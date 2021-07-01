@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="7yRqtT6cCpC-_R-rzM9gUoQGmheV9OZAUKIXrbAsyqE">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="一起探索互联网的秘密">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="After reading the official mongoDb documentation, the author sorted out the basic concepts, CRUD, and related operations">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB Tutorails">
+<meta property="og:url" content="https://sunra.top/2019/09/20/mongoDB/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="After reading the official mongoDb documentation, the author sorted out the basic concepts, CRUD, and related operations">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2021-03-05T12:58:01.140Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MongoDB Tutorails">
+<meta name="twitter:description" content="After reading the official mongoDb documentation, the author sorted out the basic concepts, CRUD, and related operations">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sunra.top/2019/09/20/mongoDB/">
+
+
+
+
+
+<script data-ad-client="ca-pub-8623125811074939" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <title>MongoDB Tutorails | Origin of Ray</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Origin of Ray</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一起探索互联网的秘密</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2019/09/20/mongoDB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">MongoDB Tutorails</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-20T08:08:41+08:00">
+                2019-09-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Sundry/" itemprop="url" rel="index">
+                    <span itemprop="name">Sundry</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>After reading the official mongoDb documentation, the author sorted out the basic concepts, CRUD, and related operations</p>
+<a id="more"></a>
+
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><table>
+<thead>
+<tr>
+<th>RDBMS</th>
+<th>MongoDB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Database</td>
+<td>Database</td>
+</tr>
+<tr>
+<td>Table</td>
+<td>Collection</td>
+</tr>
+<tr>
+<td>Tuple/Row</td>
+<td>Document</td>
+</tr>
+<tr>
+<td>column</td>
+<td>Field</td>
+</tr>
+<tr>
+<td>Table Join</td>
+<td>Embedded Documents</td>
+</tr>
+<tr>
+<td>Primary Key</td>
+<td>Primary Key (Default key _id provided by mongodb itself)</td>
+</tr>
+</tbody></table>
+<h2 id="Command"><a href="#Command" class="headerlink" title="Command"></a>Command</h2><ol>
+<li><p>create databse or return the exists database</p>
+<p>use DATABSE_NAME</p>
+</li>
+<li><p>check the current database</p>
+<p>db</p>
+</li>
+<li><p>check the database lists</p>
+<p>show dbs</p>
+</li>
+<li><p>new created db will not show when you use “show dbs” command, you need to insert at least on document into it</p>
+<p>db.movie.insert({“name”: “tutorialspoints”})</p>
+</li>
+<li><p>dropdatabse</p>
+<p>db.dropDatabse()</p>
+<p>this will delete the selected databse, it not, it will delete the default ‘test’ databse</p>
+</li>
+<li><p>create collection</p>
+<p>db.createCollection(name, options)</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Name</td>
+<td>String</td>
+<td>Name of the collection to be created</td>
+</tr>
+<tr>
+<td>Options</td>
+<td>Document</td>
+<td>(Optional) Specify options about memory size and indexing</td>
+</tr>
+</tbody></table>
+<p>Options parameter is optional, so you need to specify only the name of the collection. Following is the list of options you can use −</p>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">capped</td>
+<td align="center">Boolean</td>
+<td align="center">(Optional) If true, enables a capped collection. Capped collection is a fixed size collection that automatically overwrites its oldest entries when it reaches its maximum size. <strong>If you specify true, you need to specify size parameter also.</strong></td>
+</tr>
+<tr>
+<td align="center">autoIndexId</td>
+<td align="center">Boolean</td>
+<td align="center">(Optional) If true, automatically create index on _id field.s Default value is false.</td>
+</tr>
+<tr>
+<td align="center">size</td>
+<td align="center">number</td>
+<td align="center">(Optional) Specifies a maximum size in bytes for a capped collection. <strong>If capped is true, then you need to specify this field also.</strong></td>
+</tr>
+<tr>
+<td align="center">max</td>
+<td align="center">number</td>
+<td align="center">(Optional) Specifies the maximum number of documents allowed in the capped collection.</td>
+</tr>
+</tbody></table>
+<p>example: db.createCollection(“mycollection”)</p>
+<ol start="7">
+<li><p>check the created collection </p>
+<p>show collections</p>
+</li>
+<li><p>mongodb can create collection automatically, when you insert some document</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.tutorialspoint.insert(&#123;<span class="string">"name"</span>: <span class="string">"tutorialspoint"</span>&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>drop collection</p>
+<p>db.collection.drop() is used to drop a collection from the database</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.drop()</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="Data-type"><a href="#Data-type" class="headerlink" title="Data type"></a>Data type</h2><ol>
+<li>String</li>
+<li>Integer</li>
+<li>Boolean</li>
+<li>Double</li>
+<li>Min/Max keys: This type is used to compare a value against the lowest and highest BSON elements</li>
+<li>Arrays</li>
+<li>Timestamp</li>
+<li>Object</li>
+<li>Null</li>
+<li>Symbol: This datatype is used identically to a string, however, it’s generally reserved for languages that use a specific symbol type.</li>
+<li>Date</li>
+<li>Object ID: used to store the document’s ID</li>
+<li>Binary data</li>
+<li>Code: use to store JavaScript code into the document</li>
+<li>Regular expression</li>
+</ol>
+<h2 id="Document-CRUD-to-Collection"><a href="#Document-CRUD-to-Collection" class="headerlink" title="Document CRUD to Collection"></a>Document CRUD to Collection</h2><ol>
+<li><p>insert method</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.insert(document)</span><br></pre></td></tr></table></figure>
+
+<p>example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">db.mycol.insert(&#123;</span><br><span class="line">   _id: ObjectId(<span class="number">7</span>df78ad8902c),</span><br><span class="line">   title: 'MongoDB Overview', </span><br><span class="line">   description: 'MongoDB is no sql database',</span><br><span class="line">   by: 'tutorials point',</span><br><span class="line">   url: 'http://www.tutorialspoint.com',</span><br><span class="line">   keywords: ['mongodb', 'database', 'NoSQL'],</span><br><span class="line">   likes: <span class="number">100</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>if we don’t specify the _id parameter, the MongoDB assgin a unique ObjectId for this document, _id is 12 bytes hexadecimal number unique for every document in a collection, 12 bytes are divided as follows:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">_id: ObjectId(<span class="number">4</span> bytes timestamp, <span class="number">3</span> bytes machine id, <span class="number">2</span> bytes process id, </span><br><span class="line">   <span class="number">3</span> bytes incrementer)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>insert multiple</p>
+<p>To insert multiple documents in a single  query, we can pass an array of documents in insert command</p>
+<p>example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">db.post.insert([</span><br><span class="line">   &#123;</span><br><span class="line">      title: 'MongoDB Overview', </span><br><span class="line">      description: 'MongoDB is no sql database',</span><br><span class="line">      by: 'tutorials point',</span><br><span class="line">      url: 'http://www.tutorialspoint.com',</span><br><span class="line">      keywords: ['mongodb', 'database', 'NoSQL'],</span><br><span class="line">      likes: <span class="number">100</span></span><br><span class="line">   &#125;,</span><br><span class="line">	</span><br><span class="line">   &#123;</span><br><span class="line">      title: 'NoSQL Database', </span><br><span class="line">      description: <span class="string">"NoSQL database doesn't have tables"</span>,</span><br><span class="line">      by: 'tutorials point',</span><br><span class="line">      url: 'http://www.tutorialspoint.com',</span><br><span class="line">      keywords: ['mongodb', 'database', 'NoSQL'],</span><br><span class="line">      likes: <span class="number">20</span>, </span><br><span class="line">      comments: [	</span><br><span class="line">         &#123;</span><br><span class="line">            user:'user1',</span><br><span class="line">            message: 'My first comment',</span><br><span class="line">            dateCreated: <span class="keyword">new</span> Date(<span class="number">2013</span>,<span class="number">11</span>,<span class="number">10</span>,<span class="number">2</span>,<span class="number">35</span>),</span><br><span class="line">            like: <span class="number">0</span> </span><br><span class="line">         &#125;</span><br><span class="line">      ]</span><br><span class="line">   &#125;</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+
+<p>To insert the document you can also use db.COLLECTION_NAME.save .</p>
+<p>But if you specify the _id, it will replace the whole data with the specified _id</p>
+</li>
+<li><p>Query document</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.find()</span><br></pre></td></tr></table></figure>
+
+<p>find() method will display all documents in a non-structured way</p>
+<p>if you want to display the result in a formatted way, we can use pretty method</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.find().pretty()</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center">Operation</th>
+<th align="center">Syntax</th>
+<th align="center">Example</th>
+<th align="center">RDBMS Equivalent</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Equality</td>
+<td align="center">{<key>:<value>}</value></key></td>
+<td align="center">db.mycol.find({“by”:”tutorials point”}).pretty()</td>
+<td align="center">where by = ‘tutorials point’</td>
+</tr>
+<tr>
+<td align="center">Less Than</td>
+<td align="center">{<key>:{$lt:<value>}}</value></key></td>
+<td align="center">db.mycol.find({“likes”:{$lt:50}}).pretty()</td>
+<td align="center">where likes &lt; 50</td>
+</tr>
+<tr>
+<td align="center">Less Than Equals</td>
+<td align="center">{<key>:{$lte:<value>}}</value></key></td>
+<td align="center">db.mycol.find({“likes”:{$lte:50}}).pretty()</td>
+<td align="center">where likes &lt;= 50</td>
+</tr>
+<tr>
+<td align="center">Greater Than</td>
+<td align="center">{<key>:{$gt:<value>}}</value></key></td>
+<td align="center">db.mycol.find({“likes”:{$gt:50}}).pretty()</td>
+<td align="center">where likes &gt; 50</td>
+</tr>
+<tr>
+<td align="center">Greater Than Equals</td>
+<td align="center">{<key>:{$gte:<value>}}</value></key></td>
+<td align="center">db.mycol.find({“likes”:{$gte:50}}).pretty()</td>
+<td align="center">where likes &gt;= 50</td>
+</tr>
+<tr>
+<td align="center">Not Equals</td>
+<td align="center">{<key>:{$ne:<value>}}</value></key></td>
+<td align="center">db.mycol.find({“likes”:{$ne:50}}).pretty()</td>
+<td align="center">where likes != 50</td>
+</tr>
+</tbody></table>
+<p><strong>AND</strong> in the find method, if you pass multiple keys by separating them by ‘,’, then mongoDB treats it as AND condition, following is the basic syntax of and.  example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.mycol.find(&#123;$<span class="keyword">and</span>:[&#123;<span class="string">"by"</span>:<span class="string">"tutorials point"</span>&#125;,&#123;<span class="string">"title"</span>: <span class="string">"MongoDB Overview"</span>&#125;]&#125;).pretty()</span><br></pre></td></tr></table></figure>
+
+<p><strong>OR</strong>  example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.mycol.find(&#123;$<span class="keyword">or</span>:[&#123;<span class="string">"by"</span>:<span class="string">"tutorials point"</span>&#125;,&#123;<span class="string">"title"</span>: <span class="string">"MongoDB Overview"</span>&#125;]&#125;).pretty()</span><br></pre></td></tr></table></figure>
+
+<p>USE <strong>AND</strong> and <strong>OR</strong> together</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.mycol.find(&#123;<span class="string">"likes"</span>: &#123;$gt:<span class="number">10</span>&#125;, $<span class="keyword">or</span>: [&#123;<span class="string">"by"</span>: <span class="string">"tutorials point"</span>&#125;,</span><br></pre></td></tr></table></figure>
+
+<p>Equivalent SQL where clause is <strong>‘where likes&gt;10 AND (by = ‘tutorials point’ OR title = ‘MongoDB Overview’)’</strong></p>
+</li>
+<li><p>Update Document</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.update(SELECTION_CRITERIA, UPDATED_DATA)</span><br></pre></td></tr></table></figure>
+
+<p>example:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.mycol.update(&#123;'title':'MongoDB Overview'&#125;,&#123;$set:&#123;'title':'New MongoDB Tutorial'&#125;&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>by default, MongoDB will update only a single document, To update multiple documents, you need to set a parameter ‘multi’ to true, example:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.mycol.update(&#123;'title':'MongoDB Overview'&#125;,&#123;$set:&#123;'title':'New MongoDB Tutorial'&#125;&#125;,&#123;multi:true&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>save</strong> method can also update the data</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.save(&#123;_id:ObjectId(),NEW_DATA&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">db.mycol.save(</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="string">"_id"</span> : ObjectId(<span class="number">5983548781331</span>adf45ec5), <span class="string">"title"</span>:<span class="string">"Tutorials Point New Topic"</span>,</span><br><span class="line">      <span class="string">"by"</span>:<span class="string">"Tutorials Point"</span></span><br><span class="line">   &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Delete Document</p>
+<p>MongoDB’s <strong>remove()</strong> method is used to remove a document from the collection. remove() method accepts two parameters. One is deletion criteria and second is justOne flag.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.remove(DELLETION_CRITTERIA)  <span class="comment">//remove sepecified</span></span><br><span class="line">db.COLLECTION_NAME.remove(DELETION_CRITERIA,<span class="number">1</span>) <span class="comment">//remove one</span></span><br><span class="line">db.mycol.remove(&#123;&#125;)  <span class="comment">//remove all</span></span><br></pre></td></tr></table></figure>
+
+<p>example:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.mycol.remove(&#123;'title':'MongoDB Overview'&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h2 id="Projection"><a href="#Projection" class="headerlink" title="Projection"></a>Projection</h2><p>In the MongoDB, projection means selecting only the necessary data rather than selecting whole of the data of a document.</p>
+<p>MongoDB’s find method accept second optional parameter that is list of fields that you want to retrieve. In MongoDB, we can set a list of fields with value 1 or 0, 1 is used to show the fields</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.find(&#123;&#125;,&#123;KEY: <span class="number">1</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Limiting"><a href="#Limiting" class="headerlink" title="Limiting"></a>Limiting</h2><p><strong>limit</strong> method accept one number type argument, which is the number of documents that you want to display</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.find().limit(NUMBER)</span><br></pre></td></tr></table></figure>
+
+<p><strong>skip</strong> method can accept number type argument and is used to skip the number of documents</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.find().limit(NUMBER).skip(NUMBER)</span><br></pre></td></tr></table></figure>
+
+<p>example: following example will display only the second document</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.mycol.find(&#123;&#125;, &#123;&quot;title&quot;: 1, _id: 0&#125;).limit(1).skip(1)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Sorting"><a href="#Sorting" class="headerlink" title="Sorting"></a>Sorting</h2><p><strong>sort</strong> method accepts a document containing a list of fields along with their sorting order. To specify sorting order 1 and -1 are used. 1 is used for ascending order while -1 is used for descending order.(default ascending order)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.find().sort(&#123;KEY:<span class="number">1</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.mycol.find(&#123;&#125;,&#123;<span class="string">"title"</span>:<span class="number">1</span>,_id:<span class="number">0</span>&#125;).sort(&#123;<span class="string">"title"</span>:<span class="number">-1</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Indexing"><a href="#Indexing" class="headerlink" title="Indexing"></a>Indexing</h2><p>indexing support the efficient resolution of queries. Without indexes, MongoDB must scan every document of a collection to select those documents that match the query statement.</p>
+<p>Indexes are special data structures, that store a small portion of data set in an easy-to-traverse form. The index stores the value of a specific field or set of fields, ordered by the value of the field as specified in the index.</p>
+<p>Syntax:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.ensureIndex(&#123;KEY: <span class="number">1</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>key is the name of the field on which you want to create index and 1 is for ascending order</p>
+<p>example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.mycol.ensureIndex(&#123;&quot;title&quot;:1&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>we can also specify multiple fields:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.mycol.ensureIndex(&#123;&quot;title&quot;:1,&quot;description&quot;:-1&#125;)</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center">Parameter</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">background</td>
+<td align="center">Boolean</td>
+<td align="center">Builds the index in the background so that building an index does not block other database activities. Specify true to build in the background. The default value is <strong>false</strong>.</td>
+</tr>
+<tr>
+<td align="center">unique</td>
+<td align="center">Boolean</td>
+<td align="center">Creates a unique index so that the collection will not accept insertion of documents where the index key or keys match an existing value in the index. Specify true to create a unique index. The default value is <strong>false</strong>.</td>
+</tr>
+<tr>
+<td align="center">name</td>
+<td align="center">string</td>
+<td align="center">The name of the index. If unspecified, MongoDB generates an index name by concatenating the names of the indexed fields and the sort order.</td>
+</tr>
+<tr>
+<td align="center">dropDups</td>
+<td align="center">Boolean</td>
+<td align="center">Creates a unique index on a field that may have duplicates. MongoDB indexes only the first occurrence of a key and removes all documents from the collection that contain subsequent occurrences of that key. Specify true to create unique index. The default value is <strong>false</strong>.</td>
+</tr>
+<tr>
+<td align="center">sparse</td>
+<td align="center">Boolean</td>
+<td align="center">If true, the index only references documents with the specified field. These indexes use less space but behave differently in some situations (particularly sorts). The default value is <strong>false</strong>.</td>
+</tr>
+<tr>
+<td align="center">expireAfterSeconds</td>
+<td align="center">integer</td>
+<td align="center">Specifies a value, in seconds, as a TTL to control how long MongoDB retains documents in this collection.</td>
+</tr>
+<tr>
+<td align="center">v</td>
+<td align="center">index version</td>
+<td align="center">The index version number. The default index version depends on the version of MongoDB running when creating the index.</td>
+</tr>
+<tr>
+<td align="center">weights</td>
+<td align="center">document</td>
+<td align="center">The weight is a number ranging from 1 to 99,999 and denotes the significance of the field relative to the other indexed fields in terms of the score.</td>
+</tr>
+<tr>
+<td align="center">default_language</td>
+<td align="center">string</td>
+<td align="center">For a text index, the language that determines the list of stop words and the rules for the stemmer and tokenizer. The default value is <strong>english</strong>.</td>
+</tr>
+<tr>
+<td align="center">language_override</td>
+<td align="center">string</td>
+<td align="center">For a text index, specify the name of the field in the document that contains, the language to override the default language. The default value is language.</td>
+</tr>
+</tbody></table>
+<h2 id="Aggregate"><a href="#Aggregate" class="headerlink" title="Aggregate"></a>Aggregate</h2><p>Aggregate operations process data records and return computed results. Aggregate operations group values from multiple documents together, and can perform a variety of operations on the grouped data to return a single result. In SQL count(*) and with group by is an equivalent of mongodb aggregation</p>
+<p>Syntax</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.aggreagate(AGGREGATE_OPERATION)</span><br></pre></td></tr></table></figure>
+
+<p>example:</p>
+<p>if we have the following data</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   _id: ObjectId(7df78ad8902c)</span><br><span class="line">   title: 'MongoDB Overview', </span><br><span class="line">   description: 'MongoDB is no sql database',</span><br><span class="line">   by_user: 'tutorials point',</span><br><span class="line">   url: 'http://www.tutorialspoint.com',</span><br><span class="line">   keywords: ['mongodb', 'database', 'NoSQL'],</span><br><span class="line">   likes: 100</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">   _id: ObjectId(7df78ad8902d)</span><br><span class="line">   title: 'NoSQL Overview', </span><br><span class="line">   description: 'No sql database is very fast',</span><br><span class="line">   by_user: 'tutorials point',</span><br><span class="line">   url: 'http://www.tutorialspoint.com',</span><br><span class="line">   keywords: ['mongodb', 'database', 'NoSQL'],</span><br><span class="line">   likes: 10</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">   _id: ObjectId(7df78ad8902e)</span><br><span class="line">   title: 'Neo4j Overview', </span><br><span class="line">   description: 'Neo4j is no sql database',</span><br><span class="line">   by_user: 'Neo4j',</span><br><span class="line">   url: 'http://www.neo4j.com',</span><br><span class="line">   keywords: ['neo4j', 'database', 'NoSQL'],</span><br><span class="line">   likes: 750</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<p>if we want to display a list stating how many tutorials are written by each user</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.mycol.aggregate([&#123;$group: &#123;_id: '$by_user', num_tutorial: &#123;$sum: 1&#125;&#125;&#125;])</span><br></pre></td></tr></table></figure>
+
+<p>is equal to <strong>select by_user, count(*) from mycol group by by_user</strong>.</p>
+<p>in the above example, we have grouped documents by fields <strong>by_user</strong> and on each occurrence of by_user previous value of sum is incremented. Following is a list of available aggregation expressions.</p>
+<table>
+<thead>
+<tr>
+<th align="center">Expression</th>
+<th align="center">Description</th>
+<th align="center">Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">$sum</td>
+<td align="center">Sums up the defined value from all documents in the collection.</td>
+<td align="center">db.mycol.aggregate([{$group : {_id : “$by_user”, num_tutorial : {$sum : “$likes”}}}])</td>
+</tr>
+<tr>
+<td align="center">$avg</td>
+<td align="center">Calculates the average of all given values from all documents in the collection.</td>
+<td align="center">db.mycol.aggregate([{$group : {_id : “$by_user”, num_tutorial : {$avg : “$likes”}}}])</td>
+</tr>
+<tr>
+<td align="center">$min</td>
+<td align="center">Gets the minimum of the corresponding values from all documents in the collection.</td>
+<td align="center">db.mycol.aggregate([{$group : {_id : “$by_user”, num_tutorial : {$min : “$likes”}}}])</td>
+</tr>
+<tr>
+<td align="center">$max</td>
+<td align="center">Gets the maximum of the corresponding values from all documents in the collection.</td>
+<td align="center">db.mycol.aggregate([{$group : {_id : “$by_user”, num_tutorial : {$max : “$likes”}}}])</td>
+</tr>
+<tr>
+<td align="center">$push</td>
+<td align="center">Inserts the value to an array in the resulting document.</td>
+<td align="center">db.mycol.aggregate([{$group : {_id : “$by_user”, url : {$push: “$url”}}}])</td>
+</tr>
+<tr>
+<td align="center">$addToSet</td>
+<td align="center">Inserts the value to an array in the resulting document but does not create duplicates.</td>
+<td align="center">db.mycol.aggregate([{$group : {_id : “$by_user”, url : {$addToSet : “$url”}}}])</td>
+</tr>
+<tr>
+<td align="center">$first</td>
+<td align="center">Gets the first document from the source documents according to the grouping. Typically this makes only sense together with some previously applied “$sort”-stage.</td>
+<td align="center">db.mycol.aggregate([{$group : {_id : “$by_user”, first_url : {$first : “$url”}}}])</td>
+</tr>
+<tr>
+<td align="center">$last</td>
+<td align="center">Gets the last document from the source documents according to the grouping. Typically this makes only sense together with some previously applied “$sort”-stage.</td>
+<td align="center">db.mycol.aggregate([{$group : {_id : “$by_user”, last_url : {$last : “$url”}}}])</td>
+</tr>
+</tbody></table>
+<h3 id="Pipeline-Concept"><a href="#Pipeline-Concept" class="headerlink" title="Pipeline Concept"></a>Pipeline Concept</h3><p>In UNIX command, shell pipeline means the possibility to execute an operation on some input and use the output as the input for the next command and so on. MongoDB also supports same concept in aggregation framework. There is a set of possible stages and each of those is taken as a set of documents as an input and produces a resulting set of documents (or the final resulting JSON document at the end of the pipeline). This can then in turn be used for the next stage and so on.</p>
+<p>Following are the possible stages in aggregation framework −</p>
+<ul>
+<li><strong>$project</strong> − Used to select some specific fields from a collection.</li>
+<li><strong>$match</strong> − This is a filtering operation and thus this can reduce the amount of documents that are given as input to the next stage.</li>
+<li><strong>$group</strong> − This does the actual aggregation as discussed above.</li>
+<li><strong>$sort</strong> − Sorts the documents.</li>
+<li><strong>$skip</strong> − With this, it is possible to skip forward in the list of documents for a given amount of documents.</li>
+<li><strong>$limit</strong> − This limits the amount of documents to look at, by the given number starting from the current positions.</li>
+<li><strong>$unwind</strong> − This is used to unwind document that are using arrays. When using an array, the data is kind of pre-joined and this operation will be undone with this to have individual documents again. Thus with this stage we will increase the amount of documents for the next stage.</li>
+</ul>
+<h2 id="Replication"><a href="#Replication" class="headerlink" title="Replication"></a>Replication</h2><p>Replication is the process of synchronizing data across multiple servers. Replication provides redundancy and increases data availability with multiple copies of data on different database servers. Replication protects a database from the loss of a single server. Replication also allows you to recover from hardware failure and service interruptions. With additional copies of the data, you can dedicate one to disaster recovery, reporting, or backup.</p>
+<p>MongoDB achieves replication by the use of replica set. A replica set is a group of <strong>mongod</strong> instances that host the same data set. In a replica, one node is primary node that receives all write operations. All other instances, such as secondaries, apply operations from the primary so that they have the same data set. Replica set can have only one primary node.</p>
+<ul>
+<li>Replica set is a group of two or more nodes (generally minimum 3 nodes are required).</li>
+<li>In a replica set, one node is primary node and remaining nodes are secondary.</li>
+<li>All data replicates from primary to secondary node.</li>
+<li>At the time of automatic failover or maintenance, election establishes for primary and a new primary node is elected.</li>
+<li>After the recovery of failed node, it again join the replica set and works as a secondary node.</li>
+</ul>
+<h3 id="Set-Up-a-Replica-Set"><a href="#Set-Up-a-Replica-Set" class="headerlink" title="Set Up a Replica Set"></a>Set Up a Replica Set</h3><p>In this tutorial, we will convert standalone MongoDB instance to a replica set. To convert to replica set, following are the steps −</p>
+<ul>
+<li>Shutdown already running MongoDB server.</li>
+<li></li>
+<li>Start the MongoDB server by specifying – replSet option. Following is the basic syntax of –replSet −</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongod --port &quot;PORT&quot; --dbpath &quot;YOUR_DB_DATA_PATH&quot; --replSet &quot;REPLICA_SET_INSTANCE_NAME&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongod --port 27017 --dbpath &quot;D:\set up\mongodb\data&quot; --replSet rs0</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>It will start a mongod instance with the name rs0, on port 27017.</li>
+<li>Now start the command prompt and connect to this mongod instance.</li>
+<li>In Mongo client, issue the command <strong>rs.initiate()</strong> to initiate a new replica set.</li>
+<li>To check the replica set configuration, issue the command <strong>rs.conf()</strong>. To check the status of replica set issue the command <strong>rs.status()</strong>.</li>
+</ul>
+<h3 id="Add-Members-to-Replica-Set"><a href="#Add-Members-to-Replica-Set" class="headerlink" title="Add Members to Replica Set"></a>Add Members to Replica Set</h3><p>To add members to replica set, start mongod instances on multiple machines. Now start a mongo client and issue a command <strong>rs.add()</strong>.</p>
+<h4 id="Syntax"><a href="#Syntax" class="headerlink" title="Syntax"></a>Syntax</h4><p>The basic syntax of <strong>rs.add()</strong> command is as follows −</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;rs.add(HOST_NAME:PORT)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h4><p>Suppose your mongod instance name is <strong>mongod1.net</strong> and it is running on port <strong>27017</strong>. To add this instance to replica set, issue the command <strong>rs.add()</strong> in Mongo client.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;rs.add(&quot;mongod1.net:27017&quot;)</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+
+<p>You can add mongod instance to replica set only when you are connected to primary node. To check whether you are connected to primary or not, issue the command <strong>db.isMaster()</strong> in mongo client.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://sunra.top/2019/09/20/mongoDB/" title="MongoDB Tutorails">https://sunra.top/2019/09/20/mongoDB/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow noopener noreferrer" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/15/ARP/" rel="next" title="ARP病毒原理及防御">
+                <i class="fa fa-chevron-left"></i> ARP病毒原理及防御
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/21/blockchain/" rel="prev" title="区块链入门">
+                区块链入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg" alt="Ray Sun">
+            
+              <p class="site-author-name" itemprop="name">Ray Sun</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">151</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Sun668" target="_blank" title="GitHub" rel="external nofollow noopener noreferrer">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:947692259@qq.com" target="_blank" title="E-Mail" rel="external nofollow noopener noreferrer">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a rel="external nofollow noopener noreferrer" href="https://kingworker.cn/" title="人生思考 - 大树的个人随想" target="_blank">人生思考 - 大树的个人随想</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Command"><span class="nav-number">2.</span> <span class="nav-text">Command</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-type"><span class="nav-number">3.</span> <span class="nav-text">Data type</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Document-CRUD-to-Collection"><span class="nav-number">4.</span> <span class="nav-text">Document CRUD to Collection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Projection"><span class="nav-number">5.</span> <span class="nav-text">Projection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Limiting"><span class="nav-number">6.</span> <span class="nav-text">Limiting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sorting"><span class="nav-number">7.</span> <span class="nav-text">Sorting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Indexing"><span class="nav-number">8.</span> <span class="nav-text">Indexing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Aggregate"><span class="nav-number">9.</span> <span class="nav-text">Aggregate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Pipeline-Concept"><span class="nav-number">9.1.</span> <span class="nav-text">Pipeline Concept</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication"><span class="nav-number">10.</span> <span class="nav-text">Replication</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Set-Up-a-Replica-Set"><span class="nav-number">10.1.</span> <span class="nav-text">Set Up a Replica Set</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Example"><span class="nav-number">10.1.1.</span> <span class="nav-text">Example</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Add-Members-to-Replica-Set"><span class="nav-number">10.2.</span> <span class="nav-text">Add Members to Replica Set</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Syntax"><span class="nav-number">10.2.1.</span> <span class="nav-text">Syntax</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Example-1"><span class="nav-number">10.2.2.</span> <span class="nav-text">Example</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a rel="external nofollow noopener noreferrer" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" rel="external nofollow noopener noreferrer" _blank" href="https://github.com/iissnan/hexo-theme-next" target="_blank">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

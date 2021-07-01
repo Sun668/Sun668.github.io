@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="7yRqtT6cCpC-_R-rzM9gUoQGmheV9OZAUKIXrbAsyqE">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="一起探索互联网的秘密">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="越是我们习以为常的事情中，可能往往蕴藏着伟大的哲学，越是简单的事情当中，可能往往蕴藏着巨大的智慧。 今天我们就来讲一讲支撑起整个计算机虚拟世界，支撑起整个互联网，支撑起我们耳熟能详的腾讯，阿里，微软，谷歌这些互联网巨头的基础——冯诺依曼体系。 我们一起看看它有多简单，但同时又是多么的伟大，一起感受其中的哲学。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="虚拟世界的创世哲学——冯诺依曼体系">
+<meta property="og:url" content="https://sunra.top/2021/04/07/von-neumann-system/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="越是我们习以为常的事情中，可能往往蕴藏着伟大的哲学，越是简单的事情当中，可能往往蕴藏着巨大的智慧。 今天我们就来讲一讲支撑起整个计算机虚拟世界，支撑起整个互联网，支撑起我们耳熟能详的腾讯，阿里，微软，谷歌这些互联网巨头的基础——冯诺依曼体系。 我们一起看看它有多简单，但同时又是多么的伟大，一起感受其中的哲学。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1617794617/origin-of-ray/cf77b8fbe8a559cecbb264c390bc7337_l2phvp.png">
+<meta property="og:updated_time" content="2021-04-10T06:15:55.556Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="虚拟世界的创世哲学——冯诺依曼体系">
+<meta name="twitter:description" content="越是我们习以为常的事情中，可能往往蕴藏着伟大的哲学，越是简单的事情当中，可能往往蕴藏着巨大的智慧。 今天我们就来讲一讲支撑起整个计算机虚拟世界，支撑起整个互联网，支撑起我们耳熟能详的腾讯，阿里，微软，谷歌这些互联网巨头的基础——冯诺依曼体系。 我们一起看看它有多简单，但同时又是多么的伟大，一起感受其中的哲学。">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1617794617/origin-of-ray/cf77b8fbe8a559cecbb264c390bc7337_l2phvp.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sunra.top/2021/04/07/von-neumann-system/">
+
+
+
+
+
+<script data-ad-client="ca-pub-8623125811074939" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <title>虚拟世界的创世哲学——冯诺依曼体系 | Origin of Ray</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Origin of Ray</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一起探索互联网的秘密</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/04/07/von-neumann-system/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">虚拟世界的创世哲学——冯诺依曼体系</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-07T18:29:18+08:00">
+                2021-04-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>越是我们习以为常的事情中，可能往往蕴藏着伟大的哲学，越是简单的事情当中，可能往往蕴藏着巨大的智慧。</p>
+<p>今天我们就来讲一讲支撑起整个计算机虚拟世界，支撑起整个互联网，支撑起我们耳熟能详的腾讯，阿里，微软，谷歌这些互联网巨头的基础——冯诺依曼体系。</p>
+<p>我们一起看看它有多简单，但同时又是多么的伟大，一起感受其中的哲学。</p>
+<a id="more"></a>
+
+<h2 id="冯诺依曼体系是什么"><a href="#冯诺依曼体系是什么" class="headerlink" title="冯诺依曼体系是什么"></a>冯诺依曼体系是什么</h2><p>我们现在常说，有两个世界，一个是现实世界，一个是虚拟世界，现实世界是大自然的产物，是造物主的杰作，它自带无穷无尽的规律，比如同性相斥，异性相吸，万有引力，光速不变等等。但是这些规律不是我们制造的，只是我们发现的。</p>
+<p>而虚拟世界不同，我们就是虚拟世界的造物主，虚拟世界的规则是我们制定的而不是发现的，而这个世界最基础的规则之一就是冯诺依曼体系。</p>
+<p>当我们去审视整个信息科技时，仅把它形容为一座大厦显得如此不贴切，甚至你也不能用“一个城市”去形容它，事实上，它更像是一个无中生有的全新世界：<strong>是冯诺依曼体系从虚无中造出了虚拟世界</strong>。</p>
+<p>用道家的话“道生一，一生二，二生三，三生万物”，这个冯诺依曼体系就是这个道，我们平时所接触的具体的信息时代的产物就是这个万物。</p>
+<h3 id="为解决一切问题而生"><a href="#为解决一切问题而生" class="headerlink" title="为解决一切问题而生"></a>为解决一切问题而生</h3><p><strong>冯·诺依曼体系结构的迷人之处在于，从需求来说，它想解决一切问题。解决一切可以用“计算”来解决的问题。这是一个多么伟大的而又令人着迷的出发点</strong>。</p>
+<p>“计算”的边界在哪里？今天我们还没有人能够真正说得清。计算能不能解决“智能”的问题？通过计算能力，计算机是否终有一天可以获得和人类一样的智能？</p>
+<p>今天人工智能热潮的兴起，证明对于这个问题我们很乐观：计算终将解决智能的问题。尽管我们不能确定什么时候能够达到，但是让人欣慰的是，我们一直在进步 —— 如果人类智能无法完成进一步的进化，那么我们就一直一直在前进，最终无限逼近甚至超越人类智能。</p>
+<h3 id="冯诺依曼体系的规格"><a href="#冯诺依曼体系的规格" class="headerlink" title="冯诺依曼体系的规格"></a>冯诺依曼体系的规格</h3><p>为了实现“解决一切可以用‘计算’来解决的问题”这个目标，冯·诺依曼引入了五类基础零部件：</p>
+<ul>
+<li><p>运算器</p>
+</li>
+<li><p>控制器</p>
+</li>
+<li><p>存储器</p>
+</li>
+<li><p>输入设备</p>
+</li>
+<li><p>输出设备</p>
+</li>
+</ul>
+<p>中央处理器就是我们平时所说的CPU，它内部集成了运算器，控制器，等等，</p>
+<p>冯诺依曼体系中的存储器指的是我们CPU可以直接读取的存储器，指的是内存，分为两部分，RAM和ROM，其中ROM是只读的，也就是出场后就不能改了，一般用于存储我们的BIOS，也就是我们按下开机键，CPU就会从这里读取系统启动程序，RAM则是我们平时所说的内存，比如电脑卡了你会说内存不够了，其实指的就是这个RAM。</p>
+<p>而输入输出设备就是我们平时的鼠标键盘显示器等等，不过要注意一点，<strong>那就是我们的硬盘，U盘，其实对于冯诺依曼体系而言，并不是存储器，而是输入输出设备</strong>。</p>
+<h2 id="冯诺依曼体系是如何解决一切问题的"><a href="#冯诺依曼体系是如何解决一切问题的" class="headerlink" title="冯诺依曼体系是如何解决一切问题的"></a>冯诺依曼体系是如何解决一切问题的</h2><p>这一部分内容涉及到了软件开发领域的另一个核心问题，需求分析。</p>
+<p>但这个问题的解决思路并不仅仅适用于软件开发领域，它的思路更像是哲学，一种信息时代的哲学，也就是遇到一个问题，我要怎么分析出它的解决方案。</p>
+<p>比如现在，我的需求就是，我需要一种机制，可以解决一切问题（现在是不是更加感受到冯诺依曼体系的伟大之处？从无到有，并且能解决一切，所以说它从虚无中创造了虚拟世界）。</p>
+<p>让我们一起分析一下。</p>
+<p>首先，需求可以大致分为两部分，一部分是变化的需求，另一部分是稳定的需求。</p>
+<p>对于这个问题，需求的变化点在于，要解决的问题是五花八门包罗万象的。如何以某种稳定但可扩展的架构来支持这样的变化？而另一方面，需求的稳定之处在于，电脑的核心能力是固定的，怎么表达电脑的核心能力？</p>
+<p>我们取个巧，我们都知道电脑又叫计算机，它的核心能力是什么？就是计算。</p>
+<p>什么是计算？就是针对一个输入进行变化，变为另一个输出，就像我们数学中的函数一样，实际上我们平时编码的东西也叫作函数。</p>
+<p><strong>到这里，我们分析出来了，我们需要一个计算的地方，就称之为运算器</strong>。</p>
+<p>接下来，第二个问题，我们函数的输入和输出可以是任何数据，文本，图片，视频，等等，对于计算机而言，它们都是二进制，只不过我们通过一系列手段赋予了二进制特殊的意义，比如110…..110这段二进制，让记事本读取就是一段文本，让爱奇艺读取就是一段视频。</p>
+<p>我们可以把函数抽象为：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y = F(x)</span><br></pre></td></tr></table></figure>
+
+<p><strong>第二个问题来了，x，y在哪里</strong>，这个问题就引申出了<strong>存储器</strong>的设计。</p>
+<p>然后就是F是如何表达的，F是否能表达一切，就是是否能解决一切的关键。</p>
+<p>逻辑上来看，无论多复杂的自定义函数，都可以通过下面这些元素的组合来定义：</p>
+<ul>
+<li><p>内置函数，比如整数或小数运算（加减乘除、sin/cos 等）；</p>
+</li>
+<li><p>循环和条件分支；</p>
+</li>
+<li><p>子函数（也是自定义函数）。</p>
+</li>
+</ul>
+<p>这样一来，对于任意的一个具体的计算（自定义函数）来说，都可以用一组指令序列来表达。</p>
+<p>那么函数 F 物理上在哪里？以指令序列形式存放在存储里面。所以，存储不只存放计算所要操作的数据，也存放“计算”本身。</p>
+<p>而这也是冯诺依曼体系的伟大创举，因为在此之前，函数是没法存储在之前的计算机体系中的。</p>
+<p>只是，存储里面存放的“计算”只是数据，需要有人理解并执行这些数据背后的计算行为，才变成真正意义的“计算”。这个执行者，就是中央处理器（CPU）。</p>
+<p>它支持很多计算指令，包括执行内置函数、循环和条件分支、执行子函数等，而这就需要用到了<strong>控制器</strong>，帮助我们去执行存储的指令。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1617794617/origin-of-ray/cf77b8fbe8a559cecbb264c390bc7337_l2phvp.png" alt></p>
+<p>只是如果电脑只有“中央处理器 + 存储”，那它就如同一个人只有头脑而没有四肢五官，尽管很可能很聪明，但是这种聪明无法展现出来，因为它没法和现实世界发生交互。</p>
+<p>交互，抽象来看就是输入和输出。对人来说，输入靠的是五官：眼睛看、耳朵听、鼻子闻、舌头尝，以及肌肤接触产生的触觉。输出靠语言（说话）和各种动作，如微笑、眨眼、皱眉、手势等等。</p>
+<p>输入设备可以是鼠标键盘，也可以是触摸板，摄像头，等等，只要信息是向计算机流的，就算是输入设备。</p>
+<p>输出设备可以是屏幕，音响，也可以是灯光，打印机等等。</p>
+<p>也就是说，除了纯正的“计算”能力外，中央处理器还要有“数据交换”能力（或者叫 IO 能力）。最终，电脑可以被看做由 “中央处理器 + 存储 + 一系列的输入输出设备” 构成</p>
+<p><strong>输入输出设备从根本上解决的问题是什么？是电脑无限可能的扩展能力</strong>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我们为了从虚无中创造一个世界，那就必须让这个世界有能力去解决一切问题。</p>
+<p>要解决一切，就要将所有问题抽象为最基础的几个问题，这几个基础的问题就是稳定的地方，而变化的地方在于，如何用这几个简单的问题组合出丰富的世界，去描述丰富的世界</p>
+<p>解决一切问题的方法就是将问题抽象为一个个函数<code>y=F(x)</code>。</p>
+<p>这就类似于现实世界我们要解决一个问题，就要知道我们有什么，这就是x，我们要什么，这就是y，F就是我们如何利用已有的去获得想要的。</p>
+<p>现实世界的x，y都有自己的物质载体，虚拟世界也要有，于是就有了<strong>存储器</strong>。</p>
+<p>现实世界的F是我们的做事方法，这个方法可能是很多的小步骤去组合完成的，在虚拟世界，这些小步骤就是简单地加减，我们需要<strong>运算器</strong>去做这些事，而我们需要有顺序地去做这些事，于是需要<strong>控制器</strong>。</p>
+<p>最终，为了让我们的表达能力更丰富，我们需要更加丰富多彩的<strong>输入输出设备</strong>，来描述我们的世界，描述我们不同的问题，是输入设备将现实世界的信息转化为二进制交给了存储器，CPU从存储器读取二进制计算，然后再返回给存储器，最终输出设备讲这些二进制再解释为现实世界的信息。</p>
+<p>整个问题不仅仅是冯诺依曼体系，还包括如何进行需求分析。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://sunra.top/2021/04/07/von-neumann-system/" title="虚拟世界的创世哲学——冯诺依曼体系">https://sunra.top/2021/04/07/von-neumann-system/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow noopener noreferrer" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/04/01/react-jsx/" rel="next" title="React入门（六）深入JSX">
+                <i class="fa fa-chevron-left"></i> React入门（六）深入JSX
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/04/09/compare-esmodule-and-commonjs/" rel="prev" title="ESModule和CommonJS的比较以及注意事项">
+                ESModule和CommonJS的比较以及注意事项 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg" alt="Ray Sun">
+            
+              <p class="site-author-name" itemprop="name">Ray Sun</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">151</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Sun668" target="_blank" title="GitHub" rel="external nofollow noopener noreferrer">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:947692259@qq.com" target="_blank" title="E-Mail" rel="external nofollow noopener noreferrer">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a rel="external nofollow noopener noreferrer" href="https://kingworker.cn/" title="人生思考 - 大树的个人随想" target="_blank">人生思考 - 大树的个人随想</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#冯诺依曼体系是什么"><span class="nav-number">1.</span> <span class="nav-text">冯诺依曼体系是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为解决一切问题而生"><span class="nav-number">1.1.</span> <span class="nav-text">为解决一切问题而生</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#冯诺依曼体系的规格"><span class="nav-number">1.2.</span> <span class="nav-text">冯诺依曼体系的规格</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#冯诺依曼体系是如何解决一切问题的"><span class="nav-number">2.</span> <span class="nav-text">冯诺依曼体系是如何解决一切问题的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a rel="external nofollow noopener noreferrer" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" rel="external nofollow noopener noreferrer" _blank" href="https://github.com/iissnan/hexo-theme-next" target="_blank">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

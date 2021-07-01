@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="7yRqtT6cCpC-_R-rzM9gUoQGmheV9OZAUKIXrbAsyqE">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="IP 子网 内网">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="IP地址两级IP最开始的IP地址是由两个部分组成，即网络号和主机号，不同的网络号指定了该ip所属的网段，，它标志着主机或者路由器所连接到的网络，每个网络号在整个互联网中是唯一的。主机号则标志着该主机或路由器，每个主机号在所属的网络号中是唯一的。所以每个IP在互联网中都是唯一的。 这种IP地址叫做两级IP： IP地址 = { &amp;lt;网络号&amp;gt;, &amp;lt;主机号&amp;gt; }">
+<meta name="keywords" content="IP 子网 内网">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IP地址与子网划分，以及与内网的区别">
+<meta property="og:url" content="https://sunra.top/2020/03/21/ip_address/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="IP地址两级IP最开始的IP地址是由两个部分组成，即网络号和主机号，不同的网络号指定了该ip所属的网段，，它标志着主机或者路由器所连接到的网络，每个网络号在整个互联网中是唯一的。主机号则标志着该主机或路由器，每个主机号在所属的网络号中是唯一的。所以每个IP在互联网中都是唯一的。 这种IP地址叫做两级IP： IP地址 = { &amp;lt;网络号&amp;gt;, &amp;lt;主机号&amp;gt; }">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1584758269/computer_network/581342-20170503163928117-1456880074_sbfcsp.png">
+<meta property="og:updated_time" content="2021-03-05T13:03:11.552Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IP地址与子网划分，以及与内网的区别">
+<meta name="twitter:description" content="IP地址两级IP最开始的IP地址是由两个部分组成，即网络号和主机号，不同的网络号指定了该ip所属的网段，，它标志着主机或者路由器所连接到的网络，每个网络号在整个互联网中是唯一的。主机号则标志着该主机或路由器，每个主机号在所属的网络号中是唯一的。所以每个IP在互联网中都是唯一的。 这种IP地址叫做两级IP： IP地址 = { &amp;lt;网络号&amp;gt;, &amp;lt;主机号&amp;gt; }">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1584758269/computer_network/581342-20170503163928117-1456880074_sbfcsp.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sunra.top/2020/03/21/ip_address/">
+
+
+
+
+
+<script data-ad-client="ca-pub-8623125811074939" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <title>IP地址与子网划分，以及与内网的区别 | Origin of Ray</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Origin of Ray</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一起探索互联网的秘密</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/03/21/ip_address/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">IP地址与子网划分，以及与内网的区别</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-21T10:28:08+08:00">
+                2020-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Network/" itemprop="url" rel="index">
+                    <span itemprop="name">Network</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h2><h3 id="两级IP"><a href="#两级IP" class="headerlink" title="两级IP"></a>两级IP</h3><p>最开始的IP地址是由两个部分组成，即网络号和主机号，不同的网络号指定了该ip所属的网段，，它标志着主机或者路由器所连接到的网络，每个网络号在整个互联网中是唯一的。主机号则标志着该主机或路由器，每个主机号在所属的网络号中是唯一的。所以每个IP在互联网中都是唯一的。</p>
+<p>这种IP地址叫做两级IP：</p>
+<p>IP地址 = { &lt;网络号&gt;, &lt;主机号&gt; }</p>
+<a id="more"></a>
+
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1584758269/computer_network/581342-20170503163928117-1456880074_sbfcsp.png" alt="IP地址分类"></p>
+<p>通过上图我们可以看出：</p>
+<ul>
+<li>A，B，C类地址的网络号分别为1，2，3个<strong>字节</strong>长，而网络号字段前面分别有1-3<strong>位</strong>的类别字段，其数值分别是0，10，110。</li>
+<li>A，B，C类地址的主机号字段分别是3个，2个，1个字节长。</li>
+<li>D类地址用于多播</li>
+<li>E类地址保留。</li>
+<li>A，B，C类的可以分配的地址是由网络号和主机号共同规定，大致上（全0和全1地址保留）依次是后者的两倍（差一位），但是一个A类地址中可以分配的地址数是B类地址的256倍，因为主机号的位数查了8位。</li>
+</ul>
+<p>当一个单位申请到一个IP地址时，实际上时申请到了具有相同网络号的一块地址，其中各主机号由该单位自己分配，只要不重复就好。</p>
+<h3 id="两级IP的一些特点"><a href="#两级IP的一些特点" class="headerlink" title="两级IP的一些特点"></a>两级IP的一些特点</h3><ul>
+<li>IP地址是一种分等级的地址结构，<strong>分为两级有两个好处</strong>，第一，IP地址管理机构在分配IP地址的时候只负责分配网络地址，剩下的主机号由由得到该网络号的单位自己分配。第二，<strong>路由器仅根据目的主机所连接的网络号来转发分组</strong>，这样就会大大减少路由器中需要保存的转发表的大小，以及查找路由所需要的时间。</li>
+<li>IP地址实际上标志的是一台主机或者路由器的一个<strong>接口</strong>（与平时我们所说的端口不同），当一台主机接到两个网络上时，他就必须同时拥有两个IP地址，而且因为是两个网络，这两个IP地址的网络号必须不同，这种主机成为<strong>多归属主机</strong>。</li>
+<li>按照互联网的观点，一个网络指的是具有相同网络号的主机的集合，<strong>用转发器或者网桥（工作在链路层）连接起来的若干个局域网任然属于同一个网络</strong>，因为这些局域网拥有相同的网络号，<strong>具有不同网络号的局域网必须用路由器相连</strong>。</li>
+<li>所有的IP地址都是平等的。</li>
+<li>同一个<strong>局域网内部的主机或者路由器的网络号必须相同</strong>。</li>
+<li><strong>路由器总是具有两个或者以上的IP地址，且每个地址的网络号互不相同</strong>。</li>
+<li>当两个路由器直接相连时，在连线两端的连个接口也可以不分配IP地址，这种叫做无编号网络。</li>
+</ul>
+<h3 id="IP地址与MAC地址"><a href="#IP地址与MAC地址" class="headerlink" title="IP地址与MAC地址"></a>IP地址与MAC地址</h3><p>MAC地址是链路层和物理层使用的，是基于物理现实的地址，是在设备出场时就已经固定好并且永远不会改变的，而IP地址则是逻辑上的地址，是当一个设备接入某个网络时动态分配的，在不同的网络中同一个设备的IP地址是不同的。</p>
+<p>IP地址是放在IP数据报的首部，包括源地址和目的地址，在将IP数据包交给链路层时，网络层会利用<strong>ARP协议</strong>去查找目的地址的下一跳路由的MAC地址， 然后将其封装到MAC帧中交给链路层，链路层在根据MAC地址去转发MAC帧，在整个<strong>路由转发过程中，IP地址是始终不变的，但是MAC地址会不断通过去查找当前路由中目的IP的下一跳MAC地址去替换</strong>。</p>
+<h2 id="三级IP地址与子网划分"><a href="#三级IP地址与子网划分" class="headerlink" title="三级IP地址与子网划分"></a>三级IP地址与子网划分</h2><p>刚才说了二级的IP地址，那么为什么还需要三级的IP地址呢？</p>
+<ul>
+<li><strong>IP地址空间的利用率有时候非常低</strong>，一个A类的地址，主机号有24位，可以分配的主机数多达1000万台，但是实际上很少有哪个单位会很好的去利用。</li>
+<li><strong>两级IP地址不够灵活（注意，这里是不够灵活，而不是不够用，子网划分并不能解决IP地址不够）</strong>。有的时候，某个单位需要在一个新的地点开通一个新的网络，而在申请到一个新的网络号之前是不可能的。</li>
+</ul>
+<p>为了解决上述问题，在1985年，IP地址中有增加了一个<strong>子网号字段</strong>。使得二级IP地址变为三级。</p>
+<p>划分子网的基本思路如下：</p>
+<ul>
+<li>一个拥有许多物理网络的单位，可以将所属的物理网络划分为多个子网，本单位以外的网络看不见整个网络是由多个子网构成的，因为这个单位的对外的网络号仍然是相同的，是同一个网络。</li>
+<li>划分子网的方式是<strong>从主机号借用若干位作为子网号</strong>，同时主机号也减少了相应位数，于是二级IP地址在单位内部也从二级IP地址变成了三级IP地址。</li>
+<li>从其他网络过来的数据报仍然是通过网络号来找到该单位所在的网络，进入该单位的网络后在根据子网号去找到目的子网。再由目的子网的路由器将数据包交给目的主机。</li>
+</ul>
+<h3 id="子网掩码"><a href="#子网掩码" class="headerlink" title="子网掩码"></a>子网掩码</h3><p>从IP数据包的首部是没有办法看出源主机或者目的主机是否进行了子网划分，因为IP数据包的首部没有任何字段表示是否进行了子网划分，所以我们必须另想办法，那就是<strong>子网掩码</strong>。</p>
+<p>使用子网掩码的好处很明显，那就是就算是二级IP地址也可以使用子网掩码的方法去获取目的IP的网络号。<strong>使用了子网掩码，通过二级或三级IP地址获取网络号的方法是相同的</strong>，就是将子网掩码的每一位与目的IP做“与”运算。</p>
+<p>那么子网掩码是怎么计算出来的呢？其实很简单，就是所有的网络号（包括网络号和子网号）所占据的位为1，剩下的为0。</p>
+<p>加入了子网划分之后，就需要再路由转发表中多维护一列子网掩码，<strong>现在的路由表中有三列，目的网络地址，子网掩码，下一跳地址</strong>，当一个数据包过来时，逐行将子网掩码与目的IP相与，结果如果和目的网络地址相同，则匹配成功，将该列的下一跳地址封装进MAC帧中。</p>
+<h4 id="使用子网时的分组转发"><a href="#使用子网时的分组转发" class="headerlink" title="使用子网时的分组转发"></a>使用子网时的分组转发</h4><ol>
+<li>从收到的数据报的首部中提取目的IP地址D。</li>
+<li>首先判断是否为直接交付。对路由器直接相连的每个网络逐个进行检查：用各网络的子网掩码和D进行逐位相“与”，看结果是否和相应的网络地址匹配。如果匹配，则把分组直接交付（首先要利用匹配的这一条路由，将D转化为物理地址，再封装成MAC帧），完成任务，否则就是间接交付，执行3。</li>
+<li>若路由表中有目的地址为D的特定主机路由，则把数据报直接交付给路由表中所指明的下一跳路由，否则执行4 。</li>
+<li>对路由表中的每一行（目的网络地址，子网掩码，下一跳地址），用其中的子网掩码与D逐位相“与”，其结果为N，如果N和目的网络地址相匹配，则把数据包传给该行指明的下一跳地址。</li>
+<li>如果路由表中有一个默认路由，则把数据报传送给默认路由，否则执行6 。</li>
+<li>报告转发分组出现错误 。</li>
+</ol>
+<h2 id="子网与内网"><a href="#子网与内网" class="headerlink" title="子网与内网"></a>子网与内网</h2><p>刚才说到了，子网划分并不能解决IP地址不够的问题，那么什么技术才可以缓解IP地址不够的问题呢？这里就要说到<strong>NAT技术</strong>了。</p>
+<h3 id="NAT技术"><a href="#NAT技术" class="headerlink" title="NAT技术"></a>NAT技术</h3><p>NAT技术简单来说就是将内网的IP（内网的IP地址都是公网IP所不适用的，如192.168.0.1）地址与公网IP进行映射，NAT也分为很多种，如静态映射，也就是一对一映射，这种方式内部有多少私有地址就需要多少外部地址，并不节省IP资源，第二种是，动态NAT，该协议维护一个外部IP的池，，当内部IP需要发送数据到外部时，动态分配一个外部IP给他，有点类似DHCP租用IP地址。第三种则是最有效的，也叫PAT，将内网的IP+端口映射为外网的IP+端口。</p>
+<p>有兴趣的可以去看一下<a href="https://sunra.top/2019/12/20/nat-and-ddns/">NAT与内网穿透</a>。</p>
+<h2 id="CIDR构造超网"><a href="#CIDR构造超网" class="headerlink" title="CIDR构造超网"></a>CIDR构造超网</h2><p>上面所讲的NAT是让内网中的多个主机共享一个公网IP，有点类似于开源，而CIDR则更偏向于节流，通过打破网络地址的分类，让网络地址不局限于ABC类，可以更灵活地为不同需求地单位分配不同长度网络号的网络地址号，来减少IP地址不必要的消耗。</p>
+<p>早在RFC1009中就指出可以再子网中使用不同长度的子网掩码，叫做<strong>变长子网掩码(Variable Length Subnet Mask, VLSM)</strong>，在VLSM中基础上又研究出了<strong>无分类编址</strong>方法，正式的名字是<strong>无分类域间路由选择CIDR（Classless Inter-Domian Routing）</strong>。</p>
+<p>CIDR最主要的两个特点：</p>
+<ul>
+<li><strong>CIDR消除了传统的A类，B类和C类地址以及划分子网的概念</strong>，因而更加有效分配IPv4地址空间，因而能够更加有效地分配IPv4的地址空间，并且在新的IPv6使用之前容许互联网的规模持续增长。CIDR把32位的IP地址划分为前后两个部分，前面是<strong>网络前缀</strong>，用来指名网络，后面部分用来指明主机，因此<strong>CIDR使得IP地址又从三级变回了二级</strong>。</li>
+<li>CIDR将<strong>网络前缀</strong>都相同的<strong>连续</strong>的IP地址组成<strong>CIDR地址块</strong>。</li>
+</ul>
+<p>CIDR也使用地址掩码，其作用和生成方式与子网掩码相同。</p>
+<p>需要注意的是，所谓的CIDR不使用子网，指的是CIDR并没有在32为的地址中指明若干位为子网号。但是一旦分配到一个CIDR地址块，仍然可以在本单位内去划分子网。</p>
+<p>由于一个CIDR地址块中有很多地址，所以在路由表中就利用CIDR地址块来查找目的网络，这种地址的聚合称为<strong>路由聚合</strong>，也可以叫做<strong>构成超网</strong>。</p>
+<p>假设某个ISP有拥有地址块206.0.64.0/18，相当于有了64个C类网络，如果我们使用了CIDR就可以非常灵活地为不同需求的单位分配不同大小的地址块。同时如果不使用CIDR，那么与该ISP交换信息的每个路由器都需要保存该ISP的64个路由信息，但是有了CIDR的<strong>地址聚合</strong>，每个路由器只需要保存一个206.0.64.0/18就好。</p>
+<p>当出现了地址聚合，那么就不可避免出现另一个问题，那就是有可能一个请求的目的地址可以在路由表中找到多个匹配项，这个时候我们就要使用<strong>最长前缀匹配</strong>的策略，顾名思义，就是选择匹配项目中前缀最长的路由。</p>
+<h3 id="使用二叉搜索查找路由"><a href="#使用二叉搜索查找路由" class="headerlink" title="使用二叉搜索查找路由"></a>使用二叉搜索查找路由</h3><p>在使用了CIDR之后，由于要寻找最长前缀匹配，导致路由表的查找过程变得更加复杂，所以我们需要很好的数据结构和先进的快速查找方法。</p>
+<p>其中最常用的就是<strong>二叉线索</strong>，在这个树结构中，IP地址中从左到右的比特值决定了从根节点逐层向下延伸的路径，而二叉线索中的各个路径就代表了路由表中存放的各个地址。</p>
+<p>二叉线索树的构造过程也很简单，输入是当前路由表中的所有IP地址，我们找出每个IP地址的<strong>唯一前缀</strong>，所谓唯一前缀，指的是在表中所有的IP地址中，该前缀是唯一的，只要唯一前缀是匹配的，就只能找到唯一一条路由。</p>
+<p>通过这种方式去构造二叉线索树，最大的深度是32层，也就是说必须使用32位才能在这个路由器的路由表中找到唯一一条路由。</p>
+<p>当然，只是通过二叉线索树得到前缀匹配还不够，如果我们通过二叉线索树找到了唯一一条记录，还要去利用记录中的子网掩码和网络前缀来检验是否为目的地址的网络地址。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://sunra.top/2020/03/21/ip_address/" title="IP地址与子网划分，以及与内网的区别">https://sunra.top/2020/03/21/ip_address/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow noopener noreferrer" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/13/v-charts/" rel="next" title="v-charts">
+                <i class="fa fa-chevron-left"></i> v-charts
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/25/microservices-reading/" rel="prev" title="微服务入门笔记">
+                微服务入门笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg" alt="Ray Sun">
+            
+              <p class="site-author-name" itemprop="name">Ray Sun</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">151</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Sun668" target="_blank" title="GitHub" rel="external nofollow noopener noreferrer">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:947692259@qq.com" target="_blank" title="E-Mail" rel="external nofollow noopener noreferrer">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a rel="external nofollow noopener noreferrer" href="https://kingworker.cn/" title="人生思考 - 大树的个人随想" target="_blank">人生思考 - 大树的个人随想</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#IP地址"><span class="nav-number">1.</span> <span class="nav-text">IP地址</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#两级IP"><span class="nav-number">1.1.</span> <span class="nav-text">两级IP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两级IP的一些特点"><span class="nav-number">1.2.</span> <span class="nav-text">两级IP的一些特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP地址与MAC地址"><span class="nav-number">1.3.</span> <span class="nav-text">IP地址与MAC地址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三级IP地址与子网划分"><span class="nav-number">2.</span> <span class="nav-text">三级IP地址与子网划分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#子网掩码"><span class="nav-number">2.1.</span> <span class="nav-text">子网掩码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用子网时的分组转发"><span class="nav-number">2.1.1.</span> <span class="nav-text">使用子网时的分组转发</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子网与内网"><span class="nav-number">3.</span> <span class="nav-text">子网与内网</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NAT技术"><span class="nav-number">3.1.</span> <span class="nav-text">NAT技术</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CIDR构造超网"><span class="nav-number">4.</span> <span class="nav-text">CIDR构造超网</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用二叉搜索查找路由"><span class="nav-number">4.1.</span> <span class="nav-text">使用二叉搜索查找路由</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a rel="external nofollow noopener noreferrer" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" rel="external nofollow noopener noreferrer" _blank" href="https://github.com/iissnan/hexo-theme-next" target="_blank">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="7yRqtT6cCpC-_R-rzM9gUoQGmheV9OZAUKIXrbAsyqE">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JavaScript module">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="今天在补测试的时候，遇到了无法识别import的问题，在通过babel的动态导入插件解决了之后，就对import，export，exports，require这些平时经常用的关键字产生了一点疑惑，于是就梳理了一下它们之间的演变过程与关系。">
+<meta name="keywords" content="JavaScript module">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js_modules">
+<meta property="og:url" content="https://sunra.top/2020/01/17/js-modules2/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="今天在补测试的时候，遇到了无法识别import的问题，在通过babel的动态导入插件解决了之后，就对import，export，exports，require这些平时经常用的关键字产生了一点疑惑，于是就梳理了一下它们之间的演变过程与关系。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2021-03-05T13:04:34.576Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="js_modules">
+<meta name="twitter:description" content="今天在补测试的时候，遇到了无法识别import的问题，在通过babel的动态导入插件解决了之后，就对import，export，exports，require这些平时经常用的关键字产生了一点疑惑，于是就梳理了一下它们之间的演变过程与关系。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sunra.top/2020/01/17/js-modules2/">
+
+
+
+
+
+<script data-ad-client="ca-pub-8623125811074939" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <title>js_modules | Origin of Ray</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Origin of Ray</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一起探索互联网的秘密</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/01/17/js-modules2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">js_modules</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-17T18:31:15+08:00">
+                2020-01-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>今天在补测试的时候，遇到了无法识别import的问题，在通过babel的动态导入插件解决了之后，就对import，export，exports，require这些平时经常用的关键字产生了一点疑惑，于是就梳理了一下它们之间的演变过程与关系。</p>
+<a id="more"></a>
+
+<p>我主要通过这三篇博客再结合自己平时的实际开发经验来理解这个问题：</p>
+<p><a href="https://segmentfault.com/a/1190000011081338" rel="external nofollow noopener noreferrer" target="_blank">JavaScript模块化演进历史</a></p>
+<p><a href="https://www.zhihu.com/question/56820346" rel="external nofollow noopener noreferrer" target="_blank">require和import的区别</a></p>
+<p><a href="https://juejin.im/post/5a2e5f0851882575d42f5609" rel="external nofollow noopener noreferrer" target="_blank">import, require, export, module.exports混合使用详解</a></p>
+<h2 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h2><p>总结起来就是，js的模块化大概经历了三个重要的阶段，第一个阶段就是完全没有模块化，所有的变量和方法都是全局的。第二个阶段是js的开发者在社区中提出的各种方式来实现模块化，这其中就有最初的CommonJS，以AMD为核心的RequireJS，以CMD为核心的SeaJS。第三个阶段就是es6推出的esModule规范，也就是import 和 export。这其中第二个阶段其实完全就不是js语法本身的规范，而是开发者自己提出的一种模块的封装方式。而第三种方式是es6的新语法，大部分情况下并没有得到很好地支持，一般情况下会被babel给转化会CommonJS的require，exports这种语法，这也是为什么我们在开发中有的时候各种关键字可以混用的原因，你以为你是在用esmodule，其实已经被babel转化成为了es5的旧语法。</p>
+<p>在第一个阶段，所有的变量都是全局的，所以根本就没有模块化的概念。</p>
+<p>第二个阶段，首先是开发者们提出的各种模块封装的方式，比如命名空间，可以解决遍地全局变量的问题，如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// greeting.js</span></span><br><span class="line"><span class="keyword">var</span> app = &#123;&#125;;</span><br><span class="line">app.helloInLang = &#123;</span><br><span class="line">  en: <span class="string">'Hello world!'</span>,</span><br><span class="line">  es: <span class="string">'¡Hola mundo!'</span>,</span><br><span class="line">  ru: <span class="string">'Привет мир!'</span></span><br><span class="line">&#125;;</span><br><span class="line">app.writeHello = <span class="function"><span class="keyword">function</span> (<span class="params">lang</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">document</span>.write(helloInLang[lang]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// third_party_script.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">writeHello</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">document</span>.write(<span class="string">'The script is broken'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是这样并没有隐私可言，所有的属性都是暴露到了全局对象上，所有地方都可以访问和操作</p>
+<p>于是有人就结合立即执行函数和闭包 ，解决了私有变量的问题，如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> greeting = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> <span class="built_in">module</span> = &#123;&#125;;</span><br><span class="line">  <span class="keyword">var</span> helloInLang = &#123;</span><br><span class="line">    en: <span class="string">'Hello world!'</span>,</span><br><span class="line">    es: <span class="string">'¡Hola mundo!'</span>,</span><br><span class="line">    ru: <span class="string">'Привет мир!'</span>,</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">module</span>.getHello = <span class="function"><span class="keyword">function</span>(<span class="params">lang</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> helloInLang[lang];</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">module</span>.writeHello = <span class="function"><span class="keyword">function</span>(<span class="params">lang</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">document</span>.write(<span class="built_in">module</span>.getHello(lang));</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">module</span>;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>立即执行函数本身有自己的独立的作用域，其中声明的变量仅在该作用域之下，其他地方只能通过立即执行函数返回的方法去访问私有变量。</p>
+<p>上面两种方式虽然解决了一点模块的问题，但是还是不能很好的管理模块之间的关系，这一点直到Node.js到来，CommonJS规范的落地才得以一定程度上解决。</p>
+<p>CommonJS是一套同步的方案，它考虑的是在服务端运行的Node.js，主要是通过<code>require</code>来加载依赖项，通过<code>exports</code>或者<code>module.exports</code>来暴露接口或者数据的方式。</p>
+<p>由于服务器上通过<code>require</code>加载资源是直接读取文件的，因此中间所需的时间可以忽略不计，但是在浏览器这种需要依赖HTTP获取资源的就不行了，资源的获取所需的时间不确定，这就导致必须使用异步机制，代表主要有2个：</p>
+<ul>
+<li>基于 <a href="http://wiki.commonjs.org/wiki/Modules/AsynchronousDefinition" rel="external nofollow noopener noreferrer" target="_blank">AMD</a> 的RequireJS</li>
+<li>基于 <a href="https://github.com/cmdjs/specification/blob/master/draft/module.md" rel="external nofollow noopener noreferrer" target="_blank">CMD</a> 的SeaJS</li>
+</ul>
+<p>它们分别在浏览器实现了<code>define</code>、<code>require</code>及<code>module</code>的核心功能，虽然两者的目标是一致的，但是实现的方式或者说是思路，还是有些区别的，AMD偏向于依赖前置，CMD偏向于用到时才运行的思路，从而导致了依赖项的加载和运行时间点会不同，关于这2者的比较，网上有很多了，这里推荐几篇仅供参考：</p>
+<ul>
+<li>《<a href="https://lifesinger.wordpress.com/2011/05/17/the-difference-between-seajs-and-requirejs/" rel="external nofollow noopener noreferrer" target="_blank">SeaJS 和 RequireJS 的异同</a>》</li>
+<li>《<a href="https://div.io/topic/430" rel="external nofollow noopener noreferrer" target="_blank">再谈 SeaJS 与 RequireJS 的差异</a>》</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// CMD</span><br><span class="line">define(function (require) &#123;</span><br><span class="line">    var a = require(&apos;./a&apos;); // &lt;- 运行到此处才开始加载并运行模块a</span><br><span class="line">    var b = require(&apos;./b&apos;); // &lt;- 运行到此处才开始加载并运行模块b</span><br><span class="line">    // more code ..</span><br><span class="line">&#125;)</span><br><span class="line">// AMD</span><br><span class="line">define(</span><br><span class="line">    [&apos;./a&apos;, &apos;./b&apos;], // &lt;- 前置声明，也就是在主体运行前就已经加载并运行了模块a和模块b</span><br><span class="line">    function (a, b) &#123;</span><br><span class="line">        // more code ..</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>通过例子，你可以看到除了语法上面的区别，这2者主要的差异还是在于：</p>
+<blockquote>
+<p>何时加载和运行依赖项？</p>
+</blockquote>
+<p>这也是CommonJS社区中质疑AMD最主要原因之一，不少人认为它破坏了规范，反观CMD模式，简单的去除<code>define</code>的外包装，这就是标准的CommonJS实现，所以说CMD是最贴近CommonJS的异步模块化方案。</p>
+<p>再后来就出现了ES6的对于模块的正式定义</p>
+<p>2015年6月，<strong>ECMAScript2015</strong>也就是<strong>ES6</strong>发布了，JavaScript终于在语言标准的层面上，实现了模块功能，使得在编译时就能确定模块的依赖关系，以及其输入和输出的变量，不像 CommonJS、AMD之类的需要在运行时才能确定（例如FIS这样的工具只能预处理依赖关系，本质上还是运行时解析），成为浏览器和服务器通用的模块解决方案。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lib/greeting.js</span></span><br><span class="line"><span class="keyword">const</span> helloInLang = &#123;</span><br><span class="line">    en: <span class="string">'Hello world!'</span>,</span><br><span class="line">    es: <span class="string">'¡Hola mundo!'</span>,</span><br><span class="line">    ru: <span class="string">'Привет мир!'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> getHello = <span class="function">(<span class="params">lang</span>) =&gt;</span> (</span><br><span class="line">    helloInLang[lang];</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> sayHello = <span class="function">(<span class="params">lang</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(getHello(lang));</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// hello.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; sayHello &#125; <span class="keyword">from</span> <span class="string">'./lib/greeting'</span>;</span><br><span class="line"></span><br><span class="line">sayHello(<span class="string">'ru'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>与CommonJS用<code>require()</code>方法加载模块不同，在ES6中，<code>import</code>命令可以具体指定加载模块中用<code>export</code>命令暴露的接口（不指定具体的接口，默认加载<code>export default</code>），没有指定的是不会加载的，因此会在编译时就完成模块的加载，这种加载方式称为<strong>编译时加载</strong>或者<strong>静态加载</strong>。</p>
+<p>而CommonJS的<code>require()</code>方法是在运行时才加载的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lib/greeting.js</span></span><br><span class="line"><span class="keyword">const</span> helloInLang = &#123;</span><br><span class="line">    en: <span class="string">'Hello world!'</span>,</span><br><span class="line">    es: <span class="string">'¡Hola mundo!'</span>,</span><br><span class="line">    ru: <span class="string">'Привет мир!'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> getHello = <span class="function"><span class="keyword">function</span> (<span class="params">lang</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> helloInLang[lang];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">exports.getHello = getHello;</span><br><span class="line">exports.sayHello = <span class="function"><span class="keyword">function</span> (<span class="params">lang</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(getHello(lang))</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// hello.js</span></span><br><span class="line"><span class="keyword">const</span> sayHello = <span class="built_in">require</span>(<span class="string">'./lib/greeting'</span>).sayHello;</span><br><span class="line"></span><br><span class="line">sayHello(<span class="string">'ru'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，CommonJS中是将整个模块作为一个对象引入，然后再获取这个对象上的某个属性。</p>
+<h2 id="使用方面"><a href="#使用方面" class="headerlink" title="使用方面"></a>使用方面</h2><h3 id="require-exports-和-import-export-形式不一样"><a href="#require-exports-和-import-export-形式不一样" class="headerlink" title="require/exports 和 import/export 形式不一样"></a>require/exports 和 import/export 形式不一样</h3><p>require/exports 的用法只有以下三种简单的写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">const fs = require(&apos;fs&apos;)</span><br><span class="line">exports.fs = fs</span><br><span class="line">module.exports = fs</span><br></pre></td></tr></table></figure>
+
+<p>而 import/export 的写法就多种多样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import fs from &apos;fs&apos;</span><br><span class="line">import &#123;default as fs&#125; from &apos;fs&apos;</span><br><span class="line">import * as fs from &apos;fs&apos;</span><br><span class="line">import &#123;readFile&#125; from &apos;fs&apos;</span><br><span class="line">import &#123;readFile as read&#125; from &apos;fs&apos;</span><br><span class="line">import fs, &#123;readFile&#125; from &apos;fs&apos;</span><br><span class="line"></span><br><span class="line">export default fs</span><br><span class="line">export const fs</span><br><span class="line">export function readFile</span><br><span class="line">export &#123;readFile, read&#125;</span><br><span class="line">export * from &apos;fs&apos;</span><br></pre></td></tr></table></figure>
+
+<h3 id="require-exports-和-import-export-本质上的差别"><a href="#require-exports-和-import-export-本质上的差别" class="headerlink" title="require/exports 和 import/export 本质上的差别"></a>require/exports 和 import/export 本质上的差别</h3><p>形式上看起来五花八门，但本质上：</p>
+<ol>
+<li>CommonJS 还是 ES6 Module 输出都可以看成是一个具备多个属性或者方法的对象；</li>
+<li>default 是 ES6 Module 所独有的关键字，export default fs 输出默认的接口对象，import fs from ‘fs’ 可直接导入这个对象；</li>
+<li>ES6 Module 中导入模块的属性或者方法是强绑定的，包括基础类型；而 CommonJS 则是普通的值传递或者引用传递。</li>
+</ol>
+<p>1、2 相对比较好理解，3 需要看个例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// counter.js</span></span><br><span class="line">exports.count = <span class="number">0</span></span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'increase count to'</span>, ++exports.count, <span class="string">'in counter.js after 500ms'</span>)</span><br><span class="line">&#125;, <span class="number">500</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// commonjs.js</span></span><br><span class="line"><span class="keyword">const</span> &#123;count&#125; = <span class="built_in">require</span>(<span class="string">'./counter'</span>)</span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'read count after 1000ms in commonjs is'</span>, count)</span><br><span class="line">&#125;, <span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//es6.js</span></span><br><span class="line"><span class="keyword">import</span> &#123;count&#125; <span class="keyword">from</span> <span class="string">'./counter'</span></span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'read count after 1000ms in es6 is'</span>, count)</span><br><span class="line">&#125;, <span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>分别运行 commonjs.js 和 es6.js：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  <span class="built_in">test</span> node commonjs.js</span><br><span class="line">increase count to 1 <span class="keyword">in</span> counter.js after 500ms</span><br><span class="line"><span class="built_in">read</span> count after 1000ms <span class="keyword">in</span> commonjs is 0</span><br><span class="line">➜  <span class="built_in">test</span> babel-node es6.js</span><br><span class="line">increase count to 1 <span class="keyword">in</span> counter.js after 500ms</span><br><span class="line"><span class="built_in">read</span> count after 1000ms <span class="keyword">in</span> es6 is 1</span><br></pre></td></tr></table></figure>
+
+<p>上述只是我对三篇博客以及自己理解的一点总结，具体详细的解释可以去看上面的三篇博客再自己实现一下会有更好的理解。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://sunra.top/2020/01/17/js-modules2/" title="js_modules">https://sunra.top/2020/01/17/js-modules2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow noopener noreferrer" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/12/webpack-code-splitting/" rel="next" title="Webpack Code Splitting">
+                <i class="fa fa-chevron-left"></i> Webpack Code Splitting
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/25/http-headers-part-params/" rel="prev" title="http协议头部部分参数解析与应用">
+                http协议头部部分参数解析与应用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg" alt="Ray Sun">
+            
+              <p class="site-author-name" itemprop="name">Ray Sun</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">151</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Sun668" target="_blank" title="GitHub" rel="external nofollow noopener noreferrer">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:947692259@qq.com" target="_blank" title="E-Mail" rel="external nofollow noopener noreferrer">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a rel="external nofollow noopener noreferrer" href="https://kingworker.cn/" title="人生思考 - 大树的个人随想" target="_blank">人生思考 - 大树的个人随想</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#历史"><span class="nav-number">1.</span> <span class="nav-text">历史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方面"><span class="nav-number">2.</span> <span class="nav-text">使用方面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#require-exports-和-import-export-形式不一样"><span class="nav-number">2.1.</span> <span class="nav-text">require/exports 和 import/export 形式不一样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#require-exports-和-import-export-本质上的差别"><span class="nav-number">2.2.</span> <span class="nav-text">require/exports 和 import/export 本质上的差别</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a rel="external nofollow noopener noreferrer" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" rel="external nofollow noopener noreferrer" _blank" href="https://github.com/iissnan/hexo-theme-next" target="_blank">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
