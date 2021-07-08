@@ -89,7 +89,7 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1625014272/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210630085034_nq6abs.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1625100732/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210701085141_jdhpvd.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1625101028/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210701085657_sxvzrs.png">
-<meta property="og:updated_time" content="2021-07-03T07:42:24.261Z">
+<meta property="og:updated_time" content="2021-07-07T23:39:02.955Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入Babel原理系列（二）Parser代码结构简介">
 <meta name="twitter:description" content="上一篇文章分析 Babel 编译流程的时候，提到 Babel 会将 JS 代码转换成 AST（抽象语法树）。这种行为是一种通用的行为，无论什么编程语言都会将源代码解析成 AST，AST 不是 Babel 特有的，更不是 JS 特有的。 为什么要这么做呢？原始的 JS 文件是计算机是无法理解的，计算机也很难直接修改 JS 代码，但是转换成 AST 后，由于 AST 本质上是一组表示程序结构的对象，我">
@@ -319,6 +319,28 @@
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Babel/" itemprop="url" rel="index">
+                    <span itemprop="name">Babel</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -348,10 +370,12 @@
       
         <p>上一篇文章分析 Babel 编译流程的时候，提到 Babel 会将 JS 代码转换成 AST（抽象语法树）。这种行为是一种通用的行为，无论什么编程语言都会将源代码解析成 AST，<strong>AST 不是 Babel 特有的，更不是 JS 特有的</strong>。</p>
 <p>为什么要这么做呢？原始的 JS 文件是计算机是无法理解的，计算机也很难直接修改 JS 代码，但是转换成 AST 后，由于 AST 本质上是一组表示程序结构的对象，我们可以通过修改这个对象，间接的实现修改代码的目的。chrome V8 引擎也是这么做的，比起 Bable 更进一步的是，V8 引擎会编译 AST 生成字节码。</p>
-<p>Parser的过程分为两步，第一步，词法分析，也就是编译原理中的有限状态机，将一段代码拆分为一个个Token，第二部，语法分析，将Token数组，转换为AST树。</p>
+<p>Parser的过程分为两步，第一步，词法分析，也就是编译原理中的有限状态机，将一段代码拆分为一个个Token，第二步，语法分析，将Token数组，转换为AST树。</p>
 <p>这次我就看一下<a href="https://github.com/babel/babel/tree/main/packages/babel-parser" rel="external nofollow noopener noreferrer" target="_blank">源码</a>，简单分析一下这个过程。</p>
 <a id="more"></a>
 
+<p>首先看下Babel-Parser的目录结构</p>
+<p>主要是个四个文件夹，util，plugins，tokeinzer，parser</p>
 <h2 id="入口"><a href="#入口" class="headerlink" title="入口"></a>入口</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">parse</span>(<span class="params">input: string, options?: Options</span>): <span class="title">File</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (options?.sourceType === <span class="string">"unambiguous"</span>) &#123;</span><br><span class="line">    options = &#123;</span><br><span class="line">      ...options,</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      options.sourceType = <span class="string">"module"</span>;</span><br><span class="line">      <span class="keyword">const</span> parser = getParser(options, input);</span><br><span class="line">      <span class="keyword">const</span> ast = parser.parse();   </span><br><span class="line">        </span><br><span class="line">      <span class="comment">//省略部分其他代码</span></span><br><span class="line">        </span><br><span class="line">      <span class="keyword">return</span> ast;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (moduleError) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        options.sourceType = <span class="string">"script"</span>;</span><br><span class="line">        <span class="keyword">return</span> getParser(options, input).parse();</span><br><span class="line">      &#125; <span class="keyword">catch</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">throw</span> moduleError;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> getParser(options, input).parse();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>这段代码核心就是通过<code>getParser</code>方法获取一个parser，然后用获取的parser去进行解析。</p>
@@ -556,7 +580,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
