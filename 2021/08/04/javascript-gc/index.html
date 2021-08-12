@@ -90,7 +90,12 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1628642437/origin-of-ray/12519a0d1f2484cd24297e821f2f1887_oaspxk.jpg">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1628642627/origin-of-ray/6a558a6731fd68757e1a43c1dbc27ed8_t4jw7a.jpg">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1628642991/origin-of-ray/9004196c53f2f381a1321bcbc346fc23_fogdhf.jpg">
-<meta property="og:updated_time" content="2021-08-11T00:54:16.507Z">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/be/6f/be18e6dc6c93e761a37d50aed48f246f.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/2c/4d/2cd1ef856522ad0c8176c60b75e63c4d.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/19/17/19bbfb35d274064b253814b58413bc17.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/75/15/759f6a8105d64d3aebdc16f81a2b5e15.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/7b/42/7b8b901cb2eb575bb8907e1ad7dc1842.jpg">
+<meta property="og:updated_time" content="2021-08-11T23:59:03.889Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript执行机制（八）垃圾回收机制">
 <meta name="twitter:description" content="我们都知道，JavaScript 是一门自动垃圾回收的语言，也就是说，我们不需要去手动回收垃圾数据，这一切都交给 V8 的垃圾回收器来完成。V8 为了更高效地回收垃圾，引入了两个垃圾回收器，它们分别针对着不同的场景。 我们就来一起分析下，这两个回收机制的使用场景以及工作原理。">
@@ -448,12 +453,49 @@
 <p>采用并行回收时，垃圾回收所消耗的时间，等于总体辅助线程所消耗的时间（辅助线程数量乘以单个线程所消耗的时间），再加上一些同步开销的时间。这种方式比较简单，因为在执行垃圾标记的过程中，主线程并不会同时执行 JavaScript 代码，因此 JavaScript 代码也不会改变回收的过程。<strong>所以我们可以假定内存状态是静态的</strong>，因此只要确保同时只有一个协助线程在访问对象就好了。</p>
 <p><strong>V8 的副垃圾回收器所采用的就是并行策略</strong>，它在执行垃圾回收的过程中，启动了多个线程来负责新生代中的垃圾清理操作，这些线程同时将对象空间中的数据移动到空闲区域。由于数据的地址发生了改变，所以还需要同步更新引用这些对象的指针。</p>
 <h3 id="增量回收（拆解任务）"><a href="#增量回收（拆解任务）" class="headerlink" title="增量回收（拆解任务）"></a>增量回收（拆解任务）</h3><p>虽然并行策略能增加垃圾回收的效率，能够很好地优化副垃圾回收器，但是这仍然是一种全停顿的垃圾回收方式，在主线程执行回收工作的时候才会开启辅助线程，这依然还会存在效率问题。比如老生代存放的都是一些大的对象，如 window、DOM 这种，完整执行老生代的垃圾回收，时间依然会很久。这些大的对象都是主垃圾回收器的，所以在 2011 年，V8 又引入了增量标记的方式，我们把这种垃圾回收的方式称之为增量式垃圾回收。</p>
-<p>所谓增量式垃圾回收，是指垃圾收集器将标记工作分解为更小的块，并且穿插在主线程不同的任务之间执行。采用增量垃圾回收时，垃圾回收器没有必要一次执行完整的垃圾回收过程，每次执行的只是整个垃圾回收过程中的一小部分工作</p>
+<p>所谓增量式垃圾回收，是指垃圾收集器将标记工作分解为更小的块，并且穿插在主线程不同的任务之间执行。采用增量垃圾回收时，<strong>垃圾回收器没有必要一次执行完整的垃圾回收过程，每次执行的只是整个垃圾回收过程中的一小部分工作</strong></p>
+<p><img src="https://static001.geekbang.org/resource/image/be/6f/be18e6dc6c93e761a37d50aed48f246f.jpg" alt></p>
 <p>增量标记的算法，比全停顿的算法要稍微复杂，这主要是因为增量回收是并发的（concurrent），要实现增量执行，需要满足两点要求：</p>
 <ul>
-<li><p>垃圾回收可以被随时暂停和重启，暂停时需要保存当时的扫描结果，等下一波垃圾回收来了之后，才能继续启动。</p>
+<li><p>垃圾回收可以被随时暂停和重启，<strong>暂停时需要保存当时的扫描结果</strong>，等下一波垃圾回收来了之后，才能继续启动。</p>
 </li>
-<li><p>在暂停期间，被标记好的垃圾数据如果被 JavaScript 代码修改了，那么垃圾回收器需要能够正确地处理。</p>
+<li><p>在暂停期间，被标记好的<strong>垃圾数据如果被 JavaScript 代码修改了</strong>，那么垃圾回收器需要能够正确地处理。</p>
+</li>
+</ul>
+<h4 id="三色标记"><a href="#三色标记" class="headerlink" title="三色标记"></a>三色标记</h4><p>这里我们需要知道，在没有采用增量算法之前，V8 使用黑色和白色来标记数据。在执行一次完整的垃圾回收之前，垃圾回收器会将所有的数据设置为白色，用来表示这些数据还没有被标记，然后垃圾回收器在会从 GC Roots 出发，将所有能访问到的数据标记为黑色。遍历结束之后，被标记为黑色的数据就是活动数据，那些白色数据就是垃圾数据。</p>
+<p>如果内存中的数据只有两种状态，非黑即白，那么当你暂停了当前的垃圾回收器之后，再次恢复垃圾回收器，那么垃圾回收器就不知道从哪个位置继续开始执行了。比如垃圾回收器执行了一小段增量回收后，被 V8 暂停了，然后主线程执行了一段 JavaScript 代码，然后垃圾回收器又被恢复了，那么恢复时内存状态就如下图所示</p>
+<p><img src="https://static001.geekbang.org/resource/image/2c/4d/2cd1ef856522ad0c8176c60b75e63c4d.jpg" alt></p>
+<p><strong>如果是单纯得认为从黑色开始继续执行标记，那么从哪个黑色节点开始呢？</strong>从A？B？还是其他的黑色节点，甚至从头开始？</p>
+<p>为了解决这个问题，V8 采用了三色标记法，除了黑色和白色，还额外引入了灰色：</p>
+<ul>
+<li><p>黑色表示这个节点被 GC Root 引用到了，而且该节点的子节点都已经标记完成了</p>
+</li>
+<li><p>灰色表示这个节点被 GC Root 引用到，但子节点还没被垃圾回收器标记处理，也表明目前正在处理这个节点；</p>
+</li>
+<li><p>白色表示这个节点没有被访问到，如果在本轮遍历结束时还是白色，那么这块数据就会被收回。</p>
+</li>
+</ul>
+<p>引入灰色标记之后，垃圾回收器就可以依据当前内存中有没有灰色节点，来判断整个标记是否完成，如果没有灰色节点了，就可以进行清理工作了。如果还有灰色标记，当下次恢复垃圾回收器时，便从灰色的节点开始继续执行。</p>
+<h4 id="写屏障"><a href="#写屏障" class="headerlink" title="写屏障"></a>写屏障</h4><p>单纯的三色标记其实还是有点问题，比如下面这段代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.a = <span class="built_in">Object</span>()</span><br><span class="line"><span class="built_in">window</span>.a.b = <span class="built_in">Object</span>()</span><br><span class="line"><span class="built_in">window</span>.a.b.c=<span class="built_in">Object</span>()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://static001.geekbang.org/resource/image/19/17/19bbfb35d274064b253814b58413bc17.jpg" alt></p>
+<p>然后又执行了另外一个代码，这段代码如下所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.a.b = <span class="built_in">Object</span>() <span class="comment">//d</span></span><br></pre></td></tr></table></figure>
+
+<p>执行完之后，垃圾回收器又恢复执行了增量标记过程，由于 b 重新指向了 d 对象，所以 b 和 c 对象的连接就断开了。这时候代码的应用如下图所示：</p>
+<p><img src="https://static001.geekbang.org/resource/image/75/15/759f6a8105d64d3aebdc16f81a2b5e15.jpg" alt></p>
+<p>这就说明一个问题，当垃圾回收器将某个节点标记成了黑色，然后这个黑色的节点被续上了一个白色节点，那么垃圾回收器不会再次将这个白色节点标记为黑色节点了，因为它已经走过这个路径了。但是这个新的白色节点的确被引用了，所以我们还是需要想办法将其标记为黑色。</p>
+<p>为了解决这个问题，增量垃圾回收器添加了一个约束条件：不能让黑色节点指向白色节点。通常我们使用写屏障 (Write-barrier) 机制实现这个约束条件，也就是说，当发生了黑色的节点引用了白色的节点，写屏障机制会强制将被引用的白色节点变成灰色的，这样就保证了黑色节点不能指向白色节点的约束条件。</p>
+<p>这个方法也被称为<strong>强三色不变性</strong>，它保证了垃圾回收器能够正确地回收数据，因为在标记结束时的所有白色对象，对于垃圾回收器来说，都是不可到达的，可以安全释放。</p>
+<h3 id="V8的综合垃圾回收策略"><a href="#V8的综合垃圾回收策略" class="headerlink" title="V8的综合垃圾回收策略"></a>V8的综合垃圾回收策略</h3><p><img src="https://static001.geekbang.org/resource/image/7b/42/7b8b901cb2eb575bb8907e1ad7dc1842.jpg" alt></p>
+<p>可以看出来，主垃圾回收器同时采用了这三种策略：</p>
+<ul>
+<li><p>首先主垃圾回收器主要使用并发标记，我们可以看到，在主线程执行 JavaScript，辅助线程就开始执行标记操作了，所以说标记是在辅助线程中完成的。</p>
+</li>
+<li><p>标记完成之后，再执行并行清理操作。主线程在执行清理操作时，多个辅助线程也在执行清理操作。</p>
+</li>
+<li><p>另外，主垃圾回收器还采用了增量标记的方式，清理的任务会穿插在各种 JavaScript 任务之间执行。</p>
 </li>
 </ul>
 
@@ -664,7 +706,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾数据是如何产生的？"><span class="nav-number">1.</span> <span class="nav-text">垃圾数据是如何产生的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾回收算法步骤"><span class="nav-number">2.</span> <span class="nav-text">垃圾回收算法步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两种垃圾回收器"><span class="nav-number">3.</span> <span class="nav-text">两种垃圾回收器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#副垃圾回收器"><span class="nav-number">3.1.</span> <span class="nav-text">副垃圾回收器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主垃圾回收器"><span class="nav-number">3.2.</span> <span class="nav-text">主垃圾回收器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#V8如何提高垃圾回收效率"><span class="nav-number">4.</span> <span class="nav-text">V8如何提高垃圾回收效率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#并行回收"><span class="nav-number">4.1.</span> <span class="nav-text">并行回收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#增量回收（拆解任务）"><span class="nav-number">4.2.</span> <span class="nav-text">增量回收（拆解任务）</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾数据是如何产生的？"><span class="nav-number">1.</span> <span class="nav-text">垃圾数据是如何产生的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾回收算法步骤"><span class="nav-number">2.</span> <span class="nav-text">垃圾回收算法步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两种垃圾回收器"><span class="nav-number">3.</span> <span class="nav-text">两种垃圾回收器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#副垃圾回收器"><span class="nav-number">3.1.</span> <span class="nav-text">副垃圾回收器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主垃圾回收器"><span class="nav-number">3.2.</span> <span class="nav-text">主垃圾回收器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#V8如何提高垃圾回收效率"><span class="nav-number">4.</span> <span class="nav-text">V8如何提高垃圾回收效率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#并行回收"><span class="nav-number">4.1.</span> <span class="nav-text">并行回收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#增量回收（拆解任务）"><span class="nav-number">4.2.</span> <span class="nav-text">增量回收（拆解任务）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#三色标记"><span class="nav-number">4.2.1.</span> <span class="nav-text">三色标记</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#写屏障"><span class="nav-number">4.2.2.</span> <span class="nav-text">写屏障</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#V8的综合垃圾回收策略"><span class="nav-number">4.3.</span> <span class="nav-text">V8的综合垃圾回收策略</span></a></li></ol></li></ol></div>
             
 
           </div>
