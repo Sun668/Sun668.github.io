@@ -79,16 +79,35 @@
 
 
 
-<meta name="description" content="拨开互联网的迷雾">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Origin of Ray">
-<meta property="og:url" content="https://sunra.top/index.html">
+<meta name="description" content="Google V8是如何执行一段JavaScript代码的 本文主要是对一些老生常谈的JavaScript特性进行一个简单的统一的总结，并对于V8如何实现这些特性的进行一定的解释。 主要目的是通过介绍V8的执行流程将耳熟能详的特性串到一起，形成一个整体的认知，以及为什么JavaScript要这样设计。 中间会穿插一些思考，比如，我们在编码中应该避免的一些问题。 V8如何执行JavaScript高级">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript执行机制（九）阶段总结">
+<meta property="og:url" content="https://sunra.top/2021/08/15/javascript-conclusion/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="拨开互联网的迷雾">
+<meta property="og:description" content="Google V8是如何执行一段JavaScript代码的 本文主要是对一些老生常谈的JavaScript特性进行一个简单的统一的总结，并对于V8如何实现这些特性的进行一定的解释。 主要目的是通过介绍V8的执行流程将耳熟能详的特性串到一起，形成一个整体的认知，以及为什么JavaScript要这样设计。 中间会穿插一些思考，比如，我们在编码中应该避免的一些问题。 V8如何执行JavaScript高级">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTUwYTRjYTQ4MjRjOTkwNjdjMmI4NzY0NmU4NGM0ZWVfM2JCWkxtZFRUQnZvOWlqWjJuVk1PUGxNbmx5QjhHblhfVG9rZW46Ym94Y25QZWlGWVVaWUJVSDVPVkY5bTRGMnViXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjEzYmYxNjc3NGZiNzZiZWVjN2E1NzNmMzBlMWNjM2VfMHh2aVJYTFBHblNBd0JwbERUV2FxR2xsNkJDa25SbXVfVG9rZW46Ym94Y25YTVQxUjlxd3VXcGdLTWJGcWp3SndnXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MDlkNTZmYjlmYzZkYzlhNjEyMzY2MGU1NGYwNTc1ZDdfYXRyMkVrSEk4RTE5SGFsSnhKNk8yWmNTQVpYQWY2MVJfVG9rZW46Ym94Y25hc0JOeFdLaFYxRE1UTVhFekttZWliXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ODk0ZGJkZTVmN2QwYjE4YzQzNzA5MjdiMGJjYTQ0ZjJfeDV4Sm5VYjBNTndZcEt6SU5LTjYwaktxU3hPbUlJeVFfVG9rZW46Ym94Y25RUnZRY1ZBd1JtVHc0a0QwWnJTclVlXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MWVjZmMzOWYwNmNiMzk3ZmUwODcxYWM3MDQzZDk3ZWRfdUhOSHBBVjFqejRJVHNFTTlBMlV3NVJnQVJUMEdaMTBfVG9rZW46Ym94Y25aRmRDUUhNdFA5N2Q1dktKRmdhekFnXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=YmE5ZWNmZGVhNjc2YjYxMDY4ZmIxNDQzNDI5OThjYTNfZDZCOTZWT3BicUZYUUhaSW9zWWFCN2dwVE5pbDhjZ1VfVG9rZW46Ym94Y252NlpHTGM5U3pURUV0Nzh3bFRFS0djXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NTE4YWE2NDdiMGY5OTRjYjk1MGE0ZWE5YWExZTgzNWFfa2VPZEk1ekd2T2YzTHRPT1NmOHpLYzR2WlNlcXc5bHVfVG9rZW46Ym94Y25rdkJPN3FSb2phNnVWN0VIcGM5aWVkXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTc5NWRiZDFlNjg4YjFlMjk5ZTZjMTM2M2RjN2EwZjNfSnFzakozbXpodVE3dmE2TlllM0pDbnJHdkF4amhtNHFfVG9rZW46Ym94Y25VeTNlN25TWGFIUVF6TUF1RnJjNFNjXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NTY0YjhjOGYxZjFmODFhMDk3MDQ4NjI5NGUxNzFmZWZfdzZTMm9MMVRseVF6b3prVzRGVFEwVEk3SVJnbXFJMzdfVG9rZW46Ym94Y254UjlJalFXVVI3UTV4ckFqanA2VE9mXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MzVkZWNlM2IxMWMxMTIyYTM5ZTg0NzY5NjdlYzM4NDRfUlRoZUI4aWhmam1PZnpaeHdYbzVwQXo5YXc3dVYwSnlfVG9rZW46Ym94Y25EQWF4UHNJem5ub1A5ZWNvbnVkdllWXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MmNmMGZmMWUzYjJlOGNjNTkyZjY3MDBkZDAxZTc4MzVfUHJKdHNXd21VekpOalFVQVA3YWlmMUJGNEg4Zm9CTmtfVG9rZW46Ym94Y25LWHZvdGVkaURoZGl1M09yckhSRWtiXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTUzNDlkODhmYmI0NGNiMGMwM2NmNjMwN2QzZWFmMTFfUVBEVkxjU1dqb2cyY0pqUmRUTEpjV2VhTlBJSE1qUzFfVG9rZW46Ym94Y24zazJCMWZrTHdtQkYwUGlGb0xrS0pkXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MDQ0MWMzNDhjNGYxMjI2MmZlYjFlNGMwZDg2NzRiMDZfUWlEd1NaSElNanVTdVpmSG92dzR0czZ3aUZIbnV4QWdfVG9rZW46Ym94Y253TllvYXN0dVo5a0ZENzRjYUZZZlpnXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTU3NWU5NWMzY2QwOWRjZWVmOTVhZjA0NDk5MmJmZDJfVjA1b3hkU0VGaGtCQUhpTEE0RU1kNERKemFtSTBVOFVfVG9rZW46Ym94Y245MVZPUWJRY05POEgyRVZJN29RTWpnXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=OTIzOWM2N2ViZTI4MWUyMzYwN2NlNzllZjU3MTcyOGRfZU42UjBFYWRyR1NGUVplMDFnZUNqN0RjNERLR09iRkxfVG9rZW46Ym94Y25FSWx1V3ZZU0pTb3J2NlM3SFVDZkNoXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NjU0YmU1YTlmOGUwNGU2NzcyMWI1ZGI3MjcxMTkzYWJfU240N3p3NUJCWFNQVHl4UWJFdkFRZWY5YTVqZzltVU5fVG9rZW46Ym94Y25OWTY1eEw2SVVia1FaWENOb2VmZE5lXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MjgwYzExZDY5NTljZDk2YmJmYzg4ZGNlMjE0ODYxMmZfcFFLMk9idEQxMGdYbUZhWEdjTEp0Rzc3ZWNQZnVTNUlfVG9rZW46Ym94Y25aYUpEeXBDbzNqQXlqYlpXYW9rdXlmXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
+<meta property="og:updated_time" content="2021-08-15T07:46:34.794Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Origin of Ray">
-<meta name="twitter:description" content="拨开互联网的迷雾">
+<meta name="twitter:title" content="Javascript执行机制（九）阶段总结">
+<meta name="twitter:description" content="Google V8是如何执行一段JavaScript代码的 本文主要是对一些老生常谈的JavaScript特性进行一个简单的统一的总结，并对于V8如何实现这些特性的进行一定的解释。 主要目的是通过介绍V8的执行流程将耳熟能详的特性串到一起，形成一个整体的认知，以及为什么JavaScript要这样设计。 中间会穿插一些思考，比如，我们在编码中应该避免的一些问题。 V8如何执行JavaScript高级">
+<meta name="twitter:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTUwYTRjYTQ4MjRjOTkwNjdjMmI4NzY0NmU4NGM0ZWVfM2JCWkxtZFRUQnZvOWlqWjJuVk1PUGxNbmx5QjhHblhfVG9rZW46Ym94Y25QZWlGWVVaWUJVSDVPVkY5bTRGMnViXzE2MjkwMTM0NDc6MTYyOTAxNzA0N19WNA">
 
 
 
@@ -118,14 +137,14 @@
 
 
 
-  <link rel="canonical" href="https://sunra.top/">
+  <link rel="canonical" href="https://sunra.top/2021/08/15/javascript-conclusion/">
 
 
 
 
 
 <script data-ad-client="ca-pub-8623125811074939" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <title>  Origin of Ray - 拨开互联网的迷雾  </title>
+  <title>Javascript执行机制（九）阶段总结 | Origin of Ray</title>
   
 
 
@@ -154,8 +173,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -260,9 +278,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -292,9 +310,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/08/15/javascript-conclusion/" itemprop="url">Javascript执行机制（九）阶段总结</a></h2>
+          <h2 class="post-title" itemprop="name headline">Javascript执行机制（九）阶段总结</h2>
         
 
         <div class="post-meta">
@@ -344,9 +360,7 @@
       
 
       
-        
-          
-            <p>Google V8是如何执行一段JavaScript代码的</p>
+        <p>Google V8是如何执行一段JavaScript代码的</p>
 <p>本文主要是对一些老生常谈的JavaScript特性进行一个简单的统一的总结，并对于V8如何实现这些特性的进行一定的解释。</p>
 <p>主要目的是通过介绍V8的执行流程将耳熟能详的特性串到一起，形成一个整体的认知，以及为什么JavaScript要这样设计。</p>
 <p>中间会穿插一些思考，比如，我们在编码中应该避免的一些问题。</p>
@@ -530,8 +544,6 @@
 <li>注意内存问题</li>
 </ul>
 
-          
-        
       
     </div>
     
@@ -543,1347 +555,51 @@
     
 
     
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/08/04/javascript-gc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/08/04/javascript-gc/" itemprop="url">Javascript执行机制（八）垃圾回收机制</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-08-04T08:26:20+08:00">
-                2021-08-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>我们都知道，JavaScript 是一门自动垃圾回收的语言，也就是说，我们不需要去手动回收垃圾数据，这一切都交给 V8 的垃圾回收器来完成。V8 为了更高效地回收垃圾，引入了两个垃圾回收器，它们分别针对着不同的场景。</p>
-<p>我们就来一起分析下，这两个回收机制的使用场景以及工作原理。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/08/04/javascript-gc/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/07/27/javascript-obj-attr-search/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/07/27/javascript-obj-attr-search/" itemprop="url">Javascript执行机制（七）如何快速查找对象上的属性</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-07-27T08:07:16+08:00">
-                2021-07-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>上一篇博客我们讲了V8的整体执行的流程，这次我就继续总结下，V8是如何实现对象上属性的快速查找的。</p>
-<p>注意，这部分内容不是作用域链，也不是原型链。作用域链是用来找到对象的，如obj，原型链是如果obj上没有属性a，去它的原型上找，而本文的主题，是如何快速在obj上找到a。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/07/27/javascript-obj-attr-search/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/07/24/javascript-v8-run-flow/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/07/24/javascript-v8-run-flow/" itemprop="url">Javascript执行机制（六）V8 是怎么执行 JavaScript 代码的</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-07-24T07:48:15+08:00">
-                2021-07-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
-                    <span itemprop="name">JavaScript</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>这周在极客时间上买了李兵老师的另一门课，关于Google V8原理简介的课程。很多知识点，包括V8的整体执行流程，变量是如何存储的，对象是如何快速检索属性的，函数是如何编译的，闭包是如何实现的，不同的调用方法是是如何影响堆栈的分布的等。</p>
-<p>感觉内容很多，就继续原本的系列，这一次总结下我看完以后对V8执行JavaScript的流程的理解。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/07/24/javascript-v8-run-flow/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/07/17/react-hook2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/07/17/react-hook2/" itemprop="url">React Hook实战总结 - 如何用React Hook写出没那么复杂的项目</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-07-17T07:59:23+08:00">
-                2021-07-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/React/" itemprop="url" rel="index">
-                    <span itemprop="name">React</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>使用React也有两个月了，总结下这两个月在实战中以及自己买的课程中的关于React Hook的一些收获。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/07/17/react-hook2/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/07/03/babel-tokenizer/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/07/03/babel-tokenizer/" itemprop="url">深入Babel原理系列（三）Tokenizer</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-07-03T15:14:13+08:00">
-                2021-07-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Babel/" itemprop="url" rel="index">
-                    <span itemprop="name">Babel</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>上一个博客大概讲了下babel-parser的工作流程，主要有两个内容，一个是Tokenizer把代码字符串拆分成Token数组，一个是parser把Token数组转换为AST树。</p>
-<p>这一次就来仔细看看Tokenizer的逻辑。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/07/03/babel-tokenizer/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/06/28/babel-parser-introduction/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/06/28/babel-parser-introduction/" itemprop="url">深入Babel原理系列（二）Parser代码结构简介</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-06-28T08:09:12+08:00">
-                2021-06-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Babel/" itemprop="url" rel="index">
-                    <span itemprop="name">Babel</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>上一篇文章分析 Babel 编译流程的时候，提到 Babel 会将 JS 代码转换成 AST（抽象语法树）。这种行为是一种通用的行为，无论什么编程语言都会将源代码解析成 AST，<strong>AST 不是 Babel 特有的，更不是 JS 特有的</strong>。</p>
-<p>为什么要这么做呢？原始的 JS 文件是计算机是无法理解的，计算机也很难直接修改 JS 代码，但是转换成 AST 后，由于 AST 本质上是一组表示程序结构的对象，我们可以通过修改这个对象，间接的实现修改代码的目的。chrome V8 引擎也是这么做的，比起 Bable 更进一步的是，V8 引擎会编译 AST 生成字节码。</p>
-<p>Parser的过程分为两步，第一步，词法分析，也就是编译原理中的有限状态机，将一段代码拆分为一个个Token，第二步，语法分析，将Token数组，转换为AST树。</p>
-<p>这次我就看一下<a href="https://github.com/babel/babel/tree/main/packages/babel-parser" rel="external nofollow noopener noreferrer" target="_blank">源码</a>，简单分析一下这个过程。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/06/28/babel-parser-introduction/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/06/22/babel-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/06/22/babel-1/" itemprop="url">深入Babel原理系列（一）Babel工作流程与项目结构简介</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-06-22T07:53:03+08:00">
-                2021-06-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Babel/" itemprop="url" rel="index">
-                    <span itemprop="name">Babel</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>最近接触了一点关于Babel的知识，产生了一些兴趣，于是就打算看一看Babel的原理，然后总结学习下，这东西太复杂了，就分多个博客来写吧，这篇博客主要讲两件事，第一，简单描述下Babel的工作流程，第二，简单介绍下Babel的项目结构，也就是微内核模式。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/06/22/babel-1/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/06/09/g6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/06/09/g6/" itemprop="url">G6 使用入门与总结</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-06-09T21:14:55+08:00">
-                2021-06-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Sundry/" itemprop="url" rel="index">
-                    <span itemprop="name">Sundry</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>这周的工作中，有一个需求需要我去在前端生成一个决策树，于是去考察了很多开源的方案，下面这是我一开始调研的图表，大家可以看一下，根据自己的选择去挑自己合适的，最终我选的是G6。</p>
-<p>其实<a href="https://g6.antv.vision/zh/docs/manual/introduction" rel="external nofollow noopener noreferrer" target="_blank">G6的文档</a>已经算是非常不错的了，那我写这篇博客的目的主要有两点：</p>
-<ul>
-<li>根据自己的使用体验，重新组织成我习惯记忆的方式，方便以后自己查看。</li>
-<li>总结一下使用过程中踩的几个小坑。</li>
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://sunra.top/2021/08/15/javascript-conclusion/" title="Javascript执行机制（九）阶段总结">https://sunra.top/2021/08/15/javascript-conclusion/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow noopener noreferrer" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
 </ul>
-<blockquote>
-<p>这里吐槽一句，G6对于TypeScript实在是太不友好了，所有的属性都是可选的，有时候写下来一堆问号</p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/06/09/g6/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
 
-    
-
-    
-
+      </div>
     
 
     <footer class="post-footer">
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/06/04/lsp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/06/04/lsp/" itemprop="url">VsCode 插件语言插件开发</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-06-04T08:31:19+08:00">
-                2021-06-04
-              </time>
+              <a href="/2021/08/04/javascript-gc/" rel="next" title="Javascript执行机制（八）垃圾回收机制">
+                <i class="fa fa-chevron-left"></i> Javascript执行机制（八）垃圾回收机制
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Sundry/" itemprop="url" rel="index">
-                    <span itemprop="name">Sundry</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>最近对如何开发一个VsCode的插件比较感兴趣，于是特意去读了一些插件的开发文档，主要看的是一个<a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/" rel="external nofollow noopener noreferrer" target="_blank">中文翻译的文档</a>，不过这个文档并不全，基本属于重点功能的罗列，但是用来入门是挺好的，不过如果想要深入，还是要去看<a href="https://code.visualstudio.com/api/extension-capabilities/overview" rel="external nofollow noopener noreferrer" target="_blank">英文的文档</a>。</p>
-<p>大部分内容都比较简单，主要就是配置，就可以生效，我这次主要想总结的是如何开发一个全新的语言插件，也就是说，如果你想定义一门新类似JSX的语言，如果提供VsCode的支持，比如语法高亮，代码片段，标签自闭和，错误提示，自动补全等等。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2021/06/04/lsp/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -1893,14 +609,11 @@
   </article>
 
 
-    
-  </section>
 
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -1908,6 +621,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -1928,8 +648,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -2012,6 +741,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#V8如何执行JavaScript"><span class="nav-number">1.</span> <span class="nav-text">V8如何执行JavaScript</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#高级语言执行的两种方式"><span class="nav-number">1.1.</span> <span class="nav-text">高级语言执行的两种方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#V8为什么要用字节码"><span class="nav-number">1.2.</span> <span class="nav-text">V8为什么要用字节码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量"><span class="nav-number">2.</span> <span class="nav-text">变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#作用域提升："><span class="nav-number">2.1.</span> <span class="nav-text">作用域提升：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作用域：如何在当前上下文中找到变量"><span class="nav-number">2.2.</span> <span class="nav-text">作用域：如何在当前上下文中找到变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作用域链：如果在当前上下文找不到，如何在调用栈中找到变量"><span class="nav-number">2.3.</span> <span class="nav-text">作用域链：如果在当前上下文找不到，如何在调用栈中找到变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#找到变量后，如何在一个变量本身上找到一个属性"><span class="nav-number">2.4.</span> <span class="nav-text">找到变量后，如何在一个变量本身上找到一个属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型链：如果变量本身没有该属性，去哪里找"><span class="nav-number">2.5.</span> <span class="nav-text">原型链：如果变量本身没有该属性，去哪里找</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#思考：原型链会带来什么代码安全问题？"><span class="nav-number">2.5.1.</span> <span class="nav-text">思考：原型链会带来什么代码安全问题？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量存在哪里？堆？栈？"><span class="nav-number">2.6.</span> <span class="nav-text">变量存在哪里？堆？栈？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#This"><span class="nav-number">2.7.</span> <span class="nav-text">This</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾回收机制"><span class="nav-number">2.8.</span> <span class="nav-text">垃圾回收机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思考：几种常见的内存问题"><span class="nav-number">2.9.</span> <span class="nav-text">思考：几种常见的内存问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#内存泄漏"><span class="nav-number">2.9.1.</span> <span class="nav-text">内存泄漏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内存膨胀"><span class="nav-number">2.9.2.</span> <span class="nav-text">内存膨胀</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#频繁的垃圾回收"><span class="nav-number">2.9.3.</span> <span class="nav-text">频繁的垃圾回收</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数"><span class="nav-number">3.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么函数在JavaScript是一等公民。"><span class="nav-number">3.1.</span> <span class="nav-text">为什么函数在JavaScript是一等公民。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#延迟解析与闭包"><span class="nav-number">3.2.</span> <span class="nav-text">延迟解析与闭包</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#延迟解析"><span class="nav-number">3.2.1.</span> <span class="nav-text">延迟解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#闭包的基础：函数是一等公民"><span class="nav-number">3.2.2.</span> <span class="nav-text">闭包的基础：函数是一等公民</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#思考：延迟解析下，如何实现闭包"><span class="nav-number">3.2.3.</span> <span class="nav-text">思考：延迟解析下，如何实现闭包</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件"><span class="nav-number">4.</span> <span class="nav-text">事件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前置知识："><span class="nav-number">4.1.</span> <span class="nav-text">前置知识：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进程，线程，协程"><span class="nav-number">4.1.1.</span> <span class="nav-text">进程，线程，协程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#消息队列（宏任务）"><span class="nav-number">4.1.2.</span> <span class="nav-text">消息队列（宏任务）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#微任务（解决了宏任务执行时机不可控的问题）"><span class="nav-number">4.1.3.</span> <span class="nav-text">微任务（解决了宏任务执行时机不可控的问题）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步语法的前进"><span class="nav-number">4.2.</span> <span class="nav-text">异步语法的前进</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思考：Node中很多API都提供了同步和异步两种函数，有什么区别？"><span class="nav-number">4.3.</span> <span class="nav-text">思考：Node中很多API都提供了同步和异步两种函数，有什么区别？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#异步读文件"><span class="nav-number">4.3.1.</span> <span class="nav-text">异步读文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#同步读文件"><span class="nav-number">4.3.2.</span> <span class="nav-text">同步读文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行过程"><span class="nav-number">5.1.</span> <span class="nav-text">执行过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编码注意"><span class="nav-number">5.2.</span> <span class="nav-text">编码注意</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -2152,6 +897,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

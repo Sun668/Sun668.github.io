@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://sunra.top/2021/08/15/javascript-conclusion/</loc>
+    <lastmod>2021-08-15</lastmod>
+  </url>
+  <url>
     <loc>https://sunra.top/2021/08/04/javascript-gc/</loc>
     <lastmod>2021-08-11</lastmod>
   </url>
@@ -177,15 +181,11 @@
     <lastmod>2021-03-05</lastmod>
   </url>
   <url>
-    <loc>https://sunra.top/2020/08/25/vue-reactive/</loc>
-    <lastmod>2021-03-05</lastmod>
-  </url>
-  <url>
     <loc>https://sunra.top/2020/09/29/vue-diff/</loc>
     <lastmod>2021-03-05</lastmod>
   </url>
   <url>
-    <loc>https://sunra.top/2020/09/25/vue-watcher/</loc>
+    <loc>https://sunra.top/2020/08/25/vue-reactive/</loc>
     <lastmod>2021-03-05</lastmod>
   </url>
   <url>
@@ -194,6 +194,10 @@
   </url>
   <url>
     <loc>https://sunra.top/2021/01/26/vue3-feature-3/</loc>
+    <lastmod>2021-03-05</lastmod>
+  </url>
+  <url>
+    <loc>https://sunra.top/2020/09/25/vue-watcher/</loc>
     <lastmod>2021-03-05</lastmod>
   </url>
   <url>
