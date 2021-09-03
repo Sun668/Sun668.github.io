@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="7yRqtT6cCpC-_R-rzM9gUoQGmheV9OZAUKIXrbAsyqE">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="字符串匹配">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="我们平时工作中会经常使用SringA.indexOf(StringB)这种子串查找函数，如果让我们自己实现，我们会怎么实现？ 这次就记录下我们常说的四种字符串匹配算法，分别是BF，RK，BM和KMP算法。 前两种容易想到，也很简单，后面两种了解原理即可，这两种算是算法中比较难理解的两种，就算理解也很难写出没有bug的程序。">
+<meta name="keywords" content="字符串匹配">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字符串匹配算法学习笔记">
+<meta property="og:url" content="https://sunra.top/2020/10/24/string-matching-algorithm/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="我们平时工作中会经常使用SringA.indexOf(StringB)这种子串查找函数，如果让我们自己实现，我们会怎么实现？ 这次就记录下我们常说的四种字符串匹配算法，分别是BF，RK，BM和KMP算法。 前两种容易想到，也很简单，后面两种了解原理即可，这两种算是算法中比较难理解的两种，就算理解也很难写出没有bug的程序。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/f3/a2/f36fed972a5bdc75331d59c36eb15aa2.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/c4/9c/c47b092408ebfddfa96268037d53aa9c.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/43/f9/4316dd98eac500a01a0fd632bb5e77f9.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/cf/15/cf362f9e59c01aaf40a34d2f10e1ef15.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/29/e1/29521f541dd45e13162013b3364fece1.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/54/9e/540809418354024206d9989cb6cdd89e.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/22/da/220daef736418df84367215647bca5da.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/4e/64/4e36c4d48d1b6c3b499fb021f03c7f64.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/a8/ca/a8d229aa217a67051fbb31b8aeb2edca.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/8f/2e/8f520fb9d9cec0f6ea641d4181eb432e.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/d7/8a/d78990dbcb794d1aa2cf4a3c646ae58a.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/b9/63/b9785be3e91e34bbc23961f67c234b63.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/de/cd/de97c461b9b9dbc42d35768db59908cd.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/9b/70/9b3fa3d1cd9c0d0f914a9b1f518ad070.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/05/23/0544d2997d8bb57c10e13ccac4015e23.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/6c/f9/6caa0f61387fd2b3109fe03d803192f9.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/77/c8/7742f1d02d0940a1ef3760faf4929ec8.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/99/c2/99a6cfadf2f9a713401ba8feac2484c2.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/27/83/279be7d64e6254dac1a32d2f6d1a2383.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/57/7c/5723be3c77cdbddb64b1f8d6473cea7c.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/1d/72/1d046df5cc40bc57d3f92ff7c51afb72.jpg">
+<meta property="og:updated_time" content="2021-09-03T00:51:55.489Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="字符串匹配算法学习笔记">
+<meta name="twitter:description" content="我们平时工作中会经常使用SringA.indexOf(StringB)这种子串查找函数，如果让我们自己实现，我们会怎么实现？ 这次就记录下我们常说的四种字符串匹配算法，分别是BF，RK，BM和KMP算法。 前两种容易想到，也很简单，后面两种了解原理即可，这两种算是算法中比较难理解的两种，就算理解也很难写出没有bug的程序。">
+<meta name="twitter:image" content="https://static001.geekbang.org/resource/image/f3/a2/f36fed972a5bdc75331d59c36eb15aa2.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sunra.top/2020/10/24/string-matching-algorithm/">
+
+
+
+
+
+<script data-ad-client="ca-pub-8623125811074939" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <title>字符串匹配算法学习笔记 | Origin of Ray</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Origin of Ray</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一起探索互联网的秘密</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/10/24/string-matching-algorithm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">字符串匹配算法学习笔记</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-24T06:59:22+08:00">
+                2020-10-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">Algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们平时工作中会经常使用SringA.indexOf(StringB)这种子串查找函数，如果让我们自己实现，我们会怎么实现？</p>
+<p>这次就记录下我们常说的四种字符串匹配算法，分别是BF，RK，BM和KMP算法。</p>
+<p>前两种容易想到，也很简单，后面两种了解原理即可，这两种算是算法中比较难理解的两种，就算理解也很难写出没有bug的程序。</p>
+<a id="more"></a>
+
+<h2 id="BF（暴力匹配）算法"><a href="#BF（暴力匹配）算法" class="headerlink" title="BF（暴力匹配）算法"></a>BF（暴力匹配）算法</h2><p>BF 算法中的 BF 是 Brute Force 的缩写，中文叫作暴力匹配算法，也叫朴素匹配算法。从名字可以看出，这种算法的字符串匹配方式很“暴力”，当然也就会比较简单、好懂，但相应的性能也不高。</p>
+<p>在开始讲解这个算法之前，我先定义两个概念，方便我后面讲解。它们分别是主串和模式串。这俩概念很好理解，我举个例子你就懂了。比方说，我们在字符串 A 中查找字符串 B，那字符串 A 就是主串，字符串 B 就是模式串。我们把主串的长度记作 n，模式串的长度记作 m。因为我们是在主串中查找模式串，所以 n&gt;m。</p>
+<p>作为最简单、最暴力的字符串匹配算法，<strong>BF 算法的思想可以用一句话来概括，那就是，我们在主串中，检查起始位置分别是 0、1、2…n-m 且长度为 m 的 n-m+1 个子串，看有没有跟模式串匹配的</strong>。</p>
+<p>举个例子：</p>
+<p><img src="https://static001.geekbang.org/resource/image/f3/a2/f36fed972a5bdc75331d59c36eb15aa2.jpg" alt></p>
+<p>从上面的算法思想和例子，我们可以看出，在极端情况下，比如主串是“aaaaa…aaaaaa”（省略号表示有很多重复的字符 a），模式串是“aaaaab”。我们每次都比对 m 个字符，要比对 n-m+1 次，所以，这种算法的最坏情况时间复杂度是 O(n * m)。</p>
+<p>尽管理论上，BF 算法的时间复杂度很高，是 O(n * m)，但在实际的开发中，它却是一个比较常用的字符串匹配算法。</p>
+<p>为什么这么说呢？原因有两点。第一，实际的软件开发中，大部分情况下，模式串和主串的长度都不会太长。而且每次模式串与主串中的子串匹配的时候，当中途遇到不能匹配的字符的时候，就可以就停止了，不需要把 m 个字符都比对一下。所以，尽管理论上的最坏情况时间复杂度是 O(n*m)，但是，统计意义上，大部分情况下，算法执行效率要比这个高很多。</p>
+<p>所以说这种算法虽然时间复杂度很高，但是<strong>如果我们的数据并不复杂的时候，完全可以用这种算法，因为这种算法思路简单，不容易出错</strong></p>
+<h2 id="RK算法"><a href="#RK算法" class="headerlink" title="RK算法"></a>RK算法</h2><p>RK 算法的全称叫 Rabin-Karp 算法，是由它的两位发明者 Rabin 和 Karp 的名字来命名的。这个算法理解起来也不是很难。我个人觉得，它其实就是刚刚讲的 BF 算法的升级版。</p>
+<p>我在讲 BF 算法的时候讲过，如果模式串长度为 m，主串长度为 n，那在主串中，就会有 n-m+1 个长度为 m 的子串，我们只需要暴力地对比这 n-m+1 个子串与模式串，就可以找出主串与模式串匹配的子串。</p>
+<p>但是，每次检查主串与子串是否匹配，需要依次比对每个字符，所以 BF 算法的时间复杂度就比较高，是 O(n*m)。我们对朴素的字符串匹配算法稍加改造，引入哈希算法，时间复杂度立刻就会降低。</p>
+<p>RK 算法的思路是这样的：<strong>我们通过哈希算法对主串中的 n-m+1 个子串分别求哈希值，然后逐个与模式串的哈希值比较大小。如果某个子串的哈希值与模式串相等，那就说明对应的子串和模式串匹配了</strong>（这里先不考虑哈希冲突的问题，后面我们会讲到）。因为哈希值是一个数字，数字之间比较是否相等是非常快速的，所以模式串和子串比较的效率就提高了。</p>
+<h3 id="如何巧妙地设计哈希函数"><a href="#如何巧妙地设计哈希函数" class="headerlink" title="如何巧妙地设计哈希函数"></a>如何巧妙地设计哈希函数</h3><p>通过哈希算法计算子串的哈希值的时候，我们需要遍历子串中的每个字符。尽管模式串与子串比较的效率提高了，但是，算法整体的效率并没有提高。有没有方法可以提高哈希算法计算子串哈希值的效率呢？</p>
+<p>这里就要用到一个比较常见但也比较实用的思想，<strong>如果你后面的结果可以通过前面的计算结果推算出来，那就可以大大简化计算量，比如我们动态规划中的递推公式，前缀和等等都是用到这个思想。</strong></p>
+<p>由于我们依次计算子串哈希值的时候前一个和后一个子串有很大的重合部分，如果我们的哈希函数可以利用到这些重合的部分的计算结果，就可以避免很多的重复计算。</p>
+<h4 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h4><p>假设字符串中只包含 a～z 这 26 个小写字符，我们用二十六进制来表示一个字符串，对应的哈希值就是二十六进制数转化成十进制的结果。这种哈希算法有一个特点，在主串中，相邻两个子串的哈希值的计算公式有一定关系。</p>
+<p><img src="https://static001.geekbang.org/resource/image/c4/9c/c47b092408ebfddfa96268037d53aa9c.jpg" alt></p>
+<h3 id="改进哈希函数"><a href="#改进哈希函数" class="headerlink" title="改进哈希函数"></a>改进哈希函数</h3><ul>
+<li>如果还想提高效率，可以进一步空间花时间，那就是 26^(m-1) 这部分的计算，我们可以通过查表的方法来提高效率。我们事先计算好 26^0、26^1、26^2……26^(m-1)，并且存储在一个长度为 m 的数组中，公式中的“次方”就对应数组的下标。当我们需要计算 26 的 x 次方的时候，就可以从数组的下标为 x 的位置取值，直接使用，省去了计算的时间。</li>
+<li>上面这种哈希函数固然不会出现哈希冲突，但是十分占用空间，甚至可能会出现超过数字变量存储上限的情况。这种情况下我们可以牺牲一部分性能，采用简单的哈希算法，比如简单的ascii码相加，这样比较的时候如果hash值相同，我们再去具体比较一次，这个思想很想布隆过滤器。</li>
+</ul>
+<h2 id="BM算法"><a href="#BM算法" class="headerlink" title="BM算法"></a>BM算法</h2><h3 id="核心思路"><a href="#核心思路" class="headerlink" title="核心思路"></a>核心思路</h3><p>模式串和主串的匹配过程，看作模式串在主串中不停地往后滑动。当遇到不匹配的字符时，BF 算法和 RK 算法的做法是，模式串往后滑动一位，然后从模式串的第一个字符开始重新匹配。</p>
+<p><img src="https://static001.geekbang.org/resource/image/43/f9/4316dd98eac500a01a0fd632bb5e77f9.jpg" alt="4316dd98eac500a01a0fd632bb5e77f9"></p>
+<p>在这个例子里，主串中的 c，在模式串中是不存在的，所以，模式串向后滑动的时候，只要 c 与模式串有重合，肯定无法匹配。所以，我们可以一次性把模式串往后多滑动几位，把模式串移动到 c 的后面。</p>
+<p><img src="https://static001.geekbang.org/resource/image/cf/15/cf362f9e59c01aaf40a34d2f10e1ef15.jpg" alt="cf362f9e59c01aaf40a34d2f10e1ef15"></p>
+<p>由现象找规律，你可以思考一下，<strong>当遇到不匹配的字符时，有什么固定的规律，可以将模式串往后多滑动几位呢</strong>？这样一次性往后滑动好几位，那匹配的效率岂不是就提高了？我们今天要讲的 BM 算法，本质上其实就是在寻找这种规律。借助这种规律，在模式串与主串匹配的过程中，当模式串和主串某个字符不匹配的时候，能够跳过一些肯定不会匹配的情况，将模式串往后多滑动几位。</p>
+<h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><p>BM 算法包含两部分，分别是坏字符规则（bad character rule）和好后缀规则（good suffix shift）。我们下面依次来看，这两个规则分别都是怎么工作的。</p>
+<h4 id="坏字符规则"><a href="#坏字符规则" class="headerlink" title="坏字符规则"></a>坏字符规则</h4><p>前面两个算法，在匹配的过程中，我们都是按模式串的下标从小到大的顺序，依次与主串中的字符进行匹配的。这种匹配顺序比较符合我们的思维习惯，而 BM 算法的匹配顺序比较特别，它是按照模式串下标从大到小的顺序，倒着匹配的。我画了一张图，你可以看下。</p>
+<p><img src="https://static001.geekbang.org/resource/image/29/e1/29521f541dd45e13162013b3364fece1.jpg" alt="29521f541dd45e13162013b3364fece1"></p>
+<p><img src="https://static001.geekbang.org/resource/image/54/9e/540809418354024206d9989cb6cdd89e.jpg" alt="540809418354024206d9989cb6cdd89e"></p>
+<blockquote>
+<p>这里有个问题，为什么这里需要从后往前找？</p>
+</blockquote>
+<p>我们从模式串的末尾往前倒着匹配，当我们发现某个字符没法匹配的时候。我们把这个没有匹配的字符叫作坏字符（主串中的字符）。</p>
+<p><img src="https://static001.geekbang.org/resource/image/22/da/220daef736418df84367215647bca5da.jpg" alt></p>
+<p>我们拿坏字符 c 在模式串中查找，发现模式串中并不存在这个字符，也就是说，字符 c 与模式串中的任何字符都不可能匹配。这个时候，我们可以将模式串直接往后滑动三位，将模式串滑动到 c 后面的位置，再从模式串的末尾字符开始比较。</p>
+<p><img src="https://static001.geekbang.org/resource/image/4e/64/4e36c4d48d1b6c3b499fb021f03c7f64.jpg" alt></p>
+<p>这个时候，我们发现，模式串中最后一个字符 d，还是无法跟主串中的 a 匹配，这个时候，还能将模式串往后滑动三位吗？答案是不行的。因为这个时候，坏字符 a 在模式串中是存在的，模式串中下标是 0 的位置也是字符 a。这种情况下，我们可以将模式串往后滑动两位，让两个 a 上下对齐，然后再从模式串的末尾字符开始，重新匹配。</p>
+<p><img src="https://static001.geekbang.org/resource/image/a8/ca/a8d229aa217a67051fbb31b8aeb2edca.jpg" alt></p>
+<p>第一次不匹配的时候，我们滑动了三位，第二次不匹配的时候，我们将模式串后移两位，那具体滑动多少位，到底有没有规律呢？</p>
+<p>当发生不匹配的时候，我们把坏字符对应的模式串中的字符下标记作 si。如果坏字符在模式串中存在，我们把这个坏字符在模式串中的下标记作 xi。如果不存在，我们把 xi 记作 -1。那模式串往后移动的位数就等于 si-xi。（注意，我这里说的下标，都是字符在模式串的下标）。</p>
+<p><img src="https://static001.geekbang.org/resource/image/8f/2e/8f520fb9d9cec0f6ea641d4181eb432e.jpg" alt></p>
+<p>这里我要特别说明一点，如果坏字符在模式串里多处出现，那我们在计算 xi 的时候，选择最靠后的那个，因为这样不会让模式串滑动过多，导致本来可能匹配的情况被滑动略过。</p>
+<p>利用坏字符规则，BM 算法在最好情况下的时间复杂度非常低，是 O(n/m)。比如，主串是 aaabaaabaaabaaab，模式串是 aaaa。每次比对，模式串都可以直接后移四位，所以，匹配具有类似特点的模式串和主串的时候，BM 算法非常高效。</p>
+<p>不过，单纯使用坏字符规则还是不够的。因为根据 si-xi 计算出来的移动位数，有可能是负数，比如主串是 aaaaaaaaaaaaaaaa，模式串是 baaa。不但不会向后滑动模式串，还有可能倒退。所以，BM 算法还需要用到“好后缀规则”。</p>
+<blockquote>
+<p>到这里为止，其实只要我们限制计算出来的移动位数不能为负，BM算法就可以正常工作了。</p>
+</blockquote>
+<h4 id="好后缀规则"><a href="#好后缀规则" class="headerlink" title="好后缀规则"></a>好后缀规则</h4><p>好后缀规则实际上跟坏字符规则的思路很类似。你看我下面这幅图。当模式串滑动到图中的位置的时候，模式串和主串有 2 个字符是匹配的，倒数第 3 个字符发生了不匹配的情况。</p>
+<p><img src="https://static001.geekbang.org/resource/image/d7/8a/d78990dbcb794d1aa2cf4a3c646ae58a.jpg" alt></p>
+<p>这个时候该如何滑动模式串呢？当然，我们还可以利用坏字符规则来计算模式串的滑动位数，不过，我们也可以使用好后缀处理规则。两种规则到底如何选择，我稍后会讲。抛开这个问题，现在我们来看，好后缀规则是怎么工作的？</p>
+<p>我们把已经匹配的 bc 叫作好后缀，记作{u}。我们拿它在模式串中查找，如果找到了另一个跟{u}相匹配的子串{u<em>}，那我们就将模式串滑动到子串{u</em>}与主串中{u}对齐的位置。</p>
+<p><img src="https://static001.geekbang.org/resource/image/b9/63/b9785be3e91e34bbc23961f67c234b63.jpg" alt></p>
+<p>如果在模式串中找不到另一个等于{u}的子串，我们就直接将模式串，滑动到主串中{u}的后面，因为之前的任何一次往后滑动，都没有匹配主串中{u}的情况。</p>
+<p><img src="https://static001.geekbang.org/resource/image/de/cd/de97c461b9b9dbc42d35768db59908cd.jpg" alt></p>
+<p>不过，当模式串中不存在等于{u}的子串时，我们直接将模式串滑动到主串{u}的后面。这样做是否有点太过头呢？我们来看下面这个例子。这里面 bc 是好后缀，尽管在模式串中没有另外一个相匹配的子串{u*}，但是如果我们将模式串移动到好后缀的后面，如图所示，那就会错过模式串和主串可以匹配的情况。</p>
+<p><img src="https://static001.geekbang.org/resource/image/9b/70/9b3fa3d1cd9c0d0f914a9b1f518ad070.jpg" alt></p>
+<p>如果好后缀在模式串中不存在可匹配的子串，那在我们一步一步往后滑动模式串的过程中，只要主串中的{u}与模式串有重合，那肯定就无法完全匹配。但是当模式串滑动到前缀与主串中{u}的后缀有部分重合的时候，并且重合的部分相等的时候，就有可能会存在完全匹配的情况。</p>
+<p><img src="https://static001.geekbang.org/resource/image/05/23/0544d2997d8bb57c10e13ccac4015e23.jpg" alt></p>
+<p>所以，针对这种情况，我们不仅要看好后缀在模式串中，是否有另一个匹配的子串，我们还要考察好后缀的后缀子串，是否存在跟模式串的前缀子串匹配的。</p>
+<p>所谓某个字符串 s 的后缀子串，就是最后一个字符跟 s 对齐的子串，比如 abc 的后缀子串就包括 c, bc。所谓前缀子串，就是起始字符跟 s 对齐的子串，比如 abc 的前缀子串有 a，ab。我们从好后缀的后缀子串中，找一个最长的并且能跟模式串的前缀子串匹配的，假设是{v}，然后将模式串滑动到如图所示的位置。</p>
+<p><img src="https://static001.geekbang.org/resource/image/6c/f9/6caa0f61387fd2b3109fe03d803192f9.jpg" alt></p>
+<p>坏字符和好后缀的基本原理都讲完了，当模式串和主串中的某个字符不匹配的时候，如何选择用好后缀规则还是坏字符规则，来计算模式串往后滑动的位数？我们可以分别计算好后缀和坏字符往后滑动的位数，然后取两个数中最大的，作为模式串往后滑动的位数。这种处理方法还可以避免我们前面提到的，根据坏字符规则计算得到的往后滑动的位数，有可能是负数的情况。</p>
+<h3 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h3><h4 id="坏字符"><a href="#坏字符" class="headerlink" title="坏字符"></a>坏字符</h4><p>“坏字符规则”本身不难理解。当遇到坏字符时，要计算往后移动的位数 si-xi，其中 xi 的计算是重点，我们如何求得 xi 呢？或者说，如何查找坏字符在模式串中出现的位置呢？</p>
+<p>如果我们拿坏字符，在模式串中顺序遍历查找，这样就会比较低效，势必影响这个算法的性能。有没有更加高效的方式呢？我们之前学的散列表，这里可以派上用场了。我们可以将模式串中的每个字符及其下标都存到散列表中。这样就可以快速找到坏字符在模式串的位置下标了。</p>
+<p>关于这个散列表，我们只实现一种最简单的情况，假设字符串的字符集不是很大，每个字符长度是 1 字节，我们用大小为 256 的数组，来记录每个字符在模式串中出现的位置。</p>
+<p>数组的下标对应字符的 ASCII 码值，数组中存储这个字符在模式串中出现的位置。如果将上面的过程翻译成代码，就是下面这个样子。其中，变量 b 是模式串，m 是模式串的长度，bc 表示刚刚讲的散列表。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SIZE = <span class="number">256</span>; <span class="comment">// 全局变量或成员变量</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">generateBC</span><span class="params">(<span class="keyword">char</span>[] b, <span class="keyword">int</span> m, <span class="keyword">int</span>[] bc)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; SIZE; ++i) &#123;</span><br><span class="line">    bc[i] = <span class="number">-1</span>; <span class="comment">// 初始化bc</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; ++i) &#123;</span><br><span class="line">    <span class="keyword">int</span> ascii = (<span class="keyword">int</span>)b[i]; <span class="comment">// 计算b[i]的ASCII值</span></span><br><span class="line">    bc[ascii] = i;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>掌握了坏字符规则之后，我们先把 BM 算法代码的大框架写好，先不考虑好后缀规则，仅用坏字符规则，并且不考虑 si-xi 计算得到的移动位数可能会出现负数的情况。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public int bm(char[] a, int n, char[] b, int m) &#123;</span><br><span class="line">  int[] bc = <span class="keyword">new</span> int[SIZE]; <span class="comment">// 记录模式串中每个字符最后出现的位置</span></span><br><span class="line">  generateBC(b, m, bc); <span class="comment">// 构建坏字符哈希表</span></span><br><span class="line">  int i = <span class="number">0</span>; <span class="comment">// i表示主串与模式串对齐的第一个字符</span></span><br><span class="line">  <span class="keyword">while</span> (i &lt;= n - m) &#123;</span><br><span class="line">    int j;</span><br><span class="line">    <span class="keyword">for</span> (j = m - <span class="number">1</span>; j &gt;= <span class="number">0</span>; --j) &#123; <span class="comment">// 模式串从后往前匹配</span></span><br><span class="line">      <span class="keyword">if</span> (a[i+j] != b[j]) <span class="keyword">break</span>; <span class="comment">// 坏字符对应模式串中的下标是j</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (j &lt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> i; <span class="comment">// 匹配成功，返回主串与模式串第一个匹配的字符的位置</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 这里等同于将模式串往后滑动j-bc[(int)a[i+j]]位</span></span><br><span class="line">    i = i + (j - bc[(int)a[i+j]]); </span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="好后缀"><a href="#好后缀" class="headerlink" title="好后缀"></a>好后缀</h4><p>我们先简单回顾一下，前面讲过好后缀的处理规则中最核心的内容：</p>
+<ul>
+<li><p>在模式串中，查找跟好后缀匹配的另一个子串；</p>
+</li>
+<li><p>在好后缀的后缀子串中，查找最长的、能跟模式串前缀子串匹配的后缀子串；</p>
+</li>
+</ul>
+<p>在不考虑效率的情况下，这两个操作都可以用很“暴力”的匹配查找方式解决。但是，如果想要 BM 算法的效率很高，这部分就不能太低效。如何来做呢？</p>
+<p><strong>因为好后缀也是模式串本身的后缀子串，所以，我们可以在模式串和主串正式匹配之前，通过预处理模式串</strong>，预先计算好模式串的每个后缀子串，对应的另一个可匹配子串的位置。</p>
+<p>如何表示模式串中不同的后缀子串呢？因为后缀子串的最后一个字符的位置是固定的，下标为 m-1，我们只需要记录长度就可以了。通过长度，我们可以确定一个唯一的后缀子串。</p>
+<p><img src="https://static001.geekbang.org/resource/image/77/c8/7742f1d02d0940a1ef3760faf4929ec8.jpg" alt></p>
+<p>现在，我们要引入最关键的变量 suffix 数组。suffix 数组的下标 k，表示后缀子串的长度，下标对应的数组值存储的是，在模式串中跟好后缀{u}相匹配的子串{u*}的起始下标值。</p>
+<p><img src="https://static001.geekbang.org/resource/image/99/c2/99a6cfadf2f9a713401ba8feac2484c2.jpg" alt></p>
+<p>如果模式串中有多个（大于 1 个）子串跟后缀子串{u}匹配，那 suffix 数组中该存储哪一个子串的起始位置呢？为了避免模式串往后滑动得过头了，我们肯定要存储模式串中最靠后的那个子串的起始位置，也就是下标最大的那个子串的起始位置。不过，这样处理就足够了吗？</p>
+<p>实际上，仅仅是选最靠后的子串片段来存储是不够的。我们再回忆一下好后缀规则。我们不仅要在模式串中，查找跟好后缀匹配的另一个子串，还要在好后缀的后缀子串中，查找最长的能跟模式串前缀子串匹配的后缀子串。</p>
+<p>如果我们只记录刚刚定义的 suffix，实际上，只能处理规则的前半部分，也就是，在模式串中，查找跟好后缀匹配的另一个子串。所以，除了 suffix 数组之外，我们还需要另外一个 boolean 类型的 prefix 数组，来记录模式串的后缀子串是否能匹配模式串的前缀子串</p>
+<p><img src="https://static001.geekbang.org/resource/image/27/83/279be7d64e6254dac1a32d2f6d1a2383.jpg" alt></p>
+<p>现在，我们来看下，如何来计算并填充这两个数组的值？</p>
+<p>这个计算过程非常巧妙。我们拿下标从 0 到 i 的子串（i 可以是 0 到 m-2）与整个模式串，求公共后缀子串。如果公共后缀子串的长度是 k，那我们就记录 suffix[k]=j（j 表示公共后缀子串的起始下标）。如果 j 等于 0，也就是说，公共后缀子串也是模式串的前缀子串，我们就记录 prefix[k]=true。</p>
+<p><img src="https://static001.geekbang.org/resource/image/57/7c/5723be3c77cdbddb64b1f8d6473cea7c.jpg" alt></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// b表示模式串，m表示长度，suffix，prefix数组事先申请好了</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">generateGS</span><span class="params">(<span class="keyword">char</span>[] b, <span class="keyword">int</span> m, <span class="keyword">int</span>[] suffix, boolean[] prefix)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; ++i) &#123; <span class="comment">// 初始化</span></span><br><span class="line">    suffix[i] = <span class="number">-1</span>;</span><br><span class="line">    prefix[i] = <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m - <span class="number">1</span>; ++i) &#123; <span class="comment">// b[0, i]</span></span><br><span class="line">    <span class="keyword">int</span> j = i;</span><br><span class="line">    <span class="keyword">int</span> k = <span class="number">0</span>; <span class="comment">// 公共后缀子串长度</span></span><br><span class="line">    <span class="keyword">while</span> (j &gt;= <span class="number">0</span> &amp;&amp; b[j] == b[m<span class="number">-1</span>-k]) &#123; <span class="comment">// 与b[0, m-1]求公共后缀子串</span></span><br><span class="line">      --j;</span><br><span class="line">      ++k;</span><br><span class="line">      suffix[k] = j+<span class="number">1</span>; <span class="comment">//j+1表示公共后缀子串在b[0, i]中的起始下标</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (j == <span class="number">-1</span>) prefix[k] = <span class="literal">true</span>; <span class="comment">//如果公共后缀子串也是模式串的前缀子串</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有了这两个数组之后，我们现在来看，在模式串跟主串匹配的过程中，遇到不能匹配的字符时，如何根据好后缀规则，计算模式串往后滑动的位数？</p>
+<p>假设好后缀的长度是 k。我们先拿好后缀，在 suffix 数组中查找其匹配的子串。如果 suffix[k]不等于 -1（-1 表示不存在匹配的子串），那我们就将模式串往后移动 j-suffix[k]+1 位（j 表示坏字符对应的模式串中的字符下标）。如果 suffix[k]等于 -1，表示模式串中不存在另一个跟好后缀匹配的子串片段。我们可以用下面这条规则来处理</p>
+<p><img src="https://static001.geekbang.org/resource/image/1d/72/1d046df5cc40bc57d3f92ff7c51afb72.jpg" alt></p>
+<p>好后缀的后缀子串 b[r, m-1]（其中，r 取值从 j+2 到 m-1）的长度 k=m-r，如果 prefix[k]等于 true，表示长度为 k 的后缀子串，有可匹配的前缀子串，这样我们可以把模式串后移 r 位。</p>
+<p>如果两条规则都没有找到可以匹配好后缀及其后缀子串的子串，我们就将整个模式串后移 m 位。</p>
+<h4 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h4><h5 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// a,b表示主串和模式串；n，m表示主串和模式串的长度。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">bm</span><span class="params">(<span class="keyword">char</span>[] a, <span class="keyword">int</span> n, <span class="keyword">char</span>[] b, <span class="keyword">int</span> m)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span>[] bc = <span class="keyword">new</span> <span class="keyword">int</span>[SIZE]; <span class="comment">// 记录模式串中每个字符最后出现的位置</span></span><br><span class="line">  generateBC(b, m, bc); <span class="comment">// 构建坏字符哈希表</span></span><br><span class="line">  <span class="keyword">int</span>[] suffix = <span class="keyword">new</span> <span class="keyword">int</span>[m];</span><br><span class="line">  boolean[] prefix = <span class="keyword">new</span> boolean[m];</span><br><span class="line">  generateGS(b, m, suffix, prefix);</span><br><span class="line">  <span class="keyword">int</span> i = <span class="number">0</span>; <span class="comment">// j表示主串与模式串匹配的第一个字符</span></span><br><span class="line">  <span class="keyword">while</span> (i &lt;= n - m) &#123;</span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line">    <span class="keyword">for</span> (j = m - <span class="number">1</span>; j &gt;= <span class="number">0</span>; --j) &#123; <span class="comment">// 模式串从后往前匹配</span></span><br><span class="line">      <span class="keyword">if</span> (a[i+j] != b[j]) <span class="keyword">break</span>; <span class="comment">// 坏字符对应模式串中的下标是j</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (j &lt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> i; <span class="comment">// 匹配成功，返回主串与模式串第一个匹配的字符的位置</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> x = j - bc[(<span class="keyword">int</span>)a[i+j]];</span><br><span class="line">    <span class="keyword">int</span> y = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (j &lt; m<span class="number">-1</span>) &#123; <span class="comment">// 如果有好后缀的话</span></span><br><span class="line">      y = moveByGS(j, m, suffix, prefix);</span><br><span class="line">    &#125;</span><br><span class="line">    i = i + Math.max(x, y);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// j表示坏字符对应的模式串中的字符下标; m表示模式串长度</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">moveByGS</span><span class="params">(<span class="keyword">int</span> j, <span class="keyword">int</span> m, <span class="keyword">int</span>[] suffix, boolean[] prefix)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> k = m - <span class="number">1</span> - j; <span class="comment">// 好后缀长度</span></span><br><span class="line">  <span class="keyword">if</span> (suffix[k] != <span class="number">-1</span>) <span class="keyword">return</span> j - suffix[k] +<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> r = j+<span class="number">2</span>; r &lt;= m<span class="number">-1</span>; ++r) &#123;</span><br><span class="line">    <span class="keyword">if</span> (prefix[m-r] == <span class="literal">true</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> r;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> m;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> SIZE = <span class="number">256</span>;</span><br><span class="line"><span class="keyword">const</span> generateBC = <span class="function">(<span class="params">b</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> n = b.length;</span><br><span class="line">    <span class="keyword">let</span> bc = <span class="keyword">new</span> <span class="built_in">Array</span>(SIZE).fill(<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">let</span> ascii = b[i].charCodeAt();</span><br><span class="line">        bc[ascii] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bc;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> generateGS = <span class="function">(<span class="params">b</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> m = b.length;</span><br><span class="line">    <span class="keyword">let</span> suffix = <span class="keyword">new</span> <span class="built_in">Array</span>(m).fill(<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">let</span> prefix = <span class="keyword">new</span> <span class="built_in">Array</span>(m).fill(<span class="literal">false</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; m - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">let</span> j = i, k = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(j &gt;= <span class="number">0</span> &amp;&amp; b[j] == b[m - <span class="number">1</span> - k]) &#123;</span><br><span class="line">            suffix[++k] = j--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (j === <span class="number">-1</span>) &#123;</span><br><span class="line">            prefix[k] = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        suffix,</span><br><span class="line">        prefix</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> moveByGS = <span class="function">(<span class="params">j, suffix, prefix</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> m = suffix.length;</span><br><span class="line">    <span class="keyword">let</span> k = m - j - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (suffix[k] != <span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> j - suffix[k] + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> r = j + <span class="number">2</span>; r &lt; m; r++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (prefix[m - r]) &#123;</span><br><span class="line">            <span class="keyword">return</span> r;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> m;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> bm = <span class="function">(<span class="params">a, b</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> bc = generateBC(b);</span><br><span class="line">    <span class="keyword">const</span> &#123; suffix, prefix &#125; = generateGS(b);</span><br><span class="line">    <span class="keyword">let</span> i = <span class="number">0</span>, n = a.length, m = b.length;</span><br><span class="line">    <span class="keyword">while</span>(i &lt; n - m) &#123;</span><br><span class="line">        <span class="keyword">let</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (j = m - <span class="number">1</span>; j &gt;= <span class="number">0</span>; --j) &#123;</span><br><span class="line">            <span class="keyword">if</span> (a[i + j] != b[j]) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (j &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">let</span> x = j - bc[a[i + j].charCodeAt()];</span><br><span class="line">        <span class="keyword">let</span> y = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (j &lt; m - <span class="number">1</span>) &#123;</span><br><span class="line">            y = moveByGS(j, suffix, prefix);</span><br><span class="line">        &#125;</span><br><span class="line">        i += <span class="built_in">Math</span>.max(x, y);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="KMP"><a href="#KMP" class="headerlink" title="KMP"></a>KMP</h2><p><a href="https://sunra.top/2020/08/30/think_of_shortest_palindrome/">https://sunra.top/2020/08/30/think_of_shortest_palindrome/</a></p>
+<p>注：</p>
+<p>本文图片均来自于极客时间《数据结构与算法之美》</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://sunra.top/2020/10/24/string-matching-algorithm/" title="字符串匹配算法学习笔记">https://sunra.top/2020/10/24/string-matching-algorithm/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow noopener noreferrer" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/10/16/comparison-of-data-structures/" rel="next" title="几种基础数据结构的比较">
+                <i class="fa fa-chevron-left"></i> 几种基础数据结构的比较
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/10/26/four-algorithm-thought/" rel="prev" title="四种基本算法思想">
+                四种基本算法思想 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg" alt="Ray Sun">
+            
+              <p class="site-author-name" itemprop="name">Ray Sun</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">159</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Sun668" target="_blank" title="GitHub" rel="external nofollow noopener noreferrer">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:947692259@qq.com" target="_blank" title="E-Mail" rel="external nofollow noopener noreferrer">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a rel="external nofollow noopener noreferrer" href="https://kingworker.cn/" title="人生思考 - 大树的个人随想" target="_blank">人生思考 - 大树的个人随想</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#BF（暴力匹配）算法"><span class="nav-number">1.</span> <span class="nav-text">BF（暴力匹配）算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RK算法"><span class="nav-number">2.</span> <span class="nav-text">RK算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何巧妙地设计哈希函数"><span class="nav-number">2.1.</span> <span class="nav-text">如何巧妙地设计哈希函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#举个例子"><span class="nav-number">2.1.1.</span> <span class="nav-text">举个例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改进哈希函数"><span class="nav-number">2.2.</span> <span class="nav-text">改进哈希函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BM算法"><span class="nav-number">3.</span> <span class="nav-text">BM算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#核心思路"><span class="nav-number">3.1.</span> <span class="nav-text">核心思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原理分析"><span class="nav-number">3.2.</span> <span class="nav-text">原理分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#坏字符规则"><span class="nav-number">3.2.1.</span> <span class="nav-text">坏字符规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#好后缀规则"><span class="nav-number">3.2.2.</span> <span class="nav-text">好后缀规则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现"><span class="nav-number">3.3.</span> <span class="nav-text">算法实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#坏字符"><span class="nav-number">3.3.1.</span> <span class="nav-text">坏字符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#好后缀"><span class="nav-number">3.3.2.</span> <span class="nav-text">好后缀</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完整代码"><span class="nav-number">3.3.3.</span> <span class="nav-text">完整代码</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#C"><span class="nav-number">3.3.3.1.</span> <span class="nav-text">C++</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#JavaScript"><span class="nav-number">3.3.3.2.</span> <span class="nav-text">JavaScript</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KMP"><span class="nav-number">4.</span> <span class="nav-text">KMP</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a rel="external nofollow noopener noreferrer" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" rel="external nofollow noopener noreferrer" _blank" href="https://github.com/iissnan/hexo-theme-next" target="_blank">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="7yRqtT6cCpC-_R-rzM9gUoQGmheV9OZAUKIXrbAsyqE">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="一起探索互联网的秘密">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最近对如何开发一个VsCode的插件比较感兴趣，于是特意去读了一些插件的开发文档，主要看的是一个中文翻译的文档，不过这个文档并不全，基本属于重点功能的罗列，但是用来入门是挺好的，不过如果想要深入，还是要去看英文的文档。 大部分内容都比较简单，主要就是配置，就可以生效，我这次主要想总结的是如何开发一个全新的语言插件，也就是说，如果你想定义一门新类似JSX的语言，如果提供VsCode的支持，比如语法高">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VsCode 插件语言插件开发">
+<meta property="og:url" content="https://sunra.top/2021/06/04/lsp/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="最近对如何开发一个VsCode的插件比较感兴趣，于是特意去读了一些插件的开发文档，主要看的是一个中文翻译的文档，不过这个文档并不全，基本属于重点功能的罗列，但是用来入门是挺好的，不过如果想要深入，还是要去看英文的文档。 大部分内容都比较简单，主要就是配置，就可以生效，我这次主要想总结的是如何开发一个全新的语言插件，也就是说，如果你想定义一门新类似JSX的语言，如果提供VsCode的支持，比如语法高">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1623800006/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210616073111_tylgg9.png">
+<meta property="og:updated_time" content="2021-09-03T00:51:58.436Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="VsCode 插件语言插件开发">
+<meta name="twitter:description" content="最近对如何开发一个VsCode的插件比较感兴趣，于是特意去读了一些插件的开发文档，主要看的是一个中文翻译的文档，不过这个文档并不全，基本属于重点功能的罗列，但是用来入门是挺好的，不过如果想要深入，还是要去看英文的文档。 大部分内容都比较简单，主要就是配置，就可以生效，我这次主要想总结的是如何开发一个全新的语言插件，也就是说，如果你想定义一门新类似JSX的语言，如果提供VsCode的支持，比如语法高">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1623800006/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210616073111_tylgg9.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sunra.top/2021/06/04/lsp/">
+
+
+
+
+
+<script data-ad-client="ca-pub-8623125811074939" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <title>VsCode 插件语言插件开发 | Origin of Ray</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Origin of Ray</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">一起探索互联网的秘密</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/06/04/lsp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">VsCode 插件语言插件开发</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-06-04T08:31:19+08:00">
+                2021-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Sundry/" itemprop="url" rel="index">
+                    <span itemprop="name">Sundry</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近对如何开发一个VsCode的插件比较感兴趣，于是特意去读了一些插件的开发文档，主要看的是一个<a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/" rel="external nofollow noopener noreferrer" target="_blank">中文翻译的文档</a>，不过这个文档并不全，基本属于重点功能的罗列，但是用来入门是挺好的，不过如果想要深入，还是要去看<a href="https://code.visualstudio.com/api/extension-capabilities/overview" rel="external nofollow noopener noreferrer" target="_blank">英文的文档</a>。</p>
+<p>大部分内容都比较简单，主要就是配置，就可以生效，我这次主要想总结的是如何开发一个全新的语言插件，也就是说，如果你想定义一门新类似JSX的语言，如果提供VsCode的支持，比如语法高亮，代码片段，标签自闭和，错误提示，自动补全等等。</p>
+<a id="more"></a>
+
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1623800006/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210616073111_tylgg9.png" alt></p>
+<h1 id="插件目录结构"><a href="#插件目录结构" class="headerlink" title="插件目录结构"></a>插件目录结构</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">├── .vscode</span><br><span class="line">│   ├── launch.json     // 插件加载和调试的配置</span><br><span class="line">│   └── tasks.json      // 配置TypeScript编译任务</span><br><span class="line">├── .gitignore          // 忽略构建输出和node_modules文件</span><br><span class="line">├── README.md           // 一个友好的插件文档</span><br><span class="line">├── src</span><br><span class="line">│   └── extension.ts    // 插件源代码</span><br><span class="line">├── package.json        // 插件配置清单</span><br><span class="line">├── tsconfig.json       // TypeScript配置</span><br></pre></td></tr></table></figure>
+
+<h2 id="插件清单"><a href="#插件清单" class="headerlink" title="插件清单"></a>插件清单</h2><p>每个VS Code插件都必须包含一个<code>package.json</code>，它就是插件的<a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/references/extension-manifest" rel="external nofollow noopener noreferrer" target="_blank">配置清单</a>。<code>package.json</code>混合了Node.js字段，如：<code>scripts</code>、<code>dependencies</code>，还加入了一些VS Code独有的字段，如：<code>publisher</code>、<code>activationEvents</code>、<code>contributes</code>等。关于这些VS Code字段说明都在<a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/" rel="external nofollow noopener noreferrer" target="_blank">插件清单参考</a>中可以找到。我们在本节介绍一些非常重要的字段：</p>
+<ul>
+<li><p><code>name</code> 和 <code>publisher</code>: VS Code 使用<code>&lt;publisher&gt;.&lt;name&gt;</code>作为一个插件的ID。你可以这么理解，Hello World 例子的 ID 就是<code>vscode-samples.helloworld-sample</code>。VS Code 使用 ID 来区分各个不同的插件。</p>
+</li>
+<li><p><code>main</code>: 插件的主入口。</p>
+</li>
+<li><p><code>activationEvents</code> 和 <code>contributes</code>: <a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/references/activation-events" rel="external nofollow noopener noreferrer" target="_blank">激活事件</a> and <a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/references/contribution-points" rel="external nofollow noopener noreferrer" target="_blank">发布内容配置</a>。</p>
+</li>
+<li><p><code>engines.vscode</code>: 描述了这个插件依赖的最低VS Code API版本。</p>
+</li>
+<li><p><code>postinstall</code> 脚本: 如果你的<code>engines.vscode</code>声明的是1.25版的VS Code API，那它就会按照这个声明去安装目标版本。一旦<code>vscode.d.ts</code>文件存在于<code>node_modules/vscode/vscode.d.ts</code>，IntelliSense就会开始运作，你就可以对所有VS Code API进行定义跳转或者语法检查了。</p>
+</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"helloworld-sample"</span>,</span><br><span class="line">    <span class="attr">"displayName"</span>: <span class="string">"helloworld-sample"</span>,</span><br><span class="line">    <span class="attr">"description"</span>: <span class="string">"HelloWorld example for VS Code"</span>,</span><br><span class="line">    <span class="attr">"version"</span>: <span class="string">"0.0.1"</span>,</span><br><span class="line">    <span class="attr">"publisher"</span>: <span class="string">"vscode-samples"</span>,</span><br><span class="line">    <span class="attr">"repository"</span>: <span class="string">"https://github.com/Microsoft/vscode-extension-samples/helloworld-sample"</span>,</span><br><span class="line">    <span class="attr">"engines"</span>: &#123;</span><br><span class="line">        <span class="attr">"vscode"</span>: <span class="string">"^1.25.0"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"categories"</span>: [<span class="string">"Other"</span>],</span><br><span class="line">    <span class="attr">"activationEvents"</span>: [<span class="string">"onCommand:extension.helloWorld"</span>],<span class="comment">//激活事件，也就是什么事件会激活这个插件，这里个例子里就是当发生extension.helloWorld这个命令时会激活这个插件</span></span><br><span class="line">    <span class="attr">"main"</span>: <span class="string">"./out/extension.js"</span>,<span class="comment">//插件的入口文件</span></span><br><span class="line">    <span class="attr">"contributes"</span>: &#123;<span class="comment">//插件的发布配置，非常重要，注册事件，文件图标，标签自闭合等等绝大部分插件的配置都在这里</span></span><br><span class="line">        <span class="attr">"commands"</span>: [<span class="comment">//注册命令</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"command"</span>: <span class="string">"extension.helloWorld"</span>,<span class="comment">//这就是上面那个activationEvent里面的那个命令，也就是我们comman+shift+P时候中选择运行的命令</span></span><br><span class="line">                <span class="attr">"title"</span>: <span class="string">"Hello World"</span><span class="comment">//命令列表里显示的内容</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">        <span class="attr">"vscode:prepublish"</span>: <span class="string">"npm run compile"</span>,</span><br><span class="line">        <span class="attr">"compile"</span>: <span class="string">"tsc -p ./"</span>,</span><br><span class="line">        <span class="attr">"watch"</span>: <span class="string">"tsc -watch -p ./"</span>,</span><br><span class="line">        <span class="attr">"postinstall"</span>: <span class="string">"node ./node_modules/vscode/bin/install"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">        <span class="attr">"@types/node"</span>: <span class="string">"^8.10.25"</span>,</span><br><span class="line">        <span class="attr">"tslint"</span>: <span class="string">"^5.11.0"</span>,</span><br><span class="line">        <span class="attr">"typescript"</span>: <span class="string">"^2.6.1"</span>,</span><br><span class="line">        <span class="attr">"vscode"</span>: <span class="string">"^1.1.22"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="入口文件（package-json中的main）"><a href="#入口文件（package-json中的main）" class="headerlink" title="入口文件（package.json中的main）"></a>入口文件（package.json中的main）</h2><p>插件入口文件会导出两个函数，<code>activate</code> 和 <code>deactivate</code>，你注册的<strong>激活事件</strong>被触发之时执行<code>activate</code>，<code>deactivate</code>则提供了插件关闭前执行清理工作的机会。</p>
+<p><code>vscode</code>模块包含了一个位于<code>node ./node_modules/vscode/bin/install</code>的脚本，这个脚本会拉取<code>package.json</code>中<code>engines.vscode</code>字段定义的VS Code API。这个脚本执行过后，你就得到了智能代码提示，定义跳转等TS特性了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// &apos;vscode&apos;模块包含了VS Code extensibility API</span><br><span class="line">// 按下述方式导入这个模块</span><br><span class="line">import * as vscode from &apos;vscode&apos;;</span><br><span class="line">// 一旦你的插件激活，vscode会立刻调用下述方法</span><br><span class="line">export function activate(context: vscode.ExtensionContext) &#123;</span><br><span class="line"></span><br><span class="line">    // 用console输出诊断信息(console.log)和错误(console.error)</span><br><span class="line">    // 下面的代码只会在你的插件激活时执行一次</span><br><span class="line">    console.log(&apos;Congratulations, your extension &quot;my-first-extension&quot; is now active!&apos;);</span><br><span class="line"></span><br><span class="line">    // 入口命令已经在package.json文件中定义好了，现在调用registerCommand方法</span><br><span class="line">    // registerCommand中的参数必须与package.json中的command保持一致</span><br><span class="line">    let disposable = vscode.commands.registerCommand(&apos;extension.sayHello&apos;, () =&gt; &#123;</span><br><span class="line">        // 把你的代码写在这里，每次命令执行时都会调用这里的代码</span><br><span class="line">        // ...</span><br><span class="line">        // 给用户显示一个消息提示</span><br><span class="line">        vscode.window.showInformationMessage(&apos;Hello World!&apos;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    context.subscriptions.push(disposable);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="发布内容配置"><a href="#发布内容配置" class="headerlink" title="发布内容配置"></a>发布内容配置</h2><h1 id="插件可以做什么"><a href="#插件可以做什么" class="headerlink" title="插件可以做什么"></a>插件可以做什么</h1><h2 id="常用功能"><a href="#常用功能" class="headerlink" title="常用功能"></a>常用功能</h2><ul>
+<li><p>注册命令、配置、快捷键绑定、菜单等。</p>
+</li>
+<li><p>保存工作区或全局数据。</p>
+</li>
+<li><p>显示通知信息。</p>
+</li>
+<li><p>使用快速选择获得用户输入。</p>
+</li>
+<li><p>打开系统的文件选择工具，以便用户选择文件或文件夹。</p>
+</li>
+<li><p>使用进度API提示耗时较长的操作。</p>
+</li>
+</ul>
+<h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><ul>
+<li>使用pacakge.json中的contributes.commands注册命令，只有在这里注册的命令才可以在命令面板中搜索到。</li>
+<li>默认情况下，所有<em>命令面板</em>中出现的命令都可以在<code>package.json</code>的<code>commands</code>部分中配置。不过，有些命令是场景相关的，比如在特定的语言的编辑器中，或者只有用户设置了某些选项时才展示。<a href="https://code.visualstudio.com/docs/getstarted/keybindings#_when-clause-contexts" rel="external nofollow noopener noreferrer" target="_blank">Visual Studio Code Key Bindings</a>：可以查看如何写这个when命令</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"contributes"</span>: &#123;</span><br><span class="line">        <span class="string">"menus"</span>: &#123;</span><br><span class="line">            <span class="string">"commandPalette"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="string">"command"</span>: <span class="string">"myExtension.sayHello"</span>,</span><br><span class="line">                    <span class="string">"when"</span>: <span class="string">"editorLangId == markdown"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//现在myExtension.sayHello命令只会出现在用户的Markdown文件中了。</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用vscode.command.registerCommand为命令注册回调函数</li>
+<li>使用vscode.command.excuteCommand执行命令</li>
+</ul>
+<p>vscode也有很多内置的命令（<a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/references/commands" rel="external nofollow noopener noreferrer" target="_blank">VS Code内置命令清单</a>）</p>
+<p>我们看个例子🌰：<code>editor.action.addCommentLine</code>命令可以将当前选中行变成注释(你可以偷偷把这个功能地集成到你自己的插件中哦)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import * as vscode from &apos;vscode&apos;;</span><br><span class="line">function commentLine() &#123;</span><br><span class="line">    vscode.commands.executeCommand(&apos;editor.action.addCommentLine&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>插件需要在<code>contributes.configuration</code>发布内容配置点<a href="https://code.visualstudio.com/docs/extensionAPI/overview" rel="external nofollow noopener noreferrer" target="_blank">发布内容配置点</a>package.json的一部分，用于配置插件启动命令、用户可更改的插件配置，可以理解为插件的主要配置文件。中填写有关的配置，你可以<code>workspace.getConfiguration</code>API中阅读有关内容。</p>
+<h3 id="键位绑定"><a href="#键位绑定" class="headerlink" title="键位绑定"></a>键位绑定</h3><p>插件可以添加自定义键位映射，在<code>contributes.keybindings</code>和<a href="https://code.visualstudio.com/docs/getstarted/keybindings" rel="external nofollow noopener noreferrer" target="_blank">键位绑定</a>中了解更多有关内容。</p>
+<h3 id="菜单"><a href="#菜单" class="headerlink" title="菜单"></a>菜单</h3><p>插件可以自定义上下文菜单项，菜单会根据用户右击VS Code UI的不同位置而各不相同。查看更多<code>contributes.menus</code>发布内容配置。</p>
+<h3 id="数据存储"><a href="#数据存储" class="headerlink" title="数据存储"></a>数据存储</h3><p>VS Code中有三种数据储存方式：</p>
+<ul>
+<li><p><code>ExtensionContext.workspaceState</code>：键值对组成的工作区数据。当同一个工作区再次打开时会重新取出数据。</p>
+</li>
+<li><p><code>ExtensionContext.globalState</code>：键值对组成的全局数据。当插件激活时会再次取出这些数据。</p>
+</li>
+<li><p><code>ExtensionContext.storagePath</code>：指向你的插件可以读写的本地文件夹的路径。如果你要储存比较大的数据，这是一个非常好的选择。</p>
+</li>
+<li><p><code>ExtensionContext.globalStoragePath</code>：指向你的插件可以读写的本地存储的路径。如果你要存储所有工作区内的大文件，这是一个非常好的选择。</p>
+</li>
+</ul>
+<h3 id="通知"><a href="#通知" class="headerlink" title="通知"></a>通知</h3><p>几乎所有的插件都需要在某些时候为用户提示信息。VS Code提供了3个API来展示不同重要程度的信息：</p>
+<ul>
+<li><p><code>window.showInformationMessage</code></p>
+</li>
+<li><p><code>window.showWarningMessage</code></p>
+</li>
+<li><p><code>window.showErrorMessage</code></p>
+</li>
+</ul>
+<h2 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h2><p>产品图标主题和色彩主题可以参考文档：<a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/extension-guides/color-theme" rel="external nofollow noopener noreferrer" target="_blank">VS Code插件创作中文开发文档 - 色彩主题</a></p>
+<h3 id="文件图标主题"><a href="#文件图标主题" class="headerlink" title="文件图标主题"></a>文件图标主题</h3><p>VS Code的UI在文件名称左边显示图标，插件配置的图标系列可以让用户自由选择他们喜爱的图标。</p>
+<p>但是Vscode目前不支持某个语言插件只定义自己语言文件的图标，如果用户切换到你的插件提供的主题，却不能支持所有文件类型，就会出现问题</p>
+<p>首先，创建一个VS Code插件，然后把<code>iconTheme</code>配置点(contribution point)添加进去</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">"contributes": &#123;</span><br><span class="line">    "iconThemes": [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"id"</span>: <span class="string">"turtles"</span>,</span><br><span class="line">            <span class="attr">"label"</span>: <span class="string">"Turtles"</span>,</span><br><span class="line">            <span class="attr">"path"</span>: <span class="string">"./fileicons/turtles-icon-theme.json"</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>复制到剪贴板复制错误已复制</p>
+<ul>
+<li><p><code>id</code>作为这个图标主题的标识，目前只做内部使用，未来可能会用在设置里面，所以最好设置一个可读性强的唯一值。</p>
+</li>
+<li><p><code>label</code>会显示在<em>主题选择</em>下拉框中。</p>
+</li>
+<li><p><code>path</code>指示了图标集所在的位置。如果你的图标系列名称遵循<code>*icon-theme.json</code>命名规范，那么VS Code就能提供完整的支持。</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//turtles-icon-theme.json&#123;</span></span><br><span class="line">    "iconDefinitions": &#123;</span><br><span class="line">        "_folder_dark": &#123;</span><br><span class="line">            "iconPath": "./images/Folder_16x_inverse.svg"</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里，<strong>图标定义</strong>包含了一个标识符<code>_folder_dark</code>。除此之外还支持以下属性：</p>
+<ul>
+<li><p><code>iconPath</code>：当使用svg/png文件时：指向图片的路径。</p>
+</li>
+<li><p><code>fontCharacter</code>：当使用glyph字体时：字体中使用的字符。</p>
+</li>
+<li><p><code>fontColor</code>：当使用glyph字体时：设置glyph的颜色。</p>
+</li>
+<li><p><code>fontSize</code>：当使用字体时：设置字体大小。默认情况下会使用字体本身定义的字体大小。这个值应为父级字号的相对值(如 150%)。</p>
+</li>
+<li><p><code>fontId</code>：当使用字体时: 字体的ID。如果没有指定，则会采用<code>font specification</code>部分的第一个字体。</p>
+</li>
+</ul>
+<p>在iconDefinitions中定义之后，就可以引用了</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"iconDefinitions"</span>: &#123;</span><br><span class="line">        <span class="attr">"_folder_dark"</span>: &#123;</span><br><span class="line">            <span class="attr">"iconPath"</span>: <span class="string">"./images/Folder_16x_inverse.svg"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"file"</span>: <span class="string">"_file_dark"</span>,</span><br><span class="line">    <span class="attr">"folder"</span>: <span class="string">"_folder_dark"</span>,</span><br><span class="line">    <span class="attr">"folderExpanded"</span>: <span class="string">"_folder_open_dark"</span>,</span><br><span class="line">    <span class="attr">"folderNames"</span>: &#123;</span><br><span class="line">        <span class="attr">".vscode"</span>: <span class="string">"_vscode_folder"</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"fileExtensions"</span>: &#123;</span><br><span class="line">        <span class="attr">"ini"</span>: <span class="string">"_ini_file"</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"fileNames"</span>: &#123;</span><br><span class="line">        <span class="attr">"win.ini"</span>: <span class="string">"_win_ini_file"</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"languageIds"</span>: &#123;</span><br><span class="line">        <span class="attr">"ini"</span>: <span class="string">"_ini_file"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"light"</span>: &#123;</span><br><span class="line">        <span class="attr">"folderExpanded"</span>: <span class="string">"_folder_open_light"</span>,</span><br><span class="line">        <span class="attr">"folder"</span>: <span class="string">"_folder_light"</span>,</span><br><span class="line">        <span class="attr">"file"</span>: <span class="string">"_file_light"</span>,</span><br><span class="line">        <span class="attr">"fileExtensions"</span>: &#123;</span><br><span class="line">            <span class="attr">"ini"</span>: <span class="string">"_ini_file_light"</span>,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"highContrast"</span>: &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>file</code>是一个默认文件图标，为那些没有匹配到任何插件、文件名、语言类型的文件所准备的。目前所有文件图标属性都会被继承(只适用于：glyphs字体、字体大小(fontSize))。</p>
+</li>
+<li><p><code>folder</code>收起的文件夹图标，如果<code>folderExpanded</code>没有设置，那么展开的文件夹也会使用这个图标。使用<code>folderNames</code>关联特殊名称的文件夹。文件夹图标是可选的，如果不设置，那文件夹就不会显示任何图标。</p>
+</li>
+<li><p><code>folderExpanded</code>展开的文件夹图标。这个图标是可选的，如果不设置就会使用<code>folder</code>定义好的图标。</p>
+</li>
+<li><p><code>folderNames</code>特殊名称文件夹图标。这个键是用于文件夹名称的，不支持包含路径的名称，不支持匹配模式和通配符。大小写不敏感。</p>
+</li>
+<li><p><code>folderNamesExpanded</code>展开的特殊名称文件夹图标。</p>
+</li>
+<li><p><code>rootFolder</code> 收起的工作区根文件夹图标，如果<code>rootFolderExpanded</code>没有设置，那么展开的工作区根文件夹也会使用这个图标。如果不设置，则会使用<code>folder</code>定义的文件夹图标。</p>
+</li>
+<li><p><code>rootFolderExpanded</code> 展开的工作区根文件夹图标。如果没有设置，则会使用<code>rootFolder</code>定义的文件夹图标。</p>
+</li>
+<li><p><code>languageIds</code>语言类型图标。这个键将匹配在<em>语言配置点（contribution point）</em>配置的<a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/references/contribution-points?id=contributeslanguages" rel="external nofollow noopener noreferrer" target="_blank">语言id</a>。注意语言配置的’第一行’是不考虑在内的。</p>
+</li>
+<li><p><code>fileExtensions</code>文件插件图标。根据文件插件的名称匹配。插件名称是文件名点号后面（不包含点号）。拥有多重点号的文件名称，如<code>lib.d.ts</code>会匹配多个模式——<code>d.ts</code>和<code>ts</code>。大小写敏感。</p>
+</li>
+<li><p><code>fileNames</code>文件图标。这个键需要文件的全称进行匹配，不支持包含路径的名称，不支持模式和通配符。大小写敏感。<code>fileNames</code>是最高优先匹配。</p>
+</li>
+</ul>
+<p>匹配优先级：<code>fileNames</code> &gt; <code>fileExtensions</code> &gt; <code>languageIds</code></p>
+<p><code>light</code>和<code>highContrast</code>部分的属性表和上面相同，只是会在对应的主题下覆盖原有图标配置。</p>
+<h2 id="语言特性"><a href="#语言特性" class="headerlink" title="语言特性"></a>语言特性</h2><h3 id="声明式语言特性"><a href="#声明式语言特性" class="headerlink" title="声明式语言特性"></a>声明式语言特性</h3><p><a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/language-extensions/README?id=声明式语言特性" rel="external nofollow noopener noreferrer" target="_blank">声明式语言特性</a>添加了基础的编程语言编辑支持，如括号匹配、自动缩进和语法高亮。这些功能都可以通过声明配置而不用写任何代码就可以获得，更高级的语言特性如IntelliSense或调试，请看<a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/extension-capabilities/README?id=编程式添加语言特性" rel="external nofollow noopener noreferrer" target="_blank">编程式添加语言特性</a></p>
+<ul>
+<li><p>将常用的JS代码片段打包到插件中</p>
+</li>
+<li><p>为VS Code添加新的语言支持</p>
+</li>
+<li><p>为一门语言添加或替换语法</p>
+</li>
+<li><p>通过注入的方式，扩展一门语法</p>
+</li>
+<li><p>将现有的 TextMate 语法迁移到VS Code中</p>
+</li>
+</ul>
+<h4 id="代码片段"><a href="#代码片段" class="headerlink" title="代码片段"></a>代码片段</h4><p><a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/language-extensions/snippet-guide" rel="external nofollow noopener noreferrer" target="_blank">VS Code插件创作中文开发文档 - 代码片段</a></p>
+<h4 id="语言配置"><a href="#语言配置" class="headerlink" title="语言配置"></a>语言配置</h4><p>通过<code>contributes.languages</code>发布内容配置，你可以配置以下<em>声明式语言特性</em>：</p>
+<ul>
+<li><p>启用/关闭注释</p>
+</li>
+<li><p>定义括号</p>
+</li>
+<li><p>自动闭合符号</p>
+</li>
+<li><p>自动环绕符号</p>
+</li>
+<li><p>代码折叠</p>
+</li>
+<li><p>单词匹配</p>
+</li>
+<li><p>缩进规则</p>
+</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"language-configuration-sample"</span>,</span><br><span class="line">  <span class="attr">"displayName"</span>: <span class="string">"Language Configuration Sample"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"Language Configuration Sample"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"0.0.1"</span>,</span><br><span class="line">  <span class="attr">"publisher"</span>: <span class="string">"vscode-samples"</span>,</span><br><span class="line">  <span class="attr">"engines"</span>: &#123;</span><br><span class="line">    <span class="attr">"vscode"</span>: <span class="string">"^1.28.0"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"categories"</span>: [</span><br><span class="line">    <span class="string">"Programming Languages"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"contributes"</span>: &#123;</span><br><span class="line">    <span class="attr">"languages"</span>: [ <span class="comment">// 定义新的语言</span></span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">"id"</span>: <span class="string">"vnm"</span>, <span class="comment">// 语言的id</span></span><br><span class="line">        <span class="attr">"extensions"</span>: [</span><br><span class="line">          <span class="string">".js"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"aliases"</span>: [</span><br><span class="line">          <span class="string">"js"</span>,</span><br><span class="line">          <span class="string">"JavaScript"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"configuration"</span>: <span class="string">"./language-configuration.json"</span> <span class="comment">// 该语言的配置</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"comments"</span>: &#123; <span class="comment">// 定义注释方式</span></span><br><span class="line">        <span class="attr">"lineComment"</span>: <span class="string">"//"</span>,</span><br><span class="line">        <span class="attr">"blockComment"</span>: [<span class="string">"/*"</span>, <span class="string">"*/"</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"brackets"</span>: [[<span class="string">"&#123;"</span>, <span class="string">"&#125;"</span>], [<span class="string">"["</span>, <span class="string">"]"</span>], [<span class="string">"("</span>, <span class="string">")"</span>]], <span class="comment">//定义括号，当鼠标移动到某个括号上时，会自动高亮对应的括号</span></span><br><span class="line">    <span class="attr">"autoClosingPairs"</span>: [<span class="comment">//自动闭合括号</span></span><br><span class="line">        &#123; <span class="attr">"open"</span>: <span class="string">"&#123;"</span>, <span class="attr">"close"</span>: <span class="string">"&#125;"</span> &#125;,</span><br><span class="line">        &#123; <span class="attr">"open"</span>: <span class="string">"["</span>, <span class="attr">"close"</span>: <span class="string">"]"</span> &#125;,</span><br><span class="line">        &#123; <span class="attr">"open"</span>: <span class="string">"("</span>, <span class="attr">"close"</span>: <span class="string">")"</span> &#125;,</span><br><span class="line">        &#123; <span class="attr">"open"</span>: <span class="string">"'"</span>, <span class="attr">"close"</span>: <span class="string">"'"</span>, <span class="attr">"notIn"</span>: [<span class="string">"string"</span>, <span class="string">"comment"</span>] &#125;,</span><br><span class="line">        &#123; <span class="attr">"open"</span>: <span class="string">"\""</span>, <span class="attr">"close"</span>: <span class="string">"\""</span>, <span class="attr">"notIn"</span>: [<span class="string">"string"</span>] &#125;,</span><br><span class="line">        &#123; <span class="attr">"open"</span>: <span class="string">"`"</span>, <span class="attr">"close"</span>: <span class="string">"`"</span>, <span class="attr">"notIn"</span>: [<span class="string">"string"</span>, <span class="string">"comment"</span>] &#125;,</span><br><span class="line">        &#123; <span class="attr">"open"</span>: <span class="string">"/**"</span>, <span class="attr">"close"</span>: <span class="string">" */"</span>, <span class="attr">"notIn"</span>: [<span class="string">"string"</span>] &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"autoCloseBefore"</span>: <span class="string">";:.,=&#125;])&gt;` \n\t"</span>,<span class="comment">//默认情况下只有在右侧有空白时才会闭合标签，可以通过这个配置覆盖默认行为</span></span><br><span class="line">    <span class="attr">"surroundingPairs"</span>: [ <span class="comment">// 自动环绕括号</span></span><br><span class="line">        [<span class="string">"&#123;"</span>, <span class="string">"&#125;"</span>],</span><br><span class="line">        [<span class="string">"["</span>, <span class="string">"]"</span>],</span><br><span class="line">        [<span class="string">"("</span>, <span class="string">")"</span>],</span><br><span class="line">        [<span class="string">"'"</span>, <span class="string">"'"</span>],</span><br><span class="line">        [<span class="string">"\""</span>, <span class="string">"\""</span>],</span><br><span class="line">        [<span class="string">"`"</span>, <span class="string">"`"</span>]</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"folding"</span>: &#123;</span><br><span class="line">        <span class="attr">"markers"</span>: &#123;</span><br><span class="line">            <span class="attr">"start"</span>: <span class="string">"^\\s*//\\s*#?region\\b"</span>,</span><br><span class="line">            <span class="attr">"end"</span>: <span class="string">"^\\s*//\\s*#?endregion\\b"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"wordPattern"</span>: <span class="string">"(-?\\d*\\.\\d\\w*)|([^\\`\\~\\!\\@\\#\\%\\^\\&amp;\\*\\(\\)\\-\\=\\+\\[\\&#123;\\]\\&#125;\\\\\\|\\;\\:\\'\\\"\\,\\.\\&lt;\\&gt;\\/\\?\\s]+)"</span>,</span><br><span class="line">    <span class="attr">"indentationRules"</span>: &#123;</span><br><span class="line">        <span class="attr">"increaseIndentPattern"</span>: <span class="string">"^((?!\\/\\/).)*(\\&#123;[^&#125;\"'`]*|\\([^)\"'`]*|\\[[^\\]\"'`]*)$"</span>,</span><br><span class="line">        <span class="attr">"decreaseIndentPattern"</span>: <span class="string">"^((?!.*?\\/\\*).*\\*/)?\\s*[\\&#125;\\]].*$"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="编程式语言特性-监听用户动作"><a href="#编程式语言特性-监听用户动作" class="headerlink" title="编程式语言特性(监听用户动作)"></a>编程式语言特性(监听用户动作)</h3><p><a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/language-extensions/programmatic-language-features?id=程序性语言特性" rel="external nofollow noopener noreferrer" target="_blank">VS Code插件创作中文开发文档 - 程序性语言特性</a></p>
+<p>下面这表对应的是我们可以实现的编程性语言特性，每个特性都可以单独通过左边一列的VScode API来实现，同时可以单独通过<a href="https://microsoft.github.io/language-server-protocol/" rel="external nofollow noopener noreferrer" target="_blank">Language Server Protocol</a>在语言服务器中实现。</p>
+<p>理论上所有通过语言服务器实现的特性都可以单独用客户端实现</p>
+<p>Unable to copy while content loads</p>
+<p><a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/language-extensions/README?id=编程式语言特性" rel="external nofollow noopener noreferrer" target="_blank">编程式添加语言特性</a>可以为编程语言添加更为丰富的特性，如：悬停提示、转跳定义、错误诊断、IntelliSense和CodeLens。这些语言特性暴露于<code>vscode.languages.*</code>API。语言插件可以直接使用这些API，或是自己写一个语言服务器，通过<a href="https://github.com/Microsoft/vscode-languageserver-node" rel="external nofollow noopener noreferrer" target="_blank">语言服务器库</a>将它适配到VS Code。</p>
+<p>虽然我们提供了一个<a href="https://liiked.github.io/VS-Code-Extension-Doc-ZH/#/language-extensions/programmatic-language-features" rel="external nofollow noopener noreferrer" target="_blank">语言特性</a>列表，但是并不阻碍你发挥想象，自由使用这些API。比方说，在行内显示额外信息，使用CodeLens和代码悬停是非常好的方式，而错误诊断可以高亮拼写或代码风格错误。</p>
+<ul>
+<li><p>鼠标悬停于API上时, 出现用法示例</p>
+</li>
+<li><p>使用诊断，报告代码风格错误</p>
+</li>
+<li><p>注册新的HTML代码格式化</p>
+</li>
+<li><p>提供丰富的IntelliSense中间件</p>
+</li>
+<li><p>为一门语言添加代码折叠、面包屑、轮廓支持</p>
+</li>
+</ul>
+<h4 id="以自动补全为例子说明用法"><a href="#以自动补全为例子说明用法" class="headerlink" title="以自动补全为例子说明用法"></a>以自动补全为例子说明用法</h4><p>客户端实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class GoCompletionItemProvider implements vscode.CompletionItemProvider &#123;</span><br><span class="line">    public provideCompletionItems(</span><br><span class="line">        document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken):</span><br><span class="line">        Thenable&lt;vscode.CompletionItem[]&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">export function activate(ctx: vscode.ExtensionContext): void &#123;</span><br><span class="line">    ...</span><br><span class="line">    //registerCompletionItemProvider返回的是解除本身注册的函数，这里猜测添加订阅的一个目的是为了以后的unregister</span><br><span class="line">    ctx.subscriptions.push(</span><br><span class="line">        vscode.languages.registerCompletionItemProvider(</span><br><span class="line">            GO_MODE, new GoCompletionItemProvider(), &apos;.&apos;, &apos;\&quot;&apos;));</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>LSP实现</p>
+<p>在接收响应的<code>initialize</code>方法中，你的语言服务器需要声明它是否能提供补全，以及它是否支持动态计算补全项的<code>completionItem\resolve</code>方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    &quot;capabilities&quot; : &#123;</span><br><span class="line">        &quot;completionProvider&quot; : &#123;</span><br><span class="line">            &quot;resolveProvider&quot;: &quot;true&quot;,</span><br><span class="line">            &quot;triggerCharacters&quot;: [ &apos;.&apos; ]</span><br><span class="line">        &#125;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>返回了这个配置，客户端才会在输入完成后发送textDocument/completion事件给语言服务器，语言服务器通过onCompletion事件监听这个事件，监听后返回匹配的列表。</p>
+<p>当我们具体选择了某一个补全项之后，会发送completionItem/resolve事件，该事件被onCompletionResolve事件监听，可以补全具体的信息，或者进行修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//server.ts</span><br><span class="line">connection.onCompletion(</span><br><span class="line">  (&#123; textDocument, position, context &#125;: CompletionParams): CompletionItem[] =&gt; &#123;</span><br><span class="line">    const doc = documentService.getDocument(textDocument.uri)!;</span><br><span class="line"></span><br><span class="line">    //返回类型为CompletionItem[]</span><br><span class="line">    const completionItems = doComplete(doc, position);</span><br><span class="line"> </span><br><span class="line">    return completionItems || [];</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">// 这个函数为补全列表的选中项提供了更多信息</span><br><span class="line">connection.onCompletionResolve((item: CompletionItem): CompletionItem =&gt; &#123;</span><br><span class="line">  if (item.label === &apos;$store&apos;) &#123;</span><br><span class="line">    item.insertText = &apos;store&apos;</span><br><span class="line">  &#125;</span><br><span class="line">  return item;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="监听文档的变化"><a href="#监听文档的变化" class="headerlink" title="监听文档的变化"></a>监听文档的变化</h3><p>上面的编程式语言特性主要做的当我们进行了某些动作之后，客户端本身监听到或者客户端将监听到的动作与服务器之间利用事件进行通信。</p>
+<p>还有一种方式，是文本本身发生变化时通知客户端或者告诉语言服务器文本的内容</p>
+<p>客户端本身监听到的内容改变，可以在vscode.workspace.*中找到对应的api，如vscode.workspace.onDidChangeTextDocument</p>
+<p>LSP则稍微复杂一点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">//DocumentService.ts</span><br><span class="line">import &#123; Connection, TextDocuments &#125; from &apos;vscode-languageserver&apos;;</span><br><span class="line">import &#123; TextDocument &#125; from &apos;vscode-languageserver-textdocument&apos;;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Service responsible for managing documents being syned through LSP</span><br><span class="line"> */</span><br><span class="line">export class DocumentService &#123;</span><br><span class="line">  private documents: TextDocuments&lt;TextDocument&gt;;</span><br><span class="line"></span><br><span class="line">  constructor(conn: Connection) &#123;</span><br><span class="line">    this.documents = new TextDocuments(TextDocument);</span><br><span class="line">    this.documents.listen(conn);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getDocument(uri: string) &#123;</span><br><span class="line">    return this.documents.get(uri);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getAllDocuments() &#123;</span><br><span class="line">    return this.documents.all();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  get onDidChangeContent() &#123;</span><br><span class="line">    return this.documents.onDidChangeContent;</span><br><span class="line">  &#125;</span><br><span class="line">  get onDidClose() &#123;</span><br><span class="line">    return this.documents.onDidClose;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">//server.ts</span><br><span class="line">documentService.onDidChangeContent((change) =&gt; &#123;</span><br><span class="line">  const textDocument = change.document;</span><br><span class="line">  connection.sendDiagnostics(&#123; uri: textDocument.uri, diagnostics: validateTextDocument(textDocument) &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这种方式每次都是发送全量文本，对性能会有影响，所以vscode又提供了增量文本更新同步</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://sunra.top/2021/06/04/lsp/" title="VsCode 插件语言插件开发">https://sunra.top/2021/06/04/lsp/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow noopener noreferrer" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/06/01/react-fiber/" rel="next" title="react-fiber">
+                <i class="fa fa-chevron-left"></i> react-fiber
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/06/09/g6/" rel="prev" title="G6 使用入门与总结">
+                G6 使用入门与总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg" alt="Ray Sun">
+            
+              <p class="site-author-name" itemprop="name">Ray Sun</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">159</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Sun668" target="_blank" title="GitHub" rel="external nofollow noopener noreferrer">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:947692259@qq.com" target="_blank" title="E-Mail" rel="external nofollow noopener noreferrer">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a rel="external nofollow noopener noreferrer" href="https://kingworker.cn/" title="人生思考 - 大树的个人随想" target="_blank">人生思考 - 大树的个人随想</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#插件目录结构"><span class="nav-number">1.</span> <span class="nav-text">插件目录结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#插件清单"><span class="nav-number">1.1.</span> <span class="nav-text">插件清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#入口文件（package-json中的main）"><span class="nav-number">1.2.</span> <span class="nav-text">入口文件（package.json中的main）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布内容配置"><span class="nav-number">1.3.</span> <span class="nav-text">发布内容配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#插件可以做什么"><span class="nav-number">2.</span> <span class="nav-text">插件可以做什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用功能"><span class="nav-number">2.1.</span> <span class="nav-text">常用功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#命令"><span class="nav-number">2.1.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">2.1.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#键位绑定"><span class="nav-number">2.1.3.</span> <span class="nav-text">键位绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#菜单"><span class="nav-number">2.1.4.</span> <span class="nav-text">菜单</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据存储"><span class="nav-number">2.1.5.</span> <span class="nav-text">数据存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通知"><span class="nav-number">2.1.6.</span> <span class="nav-text">通知</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主题"><span class="nav-number">2.2.</span> <span class="nav-text">主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件图标主题"><span class="nav-number">2.2.1.</span> <span class="nav-text">文件图标主题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语言特性"><span class="nav-number">2.3.</span> <span class="nav-text">语言特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#声明式语言特性"><span class="nav-number">2.3.1.</span> <span class="nav-text">声明式语言特性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码片段"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">代码片段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#语言配置"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">语言配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编程式语言特性-监听用户动作"><span class="nav-number">2.3.2.</span> <span class="nav-text">编程式语言特性(监听用户动作)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#以自动补全为例子说明用法"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">以自动补全为例子说明用法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#监听文档的变化"><span class="nav-number">2.3.3.</span> <span class="nav-text">监听文档的变化</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a rel="external nofollow noopener noreferrer" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" rel="external nofollow noopener noreferrer" _blank" href="https://github.com/iissnan/hexo-theme-next" target="_blank">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
