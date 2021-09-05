@@ -14949,7 +14949,7 @@
 <p>比如这里：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1630811355/origin-of-ray/screenshot-20210905-110715_codkmh.png" alt></p>
 <p>成功以后，我就可以在BeEF后台看见你的所有信息，包括你的系统，浏览器，cookie等等</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1630811356/origin-of-ray/screenshot-20210905-110756_kjo1qx.png" alt></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1630813809/origin-of-ray/screenshot-20210905-114955_admtsl.png" alt></p>
 <p>恐怖吗？还有更恐怖的，比如我可以诱导你下载恶意软件</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1630811356/origin-of-ray/screenshot-20210905-110821_fhqa8m.png" alt></p>
 <p>然后你的浏览器就会显示这个：</p>
@@ -14959,7 +14959,7 @@
 <h2 id="DOM型XSS"><a href="#DOM型XSS" class="headerlink" title="DOM型XSS"></a>DOM型XSS</h2><p>DOM型XSS其实算是反射型的一种，或者是补充，我们刚才说的反射型，需要请求到后台，后台提取链接信息，然后拼接整个网页给前端，可以看到，这对于前后端分离，或者说纯前端的项目是没有用的，因为它页面是前端动态改变的，而不是后端给的。</p>
 <p>这种情况下，就需要用到DOM型的XSS了。</p>
 <p>它是通过动态操作DOM树来实现的，不依赖于数据提交到服务器，如：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="xml">document.write('<span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(document.cookie)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>')<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="xml">document.write('<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="built_in">document</span>.cookie)</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>')<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>他和反射型的相同点在于，没有控制好用户的输入，把script脚本作为标签渲染了。</p>
 <p>不同点就在于是否经过服务器，反射型的页面是服务端根据url拼接完整页面给前端渲染，而DOM型是直接就在脚本里修改页面结构，插入一个script节点，或者说一开始的那种反射是用户输入与后端之间的反射，DOM反射是在用户输入与前端自身逻辑之间的反射，前端自身会根据用户输入做出反应。</p>
