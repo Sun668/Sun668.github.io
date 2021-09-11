@@ -8700,7 +8700,7 @@
   </entry>
   <entry>
     <title>伪协议与编码绕过</title>
-    <url>/2021/09/11/pseudo-protocol-and-code-bypass/</url>
+    <url>/2021/09/10/pseudo-protocol-and-code-bypass/</url>
     <content><![CDATA[<p>这篇博客可以接上我的上一篇关于<a href="https://sunra.top/2021/09/05/xss-inrtroduction/">XSS 的分类与利用方式</a>，这次讲的伪协议与编码绕过也是一种代码注入的攻击方式，伪协议提供了另外一种代码注入点，编码绕过是对应的注入方式。</p>
 <a id="more"></a>
 
