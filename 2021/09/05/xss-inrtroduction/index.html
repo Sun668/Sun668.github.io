@@ -103,7 +103,7 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1630811355/origin-of-ray/screenshot-20210905-110842_s0ytrd.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1630812836/origin-of-ray/screenshot-20210905-113248_db3p0i.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1630813534/origin-of-ray/screenshot-20210905-114517_hwplh3.png">
-<meta property="og:updated_time" content="2021-09-11T00:08:26.175Z">
+<meta property="og:updated_time" content="2021-09-20T13:55:16.700Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XSS 的分类与利用方式">
 <meta name="twitter:description" content="XSS（跨站脚本攻击，注意是跨站，不是跨域，二者的区别大家可以自行搜索）漏洞已经是一个老生常谈的前端安全威胁了。 但是其实到目前为止还是高居前端漏洞排行榜前十。 加上最近买了门关于网络安全漏洞大全的课程，当然主要目的还是保护自己的信息安全，哈哈哈。 课程大概分为五个部分，第一个部分是安全基础，都是些基础知识，比如HTML，CSS，JS，PHP，NGINX，Spring，网络协议等等，其实就是经典面">
@@ -459,6 +459,7 @@
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1630811355/origin-of-ray/screenshot-20210905-110842_s0ytrd.png" alt></p>
 <p>如果你点了，就会下载我指定的文件，那很可能你的电脑都会被我远程控制，当然这是理论上，我暂时没这个能耐，哈哈哈哈</p>
 <p>关于这个BeEF之后，再出一篇博客介绍，功能太多了，就不一一介绍了</p>
+<h3 id="结合文件上传漏洞的存储型XSS"><a href="#结合文件上传漏洞的存储型XSS" class="headerlink" title="结合文件上传漏洞的存储型XSS"></a>结合文件上传漏洞的存储型XSS</h3><p>有的文件是可以插入代码的，如svg中是可以插入script脚本，如果网站上传文件不加检测，可以上传一个带有恶意代码的svg图片，那么就会形成存储型XSS。</p>
 <h2 id="DOM型XSS"><a href="#DOM型XSS" class="headerlink" title="DOM型XSS"></a>DOM型XSS</h2><p>DOM型XSS其实算是反射型的一种，或者是补充，我们刚才说的反射型，需要请求到后台，后台提取链接信息，然后拼接整个网页给前端，可以看到，这对于前后端分离，或者说纯前端的项目是没有用的，因为它页面是前端动态改变的，而不是后端给的。</p>
 <p>这种情况下，就需要用到DOM型的XSS了。</p>
 <p>它是通过动态操作DOM树来实现的，不依赖于数据提交到服务器，如：</p>
@@ -692,7 +693,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#XSS攻击的危害"><span class="nav-number">1.</span> <span class="nav-text">XSS攻击的危害</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XSS的基本攻击原理"><span class="nav-number">2.</span> <span class="nav-text">XSS的基本攻击原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反射型XSS"><span class="nav-number">3.</span> <span class="nav-text">反射型XSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储型XSS"><span class="nav-number">4.</span> <span class="nav-text">存储型XSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DOM型XSS"><span class="nav-number">5.</span> <span class="nav-text">DOM型XSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#突变型XSS"><span class="nav-number">6.</span> <span class="nav-text">突变型XSS</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#XSS攻击的危害"><span class="nav-number">1.</span> <span class="nav-text">XSS攻击的危害</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XSS的基本攻击原理"><span class="nav-number">2.</span> <span class="nav-text">XSS的基本攻击原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反射型XSS"><span class="nav-number">3.</span> <span class="nav-text">反射型XSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储型XSS"><span class="nav-number">4.</span> <span class="nav-text">存储型XSS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#结合文件上传漏洞的存储型XSS"><span class="nav-number">4.1.</span> <span class="nav-text">结合文件上传漏洞的存储型XSS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DOM型XSS"><span class="nav-number">5.</span> <span class="nav-text">DOM型XSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#突变型XSS"><span class="nav-number">6.</span> <span class="nav-text">突变型XSS</span></a></li></ol></div>
             
 
           </div>

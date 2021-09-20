@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sunra.top/2021/09/05/xss-inrtroduction/</loc>
+    
+    <lastmod>2021-09-20</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://sunra.top/2021/09/19/xss-worm/</loc>
     
     <lastmod>2021-09-20</lastmod>
@@ -12,13 +19,6 @@
     <loc>https://sunra.top/2021/09/10/pseudo-protocol-and-code-bypass/</loc>
     
     <lastmod>2021-09-17</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://sunra.top/2021/09/05/xss-inrtroduction/</loc>
-    
-    <lastmod>2021-09-11</lastmod>
     
   </url>
   
@@ -1161,14 +1161,14 @@
 
   
   <url>
-    <loc>https://sunra.top/categories/Sundry/</loc>
+    <loc>https://sunra.top/categories/Network/</loc>
     <lastmod>2021-09-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Network/</loc>
+    <loc>https://sunra.top/categories/Sundry/</loc>
     <lastmod>2021-09-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1203,14 +1203,14 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Blockchain/</loc>
+    <loc>https://sunra.top/categories/JavaScript/</loc>
     <lastmod>2021-09-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/JavaScript/</loc>
+    <loc>https://sunra.top/categories/Blockchain/</loc>
     <lastmod>2021-09-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
