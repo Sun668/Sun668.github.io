@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="伪协议 编码绕过 unicode">
+  <meta name="keywords" content="OS">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="这篇博客可以接上我的上一篇关于XSS 的分类与利用方式，这次讲的伪协议与编码绕过也是一种代码注入的攻击方式，伪协议提供了另外一种代码注入点，编码绕过是对应的注入方式。">
-<meta name="keywords" content="伪协议 编码绕过 unicode">
+<meta name="description" content="最近从头认真看操作系统了，感觉大学的时候啥都没干，全程像在看新的知识。 看了一部分了，感觉只是能形成一点体系，有了一点感悟了，在这里稍微总结下， 这应该会是一个系列。">
+<meta name="keywords" content="OS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="伪协议与编码绕过">
-<meta property="og:url" content="https://sunra.top/2021/09/10/xss-pseudo-protocol-and-code-bypass/index.html">
+<meta property="og:title" content="操作系统学习笔记（一）操作系统的特征与发展分类">
+<meta property="og:url" content="https://sunra.top/2021/09/25/operating-system-note-1/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="这篇博客可以接上我的上一篇关于XSS 的分类与利用方式，这次讲的伪协议与编码绕过也是一种代码注入的攻击方式，伪协议提供了另外一种代码注入点，编码绕过是对应的注入方式。">
+<meta property="og:description" content="最近从头认真看操作系统了，感觉大学的时候啥都没干，全程像在看新的知识。 看了一部分了，感觉只是能形成一点体系，有了一点感悟了，在这里稍微总结下， 这应该会是一个系列。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-09-20T23:12:24.403Z">
+<meta property="og:updated_time" content="2021-09-25T14:14:28.307Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="伪协议与编码绕过">
-<meta name="twitter:description" content="这篇博客可以接上我的上一篇关于XSS 的分类与利用方式，这次讲的伪协议与编码绕过也是一种代码注入的攻击方式，伪协议提供了另外一种代码注入点，编码绕过是对应的注入方式。">
+<meta name="twitter:title" content="操作系统学习笔记（一）操作系统的特征与发展分类">
+<meta name="twitter:description" content="最近从头认真看操作系统了，感觉大学的时候啥都没干，全程像在看新的知识。 看了一部分了，感觉只是能形成一点体系，有了一点感悟了，在这里稍微总结下， 这应该会是一个系列。">
 
 
 
@@ -120,14 +120,14 @@
 
 
 
-  <link rel="canonical" href="https://sunra.top/2021/09/10/xss-pseudo-protocol-and-code-bypass/">
+  <link rel="canonical" href="https://sunra.top/2021/09/25/operating-system-note-1/">
 
 
 
 
 
 <script data-ad-client="ca-pub-8623125811074939" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <title>伪协议与编码绕过 | Origin of Ray</title>
+  <title>操作系统学习笔记（一）操作系统的特征与发展分类 | Origin of Ray</title>
   
 
 
@@ -276,7 +276,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/09/10/xss-pseudo-protocol-and-code-bypass/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/09/25/operating-system-note-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Ray Sun">
@@ -293,7 +293,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">伪协议与编码绕过</h2>
+          <h2 class="post-title" itemprop="name headline">操作系统学习笔记（一）操作系统的特征与发展分类</h2>
         
 
         <div class="post-meta">
@@ -305,8 +305,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-09-10T17:31:41+08:00">
-                2021-09-10
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-09-25T19:57:55+08:00">
+                2021-09-25
               </time>
             
 
@@ -328,8 +328,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Security/" itemprop="url" rel="index">
-                    <span itemprop="name">Security</span>
+                  <a href="/categories/OS/" itemprop="url" rel="index">
+                    <span itemprop="name">OS</span>
                   </a>
                 </span>
 
@@ -365,72 +365,114 @@
       
 
       
-        <p>这篇博客可以接上我的上一篇关于<a href="https://sunra.top/2021/09/05/xss-inrtroduction/">XSS 的分类与利用方式</a>，这次讲的伪协议与编码绕过也是一种代码注入的攻击方式，伪协议提供了另外一种代码注入点，编码绕过是对应的注入方式。</p>
+        <p>最近从头认真看操作系统了，感觉大学的时候啥都没干，全程像在看新的知识。</p>
+<p>看了一部分了，感觉只是能形成一点体系，有了一点感悟了，在这里稍微总结下， 这应该会是一个系列。</p>
 <a id="more"></a>
 
-<h2 id="伪协议是什么"><a href="#伪协议是什么" class="headerlink" title="伪协议是什么"></a>伪协议是什么</h2><p>说起啦伪协议的概念也比较简单，只不过情况种类比较多。</p>
-<p>伪协议不同于因特网上所广泛使用的如http，https，ftp等协议，在url中使用，用于执行特定的功能。<br>如Data伪协议：<code>data:text/html;base64,PHanflajfAFLGLKSJ=</code>,<br>JavaScript伪协议：<code>javascript:alert(1);**</code>;</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:alert(5)"</span>&gt;</span>javascript伪协议<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTs8L3NjcmlwdD4="</span>&gt;</span>data 伪协议 base64<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"data:text/html;base64,PHNjcmlwdD5hbGVydCgiMSIpOzwvc2NyaXB0Pg=="</span>&gt;</span>含双引号data 伪协议 base64<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="编码绕过"><a href="#编码绕过" class="headerlink" title="编码绕过"></a>编码绕过</h2><p>伪协议其实客观上又提供了额外的代码注入点，那编码绕过就是我们利用这个注入点进行注入的方式。</p>
-<p>这种注入方式主要是为了绕过对<code>&lt;script&gt;</code>标签，括号，引号等的过滤</p>
-<h3 id="Unicode编码"><a href="#Unicode编码" class="headerlink" title="Unicode编码"></a>Unicode编码</h3><p>在讲编码绕过之前，首先提一嘴这个我们耳熟能详的编码方式。</p>
-<p>ISO (国际标谁化组织)制定的包括了地球上所有文化、所有字母和符号 的编码，使用两个字节表示一个字符。</p>
-<p>Unicode 只是一个符号集，它只规定了符号的二进制代码，却没有规定 这个二进制代码应该如何存储。</p>
-<p>具体存储由:UTF-8，UTF-16等实现</p>
+<h2 id="操作系统的基本概念"><a href="#操作系统的基本概念" class="headerlink" title="操作系统的基本概念"></a>操作系统的基本概念</h2><p>在操作系统的逻辑中，计算机系统自下而上大致分为四个部分，硬件，操作系统，应用程序和用户。</p>
+<p>操作系统是指控制和管理整个计算机系统的硬件与软件资源，合理组织和调度计算机的工作和资源的分配，进而为用户和其他软件提供方便接口与环境的程序集合。</p>
+<h2 id="操作系统的特征"><a href="#操作系统的特征" class="headerlink" title="操作系统的特征"></a>操作系统的特征</h2><h3 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h3><p>操作系统中同时存在多个程序，因此它具有处理和调度多个程序同时执行的能力。<strong>引入进程的目的就是为了使程序可以并发</strong>。</p>
+<p>并发指的是多个程序在同一时间间隔，而并行指的是同一时刻多个程序。</p>
+<p>在多道程序环境中，一段时间内，宏观上有多道程序在同时执行，而在每个时刻，单处理机情况下实际仅仅有一道程序在执行。</p>
+<blockquote>
+<p>这里注意，多道指的是可以多个程序并发，而不是有多个处理器核心</p>
+</blockquote>
+<h3 id="共享"><a href="#共享" class="headerlink" title="共享"></a>共享</h3><p>共享，即资源共享，是指系统中的资源可供内存中多个并发执行的进程共同使用。</p>
 <ul>
-<li>JavaScript编码：<code>&amp;#x</code>，<code>\u</code>都可以用来表示当前是一串unicode编码，比如字符串test，可以表示为，<code>\u0074\u0065\u0073\u0074</code>，或者<code>&amp;#x0074&amp;#x0065&amp;#x0073&amp;#x0074</code>，或者<code>&amp;#x74&amp;#x65&amp;#x73&amp;#x74</code></li>
-<li>HTML实体编码：<code>&amp;#</code>表示当前为HTML实体编码，还是以test为例，<code>&amp;#116&amp;#101&amp;#115&amp;#116</code>。</li>
-<li>URL编码：这个比较常见了，就是百分号开头的，如<code>%74%65%73%74</code></li>
+<li><p>互斥共享方式：系统中的某些资源，如打印机，虽然可以供多个程序交替使用，但是为了打印的结果不会混淆，应规定一段时间内只允许一个进程访问，也就是在并发进程的进程可以交替使用CPU但是，不可以交替使用某些临界资源。<strong>这种互斥不是并行的互斥，而是并发的互斥</strong>。</p>
+</li>
+<li><p>同时访问方式：某些资源可以被并行地程序交替访问。</p>
+</li>
 </ul>
-<h3 id="浏览器解码"><a href="#浏览器解码" class="headerlink" title="浏览器解码"></a>浏览器解码</h3><p><strong>解析一篇 HTML 文档时主要有三个处理过程:HTML 解析，URL 解析 和 JavaScript 解析。每个解析器负责解码和解析 HTML 文档中它所对 应的部分，且顺序也有所区别</strong></p>
-<p>首先我们先来单独看看每种解析器的效果：</p>
+<h3 id="虚拟"><a href="#虚拟" class="headerlink" title="虚拟"></a>虚拟</h3><p>虚拟是把一个物理上的实体变为若干逻辑上的对应物。物理实体是实际存在的，虚拟则是虚的，是概念上的。用于实现虚拟的技术，成为虚拟技术。操作系统中利用了多种虚拟技术来实现虚拟的处理机，虚拟内存，虚拟网卡，虚拟外部设备等。</p>
+<p>比如我们常见的四核八线程，其实四核从并发上将，只能有四线程，也就是一个核心一个线程，之所以说是一个核心两个线程，指的是并行意义上的，把一个核心虚拟成了两个。</p>
+<p>虚拟技术可以分为两种：时分复用技术，如处理器的分时共享；空分复用技术，如虚拟存储器。</p>
+<h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><p>多道程序环境允许多个程序并发，但由于资源有限，进程的执行不是一贯到底的，而是走走停停的，这就导致了进程会以不可知的速度向前推进，这就是进程的异步性。</p>
+<p>异步性使得操作系统运行在一种随机的环境下，这就可能导致进程产生与时间相关的错误，然后只要运行环境相同，就必须保证执行结果相同，而保证这一结果的手段，就是我们后面要主要讨论的进程的调度，同步和互斥等。</p>
+<h2 id="操作系统的功能"><a href="#操作系统的功能" class="headerlink" title="操作系统的功能"></a>操作系统的功能</h2><p><strong>为了给多道程序提供良好的运行环境</strong>，操作系统应该具有：处理机管理，存储器管理，设备管理和文件管理。</p>
+<blockquote>
+<p>也就是说，如果不是为了处理多道，其实根本没这么事。</p>
+</blockquote>
+<p>为了方便用户的使用，必须向用户提供接口。</p>
+<p>最后，可以随时扩充机器，提供更方便的服务，更高的资源利用率。</p>
+<h3 id="计算机系统资源的管理者"><a href="#计算机系统资源的管理者" class="headerlink" title="计算机系统资源的管理者"></a>计算机系统资源的管理者</h3><blockquote>
+<p>这部分可以说是操作系统的大纲了。</p>
+</blockquote>
+<ul>
+<li><p>处理机管理：多道程序环境下（单道程序环境不需要管理处理机，一个简单的队列就好），处理机的分配和运行都以进程为基本单位，因而对<strong>处理机的管理可以归结为对进程的管理</strong>。并发指的是计算机内同时运行多个进程，因此进程何时创建，何时撤销，如何管理，如何避免冲突，合理共享就是对进程管理最主要的任务。<strong>进程管理主要功能包括，进程控制，进程同步，进程通信，死锁处理，处理机调度</strong>等。</p>
+</li>
+<li><p>存储器管理：为了给多道程序提供良好的环境，方便用户以及提高内存的利用率，主要包括内存的分配与回收，地址映射，内存保护与共享和内存扩充等功能。</p>
+</li>
+<li><p>文件管理：计算机中的信息都是以文件形式存在的，操作系统中负责文件管理的部分称为文件系统，文件管理包括了文件存储空间的管理，目录管理及文件读写管理和保护。</p>
+</li>
+<li><p>设备管理：设备管理的主要任务是完成用户的I/O请求，方便用户使用各种设备。主要包括缓冲管理，设备分配，设备处理和虚拟设备等功能。</p>
+</li>
+</ul>
+<h3 id="操作系统作为用户和计算机硬件系统之间的接口"><a href="#操作系统作为用户和计算机硬件系统之间的接口" class="headerlink" title="操作系统作为用户和计算机硬件系统之间的接口"></a>操作系统作为用户和计算机硬件系统之间的接口</h3><p>操作系统接口分为两种，一种是命令接口，用户利用这些命令来组织和控制作业的执行（<strong>这里注意<code>作业</code>，这个概念和进程并不相同，后面会仔细说，你可以简单把它想象成cmd的命令行</strong>），一种是程序接口，编程人员可以用来请求系统服务。</p>
 <ol>
-<li>HTML编码</li>
+<li>命令接口</li>
 </ol>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>对于a标签，href属性 javascript:alert(1) 编码比较<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>1 	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:alert(1)"</span>&gt;</span> 未编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>2	<span class="tag">&lt;<span class="name">a</span> <span class="attr">h</span>&amp;#<span class="attr">x72</span>;<span class="attr">ef</span>=<span class="string">"javascript:alert(1)"</span>&gt;</span>href中的r进行编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>3	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javasc<span class="symbol">&amp;#x72;</span>ipt:alert(1)"</span>&gt;</span>javascript中的r进行编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>4	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:ale<span class="symbol">&amp;#x72;</span>t(1)"</span>&gt;</span>alert(1)中的r进行编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>这几种编码方式中，只有2是不可以正确解析的，因为2这种方式，破坏了html的文档结构。<br>因为HTML解析器不对HTML的关键字进行解码，这里没有把2识别为一个正常的html标签，后面就更不会了，所以我们可以看到后面两种，无论换成什么编码方式，都无法正确解码。</p>
+<p>使用命令接口进行作业控制的方式主要有两种，即联机控制方式和脱机控制方式。按作业控制方式的不同，可将命令接口分为联机命令接口和脱机命令接口。</p>
+<p>联机命令接口又称为交互式命令接口，适用于分时或实时系统（这是后面会提到的两种不同类型的操作系统，这里先留个印象）。</p>
+<p>它由一组键盘操作命令组成，用户通过控制台或终端输入操作命令，向系统提出各种服务要求，用户每输入一条命令，控制权就交给系统去解析命令并执行。</p>
+<p>脱机命令接口又称为批处理命令接口，适用于批处理操作系统（这又是一类操作系统）。它由一组作业控制命令组成。用户一旦输入批处理命令，就不能中途干涉作业运行。系统接到这一批命令，会依次执行。</p>
+<blockquote>
+<p>这里要注意，这个脱机命令接口属于命令接口，与我们平时写的程序不同。</p>
+</blockquote>
 <ol start="2">
-<li>URL编码</li>
+<li>程序接口</li>
 </ol>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>对于a标签，href属性 javascript:alert(1) 编码比较<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>1	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:alert(1)"</span>&gt;</span> 未编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>2	<span class="tag">&lt;<span class="name">a</span> <span class="attr">h</span>%<span class="attr">72ef</span>=<span class="string">"javascript:alert(1)"</span>&gt;</span>href中的r进行编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>3	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javasc%72ipt:alert(1)"</span>&gt;</span>javascript中的r进行编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>4	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:ale%72t(1)"</span>&gt;</span>alert(1)中的r进行编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>这种情况下，1，4是可以绕过的，2没法绕过的原因同上面，这个东西就不会被当作正常的html解析，而3这种，虽然会被解析成a标签，但是是对javascript这个协议类型进行了url编码，协议也属于url一部分，url解析器就是要根据这个关键字进行识别，现在识别不了，所以没法绕过。</p>
-<ol start="3">
-<li>JavaScript编码</li>
+<p>程序接口由一组系统调用（广义指令）组成，用户通过在程序中使用这些系统调用来请求操作系统为其服务，如使用各种外设，申请分配内存</p>
+<p>当前最流行的是图形用户接口（GUI），即图形接口，比如windows的那些按钮。严格来说，图形接口不是操作系统的一部分，但是图形接口会调用系统接口。</p>
+<h3 id="作为扩充机器"><a href="#作为扩充机器" class="headerlink" title="作为扩充机器"></a>作为扩充机器</h3><p>我们把没有任何软件支持的计算机称为裸机，覆盖了软件的机器称为扩充机器或虚拟机。</p>
+<h2 id="操作系统的发展与分类"><a href="#操作系统的发展与分类" class="headerlink" title="操作系统的发展与分类"></a>操作系统的发展与分类</h2><h3 id="手工操作阶段（无操作系统）"><a href="#手工操作阶段（无操作系统）" class="headerlink" title="手工操作阶段（无操作系统）"></a>手工操作阶段（无操作系统）</h3><p>用户在计算机上的所有操作都要人工干预，如程序的装入，运行，结果的输出等。</p>
+<p>有两个突出缺点：用户独占全机，资源利用率低；CPU等待手工操作，利用不充分。</p>
+<h3 id="批处理阶段"><a href="#批处理阶段" class="headerlink" title="批处理阶段"></a>批处理阶段</h3><p>为了解决上面说的缺点，解决人机矛盾以及CPU和I/O之间速度不匹配，出现了批处理系统。</p>
+<p>按照是否并发，分为单道批处理和多道批处理，也就是，批处理指的是可以输入一批作业，而不是并发。</p>
+<ol>
+<li>单道批处理系统</li>
 </ol>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>对于a标签，href属性 javascript:alert(1) 编码比较<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>1	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:alert(1)"</span>&gt;</span> 未编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>2	<span class="tag">&lt;<span class="name">a</span> <span class="attr">h</span>\<span class="attr">u0072ef</span>=<span class="string">"javascript:alert(1)"</span>&gt;</span>href中的r进行编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>3	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javasc\u0072ipt:alert(1)"</span>&gt;</span>javascript中的r进行编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>4	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:ale\u0072t(1)"</span>&gt;</span>alert(1)中的r进行编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>5	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:alert\u00281)"</span>&gt;</span>alert(1)中的(进行编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>这种也是1，4可以绕过，2是对DOM结构进行了破坏，3是对协议进行了破坏，标签可以正常解析，但是协议是错的，5这种破坏了js的解析，也没法正确执行。</p>
-<p>综上，在对应的解析阶段，如果是对该阶段的关键字进行了编码导致结构被破坏，那就没法正确解析。</p>
-<p>如html解析阶段对href属性进行了编码，就没法正确解析，html解析起不会认为是a标签有个属性叫<code>href</code>，而是认为有个属性叫<code>h&amp;#x72;ef</code>。</p>
-<p>url解析器到<code>javasc%72ipt:alert(1)</code>，就根本不会认为这是个JavaScript伪协议，故不会对其进行解码。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>4	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:ale\u0072t(1)"</span>&gt;</span>alert(1)中的r进行编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>5	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:alert\u00281)"</span>&gt;</span>alert(1)中的(进行编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>这两种都能正确走到最后一步的JavaScript解析阶段，然后就会提取js的代码进行解析，这时候，就看js解析器怎么解析了。</p>
-<p>如果对url关键字的编码，如<code>javasc&amp;#x72;ipt</code>,没有在html解码阶段被解析正确，那么url解析阶段就不会解析它了。</p>
-<h3 id="多层混淆"><a href="#多层混淆" class="headerlink" title="多层混淆"></a>多层混淆</h3><p>上面讲的是单独每个解析器，其实我们也提到了，浏览器解析文档的时候是有顺序的，分别是HTML解析器解析出dom树，URL解析器将dom树中的url属性解码，最后是JavaScript解析器解码dom树中被认为是js代码的部分</p>
-<p>只要我们按这个顺序反过来，就可以对一段html代码进行二层甚至三层的混淆编码。</p>
-<p>比如二层混淆</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>1	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:ale%5c%75%30%30%37%32t(1)"</span>&gt;</span>alert(1)中的r进行js编码,后url编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>2	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:ale<span class="symbol">&amp;#x5c;</span><span class="symbol">&amp;#x75;</span><span class="symbol">&amp;#x30;</span><span class="symbol">&amp;#x30;</span><span class="symbol">&amp;#x37;</span><span class="symbol">&amp;#x32;</span>t(1)"</span>&gt;</span>alert(1)中的r进行js编码,后html编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>3	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:ale<span class="symbol">&amp;#x25;</span><span class="symbol">&amp;#x37;</span><span class="symbol">&amp;#x32;</span>t(1)"</span>&gt;</span>alert(1)中的r进行url编码,后html编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>三层混淆</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>对于a标签，href属性 javascript:alert(1) 三层编码漏洞触发<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>三层解码 	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:ale<span class="symbol">&amp;#x25;</span><span class="symbol">&amp;#x35;</span><span class="symbol">&amp;#x63;</span><span class="symbol">&amp;#x25;</span><span class="symbol">&amp;#x37;</span><span class="symbol">&amp;#x35;</span><span class="symbol">&amp;#x25;</span><span class="symbol">&amp;#x33;</span><span class="symbol">&amp;#x30;</span><span class="symbol">&amp;#x25;</span><span class="symbol">&amp;#x33;</span><span class="symbol">&amp;#x30;</span><span class="symbol">&amp;#x25;</span><span class="symbol">&amp;#x33;</span><span class="symbol">&amp;#x37;</span><span class="symbol">&amp;#x25;</span><span class="symbol">&amp;#x33;</span><span class="symbol">&amp;#x32;</span>t(1)"</span>&gt;</span>alert(1)中的r进行js编码,后url编码,再html编码<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总结来说，我们上一篇博客讲的xss，开发者可以通过检测关键字，如果script等进行过滤。</p>
-<p>但是浏览器提供了伪协议的方式，所以我们又多了一种代码注入方式。</p>
-<p>这种方式的好处，就是可以让我们对这些关键字进行编码，从而绕过上面的那种检测。</p>
-<p>而这需要了解两点，第一点，浏览器的编码解码方式，第二，解码的顺序。</p>
-<p>首先是html解码，这个阶段如果对html的关键则进行了编码，是无法正确解析的，如对a标签的href属性进行了html编码，浏览器会认为，你就是想给a标签一个属性叫做<code>h&amp;#x72;ef</code>，但是这个阶段，可以对其他部分进行html的解码，如<code>javasc&amp;#x72;ipt:alert(1)</code>，这段代码中的r被html编码方式编码了，可以在这个阶段被解码（也就是说html解码阶段，只会解码那些非html关键字且用html编码方式编码的）。</p>
-<p>其次就是URL解码，这个阶段，如果是<code>javasc%72ipt:alert(1)</code>这种，url编码认为你就是有个协议叫做<code>javasc%72ipt</code>，当然就不会被正确解析。</p>
-<p>最后就是JavaScript解码，能走到这个阶段，说明，上面两步都得到正确解析，并认为你这里有一段js代码了，那就按照js解析器的方式去解析。</p>
-<p>换个角度理解。</p>
-<p>html解码阶段是为了看你有什么标签，标签有什么属性，你对这些东西编码了，其实就是换种写法，解析器当然直接按你说的解析成dom树，至于后续是否是浏览器内核可识别的，解析器并不关心。这一步用不到的信息，可以被html解码方式解码。</p>
-<p>html解码完后，对于解析为url部分的，再进行url解码，这一步有一个目的就是为了看看你是什么协议，如果你对协议名字进行了编码，解析器也认为你就是这个协议，至于是不是真有这个协议，也不是解析器要负责的。</p>
-<p>最后经过url解析器解析后认为是js代码的部分再进行js的解码。</p>
-<p><strong>说到底，这三个步骤都是先解析，你说啥就是啥，你说有个属性叫做<code>h&amp;#x72;ef</code>,那就有，剩下的部分按照当前阶段对应的解码方式解码后交给下一个阶段，下个阶段还是先挑出自己负责的部分解析（不解码），再把剩下的部分按照当前对应阶段的解码方式解码。至于最后能不能运行起来，那不是他们关心的。</strong></p>
-<p>比如这个东西：<code>&lt;p&gt;3    &lt;a href=&quot;javasc%72ipt:ale\u0072t(1)&quot;&gt;javascript中的r进行编码&lt;/a&gt;&lt;/p&gt;</code>，在html解码阶段a标签和href属性可以被正常解析，理论上<code>javasc%72ipt</code>这东西也会被html解码，但是这段不是html编码，所以没被正确解码，到了下个阶段，url解析器，就认为这个东西的协议就是<code>javasc%72ipt</code>，所以下一阶段也不会认为后面是一段js了，即使他可以被js解析器正确解析。</p>
+<p>系统对作业的处理时成批的，但是内存中只有一道作业，单道批处理系统的特点如下：</p>
+<ul>
+<li>自动性：顺利的情况下，磁带上的一批作业能够自动逐个运行，无需人工干预。</li>
+<li>顺序性：各作业顺序进入内存，然后按顺序完成。</li>
+<li>单道行：内存中只有一道程序运行，即监督程序每次从磁带上只调入一个作业进入内存运行。</li>
+</ul>
+<p>单道批处理面临的问题是，内存中只存在一道作业，如果它在等待I/O的时候，CPU是空闲的，这就降低了CPU的利用率。</p>
+<p>为了解决这个问题，就引入了多道处理，也就是并发，也就是操作系统如此复杂的万恶之源。</p>
+<ol start="2">
+<li>多道批处理系统</li>
+</ol>
+<p>首先要提一点，多道指的不是并发，而是多道引入了并发，或者说不并发，多道没有意义。</p>
+<p>多道指的是多个程序可以同时进入内存，如果同时进入内存后，没法并发执行，还不如不仅不进入内存。</p>
+<p><strong>之所以区分这一点，是为了区分，作业调度和进程调度，选择什么作业进入内存是作业调度，而多个作业在内存中如何并发的是进程调度。</strong></p>
+<p>多道程序设计技术允许多个程序同时进入内存，并允许他们交替进行，这些程序共享系统中的各种软硬件资源。。</p>
+<p>多道程序涉及的特点是多道，宏观上并行，微观上串行（单核）：</p>
+<ul>
+<li>多道；内存中同时存放多道相互独立的程序。</li>
+<li>宏观上并行：同时进入系统的多到程序都处于运行状态，即他们先后开始各自的运行，但都未运行完毕。</li>
+<li>微观上串行：内存中的多道程序在CPU轮流执行。</li>
+</ul>
+<p>优点是提高了资源利用率，缺点是，用户响应时间长，且不提供人机交互能力，用户输入了一串作业命令后，就只能等结果。</p>
+<h3 id="分时操作系统"><a href="#分时操作系统" class="headerlink" title="分时操作系统"></a>分时操作系统</h3><p>为了解决上面多道批处理作业的问题，创造了分时技术，指的是把处理器的运行时间分为很短的时间片，按时间片轮流把处理器分给各联机作业使用，若某个作业在分配给他的时间片中没有运行完成，则暂停改作业的执行，把处理器让给其他作业使用，等待下一轮。由于计算机运算速度快，作业轮转也快，因此给每个用户的感觉是自己独占了一台计算机。</p>
+<p>可以粗浅的解释下，<strong>分时操作系统就是在多道操作系统的基础上，提供了基于时间片的进程调度</strong>。</p>
+<p>分时操作系统是指多个用户通过终端同时共享一台主机，用户可以同时与主机进行交互而互不干扰。</p>
+<p>实现分时操作系统的关键，是如何使用户可以和作业进行交互，即当用户在终端上键入命令时，系统能及时接受并处理该命令，然后将结果返回给用户。</p>
+<p>分时操作系统支持多道，但是不同于多道的是，分时操作系统提供人机交互。这也使得，分时操作系统有了以下特征：</p>
+<ul>
+<li>同时性：又名多路性，值多个终端用户同时使用一台主机。</li>
+<li>交互性：用户通过终端采用人机对话的方式直接控制程序运行。</li>
+<li>独立性：多个用户彼此独立。</li>
+<li>及时性：用户请求能在很短的时间内得到响应。</li>
+</ul>
+<p>而这些，都基于时间片调度，再次重申，时间片调度是进程调度。</p>
+<h3 id="实时操作系统"><a href="#实时操作系统" class="headerlink" title="实时操作系统"></a>实时操作系统</h3><p>为了能够在某个规定时间内完成而不必等时间片排队，诞生了实时操作系统。</p>
+<p>分为两种，一种是硬实时系统，如飞机的飞行自动控制系统，某个特定的动作必须在规定时间完成。而能够接受偶尔违反时间规定且不会引起永久性伤害的，是软实时系统。</p>
+<p>主要特点是及时性和可靠性。</p>
+<p>这里为了实现这个，就引入了优先级和抢占式进程调度等。</p>
+<h3 id="网络操作系统和分布式操作系统"><a href="#网络操作系统和分布式操作系统" class="headerlink" title="网络操作系统和分布式操作系统"></a>网络操作系统和分布式操作系统</h3><p>网络操作系统把计算机网络中各台计算机有机结合，提供统一的经济有效的使用各台计算机的方法，实现计算机之间的数据相互传送。主要特点是网络中各种资源的共享及各台计算机之间的通信。</p>
+<p>分布式计算机系统指的是由多台计算机组成并满足以下条件的系统：系统中任意两台计算机通过通信方式交换信息；每台计算机具有同等地位；每台计算机上资源所有用户共享；系统中任意台计算机可以构成一个子系统并且可以重构；任何工作都可以分布在几台计算机上，并由他们并行工作，协同完成。主要特点就是分不幸和并行性。</p>
+<p>分布式和网络操作系统本质不同是：分布式操作系统中的若干计算机可以相互协同。</p>
 
       
     </div>
@@ -451,7 +493,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://sunra.top/2021/09/10/xss-pseudo-protocol-and-code-bypass/" title="伪协议与编码绕过">https://sunra.top/2021/09/10/xss-pseudo-protocol-and-code-bypass/</a>
+    <a href="https://sunra.top/2021/09/25/operating-system-note-1/" title="操作系统学习笔记（一）操作系统的特征与发展分类">https://sunra.top/2021/09/25/operating-system-note-1/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -473,8 +515,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2021/09/05/xss-inrtroduction/" rel="next" title="XSS 的分类与利用方式">
-                <i class="fa fa-chevron-left"></i> XSS 的分类与利用方式
+              <a href="/2021/09/21/xss-template-inject-and-rce/" rel="next" title="XSS 模版注入与远程代码执行">
+                <i class="fa fa-chevron-left"></i> XSS 模版注入与远程代码执行
               </a>
             
           </div>
@@ -482,10 +524,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2021/09/19/xss-worm/" rel="prev" title="XSS 蠕虫定义与实战分析">
-                XSS 蠕虫定义与实战分析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -643,7 +681,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#伪协议是什么"><span class="nav-number">1.</span> <span class="nav-text">伪协议是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编码绕过"><span class="nav-number">2.</span> <span class="nav-text">编码绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Unicode编码"><span class="nav-number">2.1.</span> <span class="nav-text">Unicode编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器解码"><span class="nav-number">2.2.</span> <span class="nav-text">浏览器解码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多层混淆"><span class="nav-number">2.3.</span> <span class="nav-text">多层混淆</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统的基本概念"><span class="nav-number">1.</span> <span class="nav-text">操作系统的基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统的特征"><span class="nav-number">2.</span> <span class="nav-text">操作系统的特征</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#并发"><span class="nav-number">2.1.</span> <span class="nav-text">并发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#共享"><span class="nav-number">2.2.</span> <span class="nav-text">共享</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟"><span class="nav-number">2.3.</span> <span class="nav-text">虚拟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步"><span class="nav-number">2.4.</span> <span class="nav-text">异步</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统的功能"><span class="nav-number">3.</span> <span class="nav-text">操作系统的功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#计算机系统资源的管理者"><span class="nav-number">3.1.</span> <span class="nav-text">计算机系统资源的管理者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作系统作为用户和计算机硬件系统之间的接口"><span class="nav-number">3.2.</span> <span class="nav-text">操作系统作为用户和计算机硬件系统之间的接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作为扩充机器"><span class="nav-number">3.3.</span> <span class="nav-text">作为扩充机器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统的发展与分类"><span class="nav-number">4.</span> <span class="nav-text">操作系统的发展与分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#手工操作阶段（无操作系统）"><span class="nav-number">4.1.</span> <span class="nav-text">手工操作阶段（无操作系统）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#批处理阶段"><span class="nav-number">4.2.</span> <span class="nav-text">批处理阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分时操作系统"><span class="nav-number">4.3.</span> <span class="nav-text">分时操作系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实时操作系统"><span class="nav-number">4.4.</span> <span class="nav-text">实时操作系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络操作系统和分布式操作系统"><span class="nav-number">4.5.</span> <span class="nav-text">网络操作系统和分布式操作系统</span></a></li></ol></li></ol></div>
             
 
           </div>
