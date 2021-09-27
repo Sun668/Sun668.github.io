@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这篇博客可以接上我的上一篇关于XSS 的分类与利用方式，这次讲的伪协议与编码绕过也是一种代码注入的攻击方式，伪协议提供了另外一种代码注入点，编码绕过是对应的注入方式。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-09-20T23:12:24.403Z">
+<meta property="og:updated_time" content="2021-09-27T10:41:48.639Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="伪协议与编码绕过">
 <meta name="twitter:description" content="这篇博客可以接上我的上一篇关于XSS 的分类与利用方式，这次讲的伪协议与编码绕过也是一种代码注入的攻击方式，伪协议提供了另外一种代码注入点，编码绕过是对应的注入方式。">
@@ -368,7 +368,7 @@
         <p>这篇博客可以接上我的上一篇关于<a href="https://sunra.top/2021/09/05/xss-inrtroduction/">XSS 的分类与利用方式</a>，这次讲的伪协议与编码绕过也是一种代码注入的攻击方式，伪协议提供了另外一种代码注入点，编码绕过是对应的注入方式。</p>
 <a id="more"></a>
 
-<h2 id="伪协议是什么"><a href="#伪协议是什么" class="headerlink" title="伪协议是什么"></a>伪协议是什么</h2><p>说起啦伪协议的概念也比较简单，只不过情况种类比较多。</p>
+<h2 id="伪协议是什么"><a href="#伪协议是什么" class="headerlink" title="伪协议是什么"></a>伪协议是什么</h2><p>说起来伪协议的概念也比较简单，只不过情况种类比较多。</p>
 <p>伪协议不同于因特网上所广泛使用的如http，https，ftp等协议，在url中使用，用于执行特定的功能。<br>如Data伪协议：<code>data:text/html;base64,PHanflajfAFLGLKSJ=</code>,<br>JavaScript伪协议：<code>javascript:alert(1);**</code>;</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:alert(5)"</span>&gt;</span>javascript伪协议<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTs8L3NjcmlwdD4="</span>&gt;</span>data 伪协议 base64<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"data:text/html;base64,PHNjcmlwdD5hbGVydCgiMSIpOzwvc2NyaXB0Pg=="</span>&gt;</span>含双引号data 伪协议 base64<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
@@ -567,7 +567,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">165</span>
+                  <span class="site-state-item-count">166</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
