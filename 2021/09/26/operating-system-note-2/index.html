@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="继续上次的总结，这次来讲一下，操作系统的运行环境和体系结构。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-09-27T00:31:14.828Z">
+<meta property="og:updated_time" content="2021-09-28T00:40:42.144Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="操作系统学习笔记（二）操作系统的运行环境和体系结构">
 <meta name="twitter:description" content="继续上次的总结，这次来讲一下，操作系统的运行环境和体系结构。">
@@ -389,6 +389,38 @@
 <p>操作系统发展的历程大体上就是一个想方设法提高资源利用率的过程，而提高资源利用率，就需要在程序并未使用某种资源时，把它对那种资源的占有权释放，这就需要中断。</p>
 <h4 id="中断和异常的定义"><a href="#中断和异常的定义" class="headerlink" title="中断和异常的定义"></a>中断和异常的定义</h4><p>中断，又称外中断，指的是来自CPU当前执行指令以外的事件发生，如设备发出的I/O结束中断，表示设备的输入输出已经完成，希望处理机能够向设备发出下一个输入输出指令，并然完成输入输出后的程序继续执行。时钟中断，表示一个固定的时间片已到，让处理机处理计时，启动定时任务等任务。</p>
 <p>异常，又称<strong>内中断，例外或者陷入（trap）</strong>，指的是来自CPU正在执行的指令内部的事件，如地址越界，算术溢出，内存缺页等。对异常的处理一般依赖当前程序的运行现场，且异常不能被屏蔽，一旦出现应立即处理。</p>
+<h4 id="中断处理过程"><a href="#中断处理过程" class="headerlink" title="中断处理过程"></a>中断处理过程</h4><p>不同计算机的中断（这里指外中断）的处理过程各具特色，但是大概相同：</p>
+<ol>
+<li>关中断。CPU响应中断后，首先要保护程序的现场，在保护现场过程中，CPU不能响应其他的中断，否则现场就无法保存完整。</li>
+<li>保存断点。为保证中断服务程序执行完毕后能够正确返回原来的程序，必须将原来程序的端点（程序计数器PC）保存。（注意这一步由硬件自动完成）</li>
+<li>中断服务程序寻址。实质是找到中断服务程序的入口，送入程序计数器，这个入口地址又叫做中断向量。</li>
+<li>保存现场和屏蔽字。进入中断服务程序后，首先要保存现场，现场信息一般指的是程序状态字寄存器PSWR和某些通用寄存器（由操作系统）。</li>
+<li>开中断。允许更高级别的中断请求得到相应。</li>
+<li>执行中断服务程序。这是中断的目的。但是注意，此时已经开中短了，也就是说，这里是可以被打断的。</li>
+<li>关中断。保证恢复现场和屏蔽字时不被中断。</li>
+<li>恢复现场和屏蔽字。将现场和屏蔽字恢复到原来状态。</li>
+<li>开中断，中断返回。返回源程序的断点处。</li>
+</ol>
+<p>这个过程中有几点需要注意。</p>
+<p>在执行中断服务程序之前和之后分别有一个<code>原语</code>，但是中断服务程序本身不是整个在原语中，所以理论上是可以被打断的。如果中断本身又被中断，那就需要一个栈来层层保存现场。</p>
+<p>但是注意这个栈与程序内部函数的调用栈不同，程序内部函数调用栈由程序自己模拟并管理。</p>
+<p>中断因为涉及程序计数器的保存等操作，所以一定会陷入内核态。</p>
+<p>中断的目的是通过一系列操作去打断CPU当前正在执行的程序并转去执行中断服务程序，而原语的目的则是有的指令不可以被打断。而中断处理过程中至少是包含两个原语的，也就是说，中断处理的流程中，本身就至少有两个不可被中断的原语。</p>
+<h3 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h3><p>所谓系统调用，是指用户在程序中调用系统提供的一些子功能，系统调用可以视为特殊的公共子程序。</p>
+<p>系统中的各种共享资源都由操作系统统一掌管，因此在用户程序中，凡是与资源相关的操作，都必须通过系统调用的方式提出服务请求，由操作系统代为完成。</p>
+<blockquote>
+<p>注意上篇博客的内容：程序接口由一系列系统调用组成。</p>
+</blockquote>
+<p>系统调用按功能分为几类：</p>
+<ul>
+<li>设备管理</li>
+<li>文件管理</li>
+<li>进程控制</li>
+<li>进程通信</li>
+<li>内存管理</li>
+</ul>
+<p>系统调用相关功能涉及系统资源管理，进程管理之类，对整个操作系统影响较大，<strong>需要运行在核心态。用户可以执行陷入指令，法器系统调用</strong>。</p>
+<p>用户执行陷入指令，相当于把CPU的使用权主动交给操作系统内核，之后内核程序对系统调用做出相关处理，完成后再将CPU使用权还给用户程序。</p>
 
       
     </div>
@@ -597,7 +629,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统的运行环境"><span class="nav-number">1.</span> <span class="nav-text">操作系统的运行环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#操作系统运行机制"><span class="nav-number">1.1.</span> <span class="nav-text">操作系统运行机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-时钟管理"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 时钟管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-中断机制"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 中断机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-原语"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 原语</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-系统控制的数据结构和处理"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 系统控制的数据结构和处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中断和异常"><span class="nav-number">1.2.</span> <span class="nav-text">中断和异常</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#中断和异常的定义"><span class="nav-number">1.2.1.</span> <span class="nav-text">中断和异常的定义</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统的运行环境"><span class="nav-number">1.</span> <span class="nav-text">操作系统的运行环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#操作系统运行机制"><span class="nav-number">1.1.</span> <span class="nav-text">操作系统运行机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-时钟管理"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 时钟管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-中断机制"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 中断机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-原语"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 原语</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-系统控制的数据结构和处理"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 系统控制的数据结构和处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中断和异常"><span class="nav-number">1.2.</span> <span class="nav-text">中断和异常</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#中断和异常的定义"><span class="nav-number">1.2.1.</span> <span class="nav-text">中断和异常的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中断处理过程"><span class="nav-number">1.2.2.</span> <span class="nav-text">中断处理过程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统调用"><span class="nav-number">1.3.</span> <span class="nav-text">系统调用</span></a></li></ol></li></ol></div>
             
 
           </div>
