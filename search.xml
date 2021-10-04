@@ -3489,27 +3489,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Element UI 笔记</title>
-    <url>/2020/07/18/elelment-ui-note/</url>
-    <content><![CDATA[<p>记录一下在使用elementUI时遇到的坑。</p>
-<p>elementUI有的事件命名容易让人产生疑惑，如handleSizeChange，handleCLose等。</p>
-<a id="more"></a>
-
-<h2 id="分页组件"><a href="#分页组件" class="headerlink" title="分页组件"></a>分页组件</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;el-pagination</span><br><span class="line">      @size-change=<span class="string">"handleSizeChange"</span></span><br><span class="line">      @current-change=<span class="string">"handleCurrentChange"</span></span><br><span class="line">      :current-page.sync=<span class="string">"currentPage1"</span></span><br><span class="line">      :page-size=<span class="string">"100"</span></span><br><span class="line">      layout=<span class="string">"total, prev, pager, next"</span></span><br><span class="line">      :total=<span class="string">"1000"</span>&gt;</span><br><span class="line">    &lt;<span class="regexp">/el-pagination&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>这个组件中的handleSizeChange听起来是pageSize改变时触发的，感觉上触发时pageSize已经改了，实际上你需要在函数里面再重新赋值才有用。</p>
-<h2 id="Dialog"><a href="#Dialog" class="headerlink" title="Dialog"></a>Dialog</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;el-dialog</span><br><span class="line">  title=<span class="string">"Tips"</span></span><br><span class="line">  :visible.sync=<span class="string">"dialogVisible"</span></span><br><span class="line">  width=<span class="string">"30%"</span></span><br><span class="line">  @close=<span class="string">"handleClose"</span>&gt;</span><br><span class="line">  &lt;span&gt;This is a message&lt;<span class="regexp">/span&gt;</span></span><br><span class="line"><span class="regexp">  &lt;span slot="footer" class="dialog-footer"&gt;</span></span><br><span class="line"><span class="regexp">    &lt;el-button @click="dialogVisible = false"&gt;Cancel&lt;/</span>el-button&gt;</span><br><span class="line">    &lt;el-button type=<span class="string">"primary"</span> @click=<span class="string">"dialogVisible = false"</span>&gt;Confirm&lt;<span class="regexp">/el-button&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>span&gt;</span><br><span class="line">&lt;<span class="regexp">/el-dialog&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>上面这段代码dialog的显示与隐藏由“dialogVisible” 决定，这个时候你直接点关闭按钮是无效的，我们必须在handleClose中把“dialogVisible”置为false才有效。</p>
-<h2 id="DatePicker"><a href="#DatePicker" class="headerlink" title="DatePicker"></a>DatePicker</h2><p>element-ui的时间选择器返回的时间如果直接拼到url里面，会转成GMT+8时间，也就是本地时间，而不是UTC时间。</p>
-<p>所以如果要使用UTC时间就要先转换一下。</p>
-<p>如果你是用moment转换的，要注意一点，moment的utc函数转换出来的时间是没有毫秒数的。</p>
-]]></content>
-      <categories>
-        <category>Vue</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Element UI Table 树形组件懒加载问题修复</title>
     <url>/2020/11/04/element-ui-table-lazy-loading/</url>
     <content><![CDATA[<p>上周在使用一个elementUI的table是，发现每次点击table的checkbox的时候，页面都会卡顿接近两秒钟，于是就用vue的devtools去记录了下每次的操作时间消耗在哪里，发现主要是因为elementUI的table虽然提供了树形数据和懒加载的功能，虽然子级节点没有展开，但是已经渲染出来了。</p>
@@ -5539,6 +5518,27 @@
 ]]></content>
       <categories>
         <category>JavaScript</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Element UI 笔记</title>
+    <url>/2020/07/18/elelment-ui-note/</url>
+    <content><![CDATA[<p>记录一下在使用elementUI时遇到的坑。</p>
+<p>elementUI有的事件命名容易让人产生疑惑，如handleSizeChange，handleCLose等。</p>
+<a id="more"></a>
+
+<h2 id="分页组件"><a href="#分页组件" class="headerlink" title="分页组件"></a>分页组件</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;el-pagination</span><br><span class="line">      @size-change=<span class="string">"handleSizeChange"</span></span><br><span class="line">      @current-change=<span class="string">"handleCurrentChange"</span></span><br><span class="line">      :current-page.sync=<span class="string">"currentPage1"</span></span><br><span class="line">      :page-size=<span class="string">"100"</span></span><br><span class="line">      layout=<span class="string">"total, prev, pager, next"</span></span><br><span class="line">      :total=<span class="string">"1000"</span>&gt;</span><br><span class="line">    &lt;<span class="regexp">/el-pagination&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这个组件中的handleSizeChange听起来是pageSize改变时触发的，感觉上触发时pageSize已经改了，实际上你需要在函数里面再重新赋值才有用。</p>
+<h2 id="Dialog"><a href="#Dialog" class="headerlink" title="Dialog"></a>Dialog</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;el-dialog</span><br><span class="line">  title=<span class="string">"Tips"</span></span><br><span class="line">  :visible.sync=<span class="string">"dialogVisible"</span></span><br><span class="line">  width=<span class="string">"30%"</span></span><br><span class="line">  @close=<span class="string">"handleClose"</span>&gt;</span><br><span class="line">  &lt;span&gt;This is a message&lt;<span class="regexp">/span&gt;</span></span><br><span class="line"><span class="regexp">  &lt;span slot="footer" class="dialog-footer"&gt;</span></span><br><span class="line"><span class="regexp">    &lt;el-button @click="dialogVisible = false"&gt;Cancel&lt;/</span>el-button&gt;</span><br><span class="line">    &lt;el-button type=<span class="string">"primary"</span> @click=<span class="string">"dialogVisible = false"</span>&gt;Confirm&lt;<span class="regexp">/el-button&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>span&gt;</span><br><span class="line">&lt;<span class="regexp">/el-dialog&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面这段代码dialog的显示与隐藏由“dialogVisible” 决定，这个时候你直接点关闭按钮是无效的，我们必须在handleClose中把“dialogVisible”置为false才有效。</p>
+<h2 id="DatePicker"><a href="#DatePicker" class="headerlink" title="DatePicker"></a>DatePicker</h2><p>element-ui的时间选择器返回的时间如果直接拼到url里面，会转成GMT+8时间，也就是本地时间，而不是UTC时间。</p>
+<p>所以如果要使用UTC时间就要先转换一下。</p>
+<p>如果你是用moment转换的，要注意一点，moment的utc函数转换出来的时间是没有毫秒数的。</p>
+]]></content>
+      <categories>
+        <category>Vue</category>
       </categories>
   </entry>
   <entry>
@@ -8706,6 +8706,9 @@
 <p>系统调用相关功能涉及系统资源管理，进程管理之类，对整个操作系统影响较大，<strong>需要运行在核心态。用户可以执行陷入指令，法器系统调用</strong>。</p>
 <p>用户执行陷入指令，相当于把CPU的使用权主动交给操作系统内核，之后内核程序对系统调用做出相关处理，完成后再将CPU使用权还给用户程序。</p>
 ]]></content>
+      <categories>
+        <category>OS</category>
+      </categories>
   </entry>
   <entry>
     <title>passport-azure-ad_无限刷新问题</title>
@@ -12468,6 +12471,71 @@
 ]]></content>
       <categories>
         <category>Algorithm</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Unity 官方入门教程观看笔记</title>
+    <url>/2021/10/03/unity-offical-tutorial-note/</url>
+    <content><![CDATA[<p>今天看了一下Unity官网最新的入门教程，在看的过程中简单总结了其中涉及的概念以及需要注意的内容。</p>
+<a id="more"></a>
+
+<h1 id="概念列表"><a href="#概念列表" class="headerlink" title="概念列表"></a>概念列表</h1><h2 id="GameObject：游戏对象"><a href="#GameObject：游戏对象" class="headerlink" title="GameObject：游戏对象"></a>GameObject：游戏对象</h2><p>游戏对象是Unity编辑器中最重要的概念。游戏中的每个对象都是游戏对象，从角色、可收集的道具到灯光、摄像机和特效。然而，一个游戏对象不能自己做任何事情;在它成为角色、环境或特殊效果之前，你需要赋予它属性。<br>游戏对象是Unity中代表角色、道具和场景的基本对象。它们本身并没有完成多少工作，但它们充当实现功能的组件的容器。<br>所以GameObject其实没什么好讲的，它能做什么，基本取决于它有什么Component。</p>
+<h3 id="3D"><a href="#3D" class="headerlink" title="3D"></a>3D</h3><p>在游戏中可以创建很多的基础类型，如cubu，sphere等<br>可以通过多种方式创建新的对象，创建以后，双击或者按F键可以聚焦到该对象<br>选择该对象后，右侧有些基础的属性，这些叫做Component</p>
+<h3 id="UI"><a href="#UI" class="headerlink" title="UI"></a>UI</h3><h4 id="TextMesh-Pro（TMP）"><a href="#TextMesh-Pro（TMP）" class="headerlink" title="TextMesh Pro（TMP）"></a>TextMesh Pro（TMP）</h4><p>这种UI的对象是生效在2D纬度的，所以需要切换到2D视角去观察。<br>它的Transform比较特殊，叫做Rect Transform</p>
+<p>Anchor指的是轴心在哪里，position指的是相对轴心的偏移位置</p>
+<p>这种就是轴心在左上角，偏移量为0<br>快速切换的方式，就是点击左上角那个Anchor Preset，有些预先设置好的Anchor可以直接选，按住option键可以同时设置偏移量</p>
+<h2 id="Component"><a href="#Component" class="headerlink" title="Component"></a>Component</h2><h3 id="Transformer"><a href="#Transformer" class="headerlink" title="Transformer"></a>Transformer</h3><p>分为Position，Rotate和Scale，即位置，旋转和缩放</p>
+<h3 id="Mesh-Filter"><a href="#Mesh-Filter" class="headerlink" title="Mesh Filter"></a>Mesh Filter</h3><p>The Mesh Filter takes a mesh from your assets and passes it to the Mesh Renderer for rendering on the screen.<br>When importing mesh assets, Unity automatically creates a Skinned Mesh Renderer if the mesh is skinned, or a Mesh Filter along with a Mesh Renderer, if it is not.<br>In order for non-skinned Meshes to be rendered, both the Mesh Filter and Mesh Renderer components must be present for legacy reasons.<br>初步理解，Mesh Filter是一个用于渲染GameObject的纯网格，会自动被传给同一个对象的Mesh Render用于去渲染整个对象</p>
+<h3 id="Mesh-Renderer"><a href="#Mesh-Renderer" class="headerlink" title="Mesh Renderer"></a>Mesh Renderer</h3><p>利用Mesh Filter，Material等来渲染GameObject到场景中。</p>
+<ul>
+<li>Material：用于渲染的材质</li>
+<li>Lighting <ul>
+<li>Cast Shadows：是否开启阴影，关了就不会在光源下产生影子</li>
+</ul>
+</li>
+<li>Probe：翻译叫做探针，具体作用待补充<ul>
+<li>Light Probes：</li>
+</ul>
+</li>
+<li>Additional Settings：<h3 id="Mesh-Collider"><a href="#Mesh-Collider" class="headerlink" title="Mesh Collider"></a>Mesh Collider</h3></li>
+</ul>
+<p>The Mesh Collider takes a Mesh Asset and builds its Collider based on that Mesh. It is more accurate for collision detection than using primitives for complicated Meshes. Mesh Colliders that are marked as Convex can collide with other Mesh Colliders.<br>网格碰撞体，基于Mesh Filter，可以更为精确的计算碰撞，标记为Convex的网格碰撞体可以和其他的网格碰撞体碰撞（也就是说开启的和开启的才会产生碰撞，没开启的和没开启的产生碰撞）</p>
+<p>MeshCollider.convex 凸面网格<br>这意味着如果您将此设置为 true，则您的网格碰撞器将不会有孔或入口。 凸面网格可以与其他凸面碰撞器和非凸面网格发生碰撞。 因此凸网格碰撞器适用于刚体，如果您确实需要比原始碰撞器提供的更详细的碰撞器。<br>注意：物理引擎要求凸面网格具有非零体积。 平面网格（例如标记为凸面的四边形或平面）将被物理引擎修改为具有满足此要求的厚度（以及体积）。 生成的网格的厚度与其尺寸成正比，最多可达网格平面中最长尺寸的 0.05。</p>
+<p>Collider.isTrigger<br>触发器不会向传入的刚体注册碰撞。相反，当刚体进入或退出触发器卷时，它发送OnTriggerEnter, OnTriggerExit和OnTriggerStay消息。<br>当一个Collider是一个Trigger时，碰撞器就是单纯的碰撞检测，就不会阻止其他碰撞体与自己重叠，</p>
+<h3 id="Material"><a href="#Material" class="headerlink" title="Material"></a>Material</h3><p>In Unity, you use materials and shaders together to define the appearance of your scene<br>To draw something in Unity, you must provide information that describes its shape, and information that describes the appearance of its surface. You use meshes to describe shapes, and materials to describe the appearance of surfaces.<br>Materials and shaders are closely linked; you always use materials with shaders.<br>A material contains a reference to a Shader object . If that Shader object defines material properties, then the material can also contain data such as colors or references to textures.<br>Add a component that inherits from Renderer. MeshRenderer is the most common and is suitable for most use cases, but SkinnedMeshRenderer, LineRenderer, or TrailRenderer might be more suitable if your GameObject has special requirements.</p>
+<h3 id="Shader"><a href="#Shader" class="headerlink" title="Shader"></a>Shader</h3><p>A shader asset is an asset in your Unity project that defines a Shader object . It is a text file with a .shader extension. It contains shader code.</p>
+<h3 id="Texture：纹理"><a href="#Texture：纹理" class="headerlink" title="Texture：纹理"></a>Texture：纹理</h3><p>Normally, the mesh geometry of an object only gives a rough approximation of the shape while most of the fine detail is supplied by Textures . A texture is just a standard bitmap image that is applied over the mesh surface.<br>Textures are applied to objects using Materials . Materials use specialised graphics programs called Shaders to render a texture on the mesh surface.<br>到这里，我们可以得出一个大概的结论，Mesh Filter定义了GameObject的网格信息，Mesh Render利用Mesh Filter和Material去渲染，而Material是和Shader紧密联系使用的，Material可以使用Shader去把Texture渲染到Mesh的表面。<br>Texture也包含粒子系统，以后再仔细看</p>
+<h3 id="Rigidbody：刚体"><a href="#Rigidbody：刚体" class="headerlink" title="Rigidbody：刚体"></a>Rigidbody：刚体</h3><p>添加了刚体才会受物理引擎的影响<br>Rigidbodies enable your GameObjects to act under the control of physics. The Rigidbody can receive forces and torque to make your objects move in a realistic way. Any GameObject must contain a Rigidbody to be influenced by gravity, act under added forces via scripting, or interact with other objects through the NVIDIA PhysX physics engine<br>刚体和碰撞体什么关系，两个刚体撞在一起会产生力吗？如果一个Collider.isTrigger是true，而另一个不是，会吗？<br>拥有刚体和碰撞器的GameObject会被认为是动态的，在碰撞过程中物理引擎会生效。<br>但如果刚体的kinematic设置为true，就不会对力进行响应，只可以通过transform属性进行脚本控制。</p>
+<h3 id="Animator"><a href="#Animator" class="headerlink" title="Animator"></a>Animator</h3><ul>
+<li>Animation Clips：当前模型的动作列表。</li>
+<li>Animator Controller：状态机，用于控制当前模型在不同条件下在不同Clip之间的转换。</li>
+<li>Avatar：人物模型特有的属性，可以为模型提供更为丰富的操作。<h2 id="Script"><a href="#Script" class="headerlink" title="Script"></a>Script</h2></li>
+<li>在脚本中，可以使用GetComponent<componenttype>()的方式获得所有事先加入的Component，如GetComponent<rigidbody>()可以获得我们加入的刚体组件。</rigidbody></componenttype></li>
+<li>定义为private的变量，不会在inspector显示，而public可以，然后我们可以在inspector或者其他脚本给public的变量赋值<h3 id="LifeCycle"><a href="#LifeCycle" class="headerlink" title="LifeCycle"></a>LifeCycle</h3><h4 id="Update"><a href="#Update" class="headerlink" title="Update"></a>Update</h4>每一帧执行一次<br>FixedUpdate<br>what is the difference between Update &amp; FixedUpdate in Unity?<br>每一帧执行次数取决于物理引擎作用的次数<br>LateUpdate<br>每一帧执行一次，但是是在所有的GameObject的Update执行之后再执行所有GameObject的LateUpdate<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">using System.Collections;</span><br><span class="line">using System.Collections.Generic;</span><br><span class="line">using UnityEngine;</span><br><span class="line">using UnityEngine.InputSystem;</span><br><span class="line"></span><br><span class="line">public class PlayerController : MonoBehaviour</span><br><span class="line">&#123;</span><br><span class="line">    public float speed = 0f;</span><br><span class="line">    private Rigidbody rb;</span><br><span class="line">    private float movementX;</span><br><span class="line">    private float movementY;</span><br><span class="line"></span><br><span class="line">    // Start is called before the first frame update</span><br><span class="line">    void Start()</span><br><span class="line">    &#123;</span><br><span class="line">        rb = GetComponent&lt;Rigidbody&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // InputSystem发送的信息会被这个函数接收</span><br><span class="line">    void OnMove(InputValue movementValue)</span><br><span class="line">    &#123;</span><br><span class="line">        Vector2 movementVector = movementValue.Get&lt;Vector2&gt;();</span><br><span class="line"></span><br><span class="line">        movementX = movementVector.x;</span><br><span class="line">        movementY = movementVector.y;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    void FixedUpdate()</span><br><span class="line">    &#123;</span><br><span class="line">        Vector3 movemnt = new Vector3(movementX, 0f, movementY);</span><br><span class="line"></span><br><span class="line">        rb.AddForce(movemnt * speed);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="Event"><a href="#Event" class="headerlink" title="Event"></a>Event</h3><h4 id="Collider-OnTriggerEnter"><a href="#Collider-OnTriggerEnter" class="headerlink" title="Collider.OnTriggerEnter"></a>Collider.OnTriggerEnter</h4><p>When a GameObject collides with another GameObject, Unity calls OnTriggerEnter.<br>OnTriggerEnter happens on the FixedUpdate function when two GameObjects collide. The Colliders involved are not always at the point of initial contact.<br>Both GameObjects must contain a Collider component. One must have Collider.isTrigger enabled （因为两个Collider都不是Trigger会阻止物理对象的重叠）, and contain a Rigidbody. </p>
+<p>If both GameObjects have Collider.isTrigger enabled, no collision happens. The same applies when both GameObjects do not have a Rigidbody component.（这里说的是产生碰撞，不是触发OnTriggerEvent事件）</p>
+<h4 id="Collider-OnCollisionEnter"><a href="#Collider-OnCollisionEnter" class="headerlink" title="Collider.OnCollisionEnter"></a>Collider.OnCollisionEnter</h4><p><a href="https://docs.unity3d.com/ScriptReference/Collider.OnCollisionEnter.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/ScriptReference/Collider.OnCollisionEnter.html</a><br>这个只要二者发生接触就会触发</p>
+<h3 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h3><h4 id="GameObject-SetActive-Boolean"><a href="#GameObject-SetActive-Boolean" class="headerlink" title="GameObject.SetActive(Boolean)"></a>GameObject.SetActive(Boolean)</h4><p>A GameObject may be inactive because a parent is not active. In that case, calling SetActive will not activate it, but only set the local state of the GameObject, which you can check using GameObject.activeSelf. Unity can then use this state when all parents become active.<br>GameObject的状态，如果是deactive，那么所有的component都不会工作，也就不会渲染，同时Update等生命周期函数也不会执行</p>
+<h2 id="Prefab"><a href="#Prefab" class="headerlink" title="Prefab"></a>Prefab</h2><p>Prefabs are a special type of Asset that represent a GameObject or collection of GameObjects with components that are already set up.  They’re like a blueprint which you can use to easily make instances of the same thing. Each instance of a Prefab is linked to the Prefab Asset, so changing the Asset will change all versions of the Prefab in all Scenes.<br>The first use for this system in your Project will be to make the character a Prefab.  This means that if you go on to make multiple levels for the game, you won’t need to remake JohnLemon for every level — you can just instantiate a new Prefab.<br>It’s something close: in Unity, models work like read-only Prefabs.  They’re blueprints for creating instances of that model, but the blueprint itself cannot be changed.<br>也就是说，我们从外部导入的模型，一般是只读的Prefab，如果我们想要把它变成可以编辑的，可以重新将拖拽出来的GameObject拖拽回文件夹中，此时会询问你是创建Original Prefab还是Variant of Prefab，看着意思，一个是新的Prefab，一个是对旧有Prefab的引用，我们需要创建一个新的，从而可以编辑它，所以选择Original Prefab</p>
+<h2 id="Tag"><a href="#Tag" class="headerlink" title="Tag"></a>Tag</h2><p>可以对所有的Object添加Tag。</p>
+<h2 id="Packages"><a href="#Packages" class="headerlink" title="Packages"></a>Packages</h2><p>Unity提供的一些包，提供一些定制的能力<br>InputSystem<br>如InputSytem，当作一个component加入一个GameObject后，可以接收输入事件，并且发送message到函数中</p>
+<h2 id="Animation"><a href="#Animation" class="headerlink" title="Animation"></a>Animation</h2><p>Unity - Manual: Animation System Overview<br>Unity has a rich and sophisticated animation system (sometimes referred to as ‘Mecanim’). It provides:</p>
+<ul>
+<li>Easy workflow and setup of animations for all elements of Unity including objects, characters, and properties.</li>
+<li>Support for imported animation clips and animation created within Unity</li>
+<li>Humanoid animation retargeting the ability to apply animations from one character model onto another.</li>
+<li>Simplified workflow for aligning animation clips.</li>
+<li>Convenient preview of animation clips, transitions and interactions between them. This allows animators to work more independently of programmers, prototype and preview their animations before gameplay code is hooked in.</li>
+<li>Management of complex interactions between animations with a visual programming tool.</li>
+<li>Animating different body parts with different logic.</li>
+<li>Layering and masking features<br>Unity的动画系统是基于动画剪辑(animation Clips)的概念，它包含特定对象如何随着时间改变其位置、旋转或其他属性的信息。每个片段都可以看作是一个单一的线性录音。来自外部来源的动画剪辑由艺术家或动画师使用第三方工具如Autodesk 3ds Max或Autodesk Maya，或来自动作捕捉工作室或其他来源。然后，动画剪辑被组织成一个结构化的流程图式系统，称为动画控制器。动画控制器充当状态机<br>一个非常简单的动画控制器可能只包含一两个片段，例如控制道具旋转和弹跳，或者在正确的时间动画一扇门的打开和关闭。更高级的动画控制器可能包含数十个类人动画，用于所有主要角色的动作，并可能同时混合多个剪辑，以便在玩家在场景中移动时提供流体运动。Unity的动画系统也有许多处理类人角色的特殊功能，这给了你从任何来源重新定位类人动画的能力。(例如:动作捕捉;资产存储;或其他第三方动画库)到您自己的角色模型，以及调整肌肉定义。这些功能是在统一的“Avatar”系统中实现的。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Unity</category>
       </categories>
   </entry>
   <entry>
