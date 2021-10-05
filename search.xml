@@ -1,47 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>ARP病毒原理及防御</title>
-    <url>/2019/09/15/ARP/</url>
-    <content><![CDATA[<p>ARP病毒原理及防御以及如何快速定位ARP病毒源。</p>
-<a id="more"></a>
-
-<h2 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h2><p> ARP协议（address resolution protocol）地址解析协议</p>
-<p>一台主机和另一台主机通信，要知道目标的IP地址，但是在局域网中传输数据的网卡却不能直接识别IP地址，所以用ARP解析协议将IP地址解</p>
-<p>析成MAC地址。ARP协议的基本功能就是通过目标设备的IP地址，来查询目标设备的mac地址。</p>
-<p>在局域网的任意一台主机中，都有一个ARP缓存表，里面保存本机已知的此局域网中各主机和路由器的IP地址和MAC地址的对照关系。ARP缓存</p>
-<p>表的生命周期是有时限的（一般不超过20分钟）。</p>
-<p>假设局域网中有A,B,C,D四台主机</p>
-<p>主机A想和主机B通信</p>
-<p>主机A会先查询自己的ARP缓存表里有没有B的联系方式，有的话，就将mac-b地址封装到数据包外面，发送出去。没有的话，A会向全网络发送一个</p>
-<p>ARP广播包，大声询问：我的IP地址是192.168.0.2，硬件地址是mac-a，我想知道IP地址是192.168.0.3的硬件地址是多少？   此时，局域网内所有</p>
-<p>主机都收到了，B收到后会单独私密回应：我是192.168.0.3，我的硬件地址是mac-b，其他主机不会理A的</p>
-<p>此时A知道了B的信息，同时也会动态的更新自身的缓存表</p>
-<h3 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h3><p>ARP协议是建立在信任局域网内所有节点的基础上的，他的效率很高。但是不安全。它是无状态的协议。他不会检查自己是否发过请求包，</p>
-<p>也不知道自己是否发过请求包。他也不管是否合法的应答，只要收到目标mac地址是自己的ARP reply或者ARP广播包（包括ARP reply和ARP request），</p>
-<p>都会接受并缓存。</p>
-<h2 id="ARP攻击原理"><a href="#ARP攻击原理" class="headerlink" title="ARP攻击原理"></a>ARP攻击原理</h2><p>ARP欺骗攻击建立在局域网主机间相互信任的基础上的</p>
-<p>当A发广播询问：我想知道IP是192.168.0.3的硬件地址是多少？</p>
-<p>此时B当然会回话：我是IP192.168.0.3我的硬件地址是mac-b，</p>
-<p>可是此时IP地址是192.168.0.4的C也非法回了：我是IP192.168.0.3,我的硬件地址是mac-c。而且是大量的。</p>
-<p>所以A就会误信192.168.0.3的硬件地址是mac-c，而且动态更新缓存表</p>
-<p>这样主机C就劫持了主机A发送给主机B的数据，这就是ARP欺骗的过程。</p>
-<p>假如C直接冒充网关，此时主机C会不停的发送ARP欺骗广播，大声说：我的ＩＰ是１９２.１６８.０.１，我的硬件地址是ｍａｃ－ｃ，</p>
-<p>此时局域网内所有主机都被欺骗，更改自己的缓存表，此时Ｃ将会监听到整个局域网发送给互联网的数据报。</p>
-<h2 id="如何快速找到病毒源"><a href="#如何快速找到病毒源" class="headerlink" title="如何快速找到病毒源"></a>如何快速找到病毒源</h2><h3 id="使用Sniffer抓包"><a href="#使用Sniffer抓包" class="headerlink" title="使用Sniffer抓包　　"></a>使用Sniffer抓包　　</h3><p>在网络内任意一台主机上运行抓包软件，捕获所有到达本机的数据包。如果发现有某个IP不断发送请求包，那么这台电脑一般就是病毒源。原理：无论何种ARP病毒变种，行为方式有两种，一是欺骗网关，二是欺骗网内的所有主机。</p>
-<h3 id="使用arp-a命令"><a href="#使用arp-a命令" class="headerlink" title="使用arp -a命令　"></a>使用arp -a命令　</h3><p>任意选两台不能上网的主机，在DOS命令窗口下运行arp -a命令。例如在结果中，两台电脑除了网关的IP，MAC地址对应项，都包含了192.168.0.186的这个IP，则可以断定192.168.0.186这台主机就是病毒源。原理：一般情况下，网内的主机只和网关通信。</p>
-<h3 id="使用tracert命令"><a href="#使用tracert命令" class="headerlink" title="使用tracert命令"></a>使用tracert命令</h3><p>在任意一台受影响的主机上，在DOS命令窗口下运行如下命令：tracert 61.135.179.148。　假定设置的缺省网关为10.8.6.1，在跟踪一个外网地址时，第一跳却是10.8.6.186，那么，10.8.6.186就是病毒源。原理：中毒主机在受影响主机和网关之间，扮演了“中间人”的角色。所有本应该到达网关的数据包，由于错误的MAC地址，均被发到了中毒主机。此时，中毒主机越俎代庖，起了缺省网关的作用。</p>
-<h2 id="ARP防御"><a href="#ARP防御" class="headerlink" title="ARP防御"></a>ARP防御</h2><h3 id="ARP双向绑定"><a href="#ARP双向绑定" class="headerlink" title="ARP双向绑定"></a>ARP双向绑定</h3><p> 在pc端上 IP+mac 绑定</p>
-<p> 在网络设备（交换路由）上 采用ip+mac+端口绑定</p>
-<p>网关也进行IP和mac的静态绑定</p>
-<h3 id="建立DHCP服务器"><a href="#建立DHCP服务器" class="headerlink" title="建立DHCP服务器"></a>建立DHCP服务器</h3><p>ARP攻击一般先攻击网关，将DHCP服务器建立在网关上</p>
-<h3 id="划分安全区域"><a href="#划分安全区域" class="headerlink" title="划分安全区域"></a>划分安全区域</h3><p>ARP广播包是不能跨子网或网段传播的，网段可以隔离广播包。VLAN就是一个逻辑广播域，通过VLAN技术可以在局域网中创建多个子网，就在局域网中隔离了广播,缩小感染范围。</p>
-]]></content>
-      <categories>
-        <category>Network</category>
-      </categories>
-  </entry>
-  <entry>
     <title>非对称加密原理探索</title>
     <url>/2019/10/19/Asymmetric_Encryption/</url>
     <content><![CDATA[<p>今天阅读https原理的时候，发现它采用了非对称加密的知识，于是去探索了一下非对称加密的基本原理。</p>
@@ -133,223 +92,6 @@
 ]]></content>
       <categories>
         <category>Sundry</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Azure Key Vault</title>
-    <url>/2019/11/30/Azure-Key-Vault/</url>
-    <content><![CDATA[<p>Azure Key Vault is a tool for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, or certificates. A vault is logical group of secrets.</p>
-<a id="more"></a>
-
-<p>上面这一段是Azure官方文档的描述，作者在阅读了Microsoft Azure文档之后，对其基本的概念进行了提取和总结，并在原文中加入了一些自己的理解。阅读完中文就能对key vault有个大概的认识，英文原文是比较专业的描述，不影响理解，如果想进一步了解可以去阅读文末提供的链接。</p>
-<h2 id="What-is-Azure-Key-Vault"><a href="#What-is-Azure-Key-Vault" class="headerlink" title="What is Azure Key Vault"></a>What is Azure Key Vault</h2><p>简单来讲，Azure Key Vault 就是提供了一个能够安全存储你的敏感数据的地方，想要获取这些数据就必须通过身份校验以及权限校验，我们可以把类似于证书，数据库配置等敏感信息放在这里，而不需要硬编码到代码中。在使用时我们将敏感信息存储到key vault上后，会获取对应的名称，我们只需要通过api去key vault中通过名字（也可以添加版本信息）获取对应的信息就好，这些信息可以是密钥（只能get公钥），证书信息，或者一些配置信息。当然这些信息并不是任何人直接去调用api就可以获取的，而是需要你的Identity信息被用于创建该Key Vault的Tenant下面的Subscription所承认，获取承认的方式有很多种，可以通过id-token，或者密码等。</p>
-<p>Azure Key Vault帮助解决以下问题：</p>
-<ul>
-<li><strong>秘密管理</strong> -Azure Key Vault可用于安全存储和严格控制对令牌，密码，证书，API密钥和其他秘密的访问。</li>
-<li><strong>密钥管理</strong> -Azure Key Vault也可以用作密钥管理解决方案。使用Azure Key Vault可以轻松创建和控制用于加密数据的加密密钥。</li>
-<li><strong>证书管理</strong> -Azure Key Vault也是一项服务，使您可以轻松地调配，管理和部署公共和私有安全套接字层/传输层安全性（SSL / TLS）证书，以与Azure和内部连接的资源一起使用。</li>
-<li><strong>存储由硬件安全模块支持</strong>的机密-机密和密钥可以通过软件或FIPS 140-2 2级验证HSM进行保护。</li>
-</ul>
-<p>使用Azure Key Vault 可以集中存储应用程序的机密数据并可以控制这些数据的分发。而且由于开发人员可以不用在程序中硬编码安全信息，大大提高了程序的安全性。</p>
-<p>存储在Azure Key Vault中的信息会被可靠的加密算法保存。</p>
-<p>同时Azure Key Vault可以基于Azure AD进行访问的权限控制，同时可以记录下来是谁在什么时间访问了哪一条数据。</p>
-<h2 id="Azure-Key-Vault-basic-concepts"><a href="#Azure-Key-Vault-basic-concepts" class="headerlink" title="Azure Key Vault basic concepts"></a>Azure Key Vault basic concepts</h2><ul>
-<li><strong>承租人/租户</strong>( <strong>Tenant</strong> )：承租人是拥有和管理Microsoft云服务的特定实例的组织。最常用于指组织的Azure和Office 365服务集。</li>
-<li><strong>保管库所有者</strong>( <strong>Vault owner</strong> )：保管库所有者可以创建密钥保管库并获得对其的完全访问权和控制权。保管库所有者还可以设置审核以记录谁访问了机密和密钥。管理员可以控制密钥生命周期。他们可以滚动到密钥的新版本，进行备份并执行相关任务。</li>
-<li><strong>保管箱使用者</strong>( <strong>Vault consumer</strong> )：当保管库所有者授予使用者访问权时，<strong>保管箱使用者</strong>可以对密钥保管库内的资产执行操作。可用的操作取决于所授予的权限。</li>
-<li><strong>资源</strong>( <strong>Resource</strong> )：资源是可通过Azure进行管理的项目。常见示例包括虚拟机，存储帐户，Web应用程序，数据库和虚拟网络。还有更多。</li>
-<li><strong>资源组</strong>( <strong>Resource group</strong> )：资源组是一个容器，其中包含Azure解决方案的相关资源。资源组可以包含解决方案的所有资源，也可以仅包含您要作为组进行管理的资源。您可以根据对组织最有意义的决定来决定如何向资源组分配资源。</li>
-<li><strong>服务主体</strong>( <strong>Service principal</strong> )：Azure服务主体是用户创建的应用程序，服务和自动化工具用来访问特定Azure资源的安全身份。可以将其视为具有特定角色且受到严格控制的权限的“用户身份”（用户名，密码或证书）。与一般用户身份不同，服务主体只需要做特定的事情。如果仅授予它执行管理任务所需的最低权限级别，则可以提高安全性。</li>
-<li>Azure Active Directory（Azure AD）：Azure AD是租户的Active Directory服务。每个目录都有一个或多个域。一个目录可以有许多与之关联的订阅，但只能有一个租户。每个组织可以有一个租户，这个租户有自己的ID用于标识自己，每个Tenant都有自己的一个或者多个SubScription，Subscription与Azure AD directory是多对一的关系。每个人都可以去Azure上申请自己的账号，这个账号在Azure上叫做Identity，每个Identity可以创建Azure AD account。如果你的Azure AD account在某个Tenant的Azure AD directory中，并且Tenant授予了你某个Subscription的权限，你就可以使用该Subscription下的Services。具体可以去查看<a href="https://docs.microsoft.com/en-us/azure/active-directory/active-directory-whatis" rel="external nofollow noopener noreferrer" target="_blank">文档</a></li>
-<li><strong>Azure租户ID</strong>( <strong>Azure tenant ID</strong> )：租户ID是在Azure订阅中标识Azure AD实例的独特方法。</li>
-<li><strong>托管身份</strong>( <strong>Managed identities</strong> )：Azure Key Vault提供了一种安全存储凭据以及其他密钥和机密的方法，但是您的代码需要通过Key Vault进行身份验证才能检索它们。通过使用托管身份，可以通过在Azure AD中为Azure服务提供自动托管身份来简化解决此问题的步骤。您可以使用此身份对Key Vault或支持Azure AD身份验证的任何服务进行身份验证，而无需在代码中包含任何凭据。</li>
-</ul>
-<p><strong>Anybody with an Azure subscription can create and use key vaults</strong>. Although Key Vault benefits developers and security administrators, it can be implemented and managed by an organization’s administrator who manages other Azure services. </p>
-<h2 id="Security"><a href="#Security" class="headerlink" title="Security"></a>Security</h2><p> 这一部分主要讲的就是Azure Key Vault是如何确保你的信息只能被你授权的人看到。</p>
-<p>对于Key Vault的管理有两种级别，也对应着两种access model，第一种级别叫做management plane，这种级别的关系可以对Key Vault本身进行操作，可以创建和删除一个Key Vault，第二种级别就是对Key Vault中的数据进行管理。但是不管那种级别，其身份校验都是通过Azure AD来实现的，通过基于<strong>角色的权限控制（RBAC）</strong>来判断一个用户可以对Key Vault做出怎样的操作。</p>
-<p>在不同级别之下做出的RBAC只适用于该级别之下的用户，比如你在Subscription的级别下做出的RBAC就只适用于该Subscription下的用户。</p>
-<p>同时对于secret， key，certificate的权限管理是分开的，也就是说你同一个Subscription下的用户在同一个Key Vault中可能对secret有访问权限，但是对于key却没有。</p>
-<p>You need to protect encryption keys and secrets like certificates, connection strings, and passwords in the cloud so you are using Azure Key Vault. Since you are storing sensitive and business critical data, you need to take steps to maximize the security of your vaults and the data stored in them. </p>
-<h3 id="Identity-and-access-management"><a href="#Identity-and-access-management" class="headerlink" title="Identity and access management"></a>Identity and access management</h3><p>When you create a key vault in an Azure subscription, it’s automatically associated with the Azure AD tenant of the subscription. Anyone trying to manage or retrieve content from a vault must be authenticated by Azure AD.</p>
-<ul>
-<li>Authentication establishes the identity of the caller.</li>
-<li>Authorization determines which operations the caller can perform. Authorization in Key Vault uses a combination of <a href="https://docs.microsoft.com/en-us/azure/role-based-access-control/overview" rel="external nofollow noopener noreferrer" target="_blank">Role based access control</a> (RBAC) and Azure Key Vault access policies.</li>
-</ul>
-<h4 id="Access-model-overview"><a href="#Access-model-overview" class="headerlink" title="Access model overview"></a>Access model overview</h4><p>Access to vaults takes place through two interfaces or planes. These planes are the management plane and the data plane.</p>
-<ul>
-<li>The <em>management plane</em> is where you manage Key Vault itself and it is the interface used to create and delete vaults. You can also read key vault properties and manage access policies.</li>
-<li>The <em>data plane</em> allows you to work with the data stored in a key vault. You can add, delete, and modify keys, secrets, and certificates.</li>
-</ul>
-<p>To access a key vault in either plane, all callers (users or applications) must be authenticated and authorized. Both planes use Azure Active Directory (Azure AD) for authentication. For authorization, the management plane uses role-based access control (RBAC) and the data plane uses a Key Vault access policy.</p>
-<p>The model of a single mechanism for authentication to both planes has several benefits:</p>
-<ul>
-<li>Organizations can control access centrally to all key vaults in their organization.</li>
-<li>If a user leaves, they instantly lose access to all key vaults in the organization.</li>
-<li>Organizations can customize authentication by using the options in Azure AD, such as to enable multi-factor authentication for added security</li>
-</ul>
-<h4 id="Managing-administrative-access-to-Key-Vault"><a href="#Managing-administrative-access-to-Key-Vault" class="headerlink" title="Managing administrative access to Key Vault"></a>Managing administrative access to Key Vault</h4><p>When you create a key vault in a resource group, you manage access by using Azure AD. You grant users or groups the ability to manage the key vaults in a resource group. You can grant access at a specific scope level by assigning the appropriate RBAC roles. To grant access to a user to manage key vaults, you assign a predefined <code>key vault Contributor</code> role to the user at a specific scope. The following scopes levels can be assigned to an RBAC role:</p>
-<ul>
-<li><strong>Subscription</strong>: An RBAC role assigned at the subscription level applies to all resource groups and resources within that subscription.</li>
-<li><strong>Resource group</strong>: An RBAC role assigned at the resource group level applies to all resources in that resource group.</li>
-<li><strong>Specific resource</strong>: An RBAC role assigned for a specific resource applies to that resource. In this case, the resource is a specific key vault.</li>
-</ul>
-<h4 id="Controlling-access-to-Key-Vault-data"><a href="#Controlling-access-to-Key-Vault-data" class="headerlink" title="Controlling access to Key Vault data"></a>Controlling access to Key Vault data</h4><p>Key Vault access policies grant permissions separately to keys, secrets, or certificate. You can grant a user access only to keys and not to secrets. Access permissions for keys, secrets, and certificates are managed at the vault level.</p>
-<h4 id="Network-access"><a href="#Network-access" class="headerlink" title="Network access"></a>Network access</h4><p>You can reduce the exposure of your vaults by specifying which IP addresses have access to them. The virtual network service endpoints for Azure Key Vault allow you to restrict access to a specified virtual network. The endpoints also allow you to restrict access to a list of IPv4 (internet protocol version 4) address ranges. Any user connecting to your key vault from outside those sources is denied access.</p>
-<p>After firewall rules are in effect, users can only read data from Key Vault when their requests originate from allowed virtual networks or IPv4 address ranges. This also applies to accessing Key Vault from the Azure portal. Although users can browse to a key vault from the Azure portal, they might not be able to list keys, secrets, or certificates if their client machine is not in the allowed list. This also affects the Key Vault Picker by other Azure services. Users might be able to see list of key vaults, but not list keys, if firewall rules prevent their client machine.</p>
-<h3 id="Azure-Key-Vault-security-worlds-and-geographic-boundaries"><a href="#Azure-Key-Vault-security-worlds-and-geographic-boundaries" class="headerlink" title="Azure Key Vault security worlds and geographic boundaries"></a>Azure Key Vault security worlds and geographic boundaries</h3><p>Azure Key Vault 是一个多租户服务，同一个Azure Location使用同一个HSM，享有相同的安全边界，也就是在同一个安全世界中。</p>
-<p>同时Azure Key Vault可以对数据进行备份，但是备份需要满足两个条件：</p>
-<ul>
-<li>两个Azure locations 在同一地理位置</li>
-<li>两个key vaults 属于同一个订阅</li>
-</ul>
-<h3 id="Secure-access-to-a-key-vault"><a href="#Secure-access-to-a-key-vault" class="headerlink" title="Secure access to a key vault"></a>Secure access to a key vault</h3><h4 id="Access-model-overview-1"><a href="#Access-model-overview-1" class="headerlink" title="Access model overview"></a>Access model overview</h4><p>对密钥库的访问通过两个接口进行控制:管理平面和数据平面。管理平面是您管理密钥库本身的地方。此平面中的操作包括创建和删除密钥保险库、检索密钥保险库属性和更新访问策略。数据平面是处理存储在密钥库中的数据的地方。您可以添加、删除和修改密钥、秘密和证书。<br>要访问任一平面中的密钥库，所有调用方(用户或应用程序)必须具有适当的身份验证和授权。身份验证建立</p>
-<h4 id="Active-Directory-authentication"><a href="#Active-Directory-authentication" class="headerlink" title="Active Directory authentication"></a>Active Directory authentication</h4><p>When you create a key vault in an Azure subscription, it’s automatically associated with the Azure AD tenant of the subscription. All callers in both planes must register in this tenant and authenticate to access the key vault. In both cases, applications can access Key Vault in two ways:</p>
-<ul>
-<li><strong>User plus application access</strong>: The application accesses Key Vault on behalf of a signed-in user. Examples of this type of access include Azure PowerShell and the Azure portal. User access is granted in two ways. Users can access Key Vault from any application, or they must use a specific application (referred to as <em>compound identity</em>).</li>
-<li><strong>Application-only access</strong>: The application runs as a daemon service or background job. The application identity is granted access to the key vault.</li>
-</ul>
-<p>For both types of access, the application authenticates with Azure AD. The application uses any <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/authentication-scenarios" rel="external nofollow noopener noreferrer" target="_blank">supported authentication method</a> based on the application type. The application acquires a token for a resource in the plane to grant access. The resource is an endpoint in the management or data plane, based on the Azure environment. The application uses the token and sends a REST API request to Key Vault. To learn more, review the <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow" rel="external nofollow noopener noreferrer" target="_blank">whole authentication flow</a>.</p>
-<p>The model of a single mechanism for authentication to both planes has several benefits:</p>
-<ul>
-<li>Organizations can control access centrally to all key vaults in their organization.</li>
-<li>If a user leaves, they instantly lose access to all key vaults in the organization.</li>
-<li>Organizations can customize authentication by using the options in Azure AD, such as to enable multi-factor authentication for added security.</li>
-</ul>
-<h4 id="Resource-endpoints"><a href="#Resource-endpoints" class="headerlink" title="Resource endpoints"></a>Resource endpoints</h4><p> 应用程序通过端点访问两个平面。 </p>
-<p>The access controls for the two planes work independently. To grant an application access to use keys in a key vault, you grant data plane access by using a Key Vault access policy. To grant a user read access to Key Vault properties and tags, but not access to data (keys, secrets, or certificates), you grant management plane access with RBAC. **</p>
-<h2 id="Certificate"><a href="#Certificate" class="headerlink" title="Certificate"></a>Certificate</h2><h3 id="About-keys-secrets-and-certificates"><a href="#About-keys-secrets-and-certificates" class="headerlink" title="About keys, secrets, and certificates"></a>About keys, secrets, and certificates</h3><p>Azure Key Vault使Microsoft Azure应用程序和用户能够存储和使用几种类型的秘密/密钥数据</p>
-<ul>
-<li>加密密钥（Cryptographic key）：支持多种密钥类型和算法，并允许对高价值密钥使用硬件安全模块（HSM）。我们通过api其实只能获取到公钥。</li>
-<li>机密(Secrets)：提供机密的安全存储，例如密码和数据库连接字符串。</li>
-<li>证书(Certificates)：支持基于密钥和机密构建的证书，并添加了自动续订功能。</li>
-<li>Azure存储(Azure Storage)：可以为您管理Azure存储帐户的密钥。在内部，Key Vault可以使用Azure存储帐户列出（同步）密钥，并定期重新生成（旋转）密钥。</li>
-</ul>
-<h4 id="Key-Vaults-keys"><a href="#Key-Vaults-keys" class="headerlink" title="Key Vaults keys"></a>Key Vaults keys</h4><p>Key Vault中的加密密钥表示为JSON Web密钥[JWK]对象。JWK / JWA基本规范也得到了扩展，以启用Key Vault实施所特有的密钥类型。例如，使用特定于HSM供应商的包装导入密钥，可以安全地运输只能在Key Vault HSM中使用的密钥。</p>
-<ul>
-<li><strong>“软”密钥</strong>：Key Vault在软件中处理过的密钥，但是使用HSM中的系统密钥在静止状态下进行了加密。客户可以导入现有的RSA或EC（椭圆曲线）密钥，或请求Key Vault生成一个。</li>
-<li><strong>“硬”键</strong>：在HSM（硬件安全模块）中处理的键。这些密钥在Key Vault HSM安全世界之一（每个地理区域都有一个安全世界以保持隔离）中受到保护。客户端可以以软形式或通过从兼容的HSM设备导出来导入RSA或EC密钥。客户还可以请求Key Vault生成密钥。此密钥类型将key_hsm属性添加到JWK获取以携带HSM密钥材料。</li>
-</ul>
-<p>在密钥库中创建密钥后，可以使用该密钥执行以下加密操作：</p>
-<ul>
-<li><strong>签名并验证</strong>：严格来说，此操作是“签名哈希”或“验证哈希”，因为Key Vault不支持内容哈希作为签名创建的一部分。应用程序应对要在本地签名的数据进行哈希处理，然后请求Key Vault对哈希进行签名。对于可能无法访问[公开]密钥材料的应用程序，为方便操作提供了对签名哈希的验证的支持。为了获得最佳的应用程序性能，请验证是否在本地执行操作。</li>
-<li><strong>密钥加密/包装</strong>：可以将存储在Key Vault中的密钥用于保护另一个密钥，通常是对称内容加密密钥（CEK）。当Key Vault中的密钥不对称时，将使用密钥加密。例如，RSA-OAEP和WRAPKEY / UNWRAPKEY操作等效于ENCRYPT / DECRYPT。如果“密钥保管库”中的密钥是对称的，则使用密钥包装。例如，AES-KW。支持WRAPKEY操作是为了方便无法访问[公开]密钥资料的应用程序。为了获得最佳的应用程序性能，WRAPKEY操作应在本地执行。</li>
-<li><strong>加密和解密</strong>：存储在Key Vault中的密钥可用于加密或解密单个数据块。块的大小由密钥类型和所选的加密算法确定。为方便起见，提供了Encrypt操作，用于可能无法访问[公开]密钥资料的应用程序。为了获得最佳的应用程序性能，应在本地执行加密操作。</li>
-</ul>
-<h4 id="Key-Vault-secrets"><a href="#Key-Vault-secrets" class="headerlink" title="Key Vault secrets"></a>Key Vault secrets</h4><p>From a developer’s perspective, Key Vault APIs accept and return secret values as strings. Internally, Key Vault stores and manages secrets as sequences of octets (8-bit bytes), with a maximum size of 25k bytes each. The Key Vault service doesn’t provide semantics for secrets. It merely accepts the data, encrypts it, stores it, and returns a secret identifier (“id”). The identifier can be used to retrieve the secret at a later time.</p>
-<p>For highly sensitive data, clients should consider additional layers of protection for data. Encrypting data using a separate protection key prior to storage in Key Vault is one example.</p>
-<p>Key Vault also supports a contentType field for secrets. Clients may specify the content type of a secret to assist in interpreting the secret data when it’s retrieved. The maximum length of this field is 255 characters. There are no pre-defined values. The suggested usage is as a hint for interpreting the secret data. For instance, an implementation may store both passwords and certificates as secrets, then use this field to differentiate. There are no predefined values.</p>
-<h4 id="Key-Vault-Certificates"><a href="#Key-Vault-Certificates" class="headerlink" title="Key Vault Certificates"></a>Key Vault Certificates</h4><p>Key Vault certificates support provides for management of your x509 certificates and the following behaviors:</p>
-<ul>
-<li>Allows a certificate owner to create a certificate through a Key Vault creation process or through the import of an existing certificate. Includes both self-signed and Certificate Authority generated certificates.</li>
-<li>Allows a Key Vault certificate owner to implement secure storage and management of X509 certificates without interaction with private key material.</li>
-<li>Allows a certificate owner to create a policy that directs Key Vault to manage the life-cycle of a certificate.</li>
-<li>Allows certificate owners to provide contact information for notification about life-cycle events of expiration and renewal of certificate.</li>
-<li>Supports automatic renewal with selected issuers - Key Vault partner X509 certificate providers / certificate authorities.</li>
-</ul>
-<p>本文章只是对于Azure Key Vault的基本概念的及其之间关系的简介，对于更加详细的信息，比如Key Vault具体是如何监控，节流，身份验证，请求参数之类的详细信息可以去查看文末的官方文档。</p>
-<p>参考文章：</p>
-<p> <a href="https://docs.microsoft.com/en-us/azure/key-vault/" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/key-vault/</a> </p>
-<p> <a href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis</a> </p>
-<p> <a href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-subscriptions-associated-directory" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-subscriptions-associated-directory</a> </p>
-<p> <a href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-manage-groups" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-manage-groups</a> </p>
-]]></content>
-      <categories>
-        <category>Cloud</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>HSTS</title>
-    <url>/2020/06/18/HSTS/</url>
-    <content><![CDATA[<h3 id="缘起：启用HTTPS也不够安全"><a href="#缘起：启用HTTPS也不够安全" class="headerlink" title="缘起：启用HTTPS也不够安全"></a>缘起：启用HTTPS也不够安全</h3><p>有不少网站只通过HTTPS对外提供服务，但用户在访问某个网站的时候，在浏览器里却往往直接输入网站域名（例如<a href="https://link.zhihu.com/?target=http%3A//www.example.com" rel="external nofollow noopener noreferrer" target="_blank">Example Domain</a>），而不是完整的URL（例如<a href="https://link.zhihu.com/?target=https%3A//www.example.com" rel="external nofollow noopener noreferrer" target="_blank">Example Domain</a>），不过浏览器依然能正确的使用HTTPS发起请求。这背后多亏了服务器和浏览器的协作，如下图所示。</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215200744_st7ygu.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215200744_st7ygu.png"></p>
-<p>图1：服务器和浏览器在背后帮用户做了很多工作</p>
-<p>简单来讲就是，浏览器向网站发起一次HTTP请求，在得到一个重定向响应后，发起一次HTTPS请求并得到最终的响应内容。所有的这一切对用户而言是完全透明的，所以在用户看来，在浏览器里直接输入域名却依然可以用HTTPS协议和网站进行安全的通信，是个不错的用户体验。</p>
-<p>一切看上去都是那么的完美，但其实不然，由于在建立起HTTPS连接之前存在一次明文的HTTP请求和重定向（上图中的第1、2步），使得攻击者可以以中间人的方式劫持这次请求，从而进行后续的攻击，例如窃听数据、篡改请求和响应、跳转到钓鱼网站等。</p>
-<a id="more"></a>
-
-<p>以劫持请求并跳转到钓鱼网站为例，其大致做法如下图所示：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034304/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201136_l7n9kr.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034304/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201136_l7n9kr.png"></p>
-<p>图2：劫持HTTP请求，阻止HTTPS连接，并进行钓鱼攻击</p>
-<ul>
-<li>第1步：浏览器发起一次明文HTTP请求，但实际上会被攻击者拦截下来</li>
-<li>第2步：攻击者作为代理，把当前请求转发给钓鱼网站</li>
-<li>第3步：钓鱼网站返回假冒的网页内容</li>
-<li>第4步：攻击者把假冒的网页内容返回给浏览器</li>
-</ul>
-<p>这个攻击的精妙之处在于，攻击者直接劫持了HTTP请求，并返回了内容给浏览器，根本不给浏览器同真实网站建立HTTPS连接的机会，因此浏览器会误以为真实网站通过HTTP对外提供服务，自然也就不会向用户报告当前的连接不安全。于是乎攻击者几乎可以神不知鬼不觉的对请求和响应动手脚。</p>
-<h3 id="解决之道：使用HSTS"><a href="#解决之道：使用HSTS" class="headerlink" title="解决之道：使用HSTS"></a>解决之道：使用HSTS</h3><p>既然建立HTTPS连接之前的这一次HTTP明文请求和重定向有可能被攻击者劫持，那么解决这一问题的思路自然就变成了如何避免出现这样的HTTP请求。我们期望的浏览器行为是，当用户让浏览器发起HTTP请求的时候，浏览器将其转换为HTTPS请求，直接略过上述的HTTP请求和重定向，从而使得中间人攻击失效，以规避风险。其大致流程如下：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034428/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201341_n2jssi.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034428/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201341_n2jssi.png"></p>
-<p>图3：略过HTTP请求和重定向，直接发送HTTPS请求</p>
-<ul>
-<li>第1步：用户在浏览器地址栏里输入网站域名，浏览器得知该域名应该使用HTTPS进行通信</li>
-<li>第2步：浏览器直接向网站发起HTTPS请求</li>
-<li>第3步：网站返回相应的内容</li>
-</ul>
-<p>那么问题来了，浏览器是如何做到这一点的呢？它怎么知道哪个网站应该发HTTPS请求，哪个网站应该用HTTP请求呢？此时就该HSTS闪亮登场了。</p>
-<h4 id="HSTS"><a href="#HSTS" class="headerlink" title="HSTS"></a>HSTS</h4><p>HSTS的全称是HTTP Strict-Transport-Security，它是一个Web安全策略机制（web security policy mechanism）。</p>
-<p>HSTS最早于2015年被纳入到ThoughtWorks技术雷达，并且在2016年的最新一期技术雷达里，它直接从“评估（Trial）”阶段进入到了“采用（Adopt）“阶段，这意味着ThoughtWorks强烈主张业界积极采用这项安全防御措施，并且ThoughtWorks已经将其应用于自己的项目。</p>
-<p>HSTS最为核心的是一个HTTP响应头（HTTP Response Header）。正是它可以让浏览器得知，在接下来的一段时间内，当前域名只能通过HTTPS进行访问，并且在浏览器发现当前连接不安全的情况下，强制拒绝用户的后续访问要求。</p>
-<p>HSTS Header的语法如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Strict-Transport-Security: &lt;max-age=&gt;[; includeSubDomains][; preload]</span><br></pre></td></tr></table></figure>
-
-<p>其中：</p>
-<ul>
-<li>max-age是必选参数，是一个以秒为单位的数值，它代表着HSTS Header的过期时间，通常设置为1年，即31536000秒。</li>
-<li>includeSubDomains是可选参数，如果包含它，则意味着当前域名及其子域名均开启HSTS保护。</li>
-<li>preload是可选参数，只有当你申请将自己的域名加入到浏览器内置列表的时候才需要使用到它。关于浏览器内置列表，下文有详细介绍。</li>
-</ul>
-<h4 id="让浏览器直接发起HTTPS请求"><a href="#让浏览器直接发起HTTPS请求" class="headerlink" title="让浏览器直接发起HTTPS请求"></a>让浏览器直接发起HTTPS请求</h4><p>只要在服务器返回给浏览器的响应头中，增加Strict-Transport-Security这个HTTP Header（下文简称HSTS Header），例如：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Strict-Transport-Security: max-age=31536000; includeSubDomains</span><br></pre></td></tr></table></figure>
-
-<p>就可以告诉浏览器，在接下来的31536000秒（1年）内，对于当前域名及其子域名的后续通信应该强制性的只使用HTTPS，直到超过有效期为止。</p>
-<p>完整的流程如下图所示：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034571/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201603_mijchx.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034571/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201603_mijchx.png"></p>
-<p>图4：完整的HSTS流程</p>
-<p>只要是在有效期内，浏览器都将直接强制性的发起HTTPS请求，但是问题又来了，有效期过了怎么办？其实不用为此过多担心，因为HSTS Header存在于每个响应中，随着用户和网站的交互，这个有效时间时刻都在刷新，再加上有效期通常都被设置成了1年，所以只要用户的前后两次请求之间的时间间隔没有超过1年，则基本上不会出现安全风险。更何况，就算超过了有效期，只要用户和网站再进行一次新的交互，用户的浏览器又将开启有效期为1年的HSTS保护。</p>
-<h4 id="强制拒绝不安全的链接，不给用户选择的机会"><a href="#强制拒绝不安全的链接，不给用户选择的机会" class="headerlink" title="强制拒绝不安全的链接，不给用户选择的机会"></a>强制拒绝不安全的链接，不给用户选择的机会</h4><p>在没有HSTS保护的情况下，当浏览器发现当前网站的证书出现错误，或者浏览器和服务器之间的通信不安全，无法建立HTTPS连接的时候，浏览器通常会警告用户，但是却又允许用户继续不安全的访问。如下图所示，用户可以点击图中红色方框中的链接，继续在不安全的连接下进行访问。</p>
-<p><img src="https://pic4.zhimg.com/80/v2-b69590c9522f75bbd8ef0c73382e0a57_720w.jpg" alt="img"></p>
-<p>图5：浏览器依然允许用户进行不安全的访问</p>
-<p>理论上而言，用户看到这个警告之后就应该提高警惕，意识到自己和网站之间的通信不安全，可能被劫持也可能被窃听，如果访问的恰好是银行、金融类网站的话后果更是不堪设想，理应终止后续操作。然而现实很残酷，就我的实际观察来看，有不少用户在遇到这样的警告之后依然选择了继续访问。</p>
-<p>不过随着HSTS的出现，事情有了转机。对于启用了浏览器HSTS保护的网站，如果浏览器发现当前连接不安全，它将仅仅警告用户，而不再给用户提供是否继续访问的选择，从而避免后续安全问题的发生。例如，当访问Google搜索引擎的时候，如果当前通信连接存在安全问题，浏览器将会彻底阻止用户继续访问Google，如下图所示。</p>
-<p><img src="https://pic4.zhimg.com/80/v2-b9df0eb3dcc8da972eec57f0051c2f3b_720w.jpg" alt="img"></p>
-<p>图6：浏览器彻底阻止用户继续进行不安全的访问</p>
-<h3 id="道高一尺魔高一丈：攻击者依然有可乘之机"><a href="#道高一尺魔高一丈：攻击者依然有可乘之机" class="headerlink" title="道高一尺魔高一丈：攻击者依然有可乘之机"></a>道高一尺魔高一丈：攻击者依然有可乘之机</h3><p>细心的你可能发现了，HSTS存在一个比较薄弱的环节，那就是浏览器没有当前网站的HSTS信息的时候，或者第一次访问网站的时候，依然需要一次明文的HTTP请求和重定向才能切换到HTTPS，以及刷新HSTS信息。而就是这么一瞬间却给攻击者留下了可乘之机，使得他们可以把这一次的HTTP请求劫持下来，继续中间人攻击。</p>
-<h4 id="Preload-List：让防御更加彻底"><a href="#Preload-List：让防御更加彻底" class="headerlink" title="Preload List：让防御更加彻底"></a>Preload List：让防御更加彻底</h4><p>针对上面的攻击，HSTS也有应对办法，那就是在浏览器里内置一个列表，只要是在这个列表里的域名，无论何时、何种情况，浏览器都只使用HTTPS发起连接。这个列表由Google Chromium维护，FireFox、Safari、IE等主流浏览器均在使用。</p>
-<h3 id="一些Tips"><a href="#一些Tips" class="headerlink" title="一些Tips"></a>一些Tips</h3><p><strong>Tip 1：如何配置HSTS</strong></p>
-<p>很多地方都可以进行HSTS的配置，例如反向代理服务器、应用服务器、应用程序框架，以及应用程序中自定义Header。你可以根据实际情况进行选择。<br>常见的是在代理服务器中进行配置，以Nginx为例，只需在配置文件中加上下面这条指令即可：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">add_header Strict-Transport-Security &quot;max-age=31536000; includeSubDomains&quot; always;</span><br></pre></td></tr></table></figure>
-
-<p>不过需要特别注意的是，在生产环境下使用HSTS应当特别谨慎，因为一旦浏览器接收到HSTS Header（假如有效期是1年），但是网站的证书又恰好出了问题，那么用户将在接下来的1年时间内都无法访问到你的网站，直到证书错误被修复，或者用户主动清除浏览器缓存。</p>
-<p>因此，建议在生产环境开启HSTS的时候，先将max-age的值设置小一些，例如5分钟，然后检查HSTS是否能正常工作，网站能否正常访问，之后再逐步将时间延长，例如1周、1个月，并在这个时间范围内继续检查HSTS是否正常工作，最后才改到1年。</p>
-<p><strong>Tip 2：如何加入到HSTS Preload List</strong></p>
-<p>根据官方说明，你的网站在具备以下几个条件后，可以提出申请加入到这个列表里。</p>
-<ul>
-<li>具备一个有效的证书</li>
-<li>在同一台主机上提供重定向响应，以及接收重定向过来的HTTPS请求</li>
-<li>所有子域名均使用HTTPS</li>
-<li>在根域名的HTTP响应头中，加入HSTS Header，并满足下列条件：<ul>
-<li>过期时间最短不得少于18周（10886400秒）</li>
-<li>必须包含includeSubDomains参数</li>
-<li>必须包含preload参数<br>当你准好这些之后，可以在HSTS Preload List的官网上（<a href="https://link.zhihu.com/?target=https%3A//hstspreload.org" rel="external nofollow noopener noreferrer" target="_blank">https://hstspreload.org</a>）提交申请，或者了解更多详细的内容。</li>
-</ul>
-</li>
-</ul>
-<p><strong>Tip 3：如何查询域名是否加入到了Preload List</strong></p>
-<p>从提交申请到完成审核，成功加入到内置列表，中间可能需要等待几天到几周不等的时间。可通过官网<a href="https://link.zhihu.com/?target=https%3A//hstspreload.org" rel="external nofollow noopener noreferrer" target="_blank">https://hstspreload.org</a>或在Chrome地址栏里输入chrome://net-internals/#hsts查询状态。</p>
-<h3 id="HSTS-存在的坑"><a href="#HSTS-存在的坑" class="headerlink" title="HSTS 存在的坑"></a>HSTS 存在的坑</h3><ul>
-<li>纯 IP 的请求，HSTS 没法处理，比如 <code>http://2.2.2.2</code> ， 即便响应头中设置了 STS，浏览器也不会理会（未测试）</li>
-<li>HSTS 只能在 80 和 443 端口之间切换，如果服务是 8080 端口，即便设置了 STS，也无效（未测试）</li>
-<li>如果浏览器证书错误，一般情况会提醒存在安全风险，然是依然给一个链接进入目标页，而 HSTS 则没有目标页入口，所以一旦证书配置错误，就是很大的故障了</li>
-<li>如果服务器的 HTTPS 没有配置好就开启了 STS 的响应头，并且还设置了很长的过期时间，那么在你服务器 HTTPS 配置好之前，用户都是没办法连接到你的服务器的，除非 max-age 过期了。</li>
-<li>HSTS 能让你的网站在 ssllab 上到 A+（这不是坑）</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>随着越来越多的网站开始使用HTTPS，甚至是开启全站HTTPS，数据在传输过程中的安全性能够得到极大的保障。与此同时，通过HSTS的帮助，避免遭受到SSL Stripping或者中间人的攻击，能够使得数据通信变得更加安全。本篇文章希望通过对HSTS的解析，使得更多的开发团队将HSTS运用到自己的项目中。</p>
-<p>转载文章出处：</p>
-<p><a href="https://zhuanlan.zhihu.com/p/63674248" rel="external nofollow noopener noreferrer" target="_blank">https://zhuanlan.zhihu.com/p/63674248</a></p>
-<p><a href="https://www.barretlee.com/blog/2015/10/22/hsts-intro/" rel="external nofollow noopener noreferrer" target="_blank">https://www.barretlee.com/blog/2015/10/22/hsts-intro/</a></p>
-]]></content>
-      <categories>
-        <category>Network</category>
       </categories>
   </entry>
   <entry>
@@ -456,187 +198,44 @@
       </categories>
   </entry>
   <entry>
-    <title>OAuth and OIDC</title>
-    <url>/2019/11/16/OAuth%20and%20OIDC/</url>
-    <content><![CDATA[<h2 id="OAuth-2-0"><a href="#OAuth-2-0" class="headerlink" title="OAuth 2.0"></a>OAuth 2.0</h2><p>OAuth 是一个关于授权（Authorization）的开放网络标准，在全世界得到了广泛的应用，目前的版本是2.0</p>
+    <title>ARP病毒原理及防御</title>
+    <url>/2019/09/15/ARP/</url>
+    <content><![CDATA[<p>ARP病毒原理及防御以及如何快速定位ARP病毒源。</p>
 <a id="more"></a>
 
-
-<h3 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h3><ul>
-<li><p><strong>Third-party application</strong>：第三方应用程序，本文中又称”客户端”（client）。</p>
-</li>
-<li><p><strong>HTTP Service</strong>：HTTP服务提供商，本文中简称”服务提供商”。</p>
-</li>
-<li><p><strong>Resource Owner</strong>：资源所S有者，本文中又称”用户”（user）。</p>
-</li>
-<li><p><strong>User Agent</strong>：用户代理，本文中就是指浏览器。</p>
-</li>
-<li><p><strong>Authorization server</strong>：认证服务器，即服务提供商专门用来处理认证的服务器。</p>
-</li>
-<li><p><strong>Resource server</strong>：资源服务器，即服务提供商存放用户生成的资源的服务器。它与认证服务器，可以是同一台服务器，也可以是不同的服务器。</p>
-</li>
-</ul>
-<p>OAuth在”客户端”与”服务提供商”之间，设置了一个授权层（authorization layer）。”客户端”不能直接登录”服务提供商”，只能登录授权层，以此将用户与客户端区分开来。”客户端”登录授权层所用的令牌（token），与用户的密码不同。用户可以在登录的时候，指定授权层令牌的权限范围和有效期。</p>
-<p>“客户端”登录授权层以后，”服务提供商”根据令牌的权限范围和有效期，向”客户端”开放用户储存的资料。</p>
-<h3 id="授权流程"><a href="#授权流程" class="headerlink" title="授权流程"></a>授权流程</h3><ol>
-<li><p>用户打开客户端以后，客户端要求用户给予授权。</p>
-</li>
-<li><p>用户同意给予客户端授权。</p>
-</li>
-<li><p>客户端使用上一步获得的授权，向认证服务器申请令牌。</p>
-</li>
-<li><p>认证服务器对客户端进行认证以后，确认无误，同意发放令牌。</p>
-</li>
-<li><p>客户端使用令牌，向资源服务器申请获取资源。</p>
-</li>
-<li><p>资源服务器确认令牌无误，同意向客户端开放资源。</p>
-</li>
-</ol>
-<p>这几步中的关键就是客户端如何获取授权，OAuth2.0定义了四种不同的获取授权的方式。</p>
-<h3 id="获取授权的四种方式"><a href="#获取授权的四种方式" class="headerlink" title="获取授权的四种方式"></a>获取授权的四种方式</h3><p>客户端必须得到用户的授权（authorization grant），才能获得令牌（access token）。OAuth 2.0定义了四种授权方式。</p>
-<ul>
-<li>授权码模式（authorization code）</li>
-<li>简化模式（implicit）</li>
-<li>密码模式（resource owner password credentials）</li>
-<li>客户端模式（client credentials）</li>
-</ul>
-<h4 id="授权码模式"><a href="#授权码模式" class="headerlink" title="授权码模式"></a>授权码模式</h4><p>（A）用户访问客户端，后者将前者导向认证服务器。</p>
-<p>（B）用户选择是否给予客户端授权。</p>
-<p>（C）假设用户给予授权，认证服务器将用户导向客户端事先指定的”重定向URI”（redirection URI），同时附上一个授权码。</p>
-<p>（D）客户端收到授权码，附上早先的”重定向URI”，向认证服务器申请令牌。这一步是在客户端的后台的服务器上完成的，对用户不可见。</p>
-<p>（E）认证服务器核对了授权码和重定向URI，确认无误后，向客户端发送访问令牌（access token）和更新令牌（refresh token）。</p>
-<p>A步骤中，客户端申请认证的URI，包含以下参数：</p>
-<ul>
-<li>response_type：表示授权类型，必选项，此处的值固定为”code”</li>
-<li>client_id：表示客户端的ID，必选项</li>
-<li>redirect_uri：表示重定向URI，可选项</li>
-<li>scope：表示申请的权限范围，可选项</li>
-<li>state：表示客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值。</li>
-</ul>
-<p>C步骤中，服务器回应客户端的URI，包含以下参数：</p>
-<ul>
-<li>code：表示授权码，必选项。该码的有效期应该很短，通常设为10分钟，客户端只能使用该码一次，否则会被授权服务器拒绝。该码与客户端ID和重定向URI，是一一对应关系。</li>
-<li>state：如果客户端的请求中包含这个参数，认证服务器的回应也必须一模一样包含这个参数。</li>
-</ul>
-<p>D步骤中，客户端向认证服务器申请令牌的HTTP请求，包含以下参数：</p>
-<ul>
-<li>grant_type：表示使用的授权模式，必选项，此处的值固定为”authorization_code”。</li>
-<li>code：表示上一步获得的授权码，必选项。</li>
-<li>redirect_uri：表示重定向URI，必选项，且必须与A步骤中的该参数值保持一致。</li>
-<li>client_id：表示客户端ID，必选项。</li>
-</ul>
-<p>E步骤中，认证服务器发送的HTTP回复，包含以下参数：</p>
-<ul>
-<li>access_token：表示访问令牌，必选项。</li>
-<li>token_type：表示令牌类型，该值大小写不敏感，必选项，可以是bearer类型或mac类型。</li>
-<li>expires_in：表示过期时间，单位为秒。如果省略该参数，必须其他方式设置过期时间。</li>
-<li>refresh_token：表示更新令牌，用来获取下一次的访问令牌，可选项。</li>
-<li>scope：表示权限范围，如果与客户端申请的范围一致，此项可省略。</li>
-</ul>
-<h4 id="简化模式"><a href="#简化模式" class="headerlink" title="简化模式"></a>简化模式</h4><p> 简化模式（implicit grant type）不通过第三方应用程序的服务器，直接在浏览器中向认证服务器申请令牌，跳过了”授权码”这个步骤，因此得名。所有步骤在浏览器中完成，令牌对访问者是可见的，且客户端不需要认证。 </p>
-<p>（A）客户端将用户导向认证服务器。</p>
-<p>（B）用户决定是否给于客户端授权。</p>
-<p>（C）假设用户给予授权，认证服务器将用户导向客户端指定的”重定向URI”，并在URI的Hash部分包含了访问令牌。</p>
-<p>（D）浏览器向资源服务器发出请求，其中不包括上一步收到的Hash值。</p>
-<p>（E）资源服务器返回一个网页，其中包含的代码可以获取Hash值中的令牌。</p>
-<p>（F）浏览器执行上一步获得的脚本，提取出令牌。</p>
-<p>（G）浏览器将令牌发给客户端。</p>
-<h4 id="密码模式"><a href="#密码模式" class="headerlink" title="密码模式"></a>密码模式</h4><p>密码模式（Resource Owner Password Credentials Grant）中，用户向客户端提供自己的用户名和密码。客户端使用这些信息，向”服务商提供商”索要授权。</p>
-<p>在这种模式中，用户必须把自己的密码给客户端，但是客户端不得储存密码。这通常用在用户对客户端高度信任的情况下，比如客户端是操作系统的一部分，或者由一个著名公司出品。而认证服务器只有在其他授权模式无法执行的情况下，才能考虑使用这种模式。</p>
-<p>（A）用户向客户端提供用户名和密码。</p>
-<p>（B）客户端将用户名和密码发给认证服务器，向后者请求令牌。</p>
-<p>（C）认证服务器确认无误后，向客户端提供访问令牌。</p>
-<p>B步骤中，客户端发出的HTTP请求，包含以下参数：</p>
-<ul>
-<li>grant_type：表示授权类型，此处的值固定为”password”，必选项。</li>
-<li>username：表示用户名，必选项。</li>
-<li>password：表示用户的密码，必选项。</li>
-<li>scope：表示权限范围，可选项。</li>
-</ul>
-<h4 id="客户端模式"><a href="#客户端模式" class="headerlink" title="客户端模式"></a>客户端模式</h4><p> 客户端模式（Client Credentials Grant）指客户端以自己的名义，而不是以用户的名义，向”服务提供商”进行认证。严格地说，客户端模式并不属于OAuth框架所要解决的问题。在这种模式中，用户直接向客户端注册，客户端以自己的名义要求”服务提供商”提供服务，其实不存在授权问题。 </p>
-<h3 id="更新令牌"><a href="#更新令牌" class="headerlink" title="更新令牌"></a>更新令牌</h3><p>如果用户访问的时候，客户端的”访问令牌”已经过期，则需要使用”更新令牌”申请一个新的访问令牌。</p>
-<p>客户端发出更新令牌的HTTP请求，包含以下参数：</p>
-<ul>
-<li>grant<em>type：表示使用的授权模式，此处的值固定为”refresh</em>token”，必选项。</li>
-<li>refresh_token：表示早前收到的更新令牌，必选项。</li>
-<li>scope：表示申请的授权范围，不可以超出上一次申请的范围，如果省略该参数，则表示与上一次一致。</li>
-</ul>
-<h2 id="OIDC"><a href="#OIDC" class="headerlink" title="OIDC"></a>OIDC</h2><p>OpenID Connect是基于OAuth 2.0规范族的可互操作的身份验证协议。它使用简单的REST / JSON消息流来实现，和之前任何一种身份认证协议相比，开发者可以轻松集成。</p>
-<p>OpenID Connect允许开发者验证跨网站和应用的用户，而无需拥有和管理密码文件。OpenID Connect允许所有类型的客户,包括基于浏览器的<a href="https://link.jianshu.com?t=http://lib.csdn.net/base/javascript" rel="external nofollow noopener noreferrer" target="_blank">JavaScript</a>和本机移动应用程序,启动登录流动和接收可验证断言对登录用户的身份。</p>
-<p> 简要而言，<em>OIDC</em>是一种安全机制，用于应用连接到身份认证服务器（Identity Service）获取用户信息，并将这些信息以安全可靠的方法返回给应用。 </p>
-<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p> <strong>OpenID</strong>是<em>Authentication</em>，即认证，对用户的身份进行认证，判断其身份是否有效，也就是让网站知道“你是你所声称的那个用户”； </p>
-<p><strong>OAuth</strong>是<em>Authorization</em>，即授权，在已知用户身份合法的情况下，经用户授权来允许某些操作，也就是让网站知道“你能被允许做那些事情”。<br> 由此可知，授权要在认证之后进行，只有确定用户身份只有才能授权。</p>
-<p><em>OpenID Connect</em>是“认证”和“授权”的结合，因为其基于<em>OAuth</em>协议，所以<em>OpenID-Connect</em>协议中也包含了<strong>client_id</strong>、<strong>client_secret</strong>还有<strong>redirect_uri</strong>等字段标识。这些信息被保存在“身份认证服务器”，以确保特定的客户端收到的信息只来自于合法的应用平台。这样做是目的是为了防止<em>client_id</em>泄露而造成的恶意网站发起的<em>OIDC</em>流程。</p>
-<h3 id="流程简介"><a href="#流程简介" class="headerlink" title="流程简介"></a>流程简介</h3><p><em>OAuth2</em>提供了<em>Access Token</em>来解决授权第三方客户端访问受保护资源的问题；相似的，<em>OIDC</em>在这个基础上提供了<em>ID Token</em>来解决第三方客户端标识用户身份认证的问题。<em>OIDC</em>的核心在于在<em>OAuth2</em>的授权流程中，一并提供用户的身份认证信息（<em>ID-Token</em>）给到第三方客户端，<em>ID-Token</em>使用<strong>JWT</strong>格式来包装，得益于 <a href="https://sunra.top/2019/10/26/jwt/">JWT</a>的自包含性，紧凑性以及防篡改机制，使得<em>ID-Token</em>可以安全的传递给第三方客户端程序并且容易被验证。应有服务器，在验证<em>ID-Token</em>正确只有，使用<em>Access-Token</em>向<em>UserInfo</em>的接口换取用户的更多的信息。</p>
-<p>有上述可知，<em>OIDC</em>是遵循<em>OAuth</em>协议流程，在申请<em>Access-Token</em>的同时，也返回了<em>ID-Token</em>来验证用户身份。</p>
-<h3 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h3><p><strong>EU</strong>：End User，用户。</p>
-<p> <strong>RP</strong>：Relying Party ，用来代指<em>OAuth2</em>中的受信任的客户端，身份认证和授权信息的消费方；</p>
-<p> <strong>OP</strong>：OpenID Provider，有能力提供EU身份认证的服务方（比如<em>OAuth2</em>中的授权服务），用来为RP提供EU的身份认证信息；</p>
-<p> <strong>ID-Token</strong>：JWT格式的数据，包含EU身份认证的信息。</p>
-<p> <strong>UserInfo Endpoint</strong>：用户信息接口（受<em>OAuth2</em>保护），当RP使用<em>Access-Token</em>访问时，返回授权用户的信息，此接口必须使用<em>HTTPS</em>。</p>
-<h3 id="具体流程"><a href="#具体流程" class="headerlink" title="具体流程"></a>具体流程</h3><p>如果是JS应用，其所有的代码都会被加载到浏览器而暴露出来，没有后端可以保证<em>client_secret</em>的安全性，则需要是使用<strong>默认模式流程</strong>(Implicit Flow)。</p>
-<p>如果是传统的客户端应用，后端代码和用户是隔离的，能保证<em>client_secret</em>的不被泄露，就可以使用<strong>授权码模式流程</strong>（Authentication Flow）。</p>
-<p>此外还有<strong>混合模式流程</strong>(Hybrid Flow)，简而言之就是以上二者的融合。</p>
-<h4 id="授权码流程"><a href="#授权码流程" class="headerlink" title="授权码流程"></a>授权码流程</h4><p>RP发送一个<strong>认证请求</strong>给OP，其中附带<em>client_id</em>；</p>
-<p>OP对EU进行身份认证；</p>
-<p>OP返回响应，发送授权码给RP；</p>
-<p>RP使用授权码向OP索要ID-Token和Access-Token，RP验证无误后返回给RP；</p>
-<p>RP使用Access-Token发送一个请求到<em>UserInfo EndPoint</em>； UserInfo EndPoint返回EU的Claims。</p>
-<h5 id="认证请求"><a href="#认证请求" class="headerlink" title="认证请求"></a>认证请求</h5><p>RP使用OAuth2的Authorization-Code的方式来完成用户身份认证，所有的Token都是通过OP的Token EndPoint（<a href="https://link.jianshu.com?t=https://tools.ietf.org/html/rfc6749#section-3.2" rel="external nofollow noopener noreferrer" target="_blank">OAuth2中定义</a>）来发放的。构建一个OIDC的Authentication Request需要提供如下的参数：</p>
-<ul>
-<li>scope：必须。OIDC的请求必须包含值为“openid”的scope的参数。</li>
-<li>response_type：必选。同OAuth2。</li>
-<li>client_id：必选。同OAuth2。</li>
-<li>redirect_uri：必选。同OAuth2。</li>
-<li>state：推荐。同OAuth2。防止CSRF, XSRF。</li>
-</ul>
-<p>在OP接收到认证请求之后，需要对请求参数做严格的验证，具体的规则参见<a href="https://link.jianshu.com?t=http://openid.net/specs/openid-connect-core-1_0.html#AuthRequestValidation" rel="external nofollow noopener noreferrer" target="_blank">http://openid.net/specs/openid-connect-core-1_0.html#AuthRequestValidation</a>，验证通过后引导EU进行身份认证并且同意授权。在这一切都完成后，会重定向到RP指定的回调地址(<em>redirect_uri</em>)，并且把<strong>code</strong>和<strong>state</strong>参数传递过去。</p>
-<p>RP使用上一步获得的<em>code</em>来请求Token EndPoint，这一步桶<em>OAuth2</em>，就不再展开细说了。然后Token EndPoint会返回响应的Token，其中除了<em>OAuth2</em>规定的部分数据外，还会附加一个<em>id_token</em>的字段。<em>id_token</em>字段就是上面提到的<em>ID Token</em>。</p>
-<h6 id="ID-Token"><a href="#ID-Token" class="headerlink" title="ID-Token"></a>ID-Token</h6><p>上面提到过<em>OIDC</em>对<em>OAuth2</em>最主要的扩展就是提供了<em>ID-Token</em>。下面我们就来看看<em>ID-Token</em>的主要构成：</p>
-<ul>
-<li><strong>iss = Issuer Identifier</strong>：必须。提供认证信息者的唯一标识。一般是Url的host+path部分；</li>
-<li><strong>sub = Subject Identifier</strong>：必须。iss提供的EU的唯一标识；最长为255个ASCII个字符；</li>
-<li><strong>aud = Audience(s)</strong>：必须。标识<em>ID-Token</em>的受众。必须包含<em>OAuth2</em>的client_id；</li>
-<li><strong>exp = Expiration time</strong>：必须。<em>ID-Token</em>的过期时间；</li>
-<li><strong>iat = Issued At Time</strong>：必须。JWT的构建的时间。</li>
-<li><strong>auth_time = AuthenticationTime</strong>：EU完成认证的时间。如果RP发送认证请求的时候携带<em>max_age</em>的参数，则此Claim是必须的。</li>
-<li><strong>nonce</strong>：RP发送请求的时候提供的随机字符串，用来减缓重放攻击，也可以来关联<em>ID-Token</em>和RP本身的Session信息。</li>
-<li><strong>acr = Authentication Context Class Reference</strong>：可选。表示一个认证上下文引用值，可以用来标识认证上下文类。</li>
-<li><strong>amr = Authentication Methods References</strong>：可选。表示一组认证方法。</li>
-<li><strong>azp = Authorized party</strong>：可选。结合aud使用。只有在被认证的一方和受众（aud）不一致时才使用此值，一般情况下很少使用。</li>
-</ul>
-<h4 id="默认流程"><a href="#默认流程" class="headerlink" title="默认流程"></a>默认流程</h4><p>默认流程和<em>OAuth</em>中的类似，只不过也是添加了<em>ID-Token</em>的相关内容。</p>
-<p>这里需要说明的是：<em>OIDC</em>的说明文档里很明确的说明了用户的相关信息都要使用<strong>JWT</strong>形式编码。在<em>JWT</em>中，不应该在载荷里面加入任何敏感的数据。如果传输的是用户的User ID。这个值实际上不是什么敏感内容，一般情况下被知道也是安全的。</p>
-<h3 id="UserInfo-Endpoint"><a href="#UserInfo-Endpoint" class="headerlink" title="UserInfo Endpoint"></a>UserInfo Endpoint</h3><p>可能有的读者发现了，<em>ID-Token</em>只有sub是和EU相关的，这在一般情况下是不够的，必须还需要EU的用户名，头像等其他的资料，<em>OIDC</em>提供了一组公共的cliams，来提供更多用户的信息，这就是——UserIndo EndPoin。</p>
-<p>在RP得到Access Token后可以请求此资源，然后获得一组EU相关的Claims，这些信息可以说是<em>ID-Token</em>的扩展，<em>ID-Token</em>中只需包含EU的唯一标识sub即可（避免ID Token过于庞大和暴露用户敏感信息），然后在通过此接口获取完整的EU的信息。此资源<strong>必须部署在TLS之上</strong></p>
-<h2 id="关于OAuth的一点思考"><a href="#关于OAuth的一点思考" class="headerlink" title="关于OAuth的一点思考"></a>关于OAuth的一点思考</h2><p>User：用户</p>
-<p>User Agent：用户代理，如浏览器</p>
-<p>Consumer：信息消费者，如Leetcode</p>
-<p>Service Provider：分为两个，分别是身份认证提供者（Identity Provider， IDP）,如QQ，以及资源提供者（Resource Provider），不过这二者一般是相同的</p>
-<p>OAuth并不是为了解决安全或者性能问题。</p>
-<p>OAuth也并不会帮我们保存在Consumer的登录态。</p>
-<p>OAuth出现的目的就是为了帮我们用一个第三方的账号关联多个应用的账号，它是user赋予consumer在SP的权限，而不是赋予user在consumer的权限。我们的账号一个没少，只不过建立起了一对多的关系，就类似于如果我们想去考驾照，就需要用身份证，授权驾校用我们的身份证信息去公安局证实我们这个人的存在并取回一些其他信息。但是也就到此为止，接下来的事情与OAuth并无关系。</p>
-<p>单凭OAuth无法完成在consumer创建账户，IDP不可能也没有责任保存user在consumer的任何信息，它只是在user授权情况下告诉consumer一些信息而已。</p>
-<p>为什么一开始就要发送个redirect_uri给IDP？第一次是为了IDP设置返回地302中的Location，可以不验证是不是consumer设置好的，第二次就是验证这个redirect_uri是不是你当初在IDP这里设置的，与第一次过来的是否一样，这一步必须要验证，因为这一步是最关键的，这一步才会返回token。</p>
-<p>为什么要绕这么一大圈，为什么要多一步code换access_token？说到底还是信不过浏览器同志，让他当个工具人，让它帮自己地后台去第三方申请一个授权码，然后把这个授权码给自己的后台，再然后自己的后台用这个code去第三方申请token，完事还不告诉浏览器这个token是什么，自己留下了，也就是说浏览器同志从头到尾都没见过token。</p>
-<p>Secret有什么用？原因是IDP不信任何人，就信自己给出去的secret。因为redirect_uri是域名，最终到哪里还是要靠IP地址，如果域名是对的，但是域名被攻击者指向了自己的IP，攻击者就会收到token。怎么修改这个DNS指向就涉及DNS污染了，因为DNS会层层缓存，但是又有时间，如果你一直广播告诉路由器或者主机我是leetcode，我是leetcode，时间长了你在这一片局域网中就被认为是leetcode了。但是如果有了secret，就算你带着code过来了IDP，没有我给你的secret，IDP也不会给出token。所以client_id表明自己是谁，只有给了client_secret，IDP才会相信你说的话，并给你token，所以这个secret非常重要，我们的后台又不会相信浏览器同志了，所以我们的浏览器同志从头到尾也没摸过secret。</p>
-<p>State又有什么用呢？类似于防御CSRF，保证请求设备的一致性，不过不像CSRF是伪造受害者的请求，而是让受害者登录自己的账号，如果受害者在里面存个比特币账号岂不美哉？具体实现就是攻击者登录之后，正常申请，但是到了IDP返回302以后把请求拦下，不让浏览器发送请求给自己的后台，然后把这个带code的请求链接给受害人，受害人点进去之后就可以拿到access_token成功登录，如果不注意这个账号是不是自己的就上传敏感信息，就很happy。如果有了state，不同的设备我后台都生成一个随机的字符串给前端，攻击者就算把请求发给受害者，他也不知道受害者设备中的state，后台一看你的state和刚开始说好的不一样，就会直接把这个请求丢掉，当然硬要说攻击者把你的state从庞大的互联网的某个请求中给偷到了，那也是绝了，这就属于定点爆破了，就是要搞你，那这个人多半已经混在你的身边了。</p>
-<p>为什么最后会返回两个token？因为一个代表你是谁，一个代表你能做什么，你能做的事情随时可以被管理员改变，但是你是谁是固定的，而且一般access_token过期时间都比较短，如果我用着用着就过期了，总不能让用户重新登陆吧，那岂不是回到了起点？</p>
-<p>说了半天，这些设计都停留在传输层以上，那我要是搞你的网络层呢？我再散布个ARP病毒呢？搞链路层就有点夸张了。</p>
-<p>参考文章：</p>
-<p>[<a href="https://sunra.top/2019/11/16/OAuth%20and%20OIDC/]">https://sunra.top/2019/11/16/OAuth%20and%20OIDC/]</a>(<a href="https://sunra.top/2019/11/16/OAuth">https://sunra.top/2019/11/16/OAuth</a> and OIDC/) ：OAuth，OIDC简介</p>
-<p><a href="https://sunra.top/2020/03/27/routing-protocol/">https://sunra.top/2020/03/27/routing-protocol/</a>  ：路由协议</p>
-<p><a href="https://sunra.top/2019/09/15/ARP/">https://sunra.top/2019/09/15/ARP/</a> ：ARP原理与防御</p>
-<p><a href="https://www.jianshu.com/p/0db71eb445c8" rel="external nofollow noopener noreferrer" target="_blank">https://www.jianshu.com/p/0db71eb445c8</a> ：OAuth认证流程举例</p>
-<p><a href="https://www.chrisyue.com/security-issue-about-oauth-2-0-you-should-know.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.chrisyue.com/security-issue-about-oauth-2-0-you-should-know.html</a> ：OAuth2.0中的安全考虑</p>
-<p><a href="https://www.cnblogs.com/linianhui/p/openid-connect-core.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.cnblogs.com/linianhui/p/openid-connect-core.html</a> ：OIDC文档</p>
-<p><a href="https://www.zhihu.com/question/19851243" rel="external nofollow noopener noreferrer" target="_blank">https://www.zhihu.com/question/19851243</a> ：OAuth1.0与2.0区别</p>
-<p><a href="https://docs.azure.cn/zh-cn/active-directory/azuread-dev/v1-protocols-openid-connect-code" rel="external nofollow noopener noreferrer" target="_blank">https://docs.azure.cn/zh-cn/active-directory/azuread-dev/v1-protocols-openid-connect-code</a> ：OIDC + AAD</p>
-<p><a href="https://www.sciencedirect.com/science/article/pii/S2215098617316750" rel="external nofollow noopener noreferrer" target="_blank">https://www.sciencedirect.com/science/article/pii/S2215098617316750</a> ：云服务中面临的安全问题</p>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy" rel="external nofollow noopener noreferrer" target="_blank">https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy</a> ：同源策略</p>
+<h2 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h2><p> ARP协议（address resolution protocol）地址解析协议</p>
+<p>一台主机和另一台主机通信，要知道目标的IP地址，但是在局域网中传输数据的网卡却不能直接识别IP地址，所以用ARP解析协议将IP地址解</p>
+<p>析成MAC地址。ARP协议的基本功能就是通过目标设备的IP地址，来查询目标设备的mac地址。</p>
+<p>在局域网的任意一台主机中，都有一个ARP缓存表，里面保存本机已知的此局域网中各主机和路由器的IP地址和MAC地址的对照关系。ARP缓存</p>
+<p>表的生命周期是有时限的（一般不超过20分钟）。</p>
+<p>假设局域网中有A,B,C,D四台主机</p>
+<p>主机A想和主机B通信</p>
+<p>主机A会先查询自己的ARP缓存表里有没有B的联系方式，有的话，就将mac-b地址封装到数据包外面，发送出去。没有的话，A会向全网络发送一个</p>
+<p>ARP广播包，大声询问：我的IP地址是192.168.0.2，硬件地址是mac-a，我想知道IP地址是192.168.0.3的硬件地址是多少？   此时，局域网内所有</p>
+<p>主机都收到了，B收到后会单独私密回应：我是192.168.0.3，我的硬件地址是mac-b，其他主机不会理A的</p>
+<p>此时A知道了B的信息，同时也会动态的更新自身的缓存表</p>
+<h3 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h3><p>ARP协议是建立在信任局域网内所有节点的基础上的，他的效率很高。但是不安全。它是无状态的协议。他不会检查自己是否发过请求包，</p>
+<p>也不知道自己是否发过请求包。他也不管是否合法的应答，只要收到目标mac地址是自己的ARP reply或者ARP广播包（包括ARP reply和ARP request），</p>
+<p>都会接受并缓存。</p>
+<h2 id="ARP攻击原理"><a href="#ARP攻击原理" class="headerlink" title="ARP攻击原理"></a>ARP攻击原理</h2><p>ARP欺骗攻击建立在局域网主机间相互信任的基础上的</p>
+<p>当A发广播询问：我想知道IP是192.168.0.3的硬件地址是多少？</p>
+<p>此时B当然会回话：我是IP192.168.0.3我的硬件地址是mac-b，</p>
+<p>可是此时IP地址是192.168.0.4的C也非法回了：我是IP192.168.0.3,我的硬件地址是mac-c。而且是大量的。</p>
+<p>所以A就会误信192.168.0.3的硬件地址是mac-c，而且动态更新缓存表</p>
+<p>这样主机C就劫持了主机A发送给主机B的数据，这就是ARP欺骗的过程。</p>
+<p>假如C直接冒充网关，此时主机C会不停的发送ARP欺骗广播，大声说：我的ＩＰ是１９２.１６８.０.１，我的硬件地址是ｍａｃ－ｃ，</p>
+<p>此时局域网内所有主机都被欺骗，更改自己的缓存表，此时Ｃ将会监听到整个局域网发送给互联网的数据报。</p>
+<h2 id="如何快速找到病毒源"><a href="#如何快速找到病毒源" class="headerlink" title="如何快速找到病毒源"></a>如何快速找到病毒源</h2><h3 id="使用Sniffer抓包"><a href="#使用Sniffer抓包" class="headerlink" title="使用Sniffer抓包　　"></a>使用Sniffer抓包　　</h3><p>在网络内任意一台主机上运行抓包软件，捕获所有到达本机的数据包。如果发现有某个IP不断发送请求包，那么这台电脑一般就是病毒源。原理：无论何种ARP病毒变种，行为方式有两种，一是欺骗网关，二是欺骗网内的所有主机。</p>
+<h3 id="使用arp-a命令"><a href="#使用arp-a命令" class="headerlink" title="使用arp -a命令　"></a>使用arp -a命令　</h3><p>任意选两台不能上网的主机，在DOS命令窗口下运行arp -a命令。例如在结果中，两台电脑除了网关的IP，MAC地址对应项，都包含了192.168.0.186的这个IP，则可以断定192.168.0.186这台主机就是病毒源。原理：一般情况下，网内的主机只和网关通信。</p>
+<h3 id="使用tracert命令"><a href="#使用tracert命令" class="headerlink" title="使用tracert命令"></a>使用tracert命令</h3><p>在任意一台受影响的主机上，在DOS命令窗口下运行如下命令：tracert 61.135.179.148。　假定设置的缺省网关为10.8.6.1，在跟踪一个外网地址时，第一跳却是10.8.6.186，那么，10.8.6.186就是病毒源。原理：中毒主机在受影响主机和网关之间，扮演了“中间人”的角色。所有本应该到达网关的数据包，由于错误的MAC地址，均被发到了中毒主机。此时，中毒主机越俎代庖，起了缺省网关的作用。</p>
+<h2 id="ARP防御"><a href="#ARP防御" class="headerlink" title="ARP防御"></a>ARP防御</h2><h3 id="ARP双向绑定"><a href="#ARP双向绑定" class="headerlink" title="ARP双向绑定"></a>ARP双向绑定</h3><p> 在pc端上 IP+mac 绑定</p>
+<p> 在网络设备（交换路由）上 采用ip+mac+端口绑定</p>
+<p>网关也进行IP和mac的静态绑定</p>
+<h3 id="建立DHCP服务器"><a href="#建立DHCP服务器" class="headerlink" title="建立DHCP服务器"></a>建立DHCP服务器</h3><p>ARP攻击一般先攻击网关，将DHCP服务器建立在网关上</p>
+<h3 id="划分安全区域"><a href="#划分安全区域" class="headerlink" title="划分安全区域"></a>划分安全区域</h3><p>ARP广播包是不能跨子网或网段传播的，网段可以隔离广播包。VLAN就是一个逻辑广播域，通过VLAN技术可以在局域网中创建多个子网，就在局域网中隔离了广播,缩小感染范围。</p>
 ]]></content>
       <categories>
-        <category>Cloud</category>
+        <category>Network</category>
       </categories>
   </entry>
   <entry>
@@ -6743,6 +6342,407 @@
       </categories>
   </entry>
   <entry>
+    <title>Azure Key Vault</title>
+    <url>/2019/11/30/Azure-Key-Vault/</url>
+    <content><![CDATA[<p>Azure Key Vault is a tool for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, or certificates. A vault is logical group of secrets.</p>
+<a id="more"></a>
+
+<p>上面这一段是Azure官方文档的描述，作者在阅读了Microsoft Azure文档之后，对其基本的概念进行了提取和总结，并在原文中加入了一些自己的理解。阅读完中文就能对key vault有个大概的认识，英文原文是比较专业的描述，不影响理解，如果想进一步了解可以去阅读文末提供的链接。</p>
+<h2 id="What-is-Azure-Key-Vault"><a href="#What-is-Azure-Key-Vault" class="headerlink" title="What is Azure Key Vault"></a>What is Azure Key Vault</h2><p>简单来讲，Azure Key Vault 就是提供了一个能够安全存储你的敏感数据的地方，想要获取这些数据就必须通过身份校验以及权限校验，我们可以把类似于证书，数据库配置等敏感信息放在这里，而不需要硬编码到代码中。在使用时我们将敏感信息存储到key vault上后，会获取对应的名称，我们只需要通过api去key vault中通过名字（也可以添加版本信息）获取对应的信息就好，这些信息可以是密钥（只能get公钥），证书信息，或者一些配置信息。当然这些信息并不是任何人直接去调用api就可以获取的，而是需要你的Identity信息被用于创建该Key Vault的Tenant下面的Subscription所承认，获取承认的方式有很多种，可以通过id-token，或者密码等。</p>
+<p>Azure Key Vault帮助解决以下问题：</p>
+<ul>
+<li><strong>秘密管理</strong> -Azure Key Vault可用于安全存储和严格控制对令牌，密码，证书，API密钥和其他秘密的访问。</li>
+<li><strong>密钥管理</strong> -Azure Key Vault也可以用作密钥管理解决方案。使用Azure Key Vault可以轻松创建和控制用于加密数据的加密密钥。</li>
+<li><strong>证书管理</strong> -Azure Key Vault也是一项服务，使您可以轻松地调配，管理和部署公共和私有安全套接字层/传输层安全性（SSL / TLS）证书，以与Azure和内部连接的资源一起使用。</li>
+<li><strong>存储由硬件安全模块支持</strong>的机密-机密和密钥可以通过软件或FIPS 140-2 2级验证HSM进行保护。</li>
+</ul>
+<p>使用Azure Key Vault 可以集中存储应用程序的机密数据并可以控制这些数据的分发。而且由于开发人员可以不用在程序中硬编码安全信息，大大提高了程序的安全性。</p>
+<p>存储在Azure Key Vault中的信息会被可靠的加密算法保存。</p>
+<p>同时Azure Key Vault可以基于Azure AD进行访问的权限控制，同时可以记录下来是谁在什么时间访问了哪一条数据。</p>
+<h2 id="Azure-Key-Vault-basic-concepts"><a href="#Azure-Key-Vault-basic-concepts" class="headerlink" title="Azure Key Vault basic concepts"></a>Azure Key Vault basic concepts</h2><ul>
+<li><strong>承租人/租户</strong>( <strong>Tenant</strong> )：承租人是拥有和管理Microsoft云服务的特定实例的组织。最常用于指组织的Azure和Office 365服务集。</li>
+<li><strong>保管库所有者</strong>( <strong>Vault owner</strong> )：保管库所有者可以创建密钥保管库并获得对其的完全访问权和控制权。保管库所有者还可以设置审核以记录谁访问了机密和密钥。管理员可以控制密钥生命周期。他们可以滚动到密钥的新版本，进行备份并执行相关任务。</li>
+<li><strong>保管箱使用者</strong>( <strong>Vault consumer</strong> )：当保管库所有者授予使用者访问权时，<strong>保管箱使用者</strong>可以对密钥保管库内的资产执行操作。可用的操作取决于所授予的权限。</li>
+<li><strong>资源</strong>( <strong>Resource</strong> )：资源是可通过Azure进行管理的项目。常见示例包括虚拟机，存储帐户，Web应用程序，数据库和虚拟网络。还有更多。</li>
+<li><strong>资源组</strong>( <strong>Resource group</strong> )：资源组是一个容器，其中包含Azure解决方案的相关资源。资源组可以包含解决方案的所有资源，也可以仅包含您要作为组进行管理的资源。您可以根据对组织最有意义的决定来决定如何向资源组分配资源。</li>
+<li><strong>服务主体</strong>( <strong>Service principal</strong> )：Azure服务主体是用户创建的应用程序，服务和自动化工具用来访问特定Azure资源的安全身份。可以将其视为具有特定角色且受到严格控制的权限的“用户身份”（用户名，密码或证书）。与一般用户身份不同，服务主体只需要做特定的事情。如果仅授予它执行管理任务所需的最低权限级别，则可以提高安全性。</li>
+<li>Azure Active Directory（Azure AD）：Azure AD是租户的Active Directory服务。每个目录都有一个或多个域。一个目录可以有许多与之关联的订阅，但只能有一个租户。每个组织可以有一个租户，这个租户有自己的ID用于标识自己，每个Tenant都有自己的一个或者多个SubScription，Subscription与Azure AD directory是多对一的关系。每个人都可以去Azure上申请自己的账号，这个账号在Azure上叫做Identity，每个Identity可以创建Azure AD account。如果你的Azure AD account在某个Tenant的Azure AD directory中，并且Tenant授予了你某个Subscription的权限，你就可以使用该Subscription下的Services。具体可以去查看<a href="https://docs.microsoft.com/en-us/azure/active-directory/active-directory-whatis" rel="external nofollow noopener noreferrer" target="_blank">文档</a></li>
+<li><strong>Azure租户ID</strong>( <strong>Azure tenant ID</strong> )：租户ID是在Azure订阅中标识Azure AD实例的独特方法。</li>
+<li><strong>托管身份</strong>( <strong>Managed identities</strong> )：Azure Key Vault提供了一种安全存储凭据以及其他密钥和机密的方法，但是您的代码需要通过Key Vault进行身份验证才能检索它们。通过使用托管身份，可以通过在Azure AD中为Azure服务提供自动托管身份来简化解决此问题的步骤。您可以使用此身份对Key Vault或支持Azure AD身份验证的任何服务进行身份验证，而无需在代码中包含任何凭据。</li>
+</ul>
+<p><strong>Anybody with an Azure subscription can create and use key vaults</strong>. Although Key Vault benefits developers and security administrators, it can be implemented and managed by an organization’s administrator who manages other Azure services. </p>
+<h2 id="Security"><a href="#Security" class="headerlink" title="Security"></a>Security</h2><p> 这一部分主要讲的就是Azure Key Vault是如何确保你的信息只能被你授权的人看到。</p>
+<p>对于Key Vault的管理有两种级别，也对应着两种access model，第一种级别叫做management plane，这种级别的关系可以对Key Vault本身进行操作，可以创建和删除一个Key Vault，第二种级别就是对Key Vault中的数据进行管理。但是不管那种级别，其身份校验都是通过Azure AD来实现的，通过基于<strong>角色的权限控制（RBAC）</strong>来判断一个用户可以对Key Vault做出怎样的操作。</p>
+<p>在不同级别之下做出的RBAC只适用于该级别之下的用户，比如你在Subscription的级别下做出的RBAC就只适用于该Subscription下的用户。</p>
+<p>同时对于secret， key，certificate的权限管理是分开的，也就是说你同一个Subscription下的用户在同一个Key Vault中可能对secret有访问权限，但是对于key却没有。</p>
+<p>You need to protect encryption keys and secrets like certificates, connection strings, and passwords in the cloud so you are using Azure Key Vault. Since you are storing sensitive and business critical data, you need to take steps to maximize the security of your vaults and the data stored in them. </p>
+<h3 id="Identity-and-access-management"><a href="#Identity-and-access-management" class="headerlink" title="Identity and access management"></a>Identity and access management</h3><p>When you create a key vault in an Azure subscription, it’s automatically associated with the Azure AD tenant of the subscription. Anyone trying to manage or retrieve content from a vault must be authenticated by Azure AD.</p>
+<ul>
+<li>Authentication establishes the identity of the caller.</li>
+<li>Authorization determines which operations the caller can perform. Authorization in Key Vault uses a combination of <a href="https://docs.microsoft.com/en-us/azure/role-based-access-control/overview" rel="external nofollow noopener noreferrer" target="_blank">Role based access control</a> (RBAC) and Azure Key Vault access policies.</li>
+</ul>
+<h4 id="Access-model-overview"><a href="#Access-model-overview" class="headerlink" title="Access model overview"></a>Access model overview</h4><p>Access to vaults takes place through two interfaces or planes. These planes are the management plane and the data plane.</p>
+<ul>
+<li>The <em>management plane</em> is where you manage Key Vault itself and it is the interface used to create and delete vaults. You can also read key vault properties and manage access policies.</li>
+<li>The <em>data plane</em> allows you to work with the data stored in a key vault. You can add, delete, and modify keys, secrets, and certificates.</li>
+</ul>
+<p>To access a key vault in either plane, all callers (users or applications) must be authenticated and authorized. Both planes use Azure Active Directory (Azure AD) for authentication. For authorization, the management plane uses role-based access control (RBAC) and the data plane uses a Key Vault access policy.</p>
+<p>The model of a single mechanism for authentication to both planes has several benefits:</p>
+<ul>
+<li>Organizations can control access centrally to all key vaults in their organization.</li>
+<li>If a user leaves, they instantly lose access to all key vaults in the organization.</li>
+<li>Organizations can customize authentication by using the options in Azure AD, such as to enable multi-factor authentication for added security</li>
+</ul>
+<h4 id="Managing-administrative-access-to-Key-Vault"><a href="#Managing-administrative-access-to-Key-Vault" class="headerlink" title="Managing administrative access to Key Vault"></a>Managing administrative access to Key Vault</h4><p>When you create a key vault in a resource group, you manage access by using Azure AD. You grant users or groups the ability to manage the key vaults in a resource group. You can grant access at a specific scope level by assigning the appropriate RBAC roles. To grant access to a user to manage key vaults, you assign a predefined <code>key vault Contributor</code> role to the user at a specific scope. The following scopes levels can be assigned to an RBAC role:</p>
+<ul>
+<li><strong>Subscription</strong>: An RBAC role assigned at the subscription level applies to all resource groups and resources within that subscription.</li>
+<li><strong>Resource group</strong>: An RBAC role assigned at the resource group level applies to all resources in that resource group.</li>
+<li><strong>Specific resource</strong>: An RBAC role assigned for a specific resource applies to that resource. In this case, the resource is a specific key vault.</li>
+</ul>
+<h4 id="Controlling-access-to-Key-Vault-data"><a href="#Controlling-access-to-Key-Vault-data" class="headerlink" title="Controlling access to Key Vault data"></a>Controlling access to Key Vault data</h4><p>Key Vault access policies grant permissions separately to keys, secrets, or certificate. You can grant a user access only to keys and not to secrets. Access permissions for keys, secrets, and certificates are managed at the vault level.</p>
+<h4 id="Network-access"><a href="#Network-access" class="headerlink" title="Network access"></a>Network access</h4><p>You can reduce the exposure of your vaults by specifying which IP addresses have access to them. The virtual network service endpoints for Azure Key Vault allow you to restrict access to a specified virtual network. The endpoints also allow you to restrict access to a list of IPv4 (internet protocol version 4) address ranges. Any user connecting to your key vault from outside those sources is denied access.</p>
+<p>After firewall rules are in effect, users can only read data from Key Vault when their requests originate from allowed virtual networks or IPv4 address ranges. This also applies to accessing Key Vault from the Azure portal. Although users can browse to a key vault from the Azure portal, they might not be able to list keys, secrets, or certificates if their client machine is not in the allowed list. This also affects the Key Vault Picker by other Azure services. Users might be able to see list of key vaults, but not list keys, if firewall rules prevent their client machine.</p>
+<h3 id="Azure-Key-Vault-security-worlds-and-geographic-boundaries"><a href="#Azure-Key-Vault-security-worlds-and-geographic-boundaries" class="headerlink" title="Azure Key Vault security worlds and geographic boundaries"></a>Azure Key Vault security worlds and geographic boundaries</h3><p>Azure Key Vault 是一个多租户服务，同一个Azure Location使用同一个HSM，享有相同的安全边界，也就是在同一个安全世界中。</p>
+<p>同时Azure Key Vault可以对数据进行备份，但是备份需要满足两个条件：</p>
+<ul>
+<li>两个Azure locations 在同一地理位置</li>
+<li>两个key vaults 属于同一个订阅</li>
+</ul>
+<h3 id="Secure-access-to-a-key-vault"><a href="#Secure-access-to-a-key-vault" class="headerlink" title="Secure access to a key vault"></a>Secure access to a key vault</h3><h4 id="Access-model-overview-1"><a href="#Access-model-overview-1" class="headerlink" title="Access model overview"></a>Access model overview</h4><p>对密钥库的访问通过两个接口进行控制:管理平面和数据平面。管理平面是您管理密钥库本身的地方。此平面中的操作包括创建和删除密钥保险库、检索密钥保险库属性和更新访问策略。数据平面是处理存储在密钥库中的数据的地方。您可以添加、删除和修改密钥、秘密和证书。<br>要访问任一平面中的密钥库，所有调用方(用户或应用程序)必须具有适当的身份验证和授权。身份验证建立</p>
+<h4 id="Active-Directory-authentication"><a href="#Active-Directory-authentication" class="headerlink" title="Active Directory authentication"></a>Active Directory authentication</h4><p>When you create a key vault in an Azure subscription, it’s automatically associated with the Azure AD tenant of the subscription. All callers in both planes must register in this tenant and authenticate to access the key vault. In both cases, applications can access Key Vault in two ways:</p>
+<ul>
+<li><strong>User plus application access</strong>: The application accesses Key Vault on behalf of a signed-in user. Examples of this type of access include Azure PowerShell and the Azure portal. User access is granted in two ways. Users can access Key Vault from any application, or they must use a specific application (referred to as <em>compound identity</em>).</li>
+<li><strong>Application-only access</strong>: The application runs as a daemon service or background job. The application identity is granted access to the key vault.</li>
+</ul>
+<p>For both types of access, the application authenticates with Azure AD. The application uses any <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/authentication-scenarios" rel="external nofollow noopener noreferrer" target="_blank">supported authentication method</a> based on the application type. The application acquires a token for a resource in the plane to grant access. The resource is an endpoint in the management or data plane, based on the Azure environment. The application uses the token and sends a REST API request to Key Vault. To learn more, review the <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow" rel="external nofollow noopener noreferrer" target="_blank">whole authentication flow</a>.</p>
+<p>The model of a single mechanism for authentication to both planes has several benefits:</p>
+<ul>
+<li>Organizations can control access centrally to all key vaults in their organization.</li>
+<li>If a user leaves, they instantly lose access to all key vaults in the organization.</li>
+<li>Organizations can customize authentication by using the options in Azure AD, such as to enable multi-factor authentication for added security.</li>
+</ul>
+<h4 id="Resource-endpoints"><a href="#Resource-endpoints" class="headerlink" title="Resource endpoints"></a>Resource endpoints</h4><p> 应用程序通过端点访问两个平面。 </p>
+<p>The access controls for the two planes work independently. To grant an application access to use keys in a key vault, you grant data plane access by using a Key Vault access policy. To grant a user read access to Key Vault properties and tags, but not access to data (keys, secrets, or certificates), you grant management plane access with RBAC. **</p>
+<h2 id="Certificate"><a href="#Certificate" class="headerlink" title="Certificate"></a>Certificate</h2><h3 id="About-keys-secrets-and-certificates"><a href="#About-keys-secrets-and-certificates" class="headerlink" title="About keys, secrets, and certificates"></a>About keys, secrets, and certificates</h3><p>Azure Key Vault使Microsoft Azure应用程序和用户能够存储和使用几种类型的秘密/密钥数据</p>
+<ul>
+<li>加密密钥（Cryptographic key）：支持多种密钥类型和算法，并允许对高价值密钥使用硬件安全模块（HSM）。我们通过api其实只能获取到公钥。</li>
+<li>机密(Secrets)：提供机密的安全存储，例如密码和数据库连接字符串。</li>
+<li>证书(Certificates)：支持基于密钥和机密构建的证书，并添加了自动续订功能。</li>
+<li>Azure存储(Azure Storage)：可以为您管理Azure存储帐户的密钥。在内部，Key Vault可以使用Azure存储帐户列出（同步）密钥，并定期重新生成（旋转）密钥。</li>
+</ul>
+<h4 id="Key-Vaults-keys"><a href="#Key-Vaults-keys" class="headerlink" title="Key Vaults keys"></a>Key Vaults keys</h4><p>Key Vault中的加密密钥表示为JSON Web密钥[JWK]对象。JWK / JWA基本规范也得到了扩展，以启用Key Vault实施所特有的密钥类型。例如，使用特定于HSM供应商的包装导入密钥，可以安全地运输只能在Key Vault HSM中使用的密钥。</p>
+<ul>
+<li><strong>“软”密钥</strong>：Key Vault在软件中处理过的密钥，但是使用HSM中的系统密钥在静止状态下进行了加密。客户可以导入现有的RSA或EC（椭圆曲线）密钥，或请求Key Vault生成一个。</li>
+<li><strong>“硬”键</strong>：在HSM（硬件安全模块）中处理的键。这些密钥在Key Vault HSM安全世界之一（每个地理区域都有一个安全世界以保持隔离）中受到保护。客户端可以以软形式或通过从兼容的HSM设备导出来导入RSA或EC密钥。客户还可以请求Key Vault生成密钥。此密钥类型将key_hsm属性添加到JWK获取以携带HSM密钥材料。</li>
+</ul>
+<p>在密钥库中创建密钥后，可以使用该密钥执行以下加密操作：</p>
+<ul>
+<li><strong>签名并验证</strong>：严格来说，此操作是“签名哈希”或“验证哈希”，因为Key Vault不支持内容哈希作为签名创建的一部分。应用程序应对要在本地签名的数据进行哈希处理，然后请求Key Vault对哈希进行签名。对于可能无法访问[公开]密钥材料的应用程序，为方便操作提供了对签名哈希的验证的支持。为了获得最佳的应用程序性能，请验证是否在本地执行操作。</li>
+<li><strong>密钥加密/包装</strong>：可以将存储在Key Vault中的密钥用于保护另一个密钥，通常是对称内容加密密钥（CEK）。当Key Vault中的密钥不对称时，将使用密钥加密。例如，RSA-OAEP和WRAPKEY / UNWRAPKEY操作等效于ENCRYPT / DECRYPT。如果“密钥保管库”中的密钥是对称的，则使用密钥包装。例如，AES-KW。支持WRAPKEY操作是为了方便无法访问[公开]密钥资料的应用程序。为了获得最佳的应用程序性能，WRAPKEY操作应在本地执行。</li>
+<li><strong>加密和解密</strong>：存储在Key Vault中的密钥可用于加密或解密单个数据块。块的大小由密钥类型和所选的加密算法确定。为方便起见，提供了Encrypt操作，用于可能无法访问[公开]密钥资料的应用程序。为了获得最佳的应用程序性能，应在本地执行加密操作。</li>
+</ul>
+<h4 id="Key-Vault-secrets"><a href="#Key-Vault-secrets" class="headerlink" title="Key Vault secrets"></a>Key Vault secrets</h4><p>From a developer’s perspective, Key Vault APIs accept and return secret values as strings. Internally, Key Vault stores and manages secrets as sequences of octets (8-bit bytes), with a maximum size of 25k bytes each. The Key Vault service doesn’t provide semantics for secrets. It merely accepts the data, encrypts it, stores it, and returns a secret identifier (“id”). The identifier can be used to retrieve the secret at a later time.</p>
+<p>For highly sensitive data, clients should consider additional layers of protection for data. Encrypting data using a separate protection key prior to storage in Key Vault is one example.</p>
+<p>Key Vault also supports a contentType field for secrets. Clients may specify the content type of a secret to assist in interpreting the secret data when it’s retrieved. The maximum length of this field is 255 characters. There are no pre-defined values. The suggested usage is as a hint for interpreting the secret data. For instance, an implementation may store both passwords and certificates as secrets, then use this field to differentiate. There are no predefined values.</p>
+<h4 id="Key-Vault-Certificates"><a href="#Key-Vault-Certificates" class="headerlink" title="Key Vault Certificates"></a>Key Vault Certificates</h4><p>Key Vault certificates support provides for management of your x509 certificates and the following behaviors:</p>
+<ul>
+<li>Allows a certificate owner to create a certificate through a Key Vault creation process or through the import of an existing certificate. Includes both self-signed and Certificate Authority generated certificates.</li>
+<li>Allows a Key Vault certificate owner to implement secure storage and management of X509 certificates without interaction with private key material.</li>
+<li>Allows a certificate owner to create a policy that directs Key Vault to manage the life-cycle of a certificate.</li>
+<li>Allows certificate owners to provide contact information for notification about life-cycle events of expiration and renewal of certificate.</li>
+<li>Supports automatic renewal with selected issuers - Key Vault partner X509 certificate providers / certificate authorities.</li>
+</ul>
+<p>本文章只是对于Azure Key Vault的基本概念的及其之间关系的简介，对于更加详细的信息，比如Key Vault具体是如何监控，节流，身份验证，请求参数之类的详细信息可以去查看文末的官方文档。</p>
+<p>参考文章：</p>
+<p> <a href="https://docs.microsoft.com/en-us/azure/key-vault/" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/key-vault/</a> </p>
+<p> <a href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis</a> </p>
+<p> <a href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-subscriptions-associated-directory" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-subscriptions-associated-directory</a> </p>
+<p> <a href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-manage-groups" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-manage-groups</a> </p>
+]]></content>
+      <categories>
+        <category>Cloud</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>HSTS</title>
+    <url>/2020/06/18/HSTS/</url>
+    <content><![CDATA[<h3 id="缘起：启用HTTPS也不够安全"><a href="#缘起：启用HTTPS也不够安全" class="headerlink" title="缘起：启用HTTPS也不够安全"></a>缘起：启用HTTPS也不够安全</h3><p>有不少网站只通过HTTPS对外提供服务，但用户在访问某个网站的时候，在浏览器里却往往直接输入网站域名（例如<a href="https://link.zhihu.com/?target=http%3A//www.example.com" rel="external nofollow noopener noreferrer" target="_blank">Example Domain</a>），而不是完整的URL（例如<a href="https://link.zhihu.com/?target=https%3A//www.example.com" rel="external nofollow noopener noreferrer" target="_blank">Example Domain</a>），不过浏览器依然能正确的使用HTTPS发起请求。这背后多亏了服务器和浏览器的协作，如下图所示。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215200744_st7ygu.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215200744_st7ygu.png"></p>
+<p>图1：服务器和浏览器在背后帮用户做了很多工作</p>
+<p>简单来讲就是，浏览器向网站发起一次HTTP请求，在得到一个重定向响应后，发起一次HTTPS请求并得到最终的响应内容。所有的这一切对用户而言是完全透明的，所以在用户看来，在浏览器里直接输入域名却依然可以用HTTPS协议和网站进行安全的通信，是个不错的用户体验。</p>
+<p>一切看上去都是那么的完美，但其实不然，由于在建立起HTTPS连接之前存在一次明文的HTTP请求和重定向（上图中的第1、2步），使得攻击者可以以中间人的方式劫持这次请求，从而进行后续的攻击，例如窃听数据、篡改请求和响应、跳转到钓鱼网站等。</p>
+<a id="more"></a>
+
+<p>以劫持请求并跳转到钓鱼网站为例，其大致做法如下图所示：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034304/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201136_l7n9kr.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034304/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201136_l7n9kr.png"></p>
+<p>图2：劫持HTTP请求，阻止HTTPS连接，并进行钓鱼攻击</p>
+<ul>
+<li>第1步：浏览器发起一次明文HTTP请求，但实际上会被攻击者拦截下来</li>
+<li>第2步：攻击者作为代理，把当前请求转发给钓鱼网站</li>
+<li>第3步：钓鱼网站返回假冒的网页内容</li>
+<li>第4步：攻击者把假冒的网页内容返回给浏览器</li>
+</ul>
+<p>这个攻击的精妙之处在于，攻击者直接劫持了HTTP请求，并返回了内容给浏览器，根本不给浏览器同真实网站建立HTTPS连接的机会，因此浏览器会误以为真实网站通过HTTP对外提供服务，自然也就不会向用户报告当前的连接不安全。于是乎攻击者几乎可以神不知鬼不觉的对请求和响应动手脚。</p>
+<h3 id="解决之道：使用HSTS"><a href="#解决之道：使用HSTS" class="headerlink" title="解决之道：使用HSTS"></a>解决之道：使用HSTS</h3><p>既然建立HTTPS连接之前的这一次HTTP明文请求和重定向有可能被攻击者劫持，那么解决这一问题的思路自然就变成了如何避免出现这样的HTTP请求。我们期望的浏览器行为是，当用户让浏览器发起HTTP请求的时候，浏览器将其转换为HTTPS请求，直接略过上述的HTTP请求和重定向，从而使得中间人攻击失效，以规避风险。其大致流程如下：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034428/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201341_n2jssi.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034428/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201341_n2jssi.png"></p>
+<p>图3：略过HTTP请求和重定向，直接发送HTTPS请求</p>
+<ul>
+<li>第1步：用户在浏览器地址栏里输入网站域名，浏览器得知该域名应该使用HTTPS进行通信</li>
+<li>第2步：浏览器直接向网站发起HTTPS请求</li>
+<li>第3步：网站返回相应的内容</li>
+</ul>
+<p>那么问题来了，浏览器是如何做到这一点的呢？它怎么知道哪个网站应该发HTTPS请求，哪个网站应该用HTTP请求呢？此时就该HSTS闪亮登场了。</p>
+<h4 id="HSTS"><a href="#HSTS" class="headerlink" title="HSTS"></a>HSTS</h4><p>HSTS的全称是HTTP Strict-Transport-Security，它是一个Web安全策略机制（web security policy mechanism）。</p>
+<p>HSTS最早于2015年被纳入到ThoughtWorks技术雷达，并且在2016年的最新一期技术雷达里，它直接从“评估（Trial）”阶段进入到了“采用（Adopt）“阶段，这意味着ThoughtWorks强烈主张业界积极采用这项安全防御措施，并且ThoughtWorks已经将其应用于自己的项目。</p>
+<p>HSTS最为核心的是一个HTTP响应头（HTTP Response Header）。正是它可以让浏览器得知，在接下来的一段时间内，当前域名只能通过HTTPS进行访问，并且在浏览器发现当前连接不安全的情况下，强制拒绝用户的后续访问要求。</p>
+<p>HSTS Header的语法如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Strict-Transport-Security: &lt;max-age=&gt;[; includeSubDomains][; preload]</span><br></pre></td></tr></table></figure>
+
+<p>其中：</p>
+<ul>
+<li>max-age是必选参数，是一个以秒为单位的数值，它代表着HSTS Header的过期时间，通常设置为1年，即31536000秒。</li>
+<li>includeSubDomains是可选参数，如果包含它，则意味着当前域名及其子域名均开启HSTS保护。</li>
+<li>preload是可选参数，只有当你申请将自己的域名加入到浏览器内置列表的时候才需要使用到它。关于浏览器内置列表，下文有详细介绍。</li>
+</ul>
+<h4 id="让浏览器直接发起HTTPS请求"><a href="#让浏览器直接发起HTTPS请求" class="headerlink" title="让浏览器直接发起HTTPS请求"></a>让浏览器直接发起HTTPS请求</h4><p>只要在服务器返回给浏览器的响应头中，增加Strict-Transport-Security这个HTTP Header（下文简称HSTS Header），例如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Strict-Transport-Security: max-age=31536000; includeSubDomains</span><br></pre></td></tr></table></figure>
+
+<p>就可以告诉浏览器，在接下来的31536000秒（1年）内，对于当前域名及其子域名的后续通信应该强制性的只使用HTTPS，直到超过有效期为止。</p>
+<p>完整的流程如下图所示：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034571/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201603_mijchx.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034571/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201603_mijchx.png"></p>
+<p>图4：完整的HSTS流程</p>
+<p>只要是在有效期内，浏览器都将直接强制性的发起HTTPS请求，但是问题又来了，有效期过了怎么办？其实不用为此过多担心，因为HSTS Header存在于每个响应中，随着用户和网站的交互，这个有效时间时刻都在刷新，再加上有效期通常都被设置成了1年，所以只要用户的前后两次请求之间的时间间隔没有超过1年，则基本上不会出现安全风险。更何况，就算超过了有效期，只要用户和网站再进行一次新的交互，用户的浏览器又将开启有效期为1年的HSTS保护。</p>
+<h4 id="强制拒绝不安全的链接，不给用户选择的机会"><a href="#强制拒绝不安全的链接，不给用户选择的机会" class="headerlink" title="强制拒绝不安全的链接，不给用户选择的机会"></a>强制拒绝不安全的链接，不给用户选择的机会</h4><p>在没有HSTS保护的情况下，当浏览器发现当前网站的证书出现错误，或者浏览器和服务器之间的通信不安全，无法建立HTTPS连接的时候，浏览器通常会警告用户，但是却又允许用户继续不安全的访问。如下图所示，用户可以点击图中红色方框中的链接，继续在不安全的连接下进行访问。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-b69590c9522f75bbd8ef0c73382e0a57_720w.jpg" alt="img"></p>
+<p>图5：浏览器依然允许用户进行不安全的访问</p>
+<p>理论上而言，用户看到这个警告之后就应该提高警惕，意识到自己和网站之间的通信不安全，可能被劫持也可能被窃听，如果访问的恰好是银行、金融类网站的话后果更是不堪设想，理应终止后续操作。然而现实很残酷，就我的实际观察来看，有不少用户在遇到这样的警告之后依然选择了继续访问。</p>
+<p>不过随着HSTS的出现，事情有了转机。对于启用了浏览器HSTS保护的网站，如果浏览器发现当前连接不安全，它将仅仅警告用户，而不再给用户提供是否继续访问的选择，从而避免后续安全问题的发生。例如，当访问Google搜索引擎的时候，如果当前通信连接存在安全问题，浏览器将会彻底阻止用户继续访问Google，如下图所示。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-b9df0eb3dcc8da972eec57f0051c2f3b_720w.jpg" alt="img"></p>
+<p>图6：浏览器彻底阻止用户继续进行不安全的访问</p>
+<h3 id="道高一尺魔高一丈：攻击者依然有可乘之机"><a href="#道高一尺魔高一丈：攻击者依然有可乘之机" class="headerlink" title="道高一尺魔高一丈：攻击者依然有可乘之机"></a>道高一尺魔高一丈：攻击者依然有可乘之机</h3><p>细心的你可能发现了，HSTS存在一个比较薄弱的环节，那就是浏览器没有当前网站的HSTS信息的时候，或者第一次访问网站的时候，依然需要一次明文的HTTP请求和重定向才能切换到HTTPS，以及刷新HSTS信息。而就是这么一瞬间却给攻击者留下了可乘之机，使得他们可以把这一次的HTTP请求劫持下来，继续中间人攻击。</p>
+<h4 id="Preload-List：让防御更加彻底"><a href="#Preload-List：让防御更加彻底" class="headerlink" title="Preload List：让防御更加彻底"></a>Preload List：让防御更加彻底</h4><p>针对上面的攻击，HSTS也有应对办法，那就是在浏览器里内置一个列表，只要是在这个列表里的域名，无论何时、何种情况，浏览器都只使用HTTPS发起连接。这个列表由Google Chromium维护，FireFox、Safari、IE等主流浏览器均在使用。</p>
+<h3 id="一些Tips"><a href="#一些Tips" class="headerlink" title="一些Tips"></a>一些Tips</h3><p><strong>Tip 1：如何配置HSTS</strong></p>
+<p>很多地方都可以进行HSTS的配置，例如反向代理服务器、应用服务器、应用程序框架，以及应用程序中自定义Header。你可以根据实际情况进行选择。<br>常见的是在代理服务器中进行配置，以Nginx为例，只需在配置文件中加上下面这条指令即可：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">add_header Strict-Transport-Security &quot;max-age=31536000; includeSubDomains&quot; always;</span><br></pre></td></tr></table></figure>
+
+<p>不过需要特别注意的是，在生产环境下使用HSTS应当特别谨慎，因为一旦浏览器接收到HSTS Header（假如有效期是1年），但是网站的证书又恰好出了问题，那么用户将在接下来的1年时间内都无法访问到你的网站，直到证书错误被修复，或者用户主动清除浏览器缓存。</p>
+<p>因此，建议在生产环境开启HSTS的时候，先将max-age的值设置小一些，例如5分钟，然后检查HSTS是否能正常工作，网站能否正常访问，之后再逐步将时间延长，例如1周、1个月，并在这个时间范围内继续检查HSTS是否正常工作，最后才改到1年。</p>
+<p><strong>Tip 2：如何加入到HSTS Preload List</strong></p>
+<p>根据官方说明，你的网站在具备以下几个条件后，可以提出申请加入到这个列表里。</p>
+<ul>
+<li>具备一个有效的证书</li>
+<li>在同一台主机上提供重定向响应，以及接收重定向过来的HTTPS请求</li>
+<li>所有子域名均使用HTTPS</li>
+<li>在根域名的HTTP响应头中，加入HSTS Header，并满足下列条件：<ul>
+<li>过期时间最短不得少于18周（10886400秒）</li>
+<li>必须包含includeSubDomains参数</li>
+<li>必须包含preload参数<br>当你准好这些之后，可以在HSTS Preload List的官网上（<a href="https://link.zhihu.com/?target=https%3A//hstspreload.org" rel="external nofollow noopener noreferrer" target="_blank">https://hstspreload.org</a>）提交申请，或者了解更多详细的内容。</li>
+</ul>
+</li>
+</ul>
+<p><strong>Tip 3：如何查询域名是否加入到了Preload List</strong></p>
+<p>从提交申请到完成审核，成功加入到内置列表，中间可能需要等待几天到几周不等的时间。可通过官网<a href="https://link.zhihu.com/?target=https%3A//hstspreload.org" rel="external nofollow noopener noreferrer" target="_blank">https://hstspreload.org</a>或在Chrome地址栏里输入chrome://net-internals/#hsts查询状态。</p>
+<h3 id="HSTS-存在的坑"><a href="#HSTS-存在的坑" class="headerlink" title="HSTS 存在的坑"></a>HSTS 存在的坑</h3><ul>
+<li>纯 IP 的请求，HSTS 没法处理，比如 <code>http://2.2.2.2</code> ， 即便响应头中设置了 STS，浏览器也不会理会（未测试）</li>
+<li>HSTS 只能在 80 和 443 端口之间切换，如果服务是 8080 端口，即便设置了 STS，也无效（未测试）</li>
+<li>如果浏览器证书错误，一般情况会提醒存在安全风险，然是依然给一个链接进入目标页，而 HSTS 则没有目标页入口，所以一旦证书配置错误，就是很大的故障了</li>
+<li>如果服务器的 HTTPS 没有配置好就开启了 STS 的响应头，并且还设置了很长的过期时间，那么在你服务器 HTTPS 配置好之前，用户都是没办法连接到你的服务器的，除非 max-age 过期了。</li>
+<li>HSTS 能让你的网站在 ssllab 上到 A+（这不是坑）</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>随着越来越多的网站开始使用HTTPS，甚至是开启全站HTTPS，数据在传输过程中的安全性能够得到极大的保障。与此同时，通过HSTS的帮助，避免遭受到SSL Stripping或者中间人的攻击，能够使得数据通信变得更加安全。本篇文章希望通过对HSTS的解析，使得更多的开发团队将HSTS运用到自己的项目中。</p>
+<p>转载文章出处：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/63674248" rel="external nofollow noopener noreferrer" target="_blank">https://zhuanlan.zhihu.com/p/63674248</a></p>
+<p><a href="https://www.barretlee.com/blog/2015/10/22/hsts-intro/" rel="external nofollow noopener noreferrer" target="_blank">https://www.barretlee.com/blog/2015/10/22/hsts-intro/</a></p>
+]]></content>
+      <categories>
+        <category>Network</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>OAuth and OIDC</title>
+    <url>/2019/11/16/OAuth%20and%20OIDC/</url>
+    <content><![CDATA[<h2 id="OAuth-2-0"><a href="#OAuth-2-0" class="headerlink" title="OAuth 2.0"></a>OAuth 2.0</h2><p>OAuth 是一个关于授权（Authorization）的开放网络标准，在全世界得到了广泛的应用，目前的版本是2.0</p>
+<a id="more"></a>
+
+
+<h3 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h3><ul>
+<li><p><strong>Third-party application</strong>：第三方应用程序，本文中又称”客户端”（client）。</p>
+</li>
+<li><p><strong>HTTP Service</strong>：HTTP服务提供商，本文中简称”服务提供商”。</p>
+</li>
+<li><p><strong>Resource Owner</strong>：资源所S有者，本文中又称”用户”（user）。</p>
+</li>
+<li><p><strong>User Agent</strong>：用户代理，本文中就是指浏览器。</p>
+</li>
+<li><p><strong>Authorization server</strong>：认证服务器，即服务提供商专门用来处理认证的服务器。</p>
+</li>
+<li><p><strong>Resource server</strong>：资源服务器，即服务提供商存放用户生成的资源的服务器。它与认证服务器，可以是同一台服务器，也可以是不同的服务器。</p>
+</li>
+</ul>
+<p>OAuth在”客户端”与”服务提供商”之间，设置了一个授权层（authorization layer）。”客户端”不能直接登录”服务提供商”，只能登录授权层，以此将用户与客户端区分开来。”客户端”登录授权层所用的令牌（token），与用户的密码不同。用户可以在登录的时候，指定授权层令牌的权限范围和有效期。</p>
+<p>“客户端”登录授权层以后，”服务提供商”根据令牌的权限范围和有效期，向”客户端”开放用户储存的资料。</p>
+<h3 id="授权流程"><a href="#授权流程" class="headerlink" title="授权流程"></a>授权流程</h3><ol>
+<li><p>用户打开客户端以后，客户端要求用户给予授权。</p>
+</li>
+<li><p>用户同意给予客户端授权。</p>
+</li>
+<li><p>客户端使用上一步获得的授权，向认证服务器申请令牌。</p>
+</li>
+<li><p>认证服务器对客户端进行认证以后，确认无误，同意发放令牌。</p>
+</li>
+<li><p>客户端使用令牌，向资源服务器申请获取资源。</p>
+</li>
+<li><p>资源服务器确认令牌无误，同意向客户端开放资源。</p>
+</li>
+</ol>
+<p>这几步中的关键就是客户端如何获取授权，OAuth2.0定义了四种不同的获取授权的方式。</p>
+<h3 id="获取授权的四种方式"><a href="#获取授权的四种方式" class="headerlink" title="获取授权的四种方式"></a>获取授权的四种方式</h3><p>客户端必须得到用户的授权（authorization grant），才能获得令牌（access token）。OAuth 2.0定义了四种授权方式。</p>
+<ul>
+<li>授权码模式（authorization code）</li>
+<li>简化模式（implicit）</li>
+<li>密码模式（resource owner password credentials）</li>
+<li>客户端模式（client credentials）</li>
+</ul>
+<h4 id="授权码模式"><a href="#授权码模式" class="headerlink" title="授权码模式"></a>授权码模式</h4><p>（A）用户访问客户端，后者将前者导向认证服务器。</p>
+<p>（B）用户选择是否给予客户端授权。</p>
+<p>（C）假设用户给予授权，认证服务器将用户导向客户端事先指定的”重定向URI”（redirection URI），同时附上一个授权码。</p>
+<p>（D）客户端收到授权码，附上早先的”重定向URI”，向认证服务器申请令牌。这一步是在客户端的后台的服务器上完成的，对用户不可见。</p>
+<p>（E）认证服务器核对了授权码和重定向URI，确认无误后，向客户端发送访问令牌（access token）和更新令牌（refresh token）。</p>
+<p>A步骤中，客户端申请认证的URI，包含以下参数：</p>
+<ul>
+<li>response_type：表示授权类型，必选项，此处的值固定为”code”</li>
+<li>client_id：表示客户端的ID，必选项</li>
+<li>redirect_uri：表示重定向URI，可选项</li>
+<li>scope：表示申请的权限范围，可选项</li>
+<li>state：表示客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值。</li>
+</ul>
+<p>C步骤中，服务器回应客户端的URI，包含以下参数：</p>
+<ul>
+<li>code：表示授权码，必选项。该码的有效期应该很短，通常设为10分钟，客户端只能使用该码一次，否则会被授权服务器拒绝。该码与客户端ID和重定向URI，是一一对应关系。</li>
+<li>state：如果客户端的请求中包含这个参数，认证服务器的回应也必须一模一样包含这个参数。</li>
+</ul>
+<p>D步骤中，客户端向认证服务器申请令牌的HTTP请求，包含以下参数：</p>
+<ul>
+<li>grant_type：表示使用的授权模式，必选项，此处的值固定为”authorization_code”。</li>
+<li>code：表示上一步获得的授权码，必选项。</li>
+<li>redirect_uri：表示重定向URI，必选项，且必须与A步骤中的该参数值保持一致。</li>
+<li>client_id：表示客户端ID，必选项。</li>
+</ul>
+<p>E步骤中，认证服务器发送的HTTP回复，包含以下参数：</p>
+<ul>
+<li>access_token：表示访问令牌，必选项。</li>
+<li>token_type：表示令牌类型，该值大小写不敏感，必选项，可以是bearer类型或mac类型。</li>
+<li>expires_in：表示过期时间，单位为秒。如果省略该参数，必须其他方式设置过期时间。</li>
+<li>refresh_token：表示更新令牌，用来获取下一次的访问令牌，可选项。</li>
+<li>scope：表示权限范围，如果与客户端申请的范围一致，此项可省略。</li>
+</ul>
+<h4 id="简化模式"><a href="#简化模式" class="headerlink" title="简化模式"></a>简化模式</h4><p> 简化模式（implicit grant type）不通过第三方应用程序的服务器，直接在浏览器中向认证服务器申请令牌，跳过了”授权码”这个步骤，因此得名。所有步骤在浏览器中完成，令牌对访问者是可见的，且客户端不需要认证。 </p>
+<p>（A）客户端将用户导向认证服务器。</p>
+<p>（B）用户决定是否给于客户端授权。</p>
+<p>（C）假设用户给予授权，认证服务器将用户导向客户端指定的”重定向URI”，并在URI的Hash部分包含了访问令牌。</p>
+<p>（D）浏览器向资源服务器发出请求，其中不包括上一步收到的Hash值。</p>
+<p>（E）资源服务器返回一个网页，其中包含的代码可以获取Hash值中的令牌。</p>
+<p>（F）浏览器执行上一步获得的脚本，提取出令牌。</p>
+<p>（G）浏览器将令牌发给客户端。</p>
+<h4 id="密码模式"><a href="#密码模式" class="headerlink" title="密码模式"></a>密码模式</h4><p>密码模式（Resource Owner Password Credentials Grant）中，用户向客户端提供自己的用户名和密码。客户端使用这些信息，向”服务商提供商”索要授权。</p>
+<p>在这种模式中，用户必须把自己的密码给客户端，但是客户端不得储存密码。这通常用在用户对客户端高度信任的情况下，比如客户端是操作系统的一部分，或者由一个著名公司出品。而认证服务器只有在其他授权模式无法执行的情况下，才能考虑使用这种模式。</p>
+<p>（A）用户向客户端提供用户名和密码。</p>
+<p>（B）客户端将用户名和密码发给认证服务器，向后者请求令牌。</p>
+<p>（C）认证服务器确认无误后，向客户端提供访问令牌。</p>
+<p>B步骤中，客户端发出的HTTP请求，包含以下参数：</p>
+<ul>
+<li>grant_type：表示授权类型，此处的值固定为”password”，必选项。</li>
+<li>username：表示用户名，必选项。</li>
+<li>password：表示用户的密码，必选项。</li>
+<li>scope：表示权限范围，可选项。</li>
+</ul>
+<h4 id="客户端模式"><a href="#客户端模式" class="headerlink" title="客户端模式"></a>客户端模式</h4><p> 客户端模式（Client Credentials Grant）指客户端以自己的名义，而不是以用户的名义，向”服务提供商”进行认证。严格地说，客户端模式并不属于OAuth框架所要解决的问题。在这种模式中，用户直接向客户端注册，客户端以自己的名义要求”服务提供商”提供服务，其实不存在授权问题。 </p>
+<h3 id="更新令牌"><a href="#更新令牌" class="headerlink" title="更新令牌"></a>更新令牌</h3><p>如果用户访问的时候，客户端的”访问令牌”已经过期，则需要使用”更新令牌”申请一个新的访问令牌。</p>
+<p>客户端发出更新令牌的HTTP请求，包含以下参数：</p>
+<ul>
+<li>grant<em>type：表示使用的授权模式，此处的值固定为”refresh</em>token”，必选项。</li>
+<li>refresh_token：表示早前收到的更新令牌，必选项。</li>
+<li>scope：表示申请的授权范围，不可以超出上一次申请的范围，如果省略该参数，则表示与上一次一致。</li>
+</ul>
+<h2 id="OIDC"><a href="#OIDC" class="headerlink" title="OIDC"></a>OIDC</h2><p>OpenID Connect是基于OAuth 2.0规范族的可互操作的身份验证协议。它使用简单的REST / JSON消息流来实现，和之前任何一种身份认证协议相比，开发者可以轻松集成。</p>
+<p>OpenID Connect允许开发者验证跨网站和应用的用户，而无需拥有和管理密码文件。OpenID Connect允许所有类型的客户,包括基于浏览器的<a href="https://link.jianshu.com?t=http://lib.csdn.net/base/javascript" rel="external nofollow noopener noreferrer" target="_blank">JavaScript</a>和本机移动应用程序,启动登录流动和接收可验证断言对登录用户的身份。</p>
+<p> 简要而言，<em>OIDC</em>是一种安全机制，用于应用连接到身份认证服务器（Identity Service）获取用户信息，并将这些信息以安全可靠的方法返回给应用。 </p>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p> <strong>OpenID</strong>是<em>Authentication</em>，即认证，对用户的身份进行认证，判断其身份是否有效，也就是让网站知道“你是你所声称的那个用户”； </p>
+<p><strong>OAuth</strong>是<em>Authorization</em>，即授权，在已知用户身份合法的情况下，经用户授权来允许某些操作，也就是让网站知道“你能被允许做那些事情”。<br> 由此可知，授权要在认证之后进行，只有确定用户身份只有才能授权。</p>
+<p><em>OpenID Connect</em>是“认证”和“授权”的结合，因为其基于<em>OAuth</em>协议，所以<em>OpenID-Connect</em>协议中也包含了<strong>client_id</strong>、<strong>client_secret</strong>还有<strong>redirect_uri</strong>等字段标识。这些信息被保存在“身份认证服务器”，以确保特定的客户端收到的信息只来自于合法的应用平台。这样做是目的是为了防止<em>client_id</em>泄露而造成的恶意网站发起的<em>OIDC</em>流程。</p>
+<h3 id="流程简介"><a href="#流程简介" class="headerlink" title="流程简介"></a>流程简介</h3><p><em>OAuth2</em>提供了<em>Access Token</em>来解决授权第三方客户端访问受保护资源的问题；相似的，<em>OIDC</em>在这个基础上提供了<em>ID Token</em>来解决第三方客户端标识用户身份认证的问题。<em>OIDC</em>的核心在于在<em>OAuth2</em>的授权流程中，一并提供用户的身份认证信息（<em>ID-Token</em>）给到第三方客户端，<em>ID-Token</em>使用<strong>JWT</strong>格式来包装，得益于 <a href="https://sunra.top/2019/10/26/jwt/">JWT</a>的自包含性，紧凑性以及防篡改机制，使得<em>ID-Token</em>可以安全的传递给第三方客户端程序并且容易被验证。应有服务器，在验证<em>ID-Token</em>正确只有，使用<em>Access-Token</em>向<em>UserInfo</em>的接口换取用户的更多的信息。</p>
+<p>有上述可知，<em>OIDC</em>是遵循<em>OAuth</em>协议流程，在申请<em>Access-Token</em>的同时，也返回了<em>ID-Token</em>来验证用户身份。</p>
+<h3 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h3><p><strong>EU</strong>：End User，用户。</p>
+<p> <strong>RP</strong>：Relying Party ，用来代指<em>OAuth2</em>中的受信任的客户端，身份认证和授权信息的消费方；</p>
+<p> <strong>OP</strong>：OpenID Provider，有能力提供EU身份认证的服务方（比如<em>OAuth2</em>中的授权服务），用来为RP提供EU的身份认证信息；</p>
+<p> <strong>ID-Token</strong>：JWT格式的数据，包含EU身份认证的信息。</p>
+<p> <strong>UserInfo Endpoint</strong>：用户信息接口（受<em>OAuth2</em>保护），当RP使用<em>Access-Token</em>访问时，返回授权用户的信息，此接口必须使用<em>HTTPS</em>。</p>
+<h3 id="具体流程"><a href="#具体流程" class="headerlink" title="具体流程"></a>具体流程</h3><p>如果是JS应用，其所有的代码都会被加载到浏览器而暴露出来，没有后端可以保证<em>client_secret</em>的安全性，则需要是使用<strong>默认模式流程</strong>(Implicit Flow)。</p>
+<p>如果是传统的客户端应用，后端代码和用户是隔离的，能保证<em>client_secret</em>的不被泄露，就可以使用<strong>授权码模式流程</strong>（Authentication Flow）。</p>
+<p>此外还有<strong>混合模式流程</strong>(Hybrid Flow)，简而言之就是以上二者的融合。</p>
+<h4 id="授权码流程"><a href="#授权码流程" class="headerlink" title="授权码流程"></a>授权码流程</h4><p>RP发送一个<strong>认证请求</strong>给OP，其中附带<em>client_id</em>；</p>
+<p>OP对EU进行身份认证；</p>
+<p>OP返回响应，发送授权码给RP；</p>
+<p>RP使用授权码向OP索要ID-Token和Access-Token，RP验证无误后返回给RP；</p>
+<p>RP使用Access-Token发送一个请求到<em>UserInfo EndPoint</em>； UserInfo EndPoint返回EU的Claims。</p>
+<h5 id="认证请求"><a href="#认证请求" class="headerlink" title="认证请求"></a>认证请求</h5><p>RP使用OAuth2的Authorization-Code的方式来完成用户身份认证，所有的Token都是通过OP的Token EndPoint（<a href="https://link.jianshu.com?t=https://tools.ietf.org/html/rfc6749#section-3.2" rel="external nofollow noopener noreferrer" target="_blank">OAuth2中定义</a>）来发放的。构建一个OIDC的Authentication Request需要提供如下的参数：</p>
+<ul>
+<li>scope：必须。OIDC的请求必须包含值为“openid”的scope的参数。</li>
+<li>response_type：必选。同OAuth2。</li>
+<li>client_id：必选。同OAuth2。</li>
+<li>redirect_uri：必选。同OAuth2。</li>
+<li>state：推荐。同OAuth2。防止CSRF, XSRF。</li>
+</ul>
+<p>在OP接收到认证请求之后，需要对请求参数做严格的验证，具体的规则参见<a href="https://link.jianshu.com?t=http://openid.net/specs/openid-connect-core-1_0.html#AuthRequestValidation" rel="external nofollow noopener noreferrer" target="_blank">http://openid.net/specs/openid-connect-core-1_0.html#AuthRequestValidation</a>，验证通过后引导EU进行身份认证并且同意授权。在这一切都完成后，会重定向到RP指定的回调地址(<em>redirect_uri</em>)，并且把<strong>code</strong>和<strong>state</strong>参数传递过去。</p>
+<p>RP使用上一步获得的<em>code</em>来请求Token EndPoint，这一步桶<em>OAuth2</em>，就不再展开细说了。然后Token EndPoint会返回响应的Token，其中除了<em>OAuth2</em>规定的部分数据外，还会附加一个<em>id_token</em>的字段。<em>id_token</em>字段就是上面提到的<em>ID Token</em>。</p>
+<h6 id="ID-Token"><a href="#ID-Token" class="headerlink" title="ID-Token"></a>ID-Token</h6><p>上面提到过<em>OIDC</em>对<em>OAuth2</em>最主要的扩展就是提供了<em>ID-Token</em>。下面我们就来看看<em>ID-Token</em>的主要构成：</p>
+<ul>
+<li><strong>iss = Issuer Identifier</strong>：必须。提供认证信息者的唯一标识。一般是Url的host+path部分；</li>
+<li><strong>sub = Subject Identifier</strong>：必须。iss提供的EU的唯一标识；最长为255个ASCII个字符；</li>
+<li><strong>aud = Audience(s)</strong>：必须。标识<em>ID-Token</em>的受众。必须包含<em>OAuth2</em>的client_id；</li>
+<li><strong>exp = Expiration time</strong>：必须。<em>ID-Token</em>的过期时间；</li>
+<li><strong>iat = Issued At Time</strong>：必须。JWT的构建的时间。</li>
+<li><strong>auth_time = AuthenticationTime</strong>：EU完成认证的时间。如果RP发送认证请求的时候携带<em>max_age</em>的参数，则此Claim是必须的。</li>
+<li><strong>nonce</strong>：RP发送请求的时候提供的随机字符串，用来减缓重放攻击，也可以来关联<em>ID-Token</em>和RP本身的Session信息。</li>
+<li><strong>acr = Authentication Context Class Reference</strong>：可选。表示一个认证上下文引用值，可以用来标识认证上下文类。</li>
+<li><strong>amr = Authentication Methods References</strong>：可选。表示一组认证方法。</li>
+<li><strong>azp = Authorized party</strong>：可选。结合aud使用。只有在被认证的一方和受众（aud）不一致时才使用此值，一般情况下很少使用。</li>
+</ul>
+<h4 id="默认流程"><a href="#默认流程" class="headerlink" title="默认流程"></a>默认流程</h4><p>默认流程和<em>OAuth</em>中的类似，只不过也是添加了<em>ID-Token</em>的相关内容。</p>
+<p>这里需要说明的是：<em>OIDC</em>的说明文档里很明确的说明了用户的相关信息都要使用<strong>JWT</strong>形式编码。在<em>JWT</em>中，不应该在载荷里面加入任何敏感的数据。如果传输的是用户的User ID。这个值实际上不是什么敏感内容，一般情况下被知道也是安全的。</p>
+<h3 id="UserInfo-Endpoint"><a href="#UserInfo-Endpoint" class="headerlink" title="UserInfo Endpoint"></a>UserInfo Endpoint</h3><p>可能有的读者发现了，<em>ID-Token</em>只有sub是和EU相关的，这在一般情况下是不够的，必须还需要EU的用户名，头像等其他的资料，<em>OIDC</em>提供了一组公共的cliams，来提供更多用户的信息，这就是——UserIndo EndPoin。</p>
+<p>在RP得到Access Token后可以请求此资源，然后获得一组EU相关的Claims，这些信息可以说是<em>ID-Token</em>的扩展，<em>ID-Token</em>中只需包含EU的唯一标识sub即可（避免ID Token过于庞大和暴露用户敏感信息），然后在通过此接口获取完整的EU的信息。此资源<strong>必须部署在TLS之上</strong></p>
+<h2 id="关于OAuth的一点思考"><a href="#关于OAuth的一点思考" class="headerlink" title="关于OAuth的一点思考"></a>关于OAuth的一点思考</h2><p>User：用户</p>
+<p>User Agent：用户代理，如浏览器</p>
+<p>Consumer：信息消费者，如Leetcode</p>
+<p>Service Provider：分为两个，分别是身份认证提供者（Identity Provider， IDP）,如QQ，以及资源提供者（Resource Provider），不过这二者一般是相同的</p>
+<p>OAuth并不是为了解决安全或者性能问题。</p>
+<p>OAuth也并不会帮我们保存在Consumer的登录态。</p>
+<p>OAuth出现的目的就是为了帮我们用一个第三方的账号关联多个应用的账号，它是user赋予consumer在SP的权限，而不是赋予user在consumer的权限。我们的账号一个没少，只不过建立起了一对多的关系，就类似于如果我们想去考驾照，就需要用身份证，授权驾校用我们的身份证信息去公安局证实我们这个人的存在并取回一些其他信息。但是也就到此为止，接下来的事情与OAuth并无关系。</p>
+<p>单凭OAuth无法完成在consumer创建账户，IDP不可能也没有责任保存user在consumer的任何信息，它只是在user授权情况下告诉consumer一些信息而已。</p>
+<p>为什么一开始就要发送个redirect_uri给IDP？第一次是为了IDP设置返回地302中的Location，可以不验证是不是consumer设置好的，第二次就是验证这个redirect_uri是不是你当初在IDP这里设置的，与第一次过来的是否一样，这一步必须要验证，因为这一步是最关键的，这一步才会返回token。</p>
+<p>为什么要绕这么一大圈，为什么要多一步code换access_token？说到底还是信不过浏览器同志，让他当个工具人，让它帮自己地后台去第三方申请一个授权码，然后把这个授权码给自己的后台，再然后自己的后台用这个code去第三方申请token，完事还不告诉浏览器这个token是什么，自己留下了，也就是说浏览器同志从头到尾都没见过token。</p>
+<p>Secret有什么用？原因是IDP不信任何人，就信自己给出去的secret。因为redirect_uri是域名，最终到哪里还是要靠IP地址，如果域名是对的，但是域名被攻击者指向了自己的IP，攻击者就会收到token。怎么修改这个DNS指向就涉及DNS污染了，因为DNS会层层缓存，但是又有时间，如果你一直广播告诉路由器或者主机我是leetcode，我是leetcode，时间长了你在这一片局域网中就被认为是leetcode了。但是如果有了secret，就算你带着code过来了IDP，没有我给你的secret，IDP也不会给出token。所以client_id表明自己是谁，只有给了client_secret，IDP才会相信你说的话，并给你token，所以这个secret非常重要，我们的后台又不会相信浏览器同志了，所以我们的浏览器同志从头到尾也没摸过secret。</p>
+<p>State又有什么用呢？类似于防御CSRF，保证请求设备的一致性，不过不像CSRF是伪造受害者的请求，而是让受害者登录自己的账号，如果受害者在里面存个比特币账号岂不美哉？具体实现就是攻击者登录之后，正常申请，但是到了IDP返回302以后把请求拦下，不让浏览器发送请求给自己的后台，然后把这个带code的请求链接给受害人，受害人点进去之后就可以拿到access_token成功登录，如果不注意这个账号是不是自己的就上传敏感信息，就很happy。如果有了state，不同的设备我后台都生成一个随机的字符串给前端，攻击者就算把请求发给受害者，他也不知道受害者设备中的state，后台一看你的state和刚开始说好的不一样，就会直接把这个请求丢掉，当然硬要说攻击者把你的state从庞大的互联网的某个请求中给偷到了，那也是绝了，这就属于定点爆破了，就是要搞你，那这个人多半已经混在你的身边了。</p>
+<p>为什么最后会返回两个token？因为一个代表你是谁，一个代表你能做什么，你能做的事情随时可以被管理员改变，但是你是谁是固定的，而且一般access_token过期时间都比较短，如果我用着用着就过期了，总不能让用户重新登陆吧，那岂不是回到了起点？</p>
+<p>说了半天，这些设计都停留在传输层以上，那我要是搞你的网络层呢？我再散布个ARP病毒呢？搞链路层就有点夸张了。</p>
+<p>参考文章：</p>
+<p>[<a href="https://sunra.top/2019/11/16/OAuth%20and%20OIDC/]">https://sunra.top/2019/11/16/OAuth%20and%20OIDC/]</a>(<a href="https://sunra.top/2019/11/16/OAuth">https://sunra.top/2019/11/16/OAuth</a> and OIDC/) ：OAuth，OIDC简介</p>
+<p><a href="https://sunra.top/2020/03/27/routing-protocol/">https://sunra.top/2020/03/27/routing-protocol/</a>  ：路由协议</p>
+<p><a href="https://sunra.top/2019/09/15/ARP/">https://sunra.top/2019/09/15/ARP/</a> ：ARP原理与防御</p>
+<p><a href="https://www.jianshu.com/p/0db71eb445c8" rel="external nofollow noopener noreferrer" target="_blank">https://www.jianshu.com/p/0db71eb445c8</a> ：OAuth认证流程举例</p>
+<p><a href="https://www.chrisyue.com/security-issue-about-oauth-2-0-you-should-know.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.chrisyue.com/security-issue-about-oauth-2-0-you-should-know.html</a> ：OAuth2.0中的安全考虑</p>
+<p><a href="https://www.cnblogs.com/linianhui/p/openid-connect-core.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.cnblogs.com/linianhui/p/openid-connect-core.html</a> ：OIDC文档</p>
+<p><a href="https://www.zhihu.com/question/19851243" rel="external nofollow noopener noreferrer" target="_blank">https://www.zhihu.com/question/19851243</a> ：OAuth1.0与2.0区别</p>
+<p><a href="https://docs.azure.cn/zh-cn/active-directory/azuread-dev/v1-protocols-openid-connect-code" rel="external nofollow noopener noreferrer" target="_blank">https://docs.azure.cn/zh-cn/active-directory/azuread-dev/v1-protocols-openid-connect-code</a> ：OIDC + AAD</p>
+<p><a href="https://www.sciencedirect.com/science/article/pii/S2215098617316750" rel="external nofollow noopener noreferrer" target="_blank">https://www.sciencedirect.com/science/article/pii/S2215098617316750</a> ：云服务中面临的安全问题</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy" rel="external nofollow noopener noreferrer" target="_blank">https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy</a> ：同源策略</p>
+]]></content>
+      <categories>
+        <category>Cloud</category>
+      </categories>
+  </entry>
+  <entry>
     <title>leetcode-1423</title>
     <url>/2021/02/06/leetcode-1423/</url>
     <content><![CDATA[<p>这个周的每日一题，做算法，要有想象力，要足够充分发掘已知条件。</p>
@@ -8618,93 +8618,6 @@
 <h3 id="网络操作系统和分布式操作系统"><a href="#网络操作系统和分布式操作系统" class="headerlink" title="网络操作系统和分布式操作系统"></a>网络操作系统和分布式操作系统</h3><p>网络操作系统把计算机网络中各台计算机有机结合，提供统一的经济有效的使用各台计算机的方法，实现计算机之间的数据相互传送。主要特点是网络中各种资源的共享及各台计算机之间的通信。</p>
 <p>分布式计算机系统指的是由多台计算机组成并满足以下条件的系统：系统中任意两台计算机通过通信方式交换信息；每台计算机具有同等地位；每台计算机上资源所有用户共享；系统中任意台计算机可以构成一个子系统并且可以重构；任何工作都可以分布在几台计算机上，并由他们并行工作，协同完成。主要特点就是分不幸和并行性。</p>
 <p>分布式和网络操作系统本质不同是：分布式操作系统中的若干计算机可以相互协同。</p>
-]]></content>
-      <categories>
-        <category>OS</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>操作系统学习笔记（二）操作系统的运行环境和体系结构</title>
-    <url>/2021/09/26/operating-system-note-2/</url>
-    <content><![CDATA[<p>继续上次的总结，这次来讲一下，操作系统的运行环境和体系结构。</p>
-<a id="more"></a>
-
-<h2 id="操作系统的运行环境"><a href="#操作系统的运行环境" class="headerlink" title="操作系统的运行环境"></a>操作系统的运行环境</h2><h3 id="操作系统运行机制"><a href="#操作系统运行机制" class="headerlink" title="操作系统运行机制"></a>操作系统运行机制</h3><p>计算机系统中，通常CPU执行两种不同性质的程序，一种是操作系统<strong>内核程序</strong>，另一种是<strong>用户自编程序</strong>（即系统外层的应用程序，又称应用程序）。</p>
-<p>对操作系统而言，这两种程序作用不同，前者是后者的管理者，因此管理程序要执行一些<strong>特权指令</strong>，而后者处于安全考虑则不能执行这些指令。</p>
-<p>所谓特权指令，是指计算机中不允许用户直接使用的指令，如I/O指令，置中断指令，存取用于内存保护的寄存器，送程序状态字到程序状态字寄存器等的指令。</p>
-<p>具体实现上，将CPU的状态划分为<strong>用户态（目态）和核心态（管态，内核态）</strong>。</p>
-<blockquote>
-<p>注意，<strong>用户态和核心态是CPU的状态，是CPU处于核心态时可以运行操作系统内核程序的特权指令</strong>，可以理解为CPU内部有个开关，开关为1时，CPU处于核心态，可以执行特权指令，为0时则不可以。</p>
-</blockquote>
-<p>操作系统的内核分为两个部分：</p>
-<ul>
-<li>一些与硬件紧密相关的模块，如时钟管理，中断处理，设备驱动处于底层。</li>
-<li>其次是运行频率较高的程序，如进程管理，存储器管理和设备管理。</li>
-</ul>
-<p>不同系统对内核的定义稍有区别，大致可以分为四种</p>
-<h4 id="1-时钟管理"><a href="#1-时钟管理" class="headerlink" title="1. 时钟管理"></a>1. 时钟管理</h4><p>在计算机各种部件中，时钟是最关键的设备。</p>
-<p>时钟的第一功能是计时，向用户提供准确的系统时间。</p>
-<p>另外，通过<strong>时钟中断的处理，可以实现进程切换</strong>。例如，在分时操作系统中采取时间片轮转调度，在实时系统中按截止时间控制运行，在批处理中通过时钟管理来衡量一个作业的运行程度。</p>
-<h4 id="2-中断机制"><a href="#2-中断机制" class="headerlink" title="2. 中断机制"></a>2. 中断机制</h4><p><strong>引入中断的初衷是提高多道程序运行环境中的CPU利用率，而且主要针对外部设备。</strong></p>
-<p>后来逐渐发展，形成了多种类型，成为操作系统各项操作的基础。例如鼠标或者键盘的信息输入，进程的管理和调度，系统功能的调用，设备驱动，文件访问等，无不依赖中断机制，可以说，现代操作系统是<strong>靠中断驱动的软件</strong>。</p>
-<p>中断机制，<strong>只有一小部分属于内核</strong>，它们负责保护和恢复中断现场，转移控制权到相关的处理程序等，这样可以减少中断的处理时间，提高系统并行处理的能力。</p>
-<blockquote>
-<p>中断，顾名思义，是暂停某些东西的运行，它不仅仅是异常导致的，如A的I/O完成后的中断，暂停当前CPU中B程序的执行。</p>
-</blockquote>
-<h4 id="3-原语"><a href="#3-原语" class="headerlink" title="3. 原语"></a>3. 原语</h4><p>操作系统底层可被调用的公用的小程序，它们有以下特点：</p>
-<ul>
-<li>操作系统最底层，最接近硬件的部分。</li>
-<li>具有原子性，操作只能一气呵成。</li>
-<li>运行时间短，且调用频繁。</li>
-</ul>
-<p>定义原语的直接方法是，关闭中断（也就是禁止其他中断），然所有动作不可分割地完成后再打开终端。</p>
-<p>系统中的设备驱动，CPU切换，进程通信等功能中的部分操作都可以定义为原语。</p>
-<blockquote>
-<p>也就是说，原语是属于操作系统的，它的实现和保证是软件层次的。</p>
-</blockquote>
-<h4 id="4-系统控制的数据结构和处理"><a href="#4-系统控制的数据结构和处理" class="headerlink" title="4. 系统控制的数据结构和处理"></a>4. 系统控制的数据结构和处理</h4><p>系统中用来登记状态信息的数据结构很多，如作业控制块，进程控制块（PCB），设备控制块，链表，消息队列，缓冲区，空闲区内存登记表等。为了实现有效的管理，系统需要一些基本的操作，如：</p>
-<ul>
-<li>进程管理：进程状态管理，进程调度和分派，创建与撤销进程控制块等。</li>
-<li>存储器管理：存储器空间的分配和回收，内存信息保护程序，代码对换程序。</li>
-<li>设备管理：缓冲区管理，设备分配和回收。</li>
-</ul>
-<h3 id="中断和异常"><a href="#中断和异常" class="headerlink" title="中断和异常"></a>中断和异常</h3><p>系统不允许用户程序实现核心态的功能，但它们又必须使用这些功能。因此需要在核心态上提供一些“门”，以便实现从用户态到核心态。</p>
-<p>在实际操作系统中，CPU运行上层程序时，<strong>唯一能够进入这些门的途径就是中断或者异常，一旦发生中断或异常，运行用户态的CPU会立即进入核心态，这是通过硬件实现的</strong>。</p>
-<p>操作系统发展的历程大体上就是一个想方设法提高资源利用率的过程，而提高资源利用率，就需要在程序并未使用某种资源时，把它对那种资源的占有权释放，这就需要中断。</p>
-<h4 id="中断和异常的定义"><a href="#中断和异常的定义" class="headerlink" title="中断和异常的定义"></a>中断和异常的定义</h4><p>中断，又称外中断，指的是来自CPU当前执行指令以外的事件发生，如设备发出的I/O结束中断，表示设备的输入输出已经完成，希望处理机能够向设备发出下一个输入输出指令，并然完成输入输出后的程序继续执行。时钟中断，表示一个固定的时间片已到，让处理机处理计时，启动定时任务等任务。</p>
-<p>异常，又称<strong>内中断，例外或者陷入（trap）</strong>，指的是来自CPU正在执行的指令内部的事件，如地址越界，算术溢出，内存缺页等。对异常的处理一般依赖当前程序的运行现场，且异常不能被屏蔽，一旦出现应立即处理。</p>
-<h4 id="中断处理过程"><a href="#中断处理过程" class="headerlink" title="中断处理过程"></a>中断处理过程</h4><p>不同计算机的中断（这里指外中断）的处理过程各具特色，但是大概相同：</p>
-<ol>
-<li>关中断。CPU响应中断后，首先要保护程序的现场，在保护现场过程中，CPU不能响应其他的中断，否则现场就无法保存完整。</li>
-<li>保存断点。为保证中断服务程序执行完毕后能够正确返回原来的程序，必须将原来程序的端点（程序计数器PC）保存。（注意这一步由硬件自动完成）</li>
-<li>中断服务程序寻址。实质是找到中断服务程序的入口，送入程序计数器，这个入口地址又叫做中断向量。</li>
-<li>保存现场和屏蔽字。进入中断服务程序后，首先要保存现场，现场信息一般指的是程序状态字寄存器PSWR和某些通用寄存器（由操作系统）。</li>
-<li>开中断。允许更高级别的中断请求得到相应。</li>
-<li>执行中断服务程序。这是中断的目的。但是注意，此时已经开中短了，也就是说，这里是可以被打断的。</li>
-<li>关中断。保证恢复现场和屏蔽字时不被中断。</li>
-<li>恢复现场和屏蔽字。将现场和屏蔽字恢复到原来状态。</li>
-<li>开中断，中断返回。返回源程序的断点处。</li>
-</ol>
-<p>这个过程中有几点需要注意。</p>
-<p>在执行中断服务程序之前和之后分别有一个<code>原语</code>，但是中断服务程序本身不是整个在原语中，所以理论上是可以被打断的。如果中断本身又被中断，那就需要一个栈来层层保存现场。</p>
-<p>但是注意这个栈与程序内部函数的调用栈不同，程序内部函数调用栈由程序自己模拟并管理。</p>
-<p>中断因为涉及程序计数器的保存等操作，所以一定会陷入内核态。</p>
-<p>中断的目的是通过一系列操作去打断CPU当前正在执行的程序并转去执行中断服务程序，而原语的目的则是有的指令不可以被打断。而中断处理过程中至少是包含两个原语的，也就是说，中断处理的流程中，本身就至少有两个不可被中断的原语。</p>
-<h3 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h3><p>所谓系统调用，是指用户在程序中调用系统提供的一些子功能，系统调用可以视为特殊的公共子程序。</p>
-<p>系统中的各种共享资源都由操作系统统一掌管，因此在用户程序中，凡是与资源相关的操作，都必须通过系统调用的方式提出服务请求，由操作系统代为完成。</p>
-<blockquote>
-<p>注意上篇博客的内容：程序接口由一系列系统调用组成。</p>
-</blockquote>
-<p>系统调用按功能分为几类：</p>
-<ul>
-<li>设备管理</li>
-<li>文件管理</li>
-<li>进程控制</li>
-<li>进程通信</li>
-<li>内存管理</li>
-</ul>
-<p>系统调用相关功能涉及系统资源管理，进程管理之类，对整个操作系统影响较大，<strong>需要运行在核心态。用户可以执行陷入指令，法器系统调用</strong>。</p>
-<p>用户执行陷入指令，相当于把CPU的使用权主动交给操作系统内核，之后内核程序对系统调用做出相关处理，完成后再将CPU使用权还给用户程序。</p>
 ]]></content>
       <categories>
         <category>OS</category>
@@ -12588,6 +12501,230 @@
       </categories>
   </entry>
   <entry>
+    <title>Unity文档阅读笔记（一）Working in Unity</title>
+    <url>/2021/10/05/unity-working-in-unity/</url>
+    <content><![CDATA[<h1 id="Creating-Gameplay"><a href="#Creating-Gameplay" class="headerlink" title="Creating Gameplay"></a>Creating Gameplay</h1><h2 id="Scene：场景"><a href="#Scene：场景" class="headerlink" title="Scene：场景"></a>Scene：场景</h2><p>场景是你在Unity中处理内容的地方。它们是包含游戏或应用程序全部或部分内容的资产。例如，你可能会在单个场景中创建一款简单的游戏，而对于更复杂的游戏，你可能会在每个关卡中使用一个场景，每个场景都有自己的环境、角色、障碍、装饰和UI。你可以在一个项目中创建任意数量的场景。当你创建一个新项目并首次打开它时，Unity会打开一个只包含摄像机和灯光的示例场景。</p>
+<h3 id="创建新的场景"><a href="#创建新的场景" class="headerlink" title="创建新的场景"></a>创建新的场景</h3><p>创建新的场景有三种方式：</p>
+<ul>
+<li>使用创建场景对话框，可以选择根据某个模版创建新的场景（File -&gt; New Scene）。</li>
+<li>使用菜单直接根据当前场景创建新场景（Asset -&gt; Create -&gt; Scene）</li>
+<li>使用脚本创建，创建语句会返回新场景的指针，并且会触发创建场景的事件。如果场景模版中有cloned的资源或者依赖，需要指定保存这些资源的路径。</li>
+</ul>
+<h3 id="加载场景"><a href="#加载场景" class="headerlink" title="加载场景"></a>加载场景</h3><p>要打开一个场景，执行以下操作之一:</p>
+<ul>
+<li>在项目窗口中，双击场景资源。</li>
+<li>从菜单中，选择文件&gt;新场景</li>
+<li>从菜单中，选择文件&gt;最近场景&gt; [NAME-OF-SCENE]</li>
+</ul>
+<p>如果你当前场景包含未保存的更改，Unity会提示你保存场景或放弃更改。</p>
+<h3 id="保存场景"><a href="#保存场景" class="headerlink" title="保存场景"></a>保存场景</h3><h3 id="多场景同时编辑"><a href="#多场景同时编辑" class="headerlink" title="多场景同时编辑"></a>多场景同时编辑</h3><p><a href="https://docs.unity3d.com/Manual/MultiSceneEditing.html" rel="external nofollow noopener noreferrer" target="_blank">Unity - Manual: Multi-Scene editing</a></p>
+<p>可以在编辑器中同时打开多个场景进行编辑，但是保存时各个场景都要单独保存一次。</p>
+<p>目前不太清楚这个功能意义何在，就是同时把多个场景放进了Hierarchy，具体编辑起来和单个场景没什么太大区别。</p>
+<h3 id="Scene-Template"><a href="#Scene-Template" class="headerlink" title="Scene Template"></a>Scene Template</h3><p>Unity使用场景模板来创建新的场景。场景模板是存储在项目中的资产。它们与场景相似，但设计的目的是复制，而不是直接使用。</p>
+<p>场景模板可以用于相同场景的快速复用，也可以通过脚本来根据模版创建具体的场景。</p>
+<p>每次创建新的场景，Unity都是复制了场景模板。可以将场景模板视为预先配置的场景，其中包含您想要开始的所有内容。例如，默认的Basic模板通常包含一个相机和一个灯。您可以创建自己的场景模板来定制您可以在项目中创建的新场景的类型。例如，你可以为游戏中的每个关卡创建模板，这样项目中的每个人都可以使用正确的资产和配置开始他们的场景。你可以从任何Unity场景中创建模板。</p>
+<h4 id="创建场景模版的方式"><a href="#创建场景模版的方式" class="headerlink" title="创建场景模版的方式"></a>创建场景模版的方式</h4><ul>
+<li>创建空模板</li>
+<li>从已存在的某个场景创建模版</li>
+<li>从当前场景创建模版</li>
+<li>利用脚本创建模版（可以创建空模板，或者根据某个场景创建模版）</li>
+</ul>
+<p>上述过程中，除非是创建空模板，Unity会询问哪些资源或者依赖是需要被复制而不是被引用的。</p>
+<p>这里就需要注意了，复制的资源是独立的，引用的资源是共同的，如果错把一个引用的资源当成独立的修改，可能会引入bug。</p>
+<h4 id="编辑场景模版"><a href="#编辑场景模版" class="headerlink" title="编辑场景模版"></a>编辑场景模版</h4><p><a href="https://docs.unity3d.com/Manual/scene-templates-editing.html" rel="external nofollow noopener noreferrer" target="_blank">Unity - Manual: Editing scene templates</a></p>
+<ul>
+<li>详细信息:指定模板使用的场景，并包含出现在“新建场景”对话框中的模板描述。</li>
+<li>缩略图:提供为模板创建预览图像的选项。</li>
+<li>场景模板管道:指定一个可选的自定义脚本，当Unity从模板创建一个新的场景时运行。</li>
+<li>依赖项依赖项属性：在它们的清单中定义它们需要的包集。对于项目，这些被认为是直接依赖;对于包来说，这些是间接的或传递的依赖关系。</li>
+</ul>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1633422737/origin-of-ray/asynccode_q5ialc.png" alt="img"></p>
+<h4 id="自定义场景的创建过程"><a href="#自定义场景的创建过程" class="headerlink" title="自定义场景的创建过程"></a>自定义场景的创建过程</h4><p>其实每次新建场景都是从场景模版中创建一个实例出来，所以Unity提供给我们模版实例化过程中类似hook或者生命周期的能力。</p>
+<p>当Unity从模板中实例化一个新场景时，要运行自定义代码，创建一个场景模板管道脚本并将其连接到模板。每次你从模板中创建一个新的场景，Unity也会创建一个管道脚本的新实例。</p>
+<p><a href="https://docs.unity3d.com/Manual/scene-templates-customizing-scene-instantiation.html" rel="external nofollow noopener noreferrer" target="_blank">Unity - Manual: Customizing new scene creation</a></p>
+<p>我们可以先定义一个Pipline（必须声明ISceneTemplatePiplne接口）</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1633422762/origin-of-ray/asynccode_yc16kj.png" alt="img"></p>
+<p>然后绑定到场景模版流水线中</p>
+<h2 id="GameObject"><a href="#GameObject" class="headerlink" title="GameObject"></a>GameObject</h2><p><a href="https://docs.unity3d.com/Manual/GameObjects.html" rel="external nofollow noopener noreferrer" target="_blank">Unity - Manual: GameObjects</a></p>
+<p>游戏对象是Unity编辑器中最重要的概念。游戏中的每个对象都是游戏对象，从角色、可收集的道具到灯光、摄像机和特效。然而，一个游戏对象不能自己做任何事情;在它成为角色、环境或特殊效果之前，你需要赋予它属性，也就是Component。</p>
+<p>游戏对象是Unity中代表角色、道具和场景的基本对象。它们本身并没有完成多少工作，但它们充当实现功能的组件的容器。</p>
+<p>所以GameObject其实没什么好讲的，它能做什么，基本取决于它有什么Component。</p>
+<h3 id="Transform"><a href="#Transform" class="headerlink" title="Transform"></a>Transform</h3><p><a href="https://docs.unity3d.com/Manual/class-Transform.html" rel="external nofollow noopener noreferrer" target="_blank">Unity - Manual: Transforms</a></p>
+<h4 id="父子关系的影响"><a href="#父子关系的影响" class="headerlink" title="父子关系的影响"></a>父子关系的影响</h4><p>Transform的位置、旋转和缩放值是相对于Transform的父对象进行测量的。如果Transform没有父元素，则在世界空间中度量属性。</p>
+<p>当一个游戏对象是另一个游戏对象的父对象时，子游戏对象的移动、旋转和缩放与其父对象完全相同。</p>
+<h4 id="非均匀的缩放会带来一些问题"><a href="#非均匀的缩放会带来一些问题" class="headerlink" title="非均匀的缩放会带来一些问题"></a>非均匀的缩放会带来一些问题</h4><p>非均匀缩放是指在变换中缩放的x、y和z值不同;例如(2,4,2)。相比之下，均匀缩放对x, y, z具有相同的值;例如(3,3,3)。非均匀缩放在一些特定的情况下可能很有用，但它会引入一些均匀缩放不会出现的奇怪现象：</p>
+<ul>
+<li>某些组件不完全支持非均匀伸缩。例如，一些组件有一个由半径属性定义的圆形或球形元素，其中包括Sphere Collider、Capsule Collider、Light和Audio Source。在这种情况下，圆形将不会成为椭圆形不均匀缩放，如你所期望的，将只是保持圆形。</li>
+<li>当子对象具有非均匀缩放的父对象并相对于该父对象旋转时，它可能显示为倾斜或剪切。有一些组件支持简单的非均匀缩放，但在像这样倾斜时不能正确工作。例如，一个倾斜的Box Collider将不能精确匹配渲染网格的形状。</li>
+<li>出于性能原因，非均匀缩放的父对象的子对象在旋转时不会自动更新其缩放。因此，当比例最终被更新时(例如，如果子对象从父对象分离)，子对象的形状可能会突然发生变化。</li>
+</ul>
+<h4 id="缩放的重要性（尺寸的重要性）："><a href="#缩放的重要性（尺寸的重要性）：" class="headerlink" title="缩放的重要性（尺寸的重要性）："></a>缩放的重要性（尺寸的重要性）：</h4><p>Transform的规模决定了你的建模应用程序中的网格大小和Unity中的网格大小之间的差异。网格的大小在Unity(因此变换的比例)是非常重要的，特别是在物理模拟。默认情况下，物理引擎假设世界空间中的一个单位对应于1米。如果一个物体非常大，它看起来会以慢动作坠落;这个模拟实际上是正确的，因为实际上，你看到的是一个非常大的物体落在很远的地方。</p>
+<p>有三个因素可以影响你的对象的尺寸：</p>
+<ul>
+<li><p>在3D建模应用程序中网格的大小。</p>
+</li>
+<li><p>在对象的导入设置中设置网格比例因子。</p>
+</li>
+<li><p>The <strong>scale</strong> values of your Transform Component.</p>
+</li>
+</ul>
+<p>理想情况下，您不应该在Transform组件中调整对象的Scale。最好的选择是创建现实规模的模型，这样你就不必改变你的变换规模。下一个最好的选择是在你的网格的导入设置中调整你的网格导入的比例。根据导入大小进行某些优化，实例化具有调整过的缩放值的对象可能会降低性能。</p>
+<h3 id="Component"><a href="#Component" class="headerlink" title="Component"></a>Component</h3><p>GmeObject是Unity编辑器中包含组件的对象。组件定义游戏对象的行为。要查看游戏对象的组件，在场景窗口或层次窗口中选择游戏对象，然后在检查器窗口中查看所有组件及其设置的列表。您可以在编辑器中直接与组件交互，也可以通过脚本进行交互。</p>
+<p>编写脚本(或创建脚本)是使用Unity Scripting API在代码中编写自己添加的Unity Editor功能。当你创建脚本并将其附加到游戏对象时，脚本就会像内置组件一样出现在游戏对象的检查器中。这是因为当您将脚本保存到项目中时，它们就变成了组件。从技术角度来说，你制作的任何脚本都是一种组件类型，所以Unity编辑器将你的脚本视为内置组件。在检查器中定义要公开的脚本成员，然后编辑器执行任何函数</p>
+<h3 id="激活状态"><a href="#激活状态" class="headerlink" title="激活状态"></a>激活状态</h3><p>你可以将一个游戏对象标记为非活动，以暂时将其从场景中移除。要做到这一点，</p>
+<p>导航到检查器，取消勾选游戏对象名称旁边的复选框(见下图)，或者在脚本中使用SetActive方法。如果要在一个对象被标记为活动或非活动时检入脚本，请检查activeSelf属性。</p>
+<p>当你停用一个父游戏对象时，你也会停用它的所有子游戏对象。去激活覆盖了所有子游戏对象的activeSelf设置，所以Unity让整个层级从父层级向下处于非激活状态。这不会改变子游戏对象的activeSelf属性的值，所以当你重新激活父游戏对象时，它们会返回到原来的状态。</p>
+<p>注意:这意味着你不能通过读取它的activeSelf属性来确定一个子游戏对象在场景中是否处于活动状态，因为即使它被设置为活动状态，它的父对象也可能处于非活动状态。</p>
+<p>这就是说，activeSelf这个属性指的是GameObject自身的属性，并不一定是该GameObject是否在场景中厨艺激活状态，即，如果反激活父对象的avtiveSelf，并不会改变子的activeSelf属性，你去判断子的这个属性也还是true，但是该自对象并不会显示和执行。</p>
+<h3 id="Tag"><a href="#Tag" class="headerlink" title="Tag"></a>Tag</h3><p>标签是一个参考词，你可以分配给一个或多个游戏对象。例如，你可以为玩家控制的角色定义Player Tag，为非玩家控制的角色定义Enemy Tag。你可以用可收集标签定义玩家可以在场景中收集的物品。标签可以帮助你识别用于编写脚本的游戏对象。</p>
+<p>他们确保你不需要手动添加游戏对象到脚本的暴露属性使用拖放，从而节省时间，当你使用相同的脚本代码在多个游戏对象。标签对于Collider控制脚本中的触发器很有用。</p>
+<p>也就是当多个不同种类的GameObject具有某种逻辑层面上的相似性时，可以将这些GameObject的Tag设置为同一个，从而简化开发复杂度。</p>
+<h3 id="静态对象"><a href="#静态对象" class="headerlink" title="静态对象"></a>静态对象</h3><p>如果一个游戏对象在运行时没有移动，它就被称为静态游戏对象。如果一个游戏对象在运行时移动，它就被称为动态游戏对象。Unity中的许多系统可以在编辑器中预计算静态游戏对象的信息。因为游戏对象不会移动，所以这些计算的结果在运行时仍然有效。这意味着Unity可以节省运行时计算，并有可能提高性能。</p>
+<blockquote>
+<p>没有刚体且没有碰撞体的GameObject会被视为静态对象——印象中有这个说法，待考证</p>
+</blockquote>
+<p>Static Editor Flags属性列出了许多Unity系统，它们可以在预计算中包含一个静态游戏对象。使用下拉列表定义哪些系统应该在预计算中包含游戏对象。在运行时设置静态编辑器标记对这些系统没有影响。你应该只在系统的预计算中包含一个游戏对象，因为系统需要知道这个游戏对象。在不需要知道游戏对象的系统的预计算中包含游戏对象可能会导致浪费的计算、不必要的大数据文件或意外</p>
+<p>静态编辑器标志属性位于游戏对象的检查器中，在最右上方。它由一个复选框和一个下拉菜单组成，复选框将值设置为Everything或Nothing，下拉菜单允许您选择包含哪些值。你也可以使用GameObjectUtility在代码中设置Static Editor Flags属性。</p>
+<h1 id="Prefab"><a href="#Prefab" class="headerlink" title="Prefab"></a>Prefab</h1><p>Unity的预制件系统允许你创建，配置和存储游戏对象完整的所有组件，属性值，和子游戏对象作为可重用的资产。Prefab Asset作为一个模板，你可以在场景中创建新的Prefab实例。</p>
+<p>当你想以特定方式重用一个游戏对象(游戏邦注:如非玩家角色(NPC)、道具或场景中多个地方的场景，或项目中多个场景中的场景)时，你应该将其转换为Prefab。这比简单地复制和粘贴游戏对象要好，因为Prefab系统允许你自动保持所有副本的同步。</p>
+<p>您可以将prefab嵌套在其他prefab中（<a href="https://docs.unity3d.com/Manual/NestedPrefabs.html" rel="external nofollow noopener noreferrer" target="_blank">Unity - Manual: Nested Prefabs</a>），以创建易于在多个级别编辑的复杂对象层次结构。然而，这并不意味着所有预制实例都必须相同。如果您希望某个预制件的某些实例与其他实例不同，您可以覆盖单个预制件实例上的设置。您还可以创建Prefab的变体，允许您将一组覆盖组合成一个有意义的Prefab变体。</p>
+<p>一些常见的预制使用的例子包括：</p>
+<ul>
+<li>环境资产——例如在一个关卡中多次使用的某种类型的树</li>
+<li>非玩家角色(npc)——例如某种类型的机器人可能会在你的游戏中出现多次，跨越多个关卡。它们可能在移动的速度或发出的声音上有所不同(使用重载)</li>
+<li>投射物-例如一个海盗的加农炮可能会在每次发射时实例化一个炮弹预制件。</li>
+<li>玩家的主要角色-玩家的预制件可能被放置在游戏的每个关卡(单独的场景)的起点。</li>
+</ul>
+<h2 id="创建预制件及其实例"><a href="#创建预制件及其实例" class="headerlink" title="创建预制件及其实例"></a>创建预制件及其实例</h2><p>要创建预制资产，将游戏对象从Hierarchy窗口拖到Project窗口。游戏对象及其所有组件和子游戏对象将成为项目窗口中的新资产。项目窗口中的Prefabs资产会显示为游戏对象的缩略图视图，或蓝色立方体Prefab图标，这取决于你如何设置项目窗口。</p>
+<p>这个创建预制资产的过程也将原始游戏对象变成预制实例。它现在是新创建的预制资产的一个实例。预制实例以蓝色文本显示在层次结构中，预制的根游戏对象以蓝色立方体预制图标显示</p>
+<p>通过将预制资产从项目视图拖到层次结构或场景视图，您可以在编辑器中创建预制资产的实例</p>
+<p>您还可以在运行时使用脚本创建Prefabs实例。</p>
+<p>你可以通过从Hierarchy窗口中拖拽一个新的GameObject并将其放到Project窗口中已有的Prefab资产的顶部来替换Prefab。如果你要替换现有的预制，Unity会尝试保存对预制本身和预制的个别部分(如子游戏对象和组件)的引用。为了做到这一点，它会在新的预制和你要替换的现有预制之间匹配游戏对象的名称（这种替换仅以名字为替换原则，所以需要注意）。</p>
+<h2 id="编辑Prefab的两种模式"><a href="#编辑Prefab的两种模式" class="headerlink" title="编辑Prefab的两种模式"></a>编辑Prefab的两种模式</h2><p><a href="https://docs.unity3d.com/Manual/EditingInPrefabMode.html" rel="external nofollow noopener noreferrer" target="_blank">Unity - Manual: Editing a Prefab in Prefab Mode</a></p>
+<h2 id="实例可以覆盖Prefab的默认属性-override"><a href="#实例可以覆盖Prefab的默认属性-override" class="headerlink" title="实例可以覆盖Prefab的默认属性 - override"></a>实例可以覆盖Prefab的默认属性 - override</h2><p><a href="https://docs.unity3d.com/Manual/PrefabInstanceOverrides.html" rel="external nofollow noopener noreferrer" target="_blank">Unity - Manual: Instance overrides</a></p>
+<p>在检查器窗口中，实例覆盖的名称标签以粗体显示，并在左侧空白处有一条蓝色线。当你添加一个Prefab实例的新组件时，边距中的蓝线会跨越整个组件。</p>
+<p>覆盖下拉窗口显示Prefab实例上的所有覆盖。它还允许您将覆盖从实例应用到Prefab资产，或将实例上的覆盖恢复到Prefab资产上的值。覆盖下拉按钮只出现在根预制件实例，而不出现在其他预制件内部的预制件。覆盖下拉窗口允许您单独应用或恢复预制件覆盖，或一次性应用或恢复所有预制件覆盖。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1633422783/origin-of-ray/asynccode_f176vq.png" alt="img"></p>
+<h2 id="预制件变体-Variant"><a href="#预制件变体-Variant" class="headerlink" title="预制件变体 - Variant"></a>预制件变体 - Variant</h2><p>当你想拥有一组预先定义好的预制变体时，预制变体是有用的。例如，你可能想要在你的游戏中拥有几种不同类型的GermSlimeTarget，它们都是基于相同的基本的GermSlimeTarget预制。然而，你可能想要一些GermSlimeTargets携带物品，一些以不同的速度移动，或一些发出额外的声音效果。</p>
+<p>一个预制件变体继承另一个预制件的属性，称为Base。对预制件变体的重写将优先于基础预制件的值。预制件变体可以有任何其他预制件作为其基础，包括模型预制件或其他预制件变体。</p>
+<p><a href="https://docs.unity3d.com/Manual/PrefabVariants.html" rel="external nofollow noopener noreferrer" target="_blank">Unity - Manual: Prefab Variants</a></p>
+<h2 id="override和variant的层级覆盖"><a href="#override和variant的层级覆盖" class="headerlink" title="override和variant的层级覆盖"></a>override和variant的层级覆盖</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/PrefabOverridesMultiLevel.html" rel="external nofollow noopener noreferrer" target="_blank">覆盖多个级别 - Unity 手册</a></p>
+<h2 id="解压Prefab"><a href="#解压Prefab" class="headerlink" title="解压Prefab"></a>解压Prefab</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/UnpackingPrefabInstances.html" rel="external nofollow noopener noreferrer" target="_blank">解压缩预制件实例 - Unity 手册</a></p>
+<p>就是将一个预制件实例变成普通的GameObject，与预制件脱离关系。</p>
+<h1 id="Layer"><a href="#Layer" class="headerlink" title="Layer"></a>Layer</h1><p>Unity中的层定义了哪些游戏对象可以与不同的功能进行交互。它们通常被相机用来渲染场景的一部分，被灯光用来照亮场景的一部分。但它们也可以通过光线投射来选择性地忽略碰撞器或制造碰撞。</p>
+<p>利用摄像机的剔除遮罩，您可以选择性地渲染位于某一特定层中的对象。 为此，请选择需要部分渲染对象的摄像机。</p>
+<p>通过使用层，您可以投射光线并忽略特定层中的碰撞体。 例如，您可能希望仅对玩家层投射光线并忽略所有其他碰撞体。</p>
+<p>Physics.Raycast 函数获取位掩码，在位掩码中，每个位确定该层是否将被忽略。 如果 layerMask 中的所有位都启用，那么将可以对所有碰撞体进行碰撞。 如果 layerMask = 0，则投射光线不会发生任何碰撞。</p>
+<p><a href="https://docs.unity3d.com/2020.3/Documentation/Manual/Layers.html" rel="external nofollow noopener noreferrer" target="_blank">Unity - Manual: Layers</a></p>
+<p><a href="https://docs.unity3d.com/2020.3/Documentation/Manual/LayerBasedCollision.html" rel="external nofollow noopener noreferrer" target="_blank">Unity - Manual: Layer-based collision detection</a></p>
+<h1 id="Constraints-约束"><a href="#Constraints-约束" class="headerlink" title="Constraints 约束"></a>Constraints 约束</h1><p><a href="https://docs.unity3d.com/2020.3/Documentation/Manual/Constraints.html" rel="external nofollow noopener noreferrer" target="_blank">Unity - Manual: Constraints</a></p>
+<p>约束组件将游戏对象的位置、旋转或缩放与另一个游戏对象关联。受约束的游戏对象像关联到的游戏对象一样移动、旋转或缩放。</p>
+<p>Unity 支持以下类型的约束组件：</p>
+<ul>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-AimConstraint.html" rel="external nofollow noopener noreferrer" target="_blank">Aim</a>：旋转受约束的游戏对象以朝向关联的游戏对象。</p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-LookAtConstraint.html" rel="external nofollow noopener noreferrer" target="_blank">Look At</a>：将受约束的游戏对象旋转到关联的游戏对象（简化的 Aim Constraint）。</p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-ParentConstraint.html" rel="external nofollow noopener noreferrer" target="_blank">Parent</a>：使受约束的游戏对象跟随关联的游戏对象移动和旋转。</p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-PositionConstraint.html" rel="external nofollow noopener noreferrer" target="_blank">Position</a>：像关联的游戏对象一样移动受约束的游戏对象。</p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-RotationConstraint.html" rel="external nofollow noopener noreferrer" target="_blank">Rotation</a>：像关联的游戏对象一样旋转受约束的游戏对象。</p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-ScaleConstraint.html" rel="external nofollow noopener noreferrer" target="_blank">Scale</a>：像关联的游戏对象一样缩放受约束的游戏对象。</p>
+</li>
+</ul>
+<h2 id="关联到游戏对象"><a href="#关联到游戏对象" class="headerlink" title="关联到游戏对象"></a>关联到游戏对象</h2><p>使用约束组件中的 <strong>Sources</strong> 列表可指定要关联到的游戏对象。</p>
+<p>例如，要让十字准线跟随 2D 射击游戏中玩家的宇宙飞船，请在十字准线上添加一个 <strong>Position Constraint</strong> 组件。要将十字准线关联到宇宙飞船，请导航到 <strong>Position Constraint</strong> 组件，然后将宇宙飞船游戏对象添加到 <strong>Sources</strong> 列表中。当玩家移动宇宙飞船时，十字准线随之移动。</p>
+<p>一个约束可以关联到多个源游戏对象。在这种情况下，约束使用其源游戏对象的平均位置、旋转或缩放。例如，要将光源指向一组游戏对象，请将 <strong>Aim Constraint</strong> 组件添加到光源游戏对象。然后，在 <strong>Sources</strong> 列表中添加要接受光照的游戏对象。<strong>Aim Constraint</strong> 将光源定向至其光源的平均位置。</p>
+<p>Unity 按照源游戏对象在 <strong>Sources</strong> 列表中出现的顺序来对源游戏对象求值。该顺序对 <strong>Position Constraint</strong> 和 <strong>Scale Constraint</strong> 组件没有影响。但是，顺序会对 <strong>Parent Constraint</strong>、<strong>Rotation Constraint</strong> 和 <strong>Aim Constraint</strong> 组件产生影响。要获得所需的结果，请通过拖放各项来重新排序 <strong>Sources</strong> 列表。</p>
+<p>可以约束一系列游戏对象。例如，假如想让小鸭子排成一排跟随它们的妈妈。应将 <strong>Position Constraint</strong> 组件添加到游戏对象 <em>Duckling1<em>。在 *</em>Sources** 列表中，关联到 <em>MotherDuck</em>。然后，将 <strong>Position Constraint</strong> 添加到 *Duckling2_，而后者再关联到</em> Duckling1<em>。当</em> MotherDuck_ 游戏对象在场景中移动时，<em>Duckling1</em> 跟随 <em>MotherDuck_，_Duckling2</em> 跟随 <em>Duckling1</em>。</p>
+<h2 id="设置约束属性"><a href="#设置约束属性" class="headerlink" title="设置约束属性"></a>设置约束属性</h2><p>使用 <a href="https://docs.unity3d.com/cn/current/Manual/UsingTheInspector.html" rel="external nofollow noopener noreferrer" target="_blank">Inspector 窗口</a>可更改约束中的常用属性。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1633422808/origin-of-ray/asynccode_gh0kzj.png" alt="img"></p>
+<p>Position Constraint 的 Weight 和 Constraint Settings</p>
+<p>使用 <strong>Weight</strong> 属性可以改变约束的影响。权重 1 会使约束更新游戏对象的速度与其源游戏对象的速度相同。权重为 0 会完全消除约束的影响。每个源游戏对象也有一个单独的权重。</p>
+<p>在 <strong>Constraint</strong> <strong>Settings</strong> 中，使用 <strong>At Rest</strong> 属性可以指定当 <strong>Weight</strong> 为 0 或未选中 <strong>Freeze Axes</strong> 中相应属性时要使用的 X、Y 和 Z 值。</p>
+<p>使用 <strong>Constraint</strong> <strong>Settings</strong> 中的 <strong>Offset</strong> 属性可以指定约束游戏对象时要使用的 X、Y 和 Z 值。</p>
+<p>使用 <strong>Freeze Axes</strong> 设置可以切换约束可以实际修改的轴。</p>
+<h2 id="激活和锁定约束"><a href="#激活和锁定约束" class="headerlink" title="激活和锁定约束"></a>激活和锁定约束</h2><p>可以在两个方面使用约束：激活和锁定。</p>
+<p>通过激活约束可以对受约束的游戏对象的位置、旋转或缩放进行求值。Unity 不会对非活动约束进行求值。</p>
+<p>通过锁定约束可以移动、旋转或缩放游戏对象。锁定的约束会控制游戏对象的<a href="https://docs.unity3d.com/cn/current/Manual/class-Transform.html" rel="external nofollow noopener noreferrer" target="_blank">变换组件</a>的相关部分。无法使用锁定的约束手动移动、旋转或缩放游戏对象。也无法编辑 <strong>Constraint</strong> <strong>Settings</strong>。</p>
+<p>要手动编辑游戏对象的位置、旋转或缩放，请解锁其约束。如果约束处于活动状态的同时未锁定，则在您移动、旋转或缩放受约束的游戏对象或其源游戏对象时，约束会更新 <strong>Constraint</strong> <strong>Settings</strong>。</p>
+<p>向游戏对象添加约束组件时，约束在默认情况下处于非活动状态并且未锁定。因此，允许在激活和锁定约束之前微调受约束游戏对象和源游戏对象的位置、旋转和缩放。</p>
+<p>为方便起见，<strong>Activate</strong> 和 <strong>Zero</strong> 按钮可以更新 <strong>Constraint Settings</strong>：</p>
+<ul>
+<li><p><strong>Activate__：保存相对于源游戏对象的当前偏移量，然后激活并锁定受约束的游戏对象</strong>。__</p>
+</li>
+<li><p><strong>Zero</strong>：重置位置、旋转或缩放以匹配源游戏对象，然后激活并锁定受约束的游戏对象。</p>
+</li>
+</ul>
+<h2 id="动画化和组合约束"><a href="#动画化和组合约束" class="headerlink" title="动画化和组合约束"></a>动画化和组合约束</h2><p>使用动画剪辑可以修改受约束的游戏对象关联到的源游戏对象。当动画修改源游戏对象时，约束会修改受约束的游戏对象。</p>
+<p>还可以在约束组件中动画化属性。例如，使用 Parent Constraint 将角色的剑从他们的手中移到他们的背后。首先，将一个 Parent Constraint 添加到剑游戏对象。在 <strong>Sources</strong> 列表中，将约束关联到角色的手和角色的脊椎。要动画化剑，请为每个源的权重添加关键帧。要动画化剑从背部移动到手中的动作，请添加关键帧来将手的权重从 0 更改为 1，并添加关键帧来将脊椎权重从 1 更改为 0。</p>
+<p>可以向同一个游戏对象添加多种类型的约束组件。更新游戏对象时，Unity 会按照约束组件在 <a href="https://docs.unity3d.com/cn/current/Manual/UsingTheInspector.html" rel="external nofollow noopener noreferrer" target="_blank">Inspector 窗口</a>中的先后出现顺序来对这些组件求值。一个游戏对象只能包含同一类型的一个约束组件。例如，不能添加多个 Position Constraint。</p>
+<h1 id="Unity中的旋转和方向"><a href="#Unity中的旋转和方向" class="headerlink" title="Unity中的旋转和方向"></a>Unity中的旋转和方向</h1><p><a href="https://docs.unity3d.com/cn/current/Manual/QuaternionAndEulerRotationsInUnity.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/QuaternionAndEulerRotationsInUnity.html</a></p>
+<h1 id="光源"><a href="#光源" class="headerlink" title="光源"></a>光源</h1><p><a href="https://docs.unity3d.com/cn/current/Manual/Lights.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/Lights.html</a></p>
+<h1 id="相机"><a href="#相机" class="headerlink" title="相机"></a>相机</h1><p><a href="https://docs.unity3d.com/cn/current/Manual/Cameras.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/Cameras.html</a></p>
+<h1 id="构建发布"><a href="#构建发布" class="headerlink" title="构建发布"></a>构建发布</h1><p><a href="https://docs.unity3d.com/2020.3/Documentation/Manual/PublishingBuilds.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/2020.3/Documentation/Manual/PublishingBuilds.html</a></p>
+<h1 id="编辑器的功能"><a href="#编辑器的功能" class="headerlink" title="编辑器的功能"></a>编辑器的功能</h1><h2 id="模式切换"><a href="#模式切换" class="headerlink" title="模式切换"></a>模式切换</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/2DAnd3DModeSettings.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/2DAnd3DModeSettings.html</a></p>
+<h2 id="预设值"><a href="#预设值" class="headerlink" title="预设值"></a>预设值</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/Preferences.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/Preferences.html</a></p>
+<p>比较需要注意的有缓存服务器和性能分析器</p>
+<h2 id="快捷键管理"><a href="#快捷键管理" class="headerlink" title="快捷键管理"></a>快捷键管理</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/ShortcutsManager.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/ShortcutsManager.html</a></p>
+<h2 id="构建设置"><a href="#构建设置" class="headerlink" title="构建设置"></a>构建设置</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/BuildSettings.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/BuildSettings.html</a></p>
+<h2 id="项目设置"><a href="#项目设置" class="headerlink" title="项目设置"></a>项目设置</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/comp-ManagerGroup.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/comp-ManagerGroup.html</a></p>
+<p>下面的列表显示 Project Settings 窗口中可用的默认设置类别。</p>
+<ul>
+<li><p><a href="https://docs.unity3d.com/Packages/com.unity.adaptiveperformance@2.1/manual/user-guide.html" rel="external nofollow noopener noreferrer" target="_blank">Adaptive Performance</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-AudioManager.html" rel="external nofollow noopener noreferrer" target="_blank">Audio</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-EditorManager.html" rel="external nofollow noopener noreferrer" target="_blank">Editor</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-GraphicsSettings.html" rel="external nofollow noopener noreferrer" target="_blank">Graphics</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-InputManager.html" rel="external nofollow noopener noreferrer" target="_blank">Input Manager</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-PackageManager.html" rel="external nofollow noopener noreferrer" target="_blank">Package Manager</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-PhysicsManager.html" rel="external nofollow noopener noreferrer" target="_blank">Physics</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-Physics2DManager.html" rel="external nofollow noopener noreferrer" target="_blank">Physics 2D</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-PlayerSettings.html" rel="external nofollow noopener noreferrer" target="_blank">Player</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-PresetManager.html" rel="external nofollow noopener noreferrer" target="_blank">Preset Manager</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-QualitySettings.html" rel="external nofollow noopener noreferrer" target="_blank">Quality</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/scene-templates-settings.html" rel="external nofollow noopener noreferrer" target="_blank">Scene Template</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-MonoManager.html" rel="external nofollow noopener noreferrer" target="_blank">Script Execution Order</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/SettingUpProjectServices.html" rel="external nofollow noopener noreferrer" target="_blank">Services</a></p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-TagManager.html" rel="external nofollow noopener noreferrer" target="_blank">Tags and Layers</a></p>
+</li>
+<li><p>TextMesh Pro</p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/class-TimeManager.html" rel="external nofollow noopener noreferrer" target="_blank">Time</a></p>
+</li>
+<li><p>Timeline</p>
+</li>
+<li><p>Version Control</p>
+</li>
+<li><p><a href="https://docs.unity3d.com/cn/current/Manual/configuring-project-for-xr.html" rel="external nofollow noopener noreferrer" target="_blank">XR Plugin Management</a></p>
+</li>
+</ul>
+<p>根据所安装的包，Project Settings 窗口还可能显示其他类别和设置。</p>
+<h2 id="Visual-Studio集成"><a href="#Visual-Studio集成" class="headerlink" title="Visual Studio集成"></a>Visual Studio集成</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/VisualStudioIntegration.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/VisualStudioIntegration.html</a></p>
+<h2 id="RenderDoc集成-可以捕获运行过程中的帧"><a href="#RenderDoc集成-可以捕获运行过程中的帧" class="headerlink" title="RenderDoc集成 - 可以捕获运行过程中的帧"></a>RenderDoc集成 - 可以捕获运行过程中的帧</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/RenderDocIntegration.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/RenderDocIntegration.html</a></p>
+<h2 id="Xcode帧调试器"><a href="#Xcode帧调试器" class="headerlink" title="Xcode帧调试器"></a>Xcode帧调试器</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/XcodeFrameDebuggerIntegration.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/XcodeFrameDebuggerIntegration.html</a></p>
+<h2 id="版本控制"><a href="#版本控制" class="headerlink" title="版本控制"></a>版本控制</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/Versioncontrolintegration.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/Versioncontrolintegration.html</a></p>
+<p><a href="https://docs.unity3d.com/cn/current/Manual/TextSceneFormat.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/TextSceneFormat.html</a></p>
+<h2 id="安全模式"><a href="#安全模式" class="headerlink" title="安全模式"></a>安全模式</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/SafeMode.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/SafeMode.html</a></p>
+<h1 id="性能分析器"><a href="#性能分析器" class="headerlink" title="性能分析器"></a>性能分析器</h1><p><a href="https://docs.unity3d.com/cn/current/Manual/analysis.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/analysis.html</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>v-charts</title>
     <url>/2020/03/13/v-charts/</url>
     <content><![CDATA[<p>Echarts是百度提供的一个用于在web端快速绘制图表的工具，它是通过js在canvas中进行图表的绘制，所以只要你的项目能够支持js，那就可以使用echarts。</p>
@@ -15547,6 +15684,93 @@ script:eval(document.all.mycode.expr)&#39;)&quot;&gt;</code><br>4) OK，即使�
 ]]></content>
       <categories>
         <category>Sundry</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>操作系统学习笔记（二）操作系统的运行环境和体系结构</title>
+    <url>/2021/09/26/operating-system-note-2/</url>
+    <content><![CDATA[<p>继续上次的总结，这次来讲一下，操作系统的运行环境和体系结构。</p>
+<a id="more"></a>
+
+<h2 id="操作系统的运行环境"><a href="#操作系统的运行环境" class="headerlink" title="操作系统的运行环境"></a>操作系统的运行环境</h2><h3 id="操作系统运行机制"><a href="#操作系统运行机制" class="headerlink" title="操作系统运行机制"></a>操作系统运行机制</h3><p>计算机系统中，通常CPU执行两种不同性质的程序，一种是操作系统<strong>内核程序</strong>，另一种是<strong>用户自编程序</strong>（即系统外层的应用程序，又称应用程序）。</p>
+<p>对操作系统而言，这两种程序作用不同，前者是后者的管理者，因此管理程序要执行一些<strong>特权指令</strong>，而后者处于安全考虑则不能执行这些指令。</p>
+<p>所谓特权指令，是指计算机中不允许用户直接使用的指令，如I/O指令，置中断指令，存取用于内存保护的寄存器，送程序状态字到程序状态字寄存器等的指令。</p>
+<p>具体实现上，将CPU的状态划分为<strong>用户态（目态）和核心态（管态，内核态）</strong>。</p>
+<blockquote>
+<p>注意，<strong>用户态和核心态是CPU的状态，是CPU处于核心态时可以运行操作系统内核程序的特权指令</strong>，可以理解为CPU内部有个开关，开关为1时，CPU处于核心态，可以执行特权指令，为0时则不可以。</p>
+</blockquote>
+<p>操作系统的内核分为两个部分：</p>
+<ul>
+<li>一些与硬件紧密相关的模块，如时钟管理，中断处理，设备驱动处于底层。</li>
+<li>其次是运行频率较高的程序，如进程管理，存储器管理和设备管理。</li>
+</ul>
+<p>不同系统对内核的定义稍有区别，大致可以分为四种</p>
+<h4 id="1-时钟管理"><a href="#1-时钟管理" class="headerlink" title="1. 时钟管理"></a>1. 时钟管理</h4><p>在计算机各种部件中，时钟是最关键的设备。</p>
+<p>时钟的第一功能是计时，向用户提供准确的系统时间。</p>
+<p>另外，通过<strong>时钟中断的处理，可以实现进程切换</strong>。例如，在分时操作系统中采取时间片轮转调度，在实时系统中按截止时间控制运行，在批处理中通过时钟管理来衡量一个作业的运行程度。</p>
+<h4 id="2-中断机制"><a href="#2-中断机制" class="headerlink" title="2. 中断机制"></a>2. 中断机制</h4><p><strong>引入中断的初衷是提高多道程序运行环境中的CPU利用率，而且主要针对外部设备。</strong></p>
+<p>后来逐渐发展，形成了多种类型，成为操作系统各项操作的基础。例如鼠标或者键盘的信息输入，进程的管理和调度，系统功能的调用，设备驱动，文件访问等，无不依赖中断机制，可以说，现代操作系统是<strong>靠中断驱动的软件</strong>。</p>
+<p>中断机制，<strong>只有一小部分属于内核</strong>，它们负责保护和恢复中断现场，转移控制权到相关的处理程序等，这样可以减少中断的处理时间，提高系统并行处理的能力。</p>
+<blockquote>
+<p>中断，顾名思义，是暂停某些东西的运行，它不仅仅是异常导致的，如A的I/O完成后的中断，暂停当前CPU中B程序的执行。</p>
+</blockquote>
+<h4 id="3-原语"><a href="#3-原语" class="headerlink" title="3. 原语"></a>3. 原语</h4><p>操作系统底层可被调用的公用的小程序，它们有以下特点：</p>
+<ul>
+<li>操作系统最底层，最接近硬件的部分。</li>
+<li>具有原子性，操作只能一气呵成。</li>
+<li>运行时间短，且调用频繁。</li>
+</ul>
+<p>定义原语的直接方法是，关闭中断（也就是禁止其他中断），然所有动作不可分割地完成后再打开终端。</p>
+<p>系统中的设备驱动，CPU切换，进程通信等功能中的部分操作都可以定义为原语。</p>
+<blockquote>
+<p>也就是说，原语是属于操作系统的，它的实现和保证是软件层次的。</p>
+</blockquote>
+<h4 id="4-系统控制的数据结构和处理"><a href="#4-系统控制的数据结构和处理" class="headerlink" title="4. 系统控制的数据结构和处理"></a>4. 系统控制的数据结构和处理</h4><p>系统中用来登记状态信息的数据结构很多，如作业控制块，进程控制块（PCB），设备控制块，链表，消息队列，缓冲区，空闲区内存登记表等。为了实现有效的管理，系统需要一些基本的操作，如：</p>
+<ul>
+<li>进程管理：进程状态管理，进程调度和分派，创建与撤销进程控制块等。</li>
+<li>存储器管理：存储器空间的分配和回收，内存信息保护程序，代码对换程序。</li>
+<li>设备管理：缓冲区管理，设备分配和回收。</li>
+</ul>
+<h3 id="中断和异常"><a href="#中断和异常" class="headerlink" title="中断和异常"></a>中断和异常</h3><p>系统不允许用户程序实现核心态的功能，但它们又必须使用这些功能。因此需要在核心态上提供一些“门”，以便实现从用户态到核心态。</p>
+<p>在实际操作系统中，CPU运行上层程序时，<strong>唯一能够进入这些门的途径就是中断或者异常，一旦发生中断或异常，运行用户态的CPU会立即进入核心态，这是通过硬件实现的</strong>。</p>
+<p>操作系统发展的历程大体上就是一个想方设法提高资源利用率的过程，而提高资源利用率，就需要在程序并未使用某种资源时，把它对那种资源的占有权释放，这就需要中断。</p>
+<h4 id="中断和异常的定义"><a href="#中断和异常的定义" class="headerlink" title="中断和异常的定义"></a>中断和异常的定义</h4><p>中断，又称外中断，指的是来自CPU当前执行指令以外的事件发生，如设备发出的I/O结束中断，表示设备的输入输出已经完成，希望处理机能够向设备发出下一个输入输出指令，并然完成输入输出后的程序继续执行。时钟中断，表示一个固定的时间片已到，让处理机处理计时，启动定时任务等任务。</p>
+<p>异常，又称<strong>内中断，例外或者陷入（trap）</strong>，指的是来自CPU正在执行的指令内部的事件，如地址越界，算术溢出，内存缺页等。对异常的处理一般依赖当前程序的运行现场，且异常不能被屏蔽，一旦出现应立即处理。</p>
+<h4 id="中断处理过程"><a href="#中断处理过程" class="headerlink" title="中断处理过程"></a>中断处理过程</h4><p>不同计算机的中断（这里指外中断）的处理过程各具特色，但是大概相同：</p>
+<ol>
+<li>关中断。CPU响应中断后，首先要保护程序的现场，在保护现场过程中，CPU不能响应其他的中断，否则现场就无法保存完整。</li>
+<li>保存断点。为保证中断服务程序执行完毕后能够正确返回原来的程序，必须将原来程序的端点（程序计数器PC）保存。（注意这一步由硬件自动完成）</li>
+<li>中断服务程序寻址。实质是找到中断服务程序的入口，送入程序计数器，这个入口地址又叫做中断向量。</li>
+<li>保存现场和屏蔽字。进入中断服务程序后，首先要保存现场，现场信息一般指的是程序状态字寄存器PSWR和某些通用寄存器（由操作系统）。</li>
+<li>开中断。允许更高级别的中断请求得到相应。</li>
+<li>执行中断服务程序。这是中断的目的。但是注意，此时已经开中短了，也就是说，这里是可以被打断的。</li>
+<li>关中断。保证恢复现场和屏蔽字时不被中断。</li>
+<li>恢复现场和屏蔽字。将现场和屏蔽字恢复到原来状态。</li>
+<li>开中断，中断返回。返回源程序的断点处。</li>
+</ol>
+<p>这个过程中有几点需要注意。</p>
+<p>在执行中断服务程序之前和之后分别有一个<code>原语</code>，但是中断服务程序本身不是整个在原语中，所以理论上是可以被打断的。如果中断本身又被中断，那就需要一个栈来层层保存现场。</p>
+<p>但是注意这个栈与程序内部函数的调用栈不同，程序内部函数调用栈由程序自己模拟并管理。</p>
+<p>中断因为涉及程序计数器的保存等操作，所以一定会陷入内核态。</p>
+<p>中断的目的是通过一系列操作去打断CPU当前正在执行的程序并转去执行中断服务程序，而原语的目的则是有的指令不可以被打断。而中断处理过程中至少是包含两个原语的，也就是说，中断处理的流程中，本身就至少有两个不可被中断的原语。</p>
+<h3 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h3><p>所谓系统调用，是指用户在程序中调用系统提供的一些子功能，系统调用可以视为特殊的公共子程序。</p>
+<p>系统中的各种共享资源都由操作系统统一掌管，因此在用户程序中，凡是与资源相关的操作，都必须通过系统调用的方式提出服务请求，由操作系统代为完成。</p>
+<blockquote>
+<p>注意上篇博客的内容：程序接口由一系列系统调用组成。</p>
+</blockquote>
+<p>系统调用按功能分为几类：</p>
+<ul>
+<li>设备管理</li>
+<li>文件管理</li>
+<li>进程控制</li>
+<li>进程通信</li>
+<li>内存管理</li>
+</ul>
+<p>系统调用相关功能涉及系统资源管理，进程管理之类，对整个操作系统影响较大，<strong>需要运行在核心态。用户可以执行陷入指令，法器系统调用</strong>。</p>
+<p>用户执行陷入指令，相当于把CPU的使用权主动交给操作系统内核，之后内核程序对系统调用做出相关处理，完成后再将CPU使用权还给用户程序。</p>
+]]></content>
+      <categories>
+        <category>OS</category>
       </categories>
   </entry>
 </search>
