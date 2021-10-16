@@ -2954,6 +2954,71 @@
       </categories>
   </entry>
   <entry>
+    <title>DDOS 基础知识</title>
+    <url>/2021/10/06/ddos-base/</url>
+    <content><![CDATA[<p>这次学习下，DOS(拒绝服务攻击)和DDOS（分布式拒绝服务攻击）的基础知识。</p>
+<a id="more"></a>
+
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>分布式拒绝服务（DDoS）攻击是通过大规模互联网流量淹没目标服务器或其周边基础设施，以破坏目标服务器、服务或网络正常流量的恶意行为。</p>
+<p>DDoS 攻击利用多台受损计算机系统作为攻击流量来源以达到攻击效果。利用的机器可以包括计算机，也可以包括其他联网资源（如 IoT 设备）。</p>
+<p>总体而言，DDoS 攻击好比高速公路发生交通堵塞，妨碍常规车辆抵达预定目的地。</p>
+<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>DDoS 攻击是通过连接互联网的计算机网络进行的。</p>
+<p>这些网络由计算机和其他设备（例如 IoT 设备）组成，它们感染了恶意软件，从而被攻击者远程控制。这些个体设备称为机器人（或僵尸），一组机器人则称为僵尸网络。</p>
+<p>一旦建立了僵尸网络，攻击者就可通过向每个机器人发送远程指令来发动攻击。</p>
+<p>当僵尸网络将受害者的服务器或网络作为目标时，每个机器人会将请求发送到目标的 IP 地址，这可能导致服务器或网络不堪重负，从而造成对正常流量的拒绝服务。</p>
+<p>由于每个机器人都是合法的互联网设备，因而可能很难区分攻击流量与正常流量。</p>
+<h2 id="如何识别DDoS攻击"><a href="#如何识别DDoS攻击" class="headerlink" title="如何识别DDoS攻击"></a>如何识别DDoS攻击</h2><p>DDoS 攻击最明显的症状是网站或服务突然变慢或不可用。但是，造成类似性能问题的原因有多种（如合法流量激增），因此通常需要进一步调查。流量分析工具可以帮助您发现 DDoS 攻击的一些明显迹象：</p>
+<ul>
+<li>来自单个 IP 地址或 IP 范围的可疑流量</li>
+<li>来自共享单个行为特征（例如设备类型、地理位置或 Web 浏览器版本）的用户的大量流量</li>
+<li>对单个页面或端点的请求数量出现不明原因的激增</li>
+<li>奇怪的流量模式，例如一天中非常规时间段的激增或看似不自然的模式（例如，每 10 分钟出现一次激增）<br>DDoS 攻击还有其他更具体的迹象，具体取决于攻击的类型。</li>
+</ul>
+<h2 id="DDoS分类"><a href="#DDoS分类" class="headerlink" title="DDoS分类"></a>DDoS分类</h2><h3 id="应用程序层攻击"><a href="#应用程序层攻击" class="headerlink" title="应用程序层攻击"></a>应用程序层攻击</h3><p>此类攻击有时称为第 7 层 DDoS 攻击（指 OSI 模型第 7 层），其目标是耗尽目标资源。</p>
+<p>攻击目标是生成网页并传输网页响应 HTTP 请求的服务器层。在客户端执行一项 HTTP 请求的计算成本比较低，但目标服务器做出响应却可能非常昂贵，因为服务器通常必须加载多个文件并运行数据库查询才能创建网页。</p>
+<p>第 7 层攻击很难防御，因为难以区分恶意流量和合法流量。</p>
+<h4 id="HTTP-洪水-CC-攻击"><a href="#HTTP-洪水-CC-攻击" class="headerlink" title="HTTP 洪水(CC 攻击)"></a>HTTP 洪水(CC 攻击)</h4><p>HTTP 洪水攻击类似于同时在大量不同计算机的 Web 浏览器中一次又一次地按下刷新 ——大量 HTTP 请求涌向服务器，导致拒绝服务。</p>
+<p>这种类型的攻击有简单的，也有复杂的。</p>
+<p>较简单的实现可以使用相同范围的攻击 IP 地址、referrer 和用户代理访问一个 URL。复杂版本可能使用大量攻击性 IP 地址，并使用随机 referrer 和用户代理来针对随机网址。</p>
+<h4 id="Slowloris-攻击"><a href="#Slowloris-攻击" class="headerlink" title="Slowloris 攻击"></a>Slowloris 攻击</h4><h4 id="HTTP-Post-DDOS"><a href="#HTTP-Post-DDOS" class="headerlink" title="HTTP Post DDOS"></a>HTTP Post DDOS</h4><h3 id="传输层攻击"><a href="#传输层攻击" class="headerlink" title="传输层攻击"></a>传输层攻击</h3><h4 id="SYN攻击"><a href="#SYN攻击" class="headerlink" title="SYN攻击"></a>SYN攻击</h4><p>SYN 洪水就好比补给室中的工作人员从商店的柜台接收请求。</p>
+<p>工作人员收到请求，前去取包裹，再等待确认，然后将包裹送到柜台。工作人员收到太多包裹请求，但得不到确认，直到无法处理更多包裹，实在不堪重负，致使无人能对请求做出回应。</p>
+<p>此类攻击利用 TCP 握手（两台计算机发起网络连接时要经过的一系列通信），通过向目标发送大量带有伪造源 IP 地址的 TCP“初始连接请求”SYN 数据包来实现。</p>
+<p>目标计算机响应每个连接请求，然后等待握手中的最后一步，但这一步确永远不会发生，因此在此过程中耗尽目标的资源。</p>
+<h4 id="ACK攻击"><a href="#ACK攻击" class="headerlink" title="ACK攻击"></a>ACK攻击</h4><h3 id="网络层攻击"><a href="#网络层攻击" class="headerlink" title="网络层攻击"></a>网络层攻击</h3><h4 id="DNS-放大攻击"><a href="#DNS-放大攻击" class="headerlink" title="DNS 放大攻击"></a>DNS 放大攻击</h4><p>DNS 放大就好比有人打电话给餐馆说“每道菜都订一份，请给我回电话复述整个订单”，而提供的回电号码实际上属于受害者。几乎不费吹灰之力，就能产生很长的响应并发送给受害者。</p>
+<p>利用伪造的 IP 地址（受害者的 IP 地址）向开放式 DNS 服务器发出请求后，目标 IP 地址将收到服务器发回的响应。</p>
+<h4 id="ICMP-泛洪攻击"><a href="#ICMP-泛洪攻击" class="headerlink" title="ICMP 泛洪攻击"></a>ICMP 泛洪攻击</h4><h4 id="UDP攻击"><a href="#UDP攻击" class="headerlink" title="UDP攻击"></a>UDP攻击</h4><h4 id="内存缓存攻击"><a href="#内存缓存攻击" class="headerlink" title="内存缓存攻击"></a>内存缓存攻击</h4><p>内存缓存分布式拒绝服务 (DDoS) 攻击是一种网络攻击，攻击者试图使目标受害者的网络流量超载。攻击者将欺骗性的请求发送到易受攻击的 UDP 内存缓存*服务器，该服务器随后向目标受害者发送 Internet 流量，从而可能使受害者的资源不堪重负。当目标的 Internet 基础设施过载时，就无法处理新请求，而常规流量也无法访问Internet 资源，从而导致拒绝服务。</p>
+<blockquote>
+<p>内存缓存是用于加速网站和网络的数据库缓存系统。</p>
+</blockquote>
+<p>内存缓存攻击的工作方式类似于所有 DDoS 放大攻击，例如 NTP 放大和 DNS 放大。这种攻击欺骗性请求发送到易受攻击的服务器，该服务器随后会发出比初始请求大的数据量作为响应，因此放大了流量。</p>
+<p>内存缓存放大攻击就好比是一个心怀恶意的青少年打电话给一家餐厅说“我要菜单上的东西每样来一份，请给我回电话并告诉我整个订单的信息”。当餐厅询问回叫号码时，他却给出目标受害者的电话号码。然后，目标会收到来自餐厅的呼叫，接到他们未请求的大量信息。</p>
+<p>这种放大攻击的方法之所以成为可能，因为内存缓存服务器可以选择使用 UDP 协议进行操作。UDP 是一种网络协议，允许在不首先获得所谓握手的情况下发送数据 - 握手是指双方都同意通信的网络过程。之所以使用 UDP，是因为不用咨询目标主机是否愿意接收数据，无需事先征得它们的同意，就可以将大量数据发送给目标主机。</p>
+<p>内存缓存攻击分为 4 个步骤：</p>
+<ul>
+<li>攻击者将大量数据有效载荷*植入暴露的内存缓存服务器上。</li>
+<li>接下来，攻击者使用目标受害者的 IP 地址伪造 HTTP GET 请求。</li>
+<li>带有漏洞的内存缓存服务器接收到请求，试图通过响应来提供帮助，因此将大量响应发送到目标。</li>
+<li>目标服务器或其周围的基础设施无法处理从内存缓存服务器发送的大量数据，因此导致过载和对正常请求拒绝服务</li>
+</ul>
+<p>如何防护内存缓存攻击？</p>
+<ul>
+<li>禁用 UDP - 对于内存缓存服务器，请确保在不需要时禁用 UDP 支持。默认情况下，内存缓存启用了 UDP 支持，这可能会使服务器容易受到攻击。</li>
+<li>对内存缓存服务器进行防火墙保护 - 通过在内存缓存服务器和 Internet 之间添加防火墙保护，系统管理员可以根据需要使用 UDP，而不必暴露于风险中。</li>
+<li>防止 IP 欺骗 - 只要可以伪造 IP 地址，DDoS 攻击就可以利用此漏洞将流量定向到受害者的网络。防止 IP 欺骗是一个规模较大的解决方案，无法由特定的系统管理员实施，它要求传输提供商禁止源 IP 地址源自网络外部的任何数据包离开其网络。换句话说，Internet 服务提供商 (ISP) 之类的公司必须筛选流量，以使离开其网络的数据包不得假装成来自其他地方的其他网络。如果所有主要的传输提供商都实施了这种筛选，基于欺骗的攻击将在一夜之间消失。</li>
+<li>开发具有减少 UDP 响应的软件 - 消除放大攻击的另一种方法是去除任何传入请求的放大因素；如果由于 UDP 请求而发送的响应数据小于或等于初始请求，则放大就不复可能。</li>
+</ul>
+<h2 id="如何防御DDoS"><a href="#如何防御DDoS" class="headerlink" title="如何防御DDoS"></a>如何防御DDoS</h2><h3 id="黑洞路由"><a href="#黑洞路由" class="headerlink" title="黑洞路由"></a>黑洞路由</h3><p>有一种解决方案几乎适用于所有网络管理员：创建黑洞路由，并将流量汇入该路由。在最简单的形式下，当在没有特定限制条件的情况下实施黑洞过滤时，合法网络流量和恶意网络流量都将路由到空路由或黑洞，并从网络中丢弃。</p>
+<p>如果互联网设备遭受 DDoS 攻击，则该设备的互联网服务提供商（ISP）可能会将站点的所有流量发送到黑洞中作为防御。这不是理想的解决方案，因为它相当于让攻击者达成预期的目标：使网络无法访问。</p>
+<h3 id="速率限制"><a href="#速率限制" class="headerlink" title="速率限制"></a>速率限制</h3><p>限制服务器在某个时间段接收的请求数量也是防护拒绝服务攻击的一种方法。</p>
+<p>虽然速率限制对于减缓 Web 爬虫窃取内容及防护暴力破解攻击很有帮助，但仅靠速率限制可能不足以有效应对复杂的 DDoS 攻击。</p>
+<p>然而，在高效 DDoS 防护策略中，速率限制不失为一种有效手段。了解 Cloudflare 的 Rate Limiting</p>
+<h3 id="Web-应用程序防火墙"><a href="#Web-应用程序防火墙" class="headerlink" title="Web 应用程序防火墙"></a>Web 应用程序防火墙</h3><p>Web 应用程序防火墙（WAF） 是一种有效工具，有助于缓解第 7 层 DDoS 攻击。在互联网和源站之间部署 WAF 后，WAF 可以充当反向代理，保护目标服务器，防止其遭受特定类型的恶意流量入侵。</p>
+]]></content>
+      <categories>
+        <category>Security</category>
+      </categories>
+  </entry>
+  <entry>
     <title>OAuth的发展与设计</title>
     <url>/2020/04/11/design-of-OAuth/</url>
     <content><![CDATA[<p>OAuth的中文名称是开放式授权协议，这个名字大家仔细品，它是一个授权协议，<strong>任何实现这个协议的网站都可以在用户同意的条件下给某些在自己这里注册的应用授予对应用户在本网站某些资源的权限</strong>，而这个权限一般用token来表示。</p>
@@ -8711,6 +8776,47 @@
       </categories>
   </entry>
   <entry>
+    <title>操作系统学习笔记（三）进程与线程</title>
+    <url>/2021/10/14/operating-system-note-3-process-and-thread/</url>
+    <content><![CDATA[<p>我们为什么需要进程？<br>进程又是什么，由什么组成？<br>进程如何解决问题？</p>
+<a id="more"></a>
+
+<h1 id="进程的概念和特征"><a href="#进程的概念和特征" class="headerlink" title="进程的概念和特征"></a>进程的概念和特征</h1><h2 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h2><p>在多道程序环境下，允许多个程序并发执行，此时他们将失去封闭性，并具有间断性和不可再现性的特征。</p>
+<p><strong>为此引入了进程的概念，以便更好地描述和控制程序的执行</strong>，实现操作系统的并发性和共享性（最基本的两个特性）。</p>
+<p>为了使参与并发执行的程序（含数据）能独立运行，必须为之配置一个专门的数据结构，称为进程控制块（Process Control Block，PCB）。</p>
+<p>系统利用PCB来描述进程的基本情况和运行状态，进而控制和管理进程。</p>
+<p>相应的，由程序段，相关数据段和PCB三部分构成了进程映像（进程实体）。</p>
+<p>所谓创建进程，其实就是创建进程映像的PCB，而撤销进程，实质上是撤销进程的PCB。</p>
+<p>值得注意的是，<strong>进程映像是静态的，进程是动态的，PCB是进程存在的唯一标志</strong>。</p>
+<p>从不同角度，进程可以有不同的定义，比较典型的定义有：</p>
+<ul>
+<li>进程是程序的一次执行过程。</li>
+<li>进程是一个程序及其数据在处理机上顺序执行时所发生的活动。</li>
+<li>进程是具有独立功能的程序在一个数据集合上运行的过程，它是系统进行资源分配和调度的一个独立单位。（这里需要准确理解系统资源，它指处理机，存储器和其他设备服务于某个进程的“时间”，例如把处理机资源理解为处理机时间片才是准确的）</li>
+</ul>
+<h2 id="进程的特征"><a href="#进程的特征" class="headerlink" title="进程的特征"></a>进程的特征</h2><p>进程是由多道程序并发执行而提出的，它和程序是两个截然不同的概念，进程基本特征是对比单道程序的顺序执行提出的，这也是对进程管理提出的最基本的要求。</p>
+<ul>
+<li>动态性。进程是程序的一次执行，它有着创建，活动，暂停和中止等过程，具有一定的生命周期。动态性是进程<strong>最基本的特征</strong>。</li>
+<li>并发性。多个进程实体同时存在于内存中，能在一段时间内同时运行，并发性是进程的重要特征，同时也是操作系统的重要特征。<strong>引入进程的目的就是使程序能够与其他进程的程序并发执行</strong>。</li>
+<li>独立性。进程实体是一个能独立运行，独立获得资源和独立接受调度的基本单位。<strong>凡是未建立PCB的程序，都不能作为一个独立的单位参与运行</strong>。</li>
+<li>异步性。由于进程的相互制约，使得进程具有执行的间断性，即进程按个子独立的，不可预知的速度前进。异步性会导致执行结果的不可再现。为此操作系统必须配置与之对应的进程同步机制。</li>
+<li>结构性。每个进程都配置一个PCB对其进行描述，从结构上看，进程实体是由程序段，相关数据段和PCB组成的。</li>
+</ul>
+<h1 id="进程的状态和转换"><a href="#进程的状态和转换" class="headerlink" title="进程的状态和转换"></a>进程的状态和转换</h1><p>进程在其生命周期内，由于系统中各进程之间的相互制约关系及系统的运行环境变化，使得进程的状态也在不断变化（一个进程会经历若干不同的状态），通常进程有5中状态，前三种是进程的基本状态。</p>
+<ol>
+<li>运行态。进程正在处理机上运行。在单处理机环境下，每个时刻最多只有一个进程处于运行态。</li>
+<li>就绪态。进程获得了除处理机外的一切资源，一旦得到处理机，便可立即运行。</li>
+<li>阻塞态。又称等待态，进程正在等待某一事件而暂停运行，如等待某资源（<strong>不包括处理机</strong>）为可用或等待输入输出完成。即使处理机空闲，该进程也不能运行。</li>
+<li>创建态。该进程正在被创建，尚未转到就绪态。进程的创建通常需要多个步骤，首先申请一个空白的PCB，并向PCB中填写一些控制和管理进程的信息；然后系统为该进程分配运行时所必需的资源，最后把进程转为<strong>就绪态</strong>。</li>
+<li>结束态。进程正从系统中消失，可能是进程正常结束或其他原因中断退出运行。进程需要结束运行时，系统首先必须将该进程置为结束态，然后进一步处理资源释放和回收等工作。</li>
+</ol>
+<p>注意区分就绪态和等待态，就绪态指的是只缺少处理机，只要获得处理机资源就可以立即运行，而等待态则是指进程需要其他资源或等待某一事件。<br>之所以把处理机和其他资源分开，是因为在分时系统的时间片轮转机制中，每个进程分到的时间片是若干毫秒，也就是说，进程得到处理机时间很短且非常频繁，进程在运行过程中实际上是频繁地切换到就绪态的。</p>
+]]></content>
+      <categories>
+        <category>OS</category>
+      </categories>
+  </entry>
+  <entry>
     <title>passport-azure-ad_无限刷新问题</title>
     <url>/2019/11/22/passport-azure-ad-infine-callback/</url>
     <content><![CDATA[<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>passport-azure-ad 是我们在使用node express作为服务器，passport用于验证登陆，同时又需要去azure第三方认证登陆时需要用到的插件。</p>
@@ -12590,7 +12696,7 @@
   <entry>
     <title>Unity文档阅读笔记（一）Working in Unity</title>
     <url>/2021/10/05/unity-working-in-unity/</url>
-    <content><![CDATA[<p>上一篇博客结束，应该可以对Unity有个总体但是不深入不系统的理解，这次开始就从头系统得阅读官方文档来深入了解Unity的各种概念和功能。</p>
+    <content><![CDATA[<p><a href="https://sunra.top/2021/10/03/unity-offical-tutorial-note/">上一篇博客</a>结束，应该可以对Unity有个总体但是不深入不系统的理解，这次开始就从头系统得阅读官方文档来深入了解Unity的各种概念和功能。</p>
 <a id="more"></a>
 
 <p>开始阅读Unity</p>
@@ -12813,6 +12919,64 @@
 <p><a href="https://docs.unity3d.com/cn/current/Manual/TextSceneFormat.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/TextSceneFormat.html</a></p>
 <h2 id="安全模式"><a href="#安全模式" class="headerlink" title="安全模式"></a>安全模式</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/SafeMode.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/SafeMode.html</a></p>
 <h1 id="性能分析器"><a href="#性能分析器" class="headerlink" title="性能分析器"></a>性能分析器</h1><p><a href="https://docs.unity3d.com/cn/current/Manual/analysis.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/analysis.html</a></p>
+]]></content>
+      <categories>
+        <category>Unity</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Unity文档阅读笔记（二）Asset Workflow</title>
+    <url>/2021/10/16/uniyt-asset-workflow/</url>
+    <content><![CDATA[<p>资产是你在Unity项目中用于创建游戏或应用的任何项目。资产可以代表项目中的视觉或音频元素，如3D模型、纹理、精灵、音效或音乐。资产还可以表示更抽象的项目，如颜色渐变、动画蒙版或任意文本或数字数据。资产可能来自于Unity之外创建的文件，如3D模型、音频文件或图像。你也可以在Unity编辑器中创建一些类型的资产，如ProBuilder Mesh, Animator Controller, Audio Mixer，或Render texture</p>
+<a id="more"></a>
+
+<p>Unity 中使用资源时的典型工作流程。每列代表一个单独的步骤，如下所述：</p>
+<ul>
+<li><p>将资源<strong>导入</strong> Unity 编辑器</p>
+</li>
+<li><p>使用 Unity 编辑器通过这些资源<strong>创建</strong>内容。</p>
+</li>
+<li><p><strong>构建</strong>您的应用或游戏文件，以及可选的随附内容包</p>
+</li>
+<li><p><strong>分发</strong>构建的文件，以便您的用户可以通过发布者或应用程序商店访问</p>
+</li>
+<li><p>根据您用户的行为以及您对内容进行分组和捆绑的方式，在运行时根据需要<strong>加载</strong>进一步更新。</p>
+</li>
+</ul>
+<p><a href="https://docs.unity3d.com/cn/current/Manual/AssetWorkflow.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/AssetWorkflow.html</a></p>
+<h1 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h1><p>若要将在 Unity 外部创建的资源导入 Unity 项目，可以将文件直接导出到项目下的 Assets 文件夹中，或将其复制到该文件夹中。对于许多常见格式，可以将源文件直接保存到项目的 Assets 文件夹中，Unity 可以读取它。Unity会检测到被更新的文件并重新导入。</p>
+<h2 id="资源导入设置"><a href="#资源导入设置" class="headerlink" title="资源导入设置"></a>资源导入设置</h2><p>Unity 支持的每种类型的资源都有一组导入设置，这些设置会影响资源的显示或行为方式。要查看资源的导入设置，请在 <strong>Project 视图__中选择该资源。该资源的导入设置将显示在</strong> Inspector__ 中。显示的选项因所选资源的类型而异。</p>
+<p>例如，在 Unity 图像的导入设置中，可选择将其导入为纹理、2D 精灵还是法线贴图。在 FBX 文件的导入设置中，可调整比例、生成法线或光照贴图坐标以及拆分和修剪文件中定义的动画剪辑。</p>
+<h2 id="资源处理"><a href="#资源处理" class="headerlink" title="资源处理"></a>资源处理</h2><p>Unity 读取并处理您添加到 <code>Assets</code> 文件夹的任何文件，将文件内容转换为可直接用于游戏的内部数据。资源文件本身保持不变，内部数据存储在项目的 <code>Library</code> 文件夹中。此数据是 Unity 编辑器的<a href="https://docs.unity3d.com/cn/current/Manual/AssetDatabase.html" rel="external nofollow noopener noreferrer" target="_blank">资源数据库</a>的组成部分。</p>
+<p>通过使用资源的内部格式，Unity 可以准备好可直接用于游戏的资源版本，以便在 Editor 中在运行时使用，同时将未修改的源文件保留在 <code>Assets</code> 文件夹中。使内部格式与资源文件分开，意味着您可以快速编辑它们并让 Editor 自动获取更改。例如，Photoshop 文件格式很方便，可以将 <code>.psd</code> 文件直接保存到 <code>Assets</code> 文件夹中，但移动设备和 PC 显卡等硬件不能直接处理该格式来渲染为纹理。</p>
+<p>Unity 将资源的内部表示形式存储在 <code>Library</code> 文件夹中，该文件夹类似于缓存文件夹。作为用户，切勿手动更改 <code>Library</code> 文件夹，尝试这样做可能会给 Unity Editor 中的项目带来负面影响。但是，只要该项目未在 Unity 中打开，就可以安全删除 <code>Library</code> 文件夹，因为 Unity 可以通过 <code>Assets</code> 和 <code>ProjectSettings</code> 文件夹重新生成其所有数据。这也意味着不应将 <code>Library</code> 文件夹纳入版本控制。</p>
+<p>其他的复杂资源，如带有贴图或者动画的模型，或者音频视频的导入，可以看文档。</p>
+<p><a href="https://docs.unity3d.com/cn/current/Manual/ImportingAssets.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/ImportingAssets.html</a></p>
+<h1 id="支持的资源类型"><a href="#支持的资源类型" class="headerlink" title="支持的资源类型"></a>支持的资源类型</h1><p><a href="https://docs.unity3d.com/cn/current/Manual/AssetTypes.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/AssetTypes.html</a></p>
+<p><a href="https://docs.unity3d.com/2020.3/Documentation/Manual/BuiltInImporters.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/2020.3/Documentation/Manual/BuiltInImporters.html</a></p>
+<p>也可以通过Script-Importer自定义资源导入器</p>
+<p><a href="https://docs.unity3d.com/2020.3/Documentation/Manual/ScriptedImporters.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/2020.3/Documentation/Manual/ScriptedImporters.html</a></p>
+<h1 id="资源的Metadata"><a href="#资源的Metadata" class="headerlink" title="资源的Metadata"></a>资源的Metadata</h1><p><a href="https://docs.unity3d.com/2020.3/Documentation/Manual/AssetMetadata.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/2020.3/Documentation/Manual/AssetMetadata.html</a></p>
+<h1 id="资源数据库"><a href="#资源数据库" class="headerlink" title="资源数据库"></a>资源数据库</h1><p>对于大多数类型的资源，Unity 需要将资源的源文件中的数据转换为可用于游戏或实时应用程序的格式。这些转换后的文件及其关联的数据会存储在<strong>资源数据库 (Asset Database)</strong> 中。</p>
+<p>由于大多数文件格式都经过优化来节省存储空间，所以需要执行转换过程，而在游戏或实时应用程序中，资源数据需要采用可用于硬件（例如 CPU、显卡或音频硬件）的格式才能立即使用。例如，Unity 将 .png 图像文件导入为纹理时，在运行时不会使用原始的 .png 格式数据。而在导入纹理时，Unity 将以另一种格式创建图像的新表示形式，并将其存储在项目的 <em>Library</em> 文件夹中。Unity 引擎中的 Texture 类会使用此导入版本，然后 Unity 将其上传到 GPU 以进行实时显示。</p>
+<p>如果随后修改资源已导入的源文件（或更改其任何依赖项），Unity 会重新导入该文件并更新导入版本的数据。</p>
+<h2 id="资源缓存"><a href="#资源缓存" class="headerlink" title="资源缓存"></a>资源缓存</h2><p>资源缓存是 Unity 存储导入版本的资源的位置。由于 Unity 始终可以从源资源文件及其依赖项重新创建这些导入的版本，所以这些导入的版本被视为预先计算的数据的缓存。在使用 Unity 时，此缓存可节省时间。因此，应该从版本控制系统中排除资源缓存中的文件。</p>
+<p>默认情况下，Unity 使用本地缓存，这意味着导入版本的资源将缓存在本地计算机上项目文件夹的 <em>Library</em> 文件夹中。应该使用 <strong>ignore file</strong> 从版本控制中排除此文件夹。</p>
+<p>但是，如果您是团队成员并且使用版本控制系统，最好也使用 <a href="https://docs.unity3d.com/cn/current/Manual/UnityAccelerator.html" rel="external nofollow noopener noreferrer" target="_blank">Unity Accelerator</a>，它可以跨 LAN 共享资源缓存。</p>
+<p>由于缓存的资源不适合存储在版本控制系统中，所以您的团队共同处理项目并使用本地缓存时，如果资源或依赖项发生改变，则每个团队成员的 Unity 副本都将执行导入过程，这可能会很耗时。</p>
+<p>Unity 为此提供的解决方案称为 <a href="https://docs.unity3d.com/cn/current/Manual/UnityAccelerator.html" rel="external nofollow noopener noreferrer" target="_blank">Unity Accelerator</a>。Accelerator 的功能之一是软件代理，它存储缓存版本的资源并将其提供给同一本地网络上共同从事同一项目的每个人。这意味着只有一个团队成员需要导入任何给定资源。随后，导入版本的资源将存储在 Accelerator 中，其他团队成员可以下载缓存的版本，而不必在本地等待导入过程。</p>
+<p><a href="https://docs.unity3d.com/cn/current/Manual/AssetDatabaseRefreshing.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/AssetDatabaseRefreshing.html</a></p>
+<p><a href="https://docs.unity3d.com/cn/current/Manual/AssetDatabaseBatching.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/AssetDatabaseBatching.html</a></p>
+<h1 id="特殊的文件夹名"><a href="#特殊的文件夹名" class="headerlink" title="特殊的文件夹名"></a>特殊的文件夹名</h1><p><a href="https://docs.unity3d.com/cn/current/Manual/SpecialFolders.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/SpecialFolders.html</a></p>
+<h1 id="预设"><a href="#预设" class="headerlink" title="预设"></a>预设</h1><p>可以将组件中某些Component的设置保存下来，然后应用到后面需要的Component中</p>
+<p><a href="https://docs.unity3d.com/cn/current/Manual/Presets.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/Presets.html</a></p>
+<h1 id="Asset-Bundle"><a href="#Asset-Bundle" class="headerlink" title="Asset Bundle"></a>Asset Bundle</h1><p><strong>AssetBundle</strong> 是一个存档文件，包含可在运行时由 Unity 加载的特定于平台的非代码资源（比如模型、纹理、预制件、音频剪辑甚至整个场景）。AssetBundle 可以表示彼此之间的依赖关系；例如，一个 AssetBundle 中的材质可以引用另一个 AssetBundle 中的纹理。为了提高通过网络传输的效率，可以根据用例要求（LZMA 和 LZ4）选用内置算法选择来压缩 AssetBundle。</p>
+<p>AssetBundle 可用于可下载内容（DLC），减小初始安装大小，加载针对最终用户平台优化的资源，以及减轻运行时内存压力。</p>
+<p><strong>注意：</strong> AssetBundle 可以包含代码对象实例的序列化数据，例如 ScriptableObject。但是，类定义本身被编译为项目程序集之一。当您在 AssetBundle 中加载序列化对象时，Unity 会找到匹配的类定义，创建它的实例，并使用序列化值设置该实例的字段。这意味着您可以在 AssetBundle 中向游戏中引入的新项，只要这些项不需要对您的类定义进行任何更改。</p>
+<p><a href="https://docs.unity3d.com/cn/current/Manual/AssetBundles-Workflow.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/AssetBundles-Workflow.html</a></p>
+<h1 id="脚本与资源"><a href="#脚本与资源" class="headerlink" title="脚本与资源"></a>脚本与资源</h1><p><a href="https://docs.unity3d.com/cn/current/Manual/LoadingResourcesatRuntime.html" rel="external nofollow noopener noreferrer" target="_blank">https://docs.unity3d.com/cn/current/Manual/LoadingResourcesatRuntime.html</a></p>
+<h2 id="流媒体资源"><a href="#流媒体资源" class="headerlink" title="流媒体资源"></a>流媒体资源</h2><p>Unity 在构建项目时将大多数资源整合到项目中。但是，将文件放入目标计算机上的普通文件系统以使其可通过路径名访问有时会很有用。这方面的一个例子是在 iOS 设备上部署电影文件；原始电影文件必须位于文件系统中的某个位置以便由 <code>PlayMovie</code> 函数进行播放。</p>
+<p>Unity 会将放置在 Unity 项目中名为 <strong>StreamingAssets__（区分大小写）的文件夹中的所有文件逐字复制到目标计算机上的特定文件夹。要获取此文件夹，请使用</strong> <strong><a href="https://docs.unity3d.com/cn/current/ScriptReference/Application-streamingAssetsPath.html" rel="external nofollow noopener noreferrer" target="_blank">Application.streamingAssetsPath</a></strong> <strong>属性。在任何情况下，最好使用</strong> <code>**Application.streamingAssetsPath**</code> <strong>来获取</strong> StreamingAssets__ 文件夹的位置，因为它总是指向运行应用程序的平台上的正确位置。</p>
 ]]></content>
       <categories>
         <category>Unity</category>
