@@ -79,21 +79,21 @@
 
 
 
-<meta name="description" content="最近看了一片介绍DHCP协议工作流程的文章，这里简单总结下。 如何给网卡配置一个IP地址你可以用命令行自己配置一个地址。可以使用 ifconfig，也可以使用 ip addr。设置好了以后，用这两个命令，将网卡 up 一下，就可以开始工作了。 使用 net-tools： 123$ sudo ifconfig eth1 10.0.0.1/24$ sudo ifconfig eth1 up  使用 i">
+<meta name="description" content="最近看了一片介绍DHCP协议工作流程的文章，这里简单总结下。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DHCP 协议工作流程简介">
 <meta property="og:url" content="https://sunra.top/2021/11/13/dhcp-introduction/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="最近看了一片介绍DHCP协议工作流程的文章，这里简单总结下。 如何给网卡配置一个IP地址你可以用命令行自己配置一个地址。可以使用 ifconfig，也可以使用 ip addr。设置好了以后，用这两个命令，将网卡 up 一下，就可以开始工作了。 使用 net-tools： 123$ sudo ifconfig eth1 10.0.0.1/24$ sudo ifconfig eth1 up  使用 i">
+<meta property="og:description" content="最近看了一片介绍DHCP协议工作流程的文章，这里简单总结下。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637158337/origin-of-ray/QQ%E6%88%AA%E5%9B%BE20211117221021_vyrmgg.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637158337/origin-of-ray/QQ%E6%88%AA%E5%9B%BE20211117221106_ym8rio.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637158337/origin-of-ray/QQ%E6%88%AA%E5%9B%BE20211117221140_c1zfid.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637158337/origin-of-ray/QQ%E6%88%AA%E5%9B%BE20211117221146_vkuwkg.png">
-<meta property="og:updated_time" content="2021-11-17T14:15:34.236Z">
+<meta property="og:updated_time" content="2021-11-21T08:39:27.795Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DHCP 协议工作流程简介">
-<meta name="twitter:description" content="最近看了一片介绍DHCP协议工作流程的文章，这里简单总结下。 如何给网卡配置一个IP地址你可以用命令行自己配置一个地址。可以使用 ifconfig，也可以使用 ip addr。设置好了以后，用这两个命令，将网卡 up 一下，就可以开始工作了。 使用 net-tools： 123$ sudo ifconfig eth1 10.0.0.1/24$ sudo ifconfig eth1 up  使用 i">
+<meta name="twitter:description" content="最近看了一片介绍DHCP协议工作流程的文章，这里简单总结下。">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637158337/origin-of-ray/QQ%E6%88%AA%E5%9B%BE20211117221021_vyrmgg.png">
 
 
@@ -370,6 +370,8 @@
 
       
         <p>最近看了一片介绍DHCP协议工作流程的文章，这里简单总结下。</p>
+<a id="more"></a>
+
 <h2 id="如何给网卡配置一个IP地址"><a href="#如何给网卡配置一个IP地址" class="headerlink" title="如何给网卡配置一个IP地址"></a>如何给网卡配置一个IP地址</h2><p>你可以用命令行自己配置一个地址。可以使用 ifconfig，也可以使用 ip addr。设置好了以后，用这两个命令，将网卡 up 一下，就可以开始工作了。</p>
 <p>使用 net-tools：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo ifconfig eth1 10.0.0.1/24</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo ifconfig eth1 up</span></span><br></pre></td></tr></table></figure>
