@@ -79,16 +79,27 @@
 
 
 
-<meta name="description" content="拨开互联网的迷雾">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Origin of Ray">
-<meta property="og:url" content="https://sunra.top/archives/index.html">
+<meta name="description" content="最近发现需要看一些关于设计模式的内容了，于是在网上找到了《设计模式之禅》这本书，边看边总结吧 这次先总结下UML图的看法以及单一职责原则。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《设计模式之禅》阅读笔记">
+<meta property="og:url" content="https://sunra.top/2021/11/27/design-pattern/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="拨开互联网的迷雾">
+<meta property="og:description" content="最近发现需要看一些关于设计模式的内容了，于是在网上找到了《设计模式之禅》这本书，边看边总结吧 这次先总结下UML图的看法以及单一职责原则。">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970288/origin-of-ray/a1a8c7bd-101c-4dbf-823f-91625dcf7fab_ofx3xs.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/1280X1280_jmojyd.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/520b8b37-71f6-4df7-908b-147396219239_cuvcee.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970007/origin-of-ray/99211215-7ce6-41c2-b763-edddaa45f9ba_ygqbs4.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970007/origin-of-ray/ff730454-c6d3-4437-80e9-3fc3e044f9ef_rsspoq.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/018b581c-0fd5-4efa-a9c3-20b4aebc7df4_b1azkt.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/80ee630a-8238-4368-ab5f-20d9bcc482a5_qsm51m.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/58189a99-a292-4905-bd21-1f1a218d55eb_b7wbl4.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/0e76e37a-e56a-4cad-b86f-6a3aefd8ce30_qcib9j.png">
+<meta property="og:updated_time" content="2021-11-26T23:48:53.758Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Origin of Ray">
-<meta name="twitter:description" content="拨开互联网的迷雾">
+<meta name="twitter:title" content="《设计模式之禅》阅读笔记">
+<meta name="twitter:description" content="最近发现需要看一些关于设计模式的内容了，于是在网上找到了《设计模式之禅》这本书，边看边总结吧 这次先总结下UML图的看法以及单一职责原则。">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970288/origin-of-ray/a1a8c7bd-101c-4dbf-823f-91625dcf7fab_ofx3xs.png">
 
 
 
@@ -118,14 +129,14 @@
 
 
 
-  <link rel="canonical" href="https://sunra.top/archives/">
+  <link rel="canonical" href="https://sunra.top/2021/11/27/design-pattern/">
 
 
 
 
 
 <script data-ad-client="ca-pub-8623125811074939" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <title>Archive | Origin of Ray</title>
+  <title>《设计模式之禅》阅读笔记 | Origin of Ray</title>
   
 
 
@@ -154,7 +165,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -260,390 +271,197 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/11/27/design-pattern/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
-         
+          <h2 class="post-title" itemprop="name headline">《设计模式之禅》阅读笔记</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-27T07:32:35+08:00">
+                2021-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        Great! 176 posts in total. Keep on posting.
-      </span>
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h2 class="archive-year" id="archive-year-2021">2021</h2>
-          </div>
-        
-        
+            
+          
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2021/11/27/design-pattern/" itemprop="url">
-              
-                <span itemprop="name">《设计模式之禅》阅读笔记</span>
-              
-            </a>
-        
-      </h3>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2021-11-27T07:32:35+08:00" content="2021-11-27">
-          11-27
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2021/11/13/dhcp-introduction/" itemprop="url">
-              
-                <span itemprop="name">DHCP 协议工作流程简介</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2021-11-13T08:47:39+08:00" content="2021-11-13">
-          11-13
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
+      
+        <p>最近发现需要看一些关于设计模式的内容了，于是在网上找到了《设计模式之禅》这本书，边看边总结吧</p>
+<p>这次先总结下UML图的看法以及单一职责原则。</p>
+<a id="more"></a>
 
-        
-        
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>设计模式更多的是一种哲学，偏向学术，总是会构造一些极端的情况去进行描述，就像物理学中的光滑平面一样，所以我们需要领会的更多的是其中的哲学，而不要试图在实际项目中能够完全复刻。</p>
+<h2 id="一图看懂UML标志"><a href="#一图看懂UML标志" class="headerlink" title="一图看懂UML标志"></a>一图看懂UML标志</h2><p>下面的内容会涉及很多UML图，如果大家不太熟悉，可以先简单看一下下面这张图。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970288/origin-of-ray/a1a8c7bd-101c-4dbf-823f-91625dcf7fab_ofx3xs.png" alt></p>
+<h2 id="面向接口编程"><a href="#面向接口编程" class="headerlink" title="面向接口编程"></a>面向接口编程</h2><p><a href="https://segmentfault.com/a/1190000021928946" rel="external nofollow noopener noreferrer" target="_blank">为什么要面向接口编程</a></p>
+<h1 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a><strong>单一职责原则</strong></h1><h2 id="接口职责单一"><a href="#接口职责单一" class="headerlink" title="接口职责单一"></a>接口职责单一</h2><p>单一职责原则的英文名称是Single Responsibility Principle，简称是SRP。</p>
+<p>怎么划分类的职责。我们先举个例子来说明什么是单一职责原则。</p>
+<p>只要做过项目，肯定要接触到用户、机构、角色管理这些模块，基本上使用的都是RBAC模型（Role-Based Access Control，基于角色的访问控制，通过分配和取消角色来完成用户权限的授予和取消，使动作主体（用户）与资源的行为（权限）分离），确实是一个很好的解决办法。我们这里要讲的是用户管理、修改用户的信息、增加机构（一个人属于多个机构）、增加角色等，用户有这么多的信息和行为要维护，我们就把这些写到一个接口中，都是用户管理类嘛，我们先来看它的类图</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/1280X1280_jmojyd.png" alt="img"></p>
+<p><strong>这个接口设计得有问题，用户的属性和用户的行为没有分开，这是一个严重的错误</strong>！这个接口确实设计得一团糟，应该把用户的信息抽取成一个BO（Business Object，业务对象），把行为抽取成一个Biz（Business Logic，业务逻辑），按照这个思路对类图进行修正，如图1-2所示。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/520b8b37-71f6-4df7-908b-147396219239_cuvcee.png" alt="img"></p>
+<p>重新拆封成两个接口，IUserBO负责用户的属性，简单地说，IUserBO的职责就是收集和反馈用户的属性信息；IUserBiz负责用户的行为，完成用户信息的维护和变更。各位可能要说了，这个与我实际工作中用到的User类还是有差别的呀！别着急，我们先来看一看分拆成两个接口怎么使用。OK，我们现在是面向接口编程，所以产生了这个UserInfo对象之后，当然可以把它当IUserBO接口使用。也可以当IUserBiz接口使用，这要看你在什么地方使用了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">IUserInfo userInfo = new UserInfo();</span><br><span class="line">//我要赋值了，我就认为它是一个纯粹的BO</span><br><span class="line">IUserBO userBO = (IUserBO)userInfo;</span><br><span class="line">userBO.setPassword(&quot;abc&quot;);</span><br><span class="line">//我要执行动作了，我就认为是一个业务逻辑类</span><br><span class="line">IUserBiz userBiz = (IUserBiz)userInfo;</span><br><span class="line">userBiz.deleteUser();</span><br></pre></td></tr></table></figure>
 
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2021/11/12/unity-addressable-preload/" itemprop="url">
-              
-                <span itemprop="name">Unity Addressable 预加载方案</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2021-11-12T17:38:45+08:00" content="2021-11-12">
-          11-12
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+<p>确实可以如此，问题也解决了，但是我们来分析一下刚才的动作，为什么要把一个接口拆分成两个呢？其实，在实际的使用中，我们更倾向于使用两个不同的类或接口：一个是IUserBO，一个是IUserBiz，类图如图所示。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970007/origin-of-ray/99211215-7ce6-41c2-b763-edddaa45f9ba_ygqbs4.png" alt="img"></p>
+<p>以上我们把一个接口拆分成两个接口的动作，就是依赖了单一职责原则，那什么是单一职责原则呢？</p>
+<p><strong>单一职责原则的定义是：应该有且仅有一个原因引起类的变更。</strong></p>
+<p>上面这个例子，说明了单一职责原则要求我们的属性和行为要分开。</p>
+<p>但是不仅于此，行为之间，也要进行职责的划分。</p>
+<p>比如，我们有一个手机，他有几个功能，分为拨号，通话，挂机，我们怎样设计这个借口呢？</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970007/origin-of-ray/ff730454-c6d3-4437-80e9-3fc3e044f9ef_rsspoq.png" alt="img"></p>
+<p>我相信大部分的读者都会说这个没有问题呀，以前我就是这么做的呀，某某书上也是这么写的呀，还有什么什么的源码也是这么写的！是的，这个接口接近于完美，看清楚了，是“接近”！单一职责原则要求一个接口或类只有一个原因引起变化，也就是一个接口或类只有一个职责，它就负责一件事情，看看上面的接口只负责一件事情吗？是只有一个原因引起变化吗？好像不是！</p>
+<p><strong>IPhone这个接口可不是只有一个职责，它包含了两个职责：一个是协议管理，一个是数据传送</strong>。dial()和hangup()两个方法实现的是协议管理，分别负责拨号接通和挂机；chat()实现的是数据的传送，把我们说的话转换成模拟信号或数字信号传递到对方，然后再把对方传递过来的信号还原成我们听得懂的语言</p>
+<p>我们可以这样考虑这个问题，协议接通的变化会引起这个接口或实现类的变化吗？会的！那数据传送（想想看，电话不仅仅可以通话，还可以上网）的变化会引起这个接口或实现类的变化吗？会的！那就很简单了，这里有两个原因都引起了类的变化。这两个职责会相互影响吗？电话拨号，我只要能接通就成，甭管是电信的还是网通的协议；电话连接后还关心传递的是什么数据吗？通过这样的分析，我们发现<strong>类图上的IPhone接口包含了两个职责，而且这两个职责的变化不相互影响，那就考虑拆分成两个接口</strong>，其类图如图所示。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/018b581c-0fd5-4efa-a9c3-20b4aebc7df4_b1azkt.png" alt="img"></p>
+<p>这个类图看上去有点复杂了，完全满足了单一职责原则的要求，每个接口职责分明，结构清晰，但是我相信你在设计的时候肯定不会采用这种方式，一个手机类要把ConnectionManager和DataTransfer组合在一块才能使用。组合是一种强耦合关系，你和我都有共同的生命期，这样的强耦合关系还不如使用接口实现的方式呢，而且还增加了类的复杂性，多了两个类。经过这样的思考后，我们再修改一下类图</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/80ee630a-8238-4368-ab5f-20d9bcc482a5_qsm51m.png" alt="img"></p>
+<p>这样的设计才是完美的，一个类实现了两个接口，把两个职责融合在一个类中。你会觉得这个Phone有两个原因引起变化了呀，是的，但是别忘记了<strong>我们是面向接口编程，我们对外公布的是接口而不是实现类。</strong></p>
+<h2 id="类职责单一"><a href="#类职责单一" class="headerlink" title="类职责单一"></a>类职责单一</h2><p>对于接口，我们在设计的时候一定要做到单一，但是对于实现类就需要多方面考虑了。生搬硬套单一职责原则会引起类的剧增，给维护带来非常多的麻烦，而且过分细分类的职责也会人为地增加系统的复杂性。本来一个类可以实现的行为硬要拆成两个类，然后再使用聚合或组合的方式耦合在一起，人为制造了系统的复杂性。</p>
+<h2 id="方法职责单一"><a href="#方法职责单一" class="headerlink" title="方法职责单一"></a>方法职责单一</h2><p>单一职责适用于接口、类，同时也适用于方法，什么意思呢？一个方法尽可能做一件事情，比如一个方法修改用户密码，不要把这个方法放到“修改用户信息”方法中，这个方法的颗粒度很粗</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/58189a99-a292-4905-bd21-1f1a218d55eb_b7wbl4.png" alt="img"></p>
+<p>方法职责不清晰，不单一，不要让别人猜测这个方法可能是用来处理什么逻辑的。比较好的设计如图</p>
+<p>通过类图可知，如果要修改用户名称，就调用changeUserName方法；要修改家庭地址，就调用changeHomeAddress方法；要修改单位电话，就调用changeOfficeTel方法。每个方法的职责非常清晰明确，不仅开发简单，而且日后的维护也非常容易，大家可以逐渐养成这样的习惯。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/0e76e37a-e56a-4cad-b86f-6a3aefd8ce30_qcib9j.png" alt="img"></p>
+<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><p>阅读到这里，可能有人会问我，你写的是类的设计原则吗？你通篇都在说接口的单一职责，类的单一职责你都违背了呀！呵呵，这个还真是的，我的本意是想把这个原则讲清楚，类的单一职责嘛，这个很简单，但当我回头写的时候，发觉并不是这么回事，翻看了以前的一些设计和代码，基本上拿得出手的类设计都是与单一职责相违背的。静下心来回忆，发觉每一个类这样设计都是有原因的。我查阅了Wikipedia、OODesign等几个网站，专家和我也有类似的经验，基本上类的单一职责都用了类似的一句话来说”This is sometimes hard to see”，这句话翻译过来就是“这个有时候很难说”。</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2021/11/07/uniyt-change-suit/" itemprop="url">
-              
-                <span itemprop="name">Unity 人物换装实现</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2021-11-07T17:52:32+08:00" content="2021-11-07">
-          11-07
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2021/10/21/unity-addressable/" itemprop="url">
-              
-                <span itemprop="name">Unity Addressable 可寻址插件</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2021-10-21T14:16:03+08:00" content="2021-10-21">
-          10-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2021/10/16/uniyt-asset-workflow/" itemprop="url">
-              
-                <span itemprop="name">Unity文档阅读笔记（二）Asset Workflow</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2021-10-16T14:36:03+08:00" content="2021-10-16">
-          10-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2021/10/14/operating-system-note-3-process-and-thread/" itemprop="url">
-              
-                <span itemprop="name">操作系统学习笔记（三）进程与线程</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2021-10-14T08:02:47+08:00" content="2021-10-14">
-          10-14
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2021/10/06/ddos-base/" itemprop="url">
-              
-                <span itemprop="name">DDOS 基础知识</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2021-10-06T07:38:52+08:00" content="2021-10-06">
-          10-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2021/10/05/unity-working-in-unity/" itemprop="url">
-              
-                <span itemprop="name">Unity文档阅读笔记（一）Working in Unity</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2021-10-05T16:34:22+08:00" content="2021-10-05">
-          10-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2021/10/03/unity-offical-tutorial-note/" itemprop="url">
-              
-                <span itemprop="name">Unity 官方入门教程观看笔记</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2021-10-03T11:12:38+08:00" content="2021-10-03">
-          10-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://sunra.top/2021/11/27/design-pattern/" title="《设计模式之禅》阅读笔记">https://sunra.top/2021/11/27/design-pattern/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow noopener noreferrer" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/11/13/dhcp-introduction/" rel="next" title="DHCP 协议工作流程简介">
+                <i class="fa fa-chevron-left"></i> DHCP 协议工作流程简介
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/18/">18</a><a class="extend next" rel="next" href="/archives/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -651,6 +469,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -671,8 +496,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -755,6 +589,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一图看懂UML标志"><span class="nav-number">1.1.</span> <span class="nav-text">一图看懂UML标志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#面向接口编程"><span class="nav-number">1.2.</span> <span class="nav-text">面向接口编程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单一职责原则"><span class="nav-number">2.</span> <span class="nav-text">单一职责原则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#接口职责单一"><span class="nav-number">2.1.</span> <span class="nav-text">接口职责单一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类职责单一"><span class="nav-number">2.2.</span> <span class="nav-text">类职责单一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法职责单一"><span class="nav-number">2.3.</span> <span class="nav-text">方法职责单一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最佳实践"><span class="nav-number">2.4.</span> <span class="nav-text">最佳实践</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -895,6 +745,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
