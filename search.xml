@@ -8912,6 +8912,54 @@
       </categories>
   </entry>
   <entry>
+    <title>操作系统学习笔记（四）內存分页管理方式</title>
+    <url>/2021/12/05/operating-system-note-4-memory/</url>
+    <content><![CDATA[<p>经过几个早上的奋战，终于把分页内存管理的那一句介绍给读明白了，赶紧总结下。</p>
+<p>其实内存管理还有很多的知识点，比如为什么要进行内存管理，分页，分段，快表等等，之所以单挑出分页管理总结，是因为它是基础，也是我理解起来最难的。</p>
+<a id="more"></a>
+
+<h2 id="基础概念理解"><a href="#基础概念理解" class="headerlink" title="基础概念理解"></a>基础概念理解</h2><h3 id="字，字节，位"><a href="#字，字节，位" class="headerlink" title="字，字节，位"></a>字，字节，位</h3><p>计算机中，一个bit叫做一位，缩写为b，代表了一个0或者一个1，然后8个bit叫做一个字节（Byte），缩写为B，一个字又是两个字节组成</p>
+<h3 id="地址长度代表什么"><a href="#地址长度代表什么" class="headerlink" title="地址长度代表什么"></a>地址长度代表什么</h3><p>我们经常说的32位操作系统，和64位操作系统，说的是地址的长度，也就是地址总线的根数，它决定了系统寻址的最大范围，比如32位系统，内存的寻址范围就是从0到2的32次方</p>
+<h3 id="什么叫以字节为单位编址"><a href="#什么叫以字节为单位编址" class="headerlink" title="什么叫以字节为单位编址"></a>什么叫以字节为单位编址</h3><p>上面说的32位地址长度，可以表示0到2的32次方个地址，但是一个地址代表的内存空间可以是一位，也可以是一个字节，也就是说我们是否需要一位一位地读取内存数据，或者每次都读取字节整数倍的内存，如果是后者，那就是以字节位编址单位。</p>
+<h2 id="分页存储的几个概念"><a href="#分页存储的几个概念" class="headerlink" title="分页存储的几个概念"></a>分页存储的几个概念</h2><h3 id="页面和页面大小"><a href="#页面和页面大小" class="headerlink" title="页面和页面大小"></a>页面和页面大小</h3><p>进程中的块称为<strong>页（Page）</strong>，内存中的块称为<strong>页框（Page Frame，或者页帧）</strong>。外存也以同样的单位进行划分，直接称为块（Block）。进程在执行时需要申请主存空间，即要为每个页面分配主存中的可用页框，这就产生了页和页框的一一对应。</p>
+<p>为了方便进行地址转换，页面大小应该是2的整数幂。同时页面大小应该适中，页面太小会使进程中的页面数过多，页表就会过长，占用大量内存，同时也会增加硬件地址转换的开销，降低页面换入/换出的效率；页面过大又会使页内碎片增多，降低内存的利用率。</p>
+<h3 id="地址结构"><a href="#地址结构" class="headerlink" title="地址结构"></a>地址结构</h3><p>地址结构分为两部分，前一部分为页号P，后一部分为页内偏移量W，地址长度为32位，如果其中0-11位为页内地址，那么每页大小为4KB，也就是2的12次方个B（注意这里是以字节为单位编址才是4KB）；12-32位为页号，地址空间最多允许2的20次方个页</p>
+<h3 id="页表"><a href="#页表" class="headerlink" title="页表"></a>页表</h3><p>为了方便在内存中找到每个进程中每个页面对应的物理块，系统为每个进程建立一张页表，它记录页面在内存中对应的物理块号，页表一般保存在内存中。</p>
+<p>页表是由页表项组成的，初学者容易混淆页表项和地址结构，二者都是由两部分组成，且第一部分都是页号，但是页表项第二部分是该页号对应的物理地址块号，而地址结构第二部分是在该物理块中的偏移量。</p>
+<p>页表项的第二部分拼接地址的第二部分才是真正的物理地址。</p>
+<p><strong>地址结构分为两部分，是真的各占一定长度，但是页表项内容就只有物理块号</strong></p>
+<h2 id="基本地址变换机构"><a href="#基本地址变换机构" class="headerlink" title="基本地址变换机构"></a>基本地址变换机构</h2><p>地址变换机构的任务是将逻辑地址转换为内存中的物理地址。地址变换是借助于页表实现的。</p>
+<p>在系统中设置一个页表寄存器（PTR），存放页表在内存中的起始地址F和页表长度M。</p>
+<p><strong>进程未执行时，页表起始地址和页表长度存放在进程控制块中</strong>，当进程执行时，才将页表起始地址和长度存放进寄存器。</p>
+<p>设页面大小为L，逻辑地址A到物理地址E的过程如下：</p>
+<ul>
+<li>计算页号P = A / L，和页内偏移量W = A % L</li>
+<li>比较页号P和页表长度M的关系，如果P &gt;= M，则产生越界中断，否则继续执行</li>
+<li>页表中页号P对应的页表项地址 = F + P * 页表项长度，然后取出该页表项的内容b，即物理块号。（要注意区分页表长度和页表项长度，页表长度指的是一共有多少页，页表项长度指的是页地址占多大空间，也就是物理块号的地址长度）</li>
+<li>E = b * L + W</li>
+</ul>
+<p>页式管理只需要给出一个整数就可以确定对应物理地址，因为页面大小L是确定的，所以页式管理的地址空间是一维的。</p>
+<h2 id="如何确定页表项的大小"><a href="#如何确定页表项的大小" class="headerlink" title="如何确定页表项的大小"></a>如何确定页表项的大小</h2><p>这一段就是最难理解的，理解了这一段，就基本能理解页式管理了。</p>
+<p>页表项的作用时找到该页在内存中位置，以32位逻辑地址空间，字节编址单位，一页4KB为例，地址空间一共（2的32次方个B / 4KB）= 2的20次方个页 = 1M个页，就需要（以2为底1M的对数，也就是20）位才能容纳这么多页，也就是说<strong>物理块号</strong>的长度至少因该是20，这个20指的是地址长度，在计算机中实际上就需要20个b来存储，但是又因为我们是以字节为编址单位的，一个字节等于8个b，那我们的物理块号的长度应该大于等于 20 / 8的整数，也就是至少是3B（24个b，即物理块号长度为24）。</p>
+<p>当然也可以选择更大的页表项让一个页面正好能容下整数个页表项，进而方便存储（如取成4B，一页大小是4KB，正好可以装下1K个页表项）。</p>
+<p>还有一点需要注意，就是上面的讨论没有提及物理地址长度，默认就是逻辑地址长度和物理地址长度是相同的，但是实际上完全可能不相同.</p>
+<p>比如逻辑地址32位，高20位为块号，低12位为偏移量，页表项长度，也就是物理块号长度可能是10，那么物理地址长度可能就是10 + 12 = 22.</p>
+<h2 id="两个题目"><a href="#两个题目" class="headerlink" title="两个题目"></a>两个题目</h2><h3 id="第一个"><a href="#第一个" class="headerlink" title="第一个"></a>第一个</h3><p>页式存储管理允许用户的编程空间为32个页面（每页1KB），主存为16KB，如果一个用户程序为10页长，且某个时刻页表如下：<br>逻辑页号    物理块号<br>0          8<br>1          7<br>2          4<br>3          10</p>
+<p>则地址0AC5H，对应的物理地址是多少。</p>
+<p>页面大小为1KB，所以逻辑地址低10位为页内偏移地址；<br>用户编址空间为32个页面，也就是高5位为页号；<br>主存为16个页面，即物理地址高4位为物理块号；</p>
+<p>0AC5H 二进制为 000101011000101，页号为00010，即2，对应的物理块号为4，也就是0010（因为物理块号为4位）,那么实际物理地址为01001011000101。</p>
+<h3 id="第二个"><a href="#第二个" class="headerlink" title="第二个"></a>第二个</h3><p>某主机主存按字节编址，逻辑地址和物理地址都是32位，页表项大小为4B</p>
+<p>逻辑地址高20位为页号，低12位为页内偏移量</p>
+<p>则页大小为多少字节？页表最大占用多少字节？</p>
+<p>因为页内偏移量长度为12位，那么一页大小就为2的12次方B，也就是4KB。</p>
+<p>页号长度为20，那么可以表示2的20次方个页，页表长度最大为2的20次方，一个页表项大小为4B，那就是说页表最大为2的20次方 * 4B。</p>
+<p>物理地址长度理论上应该是是物理块号长度+页内偏移量长度 = 页表项大小 + 偏移量长度 = 4B + 12b = 32b + 12b = 44b，也就是44位，但又说实际物理地址是32位，那就是说高44 - 32位全是0，是无效的。</p>
+]]></content>
+      <categories>
+        <category>OS</category>
+      </categories>
+  </entry>
+  <entry>
     <title>passport-azure-ad_无限刷新问题</title>
     <url>/2019/11/22/passport-azure-ad-infine-callback/</url>
     <content><![CDATA[<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>passport-azure-ad 是我们在使用node express作为服务器，passport用于验证登陆，同时又需要去azure第三方认证登陆时需要用到的插件。</p>
@@ -13092,7 +13140,7 @@
 <h2 id="资源池"><a href="#资源池" class="headerlink" title="资源池"></a>资源池</h2><p>上面那种资源缓存的方式，适用于所有物体共用同一套资源的情况，但是有的情况下是，我们可能需要独享资源，比如n个游戏角色需要被n个不同的玩家控制，我们就是需要n个实例出来。</p>
 <p>这种情况下，我们还能怎么优化呢？</p>
 <p>我们假设这样一种情况，如果这个房间会不断有玩家进出，每次一个玩家进来，游戏进程都需要加载一个对象，玩家退出，都需要销毁该对象，如果频率过高，其实对CPU也是一种负担。</p>
-<p>这个时候我们就可以使用资源池的方式，实例化之后，如果玩家推出房间，我们不销毁该对象，而是返回给资源池，等另一个玩家连接之后，我们直接从池子中拿一个给该玩家控制就好。</p>
+<p>这个时候我们就可以使用资源池的方式，实例化之后，如果玩家退出游戏，我们不销毁该对象，而是返回给资源池，等另一个玩家连接之后，我们直接从池子中拿一个给该玩家控制就好。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">using System.Threading.Tasks;</span><br><span class="line">using UnityEngine;</span><br><span class="line"></span><br><span class="line">namespace ResourceManager</span><br><span class="line">&#123;</span><br><span class="line">    public interface IResourcePool</span><br><span class="line">    &#123;</span><br><span class="line">        public Task&lt;GameObject&gt; GetResource(string location);</span><br><span class="line">        public GameObject GetResourceWithoutCreate(string key);</span><br><span class="line"></span><br><span class="line">        public void ReturnResource(string location, GameObject gameObject);</span><br><span class="line">        public void Clear();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">using System.Collections.Generic;</span><br><span class="line">using System.Linq;</span><br><span class="line">using System.Threading;</span><br><span class="line">using System.Threading.Tasks;</span><br><span class="line">using UnityEngine;</span><br><span class="line"></span><br><span class="line">namespace ResourceManager</span><br><span class="line">&#123;</span><br><span class="line">    public abstract class AbstractResourcePool: IResourcePool</span><br><span class="line">    &#123;</span><br><span class="line">        private static SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);</span><br><span class="line">        private Dictionary&lt;string, List&lt;GameObject&gt;&gt; _pool =</span><br><span class="line">            new Dictionary&lt;string, List&lt;GameObject&gt;&gt;();</span><br><span class="line"></span><br><span class="line">        private GameObject _parent;</span><br><span class="line"></span><br><span class="line">        private int _maxCount = 16;</span><br><span class="line"></span><br><span class="line">        public abstract Task&lt;GameObject&gt; InstantiateAsync(string key);</span><br><span class="line">        public abstract void Release(GameObject gameObject);</span><br><span class="line"></span><br><span class="line">        private GameObject GetParent()</span><br><span class="line">        &#123;</span><br><span class="line">            if (!_parent)</span><br><span class="line">            &#123;</span><br><span class="line">                _parent = new GameObject(&quot;ResourcePool&quot;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            return _parent;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public GameObject GetResourceWithoutCreate(string key)</span><br><span class="line">        &#123;</span><br><span class="line">            if (_pool.ContainsKey(key))</span><br><span class="line">            &#123;</span><br><span class="line">                while (_pool[key].Count &gt; 0)</span><br><span class="line">                &#123;</span><br><span class="line">                    GameObject resource = _pool[key].First();</span><br><span class="line">                    if (resource != null)</span><br><span class="line">                    &#123;</span><br><span class="line">                        resource.SetActive(true);</span><br><span class="line">                        _pool[key].Remove(resource);</span><br><span class="line">                        return resource;</span><br><span class="line">                    &#125;</span><br><span class="line">                    else</span><br><span class="line">                    &#123;</span><br><span class="line">                        _pool[key].RemoveAt(0);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public async Task&lt;GameObject&gt; GetResource(string key)</span><br><span class="line">        &#123;</span><br><span class="line">            await _semaphoreSlim.WaitAsync();</span><br><span class="line">            try</span><br><span class="line">            &#123;</span><br><span class="line">                if (_pool.ContainsKey(key))</span><br><span class="line">                &#123;</span><br><span class="line">                    while (_pool[key].Count &gt; 0)</span><br><span class="line">                    &#123;</span><br><span class="line">                        GameObject resource = _pool[key].First();</span><br><span class="line">                        if (resource != null)</span><br><span class="line">                        &#123;</span><br><span class="line">                            resource.SetActive(true);</span><br><span class="line">                            _pool[key].Remove(resource);</span><br><span class="line">                            return resource;</span><br><span class="line">                        &#125;</span><br><span class="line">                        else</span><br><span class="line">                        &#123;</span><br><span class="line">                            _pool[key].RemoveAt(0);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                GameObject newResource = await InstantiateAsync(key);</span><br><span class="line">                newResource.transform.SetParent(GetParent().transform);</span><br><span class="line">                return newResource;</span><br><span class="line">            &#125;</span><br><span class="line">            finally</span><br><span class="line">            &#123;</span><br><span class="line">                _semaphoreSlim.Release();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public async void ReturnResource(string key, GameObject gameObject)</span><br><span class="line">        &#123;</span><br><span class="line">            await _semaphoreSlim.WaitAsync();</span><br><span class="line">            try</span><br><span class="line">            &#123;</span><br><span class="line">                gameObject.SetActive(false);</span><br><span class="line">                gameObject.transform.SetParent(GetParent().transform);</span><br><span class="line">                if (_pool.ContainsKey(key))</span><br><span class="line">                &#123;</span><br><span class="line">                    if (_pool[key].Count &gt;= _maxCount)</span><br><span class="line">                    &#123;</span><br><span class="line">                        Release(gameObject);</span><br><span class="line">                    &#125;</span><br><span class="line">                    else</span><br><span class="line">                    &#123;</span><br><span class="line">                        _pool[key].Add(gameObject);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                else</span><br><span class="line">                &#123;</span><br><span class="line">                    _pool.Add(key, new List&lt;GameObject&gt;()&#123;gameObject&#125;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            finally</span><br><span class="line">            &#123;</span><br><span class="line">                _semaphoreSlim.Release();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public void Clear()</span><br><span class="line">        &#123;</span><br><span class="line">            foreach (var item in _pool)</span><br><span class="line">            &#123;</span><br><span class="line">                foreach (var obj in item.Value)</span><br><span class="line">                &#123;</span><br><span class="line">                    Release(obj);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -13907,54 +13955,6 @@
 ]]></content>
       <categories>
         <category>Network</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>操作系统学习笔记（四）內存分页管理方式</title>
-    <url>/2021/12/05/operating-system-note-4-memory/</url>
-    <content><![CDATA[<p>经过几个早上的奋战，终于把分页内存管理的那一句介绍给读明白了，赶紧总结下。</p>
-<p>其实内存管理还有很多的知识点，比如为什么要进行内存管理，分页，分段，快表等等，之所以单挑出分页管理总结，是因为它是基础，也是我理解起来最难的。</p>
-<a id="more"></a>
-
-<h2 id="基础概念理解"><a href="#基础概念理解" class="headerlink" title="基础概念理解"></a>基础概念理解</h2><h3 id="字，字节，位"><a href="#字，字节，位" class="headerlink" title="字，字节，位"></a>字，字节，位</h3><p>计算机中，一个bit叫做一位，缩写为b，代表了一个0或者一个1，然后8个bit叫做一个字节（Byte），缩写为B，一个字又是两个字节组成</p>
-<h3 id="地址长度代表什么"><a href="#地址长度代表什么" class="headerlink" title="地址长度代表什么"></a>地址长度代表什么</h3><p>我们经常说的32位操作系统，和64位操作系统，说的是地址的长度，也就是地址总线的根数，它决定了系统寻址的最大范围，比如32位系统，内存的寻址范围就是从0到2的32次方</p>
-<h3 id="什么叫以字节为单位编址"><a href="#什么叫以字节为单位编址" class="headerlink" title="什么叫以字节为单位编址"></a>什么叫以字节为单位编址</h3><p>上面说的32位地址长度，可以表示0到2的32次方个地址，但是一个地址代表的内存空间可以是一位，也可以是一个字节，也就是说我们是否需要一位一位地读取内存数据，或者每次都读取字节整数倍的内存，如果是后者，那就是以字节位编址单位。</p>
-<h2 id="分页存储的几个概念"><a href="#分页存储的几个概念" class="headerlink" title="分页存储的几个概念"></a>分页存储的几个概念</h2><h3 id="页面和页面大小"><a href="#页面和页面大小" class="headerlink" title="页面和页面大小"></a>页面和页面大小</h3><p>进程中的块称为<strong>页（Page）</strong>，内存中的块称为<strong>页框（Page Frame，或者页帧）</strong>。外存也以同样的单位进行划分，直接称为块（Block）。进程在执行时需要申请主存空间，即要为每个页面分配主存中的可用页框，这就产生了页和页框的一一对应。</p>
-<p>为了方便进行地址转换，页面大小应该是2的整数幂。同时页面大小应该适中，页面太小会使进程中的页面数过多，页表就会过长，占用大量内存，同时也会增加硬件地址转换的开销，降低页面换入/换出的效率；页面过大又会使页内碎片增多，降低内存的利用率。</p>
-<h3 id="地址结构"><a href="#地址结构" class="headerlink" title="地址结构"></a>地址结构</h3><p>地址结构分为两部分，前一部分为页号P，后一部分为页内偏移量W，地址长度为32位，如果其中0-11位为页内地址，那么每页大小为4KB，也就是2的12次方个B（注意这里是以字节为单位编址才是4KB）；12-32位为页号，地址空间最多允许2的20次方个页</p>
-<h3 id="页表"><a href="#页表" class="headerlink" title="页表"></a>页表</h3><p>为了方便在内存中找到每个进程中每个页面对应的物理块，系统为每个进程建立一张页表，它记录页面在内存中对应的物理块号，页表一般保存在内存中。</p>
-<p>页表是由页表项组成的，初学者容易混淆页表项和地址结构，二者都是由两部分组成，且第一部分都是页号，但是页表项第二部分是该页号对应的物理地址块号，而地址结构第二部分是在该物理块中的偏移量。</p>
-<p>页表项的第二部分拼接地址的第二部分才是真正的物理地址。</p>
-<p><strong>地址结构分为两部分，是真的各占一定长度，但是页表项内容就只有物理块号</strong></p>
-<h2 id="基本地址变换机构"><a href="#基本地址变换机构" class="headerlink" title="基本地址变换机构"></a>基本地址变换机构</h2><p>地址变换机构的任务是将逻辑地址转换为内存中的物理地址。地址变换是借助于页表实现的。</p>
-<p>在系统中设置一个页表寄存器（PTR），存放页表在内存中的起始地址F和页表长度M。</p>
-<p><strong>进程未执行时，页表起始地址和页表长度存放在进程控制块中</strong>，当进程执行时，才将页表起始地址和长度存放进寄存器。</p>
-<p>设页面大小为L，逻辑地址A到物理地址E的过程如下：</p>
-<ul>
-<li>计算页号P = A / L，和页内偏移量W = A % L</li>
-<li>比较页号P和页表长度M的关系，如果P &gt;= M，则产生越界中断，否则继续执行</li>
-<li>页表中页号P对应的页表项地址 = F + P * 页表项长度，然后取出该页表项的内容b，即物理块号。（要注意区分页表长度和页表项长度，页表长度指的是一共有多少页，页表项长度指的是页地址占多大空间，也就是物理块号的地址长度）</li>
-<li>E = b * L + W</li>
-</ul>
-<p>页式管理只需要给出一个整数就可以确定对应物理地址，因为页面大小L是确定的，所以页式管理的地址空间是一维的。</p>
-<h2 id="如何确定页表项的大小"><a href="#如何确定页表项的大小" class="headerlink" title="如何确定页表项的大小"></a>如何确定页表项的大小</h2><p>这一段就是最难理解的，理解了这一段，就基本能理解页式管理了。</p>
-<p>页表项的作用时找到该页在内存中位置，以32位逻辑地址空间，字节编址单位，一页4KB为例，地址空间一共（2的32次方个B / 4KB）= 2的20次方个页 = 1M个页，就需要（以2为底1M的对数，也就是20）位才能容纳这么多页，也就是说<strong>物理块号</strong>的长度至少因该是20，这个20指的是地址长度，在计算机中实际上就需要20个b来存储，但是又因为我们是以字节为编址单位的，一个字节等于8个b，那我们的物理块号的长度应该大于等于 20 / 8的整数，也就是至少是3B（24个b，即物理块号长度为24）。</p>
-<p>当然也可以选择更大的页表项让一个页面正好能容下整数个页表项，进而方便存储（如取成4B，一页大小是4KB，正好可以装下1K个页表项）。</p>
-<p>还有一点需要注意，就是上面的讨论没有提及物理地址长度，默认就是逻辑地址长度和物理地址长度是相同的，但是实际上完全可能不相同.</p>
-<p>比如逻辑地址32位，高20位为块号，低12位为偏移量，页表项长度，也就是物理块号长度可能是10，那么物理地址长度可能就是10 + 12 = 22.</p>
-<h2 id="两个题目"><a href="#两个题目" class="headerlink" title="两个题目"></a>两个题目</h2><h3 id="第一个"><a href="#第一个" class="headerlink" title="第一个"></a>第一个</h3><p>页式存储管理允许用户的编程空间为32个页面（每页1KB），主存为16KB，如果一个用户程序为10页长，且某个时刻页表如下：<br>逻辑页号    物理块号<br>0          8<br>1          7<br>2          4<br>3          10</p>
-<p>则地址0AC5H，对应的物理地址是多少。</p>
-<p>页面大小为1KB，所以逻辑地址低10位为页内偏移地址；<br>用户编址空间为32个页面，也就是高5位为页号；<br>主存为16个页面，即物理地址高4位为物理块号；</p>
-<p>0AC5H 二进制为 000101011000101，页号为00010，即2，对应的物理块号为4，也就是0010（因为物理块号为4位）,那么实际物理地址为01001011000101。</p>
-<h3 id="第二个"><a href="#第二个" class="headerlink" title="第二个"></a>第二个</h3><p>某主机主存按字节编址，逻辑地址和物理地址都是32位，页表项大小为4B</p>
-<p>逻辑地址高20位为页号，低12位为页内偏移量</p>
-<p>则页大小为多少字节？页表最大占用多少字节？</p>
-<p>因为页内偏移量长度为12位，那么一页大小就为2的12次方B，也就是4KB。</p>
-<p>页号长度为20，那么可以表示2的20次方个页，页表长度最大为2的20次方，一个页表项大小为4B，那就是说页表最大为2的20次方 * 4B。</p>
-<p>物理地址长度理论上应该是是物理块号长度+页内偏移量长度 = 页表项大小 + 偏移量长度 = 4B + 12b = 32b + 12b = 44b，也就是44位，但又说实际物理地址是32位，那就是说高44 - 32位全是0，是无效的。</p>
-]]></content>
-      <categories>
-        <category>OS</category>
       </categories>
   </entry>
   <entry>
