@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="开发Unity也有一段时间了，也学习了几招内存和性能优化的手段，虽然不系统，但是为了防止忘记，也是简单总结下。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-12-12T10:05:28.896Z">
+<meta property="og:updated_time" content="2021-12-19T09:08:06.594Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity性能优化总结">
 <meta name="twitter:description" content="开发Unity也有一段时间了，也学习了几招内存和性能优化的手段，虽然不系统，但是为了防止忘记，也是简单总结下。">
@@ -385,7 +385,8 @@
 
 <h2 id="Material尽量复用同一个"><a href="#Material尽量复用同一个" class="headerlink" title="Material尽量复用同一个"></a>Material尽量复用同一个</h2><p>如果条件允许，比如所有的物体的material是同一个，而且可以同时变化，就不要为每一个物体新建一个material。</p>
 <h2 id="合并Texture"><a href="#合并Texture" class="headerlink" title="合并Texture"></a>合并Texture</h2><p>合并Texture之后，如果后面不需要修改，尽量对新的Texture调用Apply方法，释放用于修改的内存。</p>
-
+<h2 id="合并批次"><a href="#合并批次" class="headerlink" title="合并批次"></a>合并批次</h2><p><a href="https://zhuanlan.zhihu.com/p/196691845" rel="external nofollow noopener noreferrer" target="_blank">https://zhuanlan.zhihu.com/p/196691845</a></p>
+<h2 id="如果贴图不需要自适应，关掉minmap"><a href="#如果贴图不需要自适应，关掉minmap" class="headerlink" title="如果贴图不需要自适应，关掉minmap"></a>如果贴图不需要自适应，关掉minmap</h2>
       
     </div>
     
@@ -597,7 +598,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#资源缓存"><span class="nav-number">1.</span> <span class="nav-text">资源缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源池"><span class="nav-number">2.</span> <span class="nav-text">资源池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Material尽量复用同一个"><span class="nav-number">3.</span> <span class="nav-text">Material尽量复用同一个</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合并Texture"><span class="nav-number">4.</span> <span class="nav-text">合并Texture</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#资源缓存"><span class="nav-number">1.</span> <span class="nav-text">资源缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源池"><span class="nav-number">2.</span> <span class="nav-text">资源池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Material尽量复用同一个"><span class="nav-number">3.</span> <span class="nav-text">Material尽量复用同一个</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合并Texture"><span class="nav-number">4.</span> <span class="nav-text">合并Texture</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合并批次"><span class="nav-number">5.</span> <span class="nav-text">合并批次</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果贴图不需要自适应，关掉minmap"><span class="nav-number">6.</span> <span class="nav-text">如果贴图不需要自适应，关掉minmap</span></a></li></ol></div>
             
 
           </div>
