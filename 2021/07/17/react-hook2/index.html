@@ -87,14 +87,14 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="使用React也有两个月了，总结下这两个月在实战中以及自己买的课程中的关于React Hook的一些收获。">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ODUwNDJlODhmMGY1MjlkZTc2ZGM2NDg4YTliMjJlYmVfcEY0cHhxMDIwRFNNUExrWGlrNHJGUGlxMXhWNkZjMTBfVG9rZW46Ym94Y244enZJQkI5Nmg2SXlLSUt0TXRtc0RmXzE2MjY0Nzk5OTk6MTYyNjQ4MzU5OV9WNA">
-<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=M2Q5MGIyODJiYmEzNDc1MzJkMDgyZjBhNjFlOGRhYTNfMG14ajU4UDFFR0ZrbUpWT2lNSnhTNXR0bFNtV0ZLTm5fVG9rZW46Ym94Y25NOFRnbDl4UjB3cDNhSGJRZDBRR0c1XzE2MjY0Nzk5OTk6MTYyNjQ4MzU5OV9WNA">
-<meta property="og:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NTFkZmZjOGMxOTA4YTlhZjA2ZGVjMzk2YzdhY2E0ODJfcXhuTVplRkxKbzZvVGRJcmFiTGZLSks2WlhjWjBIWTZfVG9rZW46Ym94Y25lcFE2SzRKcXk4cENjYjZGRlFqWDRkXzE2MjY0Nzk5OTk6MTYyNjQ4MzU5OV9WNA">
-<meta property="og:updated_time" content="2021-09-03T00:51:56.950Z">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639981252/origin-of-ray/image_nj5wy0.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639981399/origin-of-ray/image_1_dxtvnt.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639981335/origin-of-ray/c12927e3-3360-4da4-9a10-dce256deb229_lpc9uh.png">
+<meta property="og:updated_time" content="2021-12-20T06:23:30.152Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React Hook实战总结 - 如何用React Hook写出没那么复杂的项目">
 <meta name="twitter:description" content="使用React也有两个月了，总结下这两个月在实战中以及自己买的课程中的关于React Hook的一些收获。">
-<meta name="twitter:image" content="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ODUwNDJlODhmMGY1MjlkZTc2ZGM2NDg4YTliMjJlYmVfcEY0cHhxMDIwRFNNUExrWGlrNHJGUGlxMXhWNkZjMTBfVG9rZW46Ym94Y244enZJQkI5Nmg2SXlLSUt0TXRtc0RmXzE2MjY0Nzk5OTk6MTYyNjQ4MzU5OV9WNA">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639981252/origin-of-ray/image_nj5wy0.png">
 
 
 
@@ -373,7 +373,7 @@
 <a id="more"></a>
 
 <h2 id="React为什么要发明Hooks"><a href="#React为什么要发明Hooks" class="headerlink" title="React为什么要发明Hooks"></a>React为什么要发明Hooks</h2><h3 id="React-组件的本质：一个状态到视图的函数"><a href="#React-组件的本质：一个状态到视图的函数" class="headerlink" title="React 组件的本质：一个状态到视图的函数"></a>React 组件的本质：一个状态到视图的函数</h3><p>React 组件的模型其实很直观，就是从 Model 到 View 的映射，这里的 Model 对应到 React 中就是 state 和 props。如下图所示：</p>
-<p><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ODUwNDJlODhmMGY1MjlkZTc2ZGM2NDg4YTliMjJlYmVfcEY0cHhxMDIwRFNNUExrWGlrNHJGUGlxMXhWNkZjMTBfVG9rZW46Ym94Y244enZJQkI5Nmg2SXlLSUt0TXRtc0RmXzE2MjY0Nzk5OTk6MTYyNjQ4MzU5OV9WNA" alt="img"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639981252/origin-of-ray/image_nj5wy0.png" alt="img"></p>
 <p>在过去，我们需要处理当 Model 变化时，DOM 节点应该如何变化的细节问题。而现在，我们只需要通过 JSX，根据 Model 的数据用声明的方式去描述 UI 的最终展现就可以了，因为 React 会帮助你处理所有 DOM 变化的细节。而且，当 Model 中的状态发生变化时，UI 会自动变化，即所谓的数据绑定。</p>
 <p>所以呢，我们可以把 UI 的展现看成一个函数的执行过程。其中，Model 是输入参数，函数的执行结果是 DOM 树，也就是 View。而 React 要保证的，就是每当 Model 发生变化时，函数会重新执行，并且生成新的 DOM 树，然后 React 再把新的 DOM 树以最优的方式更新到浏览器。</p>
 <p>既然如此，使用 Class 作为组件是否真的合适呢？Class 在作为 React 组件的载体时，是否用了它所有的功能呢？如果你仔细思考，会发现使用 Class 其实是有点牵强的，主要有两方面的原因。</p>
@@ -385,7 +385,7 @@
 <p>再进一步想，那我们是不是就是需要这样一个机制，能够把一个外部的数据绑定到函数的执行。当数据变化时，函数能够自动重新执行。这样的话，任何会影响 UI 展现的外部数据，都可以通过这个机制绑定到 React 的函数组件。在 React 中，这个机制就是 Hooks。</p>
 <p>所以我们现在也能够理解这个机制为什么叫 Hooks 了。顾名思义，Hook 就是“钩子”的意思。在 React 中，Hooks 就是把某个目标结果钩到某个可能会变化的数据源或者事件源上，那么当被钩到的数据或事件发生变化时，产生这个目标结果的代码会重新执行，产生更新后的结果。</p>
 <p>对于函数组件，这个结果是最终的 DOM 树；所以 Hooks 的结构可以如下图所示：Hooks的作用就是将所有的数据都当作数据源，钩进任何函数组件中，并且可以触发函数组件的更新</p>
-<p><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=M2Q5MGIyODJiYmEzNDc1MzJkMDgyZjBhNjFlOGRhYTNfMG14ajU4UDFFR0ZrbUpWT2lNSnhTNXR0bFNtV0ZLTm5fVG9rZW46Ym94Y25NOFRnbDl4UjB3cDNhSGJRZDBRR0c1XzE2MjY0Nzk5OTk6MTYyNjQ4MzU5OV9WNA" alt="img"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639981399/origin-of-ray/image_1_dxtvnt.png" alt="img"></p>
 <h3 id="Hooks带来的好处"><a href="#Hooks带来的好处" class="headerlink" title="Hooks带来的好处"></a>Hooks带来的好处</h3><ul>
 <li><blockquote>
 <p>逻辑分离</p>
@@ -506,7 +506,7 @@
 <p>一方面，对于一个功能，我们无法直观地知道它相关的代码散落在哪些文件夹中。比如内容管理系统中的分类功能，可能有列表、下拉框、对话框、异步请求逻辑等，它们都在不同的文件夹中。</p>
 <p>另一方面，开发一个功能时，切换源代码会非常不方便。比如你在写分类列表功能时，就需要在组件、样式文件、action、reducer 等文件之间频繁地来回切换。而且，如果项目很大，那么你就需要展开很长的树结构，才能找到相应的文件，或者借助文件搜索去导航。不过，文件搜索导航的前提是，你还需要对整个功能的逻辑非常了解，知道有哪些文件。</p>
 <p>产生这种开发难度的本质就在于，源代码没有按照业务功能组织在一起，而是从技术角度进行了拆分。所以呢，对于文件夹的组织，我们一定要按领域去组织源代码。一个与领域相关的文件夹，就类似于刚才讲的第一个场景，自身包含了自己需要的所有技术模块，这样无论是理解代码实现，还是开发时切换导航，都会非常方便。</p>
-<p><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NTFkZmZjOGMxOTA4YTlhZjA2ZGVjMzk2YzdhY2E0ODJfcXhuTVplRkxKbzZvVGRJcmFiTGZLSks2WlhjWjBIWTZfVG9rZW46Ym94Y25lcFE2SzRKcXk4cENjYjZGRlFqWDRkXzE2MjY0Nzk5OTk6MTYyNjQ4MzU5OV9WNA" alt="img"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639981335/origin-of-ray/c12927e3-3360-4da4-9a10-dce256deb229_lpc9uh.png" alt="img"></p>
 <p>可以看到，整个应用至少包含了文章管理、评论、分类、用户等模块。首先我们知道，一个 React 应用，一定是由一些技术部件组成的，比如 components、routing、actions、store 等，图中我用不同的颜色对这些部件进行了区分。但是呢，如果我们将这些技术部件分散到不同的领域文件夹中，而每个领域文件夹都有自己的 compoents、routing、actions、store 等。这样的话，每一个文件夹就相当于一个小型的项目，包含了与自己相关的所有源代码，就便于理解和开发。</p>
 
       
