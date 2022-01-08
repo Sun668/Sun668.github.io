@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="非对称加密 证书">
+  <meta name="keywords" content="一起探索互联网的秘密">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="今天阅读https原理的时候，发现它采用了非对称加密的知识，于是去探索了一下非对称加密的基本原理。">
-<meta name="keywords" content="非对称加密 证书">
+<meta name="description" content="I/O设备I/O设备管理是操作系统设计中最凌乱也是最具挑战性的部分。由于它包含了很多领域的不同设备及设备相关的应用程序，因此很难有一个通用且一致的设计方案。所以在理解设备管理之前，应该先了解具体的I/O设备类型。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="非对称加密原理探索">
-<meta property="og:url" content="https://sunra.top/2019/10/19/Asymmetric_Encryption/index.html">
+<meta property="og:title" content="操作系统学习笔记（七）I&#x2F;O管理概述">
+<meta property="og:url" content="https://sunra.top/2022/01/07/operating-system-note-7-io-introduction/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="今天阅读https原理的时候，发现它采用了非对称加密的知识，于是去探索了一下非对称加密的基本原理。">
+<meta property="og:description" content="I/O设备I/O设备管理是操作系统设计中最凌乱也是最具挑战性的部分。由于它包含了很多领域的不同设备及设备相关的应用程序，因此很难有一个通用且一致的设计方案。所以在理解设备管理之前，应该先了解具体的I/O设备类型。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-09-03T00:52:03.476Z">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1641603821/origin-of-ray/asynccode_mozf3x.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1641603845/origin-of-ray/asynccode_ci8aj8.png">
+<meta property="og:updated_time" content="2022-01-08T01:05:19.920Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="非对称加密原理探索">
-<meta name="twitter:description" content="今天阅读https原理的时候，发现它采用了非对称加密的知识，于是去探索了一下非对称加密的基本原理。">
+<meta name="twitter:title" content="操作系统学习笔记（七）I&#x2F;O管理概述">
+<meta name="twitter:description" content="I/O设备I/O设备管理是操作系统设计中最凌乱也是最具挑战性的部分。由于它包含了很多领域的不同设备及设备相关的应用程序，因此很难有一个通用且一致的设计方案。所以在理解设备管理之前，应该先了解具体的I/O设备类型。">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1641603821/origin-of-ray/asynccode_mozf3x.png">
 
 
 
@@ -120,14 +122,14 @@
 
 
 
-  <link rel="canonical" href="https://sunra.top/2019/10/19/Asymmetric_Encryption/">
+  <link rel="canonical" href="https://sunra.top/2022/01/07/operating-system-note-7-io-introduction/">
 
 
 
 
 
 <script data-ad-client="ca-pub-8623125811074939" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <title>非对称加密原理探索 | Origin of Ray</title>
+  <title>操作系统学习笔记（七）I/O管理概述 | Origin of Ray</title>
   
 
 
@@ -276,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2019/10/19/Asymmetric_Encryption/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/01/07/operating-system-note-7-io-introduction/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Ray Sun">
@@ -293,7 +295,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">非对称加密原理探索</h2>
+          <h2 class="post-title" itemprop="name headline">操作系统学习笔记（七）I/O管理概述</h2>
         
 
         <div class="post-meta">
@@ -305,8 +307,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-19T21:28:36+08:00">
-                2019-10-19
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-01-07T08:45:16+08:00">
+                2022-01-07
               </time>
             
 
@@ -328,8 +330,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Sundry/" itemprop="url" rel="index">
-                    <span itemprop="name">Sundry</span>
+                  <a href="/categories/OS/" itemprop="url" rel="index">
+                    <span itemprop="name">OS</span>
                   </a>
                 </span>
 
@@ -365,92 +367,157 @@
       
 
       
-        <p>今天阅读https原理的时候，发现它采用了非对称加密的知识，于是去探索了一下非对称加密的基本原理。</p>
+        <h2 id="I-O设备"><a href="#I-O设备" class="headerlink" title="I/O设备"></a>I/O设备</h2><p>I/O设备管理是操作系统设计中最凌乱也是最具挑战性的部分。由于它包含了很多领域的不同设备及设备相关的应用程序，因此很难有一个通用且一致的设计方案。所以在理解设备管理之前，应该先了解具体的I/O设备类型。</p>
 <a id="more"></a>
 
-<h2 id="非对称加密"><a href="#非对称加密" class="headerlink" title="非对称加密"></a>非对称加密</h2><p>在非对称加密算法中，有公钥和私钥两种密钥，其中，公钥是公开的，不需要保密，私钥由个人持有，必须妥善保管和注意保密。加密和解密使用两种不同的密钥，是它得名的原因。</p>
-<p>每一个公钥都对应一个私钥。<br>密钥对中，让大家都知道的是公钥，不告诉大家，只有自己知道的，是私钥。 </p>
-<p>如果用其中一个密钥加密数据，则只有对应的那个密钥才可以解密。<br>如果用其中一个密钥可以进行解密数据，则该数据必然是对应的那个密钥进行的加密。 </p>
-<p>A与B之间进行通信，如果他们不想通信的内容被他人知道，就可以对通信的内容进行非对称的加密。</p>
-<p>比如BC架构中，浏览器与服务器之间进行数据通信，服务器可以将自己的公钥发送给浏览器，浏览器就可以将自己想要发送给服务器的信息利用公钥进行加密，当服务器收到该信息时，利用自己的私钥对信息进行解密就可以获取加密之前的内容，同时保证了其他任何人获取到该信息都无法破解。</p>
-<p>同时服务器也可以利用自己的私钥对返回的信息进行加密，浏览器就可以利用私钥进行解密。</p>
-<h2 id="公钥认证"><a href="#公钥认证" class="headerlink" title="公钥认证"></a>公钥认证</h2><h3 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h3><p> 在公钥加密、解密里面描述的通讯过程看似简单，但想想这个问题：在上述过程中，A怎么知道B在给他的回信在传递过程中，有没有被人修改？这就涉及到数字签名的概念。 </p>
-<p>要达到这个目的，一般是对信息做一个hash计算得到一个hash值，注意，这个过程是不可逆的，也就是说无法通过hash值得出原来的信息内容。在把信息发送出去时，把这个hash值加密后做为一个签名和信息一起发出去。 接收方在收到信息后，会重新计算信息的hash值，并和信息所附带的hash值(解密后)进行对比，如果一致，就说明信息的内容没有被修改过，因为这里hash计算可以保证不同的内容一定会得到不同的hash值，所以只要内容一被修改，根据信息内容计算的hash值就会变化。当然，不怀好意的人也可以修改信息内容的同时也修改hash值，从而让它们可以相匹配，为了防止这种情况，hash值一般都会加密后(也就是签名)再和信息一起发送。</p>
-<p>下面通过例子来说明这个过程：<br>B给A回信时，采用了数字签名的方式<br>1、B先用hash函数，生成信件的摘要(digest)<br>2、B使用自己的私钥，对这个摘要加密，这样就生成了数字签名(signature)<br>3、B将这个签名附在要回复的信息后面，一起发给A<br>4、A收到B的信息后，取下数字签名，并通过B的公钥解密，得到信件的摘要信息<br>5、A在对B发送的信息本身使用B指定的hash函数，将得到的结果同上一步解密得到的摘要进行对比，如果两者一致，就说明B发过来的信息未被修改过。</p>
-<p>问题就这样结束了吗？远没有，试想，虽然A确定了B回给他的信息是未修改过的，但是怎么确定给他回信息的就是B？如果有不怀好意的C把A保存的B的公钥偷偷换成自己的，并冒用B的名义给A发信息呢？<br>要解决这个问题，A只要能确定自己持有的公钥到底是不是B的就行了，这就需要用到数字证书。</p>
-<h3 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h3><p>数字证书是用来验证公钥所属的用户身份。在日常生活中，如果我们要验证一个人的身份，通常的做法是查看他的身份证。我们信任身份证颁发机构即政府机构的公信力，因此只要验证一个人的身份证不是伪造的，我们就相信这个人的身份和身份证上所描述的是一致的。<br>数字证书就是一个人或者组织在网络世界中的身份证，其发证机关是证书管理机构(certificate authority,CA)。CA用自己的私钥对用户的身份信息(主要是用户名和该用户的公钥)进行签名，该签名和用户的身份信息一起就形成了证书。</p>
-<p>数字证书一般由数字证书认证机构签发，需要</p>
-<ul>
-<li>申请者通过<strong>非对称加密算法（RSA）</strong> 生成一对<strong>公钥</strong>和<strong>密钥</strong>，然后把需要的申请信息（国家，域名等）连同公钥发送给 <strong>证书认证机构（CA）</strong></li>
-<li>CA构确认无误后通过<strong>消息摘要算法</strong>（MD5，SHA) 生成整个申请信息的摘要签名M， 然后 把 <strong>签名M和使用的摘要算法</strong> 用 <strong>CA自己的私钥</strong> 进行加密</li>
-</ul>
-<h4 id="构成"><a href="#构成" class="headerlink" title="构成"></a>构成</h4><ol>
-<li>证书的发布机构（Issuer）<br>指出是什么机构发布的这个证书，也就是指明这个证书是哪个证书中心（certificate authority，简称CA）发布的的(只是创建证书，不是指证书的使用者)。</li>
-<li>证书的有效期（Valid from , Valid to）<br>也就是证书的有效时间，或者说证书的使用期限。 过了有效期限，证书就会作废，不能使用了。</li>
-<li>公钥 （Public key）<br>这个我们在前面介绍公钥密码体制时介绍过，公钥是用来对消息进行加密解密的，是很长的一串数字。</li>
-<li>证书所有者（Subject）<br>这个证书是发布给谁的，或者说证书的所有者，一般是某个人或者某个公司名称、机构的名称、公司网站的网址等。</li>
-<li>签名所使用的算法 （Signature algorithm）<br>指的这个数字证书的数字签名所使用的加密算法，这样就可以使用证书发布机构的证书里面的公钥，根据这个算法对指纹进行解密。指纹的加密结果就是数字签名</li>
-<li>指纹以及指纹算法 （Thumbprint, Thumbprint algorithm）<br>这个是用来保证证书的完整性的，也就是说确保证书没有被修改过。 其原理就是在发布证书时，发布者根据指纹算法(一个hash算法)计算整个证书的hash值(指纹)并和证书放在一起，使用者在打开证书时，自己也根据指纹算法计算一下证书的hash值(指纹)，如果和刚开始的值对得上，就说明证书没有被修改过，因为证书的内容被修改后，根据证书的内容计算的出的hash值(指纹)是会变化的。</li>
+<p>计算机系统中的I/O设备按使用特性可分为以下类型：</p>
+<ol>
+<li>人机交互外部设备。用于与计算机用户之间交互的设备，如打印机，显示器，鼠标，键盘等。这类设备的数据交换速度相对较慢，通常是以字节为单位进行数据交换。</li>
+<li>存储设备。用于存储程序和数据的设备，如磁盘，磁带，光盘等。这类设备用于数据交换，速度较快，通常以多字节组成的块为单位进行数据交换。</li>
+<li>网络通信设备。用于远程设备通信的设备，如各种网络接口，调制解调器等。其速度介于前两类设备之间。网络通信设备在使用和管理上与前两类设备也有很大不同。</li>
 </ol>
-<p>其实任何个体/组织都可以成为CA（自签证书），但是你发发布的证书客户端是不信任的，也是就前文提及的需要权威。比如 <strong>Symantec、Comodo、Godaddy、Digicert</strong>。</p>
-<p>客户端信任这些CA，就会在其本地保持这些CA的 <strong>根证书</strong>（<strong>root certificate</strong>），<strong>根证书是CA自己的证书</strong>，是证书验证链的开头。根证书没有机构（已经是权威了）再为其做数字签名，所以都是自签证书。</p>
-<p>CA会通过 <strong>中介证书（intermediate-certificate）</strong> 替代根证书的去做服务器端的证书签名，确保根证书密钥绝对不可访问。</p>
-<h4 id="证书信任链"><a href="#证书信任链" class="headerlink" title="证书信任链"></a>证书信任链</h4><p>前文提到，在向CA 申请证书时是需要 <strong>CA的私钥</strong> 去对整个证书的签名摘要做非对称加密的，也就是证书是可以通过 <strong>CA的公钥</strong> 去解密得到<strong>证书的签名摘要</strong>的。当我们再次用 <strong>相同的摘要算法</strong>（证书里面有保存所使用的算法）对整个证书做签名，如果得到的签名和证书上的签名是一致的，说明这个证书是可信任的。</p>
-<p>同理，中介证书 也是可以被这样的方式证明其可信任。这样的一整个流程称为 <strong>信任链</strong>（Chain of trust）。</p>
-<p>就是我<strong>绝对</strong>相信你（A&gt;B）；你<strong>绝对</strong>相信他（B&gt;C）；等于我<strong>绝对</strong>相信他（A&gt;C）</p>
-<p>客户端得到服务端返回的证书，通过读取得到 <strong>服务端证书的发布机构（Issuer）</strong></p>
-<p>客户端去操作系统查找这个发布机构的的证书，如果是不是根证书就继续递归下去 <strong>直到拿到根证书</strong>（一般都存储在比较安全的地方，比如框架的源码等地方）。</p>
-<p>用 <strong>根证书的公钥</strong> 去 <strong>解密验证</strong> 上一层证书的<strong>合法性</strong>，再拿上一层证书的公钥去验证更上层证书的合法性；递归回溯。</p>
-<p>最后验证服务器端的证书是 <strong>可信任</strong> 的。</p>
-<h2 id="RSA原理简介"><a href="#RSA原理简介" class="headerlink" title="RSA原理简介"></a>RSA原理简介</h2><table>
+<p>按传输速率分为：</p>
+<ol>
+<li>低速设备。传输速率仅为每秒几字节到数百字节的一类设备，如键盘，鼠标等。</li>
+<li>中速设备。传输速率为每秒数千字节至数万字节的一类设备，如行式打印机，激光打印机等。</li>
+<li>高速设备。传输速率在数百千字节至千兆字节的一类设备，如磁带机，磁盘机，光盘机等。</li>
+</ol>
+<p>按信息交换单位分为：</p>
+<ol>
+<li>块设备。由于信息的存取总是以数据块为单位的，所以存储信息的设备称为块设备，它属于有结构设备，如磁盘等。磁盘设备的基本特征是传输速率较高，可寻址，即可以随机地读写任何一块。</li>
+<li>字符设备。用于数据输入输出的设备为字符设备，因为其传输的基本单位是字符。它属于无结构类型，如交互式终端机，打印机等，其特点是传输速率低，不可寻址，并且在输入输出时常采用中断驱动方式。</li>
+</ol>
+<h2 id="I-O控制方式"><a href="#I-O控制方式" class="headerlink" title="I/O控制方式"></a>I/O控制方式</h2><p>设备管理的主要任务之一是控制设备和内存或处理机之间的数据传送。</p>
+<p>外围设备和内存之间的输入输出方式有4种：</p>
+<h3 id="程序直接控制的方式"><a href="#程序直接控制的方式" class="headerlink" title="程序直接控制的方式"></a>程序直接控制的方式</h3><p>计算机从外部设备读取数据到存储器，每次读取一个字的数据。对读入的每个字，CPU需要对外设状态进行循环检查，直到确定该字已经在I/O控制器的寄存器中。</p>
+<p>由于CPU的高速性和I/O设备的低速性，致使CPU大部分时间都处于等待I/O设备是否完成数据I/O的循环测试中，造成了CPU资源的极大浪费。</p>
+<p>在这种方式中，CPU之所以需要不断测试是否完成，是因为CPU没有采用中断机制，使得I/O设备没法向CPU报告它已经完成了一个字的输入。</p>
+<p>这种方式实现简单，但是缺点就是CPU和I/O设备只能串行。</p>
+<h3 id="中断驱动方式"><a href="#中断驱动方式" class="headerlink" title="中断驱动方式"></a>中断驱动方式</h3><p>允许I/O设备主动打断CPU运行并请求服务，从而解放CPU，使得其向I/O控制器发送读命令后可以继续做其他有用的工作。</p>
+<p>我们可以分别从I/O控制器和CPU两个角度来看中断驱动方式的工作过程。</p>
+<p>从I/O控制器角度：</p>
+<ul>
+<li>I/O控制器从CPU接收了一个读指令</li>
+<li>从外围设备读取数据到控制器的寄存器</li>
+<li>通过控制线向CPU发送一个中断信号，表示数据已经准备好了，然后等待CPU请求该数据。</li>
+<li>控制器接收到CPU请求数据的信号后，将数据放到数据总线上，传到CPU的寄存器。</li>
+</ul>
+<p>从CPU角度来看：</p>
+<ul>
+<li>CPU发出读命令，然后保存当前运行程序的上下文（如程序计数器及处理机寄存器等），然后转去执行其他程序。</li>
+<li>在每个指令周期的末尾，CPU检查中断。</li>
+<li>如果有来自I/O控制器的中断，CPU保存当前程序的上下文，转去执行中断处理程序以处理该中断，此时，CPU从I/O控制器读取这一个字的数据到寄存器，并存入主存。</li>
+<li>CPU恢复发出I/O命令的程序上下文，然后继续执行。</li>
+</ul>
+<blockquote>
+<p>指令周期是什么？<a href="https://zhuanlan.zhihu.com/p/90829922" rel="external nofollow noopener noreferrer" target="_blank">【浅析】CPU中的指令周期、CPU周期和时钟周期</a></p>
+<p>I/O中断可以打断时间片吗？<a href="https://www.zhihu.com/question/278805756" rel="external nofollow noopener noreferrer" target="_blank">正常情况下，线程只能用完时间片才能让出cpu执行权吗? - 知乎</a></p>
+<p>读取一个字就恢复原程序上下文？</p>
+</blockquote>
+<h3 id="DMA方式"><a href="#DMA方式" class="headerlink" title="DMA方式"></a>DMA方式</h3><p>中断驱动方式比程序直接控制方式有效，但由于数据中的每个字在存储器与I/O控制器之间的传输都要经过CPU，这就导致了中断驱动方式还是会消耗很多CPU。</p>
+<p>而DMA（直接存储器存取）方式的基本思想是在I/O设备和内存之间开辟直接的数据交换通道。</p>
+<p>DMA方式特点如下：</p>
+<ul>
+<li>基本单位是数据块。</li>
+<li>所传送的数据，是从设备直接进入内存，或者相反。</li>
+<li>仅在传输一个或多个数据块的开始和结束时，才需要CPU干预。整块数据的传送是在DMA控制器的控制下完成的。</li>
+</ul>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1641603821/origin-of-ray/asynccode_mozf3x.png" alt="img"></p>
+<p>要在主机和控制器之间实现成块数据的直接交换，需要在DMA控制器中设置如下4类寄存器：</p>
+<ul>
+<li>命令/状态寄存器（CR）。用于接收从CPU发来的I/O命令或有关的控制信息，或设备状态字。</li>
+<li>内存地址寄存器（MAR）。在输入时，它存放把数据从设备传送到内存的起始目标地址，在输出时，它存放由内存到设备的内存源地址。</li>
+<li>数据寄存器（DR）。用于暂存从设备到内存或从内存到设备的数据</li>
+<li>数据计数器（DC）。存放本次要传送的字（节）数。</li>
+</ul>
+<p>如上图所示，DMA工作方式是：CPU接收到I/O设备的DMA请求后，它给I/O控制器发送发送一条命令，启动DMA控制器，然后继续其他工作。之后CPU就把控制操作委托给DMA控制器，由该控制器负责处理。DMA控制器直接与存储器交互，传送整个数据块，每次传送一个字，整个过程不需要CPU参与。传送完成后，DMA发送一个中断信号给CPU。</p>
+<p>DMA控制方式和中断驱动方式的主要区别是，中断驱动方式在每个数据需要传输时中断CPU，而DMA控制方式则是在所要求传送的一批数据全部传送结束时才中断CPU。</p>
+<h3 id="通道控制方式"><a href="#通道控制方式" class="headerlink" title="通道控制方式"></a>通道控制方式</h3><p>I/O通道是指专门负责输入输出的处理机（注意，这里不是控制器了）。I/O通道方式是DMA方式的发展，它可以进一步减少CPU的干扰，即把对一个数据块的读、写为单位的干预，减少为对一组数据块读写以及有关控制和管理为单位的干预。</p>
+<p>同时，又可以实现CPU，通道和I/O设备三者的并行操作，有效提高整个系统的资源利用率。</p>
+<p>例如，当CPU要完成一组相关的读或者写操作及有关控制时，只需要向I/O通道发送一条I/O指令，以给出其所要执行的通道程序的首地址和要访问的I/O设备，通道接收到该指令后，执行通道程序便可完成指定的I/O任务，数据传送结束时向CPU发送中断请求。</p>
+<p>I/O通道与一般处理机的区别是：</p>
+<ul>
+<li>通道指令的类型单一。</li>
+<li>没有自己的内存，通道所执行的通道程序是放在主机的内存中的，也就是说，通道与CPU共享内存</li>
+</ul>
+<h3 id="DMA控制方式与中断控制方式的区别"><a href="#DMA控制方式与中断控制方式的区别" class="headerlink" title="DMA控制方式与中断控制方式的区别"></a>DMA控制方式与中断控制方式的区别</h3><ol>
+<li>中断控制方式在每个数据传送完成后中断CPU，而DMA控制方式则在所要求传送的一批数据全部传送完成后中断CPU。</li>
+<li>中断控制方式的数据传送在中断处理时由CPU控制完成，而DMA控制方式则在DMA控制器的控制下完成。不过，在DMA控制方式中，数据传送的方向，存放数据的内存始址及传送数据的长度等仍然由CPU控制。</li>
+<li>DMA方式以存储器为核心，中断控制方式以CPU为核心，因此DMA方式能与CPU并行工作。</li>
+<li>DMA方式能批量传输数据，中断控制方式只能以字节为单位。</li>
+</ol>
+<h3 id="DMA控制方式和通道控制方式的区别"><a href="#DMA控制方式和通道控制方式的区别" class="headerlink" title="DMA控制方式和通道控制方式的区别"></a>DMA控制方式和通道控制方式的区别</h3><p>DMA控制方式中，在DMA控制器控制下设备和主存之间可以成批地进行数据交换而不用CPU干预，这样既减轻了CPU的负担，又提高了了I/O数据的传送速度。</p>
+<p>通道控制方式与DMA控制方式类似，也是一种以内存为中心实现设备与内存直接交换数据的控制方式，不过在通道控制方式中，CPU只需要发出启动指令，指出通道相应的操作和I/O设备，该指令就可以启动通道并使通道从内存中调出相应的通道执行程序执行。</p>
+<p>与DMA方式相比，通道控制方式需要CPU的干预更少，并且一个通道可以同时控制多台设备，进一步减轻了CPU的负担。</p>
+<p>另外，对通道来说，可以使用一些指令灵活改变 通道程序，这一点DMA控制方式无法做到。</p>
+<h2 id="I-O子系统的层次结构"><a href="#I-O子系统的层次结构" class="headerlink" title="I/O子系统的层次结构"></a>I/O子系统的层次结构</h2><table>
 <thead>
 <tr>
-<th>1</th>
-<th>找出质数</th>
-<th>P 、Q</th>
-<th>-</th>
+<th>用户层I/O软件</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>2</td>
-<td>计算公共模数</td>
-<td>N = P * Q</td>
-<td>-</td>
+<td>设备独立性软件</td>
 </tr>
 <tr>
-<td>3</td>
-<td>欧拉函数</td>
-<td>φ(N) = (P-1)(Q-1)</td>
-<td>-</td>
+<td>设备驱动程序</td>
 </tr>
 <tr>
-<td>4</td>
-<td>计算公钥E</td>
-<td>1 &lt; E &lt; φ(N)</td>
-<td>E的取值必须是整数 E 和 φ(N) 必须是互质数</td>
+<td>中断处理程序</td>
 </tr>
 <tr>
-<td>5</td>
-<td>计算私钥D</td>
-<td>E * D % φ(N) = 1</td>
-<td>-</td>
-</tr>
-<tr>
-<td>6</td>
-<td>加密</td>
-<td>C ＝ M E mod N</td>
-<td>C：密文  M：明文</td>
-</tr>
-<tr>
-<td>7</td>
-<td>解密</td>
-<td>M ＝C D mod N</td>
-<td>C：密文  M：明文</td>
+<td>硬件</td>
 </tr>
 </tbody></table>
-<p>参考文章： </p>
-<p><a href="https://blog.csdn.net/wzzvictory/article/details/9015155" rel="external nofollow noopener noreferrer" target="_blank">https://blog.csdn.net/wzzvictory/article/details/9015155</a> </p>
-<p><a href="https://cloud.tencent.com/developer/article/1130051" rel="external nofollow noopener noreferrer" target="_blank">https://cloud.tencent.com/developer/article/1130051</a> </p>
+<p>整个I/O系统可以视为具有4个层次的系统结构，各层次及其功能如下：</p>
+<h3 id="用户层I-O软件"><a href="#用户层I-O软件" class="headerlink" title="用户层I/O软件"></a>用户层I/O软件</h3><p>实现与用户交互的接口，用户可以直接调用在用户层提供的，与I/O操作有关的库函数，对设备进行操作。一般而言，大部分的I/O软件都在操作系统内部，但仍有一小部分在用户层，包括与用户程序链接在一起的库函数，以及完全运行在内核之外的一些程序，用户层软件必须通过一组系统调用来获取操作系统服务。</p>
+<h3 id="设备独立性软件"><a href="#设备独立性软件" class="headerlink" title="设备独立性软件"></a>设备独立性软件</h3><p>用于实现用户程序与设备驱动器的统一接口，设备命令，设备保护及设备分配与释放等，同时为设备管理和数据传送提供必要的存储空间。</p>
+<p>设备独立性也成为设备无关性，使得应用程序独立于具体使用的物理设备，为实现设备独立性而引入逻辑设备和物理设备两个概念。</p>
+<p>在应用程序中，根据逻辑设备名来请求使用某类设备；而在系统实际执行时，必须将逻辑设备名映射成物理设备名使用。</p>
+<p>使用逻辑设备名的好处是：</p>
+<ul>
+<li>增加设备分配的灵活性。</li>
+<li>易于实现I/O设备的重定向。</li>
+</ul>
+<p>为了实现设备独立性，必须再在驱动程序之上设置一层设备独立性软件。总体而言，设备独立性软件的主要功能可以分为两个方面：</p>
+<ul>
+<li>执行所有设备的公有操作。包括：对设备进行分配和回收；将逻辑设备映射为物理设备名；对设备进行保护，禁止用户直接访问设备；缓冲管理；差错控制；提供独立于设备的大小统一的逻辑块，屏蔽设备之间信息交换单位大小和传输速率的差异。</li>
+<li>向用户层（文件层）提供统一接口。无论何种设备，它们向用户提供的接口应该是相同的，例如，对各种设备的读写操作，在应用程序中都统一使用read/write命令等。</li>
+</ul>
+<h3 id="设备驱动程序"><a href="#设备驱动程序" class="headerlink" title="设备驱动程序"></a>设备驱动程序</h3><p>与硬件直接相关，负责具体实现系统对设备发出的操作指令，驱动I/O设备工作的驱动程序。</p>
+<p>通常，每类设备提供一个设备驱动程序，它是I/O进程与设备控制器之间的通信程序，常以进程形式存在。设备驱动程序向上层用户程序提供一组标准接口，设备具体的差别被设备驱动程序所封装，用于接收上层软件发来的抽象I/O请求，如read或write命令，转化为具体要求后，发送给设备控制器。它也将由设备控制器发送来的信号传送给上层软件，从而为I/O内核子系统隐藏设备控制器之间的差别。</p>
+<h3 id="中断处理程序"><a href="#中断处理程序" class="headerlink" title="中断处理程序"></a>中断处理程序</h3><p>用于保存被中断进程的CPU环境，转入相应的中断处理程序进行处理，处理完并恢复中断进程的现场后，返回被中断进程。</p>
+<p>中断处理层的主要任务有：进程上下文的切换，对处理终端信号源进行测试，读取设备状态和修改进程状态等。</p>
+<p>由于中断处理与硬件密切相关，对用户而言，应尽量加以屏蔽，因此应放在操作系统的底层，系统其它部分应该尽可能少地与之发生关系。</p>
+<h3 id="硬件设备"><a href="#硬件设备" class="headerlink" title="硬件设备"></a>硬件设备</h3><p>I/O设备通常包含一个机械部件和一个电子部件。为了达到设计的模块性和通用性，一般将其分开：</p>
+<ul>
+<li>电子部件称为设备控制器（或适配器），在个人计算机中，通常是一块插入主板扩充槽的印制电路板。</li>
+<li>机械部分则是设备本身。</li>
+</ul>
+<blockquote>
+<p>有几点注意：</p>
+<p>这里说的设备控制器指的是硬件设备内部的控制器，不是前面的DMA控制器中的控制器。</p>
+<p>设备无关性，做的是设备的公有操作，比如权限认证，差错校验，用缓存来将不同设备的大小不同的块统一为逻辑大小相同的块。</p>
+<p>具体的系统指令解析和执行需要下层的设备驱动程序。</p>
+<p>中断处理程序是整个操作系统的层面的东西，不仅仅在I/O中用到。</p>
+</blockquote>
+<p>设备控制器通过寄存器与CPU通信，在某些计算机上，这些寄存器占用内存地址的一部分，称为内存映像I/O；另一些计算机则采用I/O专用地址，寄存器独立编址。</p>
+<p>操作系统通过向控制器寄存器写命令字来执行I/O功能。控制器收到一条命令后，CPU可以转向其他工作，而让设备控制器自行完成具体的I/O操作。</p>
+<p>当命令执行完毕后，控制器发出一个中断信号，操作系统重新获取CPU的执行权限并检查执行结果，此时CPU仍旧从控制器寄存器中读取信息来获取执行的结果和设备的状态信息。</p>
+<p>设备控制器的主要功能如下：</p>
+<ul>
+<li>接收和识别CPU或通道发来的命令，如磁盘控制器能接受读，写，查找命令。</li>
+<li>实现数据交换，包括设备和控制器之间的数据传输，通过数据总线或通道，控制器和主存之间的数据传输。</li>
+<li>发现和记录设备及自身的状态信息，供CPU处理使用。</li>
+<li>设备地址识别。</li>
+</ul>
+<p>为了实现上述功能，设备控制器必须包含以下部分：</p>
+<ul>
+<li>设备控制器与CPU接口。该接口有三类信号线：数据线，地址线和控制线。数据线通常与两类寄存器相连，数据寄存器（存放从设备送来的输入数据或从CPU送来的输出数据）和控制/状态寄存器（存放从CPU送来的控制信息或设备的状态信息）</li>
+<li>设备控制器与设备接口。设备控制器连接设备需要相应数量的接口，一个接口连接一个设备，每个接口中都存在数据，控制和状态三类信号。</li>
+<li>I/O控制逻辑。用于实现对设备的控制，它通过一组控制线与CPU交互，对从CPU收到的I/O命令进行译码。CPU启动设备时，将启动命令发送给控制器，同时通过地址线把地址发送给控制器，由控制器的I/O逻辑对地址进行译码，并相应地选择设备进行控制。</li>
+</ul>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1641603845/origin-of-ray/asynccode_ci8aj8.png" alt="img"></p>
 
       
     </div>
@@ -471,7 +538,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://sunra.top/2019/10/19/Asymmetric_Encryption/" title="非对称加密原理探索">https://sunra.top/2019/10/19/Asymmetric_Encryption/</a>
+    <a href="https://sunra.top/2022/01/07/operating-system-note-7-io-introduction/" title="操作系统学习笔记（七）I/O管理概述">https://sunra.top/2022/01/07/operating-system-note-7-io-introduction/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -493,8 +560,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/12/sinon_mock_function/" rel="next" title="How to use sinon mock function">
-                <i class="fa fa-chevron-left"></i> How to use sinon mock function
+              <a href="/2022/01/02/operating-system-note-6-file-system-implementation/" rel="next" title="操作系统学习笔记（六）文件管理系统实现">
+                <i class="fa fa-chevron-left"></i> 操作系统学习笔记（六）文件管理系统实现
               </a>
             
           </div>
@@ -502,10 +569,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/10/26/jwt/" rel="prev" title="JWT">
-                JWT <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -663,7 +726,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#非对称加密"><span class="nav-number">1.</span> <span class="nav-text">非对称加密</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#公钥认证"><span class="nav-number">2.</span> <span class="nav-text">公钥认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数字签名"><span class="nav-number">2.1.</span> <span class="nav-text">数字签名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数字证书"><span class="nav-number">2.2.</span> <span class="nav-text">数字证书</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构成"><span class="nav-number">2.2.1.</span> <span class="nav-text">构成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#证书信任链"><span class="nav-number">2.2.2.</span> <span class="nav-text">证书信任链</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RSA原理简介"><span class="nav-number">3.</span> <span class="nav-text">RSA原理简介</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O设备"><span class="nav-number">1.</span> <span class="nav-text">I/O设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O控制方式"><span class="nav-number">2.</span> <span class="nav-text">I/O控制方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#程序直接控制的方式"><span class="nav-number">2.1.</span> <span class="nav-text">程序直接控制的方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中断驱动方式"><span class="nav-number">2.2.</span> <span class="nav-text">中断驱动方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DMA方式"><span class="nav-number">2.3.</span> <span class="nav-text">DMA方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通道控制方式"><span class="nav-number">2.4.</span> <span class="nav-text">通道控制方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DMA控制方式与中断控制方式的区别"><span class="nav-number">2.5.</span> <span class="nav-text">DMA控制方式与中断控制方式的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DMA控制方式和通道控制方式的区别"><span class="nav-number">2.6.</span> <span class="nav-text">DMA控制方式和通道控制方式的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O子系统的层次结构"><span class="nav-number">3.</span> <span class="nav-text">I/O子系统的层次结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用户层I-O软件"><span class="nav-number">3.1.</span> <span class="nav-text">用户层I/O软件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设备独立性软件"><span class="nav-number">3.2.</span> <span class="nav-text">设备独立性软件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设备驱动程序"><span class="nav-number">3.3.</span> <span class="nav-text">设备驱动程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中断处理程序"><span class="nav-number">3.4.</span> <span class="nav-text">中断处理程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬件设备"><span class="nav-number">3.5.</span> <span class="nav-text">硬件设备</span></a></li></ol></li></ol></div>
             
 
           </div>
