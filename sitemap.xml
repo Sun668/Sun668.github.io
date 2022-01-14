@@ -1301,6 +1301,13 @@
 
   
   <url>
+    <loc>https://sunra.top/categories/Network/</loc>
+    <lastmod>2022-01-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://sunra.top/categories/Sundry/</loc>
     <lastmod>2022-01-14</lastmod>
     <changefreq>daily</changefreq>
@@ -1309,13 +1316,6 @@
   
   <url>
     <loc>https://sunra.top/categories/Cloud/</loc>
-    <lastmod>2022-01-14</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sunra.top/categories/Network/</loc>
     <lastmod>2022-01-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
