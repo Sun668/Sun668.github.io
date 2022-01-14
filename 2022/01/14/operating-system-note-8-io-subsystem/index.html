@@ -79,24 +79,24 @@
 
 
 
-<meta name="description" content="阅读前的思考 在目录中找到某个文件可以使用什么方法？ 文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构之间是否存在某些制约关系？  上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。">
+<meta name="description" content="概述由于I/O设备种类繁多，功能和传输速率差异极大，因此需要多种方法来进行设备控制，这些方法共同组成了操作系统内核的I/O子系统，它将内核的其他方面从繁重的I/O设备管理中解放出来。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="操作系统学习笔记（六）文件管理系统实现">
-<meta property="og:url" content="https://sunra.top/2022/01/02/operating-system-note-6-file-system-implementation/index.html">
+<meta property="og:title" content="操作系统学习笔记（七）I&#x2F;O管理子系统">
+<meta property="og:url" content="https://sunra.top/2022/01/14/operating-system-note-8-io-subsystem/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="阅读前的思考 在目录中找到某个文件可以使用什么方法？ 文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构之间是否存在某些制约关系？  上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。">
+<meta property="og:description" content="概述由于I/O设备种类繁多，功能和传输速率差异极大，因此需要多种方法来进行设备控制，这些方法共同组成了操作系统内核的I/O子系统，它将内核的其他方面从繁重的I/O设备管理中解放出来。">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=MjNkMTljMmYzNTA4MDg5YWI5MzY1ODdkYzg4ZGJmMDhfa1poRVoyZTVQSmV0MmFnNW1CTnFIOXZ6UFRxTUpuejhfVG9rZW46Ym94Y25KUkg1M1E0NXNwbFB6TUJsQXZVbFliXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
-<meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDZkOTY5ZDYzZjllMWMzY2RkOWVjMjg0NjI3MDllNmNfUU94d3duenUzajVzcHlGSmJ2b25MeUNtbUdkRWNDazFfVG9rZW46Ym94Y25BZ21tcmJaWnExWTU1WGlHWVhSNHRiXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
-<meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmY1MmJlNzc2ODMyZGEzNzYzNzhiZThlZmRjNThhZDdfQXM3NHpTdDdmZWhDaVoyMkRFbXJQNjhNRGw5MmV2aHpfVG9rZW46Ym94Y25SV214OTNOakZrNXdXeFZNNmxMT0lkXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
-<meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmUyYjE0MjVkOWFhZTg1MzNkNjc4NDgzYmRlMmY0ODNfamdHOXpzaklPUzFCR3VNZ2J2ZWdJOUo5SzE4WG8zdUhfVG9rZW46Ym94Y25xT1NQYUVwZ2NBNlJ3UDZtQks3cXpjXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
-<meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWJhN2NkZGQ4NWYzYThjNjVhYzlhODNlNDkyMzIwZGZfWU5WQWo4eVk0T2hYVW9NemZiR1pUczRTaXNzTjVCWHdfVG9rZW46Ym94Y241THZNYmE1SkZqZVdCcWJTVm9xblBiXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
-<meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=MmI3YTEzMzY2OWM4NGE5ODc1Yjk4OGFhOTA3OTNlMDBfMWFwaUM4dU1UUDlBYXJYbE1YQmJUSUp4ZTRBdVlra1FfVG9rZW46Ym94Y25OSmRlTTRUNms1cUhTTnUySk9PMjBkXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
-<meta property="og:updated_time" content="2022-01-03T00:04:07.271Z">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1642160906/origin-of-ray/asynccode_fnjgcu.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1642160936/origin-of-ray/asynccode_tvqeud.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1642161250/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20220114195347_sle5nu.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1642160963/origin-of-ray/asynccode_yrffju.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1642160986/origin-of-ray/asynccode_ep2j2u.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1642161118/origin-of-ray/asynccode_z1kip3.png">
+<meta property="og:updated_time" content="2022-01-14T11:55:04.417Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="操作系统学习笔记（六）文件管理系统实现">
-<meta name="twitter:description" content="阅读前的思考 在目录中找到某个文件可以使用什么方法？ 文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构之间是否存在某些制约关系？  上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。">
-<meta name="twitter:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=MjNkMTljMmYzNTA4MDg5YWI5MzY1ODdkYzg4ZGJmMDhfa1poRVoyZTVQSmV0MmFnNW1CTnFIOXZ6UFRxTUpuejhfVG9rZW46Ym94Y25KUkg1M1E0NXNwbFB6TUJsQXZVbFliXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
+<meta name="twitter:title" content="操作系统学习笔记（七）I&#x2F;O管理子系统">
+<meta name="twitter:description" content="概述由于I/O设备种类繁多，功能和传输速率差异极大，因此需要多种方法来进行设备控制，这些方法共同组成了操作系统内核的I/O子系统，它将内核的其他方面从繁重的I/O设备管理中解放出来。">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1642160906/origin-of-ray/asynccode_fnjgcu.png">
 
 
 
@@ -126,14 +126,14 @@
 
 
 
-  <link rel="canonical" href="https://sunra.top/2022/01/02/operating-system-note-6-file-system-implementation/">
+  <link rel="canonical" href="https://sunra.top/2022/01/14/operating-system-note-8-io-subsystem/">
 
 
 
 
 
 <script data-ad-client="ca-pub-8623125811074939" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <title>操作系统学习笔记（六）文件管理系统实现 | Origin of Ray</title>
+  <title>操作系统学习笔记（七）I/O管理子系统 | Origin of Ray</title>
   
 
 
@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/01/02/operating-system-note-6-file-system-implementation/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/01/14/operating-system-note-8-io-subsystem/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Ray Sun">
@@ -299,7 +299,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">操作系统学习笔记（六）文件管理系统实现</h2>
+          <h2 class="post-title" itemprop="name headline">操作系统学习笔记（七）I/O管理子系统</h2>
         
 
         <div class="post-meta">
@@ -311,8 +311,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-01-02T07:56:20+08:00">
-                2022-01-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-01-14T19:46:59+08:00">
+                2022-01-14
               </time>
             
 
@@ -371,173 +371,142 @@
       
 
       
-        <h2 id="阅读前的思考"><a href="#阅读前的思考" class="headerlink" title="阅读前的思考"></a>阅读前的思考</h2><ul>
-<li>在目录中找到某个文件可以使用什么方法？</li>
-<li>文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构之间是否存在某些制约关系？</li>
-</ul>
-<p>上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>由于I/O设备种类繁多，功能和传输速率差异极大，因此需要多种方法来进行设备控制，这些方法共同组成了操作系统内核的I/O子系统，它将内核的其他方面从繁重的I/O设备管理中解放出来。</p>
 <a id="more"></a>
 
-<h2 id="文件系统的层次结构"><a href="#文件系统的层次结构" class="headerlink" title="文件系统的层次结构"></a>文件系统的层次结构</h2><p>现代操作系统有多种文件系统类型，如FAT32，NTFS，ext2，ext3，ext4等，因此文件系统的层次结构也不尽相同。下面这种是一种比较通用的层次结构。</p>
-<p>不支持在 Docs 外粘贴 block</p>
-<ol>
-<li>用户调用接口</li>
-</ol>
-<p>文件系统为用户提供与文件及目录相关的调用，如新建，打开，读写，关闭，删除文件，建立，删除目录等。这一层由若干模块组成，每个模块对应一条系统调用，用户发出系统调用时，控制即转入相应的模块。</p>
-<ol>
-<li>文件目录系统</li>
-</ol>
-<p>文件目录系统的主要功能是管理文件目录，其任务有：</p>
+<p>I/O核心子系统提供的服务主要有：</p>
 <ul>
-<li>管理活跃文件目录表。</li>
-<li>管理读写状态信息表。</li>
-<li>管理用户进程打开表。</li>
-<li>管理与组织存储设备上的文件目录结构。</li>
-<li>调用下一级存取控制模块。</li>
+<li>I/O调度</li>
+<li>缓冲与高速缓存</li>
+<li>设备分配与回收</li>
+<li>假脱机</li>
+<li>设备保护</li>
+<li>差错处理</li>
 </ul>
-<ol>
-<li>存取控制验证模块</li>
-</ol>
-<p>实现文件保护主要由该级软件完成，它把用户的访问要求与FCB中指示的访问控制权限进行比较，以确认访问的合法性。</p>
-<ol>
-<li>逻辑文件系统与文件信息缓冲区</li>
-</ol>
-<p>根据文件的逻辑结构将用户要读写的逻辑记录转换成文件逻辑结构内的相应块号。</p>
-<ol>
-<li>物理文件系统</li>
-</ol>
-<p>将逻辑记录的相对块号转换成实际的物理地址。</p>
-<ol>
-<li>辅助分配模块</li>
-</ol>
-<p>主要功能是管理辅存空间，即负责分配辅存空闲空间和回收辅存空间</p>
-<p>这里应该要回头联系下内存分配</p>
-<ol>
-<li>设备管理程序模块</li>
-</ol>
-<p>分配设备，分配设备读写缓冲区，磁盘调度，启动设备，处理设备中断，释放设备读写缓冲区，释放设备等。</p>
-<h2 id="目录的实现"><a href="#目录的实现" class="headerlink" title="目录的实现"></a>目录的实现</h2><p>目录实现的基本方法有线性列表和哈希表两种，要注意目录的实现就是为了查找，因此线性列表对应线性查找，哈希表对应散列查找。</p>
-<ol>
-<li>线性列表</li>
-</ol>
-<p>最简单的目录实现方法，是使用存储文件名和数据块指针的线性表。</p>
-<p>在创建新文件时，必须搜索目录上有没有同名的文件存在，然后在目录表上增加一个目录项，删除文件则根据给定的文件名搜索目录，接着释放它的空间。</p>
-<p>重用目录项有很多方法：</p>
+<h2 id="I-O调度"><a href="#I-O调度" class="headerlink" title="I/O调度"></a>I/O调度</h2><p>应用程序发出的系统调用的顺序不一定是最佳选择，所以需要I/O调度来改善系统整体性能，使进程之间公平地共享设备访问减少I/O所需要的平均等待时间。</p>
+<p>操作系统开发人员通过为每一个设备维护一个请求队列，来实现调度。当一个应用程序执行阻塞I/O系统调用时，请求就加到相应设备的队列上。</p>
+<p>I/O调度会重新安排调度顺序，以改善系统总体效率和应用程序的平均响应时间。</p>
+<p>I/O子系统还可以使用主存或磁盘上的存储空间技术，如缓冲，高速缓存，假脱机等来改善计算机效率</p>
+<p>磁盘调度算法就是I/O调度的一种。</p>
+<h2 id="高速缓存与缓冲区"><a href="#高速缓存与缓冲区" class="headerlink" title="高速缓存与缓冲区"></a>高速缓存与缓冲区</h2><h3 id="磁盘高速缓存（Disk-Cache）"><a href="#磁盘高速缓存（Disk-Cache）" class="headerlink" title="磁盘高速缓存（Disk Cache）"></a>磁盘高速缓存（Disk Cache）</h3><p>操作系统中使用磁盘高速缓存技术来提高磁盘的I/O速度，对高速缓存复制的访问要比原始数据访问更快。例如正在运行的进程指令既存储在磁盘上，又存储在物理内存上，也被复制到CPU的二级和一级高速缓存中。</p>
+<p>不过，磁盘高速缓存不同于通常意义下的介于CPU与内存之间的小容量高速存储器，而是指利用内存中的存储空间来暂存从磁盘中读出的一系列盘块中的信息。</p>
+<p>因此，磁盘高速缓存逻辑上属于磁盘，物理上则是驻留在内存中的盘块。</p>
+<p>高速缓存在内存中分为两种形式，</p>
+<p>一种是在内存中开辟单独的一块存储空间来作为磁盘高速缓存，大小固定；</p>
+<p>另一种是把未利用的内存空间作为一个缓冲池，供请求分页系统和磁盘I/O共享。</p>
+<h3 id="缓冲区"><a href="#缓冲区" class="headerlink" title="缓冲区"></a>缓冲区</h3><p>在设备管理子系统中，引入缓冲区的主要目的如下：</p>
 <ul>
-<li>可以将目录项标记为不再使用。</li>
-<li>将其加到空闲目录项表上。</li>
-<li>可以将目录表中最后一个目录项复制到空闲位置，降低目录表长度。</li>
+<li>缓和CPU和I/O设备间速度不匹配的问题。</li>
+<li>减少CPU的中断频率，放宽对CPU中断响应时间的限制。</li>
+<li>解决基本数据单元大小不匹配问题</li>
+<li>提高CPU和I/O设备之间的并行性</li>
 </ul>
-<p>这里的空闲目录表的思想，有点像内存的页面分配策略（固定分配局部置换，可变分配全局置换，可变分配局部置换）</p>
-<p>采用链表结构可以减少删除时间，优点在于实现简单，不过由于线性表的特殊性，比较费时。</p>
-<ol>
-<li>哈希表</li>
-</ol>
-<p>最大的困难是哈希表的长度固定以及哈希函数对表长的依赖。</p>
-<p>目录查询是通过在磁盘上反复搜索完成的，需要不断的进行I/O操作，开销较大。</p>
-<p>所以为了减少I/O操作，把当前使用的文件目录复制到内存。</p>
-<h2 id="文件的实现"><a href="#文件的实现" class="headerlink" title="文件的实现"></a>文件的实现</h2><p>文件的实现，研究的是文件的物理结构，即文件数据在物理存储设备上是如何分布和组织的。</p>
-<p>这个问题有两个方面：</p>
+<p>其实现方法如下：</p>
 <ul>
-<li>文件的分配方式，讲的是对磁盘非空闲块的管理。</li>
-<li>文件存储空间管理，对磁盘空闲块的管理。</li>
+<li>采用硬件缓冲器，但是成本太高，只在一些关键部位使用。</li>
+<li>采用缓冲区（在内存中）</li>
 </ul>
-<h3 id="文件的分配方式"><a href="#文件的分配方式" class="headerlink" title="文件的分配方式"></a>文件的分配方式</h3><h4 id="连续分配"><a href="#连续分配" class="headerlink" title="连续分配"></a>连续分配</h4><p>连续分配方法要求每个文件在磁盘上占有一组连续的块，如下图所示，磁盘地址定义了磁盘上的一个线性排序。这种排序使作业访问磁盘时需要的寻道数和寻道时间最小。</p>
-<p>文件的连续分配可以用第一块的磁盘地址和连续块的数量来定义。一个文件的目录条目包含开始块的地址和该文件所分配区域的长度。</p>
-<p><img src="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=MjNkMTljMmYzNTA4MDg5YWI5MzY1ODdkYzg4ZGJmMDhfa1poRVoyZTVQSmV0MmFnNW1CTnFIOXZ6UFRxTUpuejhfVG9rZW46Ym94Y25KUkg1M1E0NXNwbFB6TUJsQXZVbFliXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA" alt="img"></p>
-<p>连续分配支持<strong>顺序访问和直接访问</strong>，其优点是实现简单，存取速度快。缺点是长度不宜动态增加，因为一个文件末尾后的盘块可能已经分配给其他文件了，一旦需要增加，就需要重新找一片更大的连续内存，然后把数据复制过去。因而这种方式只适用于长度固定的文件。</p>
-<h4 id="链接分配"><a href="#链接分配" class="headerlink" title="链接分配"></a>链接分配</h4><p>链接分配采取离散分配的方式，消除了外部碎片，显著提高磁盘利用率，且文件可以很容易地动态增长，无需事先指导文件的大小。</p>
-<p>链接分配又可以分为隐式链接和显式链接两种形式。</p>
-<ol>
-<li>隐式链接</li>
-</ol>
-<p>隐式链接如图所示，每个文件对应一个磁盘块的链表，磁盘块分布在磁盘的任何地方，排除最后一个盘块外，每个盘块都有指向下一个盘块的指针。</p>
-<p><img src="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDZkOTY5ZDYzZjllMWMzY2RkOWVjMjg0NjI3MDllNmNfUU94d3duenUzajVzcHlGSmJ2b25MeUNtbUdkRWNDazFfVG9rZW46Ym94Y25BZ21tcmJaWnExWTU1WGlHWVhSNHRiXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA" alt="img"></p>
-<p>创建新文件时，目录中增加一个条目。每个目录项都有一个指向文件首块的指针，该指针初始化为NULL表示空文件，大小字段为0，写文件会通过空闲空间管理系统找到空间块，将该块链接到文件的尾部，然后写入。</p>
-<p>隐式链接的缺点是无法直接访问盘块，只能通过指针顺序访问文件，且盘块指针会消耗一定空间，其稳定性也是一个问题，一旦某一个指针丢了，会导致文件数据丢失。</p>
-<ol>
-<li>显式链接</li>
-</ol>
-<p>把用于链接文件各物理块的指针，从每个物理块的末尾提取出来，显式存放在内存的一张链表中。该表在整个磁盘中仅设置一张（也就是说，并不是每个文件都有自己的一张表），称为文件分配表（File Allocation Table， FAT）。每个表项存放对应块的下一块链接指针，即下一个盘块号。文件的第一个盘块号记录在目录中，后续的盘块号通过查FAT找到。</p>
-<p><img src="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmY1MmJlNzc2ODMyZGEzNzYzNzhiZThlZmRjNThhZDdfQXM3NHpTdDdmZWhDaVoyMkRFbXJQNjhNRGw5MmV2aHpfVG9rZW46Ym94Y25SV214OTNOakZrNXdXeFZNNmxMT0lkXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA" alt="img"></p>
-<p>注意，上图中的盘块号只是一个隐含的序号而已，并不占用空间，就像是数组的索引一样。</p>
-<p>FAT的表项和全部磁盘块一一对应。用一个特殊数字-1表示文件末尾，-2表示是空闲块。</p>
-<p>FAT在系统启动时就会被读入内存。</p>
-<h4 id="索引分配"><a href="#索引分配" class="headerlink" title="索引分配"></a>索引分配</h4><p>链接分配解决了连续分配的外部碎片和文件大小的管理问题，但是链接分配并不能有效支持直接访问（FAT除外）。索引分配解决了这个问题，它把每个文件的所有盘块号几种放在一起构成了索引块。</p>
-<p><img src="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmUyYjE0MjVkOWFhZTg1MzNkNjc4NDgzYmRlMmY0ODNfamdHOXpzaklPUzFCR3VNZ2J2ZWdJOUo5SzE4WG8zdUhfVG9rZW46Ym94Y25xT1NQYUVwZ2NBNlJ3UDZtQks3cXpjXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA" alt="img"></p>
-<p>每个文件都有自己的索引块。这是一个磁盘块地址的数组。 索引块的第i个条目指向文件的第i个块。目录条目包括索引块地址。要读第i块，通过索引块的第i个条目的指针来查找和读入所需要的块。</p>
-<p>创建文件时，索引块的所有指针都设为空，首次写入第i块时，先从空闲块空间中取一个块，将其地址写入索引块的第i个条目。</p>
-<p>索引块的大小是个重要的问题，每个文件都必须有一个索引块，因此索引块应该尽可能小，但是如果索引块太小了，就无法支持大文件，我们有几种方案可以用来解决这个问题：</p>
+<p>缓冲区有一个特点，即当缓冲区数据非空时，不能像缓冲区冲入数据，只能从缓冲区读取数据。当缓冲区为空时，可以往缓冲区冲入数据，但是必须把缓冲区充满后，才能从中读取数据。</p>
+<p>根据系统设置缓冲器的个数，缓冲技术可以分为如下几种：</p>
+<h4 id="单缓冲"><a href="#单缓冲" class="headerlink" title="单缓冲"></a>单缓冲</h4><p>在设备和处理机之间设置一个缓冲区，设备和处理机交换数据时，先把被交换的数据写入缓冲区，然后需要数据的设备或处理机从中取走数据。</p>
+<p>在块设备输入时，假定从磁盘把一块数据输入缓冲区的时间为T，操作系统从中取走数据的时间为M，CPU对这块数据的处理时间为C。</p>
+<p>我们在研究各种缓冲技术处理每块数据的时间时，假定一种初始状态，然后计算下一次到达相同状态的时间，就是处理一块数据的时间（如果没有明确说明，以一般认为缓冲区大小与工作区是相同的）。</p>
+<p>我们假定T &gt; C，初始状态工作区满，缓冲区空。</p>
+<p>当工作区处理完数据后，时间为C，但是缓冲区还没充满。</p>
+<p>等缓冲区充满了，从时间为T，停止冲入数据。</p>
+<p>然后数据从缓冲区传入工作区，用时为M，当工作区满了，缓冲区也空了，到达下一个状态，这个哥过程用时为M+T。</p>
+<p>如果T&lt;C，同理，用时为M+C</p>
+<p>所以单缓冲处理每块数据的时间为max(C,T) + M。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1642160906/origin-of-ray/asynccode_fnjgcu.png" alt="img"></p>
+<h4 id="双缓冲"><a href="#双缓冲" class="headerlink" title="双缓冲"></a>双缓冲</h4><p>根据单缓冲特点，CPU在传送时间M内处于空闲状态，由此引入双缓冲</p>
+<p>我们假定的初始状态是，工作区空，其中一个缓冲区满，另一个空，可以再次计算。</p>
+<p>我们分为T&lt;M+C和T&gt;M+C两种情况讨论。</p>
+<p>结论为双缓冲处理一块数据的用时为max(C + M, T)。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1642160936/origin-of-ray/asynccode_tvqeud.png" alt="img"></p>
+<p>若T&gt;M+C，我们可以使用块设备连续输入；若T&lt;M+C，则可以使CPU不必等待设备输入。</p>
+<p>对于字符设备，若采用行输入，则采用双缓冲可以是用户在输入第一行后，在CPU执行第一行命令时，用户可以向第二缓冲输入下一行数据。</p>
+<p>若两台机器之间只设置了单缓冲，则它们在任意时刻，只能实现单向的数据传输。为了实现双向数据传输，则必须再设置一个缓冲区，一个作为发送缓冲区，一个作为接收缓冲区。</p>
+<h4 id="循环缓冲"><a href="#循环缓冲" class="headerlink" title="循环缓冲"></a>循环缓冲</h4><p>包含多个大小相同的缓冲区，每个缓冲区有一个链接指针指向下一个缓冲区，最后一个缓冲区指向第一个缓冲区，多个缓冲区构成一个环形。</p>
+<p>循环缓冲用于输入输出时，还需要两个指针in和out。对于输入而言，首先要从设备接收数据到缓冲区，in指针指向可以输入数据的第一个空缓冲区，out指针指向可以提取数据的第一个满缓冲区。输出则相反（？）。</p>
+<h4 id="缓冲池"><a href="#缓冲池" class="headerlink" title="缓冲池"></a>缓冲池</h4><p>由多个系统公用的缓冲区组成，缓冲区按照其使用情况可以分为三个队列：</p>
 <ul>
-<li>链接方案。一个索引块通常为一个磁盘块，因此本身可以直接读写。为了处理大文件，可以将多个磁盘块链接起来。</li>
-<li>多层索引。多层索引使第一层索引块指向第二层的索引块，第二层索引块再指向文件块，这种方法根据最大文件大小的要求，可以继续到第三层或第四层。</li>
-<li>混合索引。将多种索引方式相结合的分配方式。例如系统既采用直接地址，又采用单击索引分配方式或者二级索引分配方式。</li>
+<li>空缓冲队列</li>
+<li>装满输入数据的缓冲队列（输入队列）</li>
+<li>装满输出数据的缓冲队列（输出队列）</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>访问第n条记录</th>
-<th>优点</th>
-<th>缺点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>连续分配</td>
-<td>需访问磁盘1次</td>
-<td>顺序存取时速度快，文件定长时可根据文件起始地址和记录长度随机访问。</td>
-<td>文件存储要求连续的存储空间，会产生碎片，不利于文件的动态扩充。</td>
-</tr>
-<tr>
-<td>链接分配</td>
-<td>需访问磁盘n次</td>
-<td>可解决外存的碎片问题，提高外存空间的利用率，动态增长较为方便。</td>
-<td>只能按照文件的指针链顺序访问，查找效率低，指针信息存放消耗额外空间。</td>
-</tr>
-<tr>
-<td>索引分配</td>
-<td>m级需访问磁盘m + 1次</td>
-<td>可以随机访问，文件易于增删</td>
-<td>索引表增加存储空间的开销，索引表的查找策略对文件系统效率影响较大。</td>
-</tr>
-</tbody></table>
-<p>这三种方案都需要目录项中或者索引节点（i节点）中存放索引块的地址。</p>
-<h3 id="文件存储空间管理"><a href="#文件存储空间管理" class="headerlink" title="文件存储空间管理"></a>文件存储空间管理</h3><h4 id="文件存储器空间的划分与初始化"><a href="#文件存储器空间的划分与初始化" class="headerlink" title="文件存储器空间的划分与初始化"></a>文件存储器空间的划分与初始化</h4><p>一般来说，一个文件存储在一个文件卷中。文件卷可以是物理盘的一部分，也可以是整个物理盘，支持超大文件的文件卷也可以由多个物理盘组成。</p>
-<p><img src="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWJhN2NkZGQ4NWYzYThjNjVhYzlhODNlNDkyMzIwZGZfWU5WQWo4eVk0T2hYVW9NemZiR1pUczRTaXNzTjVCWHdfVG9rZW46Ym94Y241THZNYmE1SkZqZVdCcWJTVm9xblBiXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA" alt="img"></p>
-<p>在一个文件卷中，文件数据信息的空间（文件区）和存放文件控制信息FCB的空间（目录区）是分离的。由于存在很多种类的文件表示和存放格式，所以现代操作系统中一般都有很多不同的文件管理模块，通过它们可以访问不同格式的逻辑卷中的文件。</p>
-<p>逻辑卷在提供文件服务前，必须由对应的文件程序进行初始化，划分好目录区和文件区，建立空闲空间管理表格以及存放逻辑卷信息的超级块。</p>
-<h4 id="文件存储器空间管理"><a href="#文件存储器空间管理" class="headerlink" title="文件存储器空间管理"></a>文件存储器空间管理</h4><p>文件存储设备分成许多大小相同的物理块，并以块为单位进行信息交换。因此文件存储设备的管理实质上是对空闲块的组织和管理。它包含空闲块的组织，分配和回收问题。</p>
-<p>这种物理块的划分思想有些像内存中页的划分，进程中的叫页，内存中的叫页框。</p>
-<h5 id="空闲表法"><a href="#空闲表法" class="headerlink" title="空闲表法"></a>空闲表法</h5><p>空闲表法属于连续分配方式，它与内存的动态分配方案类似，为每个文件分配一块连续的存储空间。</p>
-<p>系统为外存上的所有空闲区建立一张空闲盘块表，每个空闲区对应于一个空闲表项，其中包括表项序号，该空闲区第一个块号，该空闲区盘块数等。再将所有空闲区按其起始盘块号递增的次序排列。</p>
-<p>首先，这里说的属于连续分配方式，指的是空闲盘区的组织方式是连续的方式。</p>
-<p>其次看了这种方式以后，会有一种熟悉的感觉，很像内存的页面分配（策略有最佳适应算法等。）</p>
-<h5 id="空闲链表法"><a href="#空闲链表法" class="headerlink" title="空闲链表法"></a>空闲链表法</h5><p>将所有空闲盘区拉成一条空闲链，根据构成链所用的基本元素不同，可把链表分成两种形式，空闲盘块链和空闲盘区链。</p>
-<p>空闲盘块链将磁盘上的所有空闲空间以盘块为单位拉成一条链。当用户因创建文件而请求分配空间时，系统从链首开始，依次摘下适当数目的空闲盘块分配给用户。当用户因删除文件而释放存储空间时，系统将回收的盘块依次插入空闲盘块链的末尾。这种方法的优点是分配和回收一个盘块的过程非常简单，但在为一个文件分配盘块时可能要重复多次操作。</p>
-<p>空闲盘区链将磁盘上的所有空闲盘区（每个盘区可能包含多个盘块）拉成一条链。在每个盘区上除了含有用于指示下一个空闲盘区的指针外，还应该有能指明本盘区大小的信息。分配盘区的方法与内存的动态分区类似，通常采用首次适应算法，在回收盘区时，同样也要将回收区与相邻的空闲盘区合并。</p>
-<p>空闲表法，空闲盘区链比较类似，都与内存的动态分区类似。</p>
-<h5 id="位示图法"><a href="#位示图法" class="headerlink" title="位示图法"></a>位示图法</h5><p>利用二进制中的一位表示磁盘中一个盘块的使用情况，磁盘上所有的盘块都有一个二进制与之对应。当其值为0时，表示盘块空闲，为1时，表示已分配。</p>
-<h5 id="成组链表法"><a href="#成组链表法" class="headerlink" title="成组链表法"></a>成组链表法</h5><p>空闲表法和空闲链表法都不适合大型文件系统，因为这会使空闲表或者空闲链表过大。</p>
-<p>在UNIX中，采用的是成组链表法，这种方法结合了空闲表和空闲链表两种方法，克服了表太大的缺点</p>
-<p>其大致思想是：把顺序的n个空闲扇区地址保存在第一个空闲扇区，其后一个空闲扇区内则保存另一顺序空闲扇区的地址，如此继续，直至所有空闲扇区都予以链接。</p>
-<p>假设磁盘最初全为空闲扇区，其成组链接如图所示，通过这种方式可以迅速找到大批空闲块地址。</p>
-<p><img src="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=MmI3YTEzMzY2OWM4NGE5ODc1Yjk4OGFhOTA3OTNlMDBfMWFwaUM4dU1UUDlBYXJYbE1YQmJUSUp4ZTRBdVlra1FfVG9rZW46Ym94Y25OSmRlTTRUNms1cUhTTnUySk9PMjBkXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA" alt="img"></p>
-<p>这种成组链表法与多级的思想还不是完全相同。</p>
-<p>表示文件存储器空闲空间的“位向量”表或第一个成组链块，以及卷中的目录区，文件区划分信息都需要存放在辅存储器中，一般放在卷头位置，在UNIX中称为超级块。</p>
-<p>在对卷中文件进行操作前，超级块需要预先读入系统空闲的主存，并且经常保持主存超级块与辅存卷中超级块的一致性。</p>
-<h2 id="回答开始问题"><a href="#回答开始问题" class="headerlink" title="回答开始问题"></a>回答开始问题</h2><ol>
-<li>在目录中查找某个文件有什么方法</li>
+<p>还应该有四种缓冲区：</p>
+<ul>
+<li>用于收容输入数据的工作缓冲区</li>
+<li>用于提取输入数据的工作缓冲区</li>
+<li>用于收容输出数据的工作缓冲区</li>
+<li>用于提取输出数据的工作缓冲区</li>
+</ul>
+<p>当输入进程需要输入数据时，从空缓冲队列队首摘下一个空缓冲区，作为收容输入的工作缓冲区，然后向其中输入数据，装满后挂到输入队列队尾。</p>
+<p>当计算进程需要输入数据时，从输入队列获得一个缓冲区作为提取输入数据的工作缓冲区，提取完成后放回空缓冲队列队尾。</p>
+<h3 id="高速缓存和缓冲区的对比"><a href="#高速缓存和缓冲区的对比" class="headerlink" title="高速缓存和缓冲区的对比"></a>高速缓存和缓冲区的对比</h3><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1642161250/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20220114195347_sle5nu.png" alt></p>
+<h2 id="设备的分配与回收"><a href="#设备的分配与回收" class="headerlink" title="设备的分配与回收"></a>设备的分配与回收</h2><h3 id="设备分配概述"><a href="#设备分配概述" class="headerlink" title="设备分配概述"></a>设备分配概述</h3><p>设备分配时指根据用户的I/O请求分配所需的设备。分配的总原则是充分发挥设备的使用效率，尽可能让设备忙碌，又要避免由于不合理的分配方法造成的进程死锁。</p>
+<p>从设备特性来看，采用下述三种使用方式的设备分别称为独占设备，共享设备和虚拟设备：</p>
+<ul>
+<li>独占式使用设备</li>
+<li>分时共享设备，如磁盘的I/O，各进程的每次I/O操作请求可以通过分时来交替进行</li>
+<li>以SPOOLing方式使用外部设备。该技术是是在批处理操作系统时代引入的，即假脱机I/O技术，这种技术对设备的操作，其实就是对I/O操作进行批处理，是一种以空间换时间的技术。</li>
+</ul>
+<h3 id="设备分配的数据结构"><a href="#设备分配的数据结构" class="headerlink" title="设备分配的数据结构"></a>设备分配的数据结构</h3><p>设备分配依据的主要数据结构有设备控制表（DCT），控制器控制表（COCT），通道控制表（CHCT）和系统设备表（SDT）</p>
+<p>设备控制表（DCT）：我们可以认为，一个设备控制表就象征一个设备，而这个控制表的表项就是设备的各个属性。如图</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1642160963/origin-of-ray/asynccode_yrffju.png" alt="img"></p>
+<p>我们前面学了4种I/O控制方式，通道方式显然要比其他几种方式更加优越，因此现代操作系统的I/O控制采用的都是通道控制。</p>
+<p>设备控制器控制设备与内存交换数据，而设备控制器有需要请求通道为其服务，因此每个COCT必定有一个表项存放指向相应通道控制表（CHCT）的指针，而一个通道可为多个设备控制器服务，因此CHCT中必定有一个指针，指向一个表，这个表上的信息表达的是CHCT提供服务的那几个设备控制器。CHCT与COCT的关系是一对多的关系。</p>
+<p>系统设备表（SDT）：整个系统只有一个SDT，它记录已连接到系统中的所有物理设备的情况，每个物理设备占用一个表目。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1642160986/origin-of-ray/asynccode_ep2j2u.png" alt="img"></p>
+<p>由于在多道程序系统中，进程数多于资源数，会引起资源的竞争，因此要有一套合理的分配原则，主要考虑的因素有：I/O设备的固有属性，I/O设备的分配算法，I/O设备分配的安全性，以及I/O设备的独立性。</p>
+<h3 id="设备分配的策略"><a href="#设备分配的策略" class="headerlink" title="设备分配的策略"></a>设备分配的策略</h3><ol>
+<li>设备分配原则。设备分配应根据设备特性，用户要求和系统配置情况。分配的总原则是：既要充分发挥设备的使用效率，又要避免造成进程死锁。还要将用户程序和具体设备隔离开。</li>
+<li>设备分配方式。分为静态分配和动态分配两种。</li>
 </ol>
-<p>可以采用线性列表法或哈希表法。线性列表把文件名组织成一个线性表，查找时依次与线性表中的每一个表项比较。</p>
-<p>若把文件名按序排列，则二分法可以降低平均查找时间，但是建立新文件会增加维护线性表的开销。</p>
-<p>哈希表用文件名通过哈希函数得到一个指向文件的指针，这种方法非常迅速，但是要注意哈希冲突。</p>
+<p>静态分配主要用于对独占设备的分配，它在用户作业开始执行前一次性分配完该作业要求的全部设备，控制器（如通道等），一旦分配，这些设备，控制器（和通道）就一直为该作业拥有，直到该作业被撤销。静态分配不会死锁，但是效率低，不符合总原则。</p>
+<p>动态分配是在进程执行过程中根据需要分配，动态分配需要合适的分配算法。</p>
+<ol start="3">
+<li>设备分配算法。常见的动态设备分配算法有先请求先分配，优先级高者优先等。</li>
+</ol>
+<p>这里可以联系进程调度中的临界资源分配，如何避免死锁，如银行家算法？</p>
+<h3 id="设备分配的安全性"><a href="#设备分配的安全性" class="headerlink" title="设备分配的安全性"></a>设备分配的安全性</h3><p>指的是设备分配过程中应该避免死锁</p>
 <ol>
-<li>文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构是否存在某种制约关系？</li>
+<li>安全分配方式。每当进程发出I/O请求后便进入阻塞态，直到其他I/O操作完成时才被唤醒，这样，一旦进程获得某种设备后便阻塞，不能再请求任何资源，而且在它阻塞时也不保持任何资源。优点是设备分配安全，但是CPU和I/O是串行的（对于同一个进程而言）。</li>
+<li>不安全的分配方式。进程在发出I/O请求后继续运行，需要时又发出第二个，第三个I/O请求。仅当进程所请求的设备已经被另一个进程占用时，才进入阻塞态。优点是可以同时操作多个设备，从而快速推进进程，缺点是可能有死锁（因为进入阻塞的时候没有释放资源）。</li>
 </ol>
-<p>文件的逻辑结构是用户的可见结构，即用户使用文件的结构。</p>
-<p>文件的物理结构是文件在存储器上的组织结构，它表示一个文件在辅存上的安置，链接，编目的方法，它和文件的存取方法以及辅存设备的特性都有着密切的联系。</p>
-<p>单个文件的逻辑结构和物理结构之间虽无明显的制约或者关联关系，但是如果物理结构选择不慎，也很难体现逻辑结构的特点。比如一个逻辑结构是顺序结构，但是物理结构是隐式链接结构文件，即使理论上可以快速找到，但是还是需要在磁盘块上一块一块找。</p>
-<p>再次注意，逻辑结构指的是文件记录之间的管理，比如按照关键字顺序排序。</p>
+<h3 id="逻辑设备名到物理设备名的映射"><a href="#逻辑设备名到物理设备名的映射" class="headerlink" title="逻辑设备名到物理设备名的映射"></a>逻辑设备名到物理设备名的映射</h3><p>为了提高设备分配的灵活性和设备的利用率，方便实现I/O重定向，引入了设备独立性。它指的是应用程序独立于具体使用的物理设备。</p>
+<p>为了实现设备独立性，在应用程序中使用逻辑设备名来请求使用某类设备。</p>
+<p>在系统中设置一张逻辑设备表（Logic Unit Table, LUT），用于将逻辑设备名映射为物理设备名。LUT表项包括逻辑设备名，物理设备名和设备驱动程序入口地址。</p>
+<p>当进程用逻辑设备明请求分配设备时，系统为它分配相应的物理设备，并在LUT中建立一个表项，以后进程再利用逻辑设备名请求I/O操作系统时，系统通过查找LUT找到相应的物理设备和驱动。</p>
+<p>可以有两种方式建立LUT：</p>
+<ul>
+<li>在整个系统中只设置一张LUT。主要适用于单用户系统</li>
+<li>每个用户一个LUT。当用户登录时，系统为该用户建立一个进程，以及一个LUT，并把LUT存放到进程的PCB中。</li>
+</ul>
+<h2 id="SPOOLing技术（假脱机技术）"><a href="#SPOOLing技术（假脱机技术）" class="headerlink" title="SPOOLing技术（假脱机技术）"></a>SPOOLing技术（假脱机技术）</h2><p>为了缓和CPU的高速性和I/O设备的低速性之间的矛盾，引入了脱机I/O技术。</p>
+<p>该技术利用专门的外围控制机，将低速I/O设备上的数据传送到高速磁盘上，或者相反。</p>
+<p>SPOOLing的意思是外部设备同时联机操作，又称假脱机输入/输出操作，是操作系统中采用的一项独占设备改造成共享设备的技术。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1642161118/origin-of-ray/asynccode_z1kip3.png" alt="img"></p>
+<ol>
+<li>输入井和输出井</li>
+</ol>
+<p>输入井和输出井指的是在磁盘上开辟的两个存储区域。输入井模拟脱机输入时的磁盘用于收容I/O设备输入的数据。输出井模拟脱机输出时的磁盘，用于收容用户程序的输出数据。</p>
+<ol start="2">
+<li>输入缓冲区和输出缓冲区</li>
+</ol>
+<p>是在内存中开辟的两个缓冲区。输入缓冲区用于暂存由输入设备送来的数据，以后再送到输入井。输出缓冲区用来暂存从输出井送来的数据，以后再送到输出设备。</p>
+<ol start="3">
+<li>输入进程和输出进程</li>
+</ol>
+<p>输入进程模拟脱机输入是的外围控制机，将用户要求的数据从输入机通过输入缓冲区再送到输入井。当CPU需要输入数据时，直接将数据从输入井读入内存。</p>
+<p>输出进程模拟脱机输出时的外围控制机，把用户要求输出的数据先从内存送到输出井，待输出设备空闲时，在将输出井中的数据经过输出缓冲区送到输出设备</p>
+<p>为什么要从输入机到输入缓冲区（内存）到输入井（磁盘），然后CPU需要时，再从磁盘读会内存，绕一圈？</p>
+<p>为了CPU当前可能并不需要这个数据，提前输入好？</p>
+<p>共享打印机是使用SPOOLing技术的一个实例，这项技术已经被广泛用于多用户系统和局域网。当用户进程请求打印输出时，SPOOLing系统同意打印，但并不是立即把打印机分配给该用户进程，而是为它做了两件事。</p>
+<ul>
+<li>由输出进程在输出井中为之申请一块空闲磁盘块，并将要打印的数据送入</li>
+<li>输出进程再为用户进程申请一个空白的用户请求打印表，并将用户的打印请求填入其中，再将该表挂到请求打印队列中。</li>
+</ul>
 
       
     </div>
@@ -558,7 +527,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://sunra.top/2022/01/02/operating-system-note-6-file-system-implementation/" title="操作系统学习笔记（六）文件管理系统实现">https://sunra.top/2022/01/02/operating-system-note-6-file-system-implementation/</a>
+    <a href="https://sunra.top/2022/01/14/operating-system-note-8-io-subsystem/" title="操作系统学习笔记（七）I/O管理子系统">https://sunra.top/2022/01/14/operating-system-note-8-io-subsystem/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -580,8 +549,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2021/12/26/operating-system-note-5-file-system-basics/" rel="next" title="操作系统学习笔记（五）文件管理系统基础">
-                <i class="fa fa-chevron-left"></i> 操作系统学习笔记（五）文件管理系统基础
+              <a href="/2022/01/07/operating-system-note-7-io-introduction/" rel="next" title="操作系统学习笔记（七）I/O管理概述">
+                <i class="fa fa-chevron-left"></i> 操作系统学习笔记（七）I/O管理概述
               </a>
             
           </div>
@@ -589,10 +558,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2022/01/07/operating-system-note-7-io-introduction/" rel="prev" title="操作系统学习笔记（七）I/O管理概述">
-                操作系统学习笔记（七）I/O管理概述 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -750,7 +715,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#阅读前的思考"><span class="nav-number">1.</span> <span class="nav-text">阅读前的思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统的层次结构"><span class="nav-number">2.</span> <span class="nav-text">文件系统的层次结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目录的实现"><span class="nav-number">3.</span> <span class="nav-text">目录的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件的实现"><span class="nav-number">4.</span> <span class="nav-text">文件的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件的分配方式"><span class="nav-number">4.1.</span> <span class="nav-text">文件的分配方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#连续分配"><span class="nav-number">4.1.1.</span> <span class="nav-text">连续分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#链接分配"><span class="nav-number">4.1.2.</span> <span class="nav-text">链接分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引分配"><span class="nav-number">4.1.3.</span> <span class="nav-text">索引分配</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件存储空间管理"><span class="nav-number">4.2.</span> <span class="nav-text">文件存储空间管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件存储器空间的划分与初始化"><span class="nav-number">4.2.1.</span> <span class="nav-text">文件存储器空间的划分与初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件存储器空间管理"><span class="nav-number">4.2.2.</span> <span class="nav-text">文件存储器空间管理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#空闲表法"><span class="nav-number">4.2.2.1.</span> <span class="nav-text">空闲表法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#空闲链表法"><span class="nav-number">4.2.2.2.</span> <span class="nav-text">空闲链表法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#位示图法"><span class="nav-number">4.2.2.3.</span> <span class="nav-text">位示图法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#成组链表法"><span class="nav-number">4.2.2.4.</span> <span class="nav-text">成组链表法</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回答开始问题"><span class="nav-number">5.</span> <span class="nav-text">回答开始问题</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O调度"><span class="nav-number">2.</span> <span class="nav-text">I/O调度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高速缓存与缓冲区"><span class="nav-number">3.</span> <span class="nav-text">高速缓存与缓冲区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘高速缓存（Disk-Cache）"><span class="nav-number">3.1.</span> <span class="nav-text">磁盘高速缓存（Disk Cache）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓冲区"><span class="nav-number">3.2.</span> <span class="nav-text">缓冲区</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单缓冲"><span class="nav-number">3.2.1.</span> <span class="nav-text">单缓冲</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#双缓冲"><span class="nav-number">3.2.2.</span> <span class="nav-text">双缓冲</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#循环缓冲"><span class="nav-number">3.2.3.</span> <span class="nav-text">循环缓冲</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓冲池"><span class="nav-number">3.2.4.</span> <span class="nav-text">缓冲池</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高速缓存和缓冲区的对比"><span class="nav-number">3.3.</span> <span class="nav-text">高速缓存和缓冲区的对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设备的分配与回收"><span class="nav-number">4.</span> <span class="nav-text">设备的分配与回收</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#设备分配概述"><span class="nav-number">4.1.</span> <span class="nav-text">设备分配概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设备分配的数据结构"><span class="nav-number">4.2.</span> <span class="nav-text">设备分配的数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设备分配的策略"><span class="nav-number">4.3.</span> <span class="nav-text">设备分配的策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设备分配的安全性"><span class="nav-number">4.4.</span> <span class="nav-text">设备分配的安全性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#逻辑设备名到物理设备名的映射"><span class="nav-number">4.5.</span> <span class="nav-text">逻辑设备名到物理设备名的映射</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPOOLing技术（假脱机技术）"><span class="nav-number">5.</span> <span class="nav-text">SPOOLing技术（假脱机技术）</span></a></li></ol></div>
             
 
           </div>
