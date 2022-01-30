@@ -401,7 +401,7 @@
 <h5 id="映射模式-Mapped-Mode"><a href="#映射模式-Mapped-Mode" class="headerlink" title="映射模式(Mapped Mode)"></a>映射模式(Mapped Mode)</h5><p>dll 中的内容被映射到了当前目录下。如果一个被 <code>require</code> 的文件符合 dll 中的某个文件(解析之后)，那么这个dll中的这个文件就会被使用。</p>
 <p>由于这是在解析了 dll 中每个文件之后才发生的，相同的路径必须能够确保这个 dll bundle 的使用者(不一定是人，可指某些代码)有权限访问。 举例来说， 假如一个 dll bundle 中含有 <code>loadash</code>库 以及 文件<code>abc</code>， 那么 <code>require(&quot;lodash&quot;)</code> 和 <code>require(&quot;./abc&quot;)</code> 都不会被编译进主要的 bundle文件，而是会被 dll 所使用。</p>
 <h3 id="用法-Usage"><a href="#用法-Usage" class="headerlink" title="用法(Usage)"></a>用法(Usage)</h3><blockquote>
-<p><code>DllReferencePlugin</code> 和 <code>DLL插件DllPlugin</code> 都是在<em>另外</em>的 webpack 设置中使用的。</p>
+<p><code>DllReferencePlugin</code> 和 <code>DLL插件DllPlugin</code> 都是在_另外_的 webpack 设置中使用的。</p>
 </blockquote>
 <p><strong>webpack.vendor.config.js</strong></p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.DllPlugin(&#123;</span><br><span class="line">  context: __dirname,</span><br><span class="line">  name: <span class="string">'[name]_[hash]'</span>,</span><br><span class="line">  path: path.join(__dirname, <span class="string">'manifest.json'</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
