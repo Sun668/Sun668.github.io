@@ -396,7 +396,6 @@
       
         <p>AA，全名叫做Addressable，可寻址资源，可以将一个完整的游戏资源进行拆分，达到减小安装包和内存使用的的目的。</p>
 <a id="more"></a>
-
 <h1 id="安装与初始化"><a href="#安装与初始化" class="headerlink" title="安装与初始化"></a>安装与初始化</h1><ul>
 <li>安装：Windows -&gt; Package Manager，搜索Addressable并安装。</li>
 </ul>
@@ -430,14 +429,10 @@
 </li>
 <li><p>BuildTarget：打包的目的平台</p>
 </li>
-<li><p>LocalBuildPath：本地资源打包的路径</p>
-</li>
-<li><p>LocalLoadPath：本地资源的加载路径</p>
-</li>
-<li><p>RemoteBuildPath：远程资源的打包路径</p>
-</li>
-<li><p>RemoteLoadPath：远程资源的加载路径</p>
-</li>
+<li>LocalBuildPath：本地资源打包的路径</li>
+<li>LocalLoadPath：本地资源的加载路径</li>
+<li>RemoteBuildPath：远程资源的打包路径</li>
+<li>RemoteLoadPath：远程资源的加载路径</li>
 </ul>
 <h2 id="启用Remote资源发布"><a href="#启用Remote资源发布" class="headerlink" title="启用Remote资源发布"></a>启用Remote资源发布</h2><p>启用Build Remote Catalog，然后Build &amp; Load Paths设置为custom，就可以选择上面说的profile中的五个变量了，这里能够显示根据Profile中的配置计算出来的实际路径。</p>
 <p>比如，我们目前的BuildTarget是OSX，所以此时RemoteBuildPath的ServerData/[BuildTarget]计算的结果就是ServerData/StandaloneOSX</p>
@@ -468,7 +463,6 @@
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798017/origin-of-ray/asynccode_kmqek9.png" alt="img"></p>
 <h3 id="创建自定义的Schema"><a href="#创建自定义的Schema" class="headerlink" title="创建自定义的Schema"></a>创建自定义的Schema</h3><p>To create your own schema, extend the <a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEditor.AddressableAssets.Settings.AddressableAssetGroupSchema.html" rel="external nofollow noopener noreferrer" target="_blank">AddressableAssetGroupSchema</a> class (which is a kind of ScriptableObject).</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">using UnityEditor.AddressableAssets.Settings;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public class __CustomSchema __: AddressableAssetGroupSchema</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   public string CustomDescription;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>Once you have defined your custom schema object, you can add it to existing groups and group templates using the Add Schema buttons found on the Inspector windows of those entities.</p>
 <h2 id="创建新的Group用于打包为远程bundle"><a href="#创建新的Group用于打包为远程bundle" class="headerlink" title="创建新的Group用于打包为远程bundle"></a>创建新的Group用于打包为远程bundle</h2><p>如果上一步创建了Template，则可以直接根据Template创建Group，如果没有，则选择创建Blank的Group，然后通过Add Schema，添加两个基本的schema</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798046/origin-of-ray/asynccode_wrhuvq.png" alt="img"></p>
@@ -593,11 +587,7 @@
 <p>正确配置远程组并拥有包含远程内容的先前构建后，您可以通过以下方式执行内容更新构建：</p>
 <blockquote>
 <p>除了开启Build Remote Catalog，对于每个Group的更新配置还有<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/ContentUpdateWorkflow.html#settings" rel="external nofollow noopener noreferrer" target="_blank">Content update builds Setting | Addressables | 1.18.16</a>：</p>
-</blockquote>
-<blockquote>
 <p>一个是Content Update Restriction是Cannot 还是 Can Change Post Release，Cannot的叫做Static</p>
-</blockquote>
-<blockquote>
 <p>另一个是Unique Build ID，开启后可以让用户在不重启App的情况下更新资源。</p>
 </blockquote>
 <ol>

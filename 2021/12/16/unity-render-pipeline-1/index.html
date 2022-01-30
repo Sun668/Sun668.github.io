@@ -379,7 +379,6 @@
         <h1 id="总述"><a href="#总述" class="headerlink" title="总述"></a>总述</h1><p>本文大概总结下一些三维空间的坐标数据是如何通过渲染流水线变为屏幕上不同颜色的像素的，阅读之时，需要注意，图元，片元，和像素三者的区别。</p>
 <p>下图是一个总体的流程图，具体细节可以看后面的解释。</p>
 <a id="more"></a>
-
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646000/origin-of-ray/render_pipeline_gnuamz.png" alt></p>
 <h1 id="什么是渲染流水线"><a href="#什么是渲染流水线" class="headerlink" title="什么是渲染流水线"></a>什么是渲染流水线</h1><h2 id="渲染流水线的任务"><a href="#渲染流水线的任务" class="headerlink" title="渲染流水线的任务"></a>渲染流水线的任务</h2><p>渲染流水线的工作就是，从一个三维场景出发，渲染出一张二维图像。</p>
 <p>也就是说，需要从一系列三维空间信息，如顶点数据，纹理等信息出发，把这些信息最终转化为一张人眼可以看到的二维图像。</p>

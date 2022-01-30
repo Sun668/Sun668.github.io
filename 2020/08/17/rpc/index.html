@@ -372,15 +372,12 @@
         <h2 id="RPC简介"><a href="#RPC简介" class="headerlink" title="RPC简介"></a>RPC简介</h2><p>RPC(Remote Procedure Call)：远程过程调用，它是一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的思想。</p>
 <p>RPC （Remote Procedure Call）的主要功能目标是让构建分布式计算（应用）更容易，在提供强大的远程调用能力时不损失本地调用的语义简洁性。 为实现该目标，<strong>RPC 框架需提供一种透明调用机制让使用者不必显式的区分本地调用和远程调用</strong>。　　<br> RPC采用C/S模式。请求程序就是一个客户机，而服务提供程序就是一个服务器。首先，客户机调用进程发送一个有进程参数的调用信息到服务进程，然后等待应答信息。在服务器端，进程保持睡眠状态直到调用信息的到达为止。当一个调用信息到达，服务器获得进程参数，计算结果发送答复信息，然后等待下一个调用信息。最后，客户端调用进程接收答复信息，获得进程结果，然后调用执行继续进行。</p>
 <a id="more"></a>
-
 <h3 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h3><p>单独看上面的概念可能还是有点模糊</p>
 <p>我们看一下Python自带的RPC demo</p>
 <p>Server.py：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> SimpleXMLRPCServer <span class="keyword">import</span> SimpleXMLRPCServer    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun_add</span><span class="params">(a,b)</span>:</span>     </span><br><span class="line">    totle = a + b      </span><br><span class="line">    <span class="keyword">return</span> totle </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:     </span><br><span class="line">    s = SimpleXMLRPCServer((<span class="string">'0.0.0.0'</span>, <span class="number">8080</span>))   <span class="comment">#开启xmlrpcserver     </span></span><br><span class="line">    s.register_function(fun_add)                <span class="comment">#注册函数fun_add     </span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"server is online..."</span>     s.serve_forever()                           <span class="comment">#开启循环等待</span></span><br></pre></td></tr></table></figure>
-
 <p>Client.py：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> xmlrpclib <span class="keyword">import</span> ServerProxy            <span class="comment">#导入xmlrpclib的包 </span></span><br><span class="line">s = ServerProxy(<span class="string">"http://172.171.5.205:8080"</span>) <span class="comment">#定义xmlrpc客户端 </span></span><br><span class="line"><span class="keyword">print</span> s.fun_add(<span class="number">2</span>,<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-
 <h2 id="RPC架构"><a href="#RPC架构" class="headerlink" title="RPC架构"></a>RPC架构</h2><p>在一个典型 RPC 的使用场景中，包含了服务发现、负载、容错、网络传输、序列化等组件，其中“RPC 协议”就指明了程序如何进行网络传输和序列化。</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1597670692/Blog/fd5b5686336b0a1212398d8ea8fe6f66.jpg-wh_651x-s_3461264051_xmwq0x.jpg" alt></p>
 <h3 id="RPC核心功能（RPC协议）"><a href="#RPC核心功能（RPC协议）" class="headerlink" title="RPC核心功能（RPC协议）"></a>RPC核心功能（RPC协议）</h3><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1597670948/Blog/2730356-e239aeb499d61162.png_ejj0qe.webp" alt></p>
@@ -433,11 +430,11 @@
 <p>在 RPC 中可选的网络传输方式有多种，可以选择 TCP 协议、UDP 协议、HTTP 协议。</p>
 <p>每一种协议对整体的性能和效率都有不同的影响，如何选择一个正确的网络传输协议呢?首先要搞明白各种传输协议在 RPC 中的工作方式。</p>
 <h4 id="基于-TCP-协议的-RPC-调用"><a href="#基于-TCP-协议的-RPC-调用" class="headerlink" title="基于 TCP 协议的 RPC 调用"></a><strong>基于 TCP 协议的 RPC 调用</strong></h4><p>由服务的调用方与服务的提供方建立 Socket 连接，并由服务的调用方通过 Socket 将需要调用的接口名称、方法名称和参数序列化后传递给服务的提供方，服务的提供方反序列化后再利用反射调用相关的方法。</p>
-<p>***将结果返回给服务的调用方，整个基于 TCP 协议的 RPC 调用大致如此。</p>
+<p><em>*</em>将结果返回给服务的调用方，整个基于 TCP 协议的 RPC 调用大致如此。</p>
 <p>但是在实例应用中则会进行一系列的封装，如 RMI 便是在 TCP 协议上传递可序列化的 Java 对象。</p>
 <h4 id="基于-HTTP-协议的-RPC-调用"><a href="#基于-HTTP-协议的-RPC-调用" class="headerlink" title="基于 HTTP 协议的 RPC 调用"></a><strong>基于 HTTP 协议的 RPC 调用</strong></h4><p>该方法更像是访问网页一样，只是它的返回结果更加单一简单。</p>
 <p>其大致流程为：由服务的调用者向服务的提供者发送请求，这种请求的方式可能是 GET、POST、PUT、DELETE 等中的一种，服务的提供者可能会根据不同的请求方式做出不同的处理，或者某个方法只允许某种请求方式。</p>
-<p>而调用的具体方法则是根据 URL 进行方法调用，而方法所需要的参数可能是对服务调用方传输过去的 XML 数据或者 JSON 数据解析后的结果，***返回 JOSN 或者 XML 的数据结果。</p>
+<p>而调用的具体方法则是根据 URL 进行方法调用，而方法所需要的参数可能是对服务调用方传输过去的 XML 数据或者 JSON 数据解析后的结果，<em>*</em>返回 JOSN 或者 XML 的数据结果。</p>
 <p>由于目前有很多开源的 Web 服务器，如 Tomcat，所以其实现起来更加容易，就像做 Web 项目一样。</p>
 <h4 id="两种方式对比"><a href="#两种方式对比" class="headerlink" title="两种方式对比"></a><strong>两种方式对比</strong></h4><p>基于 TCP 的协议实现的 RPC 调用，由于 TCP 协议处于协议栈的下层，能够更加灵活地对协议字段进行定制，减少网络开销，提高性能，实现更大的吞吐量和并发数。</p>
 <p>但是需要更多关注底层复杂的细节，实现的代价更高。同时对不同平台，如安卓，iOS 等，需要重新开发出不同的工具包来进行请求发送和相应解析，工作量大，难以快速响应和满足用户需求。</p>
@@ -449,7 +446,7 @@
 <ul>
 <li>同步变异步：可以使用线程池将同步变成异步，但是缺点是要自己实现线程池，并且强耦合。使用消息队列可以轻松将同步请求变成异步请求。</li>
 <li>低内聚高耦合：解耦，减少强依赖。</li>
-<li>流量削峰：通过消息队列设置请求***值，超过阀值的抛弃或者转到错误界面。</li>
+<li>流量削峰：通过消息队列设置请求<em>*</em>值，超过阀值的抛弃或者转到错误界面。</li>
 <li>网络通信性能提高：TCP 的创建和销毁开销大，创建 3 次握手，销毁 4 次分手，高峰时成千上万条的链接会造成资源的巨大浪费，而且操作系统每秒处理 TCP 的数量也是有数量限制的，必定造成性能瓶颈。</li>
 </ul>
 <h2 id="RPC服务注册与发现"><a href="#RPC服务注册与发现" class="headerlink" title="RPC服务注册与发现"></a>RPC服务注册与发现</h2><p>RPC远程过程调用中，存在2个角色，一个服务提供者、另一个服务消费者。那如何让调用者知道，存在哪些服务可以调用呢？即如何让别人使用我们的服务呢？</p>

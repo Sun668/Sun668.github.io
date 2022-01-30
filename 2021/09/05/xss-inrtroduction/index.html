@@ -389,16 +389,13 @@
 <p>第二部分是后端安全，小部分是讲了文件上传漏洞，或者一些Nginx的漏洞，大部分讲的是SQL注入，这部分，看了一点我就觉得自己应该重新回去看数据库再回来看，因为基本看不懂。</p>
 <p>所以直接跳到了第三部分的前端安全，上来就是这个XSS，又刷新了自己的一波认知，记录下。</p>
 <a id="more"></a>
-
 <h2 id="XSS攻击的危害"><a href="#XSS攻击的危害" class="headerlink" title="XSS攻击的危害"></a>XSS攻击的危害</h2><p>在讲三种常见XSS之前，还是废话一下XSS攻击的基本原理。</p>
 <p>大家都知道，我们看到的网页其实都是HTML，也就是我们小学计算机课就会听到的一个词，叫做“超文本标记语言”，它是用一个个的标签来表示自己想要呈现的内容，然后浏览器根据语言的设计标准，去将这些标签转化为图片，是的，没错，其实无论是什么软件，最后都是被绘制成了图片展现给用户的，网页和普通的软件并没有什么本质上的不同，对于计算机来说，最后一步都是给画成图片。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>这是一个div<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"图片地址链接"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>这是一段非常简单的html，实际的页面比这个复杂很多，大家可以随便打开一个网页，用开发者工具看看。</p>
 <p>标签有很多种，有的标签是会发送请求或者执行代码的。</p>
 <p>比如img标签，src属性其实就是发送了个请求，去获取src属性所指的服务器图片，当然，如果是个正常的网站，获取了图片之后，就会渲染成正常的图片，但如果这个src不是一个正常的图片地址，而是一个转账请求呢？比如以下这种</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"https://www.somebank/transformer/from/A/to/B/dollar/10000"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>假设某个银行的转账请求就是这个<code>https://www.somebank/transformer/from/A/to/B/dollar/1000</code>，这个请求正常来讲，就是你在银行的官网选择从你的账户（A）给B转账才会发出的，一般是点一个按钮（html: <button onclick="“发起转账请求”">确认转账</button>，这个东西渲染出来就是我们平时看到的按钮，可以看出来，本质上button和img都是一个标签而已）。</p>
 <p>但如果不正常，你打开了一个网页，一个来历不明的网页，里面就是有这个图片，浏览器渲染这个img的时候，就会尝试去src的地址获取图片，但很不幸，这个地址并没有一个图片，你发送了一个转账请求，银行服务器只会告诉你，转账成功，那么没拿回图片来，这个图片本该出现的位置，可能就是一个简单的叉号，而你的钱已经没了。</p>
 <p>img还算简单，只能发送get请求，如果是script标签，就是我们平时所说的js脚本存放的地方，如果给攻击者注入了脚本，那真就可以为所欲为了，你所有的信息都会被拿走，比如cookie（也就是你在某个网站的信息，拿到这个，就相当于你在该网站的所有权限都对黑客开放了，拿到这个，只需要简单的document.cookie就可以，只需要这几个字母，你的身份就被窃取了）。</p>
@@ -422,7 +419,6 @@
 <p>那么怎么防御呢？最基本的就是奇怪的url不要点，但是还是天真了。</p>
 <p>第一种方式，有的网页会提示你让你抽奖，你点了以后，就等于点了这个链接，如</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">onclick</span>=<span class="string">"window.location.href=http://localhost/xss_get.php?firstname=ray&amp;lastname=%3Cscript%3Ealert%28document.cookie%29%3C%2Fscript%3E&amp;form=submit"</span> <span class="attr">src</span>=<span class="string">"这里确实是个图片地址"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>你点了这个图片，就会出发onclick对应的代码，然后就会修改window.locaion.href，这东西改了，浏览器就会跳转。</p>
 <p>第二种方式，短链或者二维码：</p>
 <p>比如上面那个链接，去985.so，就会帮你转成这个：</p>
@@ -464,7 +460,6 @@
 <p>这种情况下，就需要用到DOM型的XSS了。</p>
 <p>它是通过动态操作DOM树来实现的，不依赖于数据提交到服务器，如：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="xml">document.write('<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="built_in">document</span>.cookie)</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>')<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>他和反射型的相同点在于，没有控制好用户的输入，把script脚本作为标签渲染了。</p>
 <p>不同点就在于是否经过服务器，反射型的页面是服务端根据url拼接完整页面给前端渲染，而DOM型是直接就在脚本里修改页面结构，插入一个script节点，或者说一开始的那种反射是用户输入与后端之间的反射，DOM反射是在用户输入与前端自身逻辑之间的反射，前端自身会根据用户输入做出反应。</p>
 <p>DOM型的危害在于，它可以绕过前后端分离的场景，也可以不经过防火墙，因为它不过后端，那这个时候，安全问题就全在前端了</p>
@@ -476,7 +471,6 @@
 <p>攻击者输入看似安全的内容，在解析标记时经过浏览器重 写或者修改，发生突变，生成不安全的代码并执行，即 mXSS，极难被检测和过滤。</p>
 <p>比如这段代码：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>I am trying to be <span class="tag">&lt;<span class="name">i</span>&gt;</span>malicious<span class="tag">&lt;/<span class="name">i</span>&gt;</span> <span class="tag">&lt;<span class="name">u</span>&gt;</span>here<span class="tag">&lt;/<span class="name">u</span>&gt;</span>! <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">1</span> <span class="attr">onerror</span>=<span class="string">alert(1)</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>可能你的浏览器对于这段代码是可以帮忙做过滤的，被你一通转译之后，浏览器的策略就失效了。</p>
 <p>比如下面这个：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1630813534/origin-of-ray/screenshot-20210905-114517_hwplh3.png" alt></p>

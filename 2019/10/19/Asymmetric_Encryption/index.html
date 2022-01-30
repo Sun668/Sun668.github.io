@@ -365,9 +365,7 @@
       
 
       
-        <p>今天阅读https原理的时候，发现它采用了非对称加密的知识，于是去探索了一下非对称加密的基本原理。</p>
-<a id="more"></a>
-
+        <p>今天阅读https原理的时候，发现它采用了非对称加密的知识，于是去探索了一下非对称加密的基本原理。<br><a id="more"></a></p>
 <h2 id="非对称加密"><a href="#非对称加密" class="headerlink" title="非对称加密"></a>非对称加密</h2><p>在非对称加密算法中，有公钥和私钥两种密钥，其中，公钥是公开的，不需要保密，私钥由个人持有，必须妥善保管和注意保密。加密和解密使用两种不同的密钥，是它得名的原因。</p>
 <p>每一个公钥都对应一个私钥。<br>密钥对中，让大家都知道的是公钥，不告诉大家，只有自己知道的，是私钥。 </p>
 <p>如果用其中一个密钥加密数据，则只有对应的那个密钥才可以解密。<br>如果用其中一个密钥可以进行解密数据，则该数据必然是对应的那个密钥进行的加密。 </p>
@@ -402,7 +400,8 @@
 <p>客户端去操作系统查找这个发布机构的的证书，如果是不是根证书就继续递归下去 <strong>直到拿到根证书</strong>（一般都存储在比较安全的地方，比如框架的源码等地方）。</p>
 <p>用 <strong>根证书的公钥</strong> 去 <strong>解密验证</strong> 上一层证书的<strong>合法性</strong>，再拿上一层证书的公钥去验证更上层证书的合法性；递归回溯。</p>
 <p>最后验证服务器端的证书是 <strong>可信任</strong> 的。</p>
-<h2 id="RSA原理简介"><a href="#RSA原理简介" class="headerlink" title="RSA原理简介"></a>RSA原理简介</h2><table>
+<h2 id="RSA原理简介"><a href="#RSA原理简介" class="headerlink" title="RSA原理简介"></a>RSA原理简介</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>1</th>
@@ -411,7 +410,8 @@
 <th>-</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>2</td>
 <td>计算公共模数</td>
 <td>N = P * Q</td>
@@ -447,7 +447,9 @@
 <td>M ＝C D mod N</td>
 <td>C：密文  M：明文</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>参考文章： </p>
 <p><a href="https://blog.csdn.net/wzzvictory/article/details/9015155" rel="external nofollow noopener noreferrer" target="_blank">https://blog.csdn.net/wzzvictory/article/details/9015155</a> </p>
 <p><a href="https://cloud.tencent.com/developer/article/1130051" rel="external nofollow noopener noreferrer" target="_blank">https://cloud.tencent.com/developer/article/1130051</a> </p>

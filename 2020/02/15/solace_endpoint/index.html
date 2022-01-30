@@ -366,7 +366,6 @@
       
         <p>这个周刚接触了一点关于Solace的知识，对其中几个基础的概念查阅了一下官方文档，在这里总结一下，主要就是Endpoints，Queue，Topic，Subscription之间的关系。</p>
 <a id="more"></a>
-
 <p>首先总结一下，Endpoint是Solace中用于发送和接收消息的端，它分为两种类型，一种是Queue Endpoint，另一种是Topic Endpoint，这两种Endpoint都可以有自己的Subscription，也可以称为Topic Subscription，每个Queue Endpoint可以有多个Topic Subscription，而每个Topic Endpoint只能有自身的一个Topic Subscription，我们可以把消息推送到Topic中，也可以推送到Queue中，但是推送到Topic中的消息不仅会被发送到Topic Endpoint中，还会发送到订阅它的Queue Endpoint中。（目前作者不成熟的理解是每个Topic Endpoint都一定有一个和它Match的Topic Subscription，所以给某个Topic推送，最少会有一个Topic Endpoint收到，同时订阅这个Topic的Queue也会收到，但是如果直接向Queue推送，就只有该Queue会受到消息）</p>
 <p>接下来详细解释一下具体的概念，这部分内容来自于Solace的官方解释。</p>
 <h2 id="Endpoints"><a href="#Endpoints" class="headerlink" title="Endpoints"></a>Endpoints</h2><p>Solace PubSub+事件代理支持两种类型的端点，用于接收、存储和交付保证消息。</p>

@@ -347,7 +347,6 @@
 <p>这个sameSite的中文翻译就是同站。</p>
 <p>我们今天就来看一下这个同站是什么，它和同源有什么区别，为什么cookie明明都有domain和path来规定作用域了还需要sameSite这个属性。</p>
 <a id="more"></a>
-
 <h2 id="同源和同站"><a href="#同源和同站" class="headerlink" title="同源和同站"></a>同源和同站</h2><ul>
 <li>同源：协议（scheme）+ 主机名（hostname）+ 端口号（port） 完全一致。</li>
 <li>同站：<code>eTLD+1</code> 完全一致。</li>
@@ -355,7 +354,6 @@
 <p><code>TLD</code> 表示顶级域名，例如 <code>.com</code>、<code>.org</code>、<code>.cn</code> 等等，不过顶级域名并不是一成不变的，会随着时间推移增加，</p>
 <p><code>TLD+1</code> 表示顶级域名和它前面二级域名的组合，例如网址是：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.example.com:443/foo</span><br></pre></td></tr></table></figure>
-
 <p>那么：</p>
 <ul>
 <li><code>TLD</code> 是 <code>.com</code></li>
@@ -363,7 +361,6 @@
 </ul>
 <p>但是，这种表示方式是有缺陷的，例如对于下面的网址：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.example.com.cn</span><br></pre></td></tr></table></figure>
-
 <p>如果按照上面的规则，它的 <code>TLD+1</code> 就是 <code>com.cn</code>，并不能表示这个站点，真正能表示这个站点的应该是 <code>example.com.cn</code> 才对，所以衍生出 <code>eTLD</code> 的概念，即<strong>有效顶级域名</strong>：</p>
 <ul>
 <li><code>eTLD</code>：<code>com.cn</code></li>
@@ -374,7 +371,7 @@
 <p>同站与跨站是相同的概念，比如著名的XSS和CSRF，都是跨站攻击</p>
 </blockquote>
 <h2 id="Cookie的作用域"><a href="#Cookie的作用域" class="headerlink" title="Cookie的作用域"></a>Cookie的作用域</h2><p><strong>Cookie有两个很重要的属性:Domain和Path，用来指示此Cookie的作用域：</strong></p>
-<p>　 Domain 告诉浏览器当前要添加的 Cookie 的域名归属，如果没有明确指明，则默认为当前域名，比如通过访问 <a href="http://www.baidu.com" rel="external nofollow noopener noreferrer" target="_blank">www.baidu.com</a> 添加的 Cookie 的域名默认就是<a href="http://www.baidu.com，通过访问[www.baidu.com" rel="external nofollow noopener noreferrer" target="_blank">www.baidu.com，通过访问[www.baidu.com</a> 所生成的 Cookie 的域名就是<a href="http://www.baidu.com" rel="external nofollow noopener noreferrer" target="_blank">www.baidu.com</a></p>
+<p>　 Domain 告诉浏览器当前要添加的 Cookie 的域名归属，如果没有明确指明，则默认为当前域名，比如通过访问 www.baidu.com 添加的 Cookie 的域名默认就是www.baidu.com，通过访问[www.baidu.com 所生成的 Cookie 的域名就是www.baidu.com</p>
 <p>　　Path 告诉浏览器当前要添加的Cookie的路径归属，如果没有明确指明则默认为当前路径，比如通过访问 <a href="https://link.zhihu.com/?target=http%3A//www.baidu.com/java/hotspot.html" rel="external nofollow noopener noreferrer" target="_blank">www.baidu.com/java/hotspot.html</a> 添加的 Cookie 的默认路径就是/java/,通过 <a href="https://link.zhihu.com/?target=http%3A//www.baidu.com/java/hotspot.html" rel="external nofollow noopener noreferrer" target="_blank">www.baidu.com/java/hotspot.html</a> 生成的 Cookie 的路径也是 /java/</p>
 <p><strong>浏览器提交的Cookie需要满足以下两点：</strong></p>
 <ul>
@@ -388,17 +385,13 @@
 <p>Cookie 往往用来存储用户的身份信息，恶意网站可以设法伪造带有正确 Cookie 的 HTTP 请求，这就是 CSRF 攻击。</p>
 <p>举例来说，用户登陆了银行网站<code>your-bank.com</code>，银行服务器发来了一个 Cookie。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie:id=afasdfafa;</span><br></pre></td></tr></table></figure>
-
 <p>用户后来又访问了恶意网站<code>evil.com</code>，上面有一个表单。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"your-bank.com/transfer"</span> <span class="attr">method</span>=<span class="string">"POST"</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>用户一旦被诱骗发送这个表单，<strong>由于请求的目标是银行，所以就会自动携带上cookie中在银行的domain和path下的内容</strong>，银行网站就会收到带有正确 Cookie 的请求。为了防止这种攻击，表单一般都带有一个随机 token，告诉服务器这是真实请求。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"your-bank.com/transfer"</span> <span class="attr">method</span>=<span class="string">"POST"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"token"</span> <span class="attr">value</span>=<span class="string">"dad3weg34"</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>这种第三方网站引导发出的 Cookie，就称为第三方 Cookie。它除了用于 CSRF 攻击，还可以用于用户追踪。</p>
 <p>比如，Facebook 在第三方网站插入一张看不见的图片。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"facebook.com"</span> <span class="attr">style</span>=<span class="string">"visibility:hidden;"</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>浏览器加载上面代码时，就会向 Facebook 发出带有 Cookie 的请求，从而 Facebook 就会知道你是谁，访问了什么网站。</p>
 <h2 id="SameSite属性"><a href="#SameSite属性" class="headerlink" title="SameSite属性"></a>SameSite属性</h2><p>Chrome 51 开始，浏览器的 Cookie 新增加了一个<code>SameSite</code>属性，用来防止 CSRF 攻击和用户追踪。</p>
 <p>但是既然cookie已经有了domain和path，为什么还需要一个sameSite呢？</p>
@@ -413,72 +406,72 @@
 </ul>
 <h3 id="Strict"><a href="#Strict" class="headerlink" title="Strict"></a>Strict</h3><p><code>Strict</code>最为严格，完全禁止第三方 Cookie，跨站点时，任何情况下都不会发送 Cookie。换言之，<strong>只有当前网页的 URL 与请求目标一致，才会带上 Cookie</strong>。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie: CookieName=CookieValue; SameSite=Strict;</span><br></pre></td></tr></table></figure>
-
 <p>这个规则过于严格，可能造成非常不好的用户体验。比如，当前网页有一个 GitHub 链接，用户点击跳转就不会带有 GitHub 的 Cookie，跳转过去总是未登陆状态。</p>
 <h3 id="Lax"><a href="#Lax" class="headerlink" title="Lax"></a>Lax</h3><p><code>Lax</code>规则稍稍放宽，大多数情况也是不发送第三方 Cookie，但是导航到目标网址的 Get 请求除外。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie: CookieName=CookieValue; SameSite=Lax;</span><br></pre></td></tr></table></figure>
-
 <p>导航到目标网址的 GET 请求，只包括三种情况：链接，预加载请求，GET 表单。详见下表。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="left">请求类型</th>
-<th align="center">示例</th>
-<th align="right">正常情况</th>
-<th align="left">Lax</th>
+<th style="text-align:left">请求类型</th>
+<th style="text-align:center">示例</th>
+<th style="text-align:right">正常情况</th>
+<th style="text-align:left">Lax</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="left">链接</td>
-<td align="center"><code>&lt;a href=&quot;...&quot;&gt;&lt;/a&gt;</code></td>
-<td align="right">发送 Cookie</td>
-<td align="left">发送 Cookie</td>
+<tbody>
+<tr>
+<td style="text-align:left">链接</td>
+<td style="text-align:center"><code>&lt;a href=&quot;...&quot;&gt;&lt;/a&gt;</code></td>
+<td style="text-align:right">发送 Cookie</td>
+<td style="text-align:left">发送 Cookie</td>
 </tr>
 <tr>
-<td align="left">预加载</td>
-<td align="center"><code>&lt;link rel=&quot;prerender&quot; href=&quot;...&quot;/&gt;</code></td>
-<td align="right">发送 Cookie</td>
-<td align="left">发送 Cookie</td>
+<td style="text-align:left">预加载</td>
+<td style="text-align:center"><code>&lt;link rel=&quot;prerender&quot; href=&quot;...&quot;/&gt;</code></td>
+<td style="text-align:right">发送 Cookie</td>
+<td style="text-align:left">发送 Cookie</td>
 </tr>
 <tr>
-<td align="left">GET 表单</td>
-<td align="center"><code>&lt;form method=&quot;GET&quot; action=&quot;...&quot;&gt;</code></td>
-<td align="right">发送 Cookie</td>
-<td align="left">发送 Cookie</td>
+<td style="text-align:left">GET 表单</td>
+<td style="text-align:center"><code>&lt;form method=&quot;GET&quot; action=&quot;...&quot;&gt;</code></td>
+<td style="text-align:right">发送 Cookie</td>
+<td style="text-align:left">发送 Cookie</td>
 </tr>
 <tr>
-<td align="left">POST 表单</td>
-<td align="center"><code>&lt;form method=&quot;POST&quot; action=&quot;...&quot;&gt;</code></td>
-<td align="right">发送 Cookie</td>
-<td align="left">不发送</td>
+<td style="text-align:left">POST 表单</td>
+<td style="text-align:center"><code>&lt;form method=&quot;POST&quot; action=&quot;...&quot;&gt;</code></td>
+<td style="text-align:right">发送 Cookie</td>
+<td style="text-align:left">不发送</td>
 </tr>
 <tr>
-<td align="left">iframe</td>
-<td align="center"><code>&lt;iframe src=&quot;...&quot;&gt;&lt;/iframe&gt;</code></td>
-<td align="right">发送 Cookie</td>
-<td align="left">不发送</td>
+<td style="text-align:left">iframe</td>
+<td style="text-align:center"><code>&lt;iframe src=&quot;...&quot;&gt;&lt;/iframe&gt;</code></td>
+<td style="text-align:right">发送 Cookie</td>
+<td style="text-align:left">不发送</td>
 </tr>
 <tr>
-<td align="left">AJAX</td>
-<td align="center"><code>$.get(&quot;...&quot;)</code></td>
-<td align="right">发送 Cookie</td>
-<td align="left">不发送</td>
+<td style="text-align:left">AJAX</td>
+<td style="text-align:center"><code>$.get(&quot;...&quot;)</code></td>
+<td style="text-align:right">发送 Cookie</td>
+<td style="text-align:left">不发送</td>
 </tr>
 <tr>
-<td align="left">Image</td>
-<td align="center"><code>&lt;img src=&quot;...&quot;&gt;</code></td>
-<td align="right">发送 Cookie</td>
-<td align="left">不发送</td>
+<td style="text-align:left">Image</td>
+<td style="text-align:center"><code>&lt;img src=&quot;...&quot;&gt;</code></td>
+<td style="text-align:right">发送 Cookie</td>
+<td style="text-align:left">不发送</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>设置了<code>Strict</code>或<code>Lax</code>以后，基本就杜绝了 CSRF 攻击。当然，前提是用户浏览器支持 SameSite 属性。</p>
 <h3 id="None"><a href="#None" class="headerlink" title="None"></a>None</h3><p>Chrome 计划将<code>Lax</code>变为默认设置。这时，网站可以选择显式关闭<code>SameSite</code>属性，将其设为<code>None</code>。不过，前提是必须同时设置<code>Secure</code>属性（Cookie 只能通过 HTTPS 协议发送），否则无效。</p>
 <p>下面的设置无效。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie: widget_session=abc123; SameSite=None</span><br></pre></td></tr></table></figure>
-
 <p>下面的设置有效。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie: widget_session=abc123; SameSite=None; Secure</span><br></pre></td></tr></table></figure>
-
 <p>参考链接：</p>
 <p><a href="https://juejin.cn/post/6877496781505200142" rel="external nofollow noopener noreferrer" target="_blank">https://juejin.cn/post/6877496781505200142</a></p>
 <p><a href="https://www.ruanyifeng.com/blog/2019/09/cookie-samesite.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.ruanyifeng.com/blog/2019/09/cookie-samesite.html</a></p>

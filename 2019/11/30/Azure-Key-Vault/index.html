@@ -367,7 +367,6 @@
       
         <p>Azure Key Vault is a tool for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, or certificates. A vault is logical group of secrets.</p>
 <a id="more"></a>
-
 <p>上面这一段是Azure官方文档的描述，作者在阅读了Microsoft Azure文档之后，对其基本的概念进行了提取和总结，并在原文中加入了一些自己的理解。阅读完中文就能对key vault有个大概的认识，英文原文是比较专业的描述，不影响理解，如果想进一步了解可以去阅读文末提供的链接。</p>
 <h2 id="What-is-Azure-Key-Vault"><a href="#What-is-Azure-Key-Vault" class="headerlink" title="What is Azure Key Vault"></a>What is Azure Key Vault</h2><p>简单来讲，Azure Key Vault 就是提供了一个能够安全存储你的敏感数据的地方，想要获取这些数据就必须通过身份校验以及权限校验，我们可以把类似于证书，数据库配置等敏感信息放在这里，而不需要硬编码到代码中。在使用时我们将敏感信息存储到key vault上后，会获取对应的名称，我们只需要通过api去key vault中通过名字（也可以添加版本信息）获取对应的信息就好，这些信息可以是密钥（只能get公钥），证书信息，或者一些配置信息。当然这些信息并不是任何人直接去调用api就可以获取的，而是需要你的Identity信息被用于创建该Key Vault的Tenant下面的Subscription所承认，获取承认的方式有很多种，可以通过id-token，或者密码等。</p>
 <p>Azure Key Vault帮助解决以下问题：</p>

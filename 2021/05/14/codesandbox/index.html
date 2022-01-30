@@ -377,7 +377,6 @@
 <p>也就是说前者只是将代码的编辑放在了web段，其实背后借助了云去做代码的存储，项目的编译打包运行等，这种方式下，我们最后得到的和本地开发并无区别，对我们的区别只是不用特地下个编辑器了。</p>
 <p>后者则是将一部分的编译打包功能以及最终的运行放在了浏览器，且由于浏览器的限制，其所能支持的应用大小是有限制的（PS：最近遇到一个问题，看错误应该是代码大小超过了500K，留个坑，留待以后解决，嘿嘿）</p>
 <a id="more"></a>
-
 <p>能将 <code>类似基于本地webpack打包构建</code>的能力迁移到浏览器端看起来是一件非常不可思议的事情，上面也已经讲到，实现方式往往有两种方式，一种是基于服务端的webpack的打包构建，构建完后将构建出的代码再转交给浏览器端解析执行，相关实践如：<a href="https://juejin.im/entry/5a372e6a6fb9a0450f220711" rel="external nofollow noopener noreferrer" target="_blank">基于webpack打造前端在线编译器</a>，还有一种实现则是由服务端提供依赖包的代码（从npm安装拉取）返回给客户端，打包构建则完全是在浏览器端实现，实现了浏览器端的’webpack’，比如CodeSandbox就是这种模式的实现。今天我们就来一起看下CodeSandbox的作者这篇文章的介绍，这一切究竟是如何实现的。</p>
 <blockquote>
 <p>这里注意，codesandbox的实现经历了多次迭代，但改变的只是服务端如何提供依赖，从服务端加载依赖以后返回给客户端使用这一点是没有变的。</p>
@@ -404,7 +403,6 @@
 <p>简单来说，DllPlugin做的事情就是把一个项目打包成一个dll依赖，将项目中的依赖关系包装在dll中，然后对外暴露接口。这是官方文档地址：<a href="https://webpack.docschina.org/plugins/dll-plugin/#root" rel="external nofollow noopener noreferrer" target="_blank">DllPlugin文档</a></p>
 <p>webpack的<a href="https://webpack.js.org/plugins/dll-plugin/" rel="external nofollow noopener noreferrer" target="_blank">DLLPlugin</a>可以打包依赖项，并且使用一个manifest清单来标记打出的js包包含哪些依赖项。这份清单看起来是这样的：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"dll_bundle"</span>,</span><br><span class="line">  <span class="attr">"content"</span>: &#123;</span><br><span class="line">    <span class="attr">"./node_modules/fbjs/lib/emptyFunction.js"</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"./node_modules/fbjs/lib/invariant.js"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">"./node_modules/fbjs/lib/warning.js"</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="attr">"./node_modules/react"</span>: <span class="number">3</span>,</span><br><span class="line">    <span class="attr">"./node_modules/fbjs/lib/emptyObject.js"</span>: <span class="number">4</span>,</span><br><span class="line">    <span class="attr">"./node_modules/object-assign/index.js"</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="attr">"./node_modules/prop-types/checkPropTypes.js"</span>: <span class="number">6</span>,</span><br><span class="line">    <span class="attr">"./node_modules/prop-types/lib/ReactPropTypesSecret.js"</span>: <span class="number">7</span>,</span><br><span class="line">    <span class="attr">"./node_modules/react/cjs/react.development.js"</span>: <span class="number">8</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>每一个路径都映射一个模块id。如果我想引入 <code>React</code>，我只需要调用 <code>dll_bundle(3)</code>，然后我就得到了React！这对需求来说简直就是完美，</p>
 <p>于是作者开始行动，基于Webpack DllPlugin的思想，思考出了一个下面的系统：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1621126841/origin-of-ray/1574822062018-7c62e623-e99b-43c1-80a4-a0eba2c3dfdb_ikivwp.png" alt></p>
@@ -415,7 +413,6 @@
 </blockquote>
 <p>但是，这套系统仍然有一个非常大的限制，它不支持引入 <code>不在webpack依赖关系图</code>中的文件。这就意味着像是下面的这个例子：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">'react-icons/lib/fa/fa-beer'</span>)</span><br></pre></td></tr></table></figure>
-
 <p>将不能正常运行，因为从依赖项的入口开始自始至终都不需要它，也就不会被打包进去。（webpack的打包是基于package.json里的依赖模块以及各个依赖模块的依赖项去做打包的，不被包含在这个体系里的文件则不会被打包进去）</p>
 <h2 id="带入口的webpack"><a href="#带入口的webpack" class="headerlink" title="带入口的webpack"></a>带入口的webpack</h2><p>为了解决刚才说的那个限制，也就是说不在webpack依赖关系中的文件无法打包进入最后的dll。</p>
 <p>手动的增加了入口配置，以确保 <code>webpack</code>也可以将这些文件能够打包进去。在对这个方案做了非常多的调整之后，这个系统已经可以支持任意（？译者注：作者这里加了问号，表示并不太确定支持任意）组合的打包需求。因此你也可以去加载 react-icons，css文件也是可以的。</p>
@@ -460,7 +457,6 @@
 </ul>
 <p>所以可以认为<strong>CodeSandbox是一个简化版的Webpack, 且针对浏览器环境进行了优化，比如使用worker来进行并行转译</strong></p>
 <h3 id="项目构建过程"><a href="#项目构建过程" class="headerlink" title="项目构建过程"></a>项目构建过程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">packager -&gt; transpilation -&gt; evaluation</span><br></pre></td></tr></table></figure>
-
 <p>Sandbox 构建分为三个阶段:</p>
 <ul>
 <li><strong>Packager</strong> 包加载阶段，下载和处理所有npm模块依赖</li>

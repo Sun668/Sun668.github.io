@@ -371,7 +371,6 @@
       
         <p><a href="https://sunra.top/2021/10/03/unity-offical-tutorial-note/">上一篇博客</a>结束，应该可以对Unity有个总体但是不深入不系统的理解，这次开始就从头系统得阅读官方文档来深入了解Unity的各种概念和功能。</p>
 <a id="more"></a>
-
 <p>开始阅读Unity</p>
 <h1 id="Creating-Gameplay"><a href="#Creating-Gameplay" class="headerlink" title="Creating Gameplay"></a>Creating Gameplay</h1><h2 id="Scene：场景"><a href="#Scene：场景" class="headerlink" title="Scene：场景"></a>Scene：场景</h2><p>场景是你在Unity中处理内容的地方。它们是包含游戏或应用程序全部或部分内容的资产。例如，你可能会在单个场景中创建一款简单的游戏，而对于更复杂的游戏，你可能会在每个关卡中使用一个场景，每个场景都有自己的环境、角色、障碍、装饰和UI。你可以在一个项目中创建任意数量的场景。当你创建一个新项目并首次打开它时，Unity会打开一个只包含摄像机和灯光的示例场景。</p>
 <h3 id="创建新的场景"><a href="#创建新的场景" class="headerlink" title="创建新的场景"></a>创建新的场景</h3><p>创建新的场景有三种方式：</p>
@@ -431,8 +430,7 @@
 <h4 id="缩放的重要性（尺寸的重要性）："><a href="#缩放的重要性（尺寸的重要性）：" class="headerlink" title="缩放的重要性（尺寸的重要性）："></a>缩放的重要性（尺寸的重要性）：</h4><p>Transform的规模决定了你的建模应用程序中的网格大小和Unity中的网格大小之间的差异。网格的大小在Unity(因此变换的比例)是非常重要的，特别是在物理模拟。默认情况下，物理引擎假设世界空间中的一个单位对应于1米。如果一个物体非常大，它看起来会以慢动作坠落;这个模拟实际上是正确的，因为实际上，你看到的是一个非常大的物体落在很远的地方。</p>
 <p>有三个因素可以影响你的对象的尺寸：</p>
 <ul>
-<li><p>在3D建模应用程序中网格的大小。</p>
-</li>
+<li>在3D建模应用程序中网格的大小。</li>
 <li><p>在对象的导入设置中设置网格比例因子。</p>
 </li>
 <li><p>The <strong>scale</strong> values of your Transform Component.</p>
@@ -508,7 +506,7 @@
 <p>例如，要让十字准线跟随 2D 射击游戏中玩家的宇宙飞船，请在十字准线上添加一个 <strong>Position Constraint</strong> 组件。要将十字准线关联到宇宙飞船，请导航到 <strong>Position Constraint</strong> 组件，然后将宇宙飞船游戏对象添加到 <strong>Sources</strong> 列表中。当玩家移动宇宙飞船时，十字准线随之移动。</p>
 <p>一个约束可以关联到多个源游戏对象。在这种情况下，约束使用其源游戏对象的平均位置、旋转或缩放。例如，要将光源指向一组游戏对象，请将 <strong>Aim Constraint</strong> 组件添加到光源游戏对象。然后，在 <strong>Sources</strong> 列表中添加要接受光照的游戏对象。<strong>Aim Constraint</strong> 将光源定向至其光源的平均位置。</p>
 <p>Unity 按照源游戏对象在 <strong>Sources</strong> 列表中出现的顺序来对源游戏对象求值。该顺序对 <strong>Position Constraint</strong> 和 <strong>Scale Constraint</strong> 组件没有影响。但是，顺序会对 <strong>Parent Constraint</strong>、<strong>Rotation Constraint</strong> 和 <strong>Aim Constraint</strong> 组件产生影响。要获得所需的结果，请通过拖放各项来重新排序 <strong>Sources</strong> 列表。</p>
-<p>可以约束一系列游戏对象。例如，假如想让小鸭子排成一排跟随它们的妈妈。应将 <strong>Position Constraint</strong> 组件添加到游戏对象 <em>Duckling1<em>。在 *</em>Sources** 列表中，关联到 <em>MotherDuck</em>。然后，将 <strong>Position Constraint</strong> 添加到 *Duckling2_，而后者再关联到</em> Duckling1<em>。当</em> MotherDuck_ 游戏对象在场景中移动时，<em>Duckling1</em> 跟随 <em>MotherDuck_，_Duckling2</em> 跟随 <em>Duckling1</em>。</p>
+<p>可以约束一系列游戏对象。例如，假如想让小鸭子排成一排跟随它们的妈妈。应将 <strong>Position Constraint</strong> 组件添加到游戏对象 <em>Duckling1</em>。在 <strong>Sources</strong> 列表中，关联到 <em>MotherDuck</em>。然后，将 <strong>Position Constraint</strong> 添加到 <em>Duckling2_，而后者再关联到</em> Duckling1<em>。当</em> MotherDuck<em> 游戏对象在场景中移动时，_Duckling1</em> 跟随 <em>MotherDuck_，_Duckling2</em> 跟随 <em>Duckling1</em>。</p>
 <h2 id="设置约束属性"><a href="#设置约束属性" class="headerlink" title="设置约束属性"></a>设置约束属性</h2><p>使用 <a href="https://docs.unity3d.com/cn/current/Manual/UsingTheInspector.html" rel="external nofollow noopener noreferrer" target="_blank">Inspector 窗口</a>可更改约束中的常用属性。</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1633422808/origin-of-ray/asynccode_gh0kzj.png" alt="img"></p>
 <p>Position Constraint 的 Weight 和 Constraint Settings</p>

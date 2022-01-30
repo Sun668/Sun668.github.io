@@ -377,10 +377,8 @@
         <p>我们都知道，JavaScript 是一门自动垃圾回收的语言，也就是说，我们不需要去手动回收垃圾数据，这一切都交给 V8 的垃圾回收器来完成。V8 为了更高效地回收垃圾，引入了两个垃圾回收器，它们分别针对着不同的场景。</p>
 <p>我们就来一起分析下，这两个回收机制的使用场景以及工作原理。</p>
 <a id="more"></a>
-
 <h2 id="垃圾数据是如何产生的？"><a href="#垃圾数据是如何产生的？" class="headerlink" title="垃圾数据是如何产生的？"></a>垃圾数据是如何产生的？</h2><p>比如下面这段代码：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">gc</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> a = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>这段代码会先在栈上创建函数执行上下文，然后在堆中创建一个新的对象，然后把该对象的指针存储在<code>gc</code>的上下文中。</p>
 <p>那么当<code>gc</code>函数退出以后，栈中的a被删除，那a中存储的指针对应的对象，就会成为堆中的垃圾数据，是无效的。</p>
 <p>从这个例子中我们也可以看出，<strong>垃圾回收算法针对的是堆</strong>。</p>
@@ -478,11 +476,9 @@
 <p>引入灰色标记之后，垃圾回收器就可以依据当前内存中有没有灰色节点，来判断整个标记是否完成，如果没有灰色节点了，就可以进行清理工作了。如果还有灰色标记，当下次恢复垃圾回收器时，便从灰色的节点开始继续执行。</p>
 <h4 id="写屏障"><a href="#写屏障" class="headerlink" title="写屏障"></a>写屏障</h4><p>单纯的三色标记其实还是有点问题，比如下面这段代码：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.a = <span class="built_in">Object</span>()</span><br><span class="line"><span class="built_in">window</span>.a.b = <span class="built_in">Object</span>()</span><br><span class="line"><span class="built_in">window</span>.a.b.c=<span class="built_in">Object</span>()</span><br></pre></td></tr></table></figure>
-
 <p><img src="https://static001.geekbang.org/resource/image/19/17/19bbfb35d274064b253814b58413bc17.jpg" alt></p>
 <p>然后又执行了另外一个代码，这段代码如下所示：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.a.b = <span class="built_in">Object</span>() <span class="comment">//d</span></span><br></pre></td></tr></table></figure>
-
 <p>执行完之后，垃圾回收器又恢复执行了增量标记过程，由于 b 重新指向了 d 对象，所以 b 和 c 对象的连接就断开了。这时候代码的应用如下图所示：</p>
 <p><img src="https://static001.geekbang.org/resource/image/75/15/759f6a8105d64d3aebdc16f81a2b5e15.jpg" alt></p>
 <p>这就说明一个问题，当垃圾回收器将某个节点标记成了黑色，然后这个黑色的节点被续上了一个白色节点，那么垃圾回收器不会再次将这个白色节点标记为黑色节点了，因为它已经走过这个路径了。但是这个新的白色节点的确被引用了，所以我们还是需要想办法将其标记为黑色。</p>

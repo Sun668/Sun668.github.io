@@ -377,7 +377,7 @@
 <p>这里吐槽一句，G6对于TypeScript实在是太不友好了，所有的属性都是可选的，有时候写下来一堆问号</p>
 </blockquote>
 <a id="more"></a>
-
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -388,7 +388,8 @@
 <th>备注</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>G6</td>
 <td>文档较为详细：<a href="https://g6.antv.vision/zh/docs/manual/tutorial/preface" rel="external nofollow noopener noreferrer" target="_blank">前言</a></td>
 <td>节点数少，但是单个节点比较复杂时候比较实用</td>
@@ -444,7 +445,9 @@
 <td>同上</td>
 <td>同上</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="如何在React中使用G6"><a href="#如何在React中使用G6" class="headerlink" title="如何在React中使用G6"></a>如何在React中使用G6</h2><p>一开始我还在GGEditor和G6之间徘徊，因为我的前端项目是基于React的，使用GGEditor可能会方便一点，但是我在G6的官网找到了官方推荐的React中的使用示例，这才决定使用G6，这是官方势力的链接：<a href="https://g6.antv.vision/zh/docs/manual/advanced/g6InReact" rel="external nofollow noopener noreferrer" target="_blank">https://g6.antv.vision/zh/docs/manual/advanced/g6InReact</a></p>
 <h2 id="G6核心概念"><a href="#G6核心概念" class="headerlink" title="G6核心概念"></a>G6核心概念</h2><p>这里借用一下官方网站的图片</p>
 <p><img src="https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*I0RoTKgsvSEAAAAAAAAAAAAAARQnAQ" alt></p>
@@ -473,11 +476,9 @@
 <p>如果要了解 G6 支持的所有事件，请参考 <a href="https://g6.antv.vision/zh/docs/api/Event" rel="external nofollow noopener noreferrer" target="_blank">Event API</a>。</p>
 <p>在事件之上，G6定义了Behavior，其实就是事件及其处理函数的集合，我们从如何自定义一个事件就可以看出来：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">G6.registerBehavior(<span class="string">'activate-node'</span>, &#123;</span><br><span class="line">  getDefaultCfg() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      multiple: <span class="literal">true</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  getEvents() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="string">'node:click'</span>: <span class="string">'onNodeClick'</span>,</span><br><span class="line">      <span class="string">'canvas:click'</span>: <span class="string">'onCanvasClick'</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  onNodeClick(e) &#123;</span><br><span class="line">    <span class="keyword">const</span> graph = <span class="keyword">this</span>.graph;</span><br><span class="line">    <span class="keyword">const</span> item = e.item;</span><br><span class="line">    <span class="keyword">if</span> (item.hasState(<span class="string">'active'</span>)) &#123;</span><br><span class="line">      graph.setItemState(item, <span class="string">'active'</span>, <span class="literal">false</span>);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// this 上即可取到配置，如果不允许多个 'active'，先取消其他节点的 'active' 状态</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.multiple) &#123;</span><br><span class="line">      <span class="keyword">this</span>.removeNodesState();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 置点击的节点状态 'active' 为 true</span></span><br><span class="line">    graph.setItemState(item, <span class="string">'active'</span>, <span class="literal">true</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  onCanvasClick(e) &#123;</span><br><span class="line">    <span class="comment">// shouldUpdate 可以由用户复写，返回 true 时取消所有节点的 'active' 状态，即将 'active' 状态置为 false</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.shouldUpdate(e)) &#123;</span><br><span class="line">      removeNodesState();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  removeNodesState() &#123;</span><br><span class="line">    graph.findAllByState(<span class="string">'node'</span>, <span class="string">'active'</span>).forEach(<span class="function"><span class="params">node</span> =&gt;</span> &#123;</span><br><span class="line">        graph.setItemState(node, <span class="string">'active'</span>, <span class="literal">false</span>);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
 <p>当然，G6也有很多内置的事件，比如拖拽节点，拖拽或者缩放画布。</p>
 <p>在事件之上，定义了交互模式Mode，每个交互模式就是几个Behavior的集合，如</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> graph = <span class="keyword">new</span> G6.Graph(&#123;</span><br><span class="line">  container: <span class="string">'mountNode'</span>,</span><br><span class="line">  width: <span class="number">500</span>,</span><br><span class="line">  height: <span class="number">500</span>,</span><br><span class="line">  modes: &#123;</span><br><span class="line">    <span class="comment">// 支持的 behavior</span></span><br><span class="line">    <span class="keyword">default</span>: [<span class="string">'drag-canvas'</span>, <span class="string">'zoom-canvas'</span>],</span><br><span class="line">    edit: [<span class="string">'click-select'</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
 <p>以上是模式定义的一个例子。在图上定义了两个模式，分别是 <code>default</code>，<code>edit</code>。其中 <code>default</code> 包含两个  <a href="https://g6.antv.vision/zh/docs/manual/middle/states/defaultBehavior" rel="external nofollow noopener noreferrer" target="_blank">Behavior</a>：<code>&#39;drag-canvas&#39;</code> 和 ‘<code>zoom-canvas&#39;</code>，都使用行为的默认参数。</p>
 <h3 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h3><p>G6 中的 <strong>state</strong>，指的是节点或边的状态，包括<strong>交互状态</strong>和<strong>业务状态</strong>两种。</p>
 <p>在 G6 中，配置交互状态和业务状态的方式是相同的。对于部分只使用 G6 来完成某个需求的开发，而不想深入理解 G6 的用户，其实不用区分交互状态和业务状态的区别，使用相同的方式定义状态，完全没有理解成本。</p>

@@ -373,7 +373,6 @@
 <p>我目前在react方面的当务之急是，我只学了实践，但是很多东西我都不知道为什么要这样写，比如为什么要setState才能更新，hook是如何生效的，react fiber是什么等等，不了解这些，我感觉自己的react还浮在半空中，没有比较好的落地，所以下一步的计划就是去了解一下原理，至于是否要去阅读源码，下一步再说。</p>
 <p>这篇博客的主要内容是读了一下几位国内外大佬的博客，先对react的fiber有个大概的了解</p>
 <a id="more"></a>
-
 <h2 id="React-Fiber的诞生背景"><a href="#React-Fiber的诞生背景" class="headerlink" title="React Fiber的诞生背景"></a>React Fiber的诞生背景</h2><p>在页面元素很多，且需要频繁刷新的场景下，React 15 会出现掉帧的现象。</p>
 <p>其根本原因，是大量的同步计算任务阻塞了浏览器的 UI 渲染。默认情况下，JS 运算、页面布局和页面绘制都是运行在浏览器的主线程当中（关于这一段，可以去看我关于浏览器架构的博客：<a href="https://sunra.top/2020/12/03/browser-architecture/），他们之间是互斥的关系。如果">https://sunra.top/2020/12/03/browser-architecture/），他们之间是互斥的关系。如果</a> JS 运算持续占用主线程，页面就没法得到及时的更新。当我们调用<code>setState</code>更新页面的时候，React 会遍历应用的所有节点，计算出差异，然后再更新 UI。整个过程是一气呵成，不能被打断的。如果页面元素很多，整个过程占用的时机就可能超过 16 毫秒，就容易出现掉帧的现象。</p>
 <p>解决主线程长时间被 JS 运算占用这一问题的基本思路，是将运算切割为多个步骤，分批完成。也就是说在完成一部分任务之后，将控制权交回给浏览器，让浏览器有时间进行页面的渲染。等浏览器忙完之后，再继续之前未完成的任务。</p>
@@ -390,7 +389,6 @@
 <p>这次改动最大的当属 Reconciler 层了，React 团队也给它起了个新的名字，叫<code>Fiber Reconciler</code>。这就引入另一个关键词：Fiber。</p>
 <p>Fiber 其实指的是一种数据结构，它可以用一个纯 JS 对象来表示（这个只是简单版的，还有很多其他属性）：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fiber = &#123;</span><br><span class="line">    stateNode,    <span class="comment">// 节点实例</span></span><br><span class="line">    child,        <span class="comment">// 子节点</span></span><br><span class="line">    sibling,      <span class="comment">// 兄弟节点</span></span><br><span class="line">    <span class="keyword">return</span>,       <span class="comment">// 父节点</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>为了加以区分，以前的 Reconciler 被命名为<code>Stack Reconciler</code>。Stack Reconciler 运作的过程是不能被打断的，必须一条道走到黑：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1622505912/origin-of-ray/bVboIrF_jbskrs.png" alt></p>
 <p>而 Fiber Reconciler 每执行一段时间，都会将控制权交回给浏览器，可以分段执行：</p>

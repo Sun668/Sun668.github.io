@@ -87,15 +87,15 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="在上一篇博客中，我们从执行机制和上下文的角度讲了javascript中的变量提升。 正是由于 JavaScript 存在变量提升这种特性，从而导致了很多与直觉不符的代码，这也是 JavaScript 的一个重要设计缺陷。 虽然 ECMAScript6（以下简称 ES6）已经通过引入块级作用域并配合 let、const 关键字，来避开了这种设计缺陷，但是由于 JavaScript 需要保持向下兼容，">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204135_tf6mt8.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204144_dzlkwq.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204151_izno2z.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204157_g15aka.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/微信截图_20201215204135_tf6mt8.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/微信截图_20201215204144_dzlkwq.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/微信截图_20201215204151_izno2z.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/微信截图_20201215204157_g15aka.png">
 <meta property="og:updated_time" content="2021-09-03T00:51:59.309Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript执行机制（二）作用域">
 <meta name="twitter:description" content="在上一篇博客中，我们从执行机制和上下文的角度讲了javascript中的变量提升。 正是由于 JavaScript 存在变量提升这种特性，从而导致了很多与直觉不符的代码，这也是 JavaScript 的一个重要设计缺陷。 虽然 ECMAScript6（以下简称 ES6）已经通过引入块级作用域并配合 let、const 关键字，来避开了这种设计缺陷，但是由于 JavaScript 需要保持向下兼容，">
-<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204135_tf6mt8.png">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/微信截图_20201215204135_tf6mt8.png">
 
 
 
@@ -374,7 +374,6 @@
 <p>正是由于 JavaScript 存在变量提升这种特性，从而导致了很多与直觉不符的代码，这也是 JavaScript 的一个重要设计缺陷。</p>
 <p>虽然 ECMAScript6（以下简称 ES6）已经通过引入块级作用域并配合 let、const 关键字，来避开了这种设计缺陷，但是由于 JavaScript 需要保持向下兼容，所以变量提升在相当长一段时间内还会继续存在。这也加大了你理解概念的难度，因为既要理解新的机制，又要理解变量提升这套机制，关键这两套机制还是同时运行在“一套”系统中的。</p>
 <a id="more"></a>
-
 <h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><p>作用域是指在程序中定义变量的区域，该位置决定了变量的生命周期。通俗地理解，作用域就是变量与函数的可访问范围，即作用域控制着变量和函数的可见性和生命周期。</p>
 <p>在 ES6 之前，ES 的作用域只有两种：<strong>全局作用域和函数作用域</strong>。</p>
 <ul>
@@ -387,25 +386,21 @@
 <p>简单来讲，如果一种语言支持块级作用域，那么其代码块内部定义的变量在代码块外部是访问不到的，并且等该代码块中的代码执行完成之后，代码块中定义的变量会被销毁。</p>
 <h2 id="ES6-是如何解决变量提升带来的缺陷"><a href="#ES6-是如何解决变量提升带来的缺陷" class="headerlink" title="ES6 是如何解决变量提升带来的缺陷"></a>ES6 是如何解决变量提升带来的缺陷</h2><p>ES6 引入了 let 和 const 关键字，从而使 JavaScript 也能像其他语言一样拥有了块级作用域。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">5</span></span><br><span class="line"><span class="keyword">const</span> y = <span class="number">6</span></span><br><span class="line">x = <span class="number">7</span></span><br><span class="line">y = <span class="number">9</span> <span class="comment">//报错，const声明的变量不可以修改</span></span><br></pre></td></tr></table></figure>
-
 <p>从这段代码你可以看出来，两者之间的区别是，使用 let 关键字声明的变量是可以被改变的，而使用 const 声明的变量其值是不可以被改变的。但不管怎样，两者都可以生成块级作用域，为了简单起见，在下面的代码中，我统一使用 let 关键字来演示。</p>
 <p>那么接下来，我们就通过实际的例子来分析下，ES6 是如何通过块级作用域来解决上面的问题的。你可以先参考下面这段存在变量提升的代码：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">varTest</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> x = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">2</span>;  <span class="comment">// 同样的变量!</span></span><br><span class="line">    <span class="built_in">console</span>.log(x);  <span class="comment">// 2</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">console</span>.log(x);  <span class="comment">// 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>在这段代码中，有两个地方都定义了变量 x，第一个地方在函数块的顶部，第二个地方在 if 块的内部，由于 var 的作用范围是整个函数，所以在编译阶段，会生成如下的执行上下文：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204135_tf6mt8.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204135_tf6mt8.png"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/微信截图_20201215204135_tf6mt8.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204135_tf6mt8.png"></p>
 <p>从执行上下文的变量环境中可以看出，<strong>最终只生成了一个变量 x，函数体内所有对 x 的赋值操作都会直接改变变量环境中的 x 值</strong>。</p>
 <p>所以上述代码最后通过 console.log(x) 输出的是 2，而对于相同逻辑的代码，其他语言最后一步输出的值应该是 1，因为在 if 块里面的声明不应该影响到块外面的变量。</p>
 <p>既然支持块级作用域和不支持块级作用域的代码执行逻辑是不一样的，那么接下来我们就来改造上面的代码，让其支持块级作用域。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">letTest</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> x = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">2</span>;  <span class="comment">// 不同的变量</span></span><br><span class="line">    <span class="built_in">console</span>.log(x);  <span class="comment">// 2</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">console</span>.log(x);  <span class="comment">// 1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>执行这段代码，其输出结果就和我们的预期是一致的。这是因为 let 关键字是支持块级作用域的，所以在编译阶段，JavaScript 引擎并不会把 if 块中通过 let 声明的变量存放到变量环境中，这也就意味着在 if 块通过 let 声明的关键字，并不会提升到全函数可见。所以在 if 块之内打印出来的值是 2，跳出语块之后，打印出来的值就是 1 了。这种就非常符合我们的编程习惯了：作用域块内声明的变量不影响块外面的变量。</p>
 <h2 id="JavaScript-是如何支持块级作用域的"><a href="#JavaScript-是如何支持块级作用域的" class="headerlink" title="JavaScript 是如何支持块级作用域的"></a>JavaScript 是如何支持块级作用域的</h2><p>你已经知道 JavaScript 引擎是通过变量环境实现函数级作用域的，那么 ES6 又是如何在函数级作用域的基础之上，实现对块级作用域的支持呢？你可以先看下面这段代码：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">    <span class="keyword">let</span> b = <span class="number">2</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">let</span> b = <span class="number">3</span></span><br><span class="line">      <span class="keyword">var</span> c = <span class="number">4</span></span><br><span class="line">      <span class="keyword">let</span> d = <span class="number">5</span></span><br><span class="line">      <span class="built_in">console</span>.log(a)</span><br><span class="line">      <span class="built_in">console</span>.log(b)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(b) </span><br><span class="line">    <span class="built_in">console</span>.log(c)</span><br><span class="line">    <span class="built_in">console</span>.log(d)</span><br><span class="line">&#125;   </span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
-
 <p>当执行上面这段代码的时候，JavaScript 引擎会先对其进行编译并创建执行上下文，然后再按照顺序执行代码，关于如何创建执行上下文我们在前面的文章中已经分析过了，但是现在的情况有点不一样，我们引入了 let 关键字，let 关键字会创建块级作用域，那么 let 关键字是如何影响执行上下文的呢？</p>
 <p>第一步是编译并创建执行上下文，下面是我画出来的执行上下文示意图:</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204144_dzlkwq.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204144_dzlkwq.png"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/微信截图_20201215204144_dzlkwq.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204144_dzlkwq.png"></p>
 <p>通过上图，我们可以得出以下结论：</p>
 <ul>
 <li><p>函数内部通过 var 声明的变量，在编译阶段全都被存放到变量环境里面了。</p>
@@ -416,11 +411,11 @@
 </li>
 </ul>
 <p>接下来，第二步继续执行代码，当执行到代码块里面时，变量环境中 a 的值已经被设置成了 1，词法环境中 b 的值已经被设置成了 2，这时候函数的执行上下文就如下图所示：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204151_izno2z.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204151_izno2z.png"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/微信截图_20201215204151_izno2z.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204151_izno2z.png"></p>
 <p>从图中可以看出，当进入函数的作用域块时，作用域块中通过 let 声明的变量，会被存放在词法环境的一个单独的区域中，这个区域中的变量并不影响作用域块外面的变量，比如在作用域外面声明了变量 b，在该作用域块内部也声明了变量 b，当执行到作用域内部时，它们都是独立的存在。</p>
 <p>其实，在词法环境内部，维护了一个小型栈结构，栈底是函数最外层的变量，进入一个作用域块后，就会把该作用域块内部的变量压到栈顶；当作用域执行完成之后，该作用域的信息就会从栈顶弹出，这就是词法环境的结构。需要注意下，我这里所讲的变量是指通过 let 或者 const 声明的变量。</p>
 <p>再接下来，当执行到作用域块中的console.log(a)这行代码时，就需要在词法环境和变量环境中查找变量 a 的值了，具体查找方式是：沿着词法环境的栈顶向下查询，如果在词法环境中的某个块中查找到了，就直接返回给 JavaScript 引擎，如果没有查找到，那么继续在变量环境中查找。</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204157_g15aka.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204157_g15aka.png"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/微信截图_20201215204157_g15aka.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204157_g15aka.png"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>也就是说JavaScript一开始的设计只有全局作用域和函数作用域，对应的就是全局执行上下文和函数执行上下文，我们在函数执行过程中首先就在自身的执行上下文中查找变量，如果找不到就会依次沿着调用栈中的上下文去查找一直到全局执行上下文。</p>
 <p>后来为了引入块级作用域，我们就又在上下文中创建了一个新的栈结构，叫做词法环境，每当遇到块级作用域，就在词法环境中进行压栈，并把本块级作用域中使用let和const声明的变量放入其中，而var声明的变量还是放在变量环境中，这样既能够实现块级作用域，又能兼容var的变量提升。</p>
 
