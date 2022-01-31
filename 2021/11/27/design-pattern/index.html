@@ -355,9 +355,10 @@
         <p>最近发现需要看一些关于设计模式的内容了，于是在网上找到了《设计模式之禅》这本书，边看边总结吧</p>
 <p>这次先总结下UML图的看法以及单一职责原则。</p>
 <a id="more"></a>
+
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>设计模式更多的是一种哲学，偏向学术，总是会构造一些极端的情况去进行描述，就像物理学中的光滑平面一样，所以我们需要领会的更多的是其中的哲学，而不要试图在实际项目中能够完全复刻。</p>
 <h2 id="一图看懂UML标志"><a href="#一图看懂UML标志" class="headerlink" title="一图看懂UML标志"></a>一图看懂UML标志</h2><p>下面的内容会涉及很多UML图，如果大家不太熟悉，可以先简单看一下下面这张图。</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970288/origin-of-ray/a1a8c7bd-101c-4dbf-823f-91625dcf7fab_ofx3xs.png" alt></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970288/origin-of-ray/a1a8c7bd-101c-4dbf-823f-91625dcf7fab_ofx3xs.png"></p>
 <h2 id="面向接口编程"><a href="#面向接口编程" class="headerlink" title="面向接口编程"></a>面向接口编程</h2><p><a href="https://segmentfault.com/a/1190000021928946" rel="external nofollow noopener noreferrer" target="_blank">为什么要面向接口编程</a></p>
 <h1 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a><strong>单一职责原则</strong></h1><h2 id="接口职责单一"><a href="#接口职责单一" class="headerlink" title="接口职责单一"></a>接口职责单一</h2><p>单一职责原则的英文名称是Single Responsibility Principle，简称是SRP。</p>
 <p>怎么划分类的职责。我们先举个例子来说明什么是单一职责原则。</p>
@@ -367,6 +368,7 @@
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/520b8b37-71f6-4df7-908b-147396219239_cuvcee.png" alt="img"></p>
 <p>重新拆封成两个接口，IUserBO负责用户的属性，简单地说，IUserBO的职责就是收集和反馈用户的属性信息；IUserBiz负责用户的行为，完成用户信息的维护和变更。各位可能要说了，这个与我实际工作中用到的User类还是有差别的呀！别着急，我们先来看一看分拆成两个接口怎么使用。OK，我们现在是面向接口编程，所以产生了这个UserInfo对象之后，当然可以把它当IUserBO接口使用。也可以当IUserBiz接口使用，这要看你在什么地方使用了。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">IUserInfo userInfo = new UserInfo();</span><br><span class="line">//我要赋值了，我就认为它是一个纯粹的BO</span><br><span class="line">IUserBO userBO = (IUserBO)userInfo;</span><br><span class="line">userBO.setPassword(&quot;abc&quot;);</span><br><span class="line">//我要执行动作了，我就认为是一个业务逻辑类</span><br><span class="line">IUserBiz userBiz = (IUserBiz)userInfo;</span><br><span class="line">userBiz.deleteUser();</span><br></pre></td></tr></table></figure>
+
 <p>确实可以如此，问题也解决了，但是我们来分析一下刚才的动作，为什么要把一个接口拆分成两个呢？其实，在实际的使用中，我们更倾向于使用两个不同的类或接口：一个是IUserBO，一个是IUserBiz，类图如图所示。</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970007/origin-of-ray/99211215-7ce6-41c2-b763-edddaa45f9ba_ygqbs4.png" alt="img"></p>
 <p>以上我们把一个接口拆分成两个接口的动作，就是依赖了单一职责原则，那什么是单一职责原则呢？</p>

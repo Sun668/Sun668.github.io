@@ -370,8 +370,9 @@
 
       
         <p>最近看了篇关于VPN原理的文章，发现它的连接建立过程与HTTPS有点相似，并且都是对通信进行了数据加密。</p>
-<p>在这里记录下VPN的连接建立过程，想要比较与HTTPS的区别的可以看我的另外一篇博客：<a href="https://sunra.top/2020/04/19/https/。">https://sunra.top/2020/04/19/https/。</a></p>
+<p>在这里记录下VPN的连接建立过程，想要比较与HTTPS的区别的可以看我的另外一篇博客：<a href="https://sunra.top/2020/04/19/https/%E3%80%82">https://sunra.top/2020/04/19/https/。</a></p>
 <a id="more"></a>
+
 <h2 id="VPN是用来做什么的"><a href="#VPN是用来做什么的" class="headerlink" title="VPN是用来做什么的"></a>VPN是用来做什么的</h2><p>有的公司有多个数据中心，需要将多个数据中心连接起来，或者需要办公室和数据中心连接起来。这该怎么办呢？</p>
 <ul>
 <li><p>第一种方式是走公网，但是公网太不安全，你的隐私可能会被别人偷窥。</p>
@@ -381,11 +382,11 @@
 <li><p>第三种方式是用 VPN 来连接，这种方法比较折中，安全又不贵。</p>
 </li>
 </ul>
-<p><img src="https://static001.geekbang.org/resource/image/9f/68/9f797934cb5cf40543b716d97e214868.jpg" alt></p>
+<p><img src="https://static001.geekbang.org/resource/image/9f/68/9f797934cb5cf40543b716d97e214868.jpg"></p>
 <p>VPN，全名 <strong>Virtual Private Network</strong>，<strong>虚拟专用网</strong>，就是利用开放的公众网络，建立专用数据传输通道，将远程的分支机构、移动办公人员等连接起来。</p>
 <h2 id="VPN是如何工作的"><a href="#VPN是如何工作的" class="headerlink" title="VPN是如何工作的"></a>VPN是如何工作的</h2><p>VPN 通过隧道技术在公众网络上仿真一条点到点的专线，是通过利用一种协议来传输另外一种协议的技术，这里面涉及三种协议：乘客协议、隧道协议和承载协议。</p>
 <p>我们以 IPsec 协议为例来说明。</p>
-<p><img src="https://static001.geekbang.org/resource/image/a7/f1/a7c0a7fd2334d7145d093cf24bc6d7f1.jpg" alt></p>
+<p><img src="https://static001.geekbang.org/resource/image/a7/f1/a7c0a7fd2334d7145d093cf24bc6d7f1.jpg"></p>
 <p>在最前面的时候说了，直接使用公网太不安全，所以接下来我们来看一种十分安全的 VPN，IPsec VPN。这是基于 IP 协议的安全隧道协议，为了保证在公网上面信息的安全，因而采取了一定的机制保证安全性。</p>
 <ul>
 <li><p>机制一：<strong>私密性</strong>，防止信息泄露给未经授权的个人，通过加密把数据从明文变成无法读懂的密文，从而确保数据的私密性。在讲 HTTPS 的时候，说过加密可以分为对称加密和非对称加密。对称加密速度快一些。而 VPN 一旦建立，需要传输大量数据，因而我们采取对称加密。但是同样，对称加密还是存在加密密钥如何传输的问题，这里需要用到因特网密钥交换（IKE，Internet Key Exchange）协议。</p>
@@ -399,7 +400,7 @@
 <p>第一种方法就是预共享密钥，也就是双方事先商量好一个暗号，比如“天王盖地虎，宝塔镇河妖”，对上了，就说明是对的。</p>
 <p>另外一种方法就是用数字签名来验证。咋签名呢？当然是使用私钥进行签名，私钥只有我自己有，所以如果对方能用我的数字证书里面的公钥解开，就说明我是我。</p>
 <p>基于以上三个特性，组成了 IPsec VPN 的协议簇。这个协议簇内容比较丰富</p>
-<p><img src="https://static001.geekbang.org/resource/image/34/af/34a952bd1abeec19460b8d5dca5cd0af.jpg" alt></p>
+<p><img src="https://static001.geekbang.org/resource/image/34/af/34a952bd1abeec19460b8d5dca5cd0af.jpg"></p>
 <p>在这个协议簇里面，有两种协议，这两种协议的区别在于封装网络包的格式不一样。</p>
 <ul>
 <li><p>一种协议称为 <strong>AH</strong>（Authentication Header），只能进行数据摘要 ，不能实现数据加密。</p>

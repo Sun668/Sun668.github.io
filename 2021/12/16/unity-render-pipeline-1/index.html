@@ -379,7 +379,8 @@
         <h1 id="总述"><a href="#总述" class="headerlink" title="总述"></a>总述</h1><p>本文大概总结下一些三维空间的坐标数据是如何通过渲染流水线变为屏幕上不同颜色的像素的，阅读之时，需要注意，图元，片元，和像素三者的区别。</p>
 <p>下图是一个总体的流程图，具体细节可以看后面的解释。</p>
 <a id="more"></a>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646000/origin-of-ray/render_pipeline_gnuamz.png" alt></p>
+
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646000/origin-of-ray/render_pipeline_gnuamz.png"></p>
 <h1 id="什么是渲染流水线"><a href="#什么是渲染流水线" class="headerlink" title="什么是渲染流水线"></a>什么是渲染流水线</h1><h2 id="渲染流水线的任务"><a href="#渲染流水线的任务" class="headerlink" title="渲染流水线的任务"></a>渲染流水线的任务</h2><p>渲染流水线的工作就是，从一个三维场景出发，渲染出一张二维图像。</p>
 <p>也就是说，需要从一系列三维空间信息，如顶点数据，纹理等信息出发，把这些信息最终转化为一张人眼可以看到的二维图像。</p>
 <p>而这个工作通常是由CPU和GPU共同完成的。</p>
@@ -453,7 +454,7 @@
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646237/origin-of-ray/asynccode_kgktgg.png" alt="img"></p>
 <p>坐标转化。顾名思义，就是对顶点的坐标进行某种变换。顶点着色器可以在这一步中改变顶点的位置，这在顶点动画中非常有用。例如，我们可以通过改变顶点位置来模拟水面，布料等。但是需要注意的是，无论我们在顶点着色器中怎样改变顶点，一个顶点着色器必须完成的一个工作是：将顶点坐标从模型空间转换到<a href="https://gameinstitute.qq.com/community/detail/117556" rel="external nofollow noopener noreferrer" target="_blank">齐次裁剪空间</a></p>
 <p>我们经常可以在顶点着色器中看到如下代码：</p>
-<p>o.pos = mul(UNITY_MVP, v.position);</p>
+<p>o.pos &#x3D; mul(UNITY_MVP, v.position);</p>
 <p>这段代码的作用就是把顶点坐标转换到齐次裁剪坐标系下，接着通常再由硬件做透视除法后，最终得到归一化的设备坐标（Normalized Device Coordinate, NDC）</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646263/origin-of-ray/asynccode_s4tmq5.png" alt="img"></p>
 <p>注意，上图给出的坐标范围是OpenGL同时也是Unity的NDC，它的z分量的范围是[-1,1]之间，而在DirectX中，NDC的z分量的范围是[0,1]。顶点着色器可以有不同的输出方式。</p>

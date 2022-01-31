@@ -372,6 +372,7 @@
         <p>今天的每日一题涉及到了单调栈的使用，这里就大概总结下它的思路和应用。</p>
 <p>首先这是今天每日一题的链接：<a href="https://leetcode-cn.com/problems/next-greater-element-ii/" rel="external nofollow noopener noreferrer" target="_blank">https://leetcode-cn.com/problems/next-greater-element-ii/</a></p>
 <a id="more"></a>
+
 <h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>我们可以使用单调栈解决本题。单调栈中保存的是下标，从栈底到栈顶的下标在数组nums 中对应的值是单调不升的。</p>
 <p>每次我们移动到数组中的一个新的位置 ii，我们就将当前单调栈中所有对应值小于nums[i] 的下标弹出单调栈，<strong>这些值的下一个更大元素即为nums[i]（证明很简单：如果有更靠前的更大元素，那么这些位置将被提前弹出栈）</strong>。随后我们将位置 ii 入栈。</p>
 <p>但是注意到只遍历一次序列是不够的，例如序列 [2,3,1]，最后单调栈中将剩余 [3,1]，其中元素 [1] 的下一个更大元素还是不知道的。</p>
@@ -379,9 +380,9 @@
 <p>而在本题中，我们不需要显性地将该循环数组「拉直」，而只需要在处理时对下标取模即可。</p>
 <h2 id="单调栈的定义"><a href="#单调栈的定义" class="headerlink" title="单调栈的定义"></a>单调栈的定义</h2><p>单调栈的定义：<strong>单调栈即满足单调性的栈结构。</strong>与单调队列相比，其只在一端进行进出</p>
 <h2 id="代码及解析"><a href="#代码及解析" class="headerlink" title="代码及解析"></a>代码及解析</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> nextGreaterElements = <span class="function"><span class="keyword">function</span>(<span class="params">nums</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> n = nums.length;</span><br><span class="line">    <span class="keyword">const</span> ret = <span class="keyword">new</span> <span class="built_in">Array</span>(n).fill(<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">const</span> stk = [];<span class="comment">//单调栈，用于保存数组下标，从栈底到栈顶对应的nums中的数据单调不升</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; n * <span class="number">2</span> - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="comment">//这个while循环像一个筛子，不断从栈顶拿出数据，如果小于当前下标（i）对应的的数据，就从栈中弹出来，并且弹出来的下标对应的后面的最大值就是i对应的数据</span></span><br><span class="line">        <span class="keyword">while</span> (stk.length &amp;&amp; nums[stk[stk.length - <span class="number">1</span>]] &lt; nums[i % n]) &#123;</span><br><span class="line">            ret[stk[stk.length - <span class="number">1</span>]] = nums[i % n];</span><br><span class="line">            stk.pop();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//经过上面的筛子，已经可以保证栈中所有下标对应的数据没有比i对应的数据更小的</span></span><br><span class="line">        stk.push(i % n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
 <p>给大家举个例子解释下整个算法的工作流程：</p>
 <p>假设我们的数组是[1,2,5,4,3]</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -392,8 +393,7 @@
 <th>ret after while</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>初始化</td>
 <td>[]</td>
 <td>[-1, -1, -1, -1, -1]</td>
@@ -436,37 +436,35 @@
 <td>[2, 5, -1, -1, -1]</td>
 </tr>
 <tr>
-<td>5 =&gt; 0</td>
+<td>5 &#x3D;&gt; 0</td>
 <td>[2,3,4]</td>
 <td>[2, 5, -1, -1, -1]</td>
 <td>[2,3,4,0]</td>
 <td>[2, 5, -1, -1, -1]</td>
 </tr>
 <tr>
-<td>6 =&gt; 1</td>
+<td>6 &#x3D;&gt; 1</td>
 <td>[2,3,4,0]</td>
 <td>[2, 5, -1, -1, -1]</td>
 <td>[2,3,4,1]</td>
 <td>[2, 5, -1, -1, -1]</td>
 </tr>
 <tr>
-<td>7 =&gt; 2</td>
+<td>7 &#x3D;&gt; 2</td>
 <td>[2,3,4,1]</td>
 <td>[2, 5, -1, -1, -1]</td>
 <td>[2]</td>
 <td>[2, 5, -1, 5, 5]</td>
 </tr>
 <tr>
-<td>8 =&gt; 3</td>
+<td>8 &#x3D;&gt; 3</td>
 <td>[2]</td>
 <td>[2, 5, -1, 5, 5]</td>
 <td>[2,3]</td>
 <td>[2, 5, -1, 5, 5]</td>
 </tr>
-</tbody>
-</table>
-</div>
-<p>这几步中最关键的是看懂 7 =&gt; 2这一步，进入while循环之后，我们依次拿出1,4,3，这几个下标对应的数据分别是2,3,4，都比当前2对应的下标5小，所以依次更新ret中的数据。</p>
+</tbody></table>
+<p>这几步中最关键的是看懂 7 &#x3D;&gt; 2这一步，进入while循环之后，我们依次拿出1,4,3，这几个下标对应的数据分别是2,3,4，都比当前2对应的下标5小，所以依次更新ret中的数据。</p>
 <p>还有一点大家可能会有疑惑，就是为什么要到2 * n - 1；</p>
 <p>其实举个例子就明白，对于下标为4的数据，其实我们要遍历 4,0,1,2,3的下标才可以、</p>
 

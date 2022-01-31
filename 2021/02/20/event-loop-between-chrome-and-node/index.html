@@ -87,14 +87,14 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="用了这么久的JavaScript，才发现自己对JavaScript的事件循环机制一直有些误解。 第一，事件循环机制不是V8实现的，V8引擎只是负责JavaScript代码的编译，内存分配等。 第二，Chrome的事件循环机制是通过Web API实现的，Node则是libuv。 第三，Node11之前，Node的事件循环的原理与Chrome是不同的。">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/13734601-6a8e67d55c966687.png?imageMogr2/auto-orient/strip|imageView2/2/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/13734601-6a8e67d55c966687.png?imageMogr2/auto-orient/strip%7CimageView2/2/format/webp">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2019/1/11/1683d81674f076eb?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2019/1/12/16841bd9860c1ee9?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
 <meta property="og:updated_time" content="2021-09-03T00:52:00.860Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chrome与Node事件循环机制">
 <meta name="twitter:description" content="用了这么久的JavaScript，才发现自己对JavaScript的事件循环机制一直有些误解。 第一，事件循环机制不是V8实现的，V8引擎只是负责JavaScript代码的编译，内存分配等。 第二，Chrome的事件循环机制是通过Web API实现的，Node则是libuv。 第三，Node11之前，Node的事件循环的原理与Chrome是不同的。">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/13734601-6a8e67d55c966687.png?imageMogr2/auto-orient/strip|imageView2/2/format/webp">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/13734601-6a8e67d55c966687.png?imageMogr2/auto-orient/strip%7CimageView2/2/format/webp">
 
 
 
@@ -374,12 +374,13 @@
 <p>第二，Chrome的事件循环机制是通过Web API实现的，Node则是libuv。</p>
 <p>第三，Node11之前，Node的事件循环的原理与Chrome是不同的。</p>
 <a id="more"></a>
+
 <p>针对这几个误区，我又重新学习了一遍JavaScript的事件循环。</p>
-<p>Javascript是一个单线程、非阻塞、异步、解释性脚本语言。js的并发模型基于事件循环，Event Loop是由js宿主环境，如浏览器实现的。v8是Chrome里的javascript运行环境，在V8的源码中并不存在setTimeout/DOM/HTTP请求等 ，这些异步请求在浏览器中由webAPI处理，它是由C++实现的浏览器创建的线程。</p>
+<p>Javascript是一个单线程、非阻塞、异步、解释性脚本语言。js的并发模型基于事件循环，Event Loop是由js宿主环境，如浏览器实现的。v8是Chrome里的javascript运行环境，在V8的源码中并不存在setTimeout&#x2F;DOM&#x2F;HTTP请求等 ，这些异步请求在浏览器中由webAPI处理，它是由C++实现的浏览器创建的线程。</p>
 <h2 id="Chrome浏览器与Node11"><a href="#Chrome浏览器与Node11" class="headerlink" title="Chrome浏览器与Node11+"></a>Chrome浏览器与Node11+</h2><h3 id="浏览器"><a href="#浏览器" class="headerlink" title="浏览器"></a>浏览器</h3><p>以下是浏览器中事件循环机制的流程图，只要执行栈中没有代码在执行，微任务会在回调后立即执行。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/13734601-6a8e67d55c966687.png?imageMogr2/auto-orient/strip|imageView2/2/format/webp" alt></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/13734601-6a8e67d55c966687.png?imageMogr2/auto-orient/strip%7CimageView2/2/format/webp"></p>
 <h3 id="Node11"><a href="#Node11" class="headerlink" title="Node11+"></a>Node11+</h3><p>这部分的内容可以看我的另一篇博客：<a href="https://sunra.top/2020/05/30/nodejs-io-and-event/">https://sunra.top/2020/05/30/nodejs-io-and-event/</a></p>
-<h2 id="Node10-（以Node8为例）"><a href="#Node10-（以Node8为例）" class="headerlink" title="Node10-（以Node8为例）"></a>Node10-（以Node8为例）</h2><h3 id="1-Node简介"><a href="#1-Node简介" class="headerlink" title="1.Node简介"></a>1.Node简介</h3><p>Node 中的 Event Loop 和浏览器中的是完全不相同的东西。Node.js采用V8作为js的解析引擎，而I/O处理方面使用了自己设计的libuv，libuv是一个基于事件驱动的跨平台抽象层，封装了不同操作系统一些底层特性，对外提供统一的API，事件循环机制也是它里面的实现（下文会详细介绍）。</p>
+<h2 id="Node10-（以Node8为例）"><a href="#Node10-（以Node8为例）" class="headerlink" title="Node10-（以Node8为例）"></a>Node10-（以Node8为例）</h2><h3 id="1-Node简介"><a href="#1-Node简介" class="headerlink" title="1.Node简介"></a>1.Node简介</h3><p>Node 中的 Event Loop 和浏览器中的是完全不相同的东西。Node.js采用V8作为js的解析引擎，而I&#x2F;O处理方面使用了自己设计的libuv，libuv是一个基于事件驱动的跨平台抽象层，封装了不同操作系统一些底层特性，对外提供统一的API，事件循环机制也是它里面的实现（下文会详细介绍）。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2019/1/11/1683d81674f076eb?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
 <p>Node.js的运行机制如下:</p>
 <ul>
@@ -391,12 +392,12 @@
 <h3 id="2-六个阶段"><a href="#2-六个阶段" class="headerlink" title="2.六个阶段"></a>2.六个阶段</h3><p>其中libuv引擎中的事件循环分为 6 个阶段，它们会按照顺序反复运行。每当进入某一个阶段的时候，都会从对应的回调队列中取出函数去执行。当队列为空或者执行的回调函数数量到达系统设定的阈值，就会进入下一阶段。</p>
 <p><img src="https://user-gold-cdn.xitu.io/2019/1/12/16841bd9860c1ee9?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
 <p>从上图中，大致看出node中的事件循环的顺序：</p>
-<p>外部输入数据—&gt;轮询阶段(poll)—&gt;检查阶段(check)—&gt;关闭事件回调阶段(close callback)—&gt;定时器检测阶段(timer)—&gt;I/O事件回调阶段(I/O callbacks)—&gt;闲置阶段(idle, prepare)—&gt;轮询阶段（按照该顺序反复运行）…</p>
+<p>外部输入数据–&gt;轮询阶段(poll)–&gt;检查阶段(check)–&gt;关闭事件回调阶段(close callback)–&gt;定时器检测阶段(timer)–&gt;I&#x2F;O事件回调阶段(I&#x2F;O callbacks)–&gt;闲置阶段(idle, prepare)–&gt;轮询阶段（按照该顺序反复运行）…</p>
 <ul>
 <li>timers 阶段：这个阶段执行timer（setTimeout、setInterval）的回调</li>
-<li>I/O callbacks 阶段：处理一些上一轮循环中的少数未执行的 I/O 回调</li>
+<li>I&#x2F;O callbacks 阶段：处理一些上一轮循环中的少数未执行的 I&#x2F;O 回调</li>
 <li>idle, prepare 阶段：仅node内部使用</li>
-<li>poll 阶段：获取新的I/O事件, 适当的条件下node将阻塞在这里</li>
+<li>poll 阶段：获取新的I&#x2F;O事件, 适当的条件下node将阻塞在这里</li>
 <li>check 阶段：执行 setImmediate() 的回调</li>
 <li>close callbacks 阶段：执行 socket 的 close 事件回调</li>
 </ul>
@@ -405,7 +406,7 @@
 <h4 id="1-timer"><a href="#1-timer" class="headerlink" title="(1) timer"></a>(1) timer</h4><p>timers 阶段会执行 setTimeout 和 setInterval 回调，并且是由 poll 阶段控制的。 同样，<strong>在 Node 中定时器指定的时间也不是准确时间，只能是尽快执行</strong>。</p>
 <h4 id="2-poll"><a href="#2-poll" class="headerlink" title="(2) poll"></a>(2) poll</h4><p>poll 是一个至关重要的阶段，这一阶段中，系统会做两件事情</p>
 <p>1.回到 timer 阶段执行回调</p>
-<p>2.执行 I/O 回调</p>
+<p>2.执行 I&#x2F;O 回调</p>
 <p>并且在进入该阶段时如果没有设定了 timer 的话，会发生以下两件事情</p>
 <ul>
 <li>如果 poll 队列不为空，会遍历回调队列并同步执行，直到队列为空或者达到系统限制</li>
@@ -418,13 +419,14 @@
 <p>当然设定了 timer 的话且 poll 队列为空，则会判断是否有 timer 超时，如果有的话会回到 timer 阶段执行回调。</p>
 <h4 id="3-check阶段"><a href="#3-check阶段" class="headerlink" title="(3) check阶段"></a>(3) check阶段</h4><p>setImmediate()的回调会被加入check队列中，从event loop的阶段图可以知道，check阶段的执行顺序在poll阶段之后。 我们先来看个例子:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">'start'</span>)</span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'timer1'</span>)</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'promise1'</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;, <span class="number">0</span>)</span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'timer2'</span>)</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'promise2'</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;, <span class="number">0</span>)</span><br><span class="line"><span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'promise3'</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'end'</span>)</span><br><span class="line"><span class="comment">//start=&gt;end=&gt;promise3=&gt;timer1=&gt;timer2=&gt;promise1=&gt;promise2</span></span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>一开始执行栈的同步任务（这属于宏任务）执行完毕后（依次打印出start end，并将2个timer依次放入timer队列）,会先去执行微任务（<strong>这点跟浏览器端的一样</strong>），所以打印出promise3</li>
-<li>然后进入timers阶段，执行timer1的回调函数，打印timer1，并将promise.then回调放入microtask队列，同样的步骤执行timer2，打印timer2；这点跟浏览器端相差比较大，<strong>timers阶段有几个setTimeout/setInterval都会依次执行</strong>，并不像浏览器端，每执行一个宏任务后就去执行一个微任务（关于Node与浏览器的 Event Loop 差异，下文还会详细介绍）。</li>
+<li>然后进入timers阶段，执行timer1的回调函数，打印timer1，并将promise.then回调放入microtask队列，同样的步骤执行timer2，打印timer2；这点跟浏览器端相差比较大，<strong>timers阶段有几个setTimeout&#x2F;setInterval都会依次执行</strong>，并不像浏览器端，每执行一个宏任务后就去执行一个微任务（关于Node与浏览器的 Event Loop 差异，下文还会详细介绍）。</li>
 </ul>
 <h3 id="3-Micro-Task-与-Macro-Task"><a href="#3-Micro-Task-与-Macro-Task" class="headerlink" title="3.Micro-Task 与 Macro-Task"></a>3.Micro-Task 与 Macro-Task</h3><p>Node端事件循环中的异步队列也是这两种：macro（宏任务）队列和 micro（微任务）队列。</p>
 <ul>
-<li>常见的 macro-task 比如：setTimeout、setInterval、 setImmediate、script（整体代码）、 I/O 操作等。</li>
+<li>常见的 macro-task 比如：setTimeout、setInterval、 setImmediate、script（整体代码）、 I&#x2F;O 操作等。</li>
 <li>常见的 micro-task 比如: process.nextTick、new Promise().then(回调)等。</li>
 </ul>
 <h3 id="4-注意点"><a href="#4-注意点" class="headerlink" title="4.注意点"></a>4.注意点</h3><h4 id="1-setTimeout-和-setImmediate"><a href="#1-setTimeout-和-setImmediate" class="headerlink" title="(1) setTimeout 和 setImmediate"></a>(1) setTimeout 和 setImmediate</h4><p>二者非常相似，区别主要在于调用时机不同。</p>
@@ -433,17 +435,21 @@
 <li>setTimeout 设计在poll阶段为空闲时，且设定时间到达后执行，但它在timer阶段执行</li>
 </ul>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> <span class="title">timeout</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'timeout'</span>);</span><br><span class="line">&#125;,<span class="number">0</span>);</span><br><span class="line">setImmediate(<span class="function"><span class="keyword">function</span> <span class="title">immediate</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'immediate'</span>);</span><br><span class="line">&#125;);</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>对于以上代码来说，setTimeout 可能执行在前，也可能执行在后。</li>
-<li>首先 setTimeout(fn, 0) === setTimeout(fn, 1)，这是由源码决定的 进入事件循环也是需要成本的，如果在准备时候花费了大于 1ms 的时间，那么在 timer 阶段就会直接执行 setTimeout 回调</li>
+<li>首先 setTimeout(fn, 0) &#x3D;&#x3D;&#x3D; setTimeout(fn, 1)，这是由源码决定的 进入事件循环也是需要成本的，如果在准备时候花费了大于 1ms 的时间，那么在 timer 阶段就会直接执行 setTimeout 回调</li>
 <li>如果准备时间花费小于 1ms，那么就是 setImmediate 回调先执行了</li>
 </ul>
-<p>但当二者在异步i/o callback内部调用时，总是先执行setImmediate，再执行setTimeout</p>
+<p>但当二者在异步i&#x2F;o callback内部调用时，总是先执行setImmediate，再执行setTimeout</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line">fs.readFile(__filename, () =&gt; &#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'timeout'</span>);</span><br><span class="line">    &#125;, <span class="number">0</span>)</span><br><span class="line">    setImmediate(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'immediate'</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// immediate</span></span><br><span class="line"><span class="comment">// timeout</span></span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
 <p>在上述代码中，setImmediate 永远先执行。因为两个代码写在 IO 回调中，IO 回调是在 poll 阶段执行，当回调执行完毕后队列为空，发现存在 setImmediate 回调，所以就直接跳转到 check 阶段去执行回调了。</p>
 <h4 id="2-process-nextTick"><a href="#2-process-nextTick" class="headerlink" title="(2) process.nextTick"></a>(2) process.nextTick</h4><p>这个函数其实是独立于 Event Loop 之外的，它有一个自己的队列，当每个阶段完成后，如果存在 nextTick 队列，就会清空队列中的所有回调函数，并且优先于其他 microtask 执行。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">'timer1'</span>)</span><br><span class="line"> <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">   <span class="built_in">console</span>.log(<span class="string">'promise1'</span>)</span><br><span class="line"> &#125;)</span><br><span class="line">&#125;, <span class="number">0</span>)</span><br><span class="line">process.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line"> <span class="built_in">console</span>.log(<span class="string">'nextTick'</span>)</span><br><span class="line"> process.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">   <span class="built_in">console</span>.log(<span class="string">'nextTick'</span>)</span><br><span class="line">   process.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">     <span class="built_in">console</span>.log(<span class="string">'nextTick'</span>)</span><br><span class="line">     process.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">       <span class="built_in">console</span>.log(<span class="string">'nextTick'</span>)</span><br><span class="line">     &#125;)</span><br><span class="line">   &#125;)</span><br><span class="line"> &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// nextTick=&gt;nextTick=&gt;nextTick=&gt;nextTick=&gt;timer1=&gt;promise1</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="5-与浏览器比较"><a href="#5-与浏览器比较" class="headerlink" title="5.与浏览器比较"></a>5.与浏览器比较</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'timer1'</span>)</span><br><span class="line">    <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'promise1'</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;, <span class="number">0</span>)</span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'timer2'</span>)</span><br><span class="line">    <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'promise2'</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
 <p>浏览器端运行结果：<code>timer1=&gt;promise1=&gt;timer2=&gt;promise2</code></p>
 <p>Node端运行结果分两种情况：</p>
 <ul>

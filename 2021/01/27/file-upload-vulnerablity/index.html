@@ -368,32 +368,34 @@
         <h2 id="文件上传漏洞及其危害"><a href="#文件上传漏洞及其危害" class="headerlink" title="文件上传漏洞及其危害"></a>文件上传漏洞及其危害</h2><p>文件上传漏洞是指网络攻击者上传了一个可执行的文件到服务器并执行。这里上传的文件可以是木马，病毒，恶意脚本或者WebShell等。</p>
 <p>由于程序员在对用户文件上传部分的控制不足或者处理缺陷，而导致用户可以越过其本身权限向服务器上传可执行的动态脚本文件。</p>
 <a id="more"></a>
+
 <p>打个比方来说，如果你使用 windows 服务器并且以 asp 作为服务器端的动态网站环境，那么在你的网站的上传功能处，就一定不能让用户上传 asp 类型的文件，否则他上传一个 webshell，你服务器上的文件就可以被他任意更改了。因此文件上传漏洞带来的危害常常是毁灭性的，Apache、Tomcat、Nginx等都曝出过文件上传漏洞。</p>
 <p>比如，我们向后台传输了一个php文件，该文件的内容很简单，就一行代码，通过eval函数执行请求参数中hacker字段的值。</p>
-<p>如果我们将这个文件上传到服务器，并假设存储到了<code>http://localhost/images/shell.php</code></p>
+<p>如果我们将这个文件上传到服务器，并假设存储到了<code> http://localhost/images/shell.php</code></p>
 <p>那么这个时候我们去利用命令行执行</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -d "hacker=echo get_current_user();" http://localhost/images/shell.php</span><br></pre></td></tr></table></figure>
+
 <p>这个时候就会回显会服务器当前的用户。</p>
 <p>当然我们也可以利用其它php自带的系统函数去推测出整个后台服务器的信息。</p>
 <h2 id="文件上传漏洞初阶：后缀域名绕过"><a href="#文件上传漏洞初阶：后缀域名绕过" class="headerlink" title="文件上传漏洞初阶：后缀域名绕过"></a>文件上传漏洞初阶：后缀域名绕过</h2><h3 id="后缀名检测"><a href="#后缀名检测" class="headerlink" title="后缀名检测"></a>后缀名检测</h3><p>我们开头所讲的这个例子之所以能够执行成功，很重要的一部分原因是因为文件的后缀名是php，所以服务器在解析整个文件的时候会使用php的解析器去执行代码。</p>
 <p>如果这个文件只是一个普通的txt文件，即使其中有恶意代码，我们的服务器也只是把它当做一段普通的字符串而已。</p>
 <p>所以基于这个前提，如果我们能够对上传文件的后缀名进行一个检测，对于类似php这样的文件后缀名进行拦截，就可以避免这样的漏洞。</p>
 <h3 id="如何绕过检测"><a href="#如何绕过检测" class="headerlink" title="如何绕过检测"></a>如何绕过检测</h3><p>以php为例，如果我们的后缀名检测只检测<code>*.php</code>，那如果我上传的是php3类型的文件，其实就可以上传成功，但是像Apache2这样的代理，会将以php，php3，php4，php5为后缀的所有文件当做php文件解析。</p>
-<h2 id="文件上传漏洞中阶"><a href="#文件上传漏洞中阶" class="headerlink" title="文件上传漏洞中阶"></a>文件上传漏洞中阶</h2><h3 id="服务器关联漏洞"><a href="#服务器关联漏洞" class="headerlink" title="服务器关联漏洞"></a>服务器关联漏洞</h3><h4 id="IIS5-x-6-0-解析漏洞"><a href="#IIS5-x-6-0-解析漏洞" class="headerlink" title="IIS5.x / 6.0 解析漏洞"></a>IIS5.x / 6.0 解析漏洞</h4><ul>
+<h2 id="文件上传漏洞中阶"><a href="#文件上传漏洞中阶" class="headerlink" title="文件上传漏洞中阶"></a>文件上传漏洞中阶</h2><h3 id="服务器关联漏洞"><a href="#服务器关联漏洞" class="headerlink" title="服务器关联漏洞"></a>服务器关联漏洞</h3><h4 id="IIS5-x-x2F-6-0-解析漏洞"><a href="#IIS5-x-x2F-6-0-解析漏洞" class="headerlink" title="IIS5.x &#x2F; 6.0 解析漏洞"></a>IIS5.x &#x2F; 6.0 解析漏洞</h4><ul>
 <li>当创建以.asp结尾的文件目录时，在此目录下的任何文件都会被解析成asp文件。</li>
 <li>服务器默认不解析“；”以后的内容</li>
 </ul>
 <p>基于两点，我们可以有两种利用形式</p>
 <ul>
-<li>www.xxx.com/xx.asp/xx.jpg 会被解析成asp文件</li>
-<li>www.xxx.com/xx.asp;.jpg 会被解析成asp文件</li>
+<li><a href="http://www.xxx.com/xx.asp/xx.jpg" rel="external nofollow noopener noreferrer" target="_blank">www.xxx.com/xx.asp/xx.jpg</a> 会被解析成asp文件</li>
+<li><a href="http://www.xxx.com/xx.asp;.jpg" rel="external nofollow noopener noreferrer" target="_blank">www.xxx.com/xx.asp;.jpg</a> 会被解析成asp文件</li>
 </ul>
 <h4 id="Nginx解析漏洞"><a href="#Nginx解析漏洞" class="headerlink" title="Nginx解析漏洞"></a>Nginx解析漏洞</h4><p>在低版本的Nginx中存在一个由PHP-CGI导致的文件解析漏洞。</p>
 <p>PHP的配置文件中有一个关键的选项cgi.fix_pathinfo在本机中位于php.in配置文件中，默认是开启的。</p>
 <p>当URL中有不存在的文件时，PHP就会默认向前解析。</p>
 <p>基于这一点，我们可以：</p>
 <ul>
-<li>访问：www.xx.com/phpinfo.jpg/1.php (其实这个1.php不存在)</li>
+<li>访问：<a href="http://www.xx.com/phpinfo.jpg/1.php" rel="external nofollow noopener noreferrer" target="_blank">www.xx.com/phpinfo.jpg/1.php</a> (其实这个1.php不存在)</li>
 <li>会解析phpinfo.jpg文件，但是会使用php解析器来解析。</li>
 </ul>
 <h4 id="Apache解析漏洞"><a href="#Apache解析漏洞" class="headerlink" title="Apache解析漏洞"></a>Apache解析漏洞</h4><p>Apache在1.x和2.x版本中存在解析漏洞</p>
@@ -429,17 +431,22 @@
 <p>NTFS环境下一个文件默认使用的是未命名的文件流，但同时我们也可以创建其他命名的文件流，Windows资源管理器默认情况下并不会显示文件的命名文件流，这些命名的文件流功能上和磨人的为命名文件流是相同的。</p>
 <p>我们可以在Windows平台上尝试以下三个命令：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 111 &gt; test.txt:1.txt  // 向test.txt的命名文件流1.txt中写入数据111</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 222 &gt; test.txt // 向test.txt中写入数据222</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo test &gt; test.txt::$data // 向test.txt的默认文件流中写入数据test</span><br></pre></td></tr></table></figure>
+
 <p>通过第一个命令，我们会创建一个test.txt文件，但是我们打开该文件会发现什么内容都没有，而此时我们通过<code>notepad test.txt:1.txt</code>打开该文件流，又可以看见<code>111</code></p>
 <p>而第二个和第三个命令是相同的效果，会在文件中写入内容。</p>
 <p>基于以上的特性，我们可以这样理解，NTFS文件流允许我们让一个文件拥有多个文件流，平时我们的图形化界面使用的都是默认的未命名文件流，但是其他的文件流一旦通过命令行创建，其实是真实存在并且附着在文件上的，而且这种附着可以无视后缀名，也就是说你完全可以把一个php附着在txt文件上，比如</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 恶意代码 &gt; test.txt:shell.php</span><br></pre></td></tr></table></figure>
+
 <p>这段代码可以将恶意代码附着在一个普通的txt文件上，从而帮助我们绕过类型检测。</p>
 <h3 id="文件头部检查绕过"><a href="#文件头部检查绕过" class="headerlink" title="文件头部检查绕过"></a>文件头部检查绕过</h3><p>不同类型的文件其实都有自己标志性的文件头。</p>
 <p>有的服务器可能会对这些文件头进行校验。</p>
 <p>为了绕过这个漏洞，我们可以尝试将代码直接拼接到允许的文件类型后面，然后用解析器去执行它，如：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat shell.php &gt; test.jpg</span><br></pre></td></tr></table></figure>
+
 <p>这样我们就将一段php代码拼接在test.jpg之后。</p>
 <p>这个时候我们再用php解析器去执行，是可以成功执行最后的代码的。</p>
 <blockquote>
@@ -657,7 +664,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件上传漏洞及其危害"><span class="nav-number">1.</span> <span class="nav-text">文件上传漏洞及其危害</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件上传漏洞初阶：后缀域名绕过"><span class="nav-number">2.</span> <span class="nav-text">文件上传漏洞初阶：后缀域名绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#后缀名检测"><span class="nav-number">2.1.</span> <span class="nav-text">后缀名检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何绕过检测"><span class="nav-number">2.2.</span> <span class="nav-text">如何绕过检测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件上传漏洞中阶"><span class="nav-number">3.</span> <span class="nav-text">文件上传漏洞中阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器关联漏洞"><span class="nav-number">3.1.</span> <span class="nav-text">服务器关联漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IIS5-x-6-0-解析漏洞"><span class="nav-number">3.1.1.</span> <span class="nav-text">IIS5.x / 6.0 解析漏洞</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Nginx解析漏洞"><span class="nav-number">3.1.2.</span> <span class="nav-text">Nginx解析漏洞</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Apache解析漏洞"><span class="nav-number">3.1.3.</span> <span class="nav-text">Apache解析漏洞</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前端认证绕过"><span class="nav-number">3.2.</span> <span class="nav-text">前端认证绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#htaccess绕过"><span class="nav-number">3.3.</span> <span class="nav-text">.htaccess绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大小写绕过"><span class="nav-number">3.4.</span> <span class="nav-text">大小写绕过</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件上传漏洞高阶"><span class="nav-number">4.</span> <span class="nav-text">文件上传漏洞高阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows文件流特性绕过"><span class="nav-number">4.1.</span> <span class="nav-text">Windows文件流特性绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件头部检查绕过"><span class="nav-number">4.2.</span> <span class="nav-text">文件头部检查绕过</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件上传漏洞及其危害"><span class="nav-number">1.</span> <span class="nav-text">文件上传漏洞及其危害</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件上传漏洞初阶：后缀域名绕过"><span class="nav-number">2.</span> <span class="nav-text">文件上传漏洞初阶：后缀域名绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#后缀名检测"><span class="nav-number">2.1.</span> <span class="nav-text">后缀名检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何绕过检测"><span class="nav-number">2.2.</span> <span class="nav-text">如何绕过检测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件上传漏洞中阶"><span class="nav-number">3.</span> <span class="nav-text">文件上传漏洞中阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器关联漏洞"><span class="nav-number">3.1.</span> <span class="nav-text">服务器关联漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IIS5-x-x2F-6-0-解析漏洞"><span class="nav-number">3.1.1.</span> <span class="nav-text">IIS5.x / 6.0 解析漏洞</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Nginx解析漏洞"><span class="nav-number">3.1.2.</span> <span class="nav-text">Nginx解析漏洞</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Apache解析漏洞"><span class="nav-number">3.1.3.</span> <span class="nav-text">Apache解析漏洞</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前端认证绕过"><span class="nav-number">3.2.</span> <span class="nav-text">前端认证绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#htaccess绕过"><span class="nav-number">3.3.</span> <span class="nav-text">.htaccess绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大小写绕过"><span class="nav-number">3.4.</span> <span class="nav-text">大小写绕过</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件上传漏洞高阶"><span class="nav-number">4.</span> <span class="nav-text">文件上传漏洞高阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows文件流特性绕过"><span class="nav-number">4.1.</span> <span class="nav-text">Windows文件流特性绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件头部检查绕过"><span class="nav-number">4.2.</span> <span class="nav-text">文件头部检查绕过</span></a></li></ol></li></ol></div>
             
 
           </div>

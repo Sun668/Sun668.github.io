@@ -372,6 +372,7 @@
       
         <p>SQL注入学习笔记</p>
 <a id="more"></a>
+
 <h2 id="宏观视角的注入：5种不同类型的注入"><a href="#宏观视角的注入：5种不同类型的注入" class="headerlink" title="宏观视角的注入：5种不同类型的注入"></a>宏观视角的注入：5种不同类型的注入</h2><p>这五种不同类型注入的分类，是通过注入是否成功回显方式不同判断标准来分类的</p>
 <ul>
 <li>布尔型注入</li>
@@ -383,21 +384,21 @@
 <p>举例说明</p>
 <p><strong>布尔型注入</strong></p>
 <p>页面只返回True和False两种类型页面。利用页面返回不同，逐个猜数据</p>
-<p><a href="http://test.com?id=1" rel="external nofollow noopener noreferrer" target="_blank">http://test.com?id=1</a> and substring(version(), 1, 1) = 5</p>
+<p><a href="http://test.com/?id=1" rel="external nofollow noopener noreferrer" target="_blank">http://test.com?id=1</a> and substring(version(), 1, 1) &#x3D; 5</p>
 <p>如果数据库版本是5.x那么就可以正常返回页面</p>
 <p><strong>联合查询注入</strong></p>
 <p>判断是否入住成功的标准就是是否查询了其他的信息出来。这个是最快捷的获取任何想要的数据的方法，但是有一个前提，就是该请求能返回sql查询的结果</p>
-<p><a href="http://test.com?id=1" rel="external nofollow noopener noreferrer" target="_blank">http://test.com?id=1</a> UNION select 1,2,3,4 from INFORMATION_SCHEMA</p>
+<p><a href="http://test.com/?id=1" rel="external nofollow noopener noreferrer" target="_blank">http://test.com?id=1</a> UNION select 1,2,3,4 from INFORMATION_SCHEMA</p>
 <p><strong>基于时间的盲注</strong></p>
 <p>如果一个请求没有任何的返回，或者说，是否成功结果都是相同的，那我们就没法用布尔或者联合查询来判断这里是否能够注入，于是我们就需要时间盲注</p>
-<p>Select * from user where id = 1 and sleep(3)</p>
+<p>Select * from user where id &#x3D; 1 and sleep(3)</p>
 <p>这条语句如果成功执行，会在3秒后执行查询，如果我们在前端感知到确实有时间上的延迟，说明sql注入成功了</p>
 <p><strong>报错型注入</strong></p>
 <p>这类注入比较少见，需要前端能够显示部分sql的报错信息，而这需要后端直接就把报错结果返回给前端</p>
 <p>典型的就是group by的duplicate key的报错</p>
 <p><strong>多语句查询注入</strong></p>
 <p>最危险的注入类型，能够执行多条语句，这意味着我们也可以执行更新数据库的操作</p>
-<p><a href="http://test.com?id=1" rel="external nofollow noopener noreferrer" target="_blank">http://test.com?id=1</a>; update set name = ‘1’ where id = 1</p>
+<p><a href="http://test.com/?id=1" rel="external nofollow noopener noreferrer" target="_blank">http://test.com?id=1</a>; update set name &#x3D; ‘1’ where id &#x3D; 1</p>
 <h2 id="SQL注入最关键的两个步骤"><a href="#SQL注入最关键的两个步骤" class="headerlink" title="SQL注入最关键的两个步骤"></a>SQL注入最关键的两个步骤</h2><ul>
 <li>发现可以注入的点。如报错型，如果我们输入1可以正常查询，输入1‘则会报错，说明这里有sql注入问题</li>
 <li>构造原始的注入语句。通过猜测后端的sql语句，尝试闭合原有语句并执行自己的内容</li>
@@ -423,6 +424,8 @@
 <p>如果有时间延迟，则说明注入成功</p>
 <blockquote>
 <p>如果语句是”insert into user values(“ + use-agent + “,” + ip_address + “)”，还能成功注入吗？</p>
+</blockquote>
+<blockquote>
 <p>如果语句是”insert into user values(“ + ip_address  + “,” + use-agent + “)”，还能成功注入吗？</p>
 </blockquote>
 <h2 id="报错型注入"><a href="#报错型注入" class="headerlink" title="报错型注入"></a>报错型注入</h2><p>MySql的报错注入主要是利用MySql的一些逻辑漏洞，如BigInt大整数溢出等。</p>

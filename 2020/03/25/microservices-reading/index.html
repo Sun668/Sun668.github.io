@@ -368,6 +368,7 @@
 <p>尽管具有逻辑模块化的体系结构，但该应用程序却作为一个整体打包和部署。实际格式取决于应用程序的语言和框架。例如，许多Java应用程序打包为WAR文件，并部署在诸如Tomcat或Jetty之类的应用程序服务器上。其他Java应用程序打包为独立的可执行JAR。</p>
 <p>成功的应用程序具有随着时间的流逝并最终变得庞大的习惯。在每次冲刺期间，开发团队都会实施更多Story，这当然意味着要添加许多行代码。几年后，小型，简单的应用程序将变得庞然大物。</p>
 <a id="more"></a>
+
 <ul>
 <li>应用程序的绝对大小也会减慢开发速度。应用程序越大，启动时间越长。</li>
 <li>大型，复杂的整体应用程序的另一个问题是，这是持续部署的障碍。如今，SaaS应用程序的最新技术是每天将变更推送到生产中多次。</li>
@@ -390,7 +391,7 @@
 <li>测试微服务应用程序也要复杂得多。</li>
 <li>实现跨多个服务的更改较难。</li>
 </ul>
-<h2 id="使用API网关构建微服务"><a href="#使用API网关构建微服务" class="headerlink" title="使用API网关构建微服务"></a>使用API网关构建微服务</h2><h3 id="客户端与微服务之间的直接通信"><a href="#客户端与微服务之间的直接通信" class="headerlink" title="客户端与微服务之间的直接通信"></a>客户端与微服务之间的直接通信</h3><p>从理论上讲，客户端可以直接向每个微服务发出请求。每个微服务都有一个公共终结点（<strong>https：// *serviceName* .api.company.name</strong>）。该URL将映射到微服务的负载平衡器，该负载平衡器在可用实例之间分配请求。要检索产品详细信息，移动客户端将向上面列出的每个服务发出请求。</p>
+<h2 id="使用API网关构建微服务"><a href="#使用API网关构建微服务" class="headerlink" title="使用API网关构建微服务"></a>使用API网关构建微服务</h2><h3 id="客户端与微服务之间的直接通信"><a href="#客户端与微服务之间的直接通信" class="headerlink" title="客户端与微服务之间的直接通信"></a>客户端与微服务之间的直接通信</h3><p>从理论上讲，客户端可以直接向每个微服务发出请求。每个微服务都有一个公共终结点（<strong>https：&#x2F;&#x2F; *serviceName* .api.company.name</strong>）。该URL将映射到微服务的负载平衡器，该负载平衡器在可用实例之间分配请求。要检索产品详细信息，移动客户端将向上面列出的每个服务发出请求。</p>
 <p>不幸的是，此选项存在挑战和局限性。一个问题是客户端需求与每个微服务公开的细粒度API之间的不匹配。</p>
 <p>客户端直接调用微服务的另一个问题是，有些服务可能使用不支持Web的协议。一个服务可能使用Thrift二进制RPC，而另一服务可能使用AMQP消息传递协议。两种协议都不是特别适合浏览器或防火墙的协议，并且最好在内部使用。应用程序应在防火墙外部使用HTTP和WebSocket之类的协议。</p>
 <p>这种方法的另一个缺点是很难重构微服务。随着时间的流逝，我们可能想更改将系统划分为服务的方式。例如，我们可以合并两个服务或将一个服务拆分为两个或多个服务。但是，如果客户直接与服务进行通信，那么执行这种重构可能会非常困难。</p>
@@ -419,14 +420,14 @@
 </ul>
 <p>一对一交互：</p>
 <ul>
-<li>请求/响应–客户端向服务发出请求并等待响应。客户希望响应能够及时到达。在基于线程的应用程序中，发出请求的线程甚至可能在等待时阻塞。</li>
+<li>请求&#x2F;响应–客户端向服务发出请求并等待响应。客户希望响应能够及时到达。在基于线程的应用程序中，发出请求的线程甚至可能在等待时阻塞。</li>
 <li>通知（也称为单向请求）–客户端向服务发送请求，但不希望或未发送答复。</li>
-<li>请求/异步响应–客户端将请求发送到服务，该服务以异步方式答复。客户端在等待时不会阻塞，并假设响应可能不会在一段时间内到达。</li>
+<li>请求&#x2F;异步响应–客户端将请求发送到服务，该服务以异步方式答复。客户端在等待时不会阻塞，并假设响应可能不会在一段时间内到达。</li>
 </ul>
 <p>一对多互动有以下几种：</p>
 <ul>
-<li>发布/订阅–客户端发布通知消息，该消息由零个或更多感兴趣的服务使用。</li>
-<li>发布/异步响应–客户端发布请求消息，然后等待一定时间以等待感兴趣的服务的响应。</li>
+<li>发布&#x2F;订阅–客户端发布通知消息，该消息由零个或更多感兴趣的服务使用。</li>
+<li>发布&#x2F;异步响应–客户端发布请求消息，然后等待一定时间以等待感兴趣的服务的响应。</li>
 </ul>
 <h3 id="不断变化的API"><a href="#不断变化的API" class="headerlink" title="不断变化的API"></a>不断变化的API</h3><p>服务的API始终会随着时间而变化。在整体应用程序中，更改API和更新所有调用程序通常很简单。在基于微服务的应用程序中，即使API的所有使用者都是同一应用程序中的其他服务，也要困难得多。通常，您无法强制所有客户端与服务同步升级。</p>
 <p>处理API更改的方式取决于更改的大小。某些更改是次要的，并且与以前的版本向后兼容。</p>
@@ -442,16 +443,16 @@
 <p>使用消息传递有很多优点：</p>
 <ul>
 <li>使客户端与服务脱钩–客户端仅通过向适当的通道发送消息即可发出请求。客户端完全不知道服务实例。它不需要使用发现机制来确定服务实例的位置。</li>
-<li>消息缓冲–使用同步请求/响应协议（例如HTTP），客户端和服务在交换期间必须都可用。相反，消息代理将写入通道的消息排队，直到消费者可以处理它们为止。例如，这意味着即使订单履行系统很慢或不可用，在线商店也可以接受来自客户的订单。订单消息只是排队。</li>
+<li>消息缓冲–使用同步请求&#x2F;响应协议（例如HTTP），客户端和服务在交换期间必须都可用。相反，消息代理将写入通道的消息排队，直到消费者可以处理它们为止。例如，这意味着即使订单履行系统很慢或不可用，在线商店也可以接受来自客户的订单。订单消息只是排队。</li>
 <li>灵活的客户端-服务交互–消息支持前面描述的所有交互样式。</li>
 <li>显式进程间通信–基于RPC的机制试图使调用远程服务看起来与调用本地服务相同。但是，由于物理定律和部分失效的可能性，它们实际上是完全不同的。消息传递使这些差异非常明显，因此开发人员不会陷入错误的安全感中。</li>
 </ul>
 <p>但是，使用消息传递有一些缺点：</p>
 <ul>
 <li>额外的操作复杂性–邮件系统是又一个必须安装，配置和操作的系统组件。消息代理必须高度可用，否则系统可靠性会受到影响。</li>
-<li>实现基于请求/响应的交互的复杂性–请求/响应式的交互需要一些工作来实现。每个请求消息必须包含一个回复通道标识符和一个相关标识符。服务将包含相关ID的响应消息写入回复通道。客户端使用相关性ID将响应与请求进行匹配。使用直接支持请求/响应的IPC机制通常会更容易。</li>
+<li>实现基于请求&#x2F;响应的交互的复杂性–请求&#x2F;响应式的交互需要一些工作来实现。每个请求消息必须包含一个回复通道标识符和一个相关标识符。服务将包含相关ID的响应消息写入回复通道。客户端使用相关性ID将响应与请求进行匹配。使用直接支持请求&#x2F;响应的IPC机制通常会更容易。</li>
 </ul>
-<h4 id="同步请求"><a href="#同步请求" class="headerlink" title="同步请求"></a>同步请求</h4><p>当使用基于请求/响应的同步IPC机制时，客户端会将请求发送到服务。该服务处理请求并发送回响应。在许多客户端中，发出请求的线程在等待响应时会阻塞。</p>
+<h4 id="同步请求"><a href="#同步请求" class="headerlink" title="同步请求"></a>同步请求</h4><p>当使用基于请求&#x2F;响应的同步IPC机制时，客户端会将请求发送到服务。该服务处理请求并发送回响应。在许多客户端中，发出请求的线程在等待响应时会阻塞。</p>
 <h2 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h2><p>服务实例具有动态分配的网络位置。而且，服务实例集会由于自动缩放，故障和升级而动态更改。因此，您的客户端代码需要使用更复杂的服务发现机制。</p>
 <p>有两种主要的服务发现模式：<a href="https://microservices.io/patterns/client-side-discovery.html" rel="external nofollow noopener noreferrer" target="_blank">客户端发现</a>和<a href="https://microservices.io/patterns/server-side-discovery.html" rel="external nofollow noopener noreferrer" target="_blank">服务器端发现</a>。</p>
 <h3 id="客户端发现"><a href="#客户端发现" class="headerlink" title="客户端发现"></a>客户端发现</h3><p>使用<a href="https://microservices.io/patterns/client-side-discovery.html" rel="external nofollow noopener noreferrer" target="_blank">客户端发现时</a>，客户端负责确定可用服务实例的网络位置，并在它们之间进行负载平衡请求。客户端查询服务注册表，该服务注册表是可用服务实例的数据库。然后，客户端使用负载平衡算法来选择可用的服务实例之一并发出请求。</p>
@@ -505,7 +506,7 @@
 <h5 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h5><ul>
 <li>资源利用效率较低。每个服务实例都有整个VM（包括操作系统）的开销。</li>
 </ul>
-<h4 id="每个容器模式的服务实例"><a href="#每个容器模式的服务实例" class="headerlink" title="每个容器模式的服务实例"></a>每个容器模式的服务实例</h4><p>当您使用“ <a href="https://microservices.io/patterns/deployment/service-per-container.html" rel="external nofollow noopener noreferrer" target="_blank">每个容器</a>的<a href="https://microservices.io/patterns/deployment/service-per-container.html" rel="external nofollow noopener noreferrer" target="_blank">服务实例”</a>模式时，每个服务实例都在其自己的容器中运行。容器是<a href="https://en.wikipedia.org/wiki/Operating-system-level_virtualization" rel="external nofollow noopener noreferrer" target="_blank">操作系统级别</a>的<a href="https://en.wikipedia.org/wiki/Operating-system-level_virtualization" rel="external nofollow noopener noreferrer" target="_blank">虚拟化机制</a>。容器由在沙箱中运行的一个或多个进程组成。从进程的角度来看，它们具有自己的端口名称空间和根文件系统。您可以限制容器的内存和CPU资源。一些容器实现也具有I / O速率限制。容器技术的示例包括<a href="https://www.docker.com/" rel="external nofollow noopener noreferrer" target="_blank">Docker</a>和<a href="https://en.wikipedia.org/wiki/Solaris_Containers" rel="external nofollow noopener noreferrer" target="_blank">Solaris Zones</a>。</p>
+<h4 id="每个容器模式的服务实例"><a href="#每个容器模式的服务实例" class="headerlink" title="每个容器模式的服务实例"></a>每个容器模式的服务实例</h4><p>当您使用“ <a href="https://microservices.io/patterns/deployment/service-per-container.html" rel="external nofollow noopener noreferrer" target="_blank">每个容器</a>的<a href="https://microservices.io/patterns/deployment/service-per-container.html" rel="external nofollow noopener noreferrer" target="_blank">服务实例”</a>模式时，每个服务实例都在其自己的容器中运行。容器是<a href="https://en.wikipedia.org/wiki/Operating-system-level_virtualization" rel="external nofollow noopener noreferrer" target="_blank">操作系统级别</a>的<a href="https://en.wikipedia.org/wiki/Operating-system-level_virtualization" rel="external nofollow noopener noreferrer" target="_blank">虚拟化机制</a>。容器由在沙箱中运行的一个或多个进程组成。从进程的角度来看，它们具有自己的端口名称空间和根文件系统。您可以限制容器的内存和CPU资源。一些容器实现也具有I &#x2F; O速率限制。容器技术的示例包括<a href="https://www.docker.com/" rel="external nofollow noopener noreferrer" target="_blank">Docker</a>和<a href="https://en.wikipedia.org/wiki/Solaris_Containers" rel="external nofollow noopener noreferrer" target="_blank">Solaris Zones</a>。</p>
 <h3 id="无服务器部署"><a href="#无服务器部署" class="headerlink" title="无服务器部署"></a>无服务器部署</h3><p><a href="https://aws.amazon.com/lambda/" rel="external nofollow noopener noreferrer" target="_blank">AWS Lambda</a>是无服务器部署技术的示例。它支持Java，Node.js和Python服务。要部署微服务，请将其打包为ZIP文件，然后将其上传到AWS Lambda。您还提供元数据，元数据除其他事项外，还指定为处理请求（又称为事件）而调用的函数的名称。AWS Lambda自动运行您的微服务的足够实例来处理请求。您只需根据花费的时间和消耗的内存为每个请求付费。</p>
 <h2 id="将单片应用重构为微服务方法"><a href="#将单片应用重构为微服务方法" class="headerlink" title="将单片应用重构为微服务方法"></a>将单片应用重构为微服务方法</h2><h3 id="不再增大整体项目"><a href="#不再增大整体项目" class="headerlink" title="不再增大整体项目"></a>不再增大整体项目</h3><p>在实现新功能时，不应将更多代码添加到整体中。相反，此策略的主要思想是将新代码放入独立的微服务中。</p>
 <h3 id="前后端分离"><a href="#前后端分离" class="headerlink" title="前后端分离"></a>前后端分离</h3><p>缩小整体应用程序的一种策略是将表示层与业务逻辑和数据访问层分开。典型的企业应用程序至少包含三种不同类型的组件：</p>

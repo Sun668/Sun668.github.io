@@ -346,6 +346,7 @@
       
         <p>这周在工作中需要开发一个npm的package，是辅助其他已有的pacakge。整个仓库采用了monorepo的形式，记录一下整个过程中踩的坑和学到的新技术</p>
 <a id="more"></a>
+
 <h1 id="Lerna的使用"><a href="#Lerna的使用" class="headerlink" title="Lerna的使用"></a>Lerna的使用</h1><p>venom仓库采用的是monorepo的方式</p>
 <p>monorepo是一种与multirepo不同的代码组织方式，首先，我们解释一下什么是 monorepo 和 multirepo。这两者都是管理组织代码的方式，顾名思义 monorepo 就是把所有的相关项目都放在一个仓库中（比如 React, Angular, Babel, Google…），multirepo 则是按模块分为多个仓库。</p>
 <p><a href="https://zhuanlan.zhihu.com/p/31289463" rel="external nofollow noopener noreferrer" target="_blank">Monorepo与MultiRepo</a></p>
@@ -354,6 +355,7 @@
 <p>这是它的github地址：<a href="https://github.com/lerna/lerna" rel="external nofollow noopener noreferrer" target="_blank">https://github.com/lerna/lerna</a></p>
 <p>首先我们可以通过lerna init命令在一个文件夹下初始化lerna的配置以及文件目录</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">lerna-repo/</span><br><span class="line">  packages/</span><br><span class="line">  package.json</span><br><span class="line">  lerna.json</span><br></pre></td></tr></table></figure>
+
 <p>lerna.json中的是lerna的配置项（在git的readme中有），package.json中是整个仓库的配置项，而packages下面是一个个的文件夹，每个文件夹都是一个mulitrepo实践下的仓库，也就是我们平时最常见的仓库形式，只不过没有自己的.git</p>
 <h2 id="两种模式：Fixed和Independent"><a href="#两种模式：Fixed和Independent" class="headerlink" title="两种模式：Fixed和Independent"></a>两种模式：Fixed和Independent</h2><p>Fixed模式下，整个lerna仓库中所有的仓库的版本都是根目录下package.json中的version字段，也就是说都是同一个，也就是说所有的package要一起升版本，即使你只改动了其中一个。</p>
 <p>Independent模式下，根目录下的package.json的version字段变为independent，而每个仓库自己的版本在自己目录下的package.json中</p>
@@ -369,12 +371,12 @@
 <h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><p>lerna init：初始化lerna配置</p>
 <p>Lerna bootstrap：安装所有的依赖</p>
 <p>Lerna publish：发布新的版本</p>
-<p>Lerna exec：执行命令（—scope可以指定在哪个pacakge中执行）</p>
+<p>Lerna exec：执行命令（–scope可以指定在哪个pacakge中执行）</p>
 <p>Lerna create：创建新的 package</p>
 <p>Lerna link：将当前Lerna存储库中彼此依赖的所有Lerna软件包符号链接在一起（这个目前没有用过，本地调试我使用的是npm link）</p>
 <p>其他的可以去参考github仓库</p>
-<h1 id="Npm-link的使用（本地调试package）"><a href="#Npm-link的使用（本地调试package）" class="headerlink" title="Npm link的使用（本地调试package）"></a>Npm link的使用（本地调试package）</h1><p>在你要被其他包使用的包的根目录下执行npm link，就会在全局之中建立一个映射，即从global/a -&gt; a</p>
-<p>在要使用a的包中调用npm link a（这个a就是a这个包的package.json中name字段指定的），就会建立起b/node_modules/a -&gt; global/a -&gt; a的映射。</p>
+<h1 id="Npm-link的使用（本地调试package）"><a href="#Npm-link的使用（本地调试package）" class="headerlink" title="Npm link的使用（本地调试package）"></a>Npm link的使用（本地调试package）</h1><p>在你要被其他包使用的包的根目录下执行npm link，就会在全局之中建立一个映射，即从global&#x2F;a -&gt; a</p>
+<p>在要使用a的包中调用npm link a（这个a就是a这个包的package.json中name字段指定的），就会建立起b&#x2F;node_modules&#x2F;a -&gt; global&#x2F;a -&gt; a的映射。</p>
 <p>这个时候去修改a，会直接在b中更新。</p>
 <p><a href="https://docs.npmjs.com/cli/v7/commands/npm-link" rel="external nofollow noopener noreferrer" target="_blank">npm link</a></p>
 <h1 id="NPM-Hooks（在安装以后执行脚本）"><a href="#NPM-Hooks（在安装以后执行脚本）" class="headerlink" title="NPM Hooks（在安装以后执行脚本）"></a>NPM Hooks（在安装以后执行脚本）</h1><p>通常情况下，应用程序只能处理来自内部的消息，如果希望对外部发来的消息也能拦截处理，那就需要一种叫钩子(Hook)的技术。想象一下，npm test这个过程你是控制不了的，但如果就非常想在test之前自动处理点什么事儿，怎么办？没次都手动在test之前执行什么，烦不烦、烦不烦、烦不烦？就是不烦，也会忘啊！</p>
@@ -405,7 +407,7 @@
 <li><p>prerestart, postrestart: 在该包内执行restart脚本时执行，其中prerestart先于postrestart。注意: 如果没有在scripts里显示指定restart脚本，则会自动调用stop，然后再start</p>
 </li>
 </ul>
-<p>上面这些Hooks都是npm预定义好的，也就是说，当你执行npm install时，如果你在scripts里定义了preinstall和postinstall，那它们分别会在npm install之前/后自动执行，不劳你操心！碉堡了，有木有？</p>
+<p>上面这些Hooks都是npm预定义好的，也就是说，当你执行npm install时，如果你在scripts里定义了preinstall和postinstall，那它们分别会在npm install之前&#x2F;后自动执行，不劳你操心！碉堡了，有木有？</p>
 <p>还有，任何自定义脚本(通过npm run-script &lt;脚本名&gt;来执行)也可以前缀pre和post为其制作钩子。比如：premyscript，myscript，postmyscript</p>
 <p>也就是说，pretest脚本也会在npm test之前运行</p>
 <h1 id="Verdccio建立本地仓库（验证hook）"><a href="#Verdccio建立本地仓库（验证hook）" class="headerlink" title="Verdccio建立本地仓库（验证hook）"></a>Verdccio建立本地仓库（验证hook）</h1><p>为了测试postinstall的效果，又不想直接将未完成的包直接上传，就可以在本地创建一个自己私有的仓库，这里我采用的是<a href="https://github.com/verdaccio/verdaccio" rel="external nofollow noopener noreferrer" target="_blank">Verdccio</a></p>
@@ -413,16 +415,18 @@
 <p>目前遇到了三个坑：</p>
 <ol>
 <li>首先一定要新建一个用户才行，不然你没法publish（也可能有别的方法）</li>
-<li>如果你publish包以后，想要从中npm install，而你的包依赖的包没有，会报错，这个时候可以去修改配置项，mac是在～/.config/verdaccio/config.yaml中</li>
+<li>如果你publish包以后，想要从中npm install，而你的包依赖的包没有，会报错，这个时候可以去修改配置项，mac是在～&#x2F;.config&#x2F;verdaccio&#x2F;config.yaml中</li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">uplinks:</span><br><span class="line">  npmjs:</span><br><span class="line">    url: https://npm.org</span><br><span class="line">  yarn:</span><br><span class="line">    url: https://npm.org/</span><br></pre></td></tr></table></figure>
+
 <p>配置上游链接</p>
 <ol>
-<li>如果想要把已有的一个仓库删了，也很简单，因为全都会存在本地的~/.local/share/verdaccio/storage中。</li>
+<li>如果想要把已有的一个仓库删了，也很简单，因为全都会存在本地的~&#x2F;.local&#x2F;share&#x2F;verdaccio&#x2F;storage中。</li>
 </ol>
-<h1 id="node获取仓库地址"><a href="#node获取仓库地址" class="headerlink" title="node获取仓库地址"></a>node获取仓库地址</h1><p>有个需求是要通过node获取git的仓库地址，一开始是想读取.git/config</p>
+<h1 id="node获取仓库地址"><a href="#node获取仓库地址" class="headerlink" title="node获取仓库地址"></a>node获取仓库地址</h1><p>有个需求是要通过node获取git的仓库地址，一开始是想读取.git&#x2F;config</p>
 <p>后来发现可以用child_process执行命令行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const gitRemoteUrl = childProcess.execSync(</span><br><span class="line">  &apos;git config --get remote.origin.url&apos;,</span><br><span class="line">);</span><br><span class="line">return gitRemoteUrl ? gitRemoteUrl.toString() : noGitRepositoryUrl;</span><br></pre></td></tr></table></figure>
+
 <h1 id="如何指定打包的文件都有哪些"><a href="#如何指定打包的文件都有哪些" class="headerlink" title="如何指定打包的文件都有哪些"></a>如何指定打包的文件都有哪些</h1><p>由于我的postinstall中执行的脚本是独立的，没有在pacakge.json的main指向的index.js及其依赖中使用到，所以打包publish以后，我的脚本并没有在打包后的目录中，这个时候就需要在package.json的files中指定将我的脚本放进去。</p>
 <h2 id="Npm-dependences-version的坑"><a href="#Npm-dependences-version的坑" class="headerlink" title="Npm dependences version的坑"></a>Npm dependences version的坑</h2><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1621046584/origin-of-ray/asynccode_m00jtz.png" alt="img"></p>
 

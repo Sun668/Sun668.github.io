@@ -366,6 +366,7 @@
       
         <p>最近在看Azure文档的时候，被文档中的许多概念搞得非常困惑，就去查看了一些官方文档，算是一个临时的理解和总结。</p>
 <a id="more"></a>
+
 <p>首先上一段我认为最能解决我疑惑的<a href="https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/considerations/fundamental-concepts" rel="external nofollow noopener noreferrer" target="_blank">原文档</a>：</p>
 <h2 id="Azure-terminology"><a href="#Azure-terminology" class="headerlink" title="Azure terminology"></a>Azure terminology</h2><p>It’s helpful to know the following definitions as you begin your Azure cloud adoption efforts:</p>
 <ul>
@@ -401,34 +402,30 @@
 <li>Multi-tenant apps are available to users in both their home tenant and other tenants.</li>
 </ul>
 <p>In the Azure portal, you can configure your app to be single-tenant or multi-tenant by setting the audience as follows.</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:left">Audience</th>
-<th style="text-align:left">Single/multi-tenant</th>
-<th style="text-align:left">Who can sign in</th>
+<th align="left">Audience</th>
+<th align="left">Single&#x2F;multi-tenant</th>
+<th align="left">Who can sign in</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:left">Accounts in this directory only</td>
-<td style="text-align:left">Single tenant</td>
-<td style="text-align:left">All user and guest accounts in your directory can use your application or API. <em>Use this option if your target audience is internal to your organization.</em></td>
+<tbody><tr>
+<td align="left">Accounts in this directory only</td>
+<td align="left">Single tenant</td>
+<td align="left">All user and guest accounts in your directory can use your application or API. <em>Use this option if your target audience is internal to your organization.</em></td>
 </tr>
 <tr>
-<td style="text-align:left">Accounts in any Azure AD directory</td>
-<td style="text-align:left">Multi-tenant</td>
-<td style="text-align:left">All users and guests with a work or school account from Microsoft can use your application or API. This includes schools and businesses that use Office 365. <em>Use this option if your target audience is business or educational customers.</em></td>
+<td align="left">Accounts in any Azure AD directory</td>
+<td align="left">Multi-tenant</td>
+<td align="left">All users and guests with a work or school account from Microsoft can use your application or API. This includes schools and businesses that use Office 365. <em>Use this option if your target audience is business or educational customers.</em></td>
 </tr>
 <tr>
-<td style="text-align:left">Accounts in any Azure AD directory and personal Microsoft accounts (such as Skype, Xbox, Outlook.com)</td>
-<td style="text-align:left">Multi-tenant</td>
-<td style="text-align:left">All users with a work or school, or personal Microsoft account can use your application or API. It includes schools and businesses that use Office 365 as well as personal accounts that are used to sign in to services like Xbox and Skype. <em>Use this option to target the widest set of Microsoft accounts.</em></td>
+<td align="left">Accounts in any Azure AD directory and personal Microsoft accounts (such as Skype, Xbox, Outlook.com)</td>
+<td align="left">Multi-tenant</td>
+<td align="left">All users with a work or school, or personal Microsoft account can use your application or API. It includes schools and businesses that use Office 365 as well as personal accounts that are used to sign in to services like Xbox and Skype. <em>Use this option to target the widest set of Microsoft accounts.</em></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这些文档大概解释了这些概念的定义以及大致的关系，可以让我们有个总体上模糊的认识。</p>
 <p>总的来说，就是Azure AD是微软的一个身份认证服务，而每个组织可以利用它创建租户（Azure AD的一个实例），也就是tenant，每个租户都有自己唯一一个Azure AD 目录，每个目录都可以有多个订阅。可以通过资源组对订阅中的资源进行逻辑分组。</p>
 <p>Azure Active Directory（Azure AD）将诸如用户和应用程序之类的对象组织到称为“ <em>租户”的</em>组中。租户允许管理员为组织内的用户以及组织拥有的应用程序设置策略，以满足他们的安全和运营策略。</p>

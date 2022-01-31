@@ -370,17 +370,20 @@
 
       
         <h2 id="RPC简介"><a href="#RPC简介" class="headerlink" title="RPC简介"></a>RPC简介</h2><p>RPC(Remote Procedure Call)：远程过程调用，它是一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的思想。</p>
-<p>RPC （Remote Procedure Call）的主要功能目标是让构建分布式计算（应用）更容易，在提供强大的远程调用能力时不损失本地调用的语义简洁性。 为实现该目标，<strong>RPC 框架需提供一种透明调用机制让使用者不必显式的区分本地调用和远程调用</strong>。　　<br> RPC采用C/S模式。请求程序就是一个客户机，而服务提供程序就是一个服务器。首先，客户机调用进程发送一个有进程参数的调用信息到服务进程，然后等待应答信息。在服务器端，进程保持睡眠状态直到调用信息的到达为止。当一个调用信息到达，服务器获得进程参数，计算结果发送答复信息，然后等待下一个调用信息。最后，客户端调用进程接收答复信息，获得进程结果，然后调用执行继续进行。</p>
+<p>RPC （Remote Procedure Call）的主要功能目标是让构建分布式计算（应用）更容易，在提供强大的远程调用能力时不损失本地调用的语义简洁性。 为实现该目标，<strong>RPC 框架需提供一种透明调用机制让使用者不必显式的区分本地调用和远程调用</strong>。　　<br> RPC采用C&#x2F;S模式。请求程序就是一个客户机，而服务提供程序就是一个服务器。首先，客户机调用进程发送一个有进程参数的调用信息到服务进程，然后等待应答信息。在服务器端，进程保持睡眠状态直到调用信息的到达为止。当一个调用信息到达，服务器获得进程参数，计算结果发送答复信息，然后等待下一个调用信息。最后，客户端调用进程接收答复信息，获得进程结果，然后调用执行继续进行。</p>
 <a id="more"></a>
+
 <h3 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h3><p>单独看上面的概念可能还是有点模糊</p>
 <p>我们看一下Python自带的RPC demo</p>
 <p>Server.py：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> SimpleXMLRPCServer <span class="keyword">import</span> SimpleXMLRPCServer    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun_add</span><span class="params">(a,b)</span>:</span>     </span><br><span class="line">    totle = a + b      </span><br><span class="line">    <span class="keyword">return</span> totle </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:     </span><br><span class="line">    s = SimpleXMLRPCServer((<span class="string">'0.0.0.0'</span>, <span class="number">8080</span>))   <span class="comment">#开启xmlrpcserver     </span></span><br><span class="line">    s.register_function(fun_add)                <span class="comment">#注册函数fun_add     </span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"server is online..."</span>     s.serve_forever()                           <span class="comment">#开启循环等待</span></span><br></pre></td></tr></table></figure>
+
 <p>Client.py：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> xmlrpclib <span class="keyword">import</span> ServerProxy            <span class="comment">#导入xmlrpclib的包 </span></span><br><span class="line">s = ServerProxy(<span class="string">"http://172.171.5.205:8080"</span>) <span class="comment">#定义xmlrpc客户端 </span></span><br><span class="line"><span class="keyword">print</span> s.fun_add(<span class="number">2</span>,<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
 <h2 id="RPC架构"><a href="#RPC架构" class="headerlink" title="RPC架构"></a>RPC架构</h2><p>在一个典型 RPC 的使用场景中，包含了服务发现、负载、容错、网络传输、序列化等组件，其中“RPC 协议”就指明了程序如何进行网络传输和序列化。</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1597670692/Blog/fd5b5686336b0a1212398d8ea8fe6f66.jpg-wh_651x-s_3461264051_xmwq0x.jpg" alt></p>
-<h3 id="RPC核心功能（RPC协议）"><a href="#RPC核心功能（RPC协议）" class="headerlink" title="RPC核心功能（RPC协议）"></a>RPC核心功能（RPC协议）</h3><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1597670948/Blog/2730356-e239aeb499d61162.png_ejj0qe.webp" alt></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1597670692/Blog/fd5b5686336b0a1212398d8ea8fe6f66.jpg-wh_651x-s_3461264051_xmwq0x.jpg"></p>
+<h3 id="RPC核心功能（RPC协议）"><a href="#RPC核心功能（RPC协议）" class="headerlink" title="RPC核心功能（RPC协议）"></a>RPC核心功能（RPC协议）</h3><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1597670948/Blog/2730356-e239aeb499d61162.png_ejj0qe.webp"></p>
 <ul>
 <li>客户端(Client)：服务调用方。</li>
 <li>客户端存根(Client Stub)：存放服务端地址信息，将客户端的请求参数数据信息打包成网络消息，再通过网络传输发送给服务端。</li>
@@ -430,11 +433,11 @@
 <p>在 RPC 中可选的网络传输方式有多种，可以选择 TCP 协议、UDP 协议、HTTP 协议。</p>
 <p>每一种协议对整体的性能和效率都有不同的影响，如何选择一个正确的网络传输协议呢?首先要搞明白各种传输协议在 RPC 中的工作方式。</p>
 <h4 id="基于-TCP-协议的-RPC-调用"><a href="#基于-TCP-协议的-RPC-调用" class="headerlink" title="基于 TCP 协议的 RPC 调用"></a><strong>基于 TCP 协议的 RPC 调用</strong></h4><p>由服务的调用方与服务的提供方建立 Socket 连接，并由服务的调用方通过 Socket 将需要调用的接口名称、方法名称和参数序列化后传递给服务的提供方，服务的提供方反序列化后再利用反射调用相关的方法。</p>
-<p><em>*</em>将结果返回给服务的调用方，整个基于 TCP 协议的 RPC 调用大致如此。</p>
+<p>***将结果返回给服务的调用方，整个基于 TCP 协议的 RPC 调用大致如此。</p>
 <p>但是在实例应用中则会进行一系列的封装，如 RMI 便是在 TCP 协议上传递可序列化的 Java 对象。</p>
 <h4 id="基于-HTTP-协议的-RPC-调用"><a href="#基于-HTTP-协议的-RPC-调用" class="headerlink" title="基于 HTTP 协议的 RPC 调用"></a><strong>基于 HTTP 协议的 RPC 调用</strong></h4><p>该方法更像是访问网页一样，只是它的返回结果更加单一简单。</p>
 <p>其大致流程为：由服务的调用者向服务的提供者发送请求，这种请求的方式可能是 GET、POST、PUT、DELETE 等中的一种，服务的提供者可能会根据不同的请求方式做出不同的处理，或者某个方法只允许某种请求方式。</p>
-<p>而调用的具体方法则是根据 URL 进行方法调用，而方法所需要的参数可能是对服务调用方传输过去的 XML 数据或者 JSON 数据解析后的结果，<em>*</em>返回 JOSN 或者 XML 的数据结果。</p>
+<p>而调用的具体方法则是根据 URL 进行方法调用，而方法所需要的参数可能是对服务调用方传输过去的 XML 数据或者 JSON 数据解析后的结果，***返回 JOSN 或者 XML 的数据结果。</p>
 <p>由于目前有很多开源的 Web 服务器，如 Tomcat，所以其实现起来更加容易，就像做 Web 项目一样。</p>
 <h4 id="两种方式对比"><a href="#两种方式对比" class="headerlink" title="两种方式对比"></a><strong>两种方式对比</strong></h4><p>基于 TCP 的协议实现的 RPC 调用，由于 TCP 协议处于协议栈的下层，能够更加灵活地对协议字段进行定制，减少网络开销，提高性能，实现更大的吞吐量和并发数。</p>
 <p>但是需要更多关注底层复杂的细节，实现的代价更高。同时对不同平台，如安卓，iOS 等，需要重新开发出不同的工具包来进行请求发送和相应解析，工作量大，难以快速响应和满足用户需求。</p>
@@ -446,7 +449,7 @@
 <ul>
 <li>同步变异步：可以使用线程池将同步变成异步，但是缺点是要自己实现线程池，并且强耦合。使用消息队列可以轻松将同步请求变成异步请求。</li>
 <li>低内聚高耦合：解耦，减少强依赖。</li>
-<li>流量削峰：通过消息队列设置请求<em>*</em>值，超过阀值的抛弃或者转到错误界面。</li>
+<li>流量削峰：通过消息队列设置请求***值，超过阀值的抛弃或者转到错误界面。</li>
 <li>网络通信性能提高：TCP 的创建和销毁开销大，创建 3 次握手，销毁 4 次分手，高峰时成千上万条的链接会造成资源的巨大浪费，而且操作系统每秒处理 TCP 的数量也是有数量限制的，必定造成性能瓶颈。</li>
 </ul>
 <h2 id="RPC服务注册与发现"><a href="#RPC服务注册与发现" class="headerlink" title="RPC服务注册与发现"></a>RPC服务注册与发现</h2><p>RPC远程过程调用中，存在2个角色，一个服务提供者、另一个服务消费者。那如何让调用者知道，存在哪些服务可以调用呢？即如何让别人使用我们的服务呢？</p>
@@ -454,7 +457,7 @@
 <p>人肉告知的方式：如果你发现你的服务一台机器不够，要再添加一台，这个时候就要告诉调用者我现在有两个ip了，你们要轮询调用来实现负载均衡；调用者咬咬牙改了，结果某天一台机器挂了，调用者发现服务有一半不可用，他又只能手动修改代码来删除挂掉那台机器的ip。现实生产环境当然不会使用人肉方式。</p>
 <p>有没有一种方法能实现自动告知，即机器的增添、剔除对调用方透明，调用者不再需要写死服务提供方地址？当然可以，现如今zookeeper被广泛用于实现服务自动注册与发现功能！</p>
 <p>成熟的服务治理框架中不止存在这两个角色，一般还会有一个 Registry（注册中心）的角色。一张图就可以解释注册中心的主要职责。</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1597672620/Blog/9033085-334724946c50139e.png_i6remn.webp" alt></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1597672620/Blog/9033085-334724946c50139e.png_i6remn.webp"></p>
 <ul>
 <li>注册中心，用于服务端注册远程服务以及客户端发现服务</li>
 <li>服务端，对外提供后台服务，将自己的服务信息注册到注册中心</li>
@@ -468,12 +471,12 @@
 <h2 id="RPC与RESTful"><a href="#RPC与RESTful" class="headerlink" title="RPC与RESTful"></a>RPC与RESTful</h2><h3 id="所属类别不同"><a href="#所属类别不同" class="headerlink" title="所属类别不同"></a>所属类别不同</h3><p>REST，是Representational State Transfer 的简写，中文描述表述性状态传递（是指某个瞬间状态的资源数据的快照，包括资源数据的内容、表述格式(XML、JSON)等信息。）</p>
 <p>REST 是一种软件架构风格。这种风格的典型应用，就是HTTP。其因为简单、扩展性强的特点而广受开发者的青睐。</p>
 <p>而RPC 呢，是 Remote Procedure Call Protocol 的简写，中文描述是远程过程调用，它可以实现客户端像调用本地服务(方法)一样调用服务器的服务(方法)。</p>
-<p>而 RPC 可以基于 TCP/UDP，也可以基于 HTTP 协议进行传输的，按理说它和REST不是一个层面意义上的东西，不应该放在一起讨论，但是谁让REST这么流行呢，它是目前最流行的一套互联网应用程序的API设计标准，某种意义下，我们说 REST 可以其实就是指代 HTTP 协议。</p>
+<p>而 RPC 可以基于 TCP&#x2F;UDP，也可以基于 HTTP 协议进行传输的，按理说它和REST不是一个层面意义上的东西，不应该放在一起讨论，但是谁让REST这么流行呢，它是目前最流行的一套互联网应用程序的API设计标准，某种意义下，我们说 REST 可以其实就是指代 HTTP 协议。</p>
 <h3 id="使用方式不同"><a href="#使用方式不同" class="headerlink" title="使用方式不同"></a>使用方式不同</h3><p>从使用上来看，HTTP 接口只关注服务提供方，对于客户端怎么调用并不关心。接口只要保证有客户端调用时，返回对应的数据就行了。而RPC则要求客户端接口保持和服务端的一致。</p>
 <p>REST 是服务端把方法写好，客户端并不知道具体方法。客户端只想获取资源，所以发起HTTP请求，而服务端接收到请求后根据URI经过一系列的路由才定位到方法上面去RPC是服务端提供好方法给客户端调用，客户端需要知道服务端的具体类，具体方法，然后像调用本地方法一样直接调用它。</p>
 <h3 id="面向对象不同"><a href="#面向对象不同" class="headerlink" title="面向对象不同"></a>面向对象不同</h3><p>从设计上来看，RPC，所谓的远程过程调用 ，是面向方法的 ，REST：所谓的 Representational state transfer ，是面向资源的，除此之外，还有一种叫做 SOA，所谓的面向服务的架构，它是面向消息的，这个接触不多，就不多说了。</p>
 <h3 id="序列化协议不同"><a href="#序列化协议不同" class="headerlink" title="序列化协议不同"></a>序列化协议不同</h3><p>接口调用通常包含两个部分，序列化和通信协议。</p>
-<p>通信协议，上面已经提及了，REST 是 基于 HTTP 协议，而 RPC 可以基于 TCP/UDP，也可以基于 HTTP 协议进行传输的。</p>
+<p>通信协议，上面已经提及了，REST 是 基于 HTTP 协议，而 RPC 可以基于 TCP&#x2F;UDP，也可以基于 HTTP 协议进行传输的。</p>
 <p>常见的序列化协议，有：json、xml、hession、protobuf、thrift、text、bytes等，REST 通常使用的是 JSON或者XML，而 RPC 使用的是 JSON-RPC，或者 XML-RPC。</p>
 <h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>REST和RPC都常用于微服务架构中。</p>
 <p>1、HTTP相对更规范，更标准，更通用，无论哪种语言都支持http协议。如果你是对外开放API，例如开放平台，外部的编程语言多种多样，你无法拒绝对每种语言的支持，现在开源中间件，基本最先支持的几个协议都包含RESTful。</p>

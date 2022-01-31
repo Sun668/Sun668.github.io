@@ -366,8 +366,9 @@
       
         <p>Vue是我们经常使用的前端框架，虽然它使用起来很简单，官方文档也比较清晰，但是还是有不全面的地方导致我们可能会踩坑。</p>
 <a id="more"></a>
+
 <h3 id="表单校验"><a href="#表单校验" class="headerlink" title="表单校验"></a>表单校验</h3><p>我们在使用Vue + ElementUI时经常会用到表单，也会用带表单的验证功能，但是在使用的时候需要注意官方文档上没有提到的一点，就是如果el-form-item的prop属性值与el-form-item中包裹的表单项v-model绑定的值完全相同，否则通过el-form的rules属性绑定进来的校验规则中的校验器会无法获取表单项的数据，就会导致校验总是无法通过</p>
-<h3 id="子组件上使用v-model来进行父子组件通信"><a href="#子组件上使用v-model来进行父子组件通信" class="headerlink" title="子组件上使用v-model来进行父子组件通信"></a>子组件上使用v-model来进行父子组件通信</h3><p><a href="https://cn.vuejs.org/v2/guide/components-custom-events.html#自定义组件的-v-model" rel="external nofollow noopener noreferrer" target="_blank">vue文档关于如何在自定义组件上使用v-model</a></p>
+<h3 id="子组件上使用v-model来进行父子组件通信"><a href="#子组件上使用v-model来进行父子组件通信" class="headerlink" title="子组件上使用v-model来进行父子组件通信"></a>子组件上使用v-model来进行父子组件通信</h3><p><a href="https://cn.vuejs.org/v2/guide/components-custom-events.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6%E7%9A%84-v-model" rel="external nofollow noopener noreferrer" target="_blank">vue文档关于如何在自定义组件上使用v-model</a></p>
 <p>简单来说在自定义组件上使用v-model绑定的值会传到子组件中的props：value中，而且会自动监听该自定义组件的input事件，通过input事件返回的值会自动赋值给父组件中绑定到自定义组件的值</p>
 
       

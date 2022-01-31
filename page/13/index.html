@@ -515,7 +515,7 @@
         
           <p>首先上一道leetcode的题目：<a href="https://leetcode-cn.com/problems/satisfiability-of-equality-equations/" rel="external nofollow noopener noreferrer" target="_blank">https://leetcode-cn.com/problems/satisfiability-of-equality-equations/</a></p>
 <p>这道题我们看到之后很容易的思路就是先把所有相等的关系找个数据结构保存下来，然后依次判断不等式的两方是否同时存在于刚才的结构中。</p>
-<p>这个过程的第一步就是并集，把相关的数据放在一个集合中，第二步就是查找，在这个集合中查找相关性是否成立，这个查找的过程中可以进行一定的优化，也就是并集查找中的路径压缩。这里推荐这篇博客：<a href="https://blog.csdn.net/liujian20150808/article/details/50848646" rel="external nofollow noopener noreferrer" target="_blank">https://blog.csdn.net/liujian20150808/article/details/50848646</a><br>
+<p>这个过程的第一步就是并集，把相关的数据放在一个集合中，第二步就是查找，在这个集合中查找相关性是否成立，这个查找的过程中可以进行一定的优化，也就是并集查找中的路径压缩。这里推荐这篇博客：<a href="https://blog.csdn.net/liujian20150808/article/details/50848646" rel="external nofollow noopener noreferrer" target="_blank">https://blog.csdn.net/liujian20150808/article/details/50848646</a></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/06/08/union-find-algorithm/#more" rel="contents">
@@ -525,7 +525,7 @@
           <!--/noindex-->
         
       
-    </p></div>
+    </div>
     
     
     
@@ -662,18 +662,18 @@
       
         
           <p>这篇文章讲的是异步编程语法的发展过程，异步方法的调用是如何逐渐变成同步语法的。</p>
-<p>异步编程的方法，大概有<a href="http://www.ruanyifeng.com/blog/2012/12/asynchronous＿javascript.html" rel="external nofollow noopener noreferrer" target="_blank">下面四种</a>。</p>
+<p>异步编程的方法，大概有<a href="http://www.ruanyifeng.com/blog/2012/12/asynchronous%EF%BC%BFjavascript.html" rel="external nofollow noopener noreferrer" target="_blank">下面四种</a>。</p>
 <blockquote>
 <ul>
 <li>回调函数</li>
 <li>事件监听</li>
-<li>发布/订阅</li>
+<li>发布&#x2F;订阅</li>
 <li>Promise 对象</li>
 </ul>
 </blockquote>
 <p>ECMAScript 6 （简称 ES6 ）作为下一代 JavaScript 语言，将 JavaScript 异步编程带入了一个全新的阶段。<strong>这组系列文章的主题，就是介绍更强大、更完善的 ES6 异步编程方法。</strong></p>
 <p>新方法比较抽象，初学时，我常常感到费解，直到很久以后才想通，<strong>异步编程的语法目标，就是怎样让它更像同步编程。</strong></p>
-<p>这边文章讲的是这几种语法之间的关联，如果阅读过程中对于任意一个语法有深入理解的需求，可以去看一下<a href="https://es6.ruanyifeng.com/#README" rel="external nofollow noopener noreferrer" target="_blank">阮一峰老师的ES6语法入门</a>。<br>
+<p>这边文章讲的是这几种语法之间的关联，如果阅读过程中对于任意一个语法有深入理解的需求，可以去看一下<a href="https://es6.ruanyifeng.com/#README" rel="external nofollow noopener noreferrer" target="_blank">阮一峰老师的ES6语法入门</a>。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/06/02/javascript_async/#more" rel="contents">
@@ -683,7 +683,7 @@
           <!--/noindex-->
         
       
-    </p></div>
+    </div>
     
     
     
@@ -819,10 +819,10 @@
 
       
         
-          <p><code>nodejs</code>的两大特性，即<code>异步IO</code>和<code>事件驱动</code>。通过对<strong><em>《深入浅出nodejs》\</em></strong>和几篇博客的阅读以后，有了大致的了解，总结一下。</p>
+          <p><code>nodejs</code>的两大特性，即<code>异步IO</code>和<code>事件驱动</code>。通过对***《深入浅出nodejs》***和几篇博客的阅读以后，有了大致的了解，总结一下。</p>
 <p><strong>注意本文的内容基于node11以上。</strong></p>
-<h2 id="同步与异步，阻塞与非阻塞"><a href="#同步与异步，阻塞与非阻塞" class="headerlink" title="同步与异步，阻塞与非阻塞"></a>同步与异步，阻塞与非阻塞</h2><p>“阻塞”与”非阻塞”与”同步”与“异步”不能简单的从字面理解，提供一个从分布式系统角度的回答。<br><strong>1.同步与异步</strong><br>同步和异步关注的是<strong>消息通信机制</strong> (synchronous communication/ asynchronous communication)<br>所谓同步，就是在发出一个<em>调用</em>时，在没有得到结果之前，该<em>调用</em>就不返回。但是一旦调用返回，就得到返回值了。<br>换句话说，就是由<em>调用者</em>主动等待这个<em>调用</em>的结果。</p>
-<p>而异步则是相反，<strong><em>调用\</em>在发出之后，这个调用就直接返回了，所以没有返回结果</strong>。换句话说，当一个异步过程调用发出后，调用者不会立刻得到结果。而是在<em>调用</em>发出后，<em>被调用者</em>通过状态、通知来通知调用者，或通过回调函数处理这个调用。</p>
+<h2 id="同步与异步，阻塞与非阻塞"><a href="#同步与异步，阻塞与非阻塞" class="headerlink" title="同步与异步，阻塞与非阻塞"></a>同步与异步，阻塞与非阻塞</h2><p>“阻塞”与”非阻塞”与”同步”与“异步”不能简单的从字面理解，提供一个从分布式系统角度的回答。<br><strong>1.同步与异步</strong><br>同步和异步关注的是<strong>消息通信机制</strong> (synchronous communication&#x2F; asynchronous communication)<br>所谓同步，就是在发出一个<em>调用</em>时，在没有得到结果之前，该<em>调用</em>就不返回。但是一旦调用返回，就得到返回值了。<br>换句话说，就是由<em>调用者</em>主动等待这个<em>调用</em>的结果。</p>
+<p>而异步则是相反，<em><strong>调用*在发出之后，这个调用就直接返回了，所以没有返回结果</strong>。换句话说，当一个异步过程调用发出后，调用者不会立刻得到结果。而是在</em>调用<em>发出后，</em>被调用者*通过状态、通知来通知调用者，或通过回调函数处理这个调用。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/05/30/nodejs-io-and-event/#more" rel="contents">
@@ -968,7 +968,7 @@
 
       
         
-          <p>最近要使用到Docker，就在晚上找了几篇入门级别的博客，边总结，边实践。<br>
+          <p>最近要使用到Docker，就在晚上找了几篇入门级别的博客，边总结，边实践。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/05/30/docker-note/#more" rel="contents">
@@ -978,7 +978,7 @@
           <!--/noindex-->
         
       
-    </p></div>
+    </div>
     
     
     
@@ -1418,9 +1418,9 @@
       
         
           <p>最近遇到了一个奇怪的题目，实现以下效果：</p>
-<p>sum(2, 3).result = 5;</p>
-<p>sum(2, 3)(4, 5).result = 14;</p>
-<p>sum(1, 2)(3).result = 6;</p>
+<p>sum(2, 3).result &#x3D; 5;</p>
+<p>sum(2, 3)(4, 5).result &#x3D; 14;</p>
+<p>sum(1, 2)(3).result &#x3D; 6;</p>
 <p>这个题目看起来很奇怪，其实就是个函数柯里化加上个脑筋急转弯，这里记录一下这个题目的思路，如果不懂柯里化，看完对柯里化的介绍之后可以先自己想一下怎么实现这个效果，反正作者想了半个小时才缓过神来原来竟然如此简单，归根结底还是理论充足，但是见识少了。</p>
           <!--noindex-->
           <div class="post-button text-center">

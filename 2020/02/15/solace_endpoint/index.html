@@ -366,13 +366,14 @@
       
         <p>这个周刚接触了一点关于Solace的知识，对其中几个基础的概念查阅了一下官方文档，在这里总结一下，主要就是Endpoints，Queue，Topic，Subscription之间的关系。</p>
 <a id="more"></a>
+
 <p>首先总结一下，Endpoint是Solace中用于发送和接收消息的端，它分为两种类型，一种是Queue Endpoint，另一种是Topic Endpoint，这两种Endpoint都可以有自己的Subscription，也可以称为Topic Subscription，每个Queue Endpoint可以有多个Topic Subscription，而每个Topic Endpoint只能有自身的一个Topic Subscription，我们可以把消息推送到Topic中，也可以推送到Queue中，但是推送到Topic中的消息不仅会被发送到Topic Endpoint中，还会发送到订阅它的Queue Endpoint中。（目前作者不成熟的理解是每个Topic Endpoint都一定有一个和它Match的Topic Subscription，所以给某个Topic推送，最少会有一个Topic Endpoint收到，同时订阅这个Topic的Queue也会收到，但是如果直接向Queue推送，就只有该Queue会受到消息）</p>
 <p>接下来详细解释一下具体的概念，这部分内容来自于Solace的官方解释。</p>
 <h2 id="Endpoints"><a href="#Endpoints" class="headerlink" title="Endpoints"></a>Endpoints</h2><p>Solace PubSub+事件代理支持两种类型的端点，用于接收、存储和交付保证消息。</p>
-<p>Endpoint仅具有本地事件代理的意义，并且在使用者必须连接到具有该端点的事件代理时，它不是一个网络范围的概念。不存在通过事件代理到事件代理控制/路由协议的端点存在的传播。因此，事件代理在整个网络中不强制端点名称唯一性（看这个意思是说每个Endpoint仅在本地有效，是不会直接同网络进行信息交换的，所以就不会要求在整个网络中有唯一的名字）。</p>
+<p>Endpoint仅具有本地事件代理的意义，并且在使用者必须连接到具有该端点的事件代理时，它不是一个网络范围的概念。不存在通过事件代理到事件代理控制&#x2F;路由协议的端点存在的传播。因此，事件代理在整个网络中不强制端点名称唯一性（看这个意思是说每个Endpoint仅在本地有效，是不会直接同网络进行信息交换的，所以就不会要求在整个网络中有唯一的名字）。</p>
 <h2 id="Queues"><a href="#Queues" class="headerlink" title="Queues"></a>Queues</h2><p>Queue既是客户端可以向其发布消息的目的地，也是客户端可以绑定使用者并使用消息的Endpoint。Queue通常用于点对点(PTP)消息传递环境。</p>
 <p>尽管许多Consumer可以绑定到一个Queue，但仅能由单个Consumer使用连接到Queue的单个消息。</p>
-<p>还可以将主题订阅添加到队列，以便将发布到匹配主题的消息传递到队列。因此，也可以在发布和订阅(Pub/Sub)模型中使用队列。</p>
+<p>还可以将主题订阅添加到队列，以便将发布到匹配主题的消息传递到队列。因此，也可以在发布和订阅(Pub&#x2F;Sub)模型中使用队列。</p>
 <p>Queue比Topic Endpoint灵活得多，是大多数应用程序推荐的方法。Topic Endpoint的使用应该仅限于JMS应用程序。</p>
 <h3 id="Queue-Access-Types"><a href="#Queue-Access-Types" class="headerlink" title="Queue Access Types"></a>Queue Access Types</h3><p>队列具有访问类型，该类型决定了在多个使用者流绑定到队列时如何传递消息。可以为队列分配以下一种访问类型:</p>
 <ul>
@@ -386,7 +387,7 @@
 <h3 id="Adding-Topic-Subscriptions-to-Queues"><a href="#Adding-Topic-Subscriptions-to-Queues" class="headerlink" title="Adding Topic Subscriptions to Queues"></a>Adding Topic Subscriptions to Queues</h3><p>这一段建议直接看<a href="https://docs.solace.com/PubSub-Basics/Endpoints.htm#add-topics-to-queues" rel="external nofollow noopener noreferrer" target="_blank">Adding Topic Subscriptions to Queues</a></p>
 <p>同时还有<a href="https://docs.solace.com/PubSub-Basics/Topic-Matching-and-Delivery-Modes.htm" rel="external nofollow noopener noreferrer" target="_blank">Delivery Modes</a></p>
 <h2 id="Topic-Endpoint"><a href="#Topic-Endpoint" class="headerlink" title="Topic Endpoint"></a>Topic Endpoint</h2><p>主题端点吸引发布到主题的消息，主题端点对该主题具有匹配的主题订阅。主题端点的主题订阅在客户端请求中指定，以便将流绑定到该主题端点。</p>
-<p>主题端点可以在发布/订阅模型中使用。它们相当于Java消息服务(JMS)中的持久主题订阅。</p>
+<p>主题端点可以在发布&#x2F;订阅模型中使用。它们相当于Java消息服务(JMS)中的持久主题订阅。</p>
 
       
     </div>

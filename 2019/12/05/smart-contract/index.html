@@ -369,6 +369,7 @@
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在大致搞清楚比特币的基本概念之后，再来理解以太坊的概念就容易很多，其中最主要的就是搞清楚什么是智能合约。</p>
 <p>只是合约其实就是存储在区块链上并运行在矿工机上的一段代码，由于以太坊的限制，这段代码并不能过大，也不能过于复杂。</p>
 <a id="more"></a>
+
 <p>那么智能合约大致是怎么工作的呢？</p>
 <p>目前的理解是以太坊存在两种账户，一种是外部账户，一种是合约账户，二者都有自己的地址和余额，唯一的区别就是合约账户上存储着智能合约合约的codehash，实际的合约代码已经通过一笔交易被矿工存储到了区块链上，所以发布合约实际上也是一笔交易。可以通过向全零地址发送一笔交易来创建合约，然后根据合约内容生成合约的地址用于标识合约账户，这个过程与创建外部账户不同，外部账户地址的生成是有公钥生成私钥，再由私钥计算出地址，这个过程不可逆，这也是为什么只有掌握了私钥就等于掌握了地址；但是合约账户的地址生成依赖的主要是合约代码的hash。</p>
 <p>当我们在dapp上通过界面发出一条指令时，可能就是向某个指定的合约账户发起了一场交易，矿工收到交易消息后通过codehash找到合约代码并运行，当然这笔交易也可以向合约账户转账。矿工运行合约之后在交易的基础上收取一定的费用，之后通过挖矿将这笔交易确认后就可以获取这笔费用。</p>
@@ -378,6 +379,7 @@
 <p>比特币网络中有大量计算机节点负责维护和更新区块链，在ETH中同样存在，被称为EVM（Eth虚拟机）。可以把EVM看作一台超级计算机，拥有网络中所有节点的计算能力，该计算能力用于在区块链上运行智能合约。EVM向用户收取非常小的ETH代币维护费作为回报，以提供智能合约需要使用的计算能力，这个费用被称为“gas”。所以ETH代币的核心意义不是作为一般等价物的货币，而是类似于石油一样作为动力驱动ETH网络。</p>
 <h3 id="简单的智能合约"><a href="#简单的智能合约" class="headerlink" title="简单的智能合约"></a>简单的智能合约</h3><p>我们通过官网的示例来进行解释</p>
 <h4 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract SimpleStorage &#123;</span><br><span class="line">    uint storedData;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">set</span>(<span class="params">uint x</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        storedData = x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params"></span>) <span class="title">public</span> <span class="title">view</span> <span class="title">returns</span> (<span class="params">uint</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> storedData;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>第一行就是告诉大家源代码使用Solidity版本0.4.0写的，并且使用0.4.0以上版本运行也没问题（最高到0.5.0，但是不包含0.5.0）。这是为了确保合约不会在新的编译器版本中突然行为异常。关键字 pragma 的含义是，一般来说，pragmas（编译指令）是告知编译器如何处理源代码的指令的（例如， <a href="https://en.wikipedia.org/wiki/Pragma_once" rel="external nofollow noopener noreferrer" target="_blank">pragma once</a> ）。</p>
 <p>Solidity中合约的含义就是一组代码（它的 <em>函数</em> )和数据（它的 <em>状态</em> ），它们位于以太坊区块链的一个特定地址上。 代码行 uint storedData; 声明一个类型为 uint (256位无符号整数）的状态变量，叫做 storedData 。 你可以认为它是数据库里的一个位置，可以通过调用管理数据库代码的函数进行查询和变更。对于以太坊来说，上述的合约就是拥有合约（owning contract）。在这种情况下，函数 set 和 get 可以用来变更或取出变量的值。</p>
 <p>要访问一个状态变量，并不需要像 this. 这样的前缀，虽然这是其他语言常见的做法。</p>
@@ -386,15 +388,19 @@
 <h5 id="警告"><a href="#警告" class="headerlink" title="警告"></a><strong>警告</strong></h5><p>小心使用Unicode文本，因为有些字符虽然长得相像（甚至一样），但其字符码是不同的，其编码后的字符数组也会不一样。</p>
 <h4 id="子货币（Subcurrency）例子"><a href="#子货币（Subcurrency）例子" class="headerlink" title="子货币（Subcurrency）例子"></a><strong>子货币（Subcurrency）例子</strong></h4><p>下面的合约实现了一个最简单的加密货币。这里，币确实可以无中生有地产生，但是只有创建合约的人才能做到（实现一个不同的发行计划也不难）。而且，任何人都可以给其他人转币，不需要注册用户名和密码 —— 所需要的只是以太坊密钥对。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.21</span>;</span><br><span class="line"></span><br><span class="line">contract Coin &#123;</span><br><span class="line">    <span class="comment">// 关键字“public”让这些变量可以从外部读取</span></span><br><span class="line">    address public minter;</span><br><span class="line">    mapping (<span class="function"><span class="params">address</span> =&gt;</span> uint) public balances;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 轻客户端可以通过事件针对变化作出高效的反应</span></span><br><span class="line">    event Sent(address <span class="keyword">from</span>, address to, uint amount);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这是构造函数，只有当合约创建时运行</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">Coin</span>(<span class="params"></span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        minter = msg.sender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">mint</span>(<span class="params">address receiver, uint amount</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (msg.sender != minter) <span class="keyword">return</span>;</span><br><span class="line">        balances[receiver] += amount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params">address receiver, uint amount</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (balances[msg.sender] &lt; amount) <span class="keyword">return</span>;</span><br><span class="line">        balances[msg.sender] -= amount;</span><br><span class="line">        balances[receiver] += amount;</span><br><span class="line">        emit Sent(msg.sender, receiver, amount);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>这个合约引入了一些新的概念，让我们逐一解读。</p>
 <p>address public minter; 这一行声明了一个可以被公开访问的 address 类型的状态变量。 address 类型是一个160位的值，且不允许任何算数操作。这种类型适合存储合约地址或外部人员的密钥对。关键字 public 自动生成一个函数，允许你在这个合约之外访问这个状态变量的当前值。如果没有这个关键字，其他的合约没有办法访问这个变量。由编译器生成的函数的代码大致如下所示：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">minter</span>(<span class="params"></span>) <span class="title">returns</span> (<span class="params">address</span>) </span>&#123; <span class="keyword">return</span> minter; &#125;</span><br></pre></td></tr></table></figure>
+
 <p>当然，加一个和上面完全一样的函数是行不通的，因为我们会有同名的一个函数和一个变量，这里，主要是希望你能明白——编译器已经帮你实现了。</p>
-<p>下一行， mapping (address =&gt; uint) public balances; 也创建一个公共状态变量，但它是一个更复杂的数据类型。 该类型将address映射为无符号整数。 Mappings 可以看作是一个 <a href="https://en.wikipedia.org/wiki/Hash_table" rel="external nofollow noopener noreferrer" target="_blank">哈希表</a> 它会执行虚拟初始化，以使所有可能存在的键都映射到一个字节表示为全零的值。 但是，这种类比并不太恰当，因为它既不能获得映射的所有键的列表，也不能获得所有值的列表。 因此，要么记住你添加到mapping中的数据（使用列表或更高级的数据类型会更好），要么在不需要键列表或值列表的上下文中使用它，就如本例。 而由 public 关键字创建的getter函数 <a href="https://solidity-cn.readthedocs.io/zh/develop/contracts.html#getter-functions" rel="external nofollow noopener noreferrer" target="_blank">getter function</a> 则是更复杂一些的情况， 它大致如下所示：</p>
+<p>下一行， mapping (address &#x3D;&gt; uint) public balances; 也创建一个公共状态变量，但它是一个更复杂的数据类型。 该类型将address映射为无符号整数。 Mappings 可以看作是一个 <a href="https://en.wikipedia.org/wiki/Hash_table" rel="external nofollow noopener noreferrer" target="_blank">哈希表</a> 它会执行虚拟初始化，以使所有可能存在的键都映射到一个字节表示为全零的值。 但是，这种类比并不太恰当，因为它既不能获得映射的所有键的列表，也不能获得所有值的列表。 因此，要么记住你添加到mapping中的数据（使用列表或更高级的数据类型会更好），要么在不需要键列表或值列表的上下文中使用它，就如本例。 而由 public 关键字创建的getter函数 <a href="https://solidity-cn.readthedocs.io/zh/develop/contracts.html#getter-functions" rel="external nofollow noopener noreferrer" target="_blank">getter function</a> 则是更复杂一些的情况， 它大致如下所示：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">balances</span>(<span class="params">address _account</span>) <span class="title">public</span> <span class="title">view</span> <span class="title">returns</span> (<span class="params">uint</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> balances[_account];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>正如你所看到的，你可以通过该函数轻松地查询到账户的余额。</p>
 <p>event Sent(address from, address to, uint amount); 这行声明了一个所谓的“事件（event）”，它会在 send 函数的最后一行被发出。用户界面（当然也包括服务器应用程序）可以监听区块链上正在发送的事件，而不会花费太多成本。一旦它被发出，监听该事件的listener都将收到通知。而所有的事件都包含了 from ， to 和 amount 三个参数，可方便追踪事务。 为了监听这个事件，你可以使用如下代码：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Coin.Sent().watch(&#123;&#125;, <span class="string">''</span>, <span class="function"><span class="keyword">function</span>(<span class="params">error, result</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!error) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"Coin transfer: "</span> + result.args.amount +</span><br><span class="line">            <span class="string">" coins were sent from "</span> + result.args.from +</span><br><span class="line">            <span class="string">" to "</span> + result.args.to + <span class="string">"."</span>);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"Balances now:\n"</span> +</span><br><span class="line">            <span class="string">"Sender: "</span> + Coin.balances.call(result.args.from) +</span><br><span class="line">            <span class="string">"Receiver: "</span> + Coin.balances.call(result.args.to));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>这里请注意自动生成的 balances 函数是如何从用户界面调用的。</p>
 <p>特殊函数 Coin 是在创建合约期间运行的构造函数，不能在事后调用。 它永久存储创建合约的人的地址: msg (以及 tx 和 block ) 是一个神奇的全局变量，其中包含一些允许访问区块链的属性。 msg.sender 始终是当前（外部）函数调用的来源地址。</p>
 <p>最后，真正被用户或其他合约所调用的，以完成本合约功能的方法是 mint 和 send。 如果 mint 被合约创建者外的其他人调用则什么也不会发生。 另一方面， send 函数可被任何人用于向他人发送币 (当然，前提是发送者拥有这些币)。记住，如果你使用合约发送币给一个地址，当你在区块链浏览器上查看该地址时是看不到任何相关信息的。因为，实际上你发送币和更改余额的信息仅仅存储在特定合约的数据存储器中。通过使用事件，你可以非常简单地为你的新币创建一个“区块链浏览器”来追踪交易和余额。</p>
@@ -414,7 +420,7 @@
 <p>在合约创建的过程中，它的代码还是空的。所以直到构造函数执行结束，你都不应该在其中调用合约自己函数。</p>
 <p><strong>Gas</strong></p>
 <p>一经创建，每笔交易都收取一定数量的 <strong>gas</strong> ，目的是限制执行交易所需要的工作量和为交易支付手续费。EVM 执行交易时，gas 将按特定规则逐渐耗尽。</p>
-<p><strong>gas price</strong> 是交易发送者设置的一个值，发送者账户需要预付的手续费= gas_price * gas 。如果交易执行后还有剩余， gas 会原路返还。</p>
+<p><strong>gas price</strong> 是交易发送者设置的一个值，发送者账户需要预付的手续费&#x3D; gas_price * gas 。如果交易执行后还有剩余， gas 会原路返还。</p>
 <p>无论执行到什么位置，一旦 gas 被耗尽（比如降为负值），将会触发一个 out-of-gas 异常。当前调用帧（call frame）所做的所有状态修改都将被回滚。</p>
 <p>那么可能就会有一个问题，如果gas price是交易发送者自己制定的，那不是越低越省钱？每个人都不想多付钱。要解决这个问题首先要搞明白三个概念：</p>
 <p>Gas</p>
@@ -424,12 +430,12 @@
 <p>Gas Price</p>
 <p>Gas Price就是你愿意为一个单位的Gas出多少Eth，一般用Gwei作单位。 所以Gas Price 越高，</p>
 <p>就表示交易中每运算一步，会支付更多的Eth。</p>
-<p>大家可能对Gwei 这个单位感到陌生，Gwei 其实就是10 ^ -9 Eth，也就是说1 Gwei = 0.000000001 Eth。</p>
-<p>所以，当你设定Gas price = 20 Gwei ，就意味着你愿意为单步运算支付0.00000002 Eth。</p>
+<p>大家可能对Gwei 这个单位感到陌生，Gwei 其实就是10 ^ -9 Eth，也就是说1 Gwei &#x3D; 0.000000001 Eth。</p>
+<p>所以，当你设定Gas price &#x3D; 20 Gwei ，就意味着你愿意为单步运算支付0.00000002 Eth。</p>
 <p>说到这里，聪明如你就会意识到以太坊的手续费计算公式很简单：</p>
-<p>交易手续费(Tx Fee) = 实际运行步数(Actual Gas Used) * 单步价格(Gas Price)</p>
+<p>交易手续费(Tx Fee) &#x3D; 实际运行步数(Actual Gas Used) * 单步价格(Gas Price)</p>
 <p>例如你的交易需要以太坊执行50步完成运算，假设你设定的Gas Price是2 Gwei ，那么整个交易的手续费</p>
-<p>就是50 * 2 = 100 Gwei 了。</p>
+<p>就是50 * 2 &#x3D; 100 Gwei 了。</p>
 <p>Gas Limit</p>
 <p>Gas Limit就是一次交易中Gas的可用上限，也就是你的交易中最多会执行多少步运算。 由于交易复杂程度各有不同，</p>
 <p>确切的Gas消耗量是在完成交易后才会知道，因此在你提交交易之前，需要为交易设定一个Gas用量的上限。</p>
@@ -437,12 +443,12 @@
 <p>已经消耗的手续费同样被扣取 —— 因为要奖励已经付出劳动的矿工。 而如果交易已经完成，消耗的Gas未达到Gas Limit，</p>
 <p>那么只会按实际消耗的Gas 收取交易服务费。 换句话说，一个交易可能被收取的最高服务费就是Gas Limit * Gas Price 了。</p>
 <p>最后值得一提的是Gas Price 越高，你提交的交易会越快被矿工接纳。 但通常人们都不愿多支付手续费</p>
-<p><strong>委托调用/代码调用和库</strong></p>
+<p><strong>委托调用&#x2F;代码调用和库</strong></p>
 <p>有一种特殊类型的消息调用，被称为 <strong>委托调用(delegatecall)</strong> 。它和一般的消息调用的区别在于，目标地址的代码将在发起调用的合约的上下文中执行，并且 msg.sender 和 msg.value 不变。 这意味着一个合约可以在运行时从另外一个地址动态加载代码。存储、当前地址和余额都指向发起调用的合约，只有代码是从被调用地址获取的。 这使得 Solidity 可以实现”库“能力：可复用的代码库可以放在一个合约的存储上，如用来实现复杂的数据结构的库。</p>
 <p><strong>日志</strong></p>
 <p>有一种特殊的可索引的数据结构，其存储的数据可以一路映射直到区块层级。这个特性被称为 <strong>日志(logs)</strong> ，Solidity用它来实现 <strong>事件(events)</strong> 。合约创建之后就无法访问日志数据，但是这些数据可以从区块链外高效的访问。因为部分日志数据被存储在 <a href="https://en.wikipedia.org/wiki/Bloom_filter" rel="external nofollow noopener noreferrer" target="_blank">布隆过滤器（Bloom filter)</a> 中，我们可以高效并且加密安全地搜索日志，所以那些没有下载整个区块链的网络节点（轻客户端）也可以找到这些日志。</p>
 <p><strong>创建</strong></p>
-<p>合约甚至可以通过一个特殊的指令来创建其他合约（不是简单的调用零地址）。创建合约的调用 <strong>create calls</strong> 和普通消息调用的唯一区别在于，负载会被执行，执行的结果被存储为合约代码，调用者/创建者在栈上得到新合约的地址。</p>
+<p>合约甚至可以通过一个特殊的指令来创建其他合约（不是简单的调用零地址）。创建合约的调用 <strong>create calls</strong> 和普通消息调用的唯一区别在于，负载会被执行，执行的结果被存储为合约代码，调用者&#x2F;创建者在栈上得到新合约的地址。</p>
 <p><strong>自毁</strong></p>
 <p>合约代码从区块链上移除的唯一方式是合约在合约地址上的执行自毁操作 selfdestruct 。合约账户上剩余的以太币会发送给指定的目标，然后其存储和代码从状态中被移除。</p>
 <h3 id="重点概念再次解释"><a href="#重点概念再次解释" class="headerlink" title="重点概念再次解释"></a>重点概念再次解释</h3><p><strong>账户</strong></p>
@@ -453,7 +459,7 @@
 <p>账户状态</p>
 <p>不论账户类型，账户状态都包含以下四个字段：</p>
 <p>nonce：随机数，账户发出的交易数及创建的合约数量之和。</p>
-<p>Balance：余额，账户拥有以太币数量，单位为Wei，1Ether=10^18Wei。</p>
+<p>Balance：余额，账户拥有以太币数量，单位为Wei，1Ether&#x3D;10^18Wei。</p>
 <p>storageRoot：存储根节点，账户内容的MerklePatricia 树根节点的哈希编码。</p>
 <p>codeHash：代码哈希，与账户关联的EVM代码的哈希值，外部账户的codeHash为一个空字符串的哈希，创建后不可更改。状态数据库中包含所有代码片段哈希, 以便后续使用。</p>
 <p><img src="D:\document\study\YNote\qq063B60F6CBD116FB4E7479117DADDDEF\c84218cfc20e4f21be8e4befbd9157c4\4660_image3.jpeg" alt="img"></p>

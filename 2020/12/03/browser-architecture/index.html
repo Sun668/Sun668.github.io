@@ -87,15 +87,15 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="无论你是想要设计高性能 Web 应用，还是要优化现有的 Web 应用，你都需要了解浏览器中的网络流程、页面渲染过程，JavaScript 执行流程，以及 Web 安全理论。 这篇文章简单介绍下浏览器的架构演进。">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607950533/origin-of-ray/微信截图_20201214205124_zhp4vc.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607951301/origin-of-ray/微信截图_20201214210808_qtiudk.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607951570/origin-of-ray/微信截图_20201214211245_onevmr.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607952407/origin-of-ray/微信截图_20201214212637_nqv6vr.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607950533/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201214205124_zhp4vc.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607951301/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201214210808_qtiudk.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607951570/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201214211245_onevmr.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607952407/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201214212637_nqv6vr.png">
 <meta property="og:updated_time" content="2021-09-03T00:52:02.764Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器架构">
 <meta name="twitter:description" content="无论你是想要设计高性能 Web 应用，还是要优化现有的 Web 应用，你都需要了解浏览器中的网络流程、页面渲染过程，JavaScript 执行流程，以及 Web 安全理论。 这篇文章简单介绍下浏览器的架构演进。">
-<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607950533/origin-of-ray/微信截图_20201214205124_zhp4vc.png">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607950533/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201214205124_zhp4vc.png">
 
 
 
@@ -371,7 +371,9 @@
 
       
         <p>无论你是想要设计高性能 Web 应用，还是要优化现有的 Web 应用，你都需要了解浏览器中的网络流程、页面渲染过程，JavaScript 执行流程，以及 Web 安全理论。</p>
-<p>这篇文章简单介绍下浏览器的架构演进。<br><a id="more"></a></p>
+<p>这篇文章简单介绍下浏览器的架构演进。</p>
+<a id="more"></a>
+
 <h2 id="什么是浏览器"><a href="#什么是浏览器" class="headerlink" title="什么是浏览器"></a>什么是浏览器</h2><p>提起浏览器，大家都是非常熟悉的，但是浏览器到底是做什么的，大家可能没有仔细思考过。</p>
 <p>其实这个问题我们从浏览器的另外一个名字就能知道：<strong>万维网客户端</strong>。</p>
 <p>没错，浏览器其实就是一个客户端，帮助我们浏览万维网信息的。</p>
@@ -379,21 +381,21 @@
 <p>简单来讲，万维网上的信息就是html文档，万维网的通信就是通过http协议，这两者一个叫做超文本标记语言，一个叫做超文本传输协议。</p>
 <p><strong>浏览器最本质的作用就是帮助我们通过http协议去获取html文档并进行展示</strong>。</p>
 <h2 id="浏览器的架构"><a href="#浏览器的架构" class="headerlink" title="浏览器的架构"></a>浏览器的架构</h2><h3 id="单进程浏览器"><a href="#单进程浏览器" class="headerlink" title="单进程浏览器"></a>单进程浏览器</h3><p>顾名思义，单进程浏览器是指浏览器的所有功能模块都是运行在同一个进程里，这些模块包含了网络、插件、JavaScript 运行环境、渲染引擎和页面等。其实早在 2007 年之前，市面上浏览器都是单进程的。单进程浏览器的架构如下图所示：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607950533/origin-of-ray/微信截图_20201214205124_zhp4vc.png" alt></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607950533/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201214205124_zhp4vc.png"></p>
 <p>如此多的功能模块运行在一个进程里，是导致单进程浏览器不稳定、不流畅和不安全的一个主要因素。</p>
 <h4 id="不稳定"><a href="#不稳定" class="headerlink" title="不稳定"></a>不稳定</h4><p>早期浏览器需要借助于插件来实现诸如 Web 视频、Web 游戏等各种强大的功能，但是插件是最容易出问题的模块，并且还运行在浏览器进程之中，所以一个插件的意外崩溃会引起整个浏览器的崩溃。</p>
 <p>除了插件之外，渲染引擎模块也是不稳定的，通常一些复杂的 JavaScript 代码就有可能引起渲染引擎模块的崩溃。和插件一样，渲染引擎的崩溃也会导致整个浏览器的崩溃。</p>
 <h4 id="不流畅"><a href="#不流畅" class="headerlink" title="不流畅"></a>不流畅</h4><p>从上面的“单进程浏览器架构示意图”可以看出，所有页面的渲染模块、JavaScript 执行环境以及插件都是运行在同一个线程中的，这就意味着同一时刻只能有一个模块可以执行。比如，一个这个无限循环的脚本</p>
 <p>如果让这个脚本运行在一个单进程浏览器的页面里，你感觉会发生什么？因为这个脚本是无限循环的，所以当其执行时，它会独占整个线程，这样导致其他运行在该线程中的模块就没有机会被执行。因为浏览器中所有的页面都运行在该线程中，所以这些页面都没有机会去执行任务，这样就会导致整个浏览器失去响应，变卡顿。</p>
-<h4 id="不安全"><a href="#不安全" class="headerlink" title="不安全"></a>不安全</h4><p>插件可以使用 C/C++ 等代码编写，通过插件可以获取到操作系统的任意资源，当你在页面运行一个插件时也就意味着这个插件能完全操作你的电脑。如果是个恶意插件，那么它就可以释放病毒、窃取你的账号密码，引发安全性问题。</p>
+<h4 id="不安全"><a href="#不安全" class="headerlink" title="不安全"></a>不安全</h4><p>插件可以使用 C&#x2F;C++ 等代码编写，通过插件可以获取到操作系统的任意资源，当你在页面运行一个插件时也就意味着这个插件能完全操作你的电脑。如果是个恶意插件，那么它就可以释放病毒、窃取你的账号密码，引发安全性问题。</p>
 <p>至于页面脚本，它可以通过浏览器的漏洞来获取系统权限，这些脚本获取系统权限之后也可以对你的电脑做一些恶意的事情，同样也会引发安全问题。</p>
-<h3 id="多进程浏览器"><a href="#多进程浏览器" class="headerlink" title="多进程浏览器"></a>多进程浏览器</h3><h4 id="早期多进程浏览器"><a href="#早期多进程浏览器" class="headerlink" title="早期多进程浏览器"></a>早期多进程浏览器</h4><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607951301/origin-of-ray/微信截图_20201214210808_qtiudk.png" alt></p>
+<h3 id="多进程浏览器"><a href="#多进程浏览器" class="headerlink" title="多进程浏览器"></a>多进程浏览器</h3><h4 id="早期多进程浏览器"><a href="#早期多进程浏览器" class="headerlink" title="早期多进程浏览器"></a>早期多进程浏览器</h4><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607951301/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201214210808_qtiudk.png"></p>
 <p>从图中可以看出，Chrome 的页面是运行在单独的渲染进程中的，同时页面里的插件也是运行在单独的插件进程之中，而进程之间是通过 IPC 机制进行通信（如图中虚线部分）</p>
 <p><strong>我们先看看如何解决不稳定的问题</strong>。由于进程是相互隔离的，所以当一个页面或者插件崩溃时，影响到的仅仅是当前的页面进程或者插件进程，并不会影响到浏览器和其他页面，这就完美地解决了页面或者插件的崩溃会导致整个浏览器崩溃，也就是不稳定的问题。</p>
 <p><strong>接下来再来看看不流畅的问题是如何解决的</strong>。同样，JavaScript 也是运行在渲染进程中的，所以即使 JavaScript 阻塞了渲染进程，影响到的也只是当前的渲染页面，而并不会影响浏览器和其他页面，因为其他页面的脚本是运行在它们自己的渲染进程中的。所以当我们再在 Chrome 中运行上面那个死循环的脚本时，没有响应的仅仅是当前的页面。</p>
 <p>对于<strong>内存泄漏的解决方法</strong>那就更简单了，因为当关闭一个页面时，整个渲染进程也会被关闭，之后该进程所占用的内存都会被系统回收，这样就轻松解决了浏览器页面的内存泄漏问题。</p>
 <p>最后我们再来看看上面的<strong>两个安全问题是怎么解决的</strong>。采用多进程架构的额外好处是可以使用安全沙箱，你可以把沙箱看成是操作系统给进程上了一把锁，沙箱里面的程序可以运行，但是不能在你的硬盘上写入任何数据，也不能在敏感位置读取任何数据，例如你的文档和桌面。Chrome 把插件进程和渲染进程锁在沙箱里面，这样即使在渲染进程或者插件进程里面执行了恶意程序，恶意程序也无法突破沙箱去获取系统权限。</p>
-<h4 id="目前的多进程浏览器"><a href="#目前的多进程浏览器" class="headerlink" title="目前的多进程浏览器"></a>目前的多进程浏览器</h4><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607951570/origin-of-ray/微信截图_20201214211245_onevmr.png" alt></p>
+<h4 id="目前的多进程浏览器"><a href="#目前的多进程浏览器" class="headerlink" title="目前的多进程浏览器"></a>目前的多进程浏览器</h4><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607951570/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201214211245_onevmr.png"></p>
 <p>下面我们来逐个分析下这几个进程的功能。</p>
 <ul>
 <li><p>浏览器进程。主要负责界面显示、用户交互、子进程管理，同时提供存储等功能。</p>
@@ -407,7 +409,7 @@
 </ul>
 <h2 id="浏览器导航流程"><a href="#浏览器导航流程" class="headerlink" title="浏览器导航流程"></a>浏览器导航流程</h2><p>“在浏览器里，从输入 URL 到页面展示，这中间发生了什么？ ”这是一道经典的面试题，能比较全面地考察应聘者知识的掌握程度，其中涉及到了网络、操作系统、Web 等一系列的知识。</p>
 <p>那么今天我们就一起来探索下这个流程</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607952407/origin-of-ray/微信截图_20201214212637_nqv6vr.png" alt></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1607952407/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201214212637_nqv6vr.png"></p>
 <p>这个过程可以大致描述为如下。</p>
 <ul>
 <li><p>首先，浏览器进程接收到用户输入的 URL 请求，浏览器进程便将该 URL 转发给网络进程。</p>

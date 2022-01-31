@@ -813,7 +813,7 @@
         
           <h1 id="Vuex-初始化"><a href="#Vuex-初始化" class="headerlink" title="Vuex 初始化"></a>Vuex 初始化</h1><p>这一节我们主要来分析 Vuex 的初始化过程，它包括安装、Store 实例化过程 2 个方面。</p>
 <p>安装过程比较简单，下图是一个简单的关于实例化的思维导图。</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1600494852/Blog/vuex_frzgmi.png" alt></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1600494852/Blog/vuex_frzgmi.png"></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/09/12/vuex/#more" rel="contents">
@@ -1260,6 +1260,7 @@
 <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>给定一个字符串 s，你可以通过在字符串前面添加字符将其转换为回文串。找到并返回可以用这种方式转换的最短回文串。</p>
 <p><strong>示例 1:</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;aacecaaa&quot;</span><br><span class="line">输出: &quot;aaacecaaa&quot;</span><br></pre></td></tr></table></figure>
+
 <p><strong>示例 2:</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;abcd&quot;</span><br><span class="line">输出: &quot;dcbabcd&quot;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
@@ -1409,8 +1410,8 @@
         
           <p>Vue是一个MVVM框架，最吸引人的地方就是它的响应式。</p>
 <h2 id="官方解释"><a href="#官方解释" class="headerlink" title="官方解释"></a>官方解释</h2><p>首先我们看一下官方文档中对响应式原理的解释。</p>
-<h3 id="如何追踪变化"><a href="#如何追踪变化" class="headerlink" title="如何追踪变化"></a>如何追踪变化</h3><p>当你把一个普通的 JavaScript 对象传入 Vue 实例作为 <code>data</code> 选项，Vue 将遍历此对象所有的 property，并使用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" rel="external nofollow noopener noreferrer" target="_blank"><code>Object.defineProperty</code></a> 把这些 property 全部转为 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Working_with_Objects#定义_getters_与_setters" rel="external nofollow noopener noreferrer" target="_blank">getter/setter</a>。<code>Object.defineProperty</code> 是 ES5 中一个无法 shim 的特性，这也就是 Vue 不支持 IE8 以及更低版本浏览器的原因。</p>
-<p>这些 getter/setter 对用户来说是不可见的，但是在内部它们让 Vue 能够追踪依赖，在 property 被访问和修改时通知变更。这里需要注意的是不同浏览器在控制台打印数据对象时对 getter/setter 的格式化并不同，所以建议安装 <a href="https://github.com/vuejs/vue-devtools" rel="external nofollow noopener noreferrer" target="_blank">vue-devtools</a> 来获取对检查数据更加友好的用户界面。</p>
+<h3 id="如何追踪变化"><a href="#如何追踪变化" class="headerlink" title="如何追踪变化"></a>如何追踪变化</h3><p>当你把一个普通的 JavaScript 对象传入 Vue 实例作为 <code>data</code> 选项，Vue 将遍历此对象所有的 property，并使用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" rel="external nofollow noopener noreferrer" target="_blank"><code>Object.defineProperty</code></a> 把这些 property 全部转为 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Working_with_Objects#%E5%AE%9A%E4%B9%89_getters_%E4%B8%8E_setters" rel="external nofollow noopener noreferrer" target="_blank">getter&#x2F;setter</a>。<code>Object.defineProperty</code> 是 ES5 中一个无法 shim 的特性，这也就是 Vue 不支持 IE8 以及更低版本浏览器的原因。</p>
+<p>这些 getter&#x2F;setter 对用户来说是不可见的，但是在内部它们让 Vue 能够追踪依赖，在 property 被访问和修改时通知变更。这里需要注意的是不同浏览器在控制台打印数据对象时对 getter&#x2F;setter 的格式化并不同，所以建议安装 <a href="https://github.com/vuejs/vue-devtools" rel="external nofollow noopener noreferrer" target="_blank">vue-devtools</a> 来获取对检查数据更加友好的用户界面。</p>
 <p>每个组件实例都对应一个 <strong>watcher</strong> 实例，它会在组件渲染的过程中把“接触”过的数据 property 记录为依赖。之后当依赖项的 setter 触发时，会通知 watcher，从而使它关联的组件重新渲染。</p>
           <!--noindex-->
           <div class="post-button text-center">
@@ -1558,7 +1559,7 @@
       
         
           <h2 id="RPC简介"><a href="#RPC简介" class="headerlink" title="RPC简介"></a>RPC简介</h2><p>RPC(Remote Procedure Call)：远程过程调用，它是一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的思想。</p>
-<p>RPC （Remote Procedure Call）的主要功能目标是让构建分布式计算（应用）更容易，在提供强大的远程调用能力时不损失本地调用的语义简洁性。 为实现该目标，<strong>RPC 框架需提供一种透明调用机制让使用者不必显式的区分本地调用和远程调用</strong>。　　<br> RPC采用C/S模式。请求程序就是一个客户机，而服务提供程序就是一个服务器。首先，客户机调用进程发送一个有进程参数的调用信息到服务进程，然后等待应答信息。在服务器端，进程保持睡眠状态直到调用信息的到达为止。当一个调用信息到达，服务器获得进程参数，计算结果发送答复信息，然后等待下一个调用信息。最后，客户端调用进程接收答复信息，获得进程结果，然后调用执行继续进行。</p>
+<p>RPC （Remote Procedure Call）的主要功能目标是让构建分布式计算（应用）更容易，在提供强大的远程调用能力时不损失本地调用的语义简洁性。 为实现该目标，<strong>RPC 框架需提供一种透明调用机制让使用者不必显式的区分本地调用和远程调用</strong>。　　<br> RPC采用C&#x2F;S模式。请求程序就是一个客户机，而服务提供程序就是一个服务器。首先，客户机调用进程发送一个有进程参数的调用信息到服务进程，然后等待应答信息。在服务器端，进程保持睡眠状态直到调用信息的到达为止。当一个调用信息到达，服务器获得进程参数，计算结果发送答复信息，然后等待下一个调用信息。最后，客户端调用进程接收答复信息，获得进程结果，然后调用执行继续进行。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/08/17/rpc/#more" rel="contents">
