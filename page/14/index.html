@@ -514,7 +514,7 @@
 
       
         
-          <p>HTTPS协议是HTTP + SSL&#x2F;TLS组合而成的，而HTTP是用来从万维网服务器获取信息的协议，所以我们就从万维网开始讲起。</p>
+          <p>HTTPS协议是HTTP + SSL/TLS组合而成的，而HTTP是用来从万维网服务器获取信息的协议，所以我们就从万维网开始讲起。</p>
 <h2 id="万维网与HTTP"><a href="#万维网与HTTP" class="headerlink" title="万维网与HTTP"></a>万维网与HTTP</h2><p>万维网（WWW）并非某种特殊的计算机网络。万维网是一个大规模的，联机式的信息储藏所，英文简称web。万维网用链接的方式可以非常方便地从互联网上的一个站点访问另一个站点。</p>
 <p>每一个万维网站点都存放了许多文档。在这些文档中有一些地方的文字是用特殊方式显示的，当我们鼠标移动到这些地方的时候，鼠标的箭头就变成了一只手的形状，这就表明这里有一个链接。如果我们点击这些链接，我们就可以从这个文档链接到可能相隔很远的另一个文档。</p>
 <p>正是由于互联网的出现，使得互联网从少数计算机专家使用变成了普通百姓也能使用。</p>
@@ -1406,7 +1406,7 @@
       
         
           <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>滑动窗口算法的思路是这样：</p>
-<p>1、我们在字符串 S 中使用双指针中的左右指针技巧，初始化 left &#x3D; right &#x3D; 0，把索引闭区间 [left, right] 称为一个「窗口」。</p>
+<p>1、我们在字符串 S 中使用双指针中的左右指针技巧，初始化 left = right = 0，把索引闭区间 [left, right] 称为一个「窗口」。</p>
 <p>2、我们先不断地增加 right 指针扩大窗口 [left, right]，直到窗口中的字符串符合要求（包含了 T 中的所有字符）。</p>
 <p>3、此时，我们停止增加 right，转而不断增加 left 指针缩小窗口 [left, right]，直到窗口中的字符串不再符合要求（不包含 T 中的所有字符了）。同时，每次增加 left，我们都要更新一轮结果。</p>
 <p>4、重复第 2 和第 3 步，直到 right 到达字符串 S 的尽头。</p>
@@ -1556,7 +1556,7 @@
       
         
           <h2 id="广度优先搜索"><a href="#广度优先搜索" class="headerlink" title="广度优先搜索"></a>广度优先搜索</h2><p>通过一道题目<a href="https://leetcode-cn.com/problems/as-far-from-land-as-possible/" rel="external nofollow noopener noreferrer" target="_blank">地图分析</a>，来讲解和实践BFS。</p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>考虑最朴素的方法，即求出每一个海洋区域（grid[i][j] &#x3D;&#x3D; 0 的区域）的「最近陆地区域」，然后记录下它们的距离，然后在这些距离里面取一个最大值。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>考虑最朴素的方法，即求出每一个海洋区域（grid[i][j] == 0 的区域）的「最近陆地区域」，然后记录下它们的距离，然后在这些距离里面取一个最大值。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/03/29/multisource-bfs/#more" rel="contents">

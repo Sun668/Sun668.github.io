@@ -377,7 +377,6 @@
 </ul>
 <p>上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。</p>
 <a id="more"></a>
-
 <h2 id="文件系统的层次结构"><a href="#文件系统的层次结构" class="headerlink" title="文件系统的层次结构"></a>文件系统的层次结构</h2><p>现代操作系统有多种文件系统类型，如FAT32，NTFS，ext2，ext3，ext4等，因此文件系统的层次结构也不尽相同。下面这种是一种比较通用的层次结构。</p>
 <p>不支持在 Docs 外粘贴 block</p>
 <ol>
@@ -434,8 +433,8 @@
 <li>哈希表</li>
 </ol>
 <p>最大的困难是哈希表的长度固定以及哈希函数对表长的依赖。</p>
-<p>目录查询是通过在磁盘上反复搜索完成的，需要不断的进行I&#x2F;O操作，开销较大。</p>
-<p>所以为了减少I&#x2F;O操作，把当前使用的文件目录复制到内存。</p>
+<p>目录查询是通过在磁盘上反复搜索完成的，需要不断的进行I/O操作，开销较大。</p>
+<p>所以为了减少I/O操作，把当前使用的文件目录复制到内存。</p>
 <h2 id="文件的实现"><a href="#文件的实现" class="headerlink" title="文件的实现"></a>文件的实现</h2><p>文件的实现，研究的是文件的物理结构，即文件数据在物理存储设备上是如何分布和组织的。</p>
 <p>这个问题有两个方面：</p>
 <ul>
@@ -473,6 +472,7 @@
 <li>多层索引。多层索引使第一层索引块指向第二层的索引块，第二层索引块再指向文件块，这种方法根据最大文件大小的要求，可以继续到第三层或第四层。</li>
 <li>混合索引。将多种索引方式相结合的分配方式。例如系统既采用直接地址，又采用单击索引分配方式或者二级索引分配方式。</li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -482,7 +482,8 @@
 <th>缺点</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>连续分配</td>
 <td>需访问磁盘1次</td>
 <td>顺序存取时速度快，文件定长时可根据文件起始地址和记录长度随机访问。</td>
@@ -500,7 +501,9 @@
 <td>可以随机访问，文件易于增删</td>
 <td>索引表增加存储空间的开销，索引表的查找策略对文件系统效率影响较大。</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>这三种方案都需要目录项中或者索引节点（i节点）中存放索引块的地址。</p>
 <h3 id="文件存储空间管理"><a href="#文件存储空间管理" class="headerlink" title="文件存储空间管理"></a>文件存储空间管理</h3><h4 id="文件存储器空间的划分与初始化"><a href="#文件存储器空间的划分与初始化" class="headerlink" title="文件存储器空间的划分与初始化"></a>文件存储器空间的划分与初始化</h4><p>一般来说，一个文件存储在一个文件卷中。文件卷可以是物理盘的一部分，也可以是整个物理盘，支持超大文件的文件卷也可以由多个物理盘组成。</p>
 <p><img src="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWJhN2NkZGQ4NWYzYThjNjVhYzlhODNlNDkyMzIwZGZfWU5WQWo4eVk0T2hYVW9NemZiR1pUczRTaXNzTjVCWHdfVG9rZW46Ym94Y241THZNYmE1SkZqZVdCcWJTVm9xblBiXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA" alt="img"></p>

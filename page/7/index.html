@@ -1251,10 +1251,10 @@
 <p><a href="https://leetcode-cn.com/problems/number-of-valid-words-for-each-puzzle/" rel="external nofollow noopener noreferrer" target="_blank">https://leetcode-cn.com/problems/number-of-valid-words-for-each-puzzle/</a></p>
 <h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>我们可以设计出解决该字谜问题的一个算法流程：</p>
 <ul>
-<li><p>首先我们计算出每一个word 对应的集合 Sw，存放在某一「数据结构」中，便于后续操作中的快速查找；</p>
-</li>
-<li><p>随后我们依次枚举每一个puzzle，计算出其对应的集合 Sp，并枚举满足要求的子集 S’p。对于每一个 S’p，我们在「数据结构」中查找其出现的次数，那么所有的 S’p出现次数之和就是puzzle 对应的谜底个数。</p>
-</li>
+<li>首先我们计算出每一个word 对应的集合 Sw，存放在某一「数据结构」中，便于后续操作中的快速查找；</li>
+</ul>
+<ul>
+<li>随后我们依次枚举每一个puzzle，计算出其对应的集合 Sp，并枚举满足要求的子集 S’p。对于每一个 S’p，我们在「数据结构」中查找其出现的次数，那么所有的 S’p出现次数之和就是puzzle 对应的谜底个数。</li>
 </ul>
 <p>有了这个方案我们就可以思考如何设计这个数据结构，让我们能快速的存储和查找。</p>
           <!--noindex-->

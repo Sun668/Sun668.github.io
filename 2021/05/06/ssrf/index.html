@@ -366,7 +366,6 @@
       
         <p>最近在看一些安全知识的时候，发现了一个新的漏洞，叫做SSRF，这个漏洞原理其实并不复杂，但是由于是第一次遇到，还是简单记录一下。</p>
 <a id="more"></a>
-
 <h2 id="什么是SSRF"><a href="#什么是SSRF" class="headerlink" title="什么是SSRF"></a>什么是SSRF</h2><p>服务端请求伪造(Server-Side Request Forgery),指的是攻击者在未能取得服务器所有权限时，利用服务器漏洞以服务器的身份发送一条构造好的请求给服务器所在内网。SSRF攻击通常针对外部网络无法直接访问的内部系统。</p>
 <h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p><strong>SSRF漏洞形成的原因主要是服务器端所提供的接口中包含了所要请求的内容的URL参数，并且未对客户端所传输过来的URL参数进行过滤。</strong></p>
 <p>假设某公司的网站部署在A服务器上，为了让用户能够访问到，所以A服务器有自己的I公网P地址（或者经过NAT网关配置，有了自己的公网IP+PORT），同时公司还有一台B服务器，存放着一些重要的数据，这台B服务器部署在在内网，没有公网的IP，所以正常情况下，外网是无法访问的。</p>
@@ -378,11 +377,11 @@
 <p>不过这种情况一旦出现，攻击者就可以伪造各种IP和PORT去访问，根据返回结果不同，得到内网中的网络结果和每个服务器的端口开发情况。</p>
 <h3 id="利用ssrf获取内网敏感文件信息"><a href="#利用ssrf获取内网敏感文件信息" class="headerlink" title="利用ssrf获取内网敏感文件信息"></a><strong>利用ssrf获取内网敏感文件信息</strong></h3><p>在服务器上有一个ssrf.php的页面，该页面的功能是获取URL参数，然后将URL的内容显示到网页页面上。</p>
 <p>我们访问该链接：<a href="http://127.0.0.1/ssrf.php?url=http://127.0.0.1/test.php" rel="external nofollow noopener noreferrer" target="_blank">http://127.0.0.1/ssrf.php?url=http://127.0.0.1/test.php</a> ，它会将test.php页面显示</p>
-<p>我们可以将URL参数换成内网的地址，则会泄露服务器内网的信息。将URL换成file:&#x2F;&#x2F;的形式，就可以读取本地文件。</p>
+<p>我们可以将URL参数换成内网的地址，则会泄露服务器内网的信息。将URL换成file://的形式，就可以读取本地文件。</p>
 <h2 id="防御方式"><a href="#防御方式" class="headerlink" title="防御方式"></a>防御方式</h2><p>1、过滤返回的信息，如果web应用是去获取某一种类型的文件。那么在把返回结果展示给用户之前先验证返回的信息是否符合标准。</p>
 <p>2、统一错误信息，避免用户可以根据错误信息来判断远程服务器的端口状态。</p>
 <p>3、限制请求的端口，比如80,443,8080,8090。</p>
-<p>4、禁止不常用的协议，仅仅允许http和https请求。可以防止类似于file:&#x2F;&#x2F;&#x2F;,gopher:&#x2F;&#x2F;,ftp:&#x2F;&#x2F;等引起的问题。</p>
+<p>4、禁止不常用的协议，仅仅允许http和https请求。可以防止类似于file:///,gopher://,ftp://等引起的问题。</p>
 <p>5、使用DNS缓存或者Host白名单的方式。</p>
 <p>参考链接：</p>
 <p><a href="https://zhuanlan.zhihu.com/p/91819069" rel="external nofollow noopener noreferrer" target="_blank">https://zhuanlan.zhihu.com/p/91819069</a></p>

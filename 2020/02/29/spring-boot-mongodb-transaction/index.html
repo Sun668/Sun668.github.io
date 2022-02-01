@@ -366,31 +366,25 @@
       
         <p>今天在工作中需要使用到mongodb的tansaction，于是查阅了各种资料，也踩了不少的坑，在这里总结一下。</p>
 <a id="more"></a>
-
 <h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><ul>
 <li>MongoDB的版本必须是4.0版本以上</li>
 <li>引入spring-data</li>
 </ul>
 <h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableMongoRepositories</span>(basePackages = <span class="string">"com.baeldung.repository"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MongoTransactionConfig</span> <span class="keyword">extends</span> <span class="title">AbstractMongoConfiguration</span></span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">MongoTransactionManager <span class="title">transactionManager</span><span class="params">(MongoDbFactory dbFactory)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> MongoTransactionManager(dbFactory);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> String <span class="title">getDatabaseName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"test"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> MongoClient <span class="title">mongoClient</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> MongoClient(<span class="string">"127.0.0.1"</span>, <span class="number">27017</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>After we finished the configuration, all we need to do to use native MongoDB transactions – is to <strong>annotate our method with</strong> <em><strong>@Transactional</strong>.</em></p>
+<p>After we finished the configuration, all we need to do to use native MongoDB transactions – is to <strong>annotate our method with</strong> <strong>*@Transactional</strong>.*</p>
 <p>Everything inside the annotated method will be executed in one transaction:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">whenPerformMongoTransaction_thenSuccess</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    userRepository.save(<span class="keyword">new</span> User(<span class="string">"John"</span>, <span class="number">30</span>));</span><br><span class="line">    userRepository.save(<span class="keyword">new</span> User(<span class="string">"Ringo"</span>, <span class="number">35</span>));</span><br><span class="line">    Query query = <span class="keyword">new</span> Query().addCriteria(Criteria.where(<span class="string">"name"</span>).is(<span class="string">"John"</span>));</span><br><span class="line">    List&lt;User&gt; users = mongoTemplate.find(query, User<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"> </span><br><span class="line">    assertThat(users.size(), is(<span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>Note that we can’t use <em>listCollections</em> command inside a multi-document transaction – for example:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span>(expected = MongoTransactionException<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">Transactional</span></span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">void</span> <span class="title">whenListCollectionDuringMongoTransaction_thenException</span>() </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mongoTemplate.collectionExists(User<span class="class">.<span class="keyword">class</span>)) </span>&#123;</span><br><span class="line">        mongoTemplate.save(<span class="keyword">new</span> User(<span class="string">"John"</span>, <span class="number">30</span>));</span><br><span class="line">        mongoTemplate.save(<span class="keyword">new</span> User(<span class="string">"Ringo"</span>, <span class="number">35</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>This example throws a <em>MongoTransactionException</em> as we used the <em>collectionExists()</em> method.</p>
 <p>We also can’t run <em>count</em> inside a multi-document transaction:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span>(expected = MongoCommandException<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">Transactional</span></span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">void</span> <span class="title">whenCountDuringMongoTransaction_thenException</span>() </span>&#123;</span><br><span class="line">    userRepository.save(<span class="keyword">new</span> User(<span class="string">"John"</span>, <span class="number">30</span>));</span><br><span class="line">    userRepository.save(<span class="keyword">new</span> User(<span class="string">"Ringo"</span>, <span class="number">35</span>));</span><br><span class="line">    userRepository.count();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>But, we can work around this one with a simple query and then get the size of the resulting list:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">whenQueryDuringMongoTransaction_thenSuccess</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    userRepository.save(<span class="keyword">new</span> User(<span class="string">"Jane"</span>, <span class="number">20</span>));</span><br><span class="line">    userRepository.save(<span class="keyword">new</span> User(<span class="string">"Nick"</span>, <span class="number">33</span>));</span><br><span class="line">    List&lt;User&gt; users = mongoTemplate.find(<span class="keyword">new</span> Query(), User<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"> </span><br><span class="line">    assertTrue(users.size() &gt; <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
-<li><p>注解必须是@Transactional(rollbackFor &#x3D; { Exception.class })，不能仅仅是@Transactional</p>
+<li><p>注解必须是@Transactional(rollbackFor = { Exception.class })，不能仅仅是@Transactional</p>
 </li>
-<li><p>必须在properties文件中配置replica-set，否则报错”Sessions are not supported by the MongoDB cluster to which this client is connected”。配置方式是spring.data.mongodb.uri&#x3D;<a href="mongodb://host1:port1,host2:port2,host3:port3/" rel="external nofollow noopener noreferrer" target="_blank">mongodb:&#x2F;&#x2F;host1:port1,host2:port2,host3:port3&#x2F;</a>数据库名称?replicaSet&#x3D;复制集名称</p>
+<li><p>必须在properties文件中配置replica-set，否则报错”Sessions are not supported by the MongoDB cluster to which this client is connected”。配置方式是spring.data.mongodb.uri=<a href="mongodb://host1:port1,host2:port2,host3:port3/" rel="external nofollow noopener noreferrer" target="_blank">mongodb://host1:port1,host2:port2,host3:port3/</a>数据库名称?replicaSet=复制集名称</p>
 <p>这一点是因为事务必须基于副本集才能实现</p>
 </li>
 <li><p>如果有捕获异常，则必须加一行代码，否则发生异常时还是能insert到数据库；加了后才能回滚insert操作</p>
@@ -401,42 +395,46 @@
 <li><p>@Transactional 只能应用到 public 方法才有效</p>
 </li>
 </ul>
-<h2 id="Transactional配置项"><a href="#Transactional配置项" class="headerlink" title="@Transactional配置项"></a>@Transactional配置项</h2><table>
+<h2 id="Transactional配置项"><a href="#Transactional配置项" class="headerlink" title="@Transactional配置项"></a>@Transactional配置项</h2><div class="table-container">
+<table>
 <thead>
 <tr>
-<th align="left">属性名</th>
-<th align="left">说明</th>
+<th style="text-align:left">属性名</th>
+<th style="text-align:left">说明</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="left">name</td>
-<td align="left">当在配置文件中有多个 TransactionManager , 可以用该属性指定选择哪个事务管理器。</td>
+<tbody>
+<tr>
+<td style="text-align:left">name</td>
+<td style="text-align:left">当在配置文件中有多个 TransactionManager , 可以用该属性指定选择哪个事务管理器。</td>
 </tr>
 <tr>
-<td align="left">propagation</td>
-<td align="left">事务的传播行为，默认值为 REQUIRED。</td>
+<td style="text-align:left">propagation</td>
+<td style="text-align:left">事务的传播行为，默认值为 REQUIRED。</td>
 </tr>
 <tr>
-<td align="left">isolation</td>
-<td align="left">事务的隔离度，默认值采用 DEFAULT。</td>
+<td style="text-align:left">isolation</td>
+<td style="text-align:left">事务的隔离度，默认值采用 DEFAULT。</td>
 </tr>
 <tr>
-<td align="left">timeout</td>
-<td align="left">事务的超时时间，默认值为-1。如果超过该时间限制但事务还没有完成，则自动回滚事务。</td>
+<td style="text-align:left">timeout</td>
+<td style="text-align:left">事务的超时时间，默认值为-1。如果超过该时间限制但事务还没有完成，则自动回滚事务。</td>
 </tr>
 <tr>
-<td align="left">read-only</td>
-<td align="left">指定事务是否为只读事务，默认值为 false；为了忽略那些不需要事务的方法，比如读取数据，可以设置 read-only 为 true。</td>
+<td style="text-align:left">read-only</td>
+<td style="text-align:left">指定事务是否为只读事务，默认值为 false；为了忽略那些不需要事务的方法，比如读取数据，可以设置 read-only 为 true。</td>
 </tr>
 <tr>
-<td align="left">rollback-for</td>
-<td align="left">用于指定能够触发事务回滚的异常类型，如果有多个异常类型需要指定，各类型之间可以通过逗号分隔。</td>
+<td style="text-align:left">rollback-for</td>
+<td style="text-align:left">用于指定能够触发事务回滚的异常类型，如果有多个异常类型需要指定，各类型之间可以通过逗号分隔。</td>
 </tr>
 <tr>
-<td align="left">no-rollback- for</td>
-<td align="left">抛出 no-rollback-for 指定的异常类型，不回滚事务。</td>
+<td style="text-align:left">no-rollback- for</td>
+<td style="text-align:left">抛出 no-rollback-for 指定的异常类型，不回滚事务。</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>除此以外，@Transactional 注解也可以添加到类级别上。当把@Transactional 注解放在类级别时，表示所有该类的公共方法都配置相同的事务属性信息。</p>
 
       

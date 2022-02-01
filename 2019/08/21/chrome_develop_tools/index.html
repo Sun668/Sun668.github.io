@@ -377,7 +377,6 @@
       
         <p>当我们开发网站的时候，可能会有很多种原因造成我们的页面卡顿，那么我们可以利用Google Devtools 去快速定位导致页面卡顿的最主要原因。本篇总结了Chrome官方文档上最主要也是最直接的两个工具。</p>
 <a id="more"></a>
-
 <h2 id="利用开发者工具Performance选项卡"><a href="#利用开发者工具Performance选项卡" class="headerlink" title="利用开发者工具Performance选项卡"></a>利用开发者工具Performance选项卡</h2><h3 id="打开开发者工具"><a href="#打开开发者工具" class="headerlink" title="打开开发者工具"></a>打开开发者工具</h3><p>按Command+ Option+ I（Mac）或 Control+ Shift+ I（Windows，Linux）打开DevTools，Windows也可以使用F12。</p>
 <h3 id="利用Performance选项卡录制操作"><a href="#利用Performance选项卡录制操作" class="headerlink" title="利用Performance选项卡录制操作"></a>利用Performance选项卡录制操作</h3><ol>
 <li><p>选择Performance选项卡</p>
@@ -386,14 +385,13 @@
 </li>
 <li><p>对页面进行操作</p>
 </li>
-<li><p>操作完成后点击stop按钮</p>
-</li>
+<li>操作完成后点击stop按钮</li>
 </ol>
-<h3 id="分析录制结果"><a href="#分析录制结果" class="headerlink" title="分析录制结果"></a>分析录制结果</h3><h4 id="FPS"><a href="#FPS" class="headerlink" title="FPS"></a>FPS</h4><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/fps_ju7mvq.png"></p>
+<h3 id="分析录制结果"><a href="#分析录制结果" class="headerlink" title="分析录制结果"></a>分析录制结果</h3><h4 id="FPS"><a href="#FPS" class="headerlink" title="FPS"></a>FPS</h4><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/fps_ju7mvq.png" alt></p>
 <p>图中上方红色方框圈出的地方显示的就是录制过程中页面的FPS变化，当FPS显示的是绿色条时，表示页面比较流畅，且绿色条越高，FPS越高，用户体验越好。</p>
 <p>但是当FPS出现红色条时表示页面存在较为严重的卡顿，可能会影响用户体验。</p>
 <p>当你把鼠标放到FPS上的某一点时就会显示出该点的页面快照。（这里需要在录制时将screenshoot选项勾选）</p>
-<h4 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h4><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/CPU_yv1izl.png"></p>
+<h4 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h4><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/CPU_yv1izl.png" alt></p>
 <p>在FPS图表下方就是CPU图表，该图表中的颜色与下方的Summary选项卡是一一对应的。</p>
 <p>当你的录制结果中CPU图表别大量颜色占满，下方的Summary也大部分是有颜色的时候，就应该分析一下是什么占据了大量的CPU并想办法减少该类操作或者优化该类操作。</p>
 <p>比如当rendering占据了很大比例的时候，就应该想办法减少dom元素，因为rendering的过程其实就是把html语句转化为dom树的过程，如果该过程占据了大量的CPU就应该考虑如何优化你的dom结构了。</p>
@@ -402,28 +400,28 @@
 <li>输入Show Render，选择Rendering对应的命令</li>
 <li>页面左上角就会出现一个实时的FPS监控器</li>
 </ol>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/fps2_fhp16u.png"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/fps2_fhp16u.png" alt></p>
 <h2 id="利用Audits选项卡分析性能"><a href="#利用Audits选项卡分析性能" class="headerlink" title="利用Audits选项卡分析性能"></a>利用Audits选项卡分析性能</h2><h3 id="运行审核"><a href="#运行审核" class="headerlink" title="运行审核"></a>运行审核</h3><ol>
 <li>开启Audits选项卡</li>
 <li>点击运行审核，等待10-30秒后会出现审计结果（Tips：这里要注意这个功能需要翻墙，不然会一直卡在LightHouse is warming up，LightHouse是这个选项卡依赖地一个组件）</li>
 </ol>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/Audits_tfnnf2.png"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/Audits_tfnnf2.png" alt></p>
 <h3 id="分析运行结果"><a href="#分析运行结果" class="headerlink" title="分析运行结果"></a>分析运行结果</h3><p>运行结果很长，我们从上到下分块进行分析</p>
 <h4 id="总览模块"><a href="#总览模块" class="headerlink" title="总览模块"></a>总览模块</h4><p>这一部分综述了这次审核的几个维度的评分</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/audits1_opabc0.png"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/audits1_opabc0.png" alt></p>
 <h4 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h4><ol>
 <li>右上角的数字是该指标的总体评分，评分越高性能越好，当你优化了你的网站时，该评分就会上升</li>
 <li>First Contentful Paint：首次将内容绘制到页面的时间，改时间越短越好</li>
 <li>Time to Interactice：标记页面准备就绪处理用户交互的时间</li>
 <li>我们可以将鼠标停在任意一个指标右侧的标记上去查看详细信息</li>
 </ol>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/audits2_zyuvmj.png"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/audits2_zyuvmj.png" alt></p>
 <h4 id="Opportunities"><a href="#Opportunities" class="headerlink" title="Opportunities"></a>Opportunities</h4><p>该部分提供了关于如何改进加载性能的建议</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/opportunity_xvzdpm.png"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/opportunity_xvzdpm.png" alt></p>
 <h4 id="Diagnostics"><a href="#Diagnostics" class="headerlink" title="Diagnostics"></a>Diagnostics</h4><p>该部分提供了关于导致页面加载问题的因素，可以将每一项展开来查看详细信息</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/Diag_hqaivt.png"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/Diag_hqaivt.png" alt></p>
 <h4 id="Passed-audits"><a href="#Passed-audits" class="headerlink" title="Passed audits"></a>Passed audits</h4><p>该部分显示了你的网站那一部分是做正确的</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/Passed_ijjuxq.png"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/Passed_ijjuxq.png" alt></p>
 
       
     </div>

@@ -367,21 +367,20 @@
       
         <p>Azure Key Vault is a tool for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, or certificates. A vault is logical group of secrets.</p>
 <a id="more"></a>
-
 <p>上面这一段是Azure官方文档的描述，作者在阅读了Microsoft Azure文档之后，对其基本的概念进行了提取和总结，并在原文中加入了一些自己的理解。阅读完中文就能对key vault有个大概的认识，英文原文是比较专业的描述，不影响理解，如果想进一步了解可以去阅读文末提供的链接。</p>
 <h2 id="What-is-Azure-Key-Vault"><a href="#What-is-Azure-Key-Vault" class="headerlink" title="What is Azure Key Vault"></a>What is Azure Key Vault</h2><p>简单来讲，Azure Key Vault 就是提供了一个能够安全存储你的敏感数据的地方，想要获取这些数据就必须通过身份校验以及权限校验，我们可以把类似于证书，数据库配置等敏感信息放在这里，而不需要硬编码到代码中。在使用时我们将敏感信息存储到key vault上后，会获取对应的名称，我们只需要通过api去key vault中通过名字（也可以添加版本信息）获取对应的信息就好，这些信息可以是密钥（只能get公钥），证书信息，或者一些配置信息。当然这些信息并不是任何人直接去调用api就可以获取的，而是需要你的Identity信息被用于创建该Key Vault的Tenant下面的Subscription所承认，获取承认的方式有很多种，可以通过id-token，或者密码等。</p>
 <p>Azure Key Vault帮助解决以下问题：</p>
 <ul>
 <li><strong>秘密管理</strong> -Azure Key Vault可用于安全存储和严格控制对令牌，密码，证书，API密钥和其他秘密的访问。</li>
 <li><strong>密钥管理</strong> -Azure Key Vault也可以用作密钥管理解决方案。使用Azure Key Vault可以轻松创建和控制用于加密数据的加密密钥。</li>
-<li><strong>证书管理</strong> -Azure Key Vault也是一项服务，使您可以轻松地调配，管理和部署公共和私有安全套接字层&#x2F;传输层安全性（SSL &#x2F; TLS）证书，以与Azure和内部连接的资源一起使用。</li>
+<li><strong>证书管理</strong> -Azure Key Vault也是一项服务，使您可以轻松地调配，管理和部署公共和私有安全套接字层/传输层安全性（SSL / TLS）证书，以与Azure和内部连接的资源一起使用。</li>
 <li><strong>存储由硬件安全模块支持</strong>的机密-机密和密钥可以通过软件或FIPS 140-2 2级验证HSM进行保护。</li>
 </ul>
 <p>使用Azure Key Vault 可以集中存储应用程序的机密数据并可以控制这些数据的分发。而且由于开发人员可以不用在程序中硬编码安全信息，大大提高了程序的安全性。</p>
 <p>存储在Azure Key Vault中的信息会被可靠的加密算法保存。</p>
 <p>同时Azure Key Vault可以基于Azure AD进行访问的权限控制，同时可以记录下来是谁在什么时间访问了哪一条数据。</p>
 <h2 id="Azure-Key-Vault-basic-concepts"><a href="#Azure-Key-Vault-basic-concepts" class="headerlink" title="Azure Key Vault basic concepts"></a>Azure Key Vault basic concepts</h2><ul>
-<li><strong>承租人&#x2F;租户</strong>( <strong>Tenant</strong> )：承租人是拥有和管理Microsoft云服务的特定实例的组织。最常用于指组织的Azure和Office 365服务集。</li>
+<li><strong>承租人/租户</strong>( <strong>Tenant</strong> )：承租人是拥有和管理Microsoft云服务的特定实例的组织。最常用于指组织的Azure和Office 365服务集。</li>
 <li><strong>保管库所有者</strong>( <strong>Vault owner</strong> )：保管库所有者可以创建密钥保管库并获得对其的完全访问权和控制权。保管库所有者还可以设置审核以记录谁访问了机密和密钥。管理员可以控制密钥生命周期。他们可以滚动到密钥的新版本，进行备份并执行相关任务。</li>
 <li><strong>保管箱使用者</strong>( <strong>Vault consumer</strong> )：当保管库所有者授予使用者访问权时，<strong>保管箱使用者</strong>可以对密钥保管库内的资产执行操作。可用的操作取决于所授予的权限。</li>
 <li><strong>资源</strong>( <strong>Resource</strong> )：资源是可通过Azure进行管理的项目。常见示例包括虚拟机，存储帐户，Web应用程序，数据库和虚拟网络。还有更多。</li>
@@ -444,14 +443,14 @@
 </ul>
 <h4 id="Resource-endpoints"><a href="#Resource-endpoints" class="headerlink" title="Resource endpoints"></a>Resource endpoints</h4><p> 应用程序通过端点访问两个平面。 </p>
 <p>The access controls for the two planes work independently. To grant an application access to use keys in a key vault, you grant data plane access by using a Key Vault access policy. To grant a user read access to Key Vault properties and tags, but not access to data (keys, secrets, or certificates), you grant management plane access with RBAC. **</p>
-<h2 id="Certificate"><a href="#Certificate" class="headerlink" title="Certificate"></a>Certificate</h2><h3 id="About-keys-secrets-and-certificates"><a href="#About-keys-secrets-and-certificates" class="headerlink" title="About keys, secrets, and certificates"></a>About keys, secrets, and certificates</h3><p>Azure Key Vault使Microsoft Azure应用程序和用户能够存储和使用几种类型的秘密&#x2F;密钥数据</p>
+<h2 id="Certificate"><a href="#Certificate" class="headerlink" title="Certificate"></a>Certificate</h2><h3 id="About-keys-secrets-and-certificates"><a href="#About-keys-secrets-and-certificates" class="headerlink" title="About keys, secrets, and certificates"></a>About keys, secrets, and certificates</h3><p>Azure Key Vault使Microsoft Azure应用程序和用户能够存储和使用几种类型的秘密/密钥数据</p>
 <ul>
 <li>加密密钥（Cryptographic key）：支持多种密钥类型和算法，并允许对高价值密钥使用硬件安全模块（HSM）。我们通过api其实只能获取到公钥。</li>
 <li>机密(Secrets)：提供机密的安全存储，例如密码和数据库连接字符串。</li>
 <li>证书(Certificates)：支持基于密钥和机密构建的证书，并添加了自动续订功能。</li>
 <li>Azure存储(Azure Storage)：可以为您管理Azure存储帐户的密钥。在内部，Key Vault可以使用Azure存储帐户列出（同步）密钥，并定期重新生成（旋转）密钥。</li>
 </ul>
-<h4 id="Key-Vaults-keys"><a href="#Key-Vaults-keys" class="headerlink" title="Key Vaults keys"></a>Key Vaults keys</h4><p>Key Vault中的加密密钥表示为JSON Web密钥[JWK]对象。JWK &#x2F; JWA基本规范也得到了扩展，以启用Key Vault实施所特有的密钥类型。例如，使用特定于HSM供应商的包装导入密钥，可以安全地运输只能在Key Vault HSM中使用的密钥。</p>
+<h4 id="Key-Vaults-keys"><a href="#Key-Vaults-keys" class="headerlink" title="Key Vaults keys"></a>Key Vaults keys</h4><p>Key Vault中的加密密钥表示为JSON Web密钥[JWK]对象。JWK / JWA基本规范也得到了扩展，以启用Key Vault实施所特有的密钥类型。例如，使用特定于HSM供应商的包装导入密钥，可以安全地运输只能在Key Vault HSM中使用的密钥。</p>
 <ul>
 <li><strong>“软”密钥</strong>：Key Vault在软件中处理过的密钥，但是使用HSM中的系统密钥在静止状态下进行了加密。客户可以导入现有的RSA或EC（椭圆曲线）密钥，或请求Key Vault生成一个。</li>
 <li><strong>“硬”键</strong>：在HSM（硬件安全模块）中处理的键。这些密钥在Key Vault HSM安全世界之一（每个地理区域都有一个安全世界以保持隔离）中受到保护。客户端可以以软形式或通过从兼容的HSM设备导出来导入RSA或EC密钥。客户还可以请求Key Vault生成密钥。此密钥类型将key_hsm属性添加到JWK获取以携带HSM密钥材料。</li>
@@ -459,7 +458,7 @@
 <p>在密钥库中创建密钥后，可以使用该密钥执行以下加密操作：</p>
 <ul>
 <li><strong>签名并验证</strong>：严格来说，此操作是“签名哈希”或“验证哈希”，因为Key Vault不支持内容哈希作为签名创建的一部分。应用程序应对要在本地签名的数据进行哈希处理，然后请求Key Vault对哈希进行签名。对于可能无法访问[公开]密钥材料的应用程序，为方便操作提供了对签名哈希的验证的支持。为了获得最佳的应用程序性能，请验证是否在本地执行操作。</li>
-<li><strong>密钥加密&#x2F;包装</strong>：可以将存储在Key Vault中的密钥用于保护另一个密钥，通常是对称内容加密密钥（CEK）。当Key Vault中的密钥不对称时，将使用密钥加密。例如，RSA-OAEP和WRAPKEY &#x2F; UNWRAPKEY操作等效于ENCRYPT &#x2F; DECRYPT。如果“密钥保管库”中的密钥是对称的，则使用密钥包装。例如，AES-KW。支持WRAPKEY操作是为了方便无法访问[公开]密钥资料的应用程序。为了获得最佳的应用程序性能，WRAPKEY操作应在本地执行。</li>
+<li><strong>密钥加密/包装</strong>：可以将存储在Key Vault中的密钥用于保护另一个密钥，通常是对称内容加密密钥（CEK）。当Key Vault中的密钥不对称时，将使用密钥加密。例如，RSA-OAEP和WRAPKEY / UNWRAPKEY操作等效于ENCRYPT / DECRYPT。如果“密钥保管库”中的密钥是对称的，则使用密钥包装。例如，AES-KW。支持WRAPKEY操作是为了方便无法访问[公开]密钥资料的应用程序。为了获得最佳的应用程序性能，WRAPKEY操作应在本地执行。</li>
 <li><strong>加密和解密</strong>：存储在Key Vault中的密钥可用于加密或解密单个数据块。块的大小由密钥类型和所选的加密算法确定。为方便起见，提供了Encrypt操作，用于可能无法访问[公开]密钥资料的应用程序。为了获得最佳的应用程序性能，应在本地执行加密操作。</li>
 </ul>
 <h4 id="Key-Vault-secrets"><a href="#Key-Vault-secrets" class="headerlink" title="Key Vault secrets"></a>Key Vault secrets</h4><p>From a developer’s perspective, Key Vault APIs accept and return secret values as strings. Internally, Key Vault stores and manages secrets as sequences of octets (8-bit bytes), with a maximum size of 25k bytes each. The Key Vault service doesn’t provide semantics for secrets. It merely accepts the data, encrypts it, stores it, and returns a secret identifier (“id”). The identifier can be used to retrieve the secret at a later time.</p>
@@ -471,7 +470,7 @@
 <li>Allows a Key Vault certificate owner to implement secure storage and management of X509 certificates without interaction with private key material.</li>
 <li>Allows a certificate owner to create a policy that directs Key Vault to manage the life-cycle of a certificate.</li>
 <li>Allows certificate owners to provide contact information for notification about life-cycle events of expiration and renewal of certificate.</li>
-<li>Supports automatic renewal with selected issuers - Key Vault partner X509 certificate providers &#x2F; certificate authorities.</li>
+<li>Supports automatic renewal with selected issuers - Key Vault partner X509 certificate providers / certificate authorities.</li>
 </ul>
 <p>本文章只是对于Azure Key Vault的基本概念的及其之间关系的简介，对于更加详细的信息，比如Key Vault具体是如何监控，节流，身份验证，请求参数之类的详细信息可以去查看文末的官方文档。</p>
 <p>参考文章：</p>

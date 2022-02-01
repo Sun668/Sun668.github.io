@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="Token是什么究竟什么才算是Token，我一直没有找到比较好的定义，但是回过头来看一下它的翻译，才明白，原来名字就是定义了，Token就是令牌。 那么什么是令牌呢？">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640464/%E5%9B%BE%E7%89%871_pntvdk.jpg">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640876/computer_network/%E5%9B%BE%E7%89%871_m5icmc.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640464/图片1_pntvdk.jpg">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640876/computer_network/图片1_m5icmc.png">
 <meta property="og:updated_time" content="2021-09-03T00:51:55.106Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Token的安全存储与传输">
 <meta name="twitter:description" content="Token是什么究竟什么才算是Token，我一直没有找到比较好的定义，但是回过头来看一下它的翻译，才明白，原来名字就是定义了，Token就是令牌。 那么什么是令牌呢？">
-<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640464/%E5%9B%BE%E7%89%871_pntvdk.jpg">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640464/图片1_pntvdk.jpg">
 
 
 
@@ -371,9 +371,8 @@
         <h2 id="Token是什么"><a href="#Token是什么" class="headerlink" title="Token是什么"></a>Token是什么</h2><p>究竟什么才算是Token，我一直没有找到比较好的定义，但是回过头来看一下它的翻译，才明白，原来名字就是定义了，Token就是令牌。</p>
 <p>那么什么是令牌呢？</p>
 <a id="more"></a>
-
 <p>先看一下我们现实生活中的令牌。</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640464/%E5%9B%BE%E7%89%871_pntvdk.jpg" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640464/%E5%9B%BE%E7%89%871_pntvdk.jpg"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640464/图片1_pntvdk.jpg" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640464/%E5%9B%BE%E7%89%871_pntvdk.jpg"></p>
 <p>为什么它是个令牌呢？因为六扇门可以验证其真实性，同时六扇门可以从中获取持有该令牌的人的身份。</p>
 <p>从这里我们就可以给Token下一个大致的定义：</p>
 <ul>
@@ -383,7 +382,7 @@
 </li>
 </ul>
 <p>也就是说SessionID是Token，JWT也是Token。</p>
-<h2 id="基于Token的认证流程"><a href="#基于Token的认证流程" class="headerlink" title="基于Token的认证流程"></a>基于Token的认证流程</h2><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640876/computer_network/%E5%9B%BE%E7%89%871_m5icmc.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640876/computer_network/%E5%9B%BE%E7%89%871_m5icmc.png"></p>
+<h2 id="基于Token的认证流程"><a href="#基于Token的认证流程" class="headerlink" title="基于Token的认证流程"></a>基于Token的认证流程</h2><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640876/computer_network/图片1_m5icmc.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1587640876/computer_network/%E5%9B%BE%E7%89%871_m5icmc.png"></p>
 <p>大致就分为几步：</p>
 <ul>
 <li>用户发送登陆请求到服务器，携带用户名和密码登陆。</li>
@@ -419,8 +418,8 @@
 <p>USB Key安全性较高，属于物理级别的防御，但是有一定的成本。</p>
 <p>Cookie最方便，但是默认状态下最不安全，需要将http-only，same-site，secure等开启才能有较高的安全性。</p>
 <h2 id="Token的安全传输与HTTPS"><a href="#Token的安全传输与HTTPS" class="headerlink" title="Token的安全传输与HTTPS"></a>Token的安全传输与HTTPS</h2><p>准确地讲HTTPS是协议栈。</p>
-<p>最上层是HTTP，接着是SSL&#x2F;TLS，接着是TCP。</p>
-<p>HTTP的数据包在进入TCP发送缓存之前被SSL&#x2F;TLS加密就叫做HTTPS。</p>
+<p>最上层是HTTP，接着是SSL/TLS，接着是TCP。</p>
+<p>HTTP的数据包在进入TCP发送缓存之前被SSL/TLS加密就叫做HTTPS。</p>
 <p>所以想要搞明白HTTPS，就要搞明白HTTP。而HTTP协议本身并不复杂，它的复杂体现在各种header上，这些header都是 一些应用上的设计，所以这一层叫应用层。</p>
 <p>想要搞懂HTTP，最好是搞懂TCP。</p>
 <p>我整理了几篇关于TCP和HTTPS的博客，它们是我在学习是一些疑惑的解答。</p>
@@ -430,7 +429,7 @@
 </li>
 <li><p>TCP协议是什么？传输层可靠传输协议，缓存上层协议不断发送的数据然后打包发送给不可靠的IP协议，通过一系列措施进行可靠传输，流量控制和拥塞控制，最重要的是面向连接的特性，这也是加密数据不会混淆的重要基础。</p>
 </li>
-<li><p>SSL&#x2F;TLS如何加密数据？用对称秘钥。</p>
+<li><p>SSL/TLS如何加密数据？用对称秘钥。</p>
 </li>
 <li><p>对称秘钥如何生成？为什么不用非对称？对称秘钥就是每次TCP握手阶段用非对称秘钥生成的。</p>
 </li>

@@ -367,7 +367,6 @@
       
         <p> JSON Web Token（缩写 JWT）是目前最流行的跨域认证解决方案 </p>
 <a id="more"></a>
-
 <h2 id="JWT背景"><a href="#JWT背景" class="headerlink" title="JWT背景"></a>JWT背景</h2><p>互联网服务离不开用户认证。一般流程是下面这样。</p>
 <blockquote>
 <p>1、用户向服务器发送用户名和密码。</p>
@@ -424,7 +423,7 @@
 </blockquote>
 <p>算出签名以后，把 Header、Payload、Signature 三个部分拼成一个字符串，每个部分之间用”点”（<code>.</code>）分隔，就可以返回给用户。</p>
 <h2 id="JWT的特点"><a href="#JWT的特点" class="headerlink" title="JWT的特点"></a>JWT的特点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p><strong>1. 该方案更易于水平扩展</strong></p>
-<p>在cookie-session方案中，cookie内仅包含一个session标识符，而诸如用户信息、授权列表等都保存在服务端的session中。如果把session中的认证信息都保存在JWT中，在服务端就没有session存在的必要了。当服务端水平扩展的时候，就不用处理session复制（session replication）&#x2F; session黏连（sticky session）或是引入外部session存储了。</p>
+<p>在cookie-session方案中，cookie内仅包含一个session标识符，而诸如用户信息、授权列表等都保存在服务端的session中。如果把session中的认证信息都保存在JWT中，在服务端就没有session存在的必要了。当服务端水平扩展的时候，就不用处理session复制（session replication）/ session黏连（sticky session）或是引入外部session存储了。</p>
 <p><strong>2. 该方案可防护CSRF攻击</strong></p>
 <h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ol>
 <li><p><strong>更多的空间占用。</strong></p>
