@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sunra.top/2022/02/06/three-cpu-mode/</loc>
+    
+    <lastmod>2022-02-07</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://sunra.top/2021/09/25/operating-system-note-1/</loc>
+    
+    <lastmod>2022-02-07</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://sunra.top/2022/01/30/basic-of-linear-algebra-1/</loc>
     
     <lastmod>2022-02-07</lastmod>
@@ -173,13 +187,6 @@
     <loc>https://sunra.top/2021/09/10/xss-pseudo-protocol-and-code-bypass/</loc>
     
     <lastmod>2021-09-27</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://sunra.top/2021/09/25/operating-system-note-1/</loc>
-    
-    <lastmod>2021-09-25</lastmod>
     
   </url>
   
@@ -1322,14 +1329,14 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Cloud/</loc>
+    <loc>https://sunra.top/categories/Sundry/</loc>
     <lastmod>2022-02-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Sundry/</loc>
+    <loc>https://sunra.top/categories/Cloud/</loc>
     <lastmod>2022-02-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1350,13 +1357,6 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Math/</loc>
-    <lastmod>2022-02-07</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://sunra.top/categories/Algorithm/</loc>
     <lastmod>2022-02-07</lastmod>
     <changefreq>daily</changefreq>
@@ -1364,7 +1364,7 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Blockchain/</loc>
+    <loc>https://sunra.top/categories/Math/</loc>
     <lastmod>2022-02-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1372,6 +1372,13 @@
   
   <url>
     <loc>https://sunra.top/categories/JavaScript/</loc>
+    <lastmod>2022-02-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sunra.top/categories/Blockchain/</loc>
     <lastmod>2022-02-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
