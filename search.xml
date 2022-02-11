@@ -13225,7 +13225,7 @@ k = (m /n) * ln2</script><p>k 为哈希函数个数，m 为布隆过滤器长度
       </categories>
   </entry>
   <entry>
-    <title>Unity 渲染流水线简介</title>
+    <title>Unity Shader (一) 渲染流水线简介</title>
     <url>/2021/12/16/unity-render-pipeline-1/</url>
     <content><![CDATA[<h1 id="总述"><a href="#总述" class="headerlink" title="总述"></a>总述</h1><p>本文大概总结下一些三维空间的坐标数据是如何通过渲染流水线变为屏幕上不同颜色的像素的，阅读之时，需要注意，图元，片元，和像素三者的区别。</p>
 <p>下图是一个总体的流程图，具体细节可以看后面的解释。</p>
@@ -13358,6 +13358,50 @@ k = (m /n) * ln2</script><p>k 为哈希函数个数，m 为布隆过滤器长度
 <p>当我们执行这次渲染的时候，颜色缓冲中往往有了上次的结果，那么我们是直接覆盖还是通过某种方式混合，这就是合并解决的问题。</p>
 <p>对于不透明物体，直接关闭混合，覆盖就好。</p>
 <p>但是对于半透明物体，我们就需要结合缓冲区的内容，进行混合。</p>
+]]></content>
+      <categories>
+        <category>Unity</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Unity Shader (二) 一些容易疑惑的名词</title>
+    <url>/2022/02/12/unity-render-pipeline-2/</url>
+    <content><![CDATA[<p><a href="https://sunra.top/2021/12/16/unity-render-pipeline-1/">上一篇博客讲了关于渲染流水线中的一些基础知识</a>，其中有一些名词可能有些疑惑，统一总结一下。</p>
+<a id="more"></a>
+<h2 id="什么是OpenGL和DirectX"><a href="#什么是OpenGL和DirectX" class="headerlink" title="什么是OpenGL和DirectX"></a>什么是OpenGL和DirectX</h2><p>这二者都提供了图像编程接口，但是还是略有不同，可以看一下这篇文章：<a href="https://zhidao.baidu.com/question/119300042" rel="external nofollow noopener noreferrer" target="_blank">DirectX和</a><a href="https://zhidao.baidu.com/question/119300042" rel="external nofollow noopener noreferrer" target="_blank">OpenGL</a><a href="https://zhidao.baidu.com/question/119300042" rel="external nofollow noopener noreferrer" target="_blank">的对比</a></p>
+<p>之前的内容都是讲的概念上的流水线以及GPU是如何实现这些流水线的，但是其实开发者直接访问GPU是一件非常麻烦的事情，我们可能要和各种寄存器，显存打交道，而图像编程接口就是在这些硬件的基础上提供了一层抽象。</p>
+<p>OpenGL和DirectX就是这些图像应用编程的接口。应用程序向这些接口发送渲染命令，这些接口会依次向显卡驱动（Graphic Driver）发送渲染命令，而显卡驱动才是真正知道如何和GPU通信的角色，也正是驱动把OpenGL和DX的函数调用翻译成了GPU能够听懂的语言，同时他们也负责把纹理等数据转换成GPU支持的格式。</p>
+<p>概括来说，我们的应用程序运行在CPU上。应用程序可以通过调用OpenGL或者DirectX的图形接口讲渲染所需要的数据，如顶点数据，纹理数据等存储在显存的特定区域，随后，开发者可以通过图像编程接口发出渲染命令，这些渲染命令也叫做Draw Call，它们将会被显卡驱动翻译成GPU可以理解的代码，进行真正的绘制。</p>
+<p>因为显卡驱动的存在，几乎所有的GPU既可以和OpenGL打交道，也可以和DirectX一起工作。从显卡的角度出发，实际上它只和显卡驱动打交道。而显卡驱动则相当于一个中介，负责和双方（图像编程接口和GPU）打交道。而一个显卡供应商为了让他们的显卡同时和OpenGL、DirectX同时合作，就必须让他们的显卡驱动同时支持翻译二者。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644622145/origin-of-ray/asynccode_dxrku7.png" alt="img"></p>
+<h2 id="什么是HLSL、GLSL、CG"><a href="#什么是HLSL、GLSL、CG" class="headerlink" title="什么是HLSL、GLSL、CG"></a>什么是HLSL、GLSL、CG</h2><p>我们上面讲了很多可编程的着色器阶段，如顶点着色器，片元着色器，这些阶段的可编程性在于，我们可以使用一种特定的语言来编写程序。</p>
+<p>在可编程管线出现之前，为了编写着色器代码，开发者学习汇编语言。为了给开发者打开方便之门，就出现了更高级的着色语言（Shading languages），这里的高级是相对于汇编语言而言的。</p>
+<p>着色语言是专门用于编写着色器的，常见的着色语言有DirectX的HLSL（High Level Shading Language），OpengGL的GLSL（OpenGL Shading Language）以及NVIDIA的CG（C for Graphic），这些语言会被翻译成与机器无关的汇编语言，也称为中间语言（Intermediate Language， IL），这些中间语言被交给显卡驱动来翻译成真正的机器语言，也就是GPU可以理解的语言。</p>
+<p>GLSL的优点在于其跨平台的特性，它可以在WIndows，Linux，Mac甚至是移动平台上工作，但是这种跨平台性是由于OpenGL没有提供着色器编译器，而是由显卡驱动来完成着色器的编译工作的。也就是说，只要显卡驱动支持对GLSL的编译他就可以运行。这种做法的好处在于，由于供应商完全了解自己的硬件构造，他们知道怎么样才可以发挥硬件最大的作用。换句话说，GLSL是依赖硬件，而非操作系统层级的，但这也意味着GLSL的编译结果取决于硬件供应商。</p>
+<p>而对于HLSL，是由微软控制着色器的编译，就算是用了不同的硬件，同一个着色器的编译结果也是一样的（前提是版本相同）。但也因此支持HLSL的平台很有限，几乎全是微软的产品，如Windows，Xbox等，这是因为在其他平台上没有可以编译HLSL的编译器。</p>
+<p>CG则是真正意义上的跨平台，它会根据平台的不同，编译成相应的中间语言。CG语言的跨平台性很大原因取决于和微软的合作，这也导致CG语言的语法和HLSL非常相像，CG语言可以无缝移植成HLSL代码，缺点是无法发挥出OpenGL的最新特性。</p>
+<p>而在Unity平台，我们同样可以选择使用哪种语言。在Unity Shader中，我们可以选择使用“CG/HLSL”或“GLSL”。带引号是因为，只是语法像，并不是真正意义上对应的着色语言。</p>
+<h2 id="什么是Draw-Call"><a href="#什么是Draw-Call" class="headerlink" title="什么是Draw Call"></a>什么是Draw Call</h2><p>Draw Call本身的含义非常简单，就是CPU的调用图像编程接口，如OpenGL的glDrawElements命令或者DirectX的DrawIndexedPrimitive命令，以命令GPU进行渲染</p>
+<h3 id="CPU和GPU如何并行工作"><a href="#CPU和GPU如何并行工作" class="headerlink" title="CPU和GPU如何并行工作"></a>CPU和GPU如何并行工作</h3><p>如果没有流水线化，那么CPU需要等到GPU执行完成上一个渲染任务之后才能再次发送渲染命令，但是这种方法显然会造成效率低下。</p>
+<p>而解决方法就是使用一个命令缓冲区（Command Buffer），类似一个消息队列。</p>
+<p>命令缓冲区包含一个命令队列，由CPU向其中添加命令，GPU从中取命令。</p>
+<p>命令缓冲区的命令有很多，Draw Call只是其中一种，其他命令还有改变渲染状态等</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644622211/origin-of-ray/UML_图_k2o3zl.jpg" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644622211/origin-of-ray/UML_%E5%9B%BE_k2o3zl.jpg"></p>
+<p>CPU通过图像编程接口向缓冲区添加命令，而GPU从中读取命令并执行。白框命令就是Draw Call，而红框内的命令用于改变渲染状态。使用红框是因为这种命令往往更加好使。</p>
+<h3 id="为什么Draw-Call多了会影响帧率"><a href="#为什么Draw-Call多了会影响帧率" class="headerlink" title="为什么Draw Call多了会影响帧率"></a>为什么Draw Call多了会影响帧率</h3><p>每次调用Draw Call之前，CPU都需要向GPU发送很多内容，包括数据，命令，状态等。在这一阶段，CPU需要做很多事情，例如检查渲染状态等。而一旦CPU完成了这些准备工作，GPU就可以开始本次的渲染了。GPU渲染能力是很强的，渲染200个还是2000个没什么区别，所以渲染速度往往取决于CPU提交命令的速度，如果Draw Call过多，CPU就会把大量的时间花费在提交Draw Call上，造成CPU过载。</p>
+<h3 id="如何减少Draw-Call"><a href="#如何减少Draw-Call" class="headerlink" title="如何减少Draw Call"></a>如何减少Draw Call</h3><p>方法有很多，最常见的是批处理（Batching）。</p>
+<p>大量提交小的Draw Call比较耗时，那么我们就把多个小的Draw Call合并成一个大的就好，这就是批处理。</p>
+<p>批处理需要我们在CPU的内存里合并网格，而合并的过程是要消耗时间的。因此批处理技术更适用于那些静态的物体，例如不会移动的大地。对于移动的物体我们也可以进行批处理，但是每一帧都需要进行重新合并再发送给GPU，这对时间和空间都有影响。</p>
+<p>游戏开发过程中，为了减少Draw Call的开销，需要注意两点：</p>
+<ul>
+<li><p>避免使用大量小的网格。当不可避免使用时，考虑是否可以合并。</p>
+</li>
+<li><p>避免使用过多的材质。尽量在不同网格之间共用一个材质。</p>
+</li>
+</ul>
+<blockquote>
+<p>第一个优化方案是不是表明，每个网格都会有一个Draw Call？</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>Unity</category>

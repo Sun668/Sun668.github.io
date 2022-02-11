@@ -20,30 +20,22 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="当我们开发网站的时候，可能会有很多种原因造成我们的页面卡顿，那么我们可以利用Google Devtools 去快速定位导致页面卡顿的最主要原因。本篇总结了Chrome官方文档上最主要也是最直接的两个工具。">
-<meta name="keywords" content="Chrome 开发者工具 Performance">
+  <meta name="description" content="上一篇博客讲了关于渲染流水线中的一些基础知识，其中有一些名词可能有些疑惑，统一总结一下。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前端性能分析工具">
-<meta property="og:url" content="https://sunra.top/2019/08/21/chrome_develop_tools/index.html">
+<meta property="og:title" content="Unity Shader (二) 一些容易疑惑的名词">
+<meta property="og:url" content="https://sunra.top/2022/02/12/unity-render-pipeline-2/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="当我们开发网站的时候，可能会有很多种原因造成我们的页面卡顿，那么我们可以利用Google Devtools 去快速定位导致页面卡顿的最主要原因。本篇总结了Chrome官方文档上最主要也是最直接的两个工具。">
+<meta property="og:description" content="上一篇博客讲了关于渲染流水线中的一些基础知识，其中有一些名词可能有些疑惑，统一总结一下。">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/fps_ju7mvq.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/CPU_yv1izl.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/fps2_fhp16u.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/Audits_tfnnf2.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/audits1_opabc0.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/audits2_zyuvmj.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/opportunity_xvzdpm.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/Diag_hqaivt.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/Passed_ijjuxq.png">
-<meta property="og:updated_time" content="2021-09-03T00:52:02.607Z">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644622145/origin-of-ray/asynccode_dxrku7.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644622211/origin-of-ray/UML_图_k2o3zl.jpg">
+<meta property="og:updated_time" content="2022-02-11T23:35:54.566Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="前端性能分析工具">
-<meta name="twitter:description" content="当我们开发网站的时候，可能会有很多种原因造成我们的页面卡顿，那么我们可以利用Google Devtools 去快速定位导致页面卡顿的最主要原因。本篇总结了Chrome官方文档上最主要也是最直接的两个工具。">
-<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/fps_ju7mvq.png">
+<meta name="twitter:title" content="Unity Shader (二) 一些容易疑惑的名词">
+<meta name="twitter:description" content="上一篇博客讲了关于渲染流水线中的一些基础知识，其中有一些名词可能有些疑惑，统一总结一下。">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644622145/origin-of-ray/asynccode_dxrku7.png">
 
-<link rel="canonical" href="https://sunra.top/2019/08/21/chrome_develop_tools/">
+<link rel="canonical" href="https://sunra.top/2022/02/12/unity-render-pipeline-2/">
 
 
 <script id="page-configurations">
@@ -56,7 +48,7 @@
   };
 </script>
 
-  <title>前端性能分析工具 | Origin of Ray</title>
+  <title>Unity Shader (二) 一些容易疑惑的名词 | Origin of Ray</title>
   
 
 
@@ -202,7 +194,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2019/08/21/chrome_develop_tools/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/02/12/unity-render-pipeline-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
@@ -215,7 +207,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          前端性能分析工具
+          Unity Shader (二) 一些容易疑惑的名词
         </h1>
 
         <div class="post-meta">
@@ -224,23 +216,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2019-08-21 10:24:34" itemprop="dateCreated datePublished" datetime="2019-08-21T10:24:34+08:00">2019-08-21</time>
+              <time title="Created: 2022-02-12 07:25:38 / Modified: 07:35:54" itemprop="dateCreated datePublished" datetime="2022-02-12T07:25:38+08:00">2022-02-12</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-03 08:52:02" itemprop="dateModified" datetime="2021-09-03T08:52:02+08:00">2021-09-03</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Sundry/" itemprop="url" rel="index"><span itemprop="name">Sundry</span></a>
+                  <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
                 </span>
             </span>
 
@@ -255,53 +241,42 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>当我们开发网站的时候，可能会有很多种原因造成我们的页面卡顿，那么我们可以利用Google Devtools 去快速定位导致页面卡顿的最主要原因。本篇总结了Chrome官方文档上最主要也是最直接的两个工具。</p>
+        <p><a href="https://sunra.top/2021/12/16/unity-render-pipeline-1/">上一篇博客讲了关于渲染流水线中的一些基础知识</a>，其中有一些名词可能有些疑惑，统一总结一下。</p>
 <a id="more"></a>
-<h2 id="利用开发者工具Performance选项卡"><a href="#利用开发者工具Performance选项卡" class="headerlink" title="利用开发者工具Performance选项卡"></a>利用开发者工具Performance选项卡</h2><h3 id="打开开发者工具"><a href="#打开开发者工具" class="headerlink" title="打开开发者工具"></a>打开开发者工具</h3><p>按Command+ Option+ I（Mac）或 Control+ Shift+ I（Windows，Linux）打开DevTools，Windows也可以使用F12。</p>
-<h3 id="利用Performance选项卡录制操作"><a href="#利用Performance选项卡录制操作" class="headerlink" title="利用Performance选项卡录制操作"></a>利用Performance选项卡录制操作</h3><ol>
-<li><p>选择Performance选项卡</p>
+<h2 id="什么是OpenGL和DirectX"><a href="#什么是OpenGL和DirectX" class="headerlink" title="什么是OpenGL和DirectX"></a>什么是OpenGL和DirectX</h2><p>这二者都提供了图像编程接口，但是还是略有不同，可以看一下这篇文章：<a href="https://zhidao.baidu.com/question/119300042" rel="external nofollow noopener noreferrer" target="_blank">DirectX和</a><a href="https://zhidao.baidu.com/question/119300042" rel="external nofollow noopener noreferrer" target="_blank">OpenGL</a><a href="https://zhidao.baidu.com/question/119300042" rel="external nofollow noopener noreferrer" target="_blank">的对比</a></p>
+<p>之前的内容都是讲的概念上的流水线以及GPU是如何实现这些流水线的，但是其实开发者直接访问GPU是一件非常麻烦的事情，我们可能要和各种寄存器，显存打交道，而图像编程接口就是在这些硬件的基础上提供了一层抽象。</p>
+<p>OpenGL和DirectX就是这些图像应用编程的接口。应用程序向这些接口发送渲染命令，这些接口会依次向显卡驱动（Graphic Driver）发送渲染命令，而显卡驱动才是真正知道如何和GPU通信的角色，也正是驱动把OpenGL和DX的函数调用翻译成了GPU能够听懂的语言，同时他们也负责把纹理等数据转换成GPU支持的格式。</p>
+<p>概括来说，我们的应用程序运行在CPU上。应用程序可以通过调用OpenGL或者DirectX的图形接口讲渲染所需要的数据，如顶点数据，纹理数据等存储在显存的特定区域，随后，开发者可以通过图像编程接口发出渲染命令，这些渲染命令也叫做Draw Call，它们将会被显卡驱动翻译成GPU可以理解的代码，进行真正的绘制。</p>
+<p>因为显卡驱动的存在，几乎所有的GPU既可以和OpenGL打交道，也可以和DirectX一起工作。从显卡的角度出发，实际上它只和显卡驱动打交道。而显卡驱动则相当于一个中介，负责和双方（图像编程接口和GPU）打交道。而一个显卡供应商为了让他们的显卡同时和OpenGL、DirectX同时合作，就必须让他们的显卡驱动同时支持翻译二者。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644622145/origin-of-ray/asynccode_dxrku7.png" alt="img"></p>
+<h2 id="什么是HLSL、GLSL、CG"><a href="#什么是HLSL、GLSL、CG" class="headerlink" title="什么是HLSL、GLSL、CG"></a>什么是HLSL、GLSL、CG</h2><p>我们上面讲了很多可编程的着色器阶段，如顶点着色器，片元着色器，这些阶段的可编程性在于，我们可以使用一种特定的语言来编写程序。</p>
+<p>在可编程管线出现之前，为了编写着色器代码，开发者学习汇编语言。为了给开发者打开方便之门，就出现了更高级的着色语言（Shading languages），这里的高级是相对于汇编语言而言的。</p>
+<p>着色语言是专门用于编写着色器的，常见的着色语言有DirectX的HLSL（High Level Shading Language），OpengGL的GLSL（OpenGL Shading Language）以及NVIDIA的CG（C for Graphic），这些语言会被翻译成与机器无关的汇编语言，也称为中间语言（Intermediate Language， IL），这些中间语言被交给显卡驱动来翻译成真正的机器语言，也就是GPU可以理解的语言。</p>
+<p>GLSL的优点在于其跨平台的特性，它可以在WIndows，Linux，Mac甚至是移动平台上工作，但是这种跨平台性是由于OpenGL没有提供着色器编译器，而是由显卡驱动来完成着色器的编译工作的。也就是说，只要显卡驱动支持对GLSL的编译他就可以运行。这种做法的好处在于，由于供应商完全了解自己的硬件构造，他们知道怎么样才可以发挥硬件最大的作用。换句话说，GLSL是依赖硬件，而非操作系统层级的，但这也意味着GLSL的编译结果取决于硬件供应商。</p>
+<p>而对于HLSL，是由微软控制着色器的编译，就算是用了不同的硬件，同一个着色器的编译结果也是一样的（前提是版本相同）。但也因此支持HLSL的平台很有限，几乎全是微软的产品，如Windows，Xbox等，这是因为在其他平台上没有可以编译HLSL的编译器。</p>
+<p>CG则是真正意义上的跨平台，它会根据平台的不同，编译成相应的中间语言。CG语言的跨平台性很大原因取决于和微软的合作，这也导致CG语言的语法和HLSL非常相像，CG语言可以无缝移植成HLSL代码，缺点是无法发挥出OpenGL的最新特性。</p>
+<p>而在Unity平台，我们同样可以选择使用哪种语言。在Unity Shader中，我们可以选择使用“CG/HLSL”或“GLSL”。带引号是因为，只是语法像，并不是真正意义上对应的着色语言。</p>
+<h2 id="什么是Draw-Call"><a href="#什么是Draw-Call" class="headerlink" title="什么是Draw Call"></a>什么是Draw Call</h2><p>Draw Call本身的含义非常简单，就是CPU的调用图像编程接口，如OpenGL的glDrawElements命令或者DirectX的DrawIndexedPrimitive命令，以命令GPU进行渲染</p>
+<h3 id="CPU和GPU如何并行工作"><a href="#CPU和GPU如何并行工作" class="headerlink" title="CPU和GPU如何并行工作"></a>CPU和GPU如何并行工作</h3><p>如果没有流水线化，那么CPU需要等到GPU执行完成上一个渲染任务之后才能再次发送渲染命令，但是这种方法显然会造成效率低下。</p>
+<p>而解决方法就是使用一个命令缓冲区（Command Buffer），类似一个消息队列。</p>
+<p>命令缓冲区包含一个命令队列，由CPU向其中添加命令，GPU从中取命令。</p>
+<p>命令缓冲区的命令有很多，Draw Call只是其中一种，其他命令还有改变渲染状态等</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644622211/origin-of-ray/UML_图_k2o3zl.jpg" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644622211/origin-of-ray/UML_%E5%9B%BE_k2o3zl.jpg"></p>
+<p>CPU通过图像编程接口向缓冲区添加命令，而GPU从中读取命令并执行。白框命令就是Draw Call，而红框内的命令用于改变渲染状态。使用红框是因为这种命令往往更加好使。</p>
+<h3 id="为什么Draw-Call多了会影响帧率"><a href="#为什么Draw-Call多了会影响帧率" class="headerlink" title="为什么Draw Call多了会影响帧率"></a>为什么Draw Call多了会影响帧率</h3><p>每次调用Draw Call之前，CPU都需要向GPU发送很多内容，包括数据，命令，状态等。在这一阶段，CPU需要做很多事情，例如检查渲染状态等。而一旦CPU完成了这些准备工作，GPU就可以开始本次的渲染了。GPU渲染能力是很强的，渲染200个还是2000个没什么区别，所以渲染速度往往取决于CPU提交命令的速度，如果Draw Call过多，CPU就会把大量的时间花费在提交Draw Call上，造成CPU过载。</p>
+<h3 id="如何减少Draw-Call"><a href="#如何减少Draw-Call" class="headerlink" title="如何减少Draw Call"></a>如何减少Draw Call</h3><p>方法有很多，最常见的是批处理（Batching）。</p>
+<p>大量提交小的Draw Call比较耗时，那么我们就把多个小的Draw Call合并成一个大的就好，这就是批处理。</p>
+<p>批处理需要我们在CPU的内存里合并网格，而合并的过程是要消耗时间的。因此批处理技术更适用于那些静态的物体，例如不会移动的大地。对于移动的物体我们也可以进行批处理，但是每一帧都需要进行重新合并再发送给GPU，这对时间和空间都有影响。</p>
+<p>游戏开发过程中，为了减少Draw Call的开销，需要注意两点：</p>
+<ul>
+<li><p>避免使用大量小的网格。当不可避免使用时，考虑是否可以合并。</p>
 </li>
-<li><p>点击左上角的圆点（开始录制按钮）</p>
+<li><p>避免使用过多的材质。尽量在不同网格之间共用一个材质。</p>
 </li>
-<li><p>对页面进行操作</p>
-</li>
-<li>操作完成后点击stop按钮</li>
-</ol>
-<h3 id="分析录制结果"><a href="#分析录制结果" class="headerlink" title="分析录制结果"></a>分析录制结果</h3><h4 id="FPS"><a href="#FPS" class="headerlink" title="FPS"></a>FPS</h4><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/fps_ju7mvq.png" alt></p>
-<p>图中上方红色方框圈出的地方显示的就是录制过程中页面的FPS变化，当FPS显示的是绿色条时，表示页面比较流畅，且绿色条越高，FPS越高，用户体验越好。</p>
-<p>但是当FPS出现红色条时表示页面存在较为严重的卡顿，可能会影响用户体验。</p>
-<p>当你把鼠标放到FPS上的某一点时就会显示出该点的页面快照。（这里需要在录制时将screenshoot选项勾选）</p>
-<h4 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h4><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/CPU_yv1izl.png" alt></p>
-<p>在FPS图表下方就是CPU图表，该图表中的颜色与下方的Summary选项卡是一一对应的。</p>
-<p>当你的录制结果中CPU图表别大量颜色占满，下方的Summary也大部分是有颜色的时候，就应该分析一下是什么占据了大量的CPU并想办法减少该类操作或者优化该类操作。</p>
-<p>比如当rendering占据了很大比例的时候，就应该想办法减少dom元素，因为rendering的过程其实就是把html语句转化为dom树的过程，如果该过程占据了大量的CPU就应该考虑如何优化你的dom结构了。</p>
-<h4 id="FPS仪表盘"><a href="#FPS仪表盘" class="headerlink" title="FPS仪表盘"></a>FPS仪表盘</h4><ol>
-<li>我们可以在开发者工具中输入快捷键Command+ Shift+ P（Mac）或 Control+ Shift+ P（Windows，Linux）打开命令菜单。</li>
-<li>输入Show Render，选择Rendering对应的命令</li>
-<li>页面左上角就会出现一个实时的FPS监控器</li>
-</ol>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/fps2_fhp16u.png" alt></p>
-<h2 id="利用Audits选项卡分析性能"><a href="#利用Audits选项卡分析性能" class="headerlink" title="利用Audits选项卡分析性能"></a>利用Audits选项卡分析性能</h2><h3 id="运行审核"><a href="#运行审核" class="headerlink" title="运行审核"></a>运行审核</h3><ol>
-<li>开启Audits选项卡</li>
-<li>点击运行审核，等待10-30秒后会出现审计结果（Tips：这里要注意这个功能需要翻墙，不然会一直卡在LightHouse is warming up，LightHouse是这个选项卡依赖地一个组件）</li>
-</ol>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/Audits_tfnnf2.png" alt></p>
-<h3 id="分析运行结果"><a href="#分析运行结果" class="headerlink" title="分析运行结果"></a>分析运行结果</h3><p>运行结果很长，我们从上到下分块进行分析</p>
-<h4 id="总览模块"><a href="#总览模块" class="headerlink" title="总览模块"></a>总览模块</h4><p>这一部分综述了这次审核的几个维度的评分</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/audits1_opabc0.png" alt></p>
-<h4 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h4><ol>
-<li>右上角的数字是该指标的总体评分，评分越高性能越好，当你优化了你的网站时，该评分就会上升</li>
-<li>First Contentful Paint：首次将内容绘制到页面的时间，改时间越短越好</li>
-<li>Time to Interactice：标记页面准备就绪处理用户交互的时间</li>
-<li>我们可以将鼠标停在任意一个指标右侧的标记上去查看详细信息</li>
-</ol>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612007/Devtools/audits2_zyuvmj.png" alt></p>
-<h4 id="Opportunities"><a href="#Opportunities" class="headerlink" title="Opportunities"></a>Opportunities</h4><p>该部分提供了关于如何改进加载性能的建议</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/opportunity_xvzdpm.png" alt></p>
-<h4 id="Diagnostics"><a href="#Diagnostics" class="headerlink" title="Diagnostics"></a>Diagnostics</h4><p>该部分提供了关于导致页面加载问题的因素，可以将每一项展开来查看详细信息</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/Diag_hqaivt.png" alt></p>
-<h4 id="Passed-audits"><a href="#Passed-audits" class="headerlink" title="Passed audits"></a>Passed audits</h4><p>该部分显示了你的网站那一部分是做正确的</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566612008/Devtools/Passed_ijjuxq.png" alt></p>
+</ul>
+<blockquote>
+<p>第一个优化方案是不是表明，每个网格都会有一个Draw Call？</p>
+</blockquote>
 
     </div>
 
@@ -317,7 +292,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link: </strong>
-    <a href="https://sunra.top/2019/08/21/chrome_develop_tools/" title="前端性能分析工具">https://sunra.top/2019/08/21/chrome_develop_tools/</a>
+    <a href="https://sunra.top/2022/02/12/unity-render-pipeline-2/" title="Unity Shader (二) 一些容易疑惑的名词">https://sunra.top/2022/02/12/unity-render-pipeline-2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
@@ -334,13 +309,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/08/17/ext/" rel="prev" title="Extjs3 Ext.extend 使用填坑">
-      <i class="fa fa-chevron-left"></i> Extjs3 Ext.extend 使用填坑
+    <a href="/2022/02/06/three-cpu-mode/" rel="prev" title="CPU工作的三种模式">
+      <i class="fa fa-chevron-left"></i> CPU工作的三种模式
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2019/08/26/vue_skeleton_screen/" rel="next" title="Vue骨架屏实现方案">
-      Vue骨架屏实现方案 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -399,7 +371,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#利用开发者工具Performance选项卡"><span class="nav-number">1.</span> <span class="nav-text">利用开发者工具Performance选项卡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#打开开发者工具"><span class="nav-number">1.1.</span> <span class="nav-text">打开开发者工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用Performance选项卡录制操作"><span class="nav-number">1.2.</span> <span class="nav-text">利用Performance选项卡录制操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析录制结果"><span class="nav-number">1.3.</span> <span class="nav-text">分析录制结果</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#FPS"><span class="nav-number">1.3.1.</span> <span class="nav-text">FPS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU"><span class="nav-number">1.3.2.</span> <span class="nav-text">CPU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FPS仪表盘"><span class="nav-number">1.3.3.</span> <span class="nav-text">FPS仪表盘</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用Audits选项卡分析性能"><span class="nav-number">2.</span> <span class="nav-text">利用Audits选项卡分析性能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#运行审核"><span class="nav-number">2.1.</span> <span class="nav-text">运行审核</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析运行结果"><span class="nav-number">2.2.</span> <span class="nav-text">分析运行结果</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总览模块"><span class="nav-number">2.2.1.</span> <span class="nav-text">总览模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Performance"><span class="nav-number">2.2.2.</span> <span class="nav-text">Performance</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Opportunities"><span class="nav-number">2.2.3.</span> <span class="nav-text">Opportunities</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Diagnostics"><span class="nav-number">2.2.4.</span> <span class="nav-text">Diagnostics</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Passed-audits"><span class="nav-number">2.2.5.</span> <span class="nav-text">Passed audits</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是OpenGL和DirectX"><span class="nav-number">1.</span> <span class="nav-text">什么是OpenGL和DirectX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是HLSL、GLSL、CG"><span class="nav-number">2.</span> <span class="nav-text">什么是HLSL、GLSL、CG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Draw-Call"><span class="nav-number">3.</span> <span class="nav-text">什么是Draw Call</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU和GPU如何并行工作"><span class="nav-number">3.1.</span> <span class="nav-text">CPU和GPU如何并行工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么Draw-Call多了会影响帧率"><span class="nav-number">3.2.</span> <span class="nav-text">为什么Draw Call多了会影响帧率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何减少Draw-Call"><span class="nav-number">3.3.</span> <span class="nav-text">如何减少Draw Call</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

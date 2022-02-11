@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://sunra.top/2022/02/12/unity-render-pipeline-2/</loc>
+    <lastmod>2022-02-11</lastmod>
+  </url>
+  <url>
+    <loc>https://sunra.top/2021/12/16/unity-render-pipeline-1/</loc>
+    <lastmod>2022-02-11</lastmod>
+  </url>
+  <url>
     <loc>https://sunra.top/2022/02/06/three-cpu-mode/</loc>
     <lastmod>2022-02-07</lastmod>
   </url>
@@ -47,10 +55,6 @@
   <url>
     <loc>https://sunra.top/2021/12/12/unity-performance-optimization/</loc>
     <lastmod>2021-12-19</lastmod>
-  </url>
-  <url>
-    <loc>https://sunra.top/2021/12/16/unity-render-pipeline-1/</loc>
-    <lastmod>2021-12-16</lastmod>
   </url>
   <url>
     <loc>https://sunra.top/2021/12/05/operating-system-note-4-memory/</loc>
