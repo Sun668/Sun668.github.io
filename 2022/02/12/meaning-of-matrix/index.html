@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2022-02-13T01:55:01.975Z">
+<meta property="og:updated_time" content="2022-02-13T02:04:52.745Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="矩阵运算的代数和几何意义">
 <meta name="twitter:description" content="这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。">
@@ -221,7 +221,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-02-13 09:55:01" itemprop="dateModified" datetime="2022-02-13T09:55:01+08:00">2022-02-13</time>
+                <time title="Modified: 2022-02-13 10:04:52" itemprop="dateModified" datetime="2022-02-13T10:04:52+08:00">2022-02-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -295,6 +295,7 @@ P^{-1}AP = B</script><p>则称B是A的相似矩阵<br>若A与对角阵相似，�
 <p>需要注意的是，考虑矩阵合同需要时二次型的前提下，也就是是实对称矩阵。</p>
 <blockquote>
 <p>矩阵的相似表示的是同一个向量的变换在不同坐标空间下的表示，矩阵的合同表示的是同一个图形在不同坐标空间下的表示。</p>
+</blockquote>
 <p>从代数角度讲，合同是针对实对称矩阵讲的，而实对称矩阵一定是相似于对角阵的，且过度矩阵是个正交阵，也就是说实对称矩阵一定是既相似又合同与对角阵。其实把求实对称矩阵合同的对角阵的过程，就是将二次型配方成标准型的过程，比如</p>
 <script type="math/tex; mode=display">
 f(x_1, x_2, x_3) = 2x_1^2 + 3x_2^2 + 5x_3^2 + 4x_1x_2 - 8x_2x_3 - 4x_3x_1</script><p>这是一个二次型，系数矩阵是个实对称矩阵，我们可以把它配成完全平方</p>
@@ -306,7 +307,7 @@ y_1 = x_ 1 + x_2 - x_3 \\
 y_2 = x_2 - 2x_3 \\
 y_3 = x_3
 \end{cases}
-即
+即 
 \begin{cases}
 x_1 = y_ 1 - y_2 - y_3 \\
 x_2 = y_2 + 2y_3 \\
@@ -319,8 +320,7 @@ f = 2y_1^2 + y_2^2 - y_3^2</script><p>过度矩阵就是</p>
 1 & -1 & -1 \\
 0 & 1 & 2 \\
 0 & 0 & 1
-\end{bmatrix}</script></blockquote>
-<p>参考链接：<br><a href="http://haoeric.github.io/matrix-eigenvectors/" rel="external nofollow noopener noreferrer" target="_blank">http://haoeric.github.io/matrix-eigenvectors/</a><br><a href="https://www.cnblogs.com/yanghh/p/13492614.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.cnblogs.com/yanghh/p/13492614.html</a></p>
+\end{bmatrix}</script><p>参考链接：<br><a href="http://haoeric.github.io/matrix-eigenvectors/" rel="external nofollow noopener noreferrer" target="_blank">http://haoeric.github.io/matrix-eigenvectors/</a><br><a href="https://www.cnblogs.com/yanghh/p/13492614.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.cnblogs.com/yanghh/p/13492614.html</a></p>
 
     </div>
 
