@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2022-02-12T11:52:02.373Z">
+<meta property="og:updated_time" content="2022-02-13T01:04:23.157Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="矩阵运算的代数和几何意义">
 <meta name="twitter:description" content="这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。">
@@ -213,10 +213,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-02-12 18:48:11 / Modified: 19:52:02" itemprop="dateCreated datePublished" datetime="2022-02-12T18:48:11+08:00">2022-02-12</time>
+              <time title="Created: 2022-02-12 18:48:11" itemprop="dateCreated datePublished" datetime="2022-02-12T18:48:11+08:00">2022-02-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-02-13 09:04:23" itemprop="dateModified" datetime="2022-02-13T09:04:23+08:00">2022-02-13</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -254,12 +260,34 @@
 <p>虽然只有初等行变换才是同解方程组，但是所有的初等变换都不改变矩阵的秩。</p>
 <p>同时如果行列式的秩为n，我们转化为阶梯型就是一个上三角行列式（如果你继续做列变化，可以变成对角矩阵），如果每一行都是一个向量，那么这个向量组是线性无关的，所以说线性无关向量组组成的系数矩阵对应的方程组有唯一解，如果线性相关，那就说明，有效方程个数小于n。</p>
 <h2 id="几何意义"><a href="#几何意义" class="headerlink" title="几何意义"></a>几何意义</h2><p>上面说的方程组，其实说起来就是一个空间坐标转化的过程（也就是向量x投影到A矩阵对应的坐标空间的过程），也就是方程组等式坐边的系数矩阵按列分块得到的n个n维向量线性表出方程组右边值组成的n维向量的过程，系数矩阵的n个列向量就相当于n个坐标轴，如果秩等于n，那就说明，这n个坐标轴线性无关，方程组就只有一个解，也就是只有一种表出方法。</p>
-<h2 id="特征值和特征向量（矩阵的相似）"><a href="#特征值和特征向量（矩阵的相似）" class="headerlink" title="特征值和特征向量（矩阵的相似）"></a>特征值和特征向量（矩阵的相似）</h2><p>这一段可以直接看<a href="http://haoeric.github.io/matrix-eigenvectors/" rel="external nofollow noopener noreferrer" target="_blank">http://haoeric.github.io/matrix-eigenvectors/</a></p>
-<p>这篇博客详细的介绍了什么叫特征值和特征向量，以及，矩阵相似的意义。</p>
+<p>一个向量左乘一个矩阵，可以有两种几何意义，一种是将向量投影到一个新的坐标系中，也就是不改变向量，而是用另一个坐标系来表示该向量，一种是表示缩放旋转、</p>
+<p>前者左乘的矩阵必须是一个可逆矩阵，因为你能从A坐标系变换到B坐标系，就需要变回来，这个变回来的过程就是左乘逆矩阵，这也是为什么可逆矩阵的行列式值不能为0的一个原因，如果为零，说明丢了一个维度，那么就回不来了。</p>
+<h2 id="特征值和特征向量"><a href="#特征值和特征向量" class="headerlink" title="特征值和特征向量"></a>特征值和特征向量</h2><p>这一段可以直接看<a href="http://haoeric.github.io/matrix-eigenvectors/" rel="external nofollow noopener noreferrer" target="_blank">http://haoeric.github.io/matrix-eigenvectors/</a></p>
+<p>这篇博客详细的介绍了什么叫特征值和特征向量。</p>
 <p>我这里就只摘抄对我最有用的一段：</p>
 <p>如果一个n×n方阵A与一个非零向量x点乘满足如下条件：</p>
 <p>Ax = λx<br>那么向量x为矩阵A的一个特征向量，λ（非零）即特征向量x对应的特征值。</p>
 <p>等式左边我们可以看成是将非零向量x投影到以方阵A每一行为基的坐标系中，等式右边可以看成是对向量x进行伸缩变换，伸缩的比例为λ。所以，如果一个向量投影到一个方阵定义的空间中只发生伸缩变化，而不发生旋转变化，那么该向量就是这个方阵的一个特征向量，伸缩的比例就是特征值。</p>
+<h2 id="矩阵的相似"><a href="#矩阵的相似" class="headerlink" title="矩阵的相似"></a>矩阵的相似</h2><p>设A，B都是n阶矩阵，若存在可逆矩阵P，使得</p>
+<script type="math/tex; mode=display">
+P^{-1}AP = B</script><p>则称B是A的相似矩阵<br>若A与对角阵相似，则称A可以相似对角化，该对角阵称为A的相似标准型。</p>
+<p>两个矩阵相似，则两个矩阵的特征值和特征多项式都相等。</p>
+<p>n阶方阵可相似对角化的充分必要条件是，有n个线性无关的特征向量</p>
+<blockquote>
+<p>线性无关与正交并不同，正交一定线性无关，但是反过来不一定。如果把线性相关理解为平行的两个向量，那么线性相关则是相交，而正交是垂直相交。</p>
+</blockquote>
+<p>实对称矩阵一定可以相似对角化，且过度矩阵是个正交矩阵，实对称矩阵的不同特征值的特征向量不仅仅是线性无关，而且正交。</p>
+<p>矩阵相似的几何意义：假设空间中有一个向量v，我们可以将其的旋转和缩放表现为左乘一个矩阵，这同一个变换在不同坐标系下表示出来的矩阵就是相似的。</p>
+<ul>
+<li>首先将v从B对应的坐标系下转换到A对应的坐标系下，就是Pv</li>
+<li>然后在A坐标系下，做旋转缩放等操作，那就是APv</li>
+<li>然后把操作后的向量重新放回B对应的坐标系下，就是 P^{-1}APv，这一套操作下来的结果相当于直接在B的坐标系下直接进行旋转缩放，也就是 Bv = P^{-1}AP</li>
+</ul>
+<p>那么可以相似对角化的意义则是，在B坐标系下，我们可以表示为拆解为每个坐标轴独自的缩放，这一点和特征值和特征向量的定义又暗合（如果一个向量投影到一个方阵定义的空间中只发生伸缩变化，而不发生旋转变化，那么该向量就是这个方阵的一个特征向量，伸缩的比例就是特征值）。</p>
+<blockquote>
+<p>这里有个猜想，是不是说A对应的坐标空间的特征空间就是B对应的坐标空间？</p>
+<p>在理解特征值的时候，左乘矩阵的几何意义是投影变换，将向量投影到矩阵表示的向量空间中，而在理解相似的过程中，左乘P矩阵的几何意义是投影变换，左乘A矩阵的几何意义是进行旋转缩放。</p>
+</blockquote>
 <h2 id="矩阵的合同"><a href="#矩阵的合同" class="headerlink" title="矩阵的合同"></a>矩阵的合同</h2><p>这个也可以参考这篇博客：<a href="https://www.cnblogs.com/yanghh/p/13492614.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.cnblogs.com/yanghh/p/13492614.html</a></p>
 <p>我也只摘抄对我最有用的一段：</p>
 <p>在不同的参考系下得到的多项式或二次型矩阵不同，但我们得知道它们是不是同一个图形，于是有合同的概念。</p>
@@ -360,7 +388,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#代数意义"><span class="nav-number">1.</span> <span class="nav-text">代数意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几何意义"><span class="nav-number">2.</span> <span class="nav-text">几何意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征值和特征向量（矩阵的相似）"><span class="nav-number">3.</span> <span class="nav-text">特征值和特征向量（矩阵的相似）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩阵的合同"><span class="nav-number">4.</span> <span class="nav-text">矩阵的合同</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#代数意义"><span class="nav-number">1.</span> <span class="nav-text">代数意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几何意义"><span class="nav-number">2.</span> <span class="nav-text">几何意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征值和特征向量"><span class="nav-number">3.</span> <span class="nav-text">特征值和特征向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩阵的相似"><span class="nav-number">4.</span> <span class="nav-text">矩阵的相似</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩阵的合同"><span class="nav-number">5.</span> <span class="nav-text">矩阵的合同</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
