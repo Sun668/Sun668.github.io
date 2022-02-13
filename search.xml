@@ -7063,6 +7063,33 @@ P^{-1}AP = B</script><p>则称B是A的相似矩阵<br>若A与对角阵相似，�
 <p>在不同的参考系下得到的多项式或二次型矩阵不同，但我们得知道它们是不是同一个图形，于是有合同的概念。</p>
 <p>两个合同的矩阵是：同一个图形在不同基下的表示。</p>
 <p>需要注意的是，考虑矩阵合同需要时二次型的前提下，也就是是实对称矩阵。</p>
+<blockquote>
+<p>矩阵的相似表示的是同一个向量的变换在不同坐标空间下的表示，矩阵的合同表示的是同一个图形在不同坐标空间下的表示。</p>
+<p>从代数角度讲，合同是针对实对称矩阵讲的，而实对称矩阵一定是相似于对角阵的，且过度矩阵是个正交阵，也就是说实对称矩阵一定是既相似又合同与对角阵。其实把求实对称矩阵合同的对角阵的过程，就是将二次型配方成标准型的过程，比如</p>
+<script type="math/tex; mode=display">
+f(x_1, x_2, x_3) = 2x_1^2 + 3x_2^2 + 5x_3^2 + 4x_1x_2 - 8x_2x_3 - 4x_3x_1</script><p>这是一个二次型，系数矩阵是个实对称矩阵，我们可以把它配成完全平方</p>
+<script type="math/tex; mode=display">
+f = 2(x_1 + x_2 - x_3)^2 + (x_2 - 2x_3)^2 - x_3^2</script><p>那么引入新变量</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+y_1 = x_ 1 + x_2 - x_3 \\
+y_2 = x_2 - 2x_3 \\
+y_3 = x_3
+\end{cases}
+即
+\begin{cases}
+x_1 = y_ 1 - y_2 - y_3 \\
+x_2 = y_2 + 2y_3 \\
+x_3 = y_3
+\end{cases}</script><p>则f的标准型为</p>
+<script type="math/tex; mode=display">
+f = 2y_1^2 + y_2^2 - y_3^2</script><p>过度矩阵就是</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+1 & -1 & -1 \\
+0 & 1 & 2 \\
+0 & 0 & 1
+\end{bmatrix}</script></blockquote>
 <p>参考链接：<br><a href="http://haoeric.github.io/matrix-eigenvectors/" rel="external nofollow noopener noreferrer" target="_blank">http://haoeric.github.io/matrix-eigenvectors/</a><br><a href="https://www.cnblogs.com/yanghh/p/13492614.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.cnblogs.com/yanghh/p/13492614.html</a></p>
 ]]></content>
       <categories>
