@@ -28,8 +28,8 @@
 <meta property="og:description" content="上一篇博客讲了关于渲染流水线中的一些基础知识，其中有一些名词可能有些疑惑，统一总结一下。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644622145/origin-of-ray/asynccode_dxrku7.png">
-<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644622211/origin-of-ray/UML_图_k2o3zl.jpg">
-<meta property="og:updated_time" content="2022-02-11T23:35:54.566Z">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644838818/origin-of-ray/screenshot-20220214-193925_qiz9ta.png">
+<meta property="og:updated_time" content="2022-02-14T11:41:51.571Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity Shader (二) 一些容易疑惑的名词">
 <meta name="twitter:description" content="上一篇博客讲了关于渲染流水线中的一些基础知识，其中有一些名词可能有些疑惑，统一总结一下。">
@@ -216,10 +216,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-02-12 07:25:38 / Modified: 07:35:54" itemprop="dateCreated datePublished" datetime="2022-02-12T07:25:38+08:00">2022-02-12</time>
+              <time title="Created: 2022-02-12 07:25:38" itemprop="dateCreated datePublished" datetime="2022-02-12T07:25:38+08:00">2022-02-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-02-14 19:41:51" itemprop="dateModified" datetime="2022-02-14T19:41:51+08:00">2022-02-14</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -261,7 +267,7 @@
 <p>而解决方法就是使用一个命令缓冲区（Command Buffer），类似一个消息队列。</p>
 <p>命令缓冲区包含一个命令队列，由CPU向其中添加命令，GPU从中取命令。</p>
 <p>命令缓冲区的命令有很多，Draw Call只是其中一种，其他命令还有改变渲染状态等</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644622211/origin-of-ray/UML_图_k2o3zl.jpg" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644622211/origin-of-ray/UML_%E5%9B%BE_k2o3zl.jpg"></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644838818/origin-of-ray/screenshot-20220214-193925_qiz9ta.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1644838818/origin-of-ray/screenshot-20220214-193925_qiz9ta.png"></p>
 <p>CPU通过图像编程接口向缓冲区添加命令，而GPU从中读取命令并执行。白框命令就是Draw Call，而红框内的命令用于改变渲染状态。使用红框是因为这种命令往往更加好使。</p>
 <h3 id="为什么Draw-Call多了会影响帧率"><a href="#为什么Draw-Call多了会影响帧率" class="headerlink" title="为什么Draw Call多了会影响帧率"></a>为什么Draw Call多了会影响帧率</h3><p>每次调用Draw Call之前，CPU都需要向GPU发送很多内容，包括数据，命令，状态等。在这一阶段，CPU需要做很多事情，例如检查渲染状态等。而一旦CPU完成了这些准备工作，GPU就可以开始本次的渲染了。GPU渲染能力是很强的，渲染200个还是2000个没什么区别，所以渲染速度往往取决于CPU提交命令的速度，如果Draw Call过多，CPU就会把大量的时间花费在提交Draw Call上，造成CPU过载。</p>
 <h3 id="如何减少Draw-Call"><a href="#如何减少Draw-Call" class="headerlink" title="如何减少Draw Call"></a>如何减少Draw Call</h3><p>方法有很多，最常见的是批处理（Batching）。</p>
