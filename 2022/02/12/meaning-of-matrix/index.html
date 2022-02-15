@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2022-02-13T02:04:52.745Z">
+<meta property="og:updated_time" content="2022-02-15T03:32:43.424Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="矩阵运算的代数和几何意义">
 <meta name="twitter:description" content="这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。">
@@ -221,7 +221,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-02-13 10:04:52" itemprop="dateModified" datetime="2022-02-13T10:04:52+08:00">2022-02-13</time>
+                <time title="Modified: 2022-02-15 11:32:43" itemprop="dateModified" datetime="2022-02-15T11:32:43+08:00">2022-02-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -561,6 +561,59 @@ f = 2y_1^2 + y_2^2 - y_3^2</script><p>过度矩阵就是</p>
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
