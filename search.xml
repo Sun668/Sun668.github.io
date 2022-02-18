@@ -13310,7 +13310,7 @@ k = (m /n) * ln2</script><p>k 为哈希函数个数，m 为布隆过滤器长度
       </categories>
   </entry>
   <entry>
-    <title>Unity Shader (一) 渲染流水线简介</title>
+    <title>Unity Shader (一) 渲染流水线：从模型上的点到屏幕上的点</title>
     <url>/2021/12/16/unity-render-pipeline-1/</url>
     <content><![CDATA[<h1 id="总述"><a href="#总述" class="headerlink" title="总述"></a>总述</h1><p>本文大概总结下一些三维空间的坐标数据是如何通过渲染流水线变为屏幕上不同颜色的像素的，阅读之时，需要注意，图元，片元，和像素三者的区别。</p>
 <p>下图是一个总体的流程图，具体细节可以看后面的解释。</p>
@@ -13487,6 +13487,143 @@ k = (m /n) * ln2</script><p>k 为哈希函数个数，m 为布隆过滤器长度
 <blockquote>
 <p>第一个优化方案是不是表明，每个网格都会有一个Draw Call？</p>
 </blockquote>
+]]></content>
+      <categories>
+        <category>Unity</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Unity Shader (三) 渲染流水线：从模型上的点到屏幕上的点（矩阵版）</title>
+    <url>/2022/02/18/unity-render-pipline-3/</url>
+    <content><![CDATA[<p>之前总结过一版Unity渲染流水线的简介，这次从矩阵的空间变换角度重新梳理一下这个过程，会更加清晰。同时也是对我这段时间线性代数复习内容的一个实践。</p>
+<a id="more"></a>
+<h2 id="矩阵的几何意义：变换"><a href="#矩阵的几何意义：变换" class="headerlink" title="矩阵的几何意义：变换"></a>矩阵的几何意义：变换</h2><h3 id="什么是变换"><a href="#什么是变换" class="headerlink" title="什么是变换"></a>什么是变换</h3><p>变换，指的是把我们的一些数据，如点，方向矢量，甚至是颜色，通过某种方式进行转换的过程。</p>
+<p>我们先看一个很常见的变换类型——线性变化。线性变换指的是那些可以保留矢量加法和标量乘法的变换，用数学公式来表示就是：</p>
+<script type="math/tex; mode=display">
+f(x) + f(y) = f(x + y)\\
+kf(x) = f(kx)</script><p>缩放是一种线性变换，比如f(x) = 2<strong>x</strong>，可以表示一个大小为2的统一缩放，即经过变换后的矢量<strong>x</strong>的模将被放大两倍。</p>
+<p>可以发现，f(<strong>x</strong>) = 2<strong>x</strong>是满足上面两个条件的。</p>
+<p>同样，旋转也是一种线性变换。对于线性变换来说，如果我们要对一个三维矢量进行变换，我们需要3阶矩阵来表示这个变换</p>
+<blockquote>
+<p>因为对于三维矢量来说，缩放是三个坐标同时变化相同大小，而旋转则是不同的变换，所以需要三个方程组，变成矩阵就是n阶矩阵</p>
+</blockquote>
+<p>线性变换出了包括旋转和缩放外，还包括错切，镜像，正交投影等。</p>
+<p>但是有一个很基础的变换它不是线性的，那就是平移。我们考虑一个平移的的方程，f(<strong>x</strong>) = <strong>x</strong> + (1, 2, 3)，这个变换它就不是一个线性变换，他不满足矢量加法。比如我们令<strong>x</strong> = (1, 1, 1)。</p>
+<script type="math/tex; mode=display">
+f(x) + f(x) = (4, 6, 8)\\
+f(x + x) = (3, 4, 5)</script><p>可见，两个运算的结果是不同的，我们就不能用3阶矩阵表示三维坐标的平移。</p>
+<p>因此，我们提出了<strong>仿射变换</strong>，仿射变换就是线性变换加平移变换。做法就是升高一个维度，用4阶矩阵来表示</p>
+<blockquote>
+<p>这里有两个问题：第一个，为什么要追求线性变换，第二个，为什么升高一个维度，变换之后再降维，就可以把平移变成线性变换</p>
+<p>首先回答第一个问题，线性变换从几何上来看，就是将图像变换到另一个坐标系下，变换前后图形不会发生改变</p>
+<p>至于为什么升高一个维度，就可以抹平这个影响，可以看一下：<a href="https://www.zhihu.com/question/20666664" rel="external nofollow noopener noreferrer" target="_blank">https://www.zhihu.com/question/20666664</a></p>
+</blockquote>
+<h3 id="齐次坐标"><a href="#齐次坐标" class="headerlink" title="齐次坐标"></a>齐次坐标</h3><p>当我们把三维变换矩阵变成4维的时候，我们还需要把原本的三维矢量转换成4维矢量，也就是我们说的齐次坐标。</p>
+<p>那么如何将一个三维矢量变成齐次坐标呢？对于一个点，从三维坐标变成齐次坐标是将其w分量设置为1，对于方向矢量而言，需要将其w分量设置为0。</p>
+<p>这样设置，当用一个4阶矩阵对一个点进行变换的时候，平移旋转和缩放都会作用于该点。但是对于一个矢量，平移的效果就会被忽略</p>
+<h3 id="分解基础变换矩阵"><a href="#分解基础变换矩阵" class="headerlink" title="分解基础变换矩阵"></a>分解基础变换矩阵</h3><p>我们仿射变换进行坐标转换时，用的是一个4阶矩阵，我们可以对这个矩阵进行拆解，分成4个部分</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+M_{3 * 3} & t_{3 * 1} \\
+0_{1 * 3} & 1
+\end{bmatrix}</script><p>左上角的3阶矩阵表示旋转和缩放，右上角矩阵表示平移。</p>
+<p>接下来，我们看看，如何用这个矩阵进行旋转缩放和平移：</p>
+<h3 id="平移矩阵"><a href="#平移矩阵" class="headerlink" title="平移矩阵"></a>平移矩阵</h3><p>看一下我们对一个点进行平移操作</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+1 & 0 & 0 & t_x \\
+0 & 1 & 0 & t_y \\
+0 & 0 & 1 & t_z \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z \\ 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+x + t_x \\ y + t_y \\ z + t_z \\1
+\end{bmatrix}</script><p>可以看到，结果我们成功的把点(x , y, z)变成了(x + tx, y + ty, z + tz)。</p>
+<p>我们在看一下，对一个矢量进行变换：</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+1 & 0 & 0 & t_x \\
+0 & 1 & 0 & t_y \\
+0 & 0 & 1 & t_z \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z \\ 0
+\end{bmatrix}
+=
+\begin{bmatrix}
+x \\ y \\ z \\0
+\end{bmatrix}</script><p>平移并不会对矢量产生什么影响</p>
+<p>平移矩阵的逆矩阵就是反向平移得到的，也就是：</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+1 & 0 & 0 & -t_x \\
+0 & 1 & 0 & -t_y \\
+0 & 0 & 1 & -t_z \\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><p>可见，平移矩阵不是正交矩阵</p>
+<h3 id="缩放矩阵"><a href="#缩放矩阵" class="headerlink" title="缩放矩阵"></a>缩放矩阵</h3><p>我们可以对一个点进行坐标的缩放，用矩阵表示就是：</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+k_x & 0 & 0 & 0 \\
+0 & k_y & 0 & 0 \\
+0 & 0 & k_z & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z \\ 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+k_xx \\ k_yy \\ k_zz \\1
+\end{bmatrix}</script><p>对一个矢量进行缩放</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+k_x & 0 & 0 & 0 \\
+0 & k_y & 0 & 0 \\
+0 & 0 & k_z & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z \\ 0
+\end{bmatrix}
+=
+\begin{bmatrix}
+k_xx \\ k_yy \\ k_zz \\0
+\end{bmatrix}</script><p>上面的矩阵只适合沿着坐标轴进行缩放，如果我们希望在任意方向上进行缩放，需要用到复合变换。其中一种主要思想就是：先将缩放轴变换成标准坐标轴，然后应用上看的标准缩放，再用你变换得到原来的缩放轴方向。</p>
+<blockquote>
+<p>这个过程中其实隐含着一个相似矩阵的内容，上面的复合变换是P^{-1}AP的形式，如果P^{-1}AP = B，那么就说A和B相似。相似的几何意义就是说在不同的坐标系下对同一个向量作出的操作结果是相通的。</p>
+</blockquote>
+<h3 id="旋转矩阵"><a href="#旋转矩阵" class="headerlink" title="旋转矩阵"></a>旋转矩阵</h3><p>旋转是三种矩阵中最复杂的。我们知道旋转操作需要指定一个旋转轴，这个轴不一定是坐标轴，但是我们暂时就讲沿着坐标轴进行旋转。</p>
+<p>围绕x轴进行旋转的矩阵是：</p>
+<script type="math/tex; mode=display">
+R_x(θ) = \begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & cosθ & -sinθ & 0 \\
+0 & sinθ & cosθ & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><p>绕y轴旋转</p>
+<script type="math/tex; mode=display">
+R_y(θ) = \begin{bmatrix}
+cosθ & 0 & sinθ & 0 \\
+0 & 1 & 0 & 0 \\
+-sinθ & 0 & cosθ & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><p>绕z轴旋转：</p>
+<script type="math/tex; mode=display">
+R_z(θ) = \begin{bmatrix}
+cosθ & -sinθ & 0 & 0 \\
+sinθ & cosθ & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><h3 id="复合变换"><a href="#复合变换" class="headerlink" title="复合变换"></a>复合变换</h3><p>我们可以把平移，旋转和缩放组合起来，形成一个复杂的变换。</p>
+<p>我们使用列矩阵来表示一个点，依次进行缩放，旋转，平移（这个顺序不能改变），表示出来就是：</p>
+<script type="math/tex; mode=display">
+p_{new} = M_{translation}M_{rotation}M_{scale}p_{old}</script><p>之所以这个顺序不能改变，是因为只有这个顺序下，才能得到我们想要的结果，如果我们先平移，再缩放，可能导致变形</p>
 ]]></content>
       <categories>
         <category>Unity</category>
