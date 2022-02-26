@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645863414/origin-of-ray/流程图_1_gwp690.jpg">
 <meta property="og:image" content="https://sunra.top/2022/02/26/computer-construction-1-introduction/[https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645863415/origin-of-ray/%E6%B5%81%E7%A8%8B%E5%9B%BE_2_z9ajc2.jpg](https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645863415/origin-of-ray/流程图_2_z9ajc2.jpg">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645863310/origin-of-ray/asynccode_nix9io.png">
-<meta property="og:updated_time" content="2022-02-26T08:23:21.605Z">
+<meta property="og:updated_time" content="2022-02-26T08:26:07.021Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机组成（一）计算机概述">
 <meta name="twitter:description" content="计算机系统性能的好坏，很大程度上是由软件的效率和作用来表征的，而软件性能的发挥又离不开硬件的支持。对于某一个功能，其既可以用软件实现，又可以用硬件实现，这叫做软硬件在逻辑上是等效的。在设计计算机系统时，要进行软硬件的功能分配。通常来说，如果一个功能使用较为频繁而且用硬件实现的成本较为理想，应该采用硬件来实现，因为硬件实现的效率一般比较高。">
@@ -221,7 +221,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-02-26 16:22:42 / Modified: 16:23:21" itemprop="dateCreated datePublished" datetime="2022-02-26T16:22:42+08:00">2022-02-26</time>
+              <time title="Created: 2022-02-26 16:22:42 / Modified: 16:26:07" itemprop="dateCreated datePublished" datetime="2022-02-26T16:22:42+08:00">2022-02-26</time>
             </span>
 
           
@@ -305,7 +305,7 @@
 <h2 id="软件和硬件的逻辑功能等价性"><a href="#软件和硬件的逻辑功能等价性" class="headerlink" title="软件和硬件的逻辑功能等价性"></a>软件和硬件的逻辑功能等价性</h2><p>硬件实现的往往是最基本的算术和逻辑功能，而其他功能大多数是通过软件扩充的。</p>
 <p>对于某一个功能来说，它既可以由硬件实现，又可以通过软件实现，从用户角度看，它们在功能上是等价的，这叫做软硬件逻辑功能上的等价性。</p>
 <p>等价性是计算机系统设计的重要依据。当设计计算机系统时，我们要从多方面考虑某个功能是用硬件实现还是软件实现。</p>
-<h1 id="计算机系统的层次结构"><a href="#计算机系统的层次结构" class="headerlink" title="计算机系统的层次结构"></a>计算机系统的层次结构</h1><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645863414/origin-of-ray/流程图_1_gwp690.jpg" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645863414/origin-of-ray/%E6%B5%81%E7%A8%8B%E5%9B%BE_1_gwp690.jpg">)</p>
+<h1 id="计算机系统的层次结构"><a href="#计算机系统的层次结构" class="headerlink" title="计算机系统的层次结构"></a>计算机系统的层次结构</h1><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645863414/origin-of-ray/流程图_1_gwp690.jpg" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645863414/origin-of-ray/%E6%B5%81%E7%A8%8B%E5%9B%BE_1_gwp690.jpg"></p>
 <ul>
 <li>第1级是微程序机器层，这是一个实在的硬件层，它由机器硬件直接执行微指令。</li>
 </ul>
@@ -339,7 +339,7 @@
 <li>链接阶段：链接器（ld）将多个可重定位目标文件和标准库函数合并为一个可执行目标文件，或者简称为可执行文件。</li>
 </ul>
 <h2 id="程序执行过程的描述"><a href="#程序执行过程的描述" class="headerlink" title="程序执行过程的描述"></a>程序执行过程的描述</h2><p>在UNIX中，我们可以通过shell命令行解释器来执行程序，通过shell命令行解释执行程序过程如下：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">unix&gt;</span> ./hello</span><br><span class="line"></span><br><span class="line">hello, world!</span><br><span class="line"></span><br><span class="line"><span class="meta">unix&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">unix&gt;</span><span class="bash"> ./hello</span></span><br><span class="line"></span><br><span class="line">hello, world!</span><br><span class="line"></span><br><span class="line"><span class="meta">unix&gt;</span></span><br></pre></td></tr></table></figure>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645863310/origin-of-ray/asynccode_nix9io.png" alt="img"></p>
 <p>Shell程序将用户从键盘输入的每个字符逐一读入CPU寄存器（对应1），然后保存到主存储器中，在主存的缓冲区形成字符串“./hello”（对应2）。收到Enter后，shell调出系统的内核程序，由内核加载磁盘上的可执行文件hello到主存（对应3）。内核加载完成可执行文件中的代码和数据（这里是字符串“hello，world！\n”）后，将hello的第一条指令地址送至PC，CPU随后开始执行hello程序，它将已加载到主存的字符串中的每个字符从主存取到CPU的寄存器中（对应4），然后将CPU寄存器中的字符送到显示器中（对应5）。</p>
 <blockquote>
