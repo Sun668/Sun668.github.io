@@ -13275,6 +13275,22 @@ k = (m /n) * ln2</script><p>k 为哈希函数个数，m 为布隆过滤器长度
       </categories>
   </entry>
   <entry>
+    <title>Unity 烘焙光照贴图出现黑斑解决方案</title>
+    <url>/2022/03/05/unity-bake-ground-black/</url>
+    <content><![CDATA[<p>这周在尝试对一个场景进行烘焙是，在引入了两个超大的地形之后，重新烘焙，遇到了两个问题，第一个问题，地形的某些地方出现了大量的黑斑，第二个问题，我的光照贴图数量飙升，从3个升到了16个。</p>
+<p>询问了一下其他大佬的的意见，是因为地形过大的原因。</p>
+<a id="more"></a>
+<p>具体的解决方案，是修改地形的Mesh Renderer -&gt; LightMapping -&gt; Scale in lightmap参数，调低该参数。</p>
+<p>该参数的意思是设置对象的UV在光照贴图中的单位数量。</p>
+<p>一个物体最终生成的光照贴图的大小，由该参数，Windows-&gt;Lighting-&gt;Lightmap Resolution一起决定，可以理解为二者的乘积，然后由于Window-&gt;Lighting-&gt;Max Lightmap Size的限制，超过该大小，就会再拆出一个光照贴图。</p>
+<p>Scale in lightmap越大，该物体在光照贴图中的细节越多，而对于地形这种东西，其实没必要很多细节，而且由于太大了，如果细节很多，最终的贴图会很大，最后，会产生黑斑。</p>
+<p>当然，引起黑斑还有其他一些原因，但是我暂时没有遇到，简单记录下：<a href="https://blog.csdn.net/leeby100/article/details/89201605" rel="external nofollow noopener noreferrer" target="_blank">https://blog.csdn.net/leeby100/article/details/89201605</a></p>
+]]></content>
+      <categories>
+        <category>Unity</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Unity 官方入门教程观看笔记</title>
     <url>/2021/10/03/unity-offical-tutorial-note/</url>
     <content><![CDATA[<p>今天看了一下Unity官网最新的入门教程，在看的过程中简单总结了其中涉及的概念以及需要注意的内容。</p>
