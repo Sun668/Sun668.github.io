@@ -3423,6 +3423,31 @@ i = 1, 2, 3, ..., n</script><p>其中Ai是|A|中第i<strong>列</strong>元素�
       </categories>
   </entry>
   <entry>
+    <title>差分数组</title>
+    <url>/2022/03/13/diff-array/</url>
+    <content><![CDATA[<p>这周的每日一题有一道困难级别的题目，使用了一种叫做差分数组的技巧，这个技巧其实也不复杂，就是前缀和的反向操作，简单记录一下。</p>
+<p>这是题目的链接：<a href="https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/" rel="external nofollow noopener noreferrer" target="_blank">https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/</a></p>
+<a id="more"></a>
+<p>这个题目最简单的做法就是遍历每个可能的k，然后计算当前数组的得分，最后比较那个情况下得分是最大的，如果有多个最大的，那么取k值小的。</p>
+<p>但是这样一来，算法的复杂度就是n的平方级别的。</p>
+<p>所以我们需要找出其中的规律，然后对这个规律加以简化。</p>
+<p>首先，我们分析下这个问题：设，下标为i的数字为x，那么根据题目条件，我们可以知道，当x&lt;=i时，该元素计一分。</p>
+<p>所以说，元素x计一分的数组下标范围为[x, n-1]。</p>
+<p>如果我们轮调次数为k，那么轮调之后，因为是向左轮调，轮调之后的下标为(i - k + n) mod n</p>
+<p>所以说，(i - k + n) mod n的范围应该为[x, n - 1]</p>
+<p>运算一下可以得到，k &lt;= (i - x + n) mod n, k &gt;= (i + 1) mod n。</p>
+<p>去掉取模运算后，当i &lt; x 时，i + 1 &lt;= k &lt;= i - x + n，当 i &gt;= x时，k &gt;= i + 1 或 k &lt;= i - x</p>
+<p>对于数组 nums 中的每个元素，都可以根据元素值与元素所在下标计算该元素记 1 分的轮调下标范围。遍历所有元素之后，即可得到每个轮调下标对应的计 1 分的元素个数，计 1 分的元素个数最多的轮调下标即为得分最高的轮调下标。如果存在多个得分最高的轮调下标，则取其中最小的轮调下标。</p>
+<p>创建长度为 n 的数组 points，其中 points[k] 表示轮调下标为 k 时的得分。对于数组 nums 中的每个元素，得到该元素记 1 分的轮调下标范围，然后将数组 points 的该下标范围内的所有元素加 1。当数组 points 中的元素值确定后，找到最大元素的最小下标。该做法的时间复杂度仍然是 O(n^2)，为了降低时间复杂度，需要利用差分数组。</p>
+<p>假设元素 x 的初始下标为 i。当 i &lt; x 时应将 points 的下标范围 [i + 1, i - x + n] 内的所有元素加 1，当 i≥x 时应将 points 的下标范围 [0, i - x] 和 [i + 1, n - 1] 内的所有元素加 1。由于是将一段或两段连续下标范围内的元素加 1，因此可以使用差分数组实现。定义长度为 n 的差分数组 diffs，其中 diffs[k]=points[k]−points[k−1]（特别地，points[−1]=0），具体做法是：令low=(i+1) mod n，high=(i−x+n+1) mod n，将 diffs[low] 的值加 1，将 diffs[high] 的值减 1，如果low≥high 则将 diffs[0] 的值加 1。</p>
+<p>遍历数组 nums 的所有元素并更新差分数组之后，遍历数组 diffs 并计算前缀和，则每个下标处的前缀和表示当前轮调下标处的得分。在遍历过程中维护最大得分和最大得分的最小轮调下标，遍历结束之后即可得到结果。</p>
+<p>下面是C语言版本的代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bestRotation</span><span class="params">(<span class="keyword">int</span>* nums, <span class="keyword">int</span> numsSize)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span>* diffs = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>) * numsSize);</span><br><span class="line">    <span class="built_in">memset</span>(diffs, <span class="number">0</span>, <span class="keyword">sizeof</span>(<span class="keyword">int</span>) * numsSize);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numsSize; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> low = (i + <span class="number">1</span>) % numsSize;</span><br><span class="line">        <span class="keyword">int</span> high = (i - nums[i] + numsSize + <span class="number">1</span>) % numsSize;</span><br><span class="line">        diffs[low]++;</span><br><span class="line">        diffs[high]--;</span><br><span class="line">        <span class="keyword">if</span> (low &gt;= high) &#123;</span><br><span class="line">            diffs[<span class="number">0</span>]++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> bestIndex = <span class="number">0</span>, maxScore = <span class="number">0</span>, score = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numsSize; i++) &#123;</span><br><span class="line">        score += diffs[i];</span><br><span class="line">        <span class="keyword">if</span> (maxScore &lt; score) &#123;</span><br><span class="line">            bestIndex = i;</span><br><span class="line">            maxScore = score;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">free</span>(diffs);</span><br><span class="line">    <span class="keyword">return</span> bestIndex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Algothrim</category>
+      </categories>
+  </entry>
+  <entry>
     <title>分治算法</title>
     <url>/2020/05/03/divide-conquer-algorithm/</url>
     <content><![CDATA[<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a><strong>基本概念</strong></h2><p>  在计算机科学中，分治法是一种很重要的算法。字面上的解释是“分而治之”，就是把一个复杂的问题分成两个或更多的相同或相似的子问题，再把子问题分成更小的子问题……直到最后子问题可以简单的直接求解，原问题的解即子问题的解的合并。这个技巧是很多高效算法的基础，如排序算法(快速排序，归并排序)，傅立叶变换(快速傅立叶变换)……</p>
