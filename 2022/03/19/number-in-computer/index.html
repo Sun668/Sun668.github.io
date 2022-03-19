@@ -20,17 +20,17 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="计算机中数据的表示我们都知道，计算机的核心是CPU，而CPU就是运算器和控制器，其作用就是进行数学运算。 想要理解CPU工作的原理，就要从两方面着手，一方面是计算机中的数据是如何表示的，另一方面就是在这种表示方式下，它的运算规则又是怎样的，计算机如何用电路去表示这种运算。">
+  <meta name="description" content="我们都知道，计算机的核心是CPU，而CPU就是运算器和控制器，其作用就是进行数学运算。 想要理解CPU工作的原理，就要从两方面着手，一方面是计算机中的数据是如何表示的，另一方面就是在这种表示方式下，它的运算规则又是怎样的，计算机如何用电路去表示这种运算。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="计算机组成（二）：数据在计算机中的表示">
 <meta property="og:url" content="https://sunra.top/2022/03/19/number-in-computer/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="计算机中数据的表示我们都知道，计算机的核心是CPU，而CPU就是运算器和控制器，其作用就是进行数学运算。 想要理解CPU工作的原理，就要从两方面着手，一方面是计算机中的数据是如何表示的，另一方面就是在这种表示方式下，它的运算规则又是怎样的，计算机如何用电路去表示这种运算。">
+<meta property="og:description" content="我们都知道，计算机的核心是CPU，而CPU就是运算器和控制器，其作用就是进行数学运算。 想要理解CPU工作的原理，就要从两方面着手，一方面是计算机中的数据是如何表示的，另一方面就是在这种表示方式下，它的运算规则又是怎样的，计算机如何用电路去表示这种运算。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2022-03-19T09:39:03.300Z">
+<meta property="og:updated_time" content="2022-03-19T09:46:25.913Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机组成（二）：数据在计算机中的表示">
-<meta name="twitter:description" content="计算机中数据的表示我们都知道，计算机的核心是CPU，而CPU就是运算器和控制器，其作用就是进行数学运算。 想要理解CPU工作的原理，就要从两方面着手，一方面是计算机中的数据是如何表示的，另一方面就是在这种表示方式下，它的运算规则又是怎样的，计算机如何用电路去表示这种运算。">
+<meta name="twitter:description" content="我们都知道，计算机的核心是CPU，而CPU就是运算器和控制器，其作用就是进行数学运算。 想要理解CPU工作的原理，就要从两方面着手，一方面是计算机中的数据是如何表示的，另一方面就是在这种表示方式下，它的运算规则又是怎样的，计算机如何用电路去表示这种运算。">
 
 <link rel="canonical" href="https://sunra.top/2022/03/19/number-in-computer/">
 
@@ -215,7 +215,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-03-19 17:37:47 / Modified: 17:39:03" itemprop="dateCreated datePublished" datetime="2022-03-19T17:37:47+08:00">2022-03-19</time>
+              <time title="Created: 2022-03-19 17:37:47 / Modified: 17:46:25" itemprop="dateCreated datePublished" datetime="2022-03-19T17:37:47+08:00">2022-03-19</time>
             </span>
 
           
@@ -229,7 +229,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="计算机中数据的表示"><a href="#计算机中数据的表示" class="headerlink" title="计算机中数据的表示"></a>计算机中数据的表示</h1><p>我们都知道，计算机的核心是CPU，而CPU就是运算器和控制器，其作用就是进行数学运算。</p>
+        <p>我们都知道，计算机的核心是CPU，而CPU就是运算器和控制器，其作用就是进行数学运算。</p>
 <p>想要理解CPU工作的原理，就要从两方面着手，一方面是计算机中的数据是如何表示的，另一方面就是在这种表示方式下，它的运算规则又是怎样的，计算机如何用电路去表示这种运算。</p>
 <a id="more"></a>
 <p>我们首先来了解下计算机中数据的表示：</p>
@@ -318,9 +318,10 @@ x & 1\gt x\ge0\\
 <p>补码是最重要的表示方式，我们首先要理解，他为什么叫做补码。因为原码和反码之间的数量关系是互补的。对于负数来说，对应正数的原码+补码等于$2^{n+1}$</p>
 <p>至于后面那个模2则是计算机的一种天然的运算，机器数一共8位，也就是n=7的时候，如果加上$2^8$，就是最高位之前多了个1，但是这一位其实是会溢出的，有相当于模了$2^{n+1}$。</p>
 <p>那么我们为什么要绕这么一大圈呢？</p>
-<p>我们用纯整数的定义来看，假设机器数长位8位，也就是上面公式的n=7，有一个负数-9（表示为 $1.0001001$）我们平时计算126加-9，可以是就是直接算，那就是117。</p>
+<p>我们用纯整数的定义来看，假设机器数长位8位，也就是上面公式的n=7，有一个负数-9，我们平时计算126加-9，可以是就是直接算，那就是117。</p>
 <p>但是如果它加上2的8次幂（也就是256），那就是256-9 = 247，<strong>我们就把126-9表示位(126+247) mod 256，还是117</strong></p>
 <p>这样绕了一圈之后，我们就可以把减法也表示为加法了。</p>
+<p><strong>当x是负数时，补码为$2^{n+1} +x\ mod\ 2^{n+1}$是数值上的表示，表明在计算上的结果是正确的，而实际我们求取补码是通过$2^{n+1}-|x|$</strong></p>
 <h4 id="反码"><a href="#反码" class="headerlink" title="反码"></a>反码</h4><p>反码比较简单，也没什么太大意义，他只是原码变为补码的一种中间态，原码除符号位取反就是反码，反码加1就是补码。</p>
 <p>注意，上面这一套是对负数的，正数反码和原码一样。</p>
 <h4 id="移码"><a href="#移码" class="headerlink" title="移码"></a>移码</h4><p>移码的定义为:</p>
@@ -420,7 +421,7 @@ x & 1\gt x\ge0\\
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#计算机中数据的表示"><span class="nav-number">1.</span> <span class="nav-text">计算机中数据的表示</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#进位计数法"><span class="nav-number">1.1.</span> <span class="nav-text">进位计数法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定点数的编码表示"><span class="nav-number">1.2.</span> <span class="nav-text">定点数的编码表示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#机器数的定点表示"><span class="nav-number">1.2.1.</span> <span class="nav-text">机器数的定点表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原码，反码，补码和移码"><span class="nav-number">1.2.2.</span> <span class="nav-text">原码，反码，补码和移码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原码"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">原码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#补码"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">补码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#反码"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">反码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#移码"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">移码</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#进位计数法"><span class="nav-number">1.</span> <span class="nav-text">进位计数法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定点数的编码表示"><span class="nav-number">2.</span> <span class="nav-text">定点数的编码表示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#机器数的定点表示"><span class="nav-number">2.1.</span> <span class="nav-text">机器数的定点表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原码，反码，补码和移码"><span class="nav-number">2.2.</span> <span class="nav-text">原码，反码，补码和移码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原码"><span class="nav-number">2.2.1.</span> <span class="nav-text">原码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#补码"><span class="nav-number">2.2.2.</span> <span class="nav-text">补码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#反码"><span class="nav-number">2.2.3.</span> <span class="nav-text">反码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#移码"><span class="nav-number">2.2.4.</span> <span class="nav-text">移码</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
