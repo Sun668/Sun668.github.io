@@ -1371,20 +1371,6 @@
 
   
   <url>
-    <loc>https://sunra.top/categories/Cloud/</loc>
-    <lastmod>2022-03-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sunra.top/categories/Vue/</loc>
-    <lastmod>2022-03-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://sunra.top/categories/Network/</loc>
     <lastmod>2022-03-20</lastmod>
     <changefreq>daily</changefreq>
@@ -1393,6 +1379,20 @@
   
   <url>
     <loc>https://sunra.top/categories/Sundry/</loc>
+    <lastmod>2022-03-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sunra.top/categories/Cloud/</loc>
+    <lastmod>2022-03-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sunra.top/categories/Vue/</loc>
     <lastmod>2022-03-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1441,14 +1441,14 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Algothrim/</loc>
+    <loc>https://sunra.top/categories/Security/</loc>
     <lastmod>2022-03-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Security/</loc>
+    <loc>https://sunra.top/categories/Algothrim/</loc>
     <lastmod>2022-03-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
