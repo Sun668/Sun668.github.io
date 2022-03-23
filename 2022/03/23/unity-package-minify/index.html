@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近看了些关于Unity体积优化的方案的文章以及Unity官方文档，总结了一下">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2022-03-23T08:07:53.392Z">
+<meta property="og:updated_time" content="2022-03-23T08:15:10.718Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity 打包体积优化">
 <meta name="twitter:description" content="最近看了些关于Unity体积优化的方案的文章以及Unity官方文档，总结了一下">
@@ -215,7 +215,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-03-23 16:04:28 / Modified: 16:07:53" itemprop="dateCreated datePublished" datetime="2022-03-23T16:04:28+08:00">2022-03-23</time>
+              <time title="Created: 2022-03-23 16:04:28 / Modified: 16:15:10" itemprop="dateCreated datePublished" datetime="2022-03-23T16:04:28+08:00">2022-03-23</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -245,7 +245,8 @@
 <li>关闭图片minimap和A通道。</li>
 <li>Sprite Atlas 图集（原Sprite Packer），把多个图打包为一个图</li>
 <li>网格优化：Mesh Compression 设置为 Low、Medium 或 High</li>
-<li>使用Prefab代替场景<h2 id="代码优化"><a href="#代码优化" class="headerlink" title="代码优化"></a>代码优化</h2></li>
+<li>使用Prefab代替场景</li>
+<li>使用Addressable把资源拆包到CDN下载<h2 id="代码优化"><a href="#代码优化" class="headerlink" title="代码优化"></a>代码优化</h2></li>
 <li>在 Mono 上将 iOS Stripping Level 设置为 Use micro mscorlib__，或在 IL2CPP 上启用 Strip Engine Code</li>
 <li>IL2CPP开启托管代码剥离</li>
 <li>不要使用System.dll的方法（此方法需要重构代码，把所有使用的地方替换掉）</li>
@@ -254,7 +255,7 @@
 <li>关闭静态资源合批</li>
 <li>打包版本选择Release</li>
 <li>Build Settings Compression Method Release时选择LZ4HC<h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3></li>
-<li>如果没有必要，减少Android支持的架构</li>
+<li>如果没有必要，减少Android支持的架构(每增加一个架构，就会多出一套符号表，解压出来50+MB)</li>
 <li>Publish Settings 启动Minify<h2 id="产物优化"><a href="#产物优化" class="headerlink" title="产物优化"></a>产物优化</h2><h3 id="iOS-优化"><a href="#iOS-优化" class="headerlink" title="iOS 优化"></a>iOS 优化</h3></li>
 <li>关闭bitcode<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2></li>
 <li><a href="https://www.cnblogs.com/wxjblog/p/14038849.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.cnblogs.com/wxjblog/p/14038849.html</a></li>
