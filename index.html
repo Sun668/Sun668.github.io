@@ -295,7 +295,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-23 16:12:29" itemprop="dateModified" datetime="2022-03-23T16:12:29+08:00">2022-03-23</time>
+                <time title="Modified: 2022-03-23 17:09:18" itemprop="dateModified" datetime="2022-03-23T17:09:18+08:00">2022-03-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -318,31 +318,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h2><p>游戏房间上限最大可以有count个人，当用户进入房间后，需要去远程服务器获取这count个人物的服装配置， 获取成功以后进行逐个加载。<br>目前的方案是一次性获取所有人物的配置，然后以一种几乎同时加载的方式去做。<br>这种方案最坏的情况下会同时有count个换装的任务在运行，导致count个任务之间抢占CPU，结果就是看起来卡顿。<br>为了使游戏的表现更加流畅，需要设计一种方案进行有优先级的批量加载。</p>
-<h2 id="预期效果"><a href="#预期效果" class="headerlink" title="预期效果"></a>预期效果</h2><ul>
-<li>无论何时，用户自己的形象配置获取成功以后，立即优先加载。</li>
-<li>其他用户形象返回后进入队列，进行分批加载。</li>
-<li>其他用户优先加载可视区域内部的形象。</li>
-<li>如果都处于可视区域内部，那么优先加载距离摄像机近的形象。</li>
-<li>拥有动态调整能力，初始可以同时加载n个形象，如果检测到平均加载时间过长，动态降低并发任务上限，最低不少于m，如果平均时间在可接受范围，尝试增加并发数。<h2 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h2>用户自身的形象加载不受优先级控制，获取后立即加载。<h3 id="优先级队列"><a href="#优先级队列" class="headerlink" title="优先级队列"></a>优先级队列</h3>分析完需求和预期效果之后，我们可以很容易地想到优先级队列这个数据结构。<br>优先级队列虽然是叫做队列，但是实现起来可以使用各种数据结构，我们可以采用堆，栈，队列。<br>对于我们的场景来说，我们高频使用的操作除了push和pop之外，最常用的应该就是一次性取出前n个，从这角度考虑，我们应该采用队列的方式去实现。<br>正好C#虽然没有默认实现的优先级队列，但是有个SortedList可以使用。<h3 id="优先级算法"><a href="#优先级算法" class="headerlink" title="优先级算法"></a>优先级算法</h3>上面算法最重要的一点就是计算优先级。<br>基于我们的几点考虑：</li>
-<li>可视区域内部优先级一定高于不可视区域。</li>
-<li>人物之间的距离不会超过1000.<br>我们可以使用int类型作为Priority，计算人物和摄像机之间的距离，然后用1000减去该距离作为初始优先级，接下来判断如果是处于可是区域内部，优先级再加上1000，否则加上0；<br>计算两点之间的距离很简单，那么问题就是如何判断一个物体是否处于可视区域内。<h3 id="如何判断是否处于可视区域"><a href="#如何判断是否处于可视区域" class="headerlink" title="如何判断是否处于可视区域"></a>如何判断是否处于可视区域</h3><a href="https://blog.csdn.net/cyf649669121/article/details/110580986" rel="external nofollow noopener noreferrer" target="_blank">https://blog.csdn.net/cyf649669121/article/details/110580986</a><br>由于我们就是要判断先渲染那个形象，所以只能用坐标判断<br>public bool IsVisableInCamera<br>{<br>  get<br>  {<pre><code>  Camera mCamera = Camera.main;
-  Vector3 pos = transform.position;
-  //转化为视角坐标
-  Vector3 viewPos = mCamera.WorldToViewportPoint(pos);
-  // z&lt;0代表在相机背后
-  if (viewPos.z &lt; 0) return false;
-  //太远了！看不到了！
-  if (viewPos.z &gt; mCamera.farClipPlane)
-      return false;
-  // x,y取值在 0~1之外时代表在视角范围外；
-  if (viewPos.x &lt; 0 || viewPos.y &lt; 0 || viewPos.x &gt; 1 || viewPos.y &gt; 1) return false;
-  return true;
-</code></pre>  }<br>}</li>
-</ul>
-
+          <h2 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h2><p>游戏房间上限最大可以有count个人，当用户进入房间后，需要去远程服务器获取这count个人物的服装配置， 获取成功以后进行逐个加载。<br>目前的方案是一次性获取所有人物的配置，然后以一种几乎同时加载的方式去做。<br>这种方案最坏的情况下会同时有count个换装的任务在运行，导致count个任务之间抢占CPU，结果就是看起来卡顿。<br>为了使游戏的表现更加流畅，需要设计一种方案进行有优先级的批量加载。<br>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/03/21/unity-batch-load-avatar/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
-    </div>
+    </p></div>
 
     
     
