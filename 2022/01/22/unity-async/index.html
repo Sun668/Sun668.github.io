@@ -20,17 +20,17 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="最近在使用Unity的过程中，涉及了一些高并发状态下的异步调用出现的各种问题，于是对于Unity中的异步产生了一些疑问，不过最终，首先抛出一个最重要的结论，异步不等于多线程，时刻记住这一点，无论是IEnumerator，这个不用说，名字就叫协程，还是async/await。">
+  <meta name="description" content="最近在使用Unity的过程中，涉及了一些高并发状态下的异步调用出现的各种问题，于是对于Unity中的异步产生了一些疑问，不过最终，首先抛出一个最重要的结论，异步不等于多线程。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity 中的异步">
 <meta property="og:url" content="https://sunra.top/2022/01/22/unity-async/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="最近在使用Unity的过程中，涉及了一些高并发状态下的异步调用出现的各种问题，于是对于Unity中的异步产生了一些疑问，不过最终，首先抛出一个最重要的结论，异步不等于多线程，时刻记住这一点，无论是IEnumerator，这个不用说，名字就叫协程，还是async/await。">
+<meta property="og:description" content="最近在使用Unity的过程中，涉及了一些高并发状态下的异步调用出现的各种问题，于是对于Unity中的异步产生了一些疑问，不过最终，首先抛出一个最重要的结论，异步不等于多线程。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2022-01-22T12:51:41.994Z">
+<meta property="og:updated_time" content="2022-03-25T08:02:31.641Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity 中的异步">
-<meta name="twitter:description" content="最近在使用Unity的过程中，涉及了一些高并发状态下的异步调用出现的各种问题，于是对于Unity中的异步产生了一些疑问，不过最终，首先抛出一个最重要的结论，异步不等于多线程，时刻记住这一点，无论是IEnumerator，这个不用说，名字就叫协程，还是async/await。">
+<meta name="twitter:description" content="最近在使用Unity的过程中，涉及了一些高并发状态下的异步调用出现的各种问题，于是对于Unity中的异步产生了一些疑问，不过最终，首先抛出一个最重要的结论，异步不等于多线程。">
 
 <link rel="canonical" href="https://sunra.top/2022/01/22/unity-async/">
 
@@ -213,10 +213,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-01-22 20:45:04 / Modified: 20:51:41" itemprop="dateCreated datePublished" datetime="2022-01-22T20:45:04+08:00">2022-01-22</time>
+              <time title="Created: 2022-01-22 20:45:04" itemprop="dateCreated datePublished" datetime="2022-01-22T20:45:04+08:00">2022-01-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-25 16:02:31" itemprop="dateModified" datetime="2022-03-25T16:02:31+08:00">2022-03-25</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -238,7 +244,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>最近在使用Unity的过程中，涉及了一些高并发状态下的异步调用出现的各种问题，于是对于Unity中的异步产生了一些疑问，不过最终，首先抛出一个最重要的结论，异步不等于多线程，时刻记住这一点，无论是IEnumerator，这个不用说，名字就叫协程，还是async/await。</p>
+        <p>最近在使用Unity的过程中，涉及了一些高并发状态下的异步调用出现的各种问题，于是对于Unity中的异步产生了一些疑问，不过最终，首先抛出一个最重要的结论，异步不等于多线程。</p>
 <a id="more"></a>
 <p>首先我们要明白一点，unity中的C#与我们平时所说的C#不同，我们平时所说的C# 他的运行虚拟机是.Net Framework，而Unity的是Mono VM，所以二者的语法看起来相同，但是实际的原理可能并不相同，比如本文后面要理解的await，而且Mono对C#的语法支持只到2.8，有些新的C#语法并不能使用。具体的二者对比以及IL，IL2CPP是什么，可以参考这篇文章：<a href="https://zhuanlan.zhihu.com/p/19972689" rel="external nofollow noopener noreferrer" target="_blank">Unity将来时：IL2CPP</a></p>
 <p>其实一开始看到这两个关键字的时候，身为一个有点Web前端开发经验的人，我第一反应就是和JS进行比较，在JS中，这两个关键字是在JS的主线程上起了新的协程。</p>
@@ -275,6 +281,8 @@
 </li>
 <li><p>游戏中的许多任务需要定期执行，最容易想到的方法是将任务包含在 Update 函数中。但是，通常情况下，每秒将多次调用该函数。不需要以这样的频繁程度重复任务时，可以将其放在协程中来进行定期更新，而不是每一帧都更新</p>
 </li>
+<li>协程类似于一种生命周期函数，在固定的时间调用，不能理解为操作系统的协程</li>
+<li>一旦一个协程所在的gameobject变为inactive了，协程就会被中断，而且即使再次变为active，协程也不会继续</li>
 </ul>
 <p>可以使用 <a href="https://docs.unity3d.com/cn/2020.3/ScriptReference/MonoBehaviour.StopCoroutine.html" rel="external nofollow noopener noreferrer" target="_blank">StopCoroutine</a> 和 <a href="https://docs.unity3d.com/cn/2020.3/ScriptReference/MonoBehaviour.StopAllCoroutines.html" rel="external nofollow noopener noreferrer" target="_blank">StopAllCoroutines</a> 来停止协程。 当用 <a href="https://docs.unity3d.com/cn/2020.3/ScriptReference/GameObject.SetActive.html" rel="external nofollow noopener noreferrer" target="_blank">SetActive(false)</a> 禁用某个协程所附加到的游戏对象时，该协程也将停止。调用 <code>Destroy(example)</code>（其中 <code>example</code> 是一个 MonoBehaviour 实例）会立即触发 <code>OnDisable</code>，并会处理协程，从而有效地停止协程。最后，在帧的末尾调用 <code>OnDestroy</code>。</p>
 <p>通过在 MonoBehaviour 实例上将 <a href="https://docs.unity3d.com/cn/2020.3/ScriptReference/Behaviour-enabled.html" rel="external nofollow noopener noreferrer" target="_blank">enabled</a> 设置为 false 来禁用 MonoBehaviour 时，协程<strong>不会</strong>停止。</p>
@@ -283,7 +291,7 @@
 <p><a href="https://docs.microsoft.com/zh-cn/dotnet/api/system.threading.tasks.task?view=net-6.0" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/zh-cn/dotnet/api/system.threading.tasks.task?view=net-6.0</a></p>
 <p>简单来说，Task只是表明了这个东西是异步的，他并不一定会另起一个线程去做</p>
 <p>而且这个Task无论是使用还是内部状态的维护方式，都很像JS的Promise</p>
-<p>而Task要和async，await配合使用，await可以结构出Task的Result，这一点也很像JS</p>
+<p>await与Task配合使用，await的是Task，而async则是表明这个函数里面会有await。</p>
 <h2 id="Unity中的Task"><a href="#Unity中的Task" class="headerlink" title="Unity中的Task"></a>Unity中的Task</h2><p>相比C#的Task，Unity中的Task有一个特性是，await前后的上下文都是主线程的上下文，保证可以调用到Unity的API，所以也带来了一些问题</p>
 <p><a href="https://zhuanlan.zhihu.com/p/86168785" rel="external nofollow noopener noreferrer" target="_blank">https://zhuanlan.zhihu.com/p/86168785</a></p>
 
