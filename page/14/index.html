@@ -189,6 +189,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/06/18/HSTS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/18/HSTS/" class="post-title-link" itemprop="url">HSTS</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-06-18 06:38:51" itemprop="dateCreated datePublished" datetime="2020-06-18T06:38:51+08:00">2020-06-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-03 08:52:00" itemprop="dateModified" datetime="2021-09-03T08:52:00+08:00">2021-09-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Network/" itemprop="url" rel="index"><span itemprop="name">Network</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="缘起：启用HTTPS也不够安全"><a href="#缘起：启用HTTPS也不够安全" class="headerlink" title="缘起：启用HTTPS也不够安全"></a>缘起：启用HTTPS也不够安全</h3><p>有不少网站只通过HTTPS对外提供服务，但用户在访问某个网站的时候，在浏览器里却往往直接输入网站域名（例如<a href="https://link.zhihu.com/?target=http%3A//www.example.com" rel="external nofollow noopener noreferrer" target="_blank">Example Domain</a>），而不是完整的URL（例如<a href="https://link.zhihu.com/?target=https%3A//www.example.com" rel="external nofollow noopener noreferrer" target="_blank">Example Domain</a>），不过浏览器依然能正确的使用HTTPS发起请求。这背后多亏了服务器和浏览器的协作，如下图所示。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/微信截图_20201215200744_st7ygu.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215200744_st7ygu.png"></p>
+<p>图1：服务器和浏览器在背后帮用户做了很多工作</p>
+<p>简单来讲就是，浏览器向网站发起一次HTTP请求，在得到一个重定向响应后，发起一次HTTPS请求并得到最终的响应内容。所有的这一切对用户而言是完全透明的，所以在用户看来，在浏览器里直接输入域名却依然可以用HTTPS协议和网站进行安全的通信，是个不错的用户体验。</p>
+<p>一切看上去都是那么的完美，但其实不然，由于在建立起HTTPS连接之前存在一次明文的HTTP请求和重定向（上图中的第1、2步），使得攻击者可以以中间人的方式劫持这次请求，从而进行后续的攻击，例如窃听数据、篡改请求和响应、跳转到钓鱼网站等。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/18/HSTS/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/06/12/vue-global-error-catch/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -946,87 +1031,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/04/30/vpn-and-proxy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/30/vpn-and-proxy/" class="post-title-link" itemprop="url">VPN 与 代理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-04-30 19:16:36" itemprop="dateCreated datePublished" datetime="2020-04-30T19:16:36+08:00">2020-04-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-03 08:51:54" itemprop="dateModified" datetime="2021-09-03T08:51:54+08:00">2021-09-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Network/" itemprop="url" rel="index"><span itemprop="name">Network</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>谈起VPN我们很多人的第一反应都是翻墙，这其实也是VPN一个比较有名的原因。<strong>VPN其实会为你直接分配一个外网的IP，只是这个IP只在这条专线的另一头的代理服务器上有效</strong>，VPN的优点和用法并不在于翻墙，而是数据的加密，而且由于其流量特征明显，它用来翻墙的表现其实也不是很好。<strong>SS等代理则是帮你进行请求的转发，前提是你能找到一台在墙内能访问的服务器</strong>，并且该服务器愿意帮你转发流量。我们就从翻墙开始讲VPN到底是什么。它和代理有什么区别。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/04/30/vpn-and-proxy/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1097,7 +1101,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">195</span>
+          <span class="site-state-item-count">196</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

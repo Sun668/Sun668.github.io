@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sunra.top/2022/03/25/csharp-delegate-and-event/</loc>
+    
+    <lastmod>2022-03-25</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://sunra.top/2022/03/19/number-in-computer/</loc>
     
     <lastmod>2022-03-25</lastmod>
@@ -1420,14 +1427,14 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Math/</loc>
+    <loc>https://sunra.top/categories/Algorithm/</loc>
     <lastmod>2022-03-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Algorithm/</loc>
+    <loc>https://sunra.top/categories/Math/</loc>
     <lastmod>2022-03-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
