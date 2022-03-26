@@ -13544,6 +13544,124 @@ k = (m /n) * ln2</script><p>k 为哈希函数个数，m 为布隆过滤器长度
       </categories>
   </entry>
   <entry>
+    <title>Unity 内存最佳实践</title>
+    <url>/2022/03/25/unity-memory-best-practice/</url>
+    <content><![CDATA[<p>最近发现Unity项目在运行过程中消耗了很多的内存，而且会出现的很频繁的GC导致游戏的CPU过热。于是去阅读了一下官方的最佳实践文档，了解了一些Unity的内存管理的知识，稍微总结一下。</p>
+<a id="more"></a>
+<h2 id="托管是个什么概念"><a href="#托管是个什么概念" class="headerlink" title="托管是个什么概念"></a>托管是个什么概念</h2><p>在了解Unity内存管理的时候，经常听到一次，叫做托管堆，之前也经常听到一些词，比如托管代码，托管线程，那么这个托管是个什么意思呢？</p>
+<p>通俗的讲，unity 本身是 c++ 写的，之所以能用 C# 写脚本，是因为底层起了一个虚拟机，这个虚拟机中的代码、内存就是托管的。</p>
+<p>c#有自己的内存回收机制，所以在c#中我们可以只new，不用关心怎样delete，c#使用gc来清理内存，这部分内存就是managed memory，大部分时候我们工作于c#环境中，都是在使用托管内存，然而c#毕竟运行在c++之上，有的时候，（比如可能我们需要引入一些第三方的c++或native代码的库，在Unity3d开发中很常见）我们需要直接在c#中操纵非托管的代码，这些non-managed memory我们就需要自己去处理他们的申请和释放了， c# 中提供了一些接口，完成托管和非托管之间的转换，以及对这部分内存的操作。</p>
+<p>举个例子，我们在C#中new一个对象，可以不用delete，但是我们调用Resources.Load去加载一个资源，那就需要我们手动再给卸载掉。</p>
+<h2 id="托管堆"><a href="#托管堆" class="headerlink" title="托管堆"></a>托管堆</h2><p>许多 Unity 开发者面临的另一个常见问题是托管堆的意外扩展。在 Unity 中，托管堆的扩展比收缩容易得多。此外，Unity 的垃圾收集策略往往会使内存碎片化，因此可能阻止大型堆的收缩。</p>
+<p>“托管堆”是由项目脚本运行时（Mono 或 IL2CPP）的内存管理器自动管理的一段内存。必须在托管堆上分配托管代码中创建的所有对象（<strong>注意：</strong>严格来说，必须在托管堆上分配所有非 null 引用类型对象和所有装箱值类型对象）。</p>
+<p><img src="https://docs.unity3d.com/cn/2018.4/uploads/Main/UnderstandingPerformanceinUnity-AssetAuditingSection_image_0.png" alt></p>
+<p>在上图中，白框表示分配给托管堆的内存量，而其中的彩色框表示存储在托管堆的内存空间中的数据值。当需要更多值时，将从托管堆中分配更多空间。</p>
+<p>垃圾回收器定期运行（<strong>注意：</strong>具体运行时间视平台而定）。这时将扫描堆上的所有对象，将任何不再引用的对象标记为删除。然后会删除未引用的对象，从而释放内存。</p>
+<p>至关重要的是，Unity 的垃圾收集（使用 Boehm GC 算法）是非分代的，也是非压缩的。“非分代”意味着 GC 在执行每遍收集时必须扫描整个堆，因此随着堆的扩展，其性能会下降。“非压缩”意味着不会为内存中的对象重新分配内存地址来消除对象之间的间隙。</p>
+<blockquote>
+<p>这里的分代应该就是新生代老生代的分代，JS的垃圾回收有两种算法，针对其中的临时变量采用的就是分代的垃圾回收算法，具体想要了解可以看我的另一篇博客：<a href="https://sunra.top/2021/08/04/javascript-gc/">https://sunra.top/2021/08/04/javascript-gc/</a></p>
+</blockquote>
+<p><img src="https://docs.unity3d.com/cn/2018.4/uploads/Main/UnderstandingPerformanceinUnity-AssetAuditingSection_image_1.png" alt></p>
+<p>上图为内存碎片化示例。释放对象时，将释放其内存。但是，释放的空间不会整合成为整个“可用内存”池的一部分。位于释放的对象两侧的对象可能仍在使用中。因此，释放的空间成为其他内存段之间的“间隙”（该间隙由上图中的红色圆圈指示）。因此，新释放的空间仅可用于存储与释放相同大小或更小的对象的数据。</p>
+<p>分配对象时，请注意对象在内存空间中的分配地址必须始终为连续空间块。</p>
+<p>这导致了内存碎片化这个核心问题：虽然堆中的可用空间总量可能很大，但是可能其中的部分或全部的可分配空间对象之间存在小的“间隙”。这种情况下，即使可用空间总量高于要分配的空间量，托管堆可能也找不到足够大的连续内存块来满足该分配需求。</p>
+<p>但是，如果分配了大型对象，却没有足够的连续可用空间来容纳该对象（如上所示），Unity 内存管理器将执行两个操作。</p>
+<p>首先，如果垃圾回收器尚未运行，则运行垃圾回收器。此工具会尝试释放足够的空间来满足分配请求。</p>
+<p><strong>如果在 GC 运行后，仍然没有足够的连续空间来满足请求的内存量，则必须扩展堆。堆的具体扩展量视平台而定；但是，大多数 Unity 平台会使托管堆的大小翻倍。</strong></p>
+<h3 id="托管堆扩展方面的核心问题有两个："><a href="#托管堆扩展方面的核心问题有两个：" class="headerlink" title="托管堆扩展方面的核心问题有两个："></a>托管堆扩展方面的核心问题有两个：</h3><ul>
+<li><p>Unity 在扩展托管堆后不会经常释放分配给托管堆的内存页；它会乐观地保留扩展后的堆，即使该堆的大部分为空时也如此。这是为了防止再次发生大量分配时需要重新扩展堆。</p>
+</li>
+<li><p>在大多数平台上，Unity 最终会将托管堆的空置部分使用的页面释放回操作系统。发生此行为的间隔时间是不确定的，因此不要指望靠这种方法释放内存。</p>
+</li>
+<li><p>托管堆使用的地址空间始终不会归还给操作系统。</p>
+</li>
+<li><p>对于 32 位程序，如果托管堆多次扩展和收缩，则可能导致地址空间耗尽。如果一个程序的可用内存地址空间已耗尽，操作系统将终止该程序。</p>
+</li>
+<li><p>对于 64 位程序而言，地址空间足够大到可以运行时间超过人类平均寿命的程序，因此地址空间耗尽的这种情况极几乎不可能发生。</p>
+</li>
+</ul>
+<h3 id="临时分配"><a href="#临时分配" class="headerlink" title="临时分配"></a>临时分配</h3><p>许多 Unity 项目在每帧都有几十或几百 KB 的临时数据分配给托管堆。这种情况通常对项目的性能极为不利。请考虑以下数学计算：</p>
+<p>如果一个程序每帧分配一千字节 (1 KB) 的临时内存，并且以每秒 60 帧的速率运行，那么它必须每秒分配 60 KB 的临时内存。在一分钟内，这会在内存中增加 3.6 MB 的垃圾。每秒调用一次垃圾回收器可能会对性能产生不利影响，但对于内存不足的设备而言每分钟分配 3.6 MB 的内存是个问题。</p>
+<p>此外，请考虑加载操作。如果在大型资源加载操作期间生成了大量临时对象，并且对这些对象的引用一直持续到操作完成，则垃圾回收器无法释放这些临时对象，并且托管堆需要进行扩展，即使它包含的许多对象将在不久后释放也是如此。</p>
+<h2 id="基本的内存节省方法"><a href="#基本的内存节省方法" class="headerlink" title="基本的内存节省方法"></a>基本的内存节省方法</h2><p>其实这部分的内容不仅适用于C#，很多方法和JS编写时的注意事项相同，比如集合和数组的重用，如果在一个循环里需要反复用到一个辅助数组，那比较好的做法是在循环外申请内存，然后循环内重用，防止频繁的GC；还有空方法，空数组重用，如果很多情况下都需要返回一个空数组，那比较好的做法是事先定义好一个空数组，所有情况下都返回这一个空数组；还有循环之中频繁访问对象的某个属性，最好是在循环外先声明一个新的变量指向这个属性，这样就不需要每次循环都去找。</p>
+<h3 id="集合和数组重用"><a href="#集合和数组重用" class="headerlink" title="集合和数组重用"></a>集合和数组重用</h3><p>使用 C# 的集合类或数组时，尽可能考虑重用或汇集已分配的集合或数组。集合类开放了一个 Clear 方法，该方法会消除集合内的值，但不会释放分配给集合的内存。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void Update() &#123;</span><br><span class="line"></span><br><span class="line">    List&lt;float&gt; nearestNeighbors = new List&lt;float&gt;();</span><br><span class="line"></span><br><span class="line">    findDistancesToNearestNeighbors(nearestNeighbors);</span><br><span class="line"></span><br><span class="line">    nearestNeighbors.Sort();</span><br><span class="line"></span><br><span class="line">    // … 以某种方式使用排序列表 …</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在为复杂计算分配临时“helper”集合时，这尤其有用。下面的代码是一个非常简单的示例：</p>
+<p>在此示例中，为了收集一组数据点，每帧都为 nearestNeighbors List（列表）分配一次内存。将此 List 从方法中提升到包含类中是非常简单的，这样做避免了每帧都为新 List 分配内存：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">List&lt;float&gt; m_NearestNeighbors = new List&lt;float&gt;();</span><br><span class="line"></span><br><span class="line">void Update() &#123;</span><br><span class="line"></span><br><span class="line">    m_NearestNeighbors.Clear();</span><br><span class="line"></span><br><span class="line">    findDistancesToNearestNeighbors(NearestNeighbors);</span><br><span class="line"></span><br><span class="line">    m_NearestNeighbors.Sort();</span><br><span class="line"></span><br><span class="line">    // … 以某种方式使用排序列表 …</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在此版本中，List 的内存被保留并在多个帧之间重用。仅在 List 需要扩展时才分配新内存。</p>
+<h3 id="闭包和匿名方法"><a href="#闭包和匿名方法" class="headerlink" title="闭包和匿名方法"></a>闭包和匿名方法</h3><p>使用闭包和匿名方法时需要注意两点。</p>
+<p>首先，C# 中的所有方法引用都是引用类型，因此在堆上进行分配。通过将方法引用作为参数传递，可以轻松分配临时内存。无论传递的方法是匿名方法还是预定义的方法，都会发生此分配。</p>
+<p>其次，将匿名方法转换为闭包后，为了将闭包传递给接收闭包的方法，所需的内存量将显著增加。</p>
+<p>请参考以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">List&lt;float&gt; listOfNumbers = createListOfRandomNumbers();</span><br><span class="line"></span><br><span class="line">listOfNumbers.Sort( (x, y) =&gt;</span><br><span class="line"></span><br><span class="line">(int)x.CompareTo((int)(y/2)) </span><br><span class="line"></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>这段代码使用简单的匿名方法来控制在第一行创建的数字列表的排序顺序。但是，如果程序员希望使该代码段可重用，很容易想到将常量 2 替换为局部作用域内的变量，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">List&lt;float&gt; listOfNumbers = createListOfRandomNumbers();</span><br><span class="line"></span><br><span class="line">int desiredDivisor = getDesiredDivisor();</span><br><span class="line"></span><br><span class="line">listOfNumbers.Sort( (x, y) =&gt;</span><br><span class="line"></span><br><span class="line">(int)x.CompareTo((int)(y/desiredDivisor))</span><br><span class="line"></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>匿名方法现在要求该方法能够访问方法作用域之外的变量状态，因此已成为闭包。必须以某种方式将 desiredDivisor 变量传递给闭包，以便闭包的实际代码可以使用该变量。</p>
+<p>为此，C# 将生成一个匿名类，该类可保存闭包所需的外部作用域变量。当闭包传递给 Sort 方法时，将实例化此类的副本，并用 desiredDivisor 整数的值初始化该副本。</p>
+<p>因为执行闭包需要实例化闭包生成类的副本，并且所有类都是 C# 中的引用类型，所以执行闭包需要在托管堆上分配对象。</p>
+<p>通常，请尽可能在 C# 中避免使用闭包。应在性能敏感的代码中尽可能减少匿名方法和方法引用，尤其是那些每帧都需要执行的代码中。</p>
+<h3 id="IL2CPP-下的匿名方法"><a href="#IL2CPP-下的匿名方法" class="headerlink" title="IL2CPP 下的匿名方法"></a>IL2CPP 下的匿名方法</h3><p>目前，通过查看 IL2CPP 所生成的代码得知，对System.Function 类型变量的声明和赋值将会分配一个新对象。无论变量是显式的（在方法/类中声明）还是隐式的（声明为另一个方法的参数），都是如此。</p>
+<p>因此，使用 IL2CPP 脚本后端下的匿名方法必定会分配托管内存。在 Mono 脚本后端下则不是这种情况。</p>
+<p>此外，由于方法参数的声明方式不同，将导致IL2CPP 显示出托管内存分配量产生巨大差异。正如预期的那样，闭包的每次调用会消耗最多的内存。</p>
+<p>预定义的方法在 IL2CPP 脚本后端下作为参数传递时，其<strong>分配的内存几乎与闭包一样多</strong>，但这不是很直观。匿名方法在堆上生成最少量的临时垃圾（一个或多个数量级）。</p>
+<p>因此，如果打算在 IL2CPP 脚本后端上发布项目，有三个主要建议：</p>
+<p>最好选择不需要将方法作为参数传递的编码风格。</p>
+<p>当不可避免时，最好选择匿名方法而不是预定义方法。</p>
+<p>无论脚本后端为何，都要避免使用闭包。</p>
+<h3 id="装箱-Boxing"><a href="#装箱-Boxing" class="headerlink" title="装箱 (Boxing)"></a>装箱 (Boxing)</h3><p>装箱是 Unity 项目中最常见的非预期临时内存分配来源之一。只要将值类型的值用作引用类型就会发生装箱；这种情况最常发生在将原始值类型的变量（例如 int 和 float）传递给对象类型的方法时。</p>
+<p>在下面非常简单的示例中，对 x 中的整数进行了装箱以便传递给 object.Equals 方法，因为 object 上的 Equals 方法要求将 object 作为参数传递给它。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int x = 1;</span><br><span class="line"></span><br><span class="line">object y = new object();</span><br><span class="line"></span><br><span class="line">y.Equals(x);</span><br></pre></td></tr></table></figure>
+<p>C# IDE（集成开发环境）和编译器通常不会发出关于装箱的警告，即使导致意外的内存分配时也是如此。这是因为 C# 语言的设计理念认为，小型临时分配可以被分代垃圾回收器和对分配大小敏感的内存池有效处理。</p>
+<p>虽然 Unity 的分配器实际会使用不同的内存池进行小型和大型分配，但 Unity 的垃圾回收器“不是”分代的，因此无法有效清除由装箱生成的小型、频繁的临时分配。</p>
+<p>在为 Unity 运行时编写 C# 代码时，应尽可能避免使用装箱。</p>
+<p>识别装箱<br>装箱在 CPU 跟踪中显示为对某几种特定方法的调用，具体形式取决于使用的脚本后端。这些调用通常采用以下形式之一，其中 <some class> 是其他类或结构的名称，而 … 是一些参数：</some></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;some class&gt;::Box(…)</span><br><span class="line"></span><br><span class="line">Box(…)</span><br><span class="line"></span><br><span class="line">&lt;some class&gt;_Box(…)</span><br></pre></td></tr></table></figure>
+<h3 id="字典和枚举"><a href="#字典和枚举" class="headerlink" title="字典和枚举"></a>字典和枚举</h3><p>装箱的一个常见原因是使用 enum 类型作为字典的键。声明 enum 会创建一个新值类型，此类型在后台视为整数，但在编译时实施类型安全规则。</p>
+<p>默认情况下，调用 Dictionary.add(key, value) 会导致调用 Object.getHashCode(Object)。此方法用于获取字典的键的相应哈希代码，并在所有接受键的方法中使用，如：Dictionary.tryGetValue、Dictionary.remove 等。</p>
+<p>Object.getHashCode 方法为引用类型，但 enum 值始终为值类型。因此，对于枚举键字典，每次方法调用都会导致键被装箱至少一次。</p>
+<p>以下代码片段展示的一个简单示例说明了此装箱问题：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">enum MyEnum &#123; a, b, c &#125;;</span><br><span class="line"></span><br><span class="line">var myDictionary = new Dictionary&lt;MyEnum, object&gt;();</span><br><span class="line"></span><br><span class="line">myDictionary.Add(MyEnum.a, new object());</span><br></pre></td></tr></table></figure>
+<p>要解决此问题，则需要编写一个实现 IEqualityComparer 接口的自定义类，并将该类的实例指定为字典的比较器（<strong>注意：</strong>此对象通常是无状态的，因此可与不同的字典实例一起重复使用以节省内存）。</p>
+<p>以下是上述代码片段 IEqualityComparer 的简单示例。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class MyEnumComparer : IEqualityComparer&lt;MyEnum&gt; &#123;</span><br><span class="line"></span><br><span class="line">    public bool Equals(MyEnum x, MyEnum y) &#123;</span><br><span class="line"></span><br><span class="line">        return x == y;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int GetHashCode(MyEnum x) &#123;</span><br><span class="line"></span><br><span class="line">        return (int)x;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可将上述类的实例传递给字典的构造函数。</p>
+<h3 id="Foreach-循环"><a href="#Foreach-循环" class="headerlink" title="Foreach 循环"></a>Foreach 循环</h3><p>在 Unity 的 Mono C# 编译器版本中，使用 foreach 循环会在每次循环终止时强制 Unity 将一个值装箱（<strong>注意：</strong>是在每次整个循环完整执行完成后将该值装箱一次，并非在循环的每次迭代中装箱一次，因此无论循环运行两次还是 200 次，内存使用量都保持不变）。这是因为 Unity 的 C# 编译器生成的 IL 会构造一个通用值类型的枚举器来遍历值集合。</p>
+<p>此枚举器将实现 IDisposable 接口；当循环终止时必须调用该接口。但是，在值类型的对象（例如结构和枚举器）上调用接口方法需要将它们装箱。</p>
+<p>请参考下面非常简单的示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int accum = 0;</span><br><span class="line"></span><br><span class="line">foreach(int x in myList) &#123;</span><br><span class="line"></span><br><span class="line">    accum += x;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码通过 Unity 的 C# 编译器运行后将生成以下中间语言：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.method private hidebysig instance void </span><br><span class="line"></span><br><span class="line">    ILForeach() cil managed </span><br><span class="line"></span><br><span class="line">  &#123;</span><br><span class="line"></span><br><span class="line">    .maxstack 8</span><br><span class="line"></span><br><span class="line">    .locals init (</span><br><span class="line"></span><br><span class="line">      [0] int32 num,</span><br><span class="line"></span><br><span class="line">      [1] int32 current,</span><br><span class="line"></span><br><span class="line">      [2] valuetype [mscorlib]System.Collections.Generic.List`1/Enumerator&lt;int32&gt; V_2</span><br><span class="line"></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    // [67 5 - 67 16]</span><br><span class="line"></span><br><span class="line">    IL_0000: ldc.i4.0     </span><br><span class="line"></span><br><span class="line">    IL_0001: stloc.0      // num</span><br><span class="line"></span><br><span class="line">    // [68 5 - 68 74]</span><br><span class="line"></span><br><span class="line">    IL_0002: ldarg.0      // this</span><br><span class="line"></span><br><span class="line">    IL_0003: ldfld        class [mscorlib]System.Collections.Generic.List`1&lt;int32&gt; test::myList</span><br><span class="line"></span><br><span class="line">    IL_0008: callvirt     instance valuetype [mscorlib]System.Collections.Generic.List`1/Enumerator&lt;!0/*int32*/&gt; class [mscorlib]System.Collections.Generic.List`1&lt;int32&gt;::GetEnumerator()</span><br><span class="line"></span><br><span class="line">    IL_000d: stloc.2      // V_2</span><br><span class="line"></span><br><span class="line">    .try</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">      IL_000e: br           IL_001f</span><br><span class="line"></span><br><span class="line">    // [72 9 - 72 41]</span><br><span class="line"></span><br><span class="line">      IL_0013: ldloca.s     V_2</span><br><span class="line"></span><br><span class="line">      IL_0015: call         instance !0/*int32*/ valuetype [mscorlib]System.Collections.Generic.List`1/Enumerator&lt;int32&gt;::get_Current()</span><br><span class="line"></span><br><span class="line">      IL_001a: stloc.1      // current</span><br><span class="line"></span><br><span class="line">    // [73 9 - 73 23]</span><br><span class="line"></span><br><span class="line">      IL_001b: ldloc.0      // num</span><br><span class="line"></span><br><span class="line">      IL_001c: ldloc.1      // current</span><br><span class="line"></span><br><span class="line">      IL_001d: add          </span><br><span class="line"></span><br><span class="line">      IL_001e: stloc.0      // num</span><br><span class="line"></span><br><span class="line">    // [70 7 - 70 36]</span><br><span class="line"></span><br><span class="line">      IL_001f: ldloca.s     V_2</span><br><span class="line"></span><br><span class="line">      IL_0021: call         instance bool valuetype [mscorlib]System.Collections.Generic.List`1/Enumerator&lt;int32&gt;::MoveNext()</span><br><span class="line"></span><br><span class="line">      IL_0026: brtrue       IL_0013</span><br><span class="line"></span><br><span class="line">      IL_002b: leave        IL_003c</span><br><span class="line"></span><br><span class="line">    &#125; // .try 结束</span><br><span class="line"></span><br><span class="line">    finally</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">      IL_0030: ldloc.2      // V_2</span><br><span class="line"></span><br><span class="line">      IL_0031: box          valuetype [mscorlib]System.Collections.Generic.List`1/Enumerator&lt;int32&gt;</span><br><span class="line"></span><br><span class="line">      IL_0036: callvirt     instance void [mscorlib]System.IDisposable::Dispose()</span><br><span class="line"></span><br><span class="line">      IL_003b: endfinally   </span><br><span class="line"></span><br><span class="line">    &#125; // finally 结束</span><br><span class="line"></span><br><span class="line">    IL_003c: ret          </span><br><span class="line"></span><br><span class="line">  &#125; // 方法 test::ILForeach结束</span><br><span class="line"></span><br><span class="line">&#125; // test 类结束</span><br></pre></td></tr></table></figure>
+<p>最相关的代码是靠近底部的 <strong>finally { … }</strong> 代码块。callvirt 指令在调用 IDisposable.Dispose 方法之前先发现该方法在内存中的位置，并要求将枚举器装箱。</p>
+<p>通常，应在 Unity 中避免使用 foreach 循环。原因不仅是这些循环会进行装箱，而且通过枚举器遍历集合的方法调用成本更高，通常比通过 for 或 while 循环进行的手动迭代慢得多。</p>
+<h3 id="Unity-数组值-API"><a href="#Unity-数组值-API" class="headerlink" title="Unity 数组值 API"></a>Unity 数组值 API</h3><p>虚数组分配的一种更有害和更不明显的原因是重复访问返回数组的 Unity API。返回数组的所有 Unity API 每次被访问时都会创建一个新的数组副本。在不必要的情况下访问数组值 Unity API 是极不适宜的。</p>
+<p>例如，下面的代码在每次循环迭代时都会虚化创建 vertices 数组的四个副本。每次访问 .vertices 属性时都会发生分配。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">for(int i = 0; i &lt; mesh.vertices.Length; i++)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    float x, y, z;</span><br><span class="line"></span><br><span class="line">    x = mesh.vertices[i].x;</span><br><span class="line"></span><br><span class="line">    y = mesh.vertices[i].y;</span><br><span class="line"></span><br><span class="line">    z = mesh.vertices[i].z;</span><br><span class="line"></span><br><span class="line">    // ...</span><br><span class="line"></span><br><span class="line">    DoSomething(x, y, z);   </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过在进入循环之前捕获 vertices 数组，无论循环迭代次数是多少，都可以简单地重构为单个数组分配：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var vertices = mesh.vertices;</span><br><span class="line"></span><br><span class="line">for(int i = 0; i &lt; vertices.Length; i++)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    float x, y, z;</span><br><span class="line"></span><br><span class="line">    x = vertices[i].x;</span><br><span class="line"></span><br><span class="line">    y = vertices[i].y;</span><br><span class="line"></span><br><span class="line">    z = vertices[i].z;</span><br><span class="line"></span><br><span class="line">    // ...</span><br><span class="line"></span><br><span class="line">    DoSomething(x, y, z);   </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然访问一次属性的 CPU 成本不是很高，但在紧凑循环内重复访问会使得 CPU 性能过热。此外，重复访问会导致托管堆出现不必要的扩展。</p>
+<p>此问题在移动端极其常见，因为 Input.touches API 的行为与上述类似。项目包含以下类似代码是极为常见的，此情况下每次访问 .touches 属性时都会发生分配。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">for ( int i = 0; i &lt; Input.touches.Length; i++ )</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   Touch touch = Input.touches[i];</span><br><span class="line"></span><br><span class="line">    // …</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，通过将数组分配从循环条件中提升出来，可轻松改善该问题：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Touch[] touches = Input.touches;</span><br><span class="line"></span><br><span class="line">for ( int i = 0; i &lt; touches.Length; i++ )</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   Touch touch = touches[i];</span><br><span class="line"></span><br><span class="line">   // …</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是，现在有许多 Unity API 的版本不会导致内存分配。如果能使用这些版本时，请尽量选择这种版本。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int touchCount = Input.touchCount;</span><br><span class="line"></span><br><span class="line">for ( int i = 0; i &lt; touchCount; i++ )</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   Touch touch = Input.GetTouch(i);</span><br><span class="line"></span><br><span class="line">   // …</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将上面的示例转换为无分配的 Touch API 很简单：</p>
+<p>请注意，为了节省调用属性的 get 方法的 CPU 成本，属性访问 (Input.touchCount) 仍然保持在循环条件之外。</p>
+<h3 id="空数组重用"><a href="#空数组重用" class="headerlink" title="空数组重用"></a>空数组重用</h3><p>当数组值方法需要返回空集时，有些开发团队更喜欢返回空数组而不是 null。这种编码模式在许多托管语言中很常见，特别是 C# 和 Java。</p>
+<p>通常情况下，从方法返回零长度数组时，返回零长度数组的预分配单例实例比重复创建空数组要高效得多<strong>注意：</strong>当然，在返回数组后调整数组大小时是个例外）。</p>
+<p>脚注</p>
+<p>(1) 这是因为大多数平台上从 GPU 内存回读的速度极慢。将纹理从 GPU 内存读入临时缓冲区以供 CPU 代码（例如 Texture.GetPixel）使用将是非常不高效的。</p>
+<p>(2) 严格来说，必须在托管堆上分配所有非 null 引用类型对象和所有装箱值类型对象。</p>
+<p>(3) 具体运行时间视平台而定。</p>
+<p>(4) 注意，这与给定帧期间临时分配的字节数不同。性能分析器会显示特定帧中分配的字节数，不考虑在后续帧中是否重用了部分/全部已分配的内存。</p>
+<p>(5) 当然，在返回数组后调整数组大小时是个例外。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://docs.unity3d.com/cn/2018.4/Manual/BestPracticeUnderstandingPerformanceInUnity4-1.html" rel="external nofollow noopener noreferrer" target="_blank">了解托管堆</a></p>
+]]></content>
+      <categories>
+        <category>Unity</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Unity 官方入门教程观看笔记</title>
     <url>/2021/10/03/unity-offical-tutorial-note/</url>
     <content><![CDATA[<p>今天看了一下Unity官网最新的入门教程，在看的过程中简单总结了其中涉及的概念以及需要注意的内容。</p>
