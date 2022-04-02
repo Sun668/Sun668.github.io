@@ -189,6 +189,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/06/25/preSum/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/25/preSum/" class="post-title-link" itemprop="url">前缀和</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-06-25 07:04:03" itemprop="dateCreated datePublished" datetime="2020-06-25T07:04:03+08:00">2020-06-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-03 08:51:57" itemprop="dateModified" datetime="2021-09-03T08:51:57+08:00">2021-09-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>今天来聊一道简单却十分巧妙的算法问题：算出一共有几个和为 k 的子数组。</p>
+<p>那我把所有子数组都穷举出来，算它们的和，看看谁的和等于 k 不就行了。</p>
+<p>关键是，<strong>如何快速得到某个子数组的和呢</strong>，比如说给你一个数组 <code>nums</code>，让你实现一个接口 <code>sum(i, j)</code>，这个接口要返回 <code>nums[i..j]</code> 的和，而且会被多次调用，你怎么实现这个接口呢？</p>
+<p>因为接口要被多次调用，显然不能每次都去遍历 <code>nums[i..j]</code>，有没有一种快速的方法在 O(1) 时间内算出 <code>nums[i..j]</code> 呢？这就需要<strong>前缀和</strong>技巧了。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/25/preSum/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/06/20/sql-injection/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -946,91 +1030,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/05/08/curry/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/05/08/curry/" class="post-title-link" itemprop="url">函数柯里化</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-05-08 11:46:37" itemprop="dateCreated datePublished" datetime="2020-05-08T11:46:37+08:00">2020-05-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-03 08:52:01" itemprop="dateModified" datetime="2021-09-03T08:52:01+08:00">2021-09-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近遇到了一个奇怪的题目，实现以下效果：</p>
-<p>sum(2, 3).result = 5;</p>
-<p>sum(2, 3)(4, 5).result = 14;</p>
-<p>sum(1, 2)(3).result = 6;</p>
-<p>这个题目看起来很奇怪，其实就是个函数柯里化加上个脑筋急转弯，这里记录一下这个题目的思路，如果不懂柯里化，看完对柯里化的介绍之后可以先自己想一下怎么实现这个效果，反正作者想了半个小时才缓过神来原来竟然如此简单，归根结底还是理论充足，但是见识少了。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/05/08/curry/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1101,7 +1100,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">197</span>
+          <span class="site-state-item-count">198</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
