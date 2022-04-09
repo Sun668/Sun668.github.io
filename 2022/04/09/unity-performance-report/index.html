@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1649472389/origin-of-ray/screenshot-20220409-104611_c78bdo.png">
 <meta property="og:image" content="https://upr-1258948065.cos.ap-shanghai.myqcloud.com/upr-images/upr/zh/test_info.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1649473292/origin-of-ray/20220409-110059_jxkydl.jpg">
-<meta property="og:updated_time" content="2022-04-09T03:24:20.336Z">
+<meta property="og:updated_time" content="2022-04-09T08:30:47.093Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity 性能优化记录（一）性能分析工具的使用">
 <meta name="twitter:description" content="最近在研究Unity性能优化相关的内容，接触了几个Unity官方自己的工具，这里总结一下它们的使用方式以及如何结合着使用。 我主要用到了以下几个工具：  UPR（Unity Performance Report） Profiler Memory Profiler  首先总体上讲一下这三者之间的关系：Profiler是Unity Editor中自带的性能分析工具，不需要额外下载，能对CPU，GPU，">
@@ -223,7 +223,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-04-09 07:06:35 / Modified: 11:24:20" itemprop="dateCreated datePublished" datetime="2022-04-09T07:06:35+08:00">2022-04-09</time>
+              <time title="Created: 2022-04-09 07:06:35 / Modified: 16:30:47" itemprop="dateCreated datePublished" datetime="2022-04-09T07:06:35+08:00">2022-04-09</time>
             </span>
 
           
@@ -249,7 +249,7 @@
 <p>这里有两点需要注意：</p>
 <ul>
 <li>最好将Unity打包到对应的平台上（打包时记得勾选Development Build）,运行然后通过数据线或者wifi的方式把性能数据传输回来。Editor中会有很多干扰数据并没有用处。</li>
-<li>这三者的性能数据来源都是Development Build模式下的游戏自身，所以可能会有冲突，最起码UPR和Profiler不可以同时使用，所以UPR官方的文档也说了不能够选Autoconnect Profiler</li>
+<li>这三者的性能数据来源都是Development Build模式下的游戏自身，所以可能会有冲突，最起码UPR和Profiler不可以同时使用，所以UPR官方的文档也说了不能勾选Autoconnect Profiler</li>
 </ul>
 <h2 id="工具简介"><a href="#工具简介" class="headerlink" title="工具简介"></a>工具简介</h2><p>这里简单介绍下这几个工具能做什么以及擅长做什么。</p>
 <h3 id="Profiler"><a href="#Profiler" class="headerlink" title="Profiler"></a>Profiler</h3><p>首先介绍的是Profiler，这个工具是Unity自带的，在Editor里面打开就有，他的功能是很全面的，包含了CPU耗时分析，GPU耗时分析，内存分配等等，具体的我就不细说了，<a href="https://docs.unity3d.com/Manual/Profiler.html" rel="external nofollow noopener noreferrer" target="_blank">官方文档</a>很详细，我就不摘抄了。</p>
@@ -282,7 +282,7 @@
 <p>一开始说的工具中，UPR App和UPR Desktop是二选一，必须选一个才可以。</p>
 <p>UPR APP装在手机上的。我们在UPR的网站上创建了一个测试，会生成一个二维码和sessionid，用UPR App扫描二维码，会获取我们创建测试所属项目的包名，然后这个时候我们去运行，UPR App就会帮我们启动游戏，至于启动后的操作就不赘述，只是说记不住，但是用一下就明白</p>
 <p><img src="https://upr-1258948065.cos.ap-shanghai.myqcloud.com/upr-images/upr/zh/test_info.png" alt></p>
-<p>而笔者采用的是Mac系统下，听过UPR Desktop来测试安装在Android下的设备，因为这样可以使用UPR Package（一个unitypakcage，import到项目中就可以了）加ADB的方式获取更为详细的数据，比如电量和温度等</p>
+<p>而笔者采用的是Mac系统下，使用UPR Desktop来测试安装在Android下的设备，因为这样可以使用UPR Package（一个unitypakcage，import到项目中就可以了）加ADB的方式获取更为详细的数据，比如电量和温度等</p>
 <p>整体的安装和使用方式可以参考官网，但是有几点踩过坑的地方：</p>
 <ul>
 <li>Mac要使用UPR需要先安装.Net3.0</li>
