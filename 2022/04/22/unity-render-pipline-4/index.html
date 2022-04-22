@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="前面介绍了渲染流水线的基本内容，接下来就其中的我们可以编程的部分进行介绍，开始之前我们需要先介绍一些基础概念，对其中的一些属性进行简单说明。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2022-04-22T09:31:21.408Z">
+<meta property="og:updated_time" content="2022-04-22T10:31:50.023Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity Shader(四) Unity Shader基础概念">
 <meta name="twitter:description" content="前面介绍了渲染流水线的基本内容，接下来就其中的我们可以编程的部分进行介绍，开始之前我们需要先介绍一些基础概念，对其中的一些属性进行简单说明。">
@@ -215,7 +215,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-04-22 07:42:09 / Modified: 17:31:21" itemprop="dateCreated datePublished" datetime="2022-04-22T07:42:09+08:00">2022-04-22</time>
+              <time title="Created: 2022-04-22 07:42:09 / Modified: 18:31:50" itemprop="dateCreated datePublished" datetime="2022-04-22T07:42:09+08:00">2022-04-22</time>
             </span>
 
           
@@ -367,6 +367,15 @@
 </tbody>
 </table>
 </div>
+<h3 id="Conditionals-in-shaders"><a href="#Conditionals-in-shaders" class="headerlink" title="Conditionals in shaders"></a>Conditionals in shaders</h3><p>有的时候，我们想要让同一个Shader在不同情况下有不同的表现，例如，为不同的material配置不同的设置，为不同的硬件定义不同的功能，或者在运行时动态修改Shader的功能。或者在某种情况下避免运行复杂的计算，比如纹理的读取。</p>
+<p>我们有三种不同的方式来在不同的情况下让GPU有不同的行为：</p>
+<ul>
+<li>静态分支：在shader的编译阶段根据条件不同生成不同的shader</li>
+<li>动态分支：GPU在运行时根据条件选择不同的分支</li>
+<li>Shader变体：Unity使用静态分支来讲Shader的源代码编译成多个shader代码，unity在运行时根据不同的条件选择不同的shader代码</li>
+</ul>
+<p>如何在这三种方式中进行选择，可以看一下<a href="https://docs.unity3d.com/cn/current/Manual/shader-conditionals.html" rel="external nofollow noopener noreferrer" target="_blank">官方文档</a></p>
+<p>简单来说，如果事先知道了需要满足的条件，采用静态分支，如果不知道，那么就是动态分支或者shaer变体选一个，动态分支是GPU运行时进行选择，所以会影响GPU性能，Shader变体则是会增加包体积</p>
 
     </div>
 
@@ -461,7 +470,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader-简介"><span class="nav-number">1.</span> <span class="nav-text">Shader 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader类型"><span class="nav-number">1.1.</span> <span class="nav-text">Shader类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#术语表"><span class="nav-number">1.2.</span> <span class="nav-text">术语表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader-Class"><span class="nav-number">2.</span> <span class="nav-text">Shader Class</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Object基础"><span class="nav-number">2.1.</span> <span class="nav-text">Shader Object基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Object-内部结构"><span class="nav-number">2.2.</span> <span class="nav-text">Shader Object 内部结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SubShader"><span class="nav-number">2.2.1.</span> <span class="nav-text">SubShader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pass"><span class="nav-number">2.2.2.</span> <span class="nav-text">Pass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Shader-Variants"><span class="nav-number">2.2.3.</span> <span class="nav-text">Shader Variants</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#渲染过程中关于Shader的调用流程"><span class="nav-number">2.3.</span> <span class="nav-text">渲染过程中关于Shader的调用流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader的编译"><span class="nav-number">3.</span> <span class="nav-text">Shader的编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构建时剥离"><span class="nav-number">3.1.</span> <span class="nav-text">构建时剥离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步Shader编译"><span class="nav-number">3.2.</span> <span class="nav-text">异步Shader编译</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader中的分支，变体和关键字（keywords）"><span class="nav-number">4.</span> <span class="nav-text">Shader中的分支，变体和关键字（keywords）</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader-简介"><span class="nav-number">1.</span> <span class="nav-text">Shader 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader类型"><span class="nav-number">1.1.</span> <span class="nav-text">Shader类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#术语表"><span class="nav-number">1.2.</span> <span class="nav-text">术语表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader-Class"><span class="nav-number">2.</span> <span class="nav-text">Shader Class</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Object基础"><span class="nav-number">2.1.</span> <span class="nav-text">Shader Object基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Object-内部结构"><span class="nav-number">2.2.</span> <span class="nav-text">Shader Object 内部结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SubShader"><span class="nav-number">2.2.1.</span> <span class="nav-text">SubShader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pass"><span class="nav-number">2.2.2.</span> <span class="nav-text">Pass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Shader-Variants"><span class="nav-number">2.2.3.</span> <span class="nav-text">Shader Variants</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#渲染过程中关于Shader的调用流程"><span class="nav-number">2.3.</span> <span class="nav-text">渲染过程中关于Shader的调用流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader的编译"><span class="nav-number">3.</span> <span class="nav-text">Shader的编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构建时剥离"><span class="nav-number">3.1.</span> <span class="nav-text">构建时剥离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步Shader编译"><span class="nav-number">3.2.</span> <span class="nav-text">异步Shader编译</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader中的分支，变体和关键字（keywords）"><span class="nav-number">4.</span> <span class="nav-text">Shader中的分支，变体和关键字（keywords）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Conditionals-in-shaders"><span class="nav-number">4.1.</span> <span class="nav-text">Conditionals in shaders</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
