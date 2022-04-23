@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="前面介绍了渲染流水线的基本内容，接下来就其中的我们可以编程的部分进行介绍，开始之前我们需要先介绍一些基础概念，对其中的一些属性进行简单说明。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2022-04-22T10:31:50.023Z">
+<meta property="og:updated_time" content="2022-04-23T03:25:20.918Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity Shader(四) Unity Shader基础概念">
 <meta name="twitter:description" content="前面介绍了渲染流水线的基本内容，接下来就其中的我们可以编程的部分进行介绍，开始之前我们需要先介绍一些基础概念，对其中的一些属性进行简单说明。">
@@ -213,10 +213,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-04-22 07:42:09 / Modified: 18:31:50" itemprop="dateCreated datePublished" datetime="2022-04-22T07:42:09+08:00">2022-04-22</time>
+              <time title="Created: 2022-04-22 07:42:09" itemprop="dateCreated datePublished" datetime="2022-04-22T07:42:09+08:00">2022-04-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-04-23 11:25:20" itemprop="dateModified" datetime="2022-04-23T11:25:20+08:00">2022-04-23</time>
+              </span>
 
           
 
@@ -281,9 +287,6 @@
 </ul>
 <h4 id="Shader-Variants"><a href="#Shader-Variants" class="headerlink" title="Shader Variants"></a>Shader Variants</h4><p>Pass中的Shader Program会被组织称Shader Variant，着色器变体共享公共代码，但在启用或禁用给定关键字时具有不同的功能。</p>
 <p>Pass中的着色器变体的数量取决于在着色器代码中定义的关键字和目标平台。每个Pass包含至少一个变体</p>
-<blockquote>
-<p>说到这个Shader变体，它是我们打包过程中需要重视的一个环节，一个小小的设置不同，就可能会多出几万个变体出来，所以在优化包体积的时候，减少Shader变体数量也是一个很重要的环节，有一篇文章写的不错，记录一下：<a href="https://blog.unity.com/technology/stripping-scriptable-shader-variants" rel="external nofollow noopener noreferrer" target="_blank">https://blog.unity.com/technology/stripping-scriptable-shader-variants</a></p>
-</blockquote>
 <h3 id="渲染过程中关于Shader的调用流程"><a href="#渲染过程中关于Shader的调用流程" class="headerlink" title="渲染过程中关于Shader的调用流程"></a>渲染过程中关于Shader的调用流程</h3><p>Unity在使用一个Shader Object之前，会创建一个该Shader Object中SubShader的列表，包括自己定义的和fallback中的</p>
 <p>当Unity首次渲染几何体或者Shader的LOD值发生变化或者渲染流水线的设置发生变化时，需要决定采取该Shader Object中的哪一个SubShader：</p>
 <ul>
@@ -374,8 +377,42 @@
 <li>动态分支：GPU在运行时根据条件选择不同的分支</li>
 <li>Shader变体：Unity使用静态分支来讲Shader的源代码编译成多个shader代码，unity在运行时根据不同的条件选择不同的shader代码</li>
 </ul>
-<p>如何在这三种方式中进行选择，可以看一下<a href="https://docs.unity3d.com/cn/current/Manual/shader-conditionals.html" rel="external nofollow noopener noreferrer" target="_blank">官方文档</a></p>
-<p>简单来说，如果事先知道了需要满足的条件，采用静态分支，如果不知道，那么就是动态分支或者shaer变体选一个，动态分支是GPU运行时进行选择，所以会影响GPU性能，Shader变体则是会增加包体积</p>
+<p>这三种其实也可以分为两种，静态条件和动态条件，因为Shader变体使用的其实也是静态条件，只不过静态分支是在编译阶段根据静态条件把用不到的代码剔除了，而变体则是在编译阶段把每个不同的条件都编译出了一个变体</p>
+<p>如何在这三种方式中进行选择，可以看一下<a href="https://docs.unity3d.com/Manual/shader-branching.html" rel="external nofollow noopener noreferrer" target="_blank">官方文档</a></p>
+<p>简单来说，如果事先知道了需要满足的条件，采用静态分支，如果不知道，那么就是动态分支或者shaer变体选一个，动态分支是GPU运行时进行选择，所以会影响GPU性能，Shader变体则是会增加包体积。</p>
+<h3 id><a href="#" class="headerlink" title=" "></a> </h3><h3 id="Shader-Variants-Shader变体"><a href="#Shader-Variants-Shader变体" class="headerlink" title="Shader Variants(Shader变体)"></a>Shader Variants(Shader变体)</h3><p>着色器变体，有时也称为着色器排列，是将条件行为引入着色器代码的一种方法。Unity将着色器源文件编译成着色器程序。每个编译的着色器程序都有一个或多个变体:不同的着色器程序版本适用于不同的条件。在运行时，Unity使用匹配当前需求的变体。你可以使用shader keywords来配置变量。</p>
+<p>带有大量变体的着色器被称为mega着色器或uber着色器。Unity的标准着色器就是这样一个着色器的例子。</p>
+<h4 id="变体生成的数量"><a href="#变体生成的数量" class="headerlink" title="变体生成的数量"></a>变体生成的数量</h4><p>在构建时，Unity为当前构建目标的每个图形API编译一组着色器变体。每个图形API和构建目标组合的变体数量取决于你的着色器源文件，以及你对着色器关键字的使用。</p>
+<ol>
+<li><p>Unity为当前构建目标列表中的每个图形API编译一组着色器变体。每个构建目标和图形API的组合的着色器都不同;例如，Unity在iOS和macOS上为Metal编译不同的着色器。一些着色程序或关键字可能只针对给定的图形API或给定的构建目标，因此图形API和构建目标的每个组合的变体总数可能不同;然而，编译这些变体的过程是相同的。</p>
+</li>
+<li><p>Unity必须决定为当前的构建目标和图形API组合编译多少Shader Program。对于你的构建中包含的每个着色器源文件，Unity决定了它定义了多少个独特的Shader Program:</p>
+</li>
+</ol>
+<ul>
+<li>一个计算着色器资产定义了一个单独的Shader Program。</li>
+<li>在一个手工编码的着色器中，Shader Program的数量取决于你的代码。总共包括:<ul>
+<li>源文件本身中所有通道中的所有着色器阶段。例如，每个顶点阶段定义一个Shader Program;</li>
+<li>每个片段阶段定义一个Shader Program;这包括所有的回退着色器，以及使用UsePass命令包括的所有通道</li>
+</ul>
+</li>
+<li>在Shader Graph Shader中，Shader程序的数量取决于Unity从你的图形中生成的代码。要查看Unity生成的着色器代码，点击shader Graph资产并选择see generated code。然后，你可以确定着色器程序的总数，就像手动编码着色器一样。</li>
+</ul>
+<ol>
+<li>keywords影响变体数量<br><strong>当Unity决定了它必须为当前的构建目标和图形API编译多少个着色器程序时，它就决定了它必须为每个着色器程序编译多少个着色器变体。</strong></li>
+</ol>
+<p>对于每个着色器程序，Unity决定产生不同变体的着色器关键字的组合。这包括：</p>
+<ul>
+<li>着色器变量关键字的集合，在源文件中为该着色器声明。更多信息，参见<a href="https://docs.unity3d.com/Manual/shader-keywords.html#declaring-keywords" rel="external nofollow noopener noreferrer" target="_blank">声明着色关键字</a>。</li>
+<li>Unity自动添加的着色器关键字集。更多信息，参见<a href="https://docs.unity3d.com/Manual/shader-keywords.html#predefined-shader-keywords" rel="external nofollow noopener noreferrer" target="_blank">Unity预定义的shader关键字</a>。</li>
+</ul>
+<p>For example, this set contains three shader variant keywords:</p>
+<p>COLOR_RED<br>COLOR_GREEN<br>COLOR_BLUE<br>This set contains four shader variant keywords:</p>
+<p>QUALITY_LOW<br>QUALITY_MEDIUM<br>QUALITY_HIGH<br>QUALITY_ULTRA<br>A shader program affected by those shader variant keywords will result in the following twelve variants:</p>
+<p>COLOR_RED and QUALITY_LOW<br>COLOR_RED and QUALITY_MEDIUM<br>COLOR_RED and QUALITY_HIGH<br>COLOR_RED and QUALITY_ULTRA<br>COLOR_GREEN and QUALITY_LOW<br>COLOR_GREEN and QUALITY_MEDIUM<br>COLOR_GREEN and QUALITY_HIGH<br>COLOR_GREEN and QUALITY_ULTRA<br>COLOR_BLUE and QUALITY_LOW<br>COLOR_BLUE and QUALITY_MEDIUM<br>COLOR_BLUE and QUALITY_HIGH<br>COLOR_BLUE and QUALITY_ULTRA</p>
+<p>当你添加更多的着色器变量关键字集时，Unity编译的变量数量可以快速增长。这种快速增长的术语是组合爆炸。例如，考虑一个相当典型的用例，其中一个着色器有许多着色器变体关键字集，每个关键字包含两个关键字(&lt;特性名&gt; ON和&lt;特性名&gt; OFF)。如果着色器有两个这样的关键字集，这将导致四个变量。如果着色器有10组这样的关键字，这将导致1024个变体</p>
+<h4 id="着色器变种的重复数据消除"><a href="#着色器变种的重复数据消除" class="headerlink" title="着色器变种的重复数据消除"></a>着色器变种的重复数据消除</h4><p>编译后，Unity自动识别相同的变量在相同的Pass中，并确保这些相同的变量指向相同的字节码。这就是重复数据删除。重复数据删除可防止相同Pass中的相同变量增加文件大小;然而，相同的变体仍然会导致编译过程中的浪费工作，并增加内存使用和着色器加载时间在运行时。记住这一点，最好去掉不需要的变量。</p>
+<h4 id="如何从Shader变体角度优化打包体积"><a href="#如何从Shader变体角度优化打包体积" class="headerlink" title="如何从Shader变体角度优化打包体积"></a>如何从Shader变体角度优化打包体积</h4><p>有一篇文章写的不错，记录一下：<a href="https://blog.unity.com/technology/stripping-scriptable-shader-variants" rel="external nofollow noopener noreferrer" target="_blank">https://blog.unity.com/technology/stripping-scriptable-shader-variants</a></p>
 
     </div>
 
@@ -470,7 +507,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader-简介"><span class="nav-number">1.</span> <span class="nav-text">Shader 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader类型"><span class="nav-number">1.1.</span> <span class="nav-text">Shader类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#术语表"><span class="nav-number">1.2.</span> <span class="nav-text">术语表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader-Class"><span class="nav-number">2.</span> <span class="nav-text">Shader Class</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Object基础"><span class="nav-number">2.1.</span> <span class="nav-text">Shader Object基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Object-内部结构"><span class="nav-number">2.2.</span> <span class="nav-text">Shader Object 内部结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SubShader"><span class="nav-number">2.2.1.</span> <span class="nav-text">SubShader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pass"><span class="nav-number">2.2.2.</span> <span class="nav-text">Pass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Shader-Variants"><span class="nav-number">2.2.3.</span> <span class="nav-text">Shader Variants</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#渲染过程中关于Shader的调用流程"><span class="nav-number">2.3.</span> <span class="nav-text">渲染过程中关于Shader的调用流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader的编译"><span class="nav-number">3.</span> <span class="nav-text">Shader的编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构建时剥离"><span class="nav-number">3.1.</span> <span class="nav-text">构建时剥离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步Shader编译"><span class="nav-number">3.2.</span> <span class="nav-text">异步Shader编译</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader中的分支，变体和关键字（keywords）"><span class="nav-number">4.</span> <span class="nav-text">Shader中的分支，变体和关键字（keywords）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Conditionals-in-shaders"><span class="nav-number">4.1.</span> <span class="nav-text">Conditionals in shaders</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader-简介"><span class="nav-number">1.</span> <span class="nav-text">Shader 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader类型"><span class="nav-number">1.1.</span> <span class="nav-text">Shader类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#术语表"><span class="nav-number">1.2.</span> <span class="nav-text">术语表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader-Class"><span class="nav-number">2.</span> <span class="nav-text">Shader Class</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Object基础"><span class="nav-number">2.1.</span> <span class="nav-text">Shader Object基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Object-内部结构"><span class="nav-number">2.2.</span> <span class="nav-text">Shader Object 内部结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SubShader"><span class="nav-number">2.2.1.</span> <span class="nav-text">SubShader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pass"><span class="nav-number">2.2.2.</span> <span class="nav-text">Pass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Shader-Variants"><span class="nav-number">2.2.3.</span> <span class="nav-text">Shader Variants</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#渲染过程中关于Shader的调用流程"><span class="nav-number">2.3.</span> <span class="nav-text">渲染过程中关于Shader的调用流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader的编译"><span class="nav-number">3.</span> <span class="nav-text">Shader的编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构建时剥离"><span class="nav-number">3.1.</span> <span class="nav-text">构建时剥离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步Shader编译"><span class="nav-number">3.2.</span> <span class="nav-text">异步Shader编译</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader中的分支，变体和关键字（keywords）"><span class="nav-number">4.</span> <span class="nav-text">Shader中的分支，变体和关键字（keywords）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Conditionals-in-shaders"><span class="nav-number">4.1.</span> <span class="nav-text">Conditionals in shaders</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">4.2.</span> <span class="nav-text"> </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Variants-Shader变体"><span class="nav-number">4.3.</span> <span class="nav-text">Shader Variants(Shader变体)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#变体生成的数量"><span class="nav-number">4.3.1.</span> <span class="nav-text">变体生成的数量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#着色器变种的重复数据消除"><span class="nav-number">4.3.2.</span> <span class="nav-text">着色器变种的重复数据消除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何从Shader变体角度优化打包体积"><span class="nav-number">4.3.3.</span> <span class="nav-text">如何从Shader变体角度优化打包体积</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
