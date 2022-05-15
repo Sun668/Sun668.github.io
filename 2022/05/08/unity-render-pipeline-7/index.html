@@ -28,9 +28,9 @@
 <meta property="og:description" content="在内置渲染管线中，表面着色器是编写与光照交互的着色器的一种简化方式。 编写与光照交互的着色器非常复杂。有不同的光源类型，不同的阴影选项，不同的渲染路径（前向和延迟渲染）；着色器应该以某种方式应对所有这些复杂性。 表面着色器是一种代码生成方法，与使用低级顶点/像素着色器程序相比，可以更轻松地编写光照着色器。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://docs.unity3d.com/cn/current/uploads/Main/SurfaceShaderSimple.jpg">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/20018137-d2ff6da2b4e91a45.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1652600532/origin-of-ray/20018137-d2ff6da2b4e91a45.jpg_sdysuu.webp">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1652579914/origin-of-ray/screenshot-20220515-095732_izsvgx.png">
-<meta property="og:updated_time" content="2022-05-15T02:06:19.826Z">
+<meta property="og:updated_time" content="2022-05-15T07:43:02.023Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity 渲染原理（七）表面着色器与Shader Graph">
 <meta name="twitter:description" content="在内置渲染管线中，表面着色器是编写与光照交互的着色器的一种简化方式。 编写与光照交互的着色器非常复杂。有不同的光源类型，不同的阴影选项，不同的渲染路径（前向和延迟渲染）；着色器应该以某种方式应对所有这些复杂性。 表面着色器是一种代码生成方法，与使用低级顶点/像素着色器程序相比，可以更轻松地编写光照着色器。">
@@ -225,7 +225,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-05-15 10:06:19" itemprop="dateModified" datetime="2022-05-15T10:06:19+08:00">2022-05-15</time>
+                <time title="Modified: 2022-05-15 15:43:02" itemprop="dateModified" datetime="2022-05-15T15:43:02+08:00">2022-05-15</time>
               </span>
 
           
@@ -352,7 +352,7 @@
 <p>这些Pass有些是为了针对不同的渲染路径，例如，默认情况下Unity 会为前向渲染路径生成LightMode 为 ForwardBase 和 ForwardAdd 的Pass，为Unity 5 之前的延迟渲染路径生成LightMode 为PrePassBase 和 PrePassFinal 的Pass，为Unity5之后的延迟渲染路径生成LightMode 为 Deferred 的Pass。</p>
 <p>还有一些Pass 是用于产生额外的信息。例如，为了给光照映射和动态全局光照提取表面信息，Unity 会生成一个LightMode 为 Meta 的Pass。这些Pass 的生成都是基于我们再表面着色器中的编译指令和自定义的函数，这是由规律可循的。Unity 提供了一个功能，让我们可以对表面着色器自动生成的代码一探究竟：在每个编译完成的表面着色器的面板上，有一个“Show generated code” 按钮，如下图所示。我们只需要单击一下就可以看到Unity为这个表面着色器生成的所有顶点/片元着色器。</p>
 <p>以Unity生成的LightMode 为ForwardBase 的Pass为例，它的渲染流水线如下图所示：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/20018137-d2ff6da2b4e91a45.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp" alt></p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1652600532/origin-of-ray/20018137-d2ff6da2b4e91a45.jpg_sdysuu.webp" alt></p>
 <p>Unity对该Pass的自动生成过程大致如下：</p>
 <ol>
 <li>将表面着色器中CGPROGRAM和ENDCG之间的代码复制过来。</li>
