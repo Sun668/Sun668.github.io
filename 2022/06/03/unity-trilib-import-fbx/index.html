@@ -28,7 +28,7 @@
 <meta property="og:description" content="最近在开发一个Unity人物形象的SDK，目标是该SDK可以动态下载最新的人物和服装的模型而不用让提前内置在SDK中。 一开始我打算采用的方案是传统的比较成熟的Addressables去打包bundle的方式，但是bundle的划分是个问题，而且这种方式需要每次把模型导入unity然后再出包，再更新catalog，整个流程比较繁琐。 所以我就在想，能不能直接从远程加载FBX和贴图，然后直接使用FB">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1654240809/origin-of-ray/screenshot-20220603-151953_fuledj.png">
-<meta property="og:updated_time" content="2022-06-03T07:57:21.996Z">
+<meta property="og:updated_time" content="2022-06-07T00:20:28.742Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity下TriLib远程加载FBX的使用与源码解析">
 <meta name="twitter:description" content="最近在开发一个Unity人物形象的SDK，目标是该SDK可以动态下载最新的人物和服装的模型而不用让提前内置在SDK中。 一开始我打算采用的方案是传统的比较成熟的Addressables去打包bundle的方式，但是bundle的划分是个问题，而且这种方式需要每次把模型导入unity然后再出包，再更新catalog，整个流程比较繁琐。 所以我就在想，能不能直接从远程加载FBX和贴图，然后直接使用FB">
@@ -215,10 +215,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-06-03 06:31:34 / Modified: 15:57:21" itemprop="dateCreated datePublished" datetime="2022-06-03T06:31:34+08:00">2022-06-03</time>
+              <time title="Created: 2022-06-03 06:31:34" itemprop="dateCreated datePublished" datetime="2022-06-03T06:31:34+08:00">2022-06-03</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-07 08:20:28" itemprop="dateModified" datetime="2022-06-07T08:20:28+08:00">2022-06-07</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -298,6 +304,7 @@
 <li>ProcessTextures最终会调用ProcessMaterial</li>
 <li>ProcessMaterial首先会调用第一步选择出来的MaterialMapper的Map方法，创建一个材质出来，然后会调用MaterialMapper的ApplyMaterialToRenderer又创建处一个材质。这两步创建的材质都是根据从事先设置好的模版中选择了一个，而选择的依据是LoadModel导入时自带的那些配置。</li>
 </ul>
+<p>解决方案是，在第一步创建assetOptions的时候，把useAlpha那个属性设置为false（默认为true）</p>
 
     </div>
 
@@ -333,7 +340,10 @@
     <a href="/2022/05/21/unity-render-pipeline-9/" rel="prev" title="Unity 渲染原理（九）Unity光照模型">
       <i class="fa fa-chevron-left"></i> Unity 渲染原理（九）Unity光照模型
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/04/unity-render-pipeline-10/" rel="next" title="Unity 渲染原理（十）Unity基础纹理">
+      Unity 渲染原理（十）Unity基础纹理 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -407,7 +417,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">207</span>
+          <span class="site-state-item-count">208</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
