@@ -13,7 +13,7 @@
   <url>
     <loc>https://sunra.top/2022/06/04/unity-render-pipeline-10/</loc>
     
-    <lastmod>2022-06-04</lastmod>
+    <lastmod>2022-06-07</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1901,14 +1901,14 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Cloud/</loc>
+    <loc>https://sunra.top/categories/Sundry/</loc>
     <lastmod>2022-06-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Sundry/</loc>
+    <loc>https://sunra.top/categories/Cloud/</loc>
     <lastmod>2022-06-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1929,13 +1929,6 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Math/</loc>
-    <lastmod>2022-06-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://sunra.top/categories/Algorithm/</loc>
     <lastmod>2022-06-07</lastmod>
     <changefreq>weekly</changefreq>
@@ -1943,7 +1936,7 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Blockchain/</loc>
+    <loc>https://sunra.top/categories/Math/</loc>
     <lastmod>2022-06-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1951,6 +1944,13 @@
   
   <url>
     <loc>https://sunra.top/categories/JavaScript/</loc>
+    <lastmod>2022-06-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://sunra.top/categories/Blockchain/</loc>
     <lastmod>2022-06-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
