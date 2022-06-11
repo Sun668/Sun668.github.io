@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sunra.top/2022/06/11/operating-system-note-9-process-dispatch/</loc>
+    
+    <lastmod>2022-06-11</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://sunra.top/2021/10/14/operating-system-note-3-process-and-thread/</loc>
     
     <lastmod>2022-06-11</lastmod>
@@ -12,15 +21,6 @@
   
   <url>
     <loc>https://sunra.top/2022/06/03/unity-trilib-import-fbx/</loc>
-    
-    <lastmod>2022-06-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sunra.top/2022/06/04/unity-render-pipeline-10/</loc>
     
     <lastmod>2022-06-07</lastmod>
     
@@ -1901,14 +1901,14 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Cloud/</loc>
+    <loc>https://sunra.top/categories/Sundry/</loc>
     <lastmod>2022-06-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Sundry/</loc>
+    <loc>https://sunra.top/categories/Cloud/</loc>
     <lastmod>2022-06-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1929,14 +1929,14 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Math/</loc>
+    <loc>https://sunra.top/categories/Algorithm/</loc>
     <lastmod>2022-06-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Algorithm/</loc>
+    <loc>https://sunra.top/categories/Math/</loc>
     <lastmod>2022-06-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
