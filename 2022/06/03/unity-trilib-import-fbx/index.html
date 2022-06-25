@@ -28,7 +28,7 @@
 <meta property="og:description" content="最近在开发一个Unity人物形象的SDK，目标是该SDK可以动态下载最新的人物和服装的模型而不用让提前内置在SDK中。 一开始我打算采用的方案是传统的比较成熟的Addressables去打包bundle的方式，但是bundle的划分是个问题，而且这种方式需要每次把模型导入unity然后再出包，再更新catalog，整个流程比较繁琐。 所以我就在想，能不能直接从远程加载FBX和贴图，然后直接使用FB">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1654240809/origin-of-ray/screenshot-20220603-151953_fuledj.png">
-<meta property="og:updated_time" content="2022-06-21T13:17:06.795Z">
+<meta property="og:updated_time" content="2022-06-25T05:27:14.742Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity下TriLib远程加载FBX的使用与源码解析">
 <meta name="twitter:description" content="最近在开发一个Unity人物形象的SDK，目标是该SDK可以动态下载最新的人物和服装的模型而不用让提前内置在SDK中。 一开始我打算采用的方案是传统的比较成熟的Addressables去打包bundle的方式，但是bundle的划分是个问题，而且这种方式需要每次把模型导入unity然后再出包，再更新catalog，整个流程比较繁琐。 所以我就在想，能不能直接从远程加载FBX和贴图，然后直接使用FB">
@@ -223,7 +223,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-21 21:17:06" itemprop="dateModified" datetime="2022-06-21T21:17:06+08:00">2022-06-21</time>
+                <time title="Modified: 2022-06-25 13:27:14" itemprop="dateModified" datetime="2022-06-25T13:27:14+08:00">2022-06-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -308,7 +308,8 @@
 <h3 id="loadFbxFromZipFile丢失贴图（v2-1-6）"><a href="#loadFbxFromZipFile丢失贴图（v2-1-6）" class="headerlink" title="loadFbxFromZipFile丢失贴图（v2.1.6）"></a>loadFbxFromZipFile丢失贴图（v2.1.6）</h3><p>当你成功将fbx导入后，你会发现，你的材质中可能没有贴图，这个时候需要检查zip包中的贴图名称是否正确，即你的fbx中指定的贴图名称是什么，你的实际的贴图名称就要是什么，trilib是通过文件名进行映射的。</p>
 <h3 id="贴图的isReadable为false（v2-1-6）"><a href="#贴图的isReadable为false（v2-1-6）" class="headerlink" title="贴图的isReadable为false（v2.1.6）"></a>贴图的isReadable为false（v2.1.6）</h3><p>在升级成2.1.6版本之后，trilib的导入的材质中的贴图是无法读取的，也就是说<code>Read/Write Enable</code>是没有勾选的那种。</p>
 <p>这个可以看到官方文档上说，这个是故意的，而且没有选项可以修改这个配置，那么我们就只能去修改它的底层代码了。</p>
-
+<p>最后我选择的是改变MaterialMapper中的<code>ApplyDiffuseMapTexture</code>方法，因为我的项目时URP项目，所以修改的是UniversalUniversalRPMaterialMapper</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">private void ApplyDiffuseMapTexture(TextureLoadingContext textureLoadingContext)</span><br><span class="line">&#123;</span><br><span class="line">    if (textureLoadingContext.UnityTexture != null)</span><br><span class="line">    &#123;</span><br><span class="line">        Texture2D unityTexture = new Texture2D(textureLoadingContext.UnityTexture.width, textureLoadingContext.UnityTexture.height, textureLoadingContext.UnityTexture.graphicsFormat, textureLoadingContext.UnityTexture.mipmapCount, TextureCreationFlags.None);</span><br><span class="line"></span><br><span class="line">        Graphics.CopyTexture(textureLoadingContext.UnityTexture, unityTexture);</span><br><span class="line">        DestroyImmediate(textureLoadingContext.UnityTexture);</span><br><span class="line">        textureLoadingContext.UnityTexture = unityTexture;</span><br><span class="line">        textureLoadingContext.Context.AddUsedTexture(textureLoadingContext.UnityTexture);</span><br><span class="line">    &#125;</span><br><span class="line">    textureLoadingContext.MaterialMapperContext.VirtualMaterial.SetProperty(&quot;_BaseMap&quot;, textureLoadingContext.UnityTexture, GenericMaterialProperty.DiffuseMap);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
     </div>
 
     
