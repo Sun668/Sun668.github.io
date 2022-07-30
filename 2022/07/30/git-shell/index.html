@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近在写打包流水线的时候，遇到了几个坑，稍微总结一下。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2022-07-30T01:12:51.772Z">
+<meta property="og:updated_time" content="2022-07-30T01:16:03.564Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 命令行踩坑笔记">
 <meta name="twitter:description" content="最近在写打包流水线的时候，遇到了几个坑，稍微总结一下。">
@@ -215,7 +215,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-07-30 08:55:06 / Modified: 09:12:51" itemprop="dateCreated datePublished" datetime="2022-07-30T08:55:06+08:00">2022-07-30</time>
+              <time title="Created: 2022-07-30 08:55:06 / Modified: 09:16:03" itemprop="dateCreated datePublished" datetime="2022-07-30T08:55:06+08:00">2022-07-30</time>
             </span>
 
           
@@ -240,7 +240,8 @@
 <p><code>$()</code>内部的就是subprocess，它的失败不会导致shell直接退出</p>
 <h3 id="set-e"><a href="#set-e" class="headerlink" title="set +e"></a>set +e</h3><p><strong>在shell的头部设置set +e，保证失败不退出，然后检查命令是否执行成功</strong></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">set +e</span><br><span class="line"></span><br><span class="line">git clone --depth=1 -b "$branch" "$&#123;git_url&#125;" "$&#123;products_dir&#125;"</span><br><span class="line">if [[ $? -ne 0 ]]; then</span><br><span class="line">    echo "remote $branch not existed"</span><br><span class="line">    git clone--depth=1 -b master "$&#123;git_url&#125;" "$&#123;products_dir&#125;"</span><br><span class="line">    git checkout -b "$&#123;branch&#125;"</span><br><span class="line">    git push -u origin "$&#123;branch&#125;"</span><br><span class="line">else</span><br><span class="line">    echo "remote $branch existed"</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
-<p>$? 的意思是获取上一条指令的执行结果，如果结果为0则表示成功。</p>
+<p><code>$?</code> 的意思是获取上一条指令的执行结果，如果结果为0则表示成功。</p>
+<h2 id="如果仓库使用了lfs，最好使用git-lfs命令"><a href="#如果仓库使用了lfs，最好使用git-lfs命令" class="headerlink" title="如果仓库使用了lfs，最好使用git lfs命令"></a>如果仓库使用了lfs，最好使用git lfs命令</h2><p>就是说如果你的仓库使用了lfs，那么，尽量使用<code>git lfs clone</code>，而不是<code>git clone</code>,其他命令同理</p>
 
     </div>
 
@@ -335,7 +336,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#远程分支存在则拉取，不存在则checkout"><span class="nav-number">1.</span> <span class="nav-text">远程分支存在则拉取，不存在则checkout</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全量拉取"><span class="nav-number">1.1.</span> <span class="nav-text">全量拉取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#subprocess尝试拉取最新版本"><span class="nav-number">1.2.</span> <span class="nav-text">subprocess尝试拉取最新版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set-e"><span class="nav-number">1.3.</span> <span class="nav-text">set +e</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#远程分支存在则拉取，不存在则checkout"><span class="nav-number">1.</span> <span class="nav-text">远程分支存在则拉取，不存在则checkout</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全量拉取"><span class="nav-number">1.1.</span> <span class="nav-text">全量拉取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#subprocess尝试拉取最新版本"><span class="nav-number">1.2.</span> <span class="nav-text">subprocess尝试拉取最新版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set-e"><span class="nav-number">1.3.</span> <span class="nav-text">set +e</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果仓库使用了lfs，最好使用git-lfs命令"><span class="nav-number">2.</span> <span class="nav-text">如果仓库使用了lfs，最好使用git lfs命令</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
