@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://sunra.top/2022/07/27/unity-code-strip-and-linker/</loc>
+    <lastmod>2022-07-30</lastmod>
+  </url>
+  <url>
     <loc>https://sunra.top/2022/07/24/unity-render-pipeline-12/</loc>
-    <lastmod>2022-07-26</lastmod>
+    <lastmod>2022-07-27</lastmod>
+  </url>
+  <url>
+    <loc>https://sunra.top/2022/07/03/unity-render-pipeline-11/</loc>
+    <lastmod>2022-07-27</lastmod>
   </url>
   <url>
     <loc>https://sunra.top/2022/07/16/advanced-mathematic-summary/</loc>
@@ -11,10 +19,6 @@
   <url>
     <loc>https://sunra.top/2022/07/08/why-singletons-are-controversial/</loc>
     <lastmod>2022-07-08</lastmod>
-  </url>
-  <url>
-    <loc>https://sunra.top/2022/07/03/unity-render-pipeline-11/</loc>
-    <lastmod>2022-07-03</lastmod>
   </url>
   <url>
     <loc>https://sunra.top/2022/06/12/unity-render-pipeline-10/</loc>
