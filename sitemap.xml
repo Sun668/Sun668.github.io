@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sunra.top/2022/07/30/git-shell/</loc>
+    
+    <lastmod>2022-07-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://sunra.top/2022/07/27/unity-code-strip-and-linker/</loc>
     
     <lastmod>2022-07-30</lastmod>
@@ -1964,14 +1973,14 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Cloud/</loc>
+    <loc>https://sunra.top/categories/Sundry/</loc>
     <lastmod>2022-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Sundry/</loc>
+    <loc>https://sunra.top/categories/Cloud/</loc>
     <lastmod>2022-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1992,14 +2001,14 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Math/</loc>
+    <loc>https://sunra.top/categories/Algorithm/</loc>
     <lastmod>2022-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Algorithm/</loc>
+    <loc>https://sunra.top/categories/Math/</loc>
     <lastmod>2022-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
