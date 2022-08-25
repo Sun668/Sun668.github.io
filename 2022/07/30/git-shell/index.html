@@ -27,10 +27,12 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近在写打包流水线的时候，遇到了几个坑，稍微总结一下。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2022-07-30T01:16:03.564Z">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1661417543/origin-of-ray/WX20220825-165055_bxookt.png">
+<meta property="og:updated_time" content="2022-08-25T08:55:21.932Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 命令行踩坑笔记">
 <meta name="twitter:description" content="最近在写打包流水线的时候，遇到了几个坑，稍微总结一下。">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1661417543/origin-of-ray/WX20220825-165055_bxookt.png">
 
 <link rel="canonical" href="https://sunra.top/2022/07/30/git-shell/">
 
@@ -213,10 +215,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-07-30 08:55:06 / Modified: 09:16:03" itemprop="dateCreated datePublished" datetime="2022-07-30T08:55:06+08:00">2022-07-30</time>
+              <time title="Created: 2022-07-30 08:55:06" itemprop="dateCreated datePublished" datetime="2022-07-30T08:55:06+08:00">2022-07-30</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-08-25 16:55:21" itemprop="dateModified" datetime="2022-08-25T16:55:21+08:00">2022-08-25</time>
+              </span>
 
           
 
@@ -242,6 +250,15 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">set +e</span><br><span class="line"></span><br><span class="line">git clone --depth=1 -b "$branch" "$&#123;git_url&#125;" "$&#123;products_dir&#125;"</span><br><span class="line">if [[ $? -ne 0 ]]; then</span><br><span class="line">    echo "remote $branch not existed"</span><br><span class="line">    git clone--depth=1 -b master "$&#123;git_url&#125;" "$&#123;products_dir&#125;"</span><br><span class="line">    git checkout -b "$&#123;branch&#125;"</span><br><span class="line">    git push -u origin "$&#123;branch&#125;"</span><br><span class="line">else</span><br><span class="line">    echo "remote $branch existed"</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
 <p><code>$?</code> 的意思是获取上一条指令的执行结果，如果结果为0则表示成功。</p>
 <h2 id="如果仓库使用了lfs，最好使用git-lfs命令"><a href="#如果仓库使用了lfs，最好使用git-lfs命令" class="headerlink" title="如果仓库使用了lfs，最好使用git lfs命令"></a>如果仓库使用了lfs，最好使用git lfs命令</h2><p>就是说如果你的仓库使用了lfs，那么，尽量使用<code>git lfs clone</code>，而不是<code>git clone</code>,其他命令同理</p>
+<h2 id="android-requestLegacyExternalStorage-not-found"><a href="#android-requestLegacyExternalStorage-not-found" class="headerlink" title="android:requestLegacyExternalStorage not found"></a>android:requestLegacyExternalStorage not found</h2><p>如果你在打包APK过程中遇到了这样的报错：<code>AAPT: error: attribute android:requestLegacyExternalStorage not found.</code></p>
+<p>当项目build.gradle - compileSdkVersion配置的版本小于29，并且还在AndroidManifest.xml - application中配置了android:requestLegacyExternalStorage属性(不管是自己项目还是三方库配置了这个属性)，就会导致这个问题的产生。<br>这个属性主要作用是因为Android 10.0的存储权限调整，Google推出的临时解决方案。</p>
+<p>这个博客上介绍了两种解决方法：<a href="https://juejin.cn/post/6850418117093523464" rel="external nofollow noopener noreferrer" target="_blank">https://juejin.cn/post/6850418117093523464</a></p>
+<p>不过这两种方法不适用于我们的情况，因为我们是直接产生APK的，没有办法暂停下来操作中间的Gradle产物，当然我们可以说先打包Gradle项目出来，再构建APK</p>
+<p>不过Unity官方提供了方法，我们可以定义中间Gradle产物的<code>AndroidManifest.xml</code>，这里分两种，一种是定义unityLibrary的，一种是定义launcher的，我们采取第二种</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1661417543/origin-of-ray/WX20220825-165055_bxookt.png" alt></p>
+<p>然后将生成的<code>Assets/Plugins/Android/LauncherManifest.xml</code>改成这样：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- GENERATED BY UNITY. REMOVE THIS COMMENT TO PREVENT OVERWRITING WHEN EXPORTING AGAIN--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">manifest</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">package</span>=<span class="string">"com.unity3d.player"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:tools</span>=<span class="string">"http://schemas.android.com/tools"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:installLocation</span>=<span class="string">"preferExternal"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">supports-screens</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:smallScreens</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:normalScreens</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:largeScreens</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:xlargeScreens</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:anyDensity</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">application</span> <span class="attr">android:extractNativeLibs</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">                 <span class="attr">android:label</span>=<span class="string">"@string/app_name"</span></span></span><br><span class="line"><span class="tag">                 <span class="attr">android:icon</span>=<span class="string">"@mipmap/app_icon"</span></span></span><br><span class="line"><span class="tag">                 <span class="attr">tools:remove</span>=<span class="string">"android:requestLegacyExternalStorage"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>主要就是在application标签中添加<code>tools:remove=&quot;android:requestLegacyExternalStorage&quot;</code></p>
 
     </div>
 
@@ -339,7 +356,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#远程分支存在则拉取，不存在则checkout"><span class="nav-number">1.</span> <span class="nav-text">远程分支存在则拉取，不存在则checkout</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全量拉取"><span class="nav-number">1.1.</span> <span class="nav-text">全量拉取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#subprocess尝试拉取最新版本"><span class="nav-number">1.2.</span> <span class="nav-text">subprocess尝试拉取最新版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set-e"><span class="nav-number">1.3.</span> <span class="nav-text">set +e</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果仓库使用了lfs，最好使用git-lfs命令"><span class="nav-number">2.</span> <span class="nav-text">如果仓库使用了lfs，最好使用git lfs命令</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#远程分支存在则拉取，不存在则checkout"><span class="nav-number">1.</span> <span class="nav-text">远程分支存在则拉取，不存在则checkout</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全量拉取"><span class="nav-number">1.1.</span> <span class="nav-text">全量拉取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#subprocess尝试拉取最新版本"><span class="nav-number">1.2.</span> <span class="nav-text">subprocess尝试拉取最新版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set-e"><span class="nav-number">1.3.</span> <span class="nav-text">set +e</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果仓库使用了lfs，最好使用git-lfs命令"><span class="nav-number">2.</span> <span class="nav-text">如果仓库使用了lfs，最好使用git lfs命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#android-requestLegacyExternalStorage-not-found"><span class="nav-number">3.</span> <span class="nav-text">android:requestLegacyExternalStorage not found</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
