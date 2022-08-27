@@ -189,6 +189,72 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/06/25/operating-system-note-10-xmind/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/06/25/operating-system-note-10-xmind/" class="post-title-link" itemprop="url">操作系统学习笔记（十）操作系统知识点梳理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-06-25 13:15:29 / Modified: 13:18:09" itemprop="dateCreated datePublished" datetime="2022-06-25T13:15:29+08:00">2022-06-25</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>近期刚把操作系统整本书看了一遍，趁着有个总体印象，先梳理一下知识点</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/06/25/operating-system-note-10-xmind/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/06/12/unity-render-pipeline-10/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -917,97 +983,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/04/14/storage-management-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/14/storage-management-1/" class="post-title-link" itemprop="url">计算机存储管理全面梳理（一）内存管理的基本原理和要求</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-04-14 21:40:41" itemprop="dateCreated datePublished" datetime="2022-04-14T21:40:41+08:00">2022-04-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-04-16 11:00:28" itemprop="dateModified" datetime="2022-04-16T11:00:28+08:00">2022-04-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/OS/" itemprop="url" rel="index"><span itemprop="name">OS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在看了计算机组成原理中的存储系统一章后，结合操作系统中的内存管理和文件管理，对整个计算机的存储管理有了新的理解，这里就一起杂糅着总结一下。<br>首先抛出几个我的总体看完以后的新的理解：</p>
-<ul>
-<li>计算机的存储管理，是分层次的，从高速缓存到内存到外存，速度依次降低，大小逐渐增大，价格逐渐便宜。</li>
-<li>CPU从这三层获取数据的速度逐渐降低，我们存储管理搞了这么多骚操作，其实就是为了省钱的同时，既提高访问速度（局部性原理，层层缓存），又提高可用的地址空间（虚拟内存）</li>
-<li>无论是哪个层次，所面对的问题都是地址的映射，空间的分配，以及空间不够时的置换替换策略（这三者之间是强相关的，比如分页的分配方式，地址映射就需要用到页表，请求式分页的分配方式，空间的分配和置换也是强相关的）。</li>
-<li>只有存在空间不够的情况才需要置换策略，比如cache置换，比如请求式的分页的内存。像连续分配或者普通的分页式分配则不需要置换策略，空间不够就不分配，不存在把哪个内存暂时置换出来的问题。</li>
-<li>各种空间管理方式之间不是独立的，是有内在的递进关系的。以内存分配为例，一开始是连续分配，但是发现连续分配很容易出现碎片化问题，就想到了不连续分配，不连续分配分为分段，分页和段页式，但是注意，到目前为止，只是内存分配的问题，整个程序还是需要一开始就完全加载到内存中。由此我们提出了虚拟内存的概念，为了配合虚拟内存，我们升级分段，分页和段页式为请求式的，页表项或者段表项中会多一些字段用于缺页时外存地址，会多一些字段用于内存置换时的标志。</li>
-<li>分页/段和虚拟内存是两回事，分页是一种空间分配方式，虚拟内存是是一种逻辑上扩充内存空间的方式，只不过虚拟内存使用请求式的分页或分段而已。</li>
-<li>连续分配和基本的分页分段只有分配策略，如首次适应算法，临近适应算法等，但是没有特别的置换策略，不存在程序还在运行时的置换，都是一次性全部分配，能分配则运行，运行完一次性全部卸载。而像请求式分页这种它的分配策略还牵扯到置换策略。</li>
-<li>现代操作系统的内存访问路径大致是这样的：首先程序给出指令或者数据的虚拟内存相对地址，然后通过地址重定位得到虚拟内存的实际地址，然后去查询段表或者页表是否已经加载到了内存中，如果加载到了内存中，且在cache中，则直接从cache返回，如果在内存而不再cache，则从内存中加载并更新cache（可能发生替换），如果不在内存中，则从页表项中找到外存地址，加载到内存中（可能发生替换），再返回给CPU并更新cache。</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/04/14/storage-management-1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1078,7 +1053,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">219</span>
+          <span class="site-state-item-count">220</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
