@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="在以前的文章中，我们通过调用栈执行上下文讲清楚了JavaScript的作用域链和闭包的原理。 这次我们来讲一下JavaScript中另外一个非常重要的概念this。 这篇文章有两个要点，第一，this是个什么东西，第二，this指向如何判断。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-09-03T00:51:59.259Z">
+<meta property="og:updated_time" content="2022-09-25T08:58:38.636Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript执行机制（四）this指向的是什么？">
 <meta name="twitter:description" content="在以前的文章中，我们通过调用栈执行上下文讲清楚了JavaScript的作用域链和闭包的原理。 这次我们来讲一下JavaScript中另外一个非常重要的概念this。 这篇文章有两个要点，第一，this是个什么东西，第二，this指向如何判断。">
@@ -222,7 +222,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-03 08:51:59" itemprop="dateModified" datetime="2021-09-03T08:51:59+08:00">2021-09-03</time>
+                <time title="Modified: 2022-09-25 16:58:38" itemprop="dateModified" datetime="2022-09-25T16:58:38+08:00">2022-09-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -289,6 +289,9 @@
 </ul>
 <p>为了直观理解，我们可以用代码来演示下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> tempObj = &#123;&#125;</span><br><span class="line">CreateObj.call(tempObj)</span><br><span class="line"><span class="keyword">return</span> tempObj</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，上面这个流程只是建立在<code>CreateObj</code>函数内部没有返回的基础上，如果该函数内部返回了一个对象，那么myObj就是该对象</p>
+</blockquote>
 <h2 id="特例：箭头函数"><a href="#特例：箭头函数" class="headerlink" title="特例：箭头函数"></a>特例：箭头函数</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> myObj = &#123;</span><br><span class="line">  name : <span class="string">"极客时间"</span>, </span><br><span class="line">  showThis: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>)</span><br><span class="line">    <span class="keyword">var</span> bar = <span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.name = <span class="string">"极客邦"</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    bar()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">myObj.showThis()</span><br><span class="line"><span class="built_in">console</span>.log(myObj.name)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.name)</span><br></pre></td></tr></table></figure>
 <p>执行这段代码，你会发现它也输出了我们想要的结果，也就是箭头函数 bar 里面的 this 是指向 myObj 对象的。这是因为 <strong>ES6 中的箭头函数并不会创建其自身的执行上下文，所以箭头函数中的 this 取决于它的外部函数</strong>。</p>
 

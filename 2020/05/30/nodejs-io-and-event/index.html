@@ -30,7 +30,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://segmentfault.com/img/remote/1460000005173228">
 <meta property="og:image" content="https://segmentfault.com/img/remote/1460000006792647">
-<meta property="og:updated_time" content="2021-09-03T00:51:57.834Z">
+<meta property="og:updated_time" content="2022-09-25T08:56:33.268Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nodejs 异步IO与事件驱动">
 <meta name="twitter:description" content="nodejs的两大特性，即异步IO和事件驱动。通过对《深入浅出nodejs》\和几篇博客的阅读以后，有了大致的了解，总结一下。 注意本文的内容基于node11以上。 同步与异步，阻塞与非阻塞“阻塞”与”非阻塞”与”同步”与“异步”不能简单的从字面理解，提供一个从分布式系统角度的回答。1.同步与异步同步和异步关注的是消息通信机制 (synchronous communication/ asynchr">
@@ -225,7 +225,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-03 08:51:57" itemprop="dateModified" datetime="2021-09-03T08:51:57+08:00">2021-09-03</time>
+                <time title="Modified: 2022-09-25 16:56:33" itemprop="dateModified" datetime="2022-09-25T16:56:33+08:00">2022-09-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -358,6 +358,7 @@
 <p>其实延迟2秒只是表示2秒后，setTimeout里的函数被会推入event queue，而event queue(事件队列)里的任务，只有在主线程空闲时才会执行。上述的流程走完，我们知道setTimeout这个函数，是经过指定时间后，把要执行的任务(本例中为console)加入到Event Queue中，又因为是单线程任务要一个一个执行，如果前面的任务需要的时间太久，那么只能等着，导致真正的延迟时间远远大于2秒。 我们还经常遇到setTimeout(fn，0)这样的代码，它的含义是，指定某个任务在主线程最早的空闲时间执行，意思就是不用再等多少秒了，只要主线程执行栈内的同步任务全部执行完成，栈为空就马上执行。但是即便主线程为空，0毫秒实际上也是达不到的。根据HTML的标准，最低是4毫秒。</p>
 <p>关于setInterval： 以setInterval(fn，ms)为例，setInterval是循环执行的，setInterval会每隔指定的时间将注册的函数置入Event Queue，不是每过ms秒会执行一次fn，而是每过ms秒，会有fn进入Event Queue。需要注意的一点是，一旦setInterval的回调函数fn执行时间超过了延迟时间ms，那么就完全看不出来有时间间隔了。</p>
 <p>上面的概念很基础也很容易理解但不幸的消息是上面讲的一切都不是绝对的正确，因为涉及到Promise、async/await、process.nextTick(node)所以要对任务有更精细的定义：</p>
+<p><strong>我们把宿主发起的任务称为宏观任务，把 JavaScript 引擎发起的任务称为微观任务。</strong></p>
 <p>宏任务(macro-task)：包括整体代码script、setTimeout、setInterval、MessageChannel、postMessage、setImmediate。<br> 微任务(micro-task)：Promise、process.nextTick、MutationObsever。</p>
 <p>在划分宏任务、微任务的时候并没有提到async/await因为async/await的本质就是Promise。</p>
 <p><strong>事件循环机制到底是怎么样的？ *不同类型的任务会进入对应的Event Queue，比如setTimeout和setInterval会进入相同(宏任务)的Event Queue。而Promise和process.nextTick会进入相同(微任务)的Event Queue</strong>。*</p>
