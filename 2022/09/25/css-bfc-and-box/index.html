@@ -20,18 +20,18 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="CSS用了很久，但是对于其中的一些用法总是有些模糊，没有一个系统的，有逻辑的认知。这次就先理清楚一下CSS中的BFC与盒子模型，以及相关的一些定位和布局属性。 默认情况下，元素是如何布局的？首先，取得元素的内容来放在一个独立的元素盒子中，然后在其周边加上内边距、边框和外边距 —- 就是我们之前看到的盒子模型。 默认的，一个块级元素的内容宽度是其父元素的 100%，其高度与其内容高度一致。内联元素的">
+  <meta name="description" content="CSS用了很久，但是对于其中的一些用法总是有些模糊，没有一个系统的，有逻辑的认知。这次就先理清楚一下CSS中的BFC与盒子模型，以及相关的一些定位和布局属性。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CSS的BFC与盒子模型">
 <meta property="og:url" content="https://sunra.top/2022/09/25/css-bfc-and-box/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="CSS用了很久，但是对于其中的一些用法总是有些模糊，没有一个系统的，有逻辑的认知。这次就先理清楚一下CSS中的BFC与盒子模型，以及相关的一些定位和布局属性。 默认情况下，元素是如何布局的？首先，取得元素的内容来放在一个独立的元素盒子中，然后在其周边加上内边距、边框和外边距 —- 就是我们之前看到的盒子模型。 默认的，一个块级元素的内容宽度是其父元素的 100%，其高度与其内容高度一致。内联元素的">
+<meta property="og:description" content="CSS用了很久，但是对于其中的一些用法总是有些模糊，没有一个系统的，有逻辑的认知。这次就先理清楚一下CSS中的BFC与盒子模型，以及相关的一些定位和布局属性。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model/box-model.png">
-<meta property="og:updated_time" content="2022-09-25T13:16:44.501Z">
+<meta property="og:updated_time" content="2022-09-26T01:54:02.192Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CSS的BFC与盒子模型">
-<meta name="twitter:description" content="CSS用了很久，但是对于其中的一些用法总是有些模糊，没有一个系统的，有逻辑的认知。这次就先理清楚一下CSS中的BFC与盒子模型，以及相关的一些定位和布局属性。 默认情况下，元素是如何布局的？首先，取得元素的内容来放在一个独立的元素盒子中，然后在其周边加上内边距、边框和外边距 —- 就是我们之前看到的盒子模型。 默认的，一个块级元素的内容宽度是其父元素的 100%，其高度与其内容高度一致。内联元素的">
+<meta name="twitter:description" content="CSS用了很久，但是对于其中的一些用法总是有些模糊，没有一个系统的，有逻辑的认知。这次就先理清楚一下CSS中的BFC与盒子模型，以及相关的一些定位和布局属性。">
 <meta name="twitter:image" content="https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model/box-model.png">
 
 <link rel="canonical" href="https://sunra.top/2022/09/25/css-bfc-and-box/">
@@ -215,10 +215,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-09-25 19:53:52 / Modified: 21:16:44" itemprop="dateCreated datePublished" datetime="2022-09-25T19:53:52+08:00">2022-09-25</time>
+              <time title="Created: 2022-09-25 19:53:52" itemprop="dateCreated datePublished" datetime="2022-09-25T19:53:52+08:00">2022-09-25</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-09-26 09:54:02" itemprop="dateModified" datetime="2022-09-26T09:54:02+08:00">2022-09-26</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -241,6 +247,7 @@
 
       
         <p>CSS用了很久，但是对于其中的一些用法总是有些模糊，没有一个系统的，有逻辑的认知。这次就先理清楚一下CSS中的BFC与盒子模型，以及相关的一些定位和布局属性。</p>
+<a id="more"></a>
 <h2 id="默认情况下，元素是如何布局的？"><a href="#默认情况下，元素是如何布局的？" class="headerlink" title="默认情况下，元素是如何布局的？"></a>默认情况下，元素是如何布局的？</h2><p>首先，取得元素的内容来放在一个独立的元素盒子中，然后在其周边加上内边距、边框和外边距 —- 就是我们之前看到的盒子模型。</p>
 <p>默认的，一个块级元素的内容宽度是其父元素的 100%，其高度与其内容高度一致。内联元素的 height width 与内容一致。你无法设置内联元素的 height width —- 它们就那样置于块级元素的内容里。如果你想控制内联元素的尺寸，你需要为元素设置display: block; （或者，display: inline-block; inline-block 混合了 inline 和 block 的特性。)</p>
 <p>这样解释了独立元素的布局，但是元素之间又是如何相互影响的呢？ 正常布局流（在布局介绍里提到过）是一套在浏览器视口内放置、组织元素的系统。默认的，块级元素按照基于其父元素的书写顺序(默认值： horizontal-tb) 的<em>块流动方向 (block flow direction)</em>放置 —- 每个块级元素会在上一个元素下面另起一行，它们会被设置好的 margin 分隔。在英语，或者其他水平书写、自上而下模式里，块级元素是垂直组织的。</p>
