@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sunra.top/2020/12/10/javascript-this/</loc>
+    
+    <lastmod>2022-10-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://sunra.top/2019/12/13/js-arrow-function-context/</loc>
     
     <lastmod>2022-10-01</lastmod>
@@ -32,15 +41,6 @@
     <loc>https://sunra.top/2022/09/25/css-bfc-and-box/</loc>
     
     <lastmod>2022-09-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sunra.top/2020/12/10/javascript-this/</loc>
-    
-    <lastmod>2022-09-25</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
