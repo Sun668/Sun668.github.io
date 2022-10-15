@@ -2081,13 +2081,6 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Security/</loc>
-    <lastmod>2022-10-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://sunra.top/categories/Sundry/</loc>
     <lastmod>2022-10-15</lastmod>
     <changefreq>weekly</changefreq>
@@ -2096,6 +2089,13 @@
   
   <url>
     <loc>https://sunra.top/categories/Cloud/</loc>
+    <lastmod>2022-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://sunra.top/categories/Security/</loc>
     <lastmod>2022-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -2151,14 +2151,14 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/CSS/</loc>
+    <loc>https://sunra.top/categories/Unity/</loc>
     <lastmod>2022-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Unity/</loc>
+    <loc>https://sunra.top/categories/CSS/</loc>
     <lastmod>2022-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
