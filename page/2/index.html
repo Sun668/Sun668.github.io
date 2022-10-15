@@ -189,6 +189,87 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/08/10/unity-render-pipeline-14/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/10/unity-render-pipeline-14/" class="post-title-link" itemprop="url">Unity 渲染原理（十四）Unity的光源</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-08-10 17:07:06" itemprop="dateCreated datePublished" datetime="2022-08-10T17:07:06+08:00">2022-08-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-08-14 16:24:26" itemprop="dateModified" datetime="2022-08-14T16:24:26+08:00">2022-08-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>只有一个平行光的世界很美好，但是，我们实际上就是需要在Unity Shader中处理更复杂的光源类型以及数目更多的光源。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/10/unity-render-pipeline-14/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/08/07/unity-render-pipeline-13/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -918,94 +999,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/06/11/operating-system-note-9-process-dispatch/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/06/11/operating-system-note-9-process-dispatch/" class="post-title-link" itemprop="url">操作系统学习笔记（三）进程的调度，同步/互斥与死锁</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-06-11 08:25:55" itemprop="dateCreated datePublished" datetime="2022-06-11T08:25:55+08:00">2022-06-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-12 20:42:48" itemprop="dateModified" datetime="2022-06-12T20:42:48+08:00">2022-06-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/OS/" itemprop="url" rel="index"><span itemprop="name">OS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>之前一篇博客讲过了进程存在的意义是什么，我们为什么要搞出进程这个概念。</p>
-<p>但是随之而来的就是几个连续的问题，也是多道并发会遇到的几个问题：</p>
-<ul>
-<li>多个进程并发的时候，如何进行调度，调度的原则是什么？</li>
-<li>如果多个进程之间有相互依赖关系怎么办，比如同步和互斥关系？</li>
-<li>如果因为依赖关系，产生了循环依赖，可能导致死锁，又该怎么办？</li>
-</ul>
-<p>这篇博客我们就第一个问题进行解释，那就是处理机如何进行调度的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/06/11/operating-system-note-9-process-dispatch/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1076,7 +1069,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">227</span>
+          <span class="site-state-item-count">228</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

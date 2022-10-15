@@ -189,6 +189,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/10/12/hash-table/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/12/hash-table/" class="post-title-link" itemprop="url">散列表的设计和应用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-12 21:42:34" itemprop="dateCreated datePublished" datetime="2020-10-12T21:42:34+08:00">2020-10-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-03 08:52:00" itemprop="dateModified" datetime="2021-09-03T08:52:00+08:00">2021-09-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="什么是散列表"><a href="#什么是散列表" class="headerlink" title="什么是散列表"></a>什么是散列表</h2><p>散列表的英文叫“Hash Table”，我们平时也叫它“哈希表”或者“Hash 表”</p>
+<p>散列表用的是数组支持按照下标随机访问数据的特性，所以散列表其实就是数组的一种扩展，由数组演化而来。可以说，如果没有数组，就没有散列表。</p>
+<p>为什么这么说呢？其实所谓的散列表的存储是从要存储的数据中抽取出某些数据，根据某个具体的规则计算出一个数组的下标，然后将这个数据存储到对应下标的位置，抽取出来的数据叫做<strong>键（key），或者叫关键字</strong>，这个规则就叫做<strong>散列函数</strong>，计算得到的数组下标就是<strong>散列值</strong>，或者叫Hash值。</p>
+<p>我们具体举个例子，我们要把一个名叫<strong>abcd.txt</strong>的文档存储在散列表中，我们就以文件名作为key，设计一个散列函数，这个散列函数入参就是文件名，经过一系列的计算，得到数组的下标是3，那么就把这个文档的内容存储在数组下标为3的地方，下次我想看一下是否存储过abcd.txt的文档，可以再次执行散列函数，得到下标3，然后去查询下标为3的地方是否有数据。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/10/12/hash-table/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/10/02/sort-algorithm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -934,91 +1018,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/08/25/vue-reactive/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/25/vue-reactive/" class="post-title-link" itemprop="url">Vue源码学习（一） 响应式原理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-08-25 07:00:26" itemprop="dateCreated datePublished" datetime="2020-08-25T07:00:26+08:00">2020-08-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-03 08:51:54" itemprop="dateModified" datetime="2021-09-03T08:51:54+08:00">2021-09-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Vue是一个MVVM框架，最吸引人的地方就是它的响应式。</p>
-<h2 id="官方解释"><a href="#官方解释" class="headerlink" title="官方解释"></a>官方解释</h2><p>首先我们看一下官方文档中对响应式原理的解释。</p>
-<h3 id="如何追踪变化"><a href="#如何追踪变化" class="headerlink" title="如何追踪变化"></a>如何追踪变化</h3><p>当你把一个普通的 JavaScript 对象传入 Vue 实例作为 <code>data</code> 选项，Vue 将遍历此对象所有的 property，并使用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" rel="external nofollow noopener noreferrer" target="_blank"><code>Object.defineProperty</code></a> 把这些 property 全部转为 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Working_with_Objects#定义_getters_与_setters" rel="external nofollow noopener noreferrer" target="_blank">getter/setter</a>。<code>Object.defineProperty</code> 是 ES5 中一个无法 shim 的特性，这也就是 Vue 不支持 IE8 以及更低版本浏览器的原因。</p>
-<p>这些 getter/setter 对用户来说是不可见的，但是在内部它们让 Vue 能够追踪依赖，在 property 被访问和修改时通知变更。这里需要注意的是不同浏览器在控制台打印数据对象时对 getter/setter 的格式化并不同，所以建议安装 <a href="https://github.com/vuejs/vue-devtools" rel="external nofollow noopener noreferrer" target="_blank">vue-devtools</a> 来获取对检查数据更加友好的用户界面。</p>
-<p>每个组件实例都对应一个 <strong>watcher</strong> 实例，它会在组件渲染的过程中把“接触”过的数据 property 记录为依赖。之后当依赖项的 setter 触发时，会通知 watcher，从而使它关联的组件重新渲染。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/08/25/vue-reactive/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1089,7 +1088,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">227</span>
+          <span class="site-state-item-count">228</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
