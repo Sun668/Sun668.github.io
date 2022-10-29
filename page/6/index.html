@@ -189,6 +189,176 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/01/02/operating-system-note-6-file-system-implementation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/02/operating-system-note-6-file-system-implementation/" class="post-title-link" itemprop="url">操作系统学习笔记（六）文件管理系统实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-01-02 07:56:20" itemprop="dateCreated datePublished" datetime="2022-01-02T07:56:20+08:00">2022-01-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-01-03 08:04:07" itemprop="dateModified" datetime="2022-01-03T08:04:07+08:00">2022-01-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OS/" itemprop="url" rel="index"><span itemprop="name">OS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="阅读前的思考"><a href="#阅读前的思考" class="headerlink" title="阅读前的思考"></a>阅读前的思考</h2><ul>
+<li>在目录中找到某个文件可以使用什么方法？</li>
+<li>文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构之间是否存在某些制约关系？</li>
+</ul>
+<p>上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/01/02/operating-system-note-6-file-system-implementation/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/12/26/operating-system-note-5-file-system-basics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/26/operating-system-note-5-file-system-basics/" class="post-title-link" itemprop="url">操作系统学习笔记（五）文件管理系统基础</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-12-26 08:31:09" itemprop="dateCreated datePublished" datetime="2021-12-26T08:31:09+08:00">2021-12-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-27 08:43:56" itemprop="dateModified" datetime="2021-12-27T08:43:56+08:00">2021-12-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OS/" itemprop="url" rel="index"><span itemprop="name">OS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="阅读的时候带着两个问题"><a href="#阅读的时候带着两个问题" class="headerlink" title="阅读的时候带着两个问题"></a>阅读的时候带着两个问题</h2><ul>
+<li>什么是文件？什么是文件系统？</li>
+<li>文件系统要完成哪些功能？</li>
+</ul>
+<p>要注意区分文件的逻辑结构和物理结构，不要把二者混为一谈.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/12/26/operating-system-note-5-file-system-basics/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/12/16/unity-render-pipeline-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -826,166 +996,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/10/16/uniyt-asset-workflow/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/16/uniyt-asset-workflow/" class="post-title-link" itemprop="url">Unity文档阅读笔记（二）Asset Workflow</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-16 14:36:03 / Modified: 15:13:02" itemprop="dateCreated datePublished" datetime="2021-10-16T14:36:03+08:00">2021-10-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>资产是你在Unity项目中用于创建游戏或应用的任何项目。资产可以代表项目中的视觉或音频元素，如3D模型、纹理、精灵、音效或音乐。资产还可以表示更抽象的项目，如颜色渐变、动画蒙版或任意文本或数字数据。资产可能来自于Unity之外创建的文件，如3D模型、音频文件或图像。你也可以在Unity编辑器中创建一些类型的资产，如ProBuilder Mesh, Animator Controller, Audio Mixer，或Render texture</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/16/uniyt-asset-workflow/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/10/14/operating-system-note-3-process-and-thread/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/14/operating-system-note-3-process-and-thread/" class="post-title-link" itemprop="url">操作系统学习笔记（三）进程与线程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-10-14 08:02:47" itemprop="dateCreated datePublished" datetime="2021-10-14T08:02:47+08:00">2021-10-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-11 10:35:04" itemprop="dateModified" datetime="2022-06-11T10:35:04+08:00">2022-06-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/OS/" itemprop="url" rel="index"><span itemprop="name">OS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>我们为什么需要进程？<br>进程又是什么，由什么组成？<br>进程如何解决问题？</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/14/operating-system-note-3-process-and-thread/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1052,7 +1066,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">229</span>
+          <span class="site-state-item-count">231</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
