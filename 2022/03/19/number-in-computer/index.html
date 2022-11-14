@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="我们都知道，计算机的核心是CPU，而CPU就是运算器和控制器，其作用就是进行数学运算。 想要理解CPU工作的原理，就要从两方面着手，一方面是计算机中的数据是如何表示的，另一方面就是在这种表示方式下，它的运算规则又是怎样的，计算机如何用电路去表示这种运算。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2022-09-25T08:11:55.534Z">
+<meta property="og:updated_time" content="2022-11-14T08:41:43.389Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机组成（二）：数据在计算机中的表示">
 <meta name="twitter:description" content="我们都知道，计算机的核心是CPU，而CPU就是运算器和控制器，其作用就是进行数学运算。 想要理解CPU工作的原理，就要从两方面着手，一方面是计算机中的数据是如何表示的，另一方面就是在这种表示方式下，它的运算规则又是怎样的，计算机如何用电路去表示这种运算。">
@@ -221,7 +221,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-09-25 16:11:55" itemprop="dateModified" datetime="2022-09-25T16:11:55+08:00">2022-09-25</time>
+                <time title="Modified: 2022-11-14 16:41:43" itemprop="dateModified" datetime="2022-11-14T16:41:43+08:00">2022-11-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -330,7 +330,7 @@ x & 1\gt x\ge0\\
 2^{n+1} + x = 2^{n+1} - |x| & 0 \gt x\ge-2^n
 \end{cases}
 \ mod\ 2^{n+1}</script><p>补码的表示数量比原码多了一位，就是最小能多表示一个数，原因是补码的正0和负0是一样的，于是我们就定义原本的-0为$-2^n$</p>
-<p>补码是最重要的表示方式，我们首先要理解，他为什么叫做补码。因为原码和反码之间的数量关系是互补的。对于负数来说，对应正数的原码+补码等于$2^{n+1}$</p>
+<p>补码是最重要的表示方式，我们首先要理解，他为什么叫做补码。因为原码和补码之间的数量关系是互补的。对于负数来说，对应正数的原码+补码等于$2^{n+1}$</p>
 <p>至于后面那个模2则是计算机的一种天然的运算，机器数一共8位，也就是n=7的时候，如果加上$2^8$，就是最高位之前多了个1，但是这一位其实是会溢出的，有相当于模了$2^{n+1}$。</p>
 <p>那么我们为什么要绕这么一大圈呢？</p>
 <p>我们用纯整数的定义来看，假设机器数长位8位，也就是上面公式的n=7，有一个负数-9，我们平时计算126加-9，可以是就是直接算，那就是117。</p>
