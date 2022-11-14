@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1668345886/origin-of-ray/2cc66895-f27b-4c7a-93bd-6cb29c3764a0_wsksby.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1668345953/origin-of-ray/d4f21b37-df29-497a-b109-f04af2790a75_ib658e.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1668346080/origin-of-ray/f342d1e1-b53d-4772-bbc4-d7afee416f53_yq0evb.png">
-<meta property="og:updated_time" content="2022-11-14T02:16:25.132Z">
+<meta property="og:updated_time" content="2022-11-14T03:42:22.614Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScript中Set，Map和Object的区别">
 <meta name="twitter:description" content="最近在阅读《Web高效编程与实践优化》的计算机基础一节，看到他讲了JS中Set和Map的区别，以及Object的实现，算是解决了往常的一点疑惑吧，这里简单总结下：">
@@ -228,7 +228,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-14 10:16:25" itemprop="dateModified" datetime="2022-11-14T10:16:25+08:00">2022-11-14</time>
+                <time title="Modified: 2022-11-14 11:42:22" itemprop="dateModified" datetime="2022-11-14T11:42:22+08:00">2022-11-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -289,7 +289,7 @@
 <h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><p>和Set基本一致，不同的地方是，map多了存储value的地方，</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1668346080/origin-of-ray/f342d1e1-b53d-4772-bbc4-d7afee416f53_yq0evb.png" alt></p>
 <p>当然它不是直接存放字符串“hello”，而是存放hello的指针地址， 指向实际存放hello的内存位置。</p>
-<h2 id="JS-Object"><a href="#JS-Object" class="headerlink" title="JS Object"></a>JS Object</h2><p>我们这里主要指的是JS的慢属性，JS Object主要也是采用哈希存储，和JS Map不一样的地方是，JS Object的容量是元素个数的两倍，就是上面说的哈希的典型实现。存储 结构也不一样，有一个专门存放key和一个存放value的数组，如果能找 到key，则拿到这个key的index去另外一个数组取出value值。当发生散列值冲突时，根据当前的index，直接计算下一个存储位置</p>
+<h2 id="JS-Object"><a href="#JS-Object" class="headerlink" title="JS Object"></a>JS Object</h2><p>这个可以参考这篇博客：<a href="https://sunra.top/2021/07/27/javascript-obj-attr-search/">https://sunra.top/2021/07/27/javascript-obj-attr-search/</a></p>
 
     </div>
 
