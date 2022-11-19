@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="随着对JS的知识的了解和实际的开发需要，内心对于重读设计模式的感触越来越深，所以就重新拿起了《JavaScrip设计模式与开发实践》一书，并结合《设计模式之美》的部分内容，做个总结。 首先提出几个问题，也是我这次的几个比较总结性的收获：  JavaScript是面向对象还是面向过程 函数式编程是面向对象还是面向过程  然后抛出我这次对设计模式的一个最大的收获，就是所有的设计模式，其实都是识别出代码">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2022-11-19T13:33:16.789Z">
+<meta property="og:updated_time" content="2022-11-19T13:35:06.061Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScript 设计模式学习与实践（一）">
 <meta name="twitter:description" content="随着对JS的知识的了解和实际的开发需要，内心对于重读设计模式的感触越来越深，所以就重新拿起了《JavaScrip设计模式与开发实践》一书，并结合《设计模式之美》的部分内容，做个总结。 首先提出几个问题，也是我这次的几个比较总结性的收获：  JavaScript是面向对象还是面向过程 函数式编程是面向对象还是面向过程  然后抛出我这次对设计模式的一个最大的收获，就是所有的设计模式，其实都是识别出代码">
@@ -215,7 +215,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-11-19 14:24:48 / Modified: 21:33:16" itemprop="dateCreated datePublished" datetime="2022-11-19T14:24:48+08:00">2022-11-19</time>
+              <time title="Created: 2022-11-19 14:24:48 / Modified: 21:35:06" itemprop="dateCreated datePublished" datetime="2022-11-19T14:24:48+08:00">2022-11-19</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
 <p>也就是说理论上提供，继承，多态，封装的语言就可以算是面向对象的语言，那么JavaScript算是面向对象的语言吗？</p>
 <p>笔者个人认为：<strong>JavaScript算是一门面向对象的语言，只是它的继承并不是通过类的形式，而是通过原型链的方式，虽然ES6后面也实现了class的语法，但本质上还是通过原型链的方式</strong>。</p>
 <p>首先说继承，通过类的方式实现继承和通过原型链的方式有什么区别呢？<strong>通过类的方式是一种is-a的关系，也就是说子类是父类的一种，而原型链继承则是有点类似接口（has-a）的方式，或者说有点像鸭子类型，也就是说，我现在需要一个变量，我更关注的是它有没有嘎嘎叫这个方法，而不是他是不是鸭子类的实例，即便他是狗的实例，他有嘎嘎叫的实例，那也是我要的</strong>。</p>
-<p>原型链式的继承的本质就是原型链的委托机制，要得到一个对象，不是实例化一个类，而是找到一个对象作为原型并克隆它</p>
+<p><strong>原型链式的继承的本质就是原型链的委托机制，要得到一个对象，不是实例化一个类，而是找到一个对象作为原型并克隆它，对象会将请求委托给它构造器的原型。</strong></p>
 <p>面向接口编程是设计模式中最重要的思想，但是在JavaScript中，面向接口编程与主流语言并不相同。</p>
 <p>再说多态，多态的含义是：统一操作作用于不同对象上面，可以产生不同的解释和不同的执行结果。换句话说，给不同的对象发送同一个消息时，这些对象会根据这个消息分别给出不同的反馈。</p>
 <p>多态背后的思想是：讲“做什么”和“谁去做以及怎样做”分离开来，也就是将“不变的食物”和“可能改变的事物”分离开来。将二者分开，分别封装，给予了我们扩展程序的能力，程序看起来是可生长的，这也符合开闭原则。</p>
