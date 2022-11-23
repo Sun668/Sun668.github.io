@@ -20,17 +20,17 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="随着对JS的知识的了解和实际的开发需要，内心对于重读设计模式的感触越来越深，所以就重新拿起了《JavaScrip设计模式与开发实践》一书，并结合《设计模式之美》的部分内容，做个总结。 首先提出几个问题，也是我这次的几个比较总结性的收获：  JavaScript是面向对象还是面向过程 函数式编程是面向对象还是面向过程  然后抛出我这次对设计模式的一个最大的收获，就是所有的设计模式，其实都是识别出代码">
+  <meta name="description" content="随着对JS的知识的了解和实际的开发需要，内心对于重读设计模式的感触越来越深，所以就重新拿起了《JavaScrip设计模式与开发实践》一书，并结合《设计模式之美》的部分内容，先做个总结，并先讲一下单例模式，剩下的后续慢慢讲。 首先提出几个问题，也是我这次的几个比较总结性的收获：  JavaScript是面向对象还是面向过程 函数式编程是面向对象还是面向过程  然后抛出我这次对设计模式的一个最大的收获">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript 设计模式学习与实践（一）">
 <meta property="og:url" content="https://sunra.top/2022/11/19/javascript-design-parttern-1/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="随着对JS的知识的了解和实际的开发需要，内心对于重读设计模式的感触越来越深，所以就重新拿起了《JavaScrip设计模式与开发实践》一书，并结合《设计模式之美》的部分内容，做个总结。 首先提出几个问题，也是我这次的几个比较总结性的收获：  JavaScript是面向对象还是面向过程 函数式编程是面向对象还是面向过程  然后抛出我这次对设计模式的一个最大的收获，就是所有的设计模式，其实都是识别出代码">
+<meta property="og:description" content="随着对JS的知识的了解和实际的开发需要，内心对于重读设计模式的感触越来越深，所以就重新拿起了《JavaScrip设计模式与开发实践》一书，并结合《设计模式之美》的部分内容，先做个总结，并先讲一下单例模式，剩下的后续慢慢讲。 首先提出几个问题，也是我这次的几个比较总结性的收获：  JavaScript是面向对象还是面向过程 函数式编程是面向对象还是面向过程  然后抛出我这次对设计模式的一个最大的收获">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2022-11-19T13:35:06.061Z">
+<meta property="og:updated_time" content="2022-11-19T23:17:56.670Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScript 设计模式学习与实践（一）">
-<meta name="twitter:description" content="随着对JS的知识的了解和实际的开发需要，内心对于重读设计模式的感触越来越深，所以就重新拿起了《JavaScrip设计模式与开发实践》一书，并结合《设计模式之美》的部分内容，做个总结。 首先提出几个问题，也是我这次的几个比较总结性的收获：  JavaScript是面向对象还是面向过程 函数式编程是面向对象还是面向过程  然后抛出我这次对设计模式的一个最大的收获，就是所有的设计模式，其实都是识别出代码">
+<meta name="twitter:description" content="随着对JS的知识的了解和实际的开发需要，内心对于重读设计模式的感触越来越深，所以就重新拿起了《JavaScrip设计模式与开发实践》一书，并结合《设计模式之美》的部分内容，先做个总结，并先讲一下单例模式，剩下的后续慢慢讲。 首先提出几个问题，也是我这次的几个比较总结性的收获：  JavaScript是面向对象还是面向过程 函数式编程是面向对象还是面向过程  然后抛出我这次对设计模式的一个最大的收获">
 
 <link rel="canonical" href="https://sunra.top/2022/11/19/javascript-design-parttern-1/">
 
@@ -213,10 +213,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-11-19 14:24:48 / Modified: 21:35:06" itemprop="dateCreated datePublished" datetime="2022-11-19T14:24:48+08:00">2022-11-19</time>
+              <time title="Created: 2022-11-19 14:24:48" itemprop="dateCreated datePublished" datetime="2022-11-19T14:24:48+08:00">2022-11-19</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-20 07:17:56" itemprop="dateModified" datetime="2022-11-20T07:17:56+08:00">2022-11-20</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -238,7 +244,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>随着对JS的知识的了解和实际的开发需要，内心对于重读设计模式的感触越来越深，所以就重新拿起了《JavaScrip设计模式与开发实践》一书，并结合《设计模式之美》的部分内容，做个总结。</p>
+        <p>随着对JS的知识的了解和实际的开发需要，内心对于重读设计模式的感触越来越深，所以就重新拿起了《JavaScrip设计模式与开发实践》一书，并结合《设计模式之美》的部分内容，先做个总结，并先讲一下单例模式，剩下的后续慢慢讲。</p>
 <p>首先提出几个问题，也是我这次的几个比较总结性的收获：</p>
 <ul>
 <li>JavaScript是面向对象还是面向过程</li>
@@ -253,13 +259,13 @@
 <p>实际上，面向过程编程和面向过程编程语言并没有严格的官方定义。理解这两个概念最好的方式是跟面向对象编程和面向对象编程语言进行对比。相较于面向对象编程以类为组织代码的基本单元，面向过程编程则是以过程（或方法）作为组织代码的基本单元。它最主要的特点就是数据和方法相分离。相较于面向对象编程语言，面向过程编程语言最大的特点就是不支持丰富的面向对象编程特性，比如继承、多态、封装。</p>
 <p>也就是说理论上提供，继承，多态，封装的语言就可以算是面向对象的语言，那么JavaScript算是面向对象的语言吗？</p>
 <p>笔者个人认为：<strong>JavaScript算是一门面向对象的语言，只是它的继承并不是通过类的形式，而是通过原型链的方式，虽然ES6后面也实现了class的语法，但本质上还是通过原型链的方式</strong>。</p>
-<p>首先说继承，通过类的方式实现继承和通过原型链的方式有什么区别呢？<strong>通过类的方式是一种is-a的关系，也就是说子类是父类的一种，而原型链继承则是有点类似接口（has-a）的方式，或者说有点像鸭子类型，也就是说，我现在需要一个变量，我更关注的是它有没有嘎嘎叫这个方法，而不是他是不是鸭子类的实例，即便他是狗的实例，他有嘎嘎叫的实例，那也是我要的</strong>。</p>
-<p><strong>原型链式的继承的本质就是原型链的委托机制，要得到一个对象，不是实例化一个类，而是找到一个对象作为原型并克隆它，对象会将请求委托给它构造器的原型。</strong></p>
-<p>面向接口编程是设计模式中最重要的思想，但是在JavaScript中，面向接口编程与主流语言并不相同。</p>
+<p>首先说继承，通过类的方式实现继承和通过原型链的方式有什么区别呢？<strong>通过类的方式是一种is-a的关系，也就是说子类是父类的一种，而原型链继承则是有点类似接口（has-a）的方式，或者说有点像鸭子类型，也就是说，我现在需要一个变量，我更关注的是它有没有say这个方法，而不是他是不是Duck的实例，即便他是Chicken的实例，他有say的方法，那也是我要的</strong>。</p>
+<p><strong>原型链式的继承的本质就是原型链的委托机制，要得到一个对象，不是实例化一个类，而是找到一个对象作为原型并克隆它，对象会将请求委托给它构造器的原型，比如JavaScript就提供Object.create的方式</strong></p>
+<p>面向接口编程是设计模式中最重要的思想，但是在JavaScript中，因为它是基于原型链继承的，所以它天生就暗含了面向接口编程的思想，面向接口编程与主流语言并不相同，更为简单。</p>
 <p>再说多态，多态的含义是：统一操作作用于不同对象上面，可以产生不同的解释和不同的执行结果。换句话说，给不同的对象发送同一个消息时，这些对象会根据这个消息分别给出不同的反馈。</p>
 <p>多态背后的思想是：讲“做什么”和“谁去做以及怎样做”分离开来，也就是将“不变的食物”和“可能改变的事物”分离开来。将二者分开，分别封装，给予了我们扩展程序的能力，程序看起来是可生长的，这也符合开闭原则。</p>
 <p>使用继承来实现多态，是让对象表现出多态性的一个最常见的手段。继承分为实现继承和接口继承，前者就是基于父子类的方式，后者就是通过接口的方式。</p>
-<p>多态本质是把做什么和谁去做分开，要实现这一点，就需要先消除类型之间的耦合关系，在java中，我们需要通过向上转型来实现，而在javascript中，变量类型在运行时是可变的，一个对象，既可以是Duck类型，又可以是Chicken类型，这意味着<strong>JavaScript中，对象的多态性是与生俱来的</strong>。</p>
+<p>多态本质是把做什么和谁去做分开，要实现这一点，就需要先消除类型之间的耦合关系，在Java中，我们需要通过向上转型来实现，而在JavaScript中，变量类型在运行时是可变的，一个对象，既可以是Duck类型，又可以是Chicken类型，我需要的是它say这个方法，这意味着<strong>JavaScript中，对象的多态性是与生俱来的</strong>。</p>
 <p>多态的最根本的好处在于，你不必再向对象询问“你是什么类型”而后根据得到的答案调用对象的某个行为，你只管调用就行了，其他一切多态机制都会为你安排妥当。换句话说，多态最根本的作用就是通过把过程化的条件分支语句转化为对象的多态性，从而消除这些条件分支语句。</p>
 <h2 id="什么叫函数式编程"><a href="#什么叫函数式编程" class="headerlink" title="什么叫函数式编程"></a>什么叫函数式编程</h2><p>在函数式编程中，函数是头等对象即头等函数，这意味着一个函数，既可以作为其它函数的输入参数值，也可以从函数中返回值，被修改或者被分配给一个变量。λ演算是这种范型最重要的基础，λ演算的函数可以接受函数作为输入参数和输出返回值。</p>
 <p>比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。</p>
@@ -346,7 +352,10 @@
     <a href="/2022/11/11/javascript-set-map-obj/" rel="prev" title="JavaScript中Set，Map和Object的区别">
       <i class="fa fa-chevron-left"></i> JavaScript中Set，Map和Object的区别
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/22/micro-frontend-qiankun-sandbox/" rel="next" title="微前端框架 Qiankun 沙箱原理">
+      微前端框架 Qiankun 沙箱原理 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -420,7 +429,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">234</span>
+          <span class="site-state-item-count">235</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
