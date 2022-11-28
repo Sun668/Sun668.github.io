@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sunra.top/google13c60c43461d3f4a.html</loc>
+    
+    <lastmod>2022-11-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://sunra.top/2022/11/28/javascript-design-pattern-2/</loc>
     
     <lastmod>2022-11-28</lastmod>
@@ -2190,6 +2199,13 @@
   </url>
   
   <url>
+    <loc>https://sunra.top/categories/Math/</loc>
+    <lastmod>2022-11-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://sunra.top/categories/Babel/</loc>
     <lastmod>2022-11-28</lastmod>
     <changefreq>weekly</changefreq>
@@ -2198,13 +2214,6 @@
   
   <url>
     <loc>https://sunra.top/categories/Algorithm/</loc>
-    <lastmod>2022-11-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://sunra.top/categories/Math/</loc>
     <lastmod>2022-11-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
