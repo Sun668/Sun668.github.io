@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="今天阅读https原理的时候，发现它采用了非对称加密的知识，于是去探索了一下非对称加密的基本原理。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-09-03T00:52:03.476Z">
+<meta property="og:updated_time" content="2023-01-04T02:28:22.696Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="非对称加密原理探索">
 <meta name="twitter:description" content="今天阅读https原理的时候，发现它采用了非对称加密的知识，于是去探索了一下非对称加密的基本原理。">
@@ -223,7 +223,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-03 08:52:03" itemprop="dateModified" datetime="2021-09-03T08:52:03+08:00">2021-09-03</time>
+                <time title="Modified: 2023-01-04 10:28:22" itemprop="dateModified" datetime="2023-01-04T10:28:22+08:00">2023-01-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -252,7 +252,7 @@
 <p>如果用其中一个密钥加密数据，则只有对应的那个密钥才可以解密。<br>如果用其中一个密钥可以进行解密数据，则该数据必然是对应的那个密钥进行的加密。 </p>
 <p>A与B之间进行通信，如果他们不想通信的内容被他人知道，就可以对通信的内容进行非对称的加密。</p>
 <p>比如BC架构中，浏览器与服务器之间进行数据通信，服务器可以将自己的公钥发送给浏览器，浏览器就可以将自己想要发送给服务器的信息利用公钥进行加密，当服务器收到该信息时，利用自己的私钥对信息进行解密就可以获取加密之前的内容，同时保证了其他任何人获取到该信息都无法破解。</p>
-<p>同时服务器也可以利用自己的私钥对返回的信息进行加密，浏览器就可以利用私钥进行解密。</p>
+<p>同时服务器也可以利用自己的私钥对返回的信息进行加密，浏览器就可以利用服务器发送给自己的公钥进行解密。</p>
 <h2 id="公钥认证"><a href="#公钥认证" class="headerlink" title="公钥认证"></a>公钥认证</h2><h3 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h3><p> 在公钥加密、解密里面描述的通讯过程看似简单，但想想这个问题：在上述过程中，A怎么知道B在给他的回信在传递过程中，有没有被人修改？这就涉及到数字签名的概念。 </p>
 <p>要达到这个目的，一般是对信息做一个hash计算得到一个hash值，注意，这个过程是不可逆的，也就是说无法通过hash值得出原来的信息内容。在把信息发送出去时，把这个hash值加密后做为一个签名和信息一起发出去。 接收方在收到信息后，会重新计算信息的hash值，并和信息所附带的hash值(解密后)进行对比，如果一致，就说明信息的内容没有被修改过，因为这里hash计算可以保证不同的内容一定会得到不同的hash值，所以只要内容一被修改，根据信息内容计算的hash值就会变化。当然，不怀好意的人也可以修改信息内容的同时也修改hash值，从而让它们可以相匹配，为了防止这种情况，hash值一般都会加密后(也就是签名)再和信息一起发送。</p>
 <p>下面通过例子来说明这个过程：<br>B给A回信时，采用了数字签名的方式<br>1、B先用hash函数，生成信件的摘要(digest)<br>2、B使用自己的私钥，对这个摘要加密，这样就生成了数字签名(signature)<br>3、B将这个签名附在要回复的信息后面，一起发给A<br>4、A收到B的信息后，取下数字签名，并通过B的公钥解密，得到信件的摘要信息<br>5、A在对B发送的信息本身使用B指定的hash函数，将得到的结果同上一步解密得到的摘要进行对比，如果两者一致，就说明B发过来的信息未被修改过。</p>
@@ -516,7 +516,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
