@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这个周编码过程中使用了NodeJs去处理图片，因为图片处理的接口全都是Promise，就导致了我的程序中充满了Promise的嵌套返回，then的结果中有返回了另一个Promise，另一个Promise中一系列中的then中有的又会返回新的Promise，这一度让我变得混乱。 理清楚后，不禁对Promise为什么能够如此神奇产生了好奇，于是去阅读了它的源码，才发现有些习以为常的功能背后的设计的奇妙">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-09-03T00:51:57.504Z">
+<meta property="og:updated_time" content="2023-01-09T08:51:58.822Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Promise 源码分析">
 <meta name="twitter:description" content="这个周编码过程中使用了NodeJs去处理图片，因为图片处理的接口全都是Promise，就导致了我的程序中充满了Promise的嵌套返回，then的结果中有返回了另一个Promise，另一个Promise中一系列中的then中有的又会返回新的Promise，这一度让我变得混乱。 理清楚后，不禁对Promise为什么能够如此神奇产生了好奇，于是去阅读了它的源码，才发现有些习以为常的功能背后的设计的奇妙">
@@ -223,7 +223,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-03 08:51:57" itemprop="dateModified" datetime="2021-09-03T08:51:57+08:00">2021-09-03</time>
+                <time title="Modified: 2023-01-09 16:51:58" itemprop="dateModified" datetime="2023-01-09T16:51:58+08:00">2023-01-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -326,6 +326,11 @@
 <li>根据执行结果选择回调</li>
 </ul>
 <p>另外提一句safeThen, safeThen的作用是当调用then的时候环境this已经不是Promise的情况下能够继续安全执行then。</p>
+<h2 id="Promise是微任务具体是什么意思"><a href="#Promise是微任务具体是什么意思" class="headerlink" title="Promise是微任务具体是什么意思"></a>Promise是微任务具体是什么意思</h2><p>我们看完了源码再重新回头理解Promise为什么是微任务</p>
+<p>还是以开始的代码为例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> num = <span class="built_in">Math</span>.random();</span><br><span class="line">    num &gt; <span class="number">.5</span> ? resolve(<span class="string">`success:<span class="subst">$&#123;num&#125;</span>`</span>) : reject(<span class="string">`fail:<span class="subst">$&#123;num&#125;</span>`</span>);</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">promise.then(<span class="function">(<span class="params">resolveVal</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(val);</span><br><span class="line">&#125;).catch(<span class="function"><span class="params">rejectVal</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(rejectVal)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>这段代码中，setTimeout这段代码是会直接执行的，然后创建了一个宏任务，也就是1s之后执行resolve或者reject，然后下面的then其实和catch其实是创建了两个Handler，而这两个Handler会在调用resolve或者reject之后，被asap这个包丢进微任务里。</p>
+<p>所以，我们一直说的Promise是微任务，其实指的是then和catch里传入的函数会在状态改变时被放入微任务队列。</p>
 <p>参考文章：</p>
 <p><a href="https://juejin.im/post/5caf147af265da035d0c698a" rel="external nofollow noopener noreferrer" target="_blank">https://juejin.im/post/5caf147af265da035d0c698a</a></p>
 <p><a href="https://juejin.im/entry/599968f6518825244630f809" rel="external nofollow noopener noreferrer" target="_blank">https://juejin.im/entry/599968f6518825244630f809</a></p>
@@ -446,7 +451,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Promise-使用"><span class="nav-number">1.</span> <span class="nav-text">Promise 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#then的规则"><span class="nav-number">1.1.</span> <span class="nav-text">then的规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#catch的规则"><span class="nav-number">1.2.</span> <span class="nav-text">catch的规则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#工具函数"><span class="nav-number">2.1.</span> <span class="nav-text">工具函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#声明"><span class="nav-number">2.2.</span> <span class="nav-text">声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#doResolve"><span class="nav-number">2.3.</span> <span class="nav-text">doResolve</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#resolve-amp-reject"><span class="nav-number">2.4.</span> <span class="nav-text">resolve &amp; reject</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#then"><span class="nav-number">2.5.</span> <span class="nav-text">then</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Promise-使用"><span class="nav-number">1.</span> <span class="nav-text">Promise 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#then的规则"><span class="nav-number">1.1.</span> <span class="nav-text">then的规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#catch的规则"><span class="nav-number">1.2.</span> <span class="nav-text">catch的规则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#工具函数"><span class="nav-number">2.1.</span> <span class="nav-text">工具函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#声明"><span class="nav-number">2.2.</span> <span class="nav-text">声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#doResolve"><span class="nav-number">2.3.</span> <span class="nav-text">doResolve</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#resolve-amp-reject"><span class="nav-number">2.4.</span> <span class="nav-text">resolve &amp; reject</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#then"><span class="nav-number">2.5.</span> <span class="nav-text">then</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Promise是微任务具体是什么意思"><span class="nav-number">3.</span> <span class="nav-text">Promise是微任务具体是什么意思</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
