@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615207688/origin-of-ray/微信截图_20210308204757_sxwhgi.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615207902/origin-of-ray/微信截图_20210308205133_amqnac.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615208011/origin-of-ray/微信截图_20210308205319_qlouxj.png">
-<meta property="og:updated_time" content="2021-09-03T00:51:59.374Z">
+<meta property="og:updated_time" content="2023-01-10T02:46:22.869Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript执行机制（三）作用域链和闭包">
 <meta name="twitter:description" content="在上一篇关于作用域的文章中我们通过调用栈讲什么是作用域。 每当我们调用一个函数时就会在调用栈中为该函数创建执行上下文，到目前为止我们知道了该执行上下文中有变量环境，用于存储通过var声明的变量，也有一个词法环境，词法环境又是一个栈，依次放置了函数中通过let和const声明的在不同层级的块级作用域中的变量。 基于上面的变量环境和词法环境，我们可以明白如何在一个函数的执行上下文中找到正确的变量。 那">
@@ -229,7 +229,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-03 08:51:59" itemprop="dateModified" datetime="2021-09-03T08:51:59+08:00">2021-09-03</time>
+                <time title="Modified: 2023-01-10 10:46:22" itemprop="dateModified" datetime="2023-01-10T10:46:22+08:00">2023-01-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -288,7 +288,8 @@
 <p>ES6 是支持块级作用域的，当执行到代码块时，如果代码块中有 let 或者 const 声明的变量，那么变量就会存放到该函数的词法环境中。对于上面这段代码，当执行到 bar 函数内部的 if 语句块时，其调用栈的情况如下图所示：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615207688/origin-of-ray/微信截图_20210308204757_sxwhgi.png" alt="函数作用域链查找顺序"></p>
 <h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><p>首先说一下闭包是什么。</p>
-<p>这里首先用一种通俗的，比较基于表象的说法来解释：首先它是闭合的，也就是说外界无法直接访问其中的变量，第二，它又是个包，所以它暴露出来某些方法可以让外界来操作它的内部数据。</p>
+<p>第一种说法，也是最本质的说法，闭包就是带有自己运行环境的一个函数，也就是说，这个函数有自己的执行上下文。</p>
+<p>另外一种从使用上来说，一种通俗的，比较基于表象的说法来解释：首先它是闭合的，也就是说外界无法直接访问其中的变量，第二，它又是个包，所以它暴露出来某些方法可以让外界来操作它的内部数据。</p>
 <p>这里你可以结合下面这段代码来理解什么是闭包：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">"bigTree"</span></span><br><span class="line">    <span class="keyword">let</span> test1 = <span class="number">1</span></span><br><span class="line">    <span class="keyword">const</span> test2 = <span class="number">2</span></span><br><span class="line">    <span class="keyword">var</span> innerBar = &#123;</span><br><span class="line">        getName:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(test1)</span><br><span class="line">            <span class="keyword">return</span> myName</span><br><span class="line">        &#125;,</span><br><span class="line">        setName:<span class="function"><span class="keyword">function</span>(<span class="params">newName</span>)</span>&#123;</span><br><span class="line">            myName = newName</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> innerBar</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> bar = foo()</span><br><span class="line">bar.setName(<span class="string">"大树"</span>)</span><br><span class="line">bar.getName()</span><br><span class="line"><span class="built_in">console</span>.log(bar.getName())</span><br></pre></td></tr></table></figure>
 <p>首先我们看看当执行到 foo 函数内部的return innerBar这行代码时调用栈的情况，你可以参考下图：</p>
