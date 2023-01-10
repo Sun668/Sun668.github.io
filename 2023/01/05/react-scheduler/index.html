@@ -28,7 +28,7 @@
 <meta property="og:description" content="之前一篇博客讲过React的更新过程，不过在那个博客中，任务调度使用的是浏览器的requestIdleCallback，而实际上React使用的自己实现的一个任务调度器，我们这次就开分析一下它的源码，以及React为什么要自己实现任务调度器。 本文基于React仓库中的16.18.6分支进行解读。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1672979542/origin-of-ray/screenshot-20230106-123045_zosxud.png">
-<meta property="og:updated_time" content="2023-01-06T13:56:25.422Z">
+<meta property="og:updated_time" content="2023-01-10T08:17:14.820Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React Scheduler 源码解析">
 <meta name="twitter:description" content="之前一篇博客讲过React的更新过程，不过在那个博客中，任务调度使用的是浏览器的requestIdleCallback，而实际上React使用的自己实现的一个任务调度器，我们这次就开分析一下它的源码，以及React为什么要自己实现任务调度器。 本文基于React仓库中的16.18.6分支进行解读。">
@@ -224,7 +224,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-01-06 21:56:25" itemprop="dateModified" datetime="2023-01-06T21:56:25+08:00">2023-01-06</time>
+                <time title="Modified: 2023-01-10 16:17:14" itemprop="dateModified" datetime="2023-01-10T16:17:14+08:00">2023-01-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -330,6 +330,9 @@
 </ul>
 <h2 id="unstable-cancelCallback"><a href="#unstable-cancelCallback" class="headerlink" title="unstable_cancelCallback"></a>unstable_cancelCallback</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unstable_cancelCallback</span>(<span class="params">callbackNode</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> next = callbackNode.next;</span><br><span class="line">  <span class="keyword">if</span> (next === <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// Already cancelled.</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (next === callbackNode) &#123;</span><br><span class="line">    <span class="comment">// This is the only scheduled callback. Clear the list.</span></span><br><span class="line">    firstCallbackNode = <span class="literal">null</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// Remove the callback from its position in the list.</span></span><br><span class="line">    <span class="keyword">if</span> (callbackNode === firstCallbackNode) &#123;</span><br><span class="line">      firstCallbackNode = next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> previous = callbackNode.previous;</span><br><span class="line">    previous.next = next;</span><br><span class="line">    next.previous = previous;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  callbackNode.next = callbackNode.previous = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这个也比较简单，就是从callbackNode的双向环中找出要取消的任务，然后从环中把它去掉。</p>
+<blockquote>
+<p>最新版本的Scheduler的主要改动是：已经不是使用双向链表的方式存储所有任务了，而是使用了两个最小堆，分别叫timerQueue和taskQueue，任务会先放到timerQueue中，每次执行完taskQueue中的任务后，后检查timerQueue中有没有已经到期的任务，如果有，放入taskQueue中，然后重新开始遍历执行taskQueue中的任务，遍历过程中如果需要yield就暂时退出，然后开启设置宏任务下次继续执行</p>
+</blockquote>
 
     </div>
 
