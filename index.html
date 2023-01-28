@@ -190,6 +190,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/01/26/analysis-patterns/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/01/26/analysis-patterns/" class="post-title-link" itemprop="url">分析模式——可复用的对象模型</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-01-26 11:10:44" itemprop="dateCreated datePublished" datetime="2023-01-26T11:10:44+08:00">2023-01-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-01-28 22:11:15" itemprop="dateModified" datetime="2023-01-28T22:11:15+08:00">2023-01-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Sundry/" itemprop="url" rel="index"><span itemprop="name">Sundry</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近读了《分析模式——可复用的对象模型》一书，这本书算是DDD方面的一本启蒙书籍，阅读完成后还是受益良多，一方面是很多观点和平时的工作相互印证，很受启发，另一方面学到了一些业务建模的模式，本文主要总结一下收到启发的地方和建模原则，具体的建模方式举一个例子体会一下就好。</p>
+<p>这里先简单说几个我最有收获的几个点：</p>
+<ul>
+<li>对象开发的一个重要原则是是软件的结构反映问题的结构。</li>
+<li>问题没有梳理清楚导致的耦合是没有办法通过设计模式来解决的，比如物流和订单，他们使用了同一个数据表，他们需要互相感知到对方，那么他们就一定在某种程度上的耦合在一起，属于本质复杂度，这种耦合是没办法通过良好的设计模式进行解耦的，即使它们是两个系统，他们也要一起改动。</li>
+<li>业务领域的划分也要做到高内聚，低耦合，最少知识原则，如果每个业务领域需要知道很多其他业务领域的知识，那么其实还是耦合的。</li>
+<li>不同领域之间如果非要有联系，也尽量减少双向的联系，每一个双向的联系都会为系统带来更高的复杂度。</li>
+<li>在系统开始阶段要尽量降低系统复杂度的同时，对修改保持开放，也就是开闭原则，除非十分必要，不要上来就引入很多第三方工具，要考虑这些工具的引入成本，维护成本，升级成本，甚至是机会成本，也不要上来就搞什么微服务，微服务最好是从一个成熟的系统中经过验证稳定的业务领域中孵化出来，否则只是单纯的技术架构上的微服务只会徒增系统整体的复杂性和风险。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/01/26/analysis-patterns/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/01/22/km-algorithm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -215,7 +304,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-01-22 11:40:37 / Modified: 12:59:02" itemprop="dateCreated datePublished" datetime="2023-01-22T11:40:37+08:00">2023-01-22</time>
+              <time title="Created: 2023-01-22 11:40:37 / Modified: 13:40:10" itemprop="dateCreated datePublished" datetime="2023-01-22T11:40:37+08:00">2023-01-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -889,82 +978,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/11/28/javascript-design-pattern-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/11/28/javascript-design-pattern-2/" class="post-title-link" itemprop="url">JavaScript 设计模式学习与实践（二）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-11-28 09:40:55 / Modified: 15:47:56" itemprop="dateCreated datePublished" datetime="2022-11-28T09:40:55+08:00">2022-11-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>我们接着上一篇博客继续总结和学习JavaScript的常用设计模式，这一次我们总结两个在JavaScript角度来讲比较像的模式，也就是代理模式，策略模式。</p>
-<p>这两个模式在非函数式编程编程的语言中，如Java中区别是比较明显的，但是用JavaScript来看则是比较相似的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/11/28/javascript-design-pattern-2/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1035,7 +1048,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">246</span>
+          <span class="site-state-item-count">247</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
