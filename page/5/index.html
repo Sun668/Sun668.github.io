@@ -190,6 +190,94 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/06/11/operating-system-note-9-process-dispatch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/06/11/operating-system-note-9-process-dispatch/" class="post-title-link" itemprop="url">操作系统学习笔记（三）进程的调度，同步/互斥与死锁</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-06-11 08:25:55" itemprop="dateCreated datePublished" datetime="2022-06-11T08:25:55+08:00">2022-06-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-12 20:42:48" itemprop="dateModified" datetime="2022-06-12T20:42:48+08:00">2022-06-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OS/" itemprop="url" rel="index"><span itemprop="name">OS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>之前一篇博客讲过了进程存在的意义是什么，我们为什么要搞出进程这个概念。</p>
+<p>但是随之而来的就是几个连续的问题，也是多道并发会遇到的几个问题：</p>
+<ul>
+<li>多个进程并发的时候，如何进行调度，调度的原则是什么？</li>
+<li>如果多个进程之间有相互依赖关系怎么办，比如同步和互斥关系？</li>
+<li>如果因为依赖关系，产生了循环依赖，可能导致死锁，又该怎么办？</li>
+</ul>
+<p>这篇博客我们就第一个问题进行解释，那就是处理机如何进行调度的。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/06/11/operating-system-note-9-process-dispatch/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/06/03/unity-trilib-import-fbx/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -936,82 +1024,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/04/02/unity-android-symbols-analysis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/02/unity-android-symbols-analysis/" class="post-title-link" itemprop="url">Unity Android符号表解析崩溃日志</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-04-02 21:42:41 / Modified: 18:34:35" itemprop="dateCreated datePublished" datetime="2022-04-02T21:42:41+08:00">2022-04-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>我们在将Unity打包成il2cpp+release模式的apk的之后，内部的代码是会被打包成so文件的，这个东西其实是linux的动态链接库的格式，对应的就是windows的dll或者Mac的dylib之类的东西。在android这边也可以叫做符号表，因为它内部会保存虚拟内存地址与汇编代码的的对应关系。</p>
-<p>这样打包以后，会降低我们的包体积，而且有助于我们的代码保护不被抄袭，但是同时也会导致我们开发者看不懂报错信息，因为这些报错信息都是些虚拟内存地址，而不是函数的名字，那么对于线上发生的报错信息，我们怎么去阅读呢？</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/04/02/unity-android-symbols-analysis/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1082,7 +1094,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">247</span>
+          <span class="site-state-item-count">248</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
