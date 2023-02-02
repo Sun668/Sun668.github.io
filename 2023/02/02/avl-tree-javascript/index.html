@@ -20,18 +20,18 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="最近尝试实现了下AVL树，发现这玩意写起来还是很多细节的，搞了半天，所以就在这里记录下。 AVL树就是平衡二叉检索树，一方面它是BST，即二叉检索树，一方面它是平衡的，也就是任何一个节点为根结点的子树的左子树和右子树的高度差不到1。 基本原理关于BST就不多说了，比较简单，就是每个节点的左孩子都小于根节点，右孩子都大于根节点，插入的时候注意就好。 但是BST有个问题，比如依次插入1，2，3，4，5">
+  <meta name="description" content="最近尝试实现了下AVL树，发现这玩意写起来还是很多细节的，搞了半天，所以就在这里记录下。 AVL树就是平衡二叉检索树，一方面它是BST，即二叉检索树，一方面它是平衡的，也就是任何一个节点为根结点的子树的左子树和右子树的高度差不到1。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript实现AVL树">
 <meta property="og:url" content="https://sunra.top/2023/02/02/avl-tree-javascript/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="最近尝试实现了下AVL树，发现这玩意写起来还是很多细节的，搞了半天，所以就在这里记录下。 AVL树就是平衡二叉检索树，一方面它是BST，即二叉检索树，一方面它是平衡的，也就是任何一个节点为根结点的子树的左子树和右子树的高度差不到1。 基本原理关于BST就不多说了，比较简单，就是每个节点的左孩子都小于根节点，右孩子都大于根节点，插入的时候注意就好。 但是BST有个问题，比如依次插入1，2，3，4，5">
+<meta property="og:description" content="最近尝试实现了下AVL树，发现这玩意写起来还是很多细节的，搞了半天，所以就在这里记录下。 AVL树就是平衡二叉检索树，一方面它是BST，即二叉检索树，一方面它是平衡的，也就是任何一个节点为根结点的子树的左子树和右子树的高度差不到1。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1675307019/origin-of-ray/912c7f2fdaf3490689db1a7144775b11_tplv-k3u1fbpfcp-zoom-in-crop-mark_4536_0_0_0_qzoplx.webp">
-<meta property="og:updated_time" content="2023-02-02T03:46:12.239Z">
+<meta property="og:updated_time" content="2023-02-02T03:48:16.551Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScript实现AVL树">
-<meta name="twitter:description" content="最近尝试实现了下AVL树，发现这玩意写起来还是很多细节的，搞了半天，所以就在这里记录下。 AVL树就是平衡二叉检索树，一方面它是BST，即二叉检索树，一方面它是平衡的，也就是任何一个节点为根结点的子树的左子树和右子树的高度差不到1。 基本原理关于BST就不多说了，比较简单，就是每个节点的左孩子都小于根节点，右孩子都大于根节点，插入的时候注意就好。 但是BST有个问题，比如依次插入1，2，3，4，5">
+<meta name="twitter:description" content="最近尝试实现了下AVL树，发现这玩意写起来还是很多细节的，搞了半天，所以就在这里记录下。 AVL树就是平衡二叉检索树，一方面它是BST，即二叉检索树，一方面它是平衡的，也就是任何一个节点为根结点的子树的左子树和右子树的高度差不到1。">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1675307019/origin-of-ray/912c7f2fdaf3490689db1a7144775b11_tplv-k3u1fbpfcp-zoom-in-crop-mark_4536_0_0_0_qzoplx.webp">
 
 <link rel="canonical" href="https://sunra.top/2023/02/02/avl-tree-javascript/">
@@ -218,7 +218,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-02-02 10:56:03 / Modified: 11:46:12" itemprop="dateCreated datePublished" datetime="2023-02-02T10:56:03+08:00">2023-02-02</time>
+              <time title="Created: 2023-02-02 10:56:03 / Modified: 11:48:16" itemprop="dateCreated datePublished" datetime="2023-02-02T10:56:03+08:00">2023-02-02</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -243,6 +243,7 @@
       
         <p>最近尝试实现了下AVL树，发现这玩意写起来还是很多细节的，搞了半天，所以就在这里记录下。</p>
 <p>AVL树就是平衡二叉检索树，一方面它是BST，即二叉检索树，一方面它是平衡的，也就是任何一个节点为根结点的子树的左子树和右子树的高度差不到1。</p>
+<a id="more"></a>
 <h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>关于BST就不多说了，比较简单，就是每个节点的左孩子都小于根节点，右孩子都大于根节点，插入的时候注意就好。</p>
 <p>但是BST有个问题，比如依次插入1，2，3，4，5，6，那么最终会得到一个只有右孩子的树，其实这个BST已经退化成了普通链表，所以我们需要一定的方式保持这个树的平衡，而保持平衡的方式如下：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1675307019/origin-of-ray/912c7f2fdaf3490689db1a7144775b11_tplv-k3u1fbpfcp-zoom-in-crop-mark_4536_0_0_0_qzoplx.webp" alt></p>
