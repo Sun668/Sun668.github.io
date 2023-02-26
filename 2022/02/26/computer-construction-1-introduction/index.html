@@ -355,7 +355,7 @@
 <li>链接阶段：链接器（ld）将多个可重定位目标文件和标准库函数合并为一个可执行目标文件，或者简称为可执行文件。</li>
 </ul>
 <h2 id="程序执行过程的描述"><a href="#程序执行过程的描述" class="headerlink" title="程序执行过程的描述"></a>程序执行过程的描述</h2><p>在UNIX中，我们可以通过shell命令行解释器来执行程序，通过shell命令行解释执行程序过程如下：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">unix&gt;</span> ./hello</span><br><span class="line"></span><br><span class="line">hello, world!</span><br><span class="line"></span><br><span class="line"><span class="meta">unix&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">unix&gt;</span><span class="bash"> ./hello</span></span><br><span class="line"></span><br><span class="line">hello, world!</span><br><span class="line"></span><br><span class="line"><span class="meta">unix&gt;</span></span><br></pre></td></tr></table></figure>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645863310/origin-of-ray/asynccode_nix9io.png" alt="img"></p>
 <p>Shell程序将用户从键盘输入的每个字符逐一读入CPU寄存器（对应1），然后保存到主存储器中，在主存的缓冲区形成字符串“./hello”（对应2）。收到Enter后，shell调出系统的内核程序，由内核加载磁盘上的可执行文件hello到主存（对应3）。内核加载完成可执行文件中的代码和数据（这里是字符串“hello，world！\n”）后，将hello的第一条指令地址送至PC，CPU随后开始执行hello程序，它将已加载到主存的字符串中的每个字符从主存取到CPU的寄存器中（对应4），然后将CPU寄存器中的字符送到显示器中（对应5）。</p>
 <blockquote>
@@ -538,7 +538,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">250</span>
+          <span class="site-state-item-count">251</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
