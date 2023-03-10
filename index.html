@@ -190,6 +190,94 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/03/10/g6-relationship-graph/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/03/10/g6-relationship-graph/" class="post-title-link" itemprop="url">如何用G6开发一个关系图谱</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-03-10 14:28:01 / Modified: 15:47:46" itemprop="dateCreated datePublished" datetime="2023-03-10T14:28:01+08:00">2023-03-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Sundry/" itemprop="url" rel="index"><span itemprop="name">Sundry</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近在想着飞书文档的关系图是怎么实现的，于是想起了之前用的G6，于是简单实现了一版。</p>
+<h1 id="最终效果"><a href="#最终效果" class="headerlink" title="最终效果"></a>最终效果</h1><p>主要功能如下：</p>
+<ul>
+<li>节点分为两部分，上半部分是图标，下半部分是文字<ul>
+<li>鼠标放到图标上时，会产生水波纹的扩散特效，同时出现一圈边框</li>
+<li>文字需要有下划线以及白色背景，且水波纹特效不能被白色背景挡住</li>
+<li>文字的下划线需要是方格</li>
+</ul>
+</li>
+<li>连线要有渐变色，且渐变色要从箭头起点到箭头终点，且如果支持双向关系，如何实现两条边</li>
+<li>连线上中间位置要有一个Label</li>
+<li>节点和连线要支持半透明</li>
+<li>整体布局要是力导向布局，且支持节点拖拽，拖拽时不能让节点之间产生重叠，但是也不能因为连线拖动其他节点（单独提出这一点是因为G6自带的力导向布局节点会被拖拽）</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/03/10/g6-relationship-graph/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/03/05/management-methods-of-technical-people/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -914,81 +1002,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/01/04/leetcode-1802/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/01/04/leetcode-1802/" class="post-title-link" itemprop="url">二分法解决有界区间的最值问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-01-04 11:35:40 / Modified: 14:51:13" itemprop="dateCreated datePublished" datetime="2023-01-04T11:35:40+08:00">2023-01-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近在leetcode上遇到了几个问题都是采用二分法来解决的，总结了一下其中的规律，简单来说，<strong>如果是要从有界区间中寻找符合条件的最大值或者最小值，可以考虑采用二分法</strong>，不过不是基础的二分法，而是不断寻找左侧边界或者右侧边界的二分法。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/01/04/leetcode-1802/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1059,7 +1072,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">252</span>
+          <span class="site-state-item-count">253</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
