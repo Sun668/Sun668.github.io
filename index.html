@@ -190,6 +190,81 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/03/30/canvas-to-svg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/03/30/canvas-to-svg/" class="post-title-link" itemprop="url">如何将Canvas转为SVG</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-03-30 12:27:55 / Modified: 12:34:14" itemprop="dateCreated datePublished" datetime="2023-03-30T12:27:55+08:00">2023-03-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Sundry/" itemprop="url" rel="index"><span itemprop="name">Sundry</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>之前做了个关系图谱的需求，因为导出png等图片放大会失真，所以希望导出为矢量图。但是G6自带的导出图谱功能再Canvas模式下无法导出为SVG，而SVG模式又有很多特性不支持，所以就想办法能不能把Canvas导出为SVG了。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/03/30/canvas-to-svg/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/03/24/greedy-algorithm-and-simulated-annealing-algorithm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -898,95 +973,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/01/26/analysis-patterns/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/01/26/analysis-patterns/" class="post-title-link" itemprop="url">分析模式——可复用的对象模型</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-01-26 11:10:44" itemprop="dateCreated datePublished" datetime="2023-01-26T11:10:44+08:00">2023-01-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-01-28 22:11:35" itemprop="dateModified" datetime="2023-01-28T22:11:35+08:00">2023-01-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Sundry/" itemprop="url" rel="index"><span itemprop="name">Sundry</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近读了《分析模式——可复用的对象模型》一书，这本书算是DDD方面的一本启蒙书籍，阅读完成后还是受益良多，一方面是很多观点和平时的工作相互印证，很受启发，另一方面学到了一些业务建模的模式，本文主要总结一下收到启发的地方和建模原则，具体的建模方式举一个例子体会一下就好。</p>
-<p>这里先简单说几个我最有收获的几个点：</p>
-<ul>
-<li>对象开发的一个重要原则是是软件的结构反映问题的结构。</li>
-<li>问题没有梳理清楚导致的耦合是没有办法通过设计模式来解决的，比如物流和订单，他们使用了同一个数据表，他们需要互相感知到对方，那么他们就一定在某种程度上的耦合在一起，属于本质复杂度，这种耦合是没办法通过良好的设计模式进行解耦的，即使它们是两个系统，他们也要一起改动。</li>
-<li>业务领域的划分也要做到高内聚，低耦合，最少知识原则，如果每个业务领域需要知道很多其他业务领域的知识，那么其实还是耦合的。</li>
-<li>不同领域之间如果非要有联系，也尽量减少双向的联系，每一个双向的联系都会为系统带来更高的复杂度。</li>
-<li>在系统开始阶段要尽量降低系统复杂度的同时，对修改保持开放，也就是开闭原则，除非十分必要，不要上来就引入很多第三方工具，要考虑这些工具的引入成本，维护成本，升级成本，甚至是机会成本，也不要上来就搞什么微服务，微服务最好是从一个成熟的系统中经过验证稳定的业务领域中孵化出来，否则只是单纯的技术架构上的微服务只会徒增系统整体的复杂性和风险。</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/01/26/analysis-patterns/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1057,7 +1043,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">256</span>
+          <span class="site-state-item-count">257</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
