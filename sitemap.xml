@@ -1833,14 +1833,14 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Security/</loc>
+    <loc>https://sunra.top/categories/Cloud/</loc>
     <lastmod>2023-03-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Cloud/</loc>
+    <loc>https://sunra.top/categories/Security/</loc>
     <lastmod>2023-03-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1854,7 +1854,7 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Algorithm/</loc>
+    <loc>https://sunra.top/categories/Math/</loc>
     <lastmod>2023-03-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1868,7 +1868,14 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/Math/</loc>
+    <loc>https://sunra.top/categories/Algorithm/</loc>
+    <lastmod>2023-03-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://sunra.top/categories/JavaScript/</loc>
     <lastmod>2023-03-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1882,7 +1889,7 @@
   </url>
   
   <url>
-    <loc>https://sunra.top/categories/JavaScript/</loc>
+    <loc>https://sunra.top/categories/ComputerOrganization/</loc>
     <lastmod>2023-03-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1897,13 +1904,6 @@
   
   <url>
     <loc>https://sunra.top/categories/CSS/</loc>
-    <lastmod>2023-03-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://sunra.top/categories/ComputerOrganization/</loc>
     <lastmod>2023-03-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
