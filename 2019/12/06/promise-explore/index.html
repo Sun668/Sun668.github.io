@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这个周编码过程中使用了NodeJs去处理图片，因为图片处理的接口全都是Promise，就导致了我的程序中充满了Promise的嵌套返回，then的结果中有返回了另一个Promise，另一个Promise中一系列中的then中有的又会返回新的Promise，这一度让我变得混乱。 理清楚后，不禁对Promise为什么能够如此神奇产生了好奇，于是去阅读了它的源码，才发现有些习以为常的功能背后的设计的奇妙">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-04-10T03:19:19.417Z">
+<meta property="og:updated_time" content="2023-04-10T14:07:39.200Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Promise 源码分析">
 <meta name="twitter:description" content="这个周编码过程中使用了NodeJs去处理图片，因为图片处理的接口全都是Promise，就导致了我的程序中充满了Promise的嵌套返回，then的结果中有返回了另一个Promise，另一个Promise中一系列中的then中有的又会返回新的Promise，这一度让我变得混乱。 理清楚后，不禁对Promise为什么能够如此神奇产生了好奇，于是去阅读了它的源码，才发现有些习以为常的功能背后的设计的奇妙">
@@ -223,7 +223,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-10 11:19:19" itemprop="dateModified" datetime="2023-04-10T11:19:19+08:00">2023-04-10</time>
+                <time title="Modified: 2023-04-10 22:07:39" itemprop="dateModified" datetime="2023-04-10T22:07:39+08:00">2023-04-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -494,6 +494,12 @@
 
       </div>
 
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
     </div>
   </aside>
   <div id="sidebar-dimmer"></div>
