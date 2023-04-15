@@ -199,6 +199,81 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/04/15/fetch-event-source-code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/04/15/fetch-event-source-code/" class="post-title-link" itemprop="url">fetch-event-source源码解析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-04-15 13:12:13 / Modified: 14:03:48" itemprop="dateCreated datePublished" datetime="2023-04-15T13:12:13+08:00">2023-04-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Network/" itemprop="url" rel="index"><span itemprop="name">Network</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我们都知道ChatGPT的接口支持流式SSE的方式进行数据返回，而前端浏览器默认提供了EventSource去接收SSE，但是问题在于，默认的EventSource只支持Get请求，切不支持任何自定义的头部，而ChatGPT的接口就是POST请求，且需要在头部携带token，于是使用了一个微软的库，我们来解释一下它的用法，源码以及从协议角度简单说一下它的源码可以运行的基础，即它的源码为什么可以工作</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/04/15/fetch-event-source-code/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/04/08/server-push-method/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -230,7 +305,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 10:02:07" itemprop="dateModified" datetime="2023-04-15T10:02:07+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 14:03:48" itemprop="dateModified" datetime="2023-04-15T14:03:48+08:00">2023-04-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -311,7 +386,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 10:02:07" itemprop="dateModified" datetime="2023-04-15T10:02:07+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 14:03:48" itemprop="dateModified" datetime="2023-04-15T14:03:48+08:00">2023-04-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -392,7 +467,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 10:02:07" itemprop="dateModified" datetime="2023-04-15T10:02:07+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 14:03:48" itemprop="dateModified" datetime="2023-04-15T14:03:48+08:00">2023-04-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -473,7 +548,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 10:02:07" itemprop="dateModified" datetime="2023-04-15T10:02:07+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 14:03:48" itemprop="dateModified" datetime="2023-04-15T14:03:48+08:00">2023-04-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -558,7 +633,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 10:02:07" itemprop="dateModified" datetime="2023-04-15T10:02:07+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 14:03:48" itemprop="dateModified" datetime="2023-04-15T14:03:48+08:00">2023-04-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -641,7 +716,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 10:02:07" itemprop="dateModified" datetime="2023-04-15T10:02:07+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 14:03:48" itemprop="dateModified" datetime="2023-04-15T14:03:48+08:00">2023-04-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -735,7 +810,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 10:02:07" itemprop="dateModified" datetime="2023-04-15T10:02:07+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 14:03:48" itemprop="dateModified" datetime="2023-04-15T14:03:48+08:00">2023-04-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -818,7 +893,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 10:02:07" itemprop="dateModified" datetime="2023-04-15T10:02:07+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 14:03:48" itemprop="dateModified" datetime="2023-04-15T14:03:48+08:00">2023-04-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -900,7 +975,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 10:02:07" itemprop="dateModified" datetime="2023-04-15T10:02:07+08:00">2023-04-15</time>
+                <time title="Modified: 2023-04-15 14:03:48" itemprop="dateModified" datetime="2023-04-15T14:03:48+08:00">2023-04-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -927,88 +1002,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/02/18/wechat-bot-msg-decode/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/02/11/10-times-programmer-work/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/11/10-times-programmer-work/" class="post-title-link" itemprop="url">10倍程序员工作法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-02-11 18:01:01" itemprop="dateCreated datePublished" datetime="2023-02-11T18:01:01+08:00">2023-02-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-15 10:02:07" itemprop="dateModified" datetime="2023-04-15T10:02:07+08:00">2023-04-15</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Sundry/" itemprop="url" rel="index"><span itemprop="name">Sundry</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近chatgpt大火，让很多人觉得很多工作包括程序员会被取代。其他岗位我不太了解，但是对于程序员这个职业，我认为但是其实这说明，大家对于程序员在处理的问题的认知是程序员处理的是某一个独立的问题上，或者某个独立的很具体的问题上，当然这和程序员面试题有关，毕竟程序员面试题其实就是这种，面试题，说起来就是做卷子，做卷子你怎么可能有背靠互联网的机器人比，而那些不好衡量的看起来是空话的东西，在一次面试中，人还真不一定表现的比背后是所有面试经验帖的机器人高明。</p>
-<p>但是其实这已经是忘记了程序员是为什么而存在的。程序员掌握的技术叫做信息技术，目的是为了快速的收集和处理信息，那么为什么这个技术重要呢？了解这个问题，其实也能明白AI到底给我们带来了什么。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/11/10-times-programmer-work/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1098,7 +1091,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">258</span>
+          <span class="site-state-item-count">259</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
