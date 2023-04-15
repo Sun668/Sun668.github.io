@@ -28,7 +28,7 @@
 <meta property="og:description" content="透明是游戏中经常使用的一种场景，在实时渲染中要实现透明效果，通常会在渲染模型时控制它的透明通道。当开启透明混合后，当一个物体被渲染到屏幕上，每个片元除了颜色值和深度值之外，它还有另一个属性，透明度。当透明度为1时，表示该像素完全不透明，当为0时，表示该像素完全不会显示。 在Unity中，我们通常使用两种方法来实现透明效果：第一种是使用透明度测试（Alpha Test），这种方法其实无法得到真正的半">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1658626131/origin-of-ray/screenshot-20220724-092801_czvuok.png">
-<meta property="og:updated_time" content="2023-04-12T06:22:10.837Z">
+<meta property="og:updated_time" content="2023-04-15T02:02:07.196Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity 渲染原理（十二）透明效果与渲染队列">
 <meta name="twitter:description" content="透明是游戏中经常使用的一种场景，在实时渲染中要实现透明效果，通常会在渲染模型时控制它的透明通道。当开启透明混合后，当一个物体被渲染到屏幕上，每个片元除了颜色值和深度值之外，它还有另一个属性，透明度。当透明度为1时，表示该像素完全不透明，当为0时，表示该像素完全不会显示。 在Unity中，我们通常使用两种方法来实现透明效果：第一种是使用透明度测试（Alpha Test），这种方法其实无法得到真正的半">
@@ -49,6 +49,15 @@
 
   <title>Unity 渲染原理（十二）透明效果与渲染队列 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -224,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-12 14:22:10" itemprop="dateModified" datetime="2023-04-12T14:22:10+08:00">2023-04-12</time>
+                <time title="Modified: 2023-04-15 10:02:07" itemprop="dateModified" datetime="2023-04-15T10:02:07+08:00">2023-04-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
