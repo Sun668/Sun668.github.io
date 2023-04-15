@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="我们都知道ChatGPT的接口支持流式SSE的方式进行数据返回，而前端浏览器默认提供了EventSource去接收SSE，但是问题在于，默认的EventSource只支持Get请求，切不支持任何自定义的头部，而ChatGPT的接口就是POST请求，且需要在头部携带token，于是使用了一个微软的库，我们来解释一下它的用法，源码以及从协议角度简单说一下它的源码可以运行的基础，即它的源码为什么可以工作">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-04-15T06:03:48.408Z">
+<meta property="og:updated_time" content="2023-04-15T07:32:25.050Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fetch-event-source源码解析">
 <meta name="twitter:description" content="我们都知道ChatGPT的接口支持流式SSE的方式进行数据返回，而前端浏览器默认提供了EventSource去接收SSE，但是问题在于，默认的EventSource只支持Get请求，切不支持任何自定义的头部，而ChatGPT的接口就是POST请求，且需要在头部携带token，于是使用了一个微软的库，我们来解释一下它的用法，源码以及从协议角度简单说一下它的源码可以运行的基础，即它的源码为什么可以工作">
@@ -225,7 +225,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-04-15 13:12:13 / Modified: 14:03:48" itemprop="dateCreated datePublished" datetime="2023-04-15T13:12:13+08:00">2023-04-15</time>
+              <time title="Created: 2023-04-15 13:12:13 / Modified: 15:32:25" itemprop="dateCreated datePublished" datetime="2023-04-15T13:12:13+08:00">2023-04-15</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -271,7 +271,7 @@
 <li>为什么fetch api 的response.body可以被不断解析，而不是我么常见的那种就是个json object的形式</li>
 <li>为什么getMessage可以讲line buffer解析正确</li>
 </ul>
-<p>首先第一点，简单来说，SSE本质上还是基于HTTP的，所以可以通过HTTP请求建立连接<br>第二点，因为我们平时的api接口返回的数据格式是<code>application/json</code>这种，而sse接口返回的格式是<code>text/event-stream</code>，所以response.body其实是个readableStream，所以可以不断传输数据回来。<br>第三点，因为这是协议规定的，按照协议来就好：<a href="https://html.spec.whatwg.org/multipage/server-sent-events.html#event-stream-interpretation" rel="external nofollow noopener noreferrer" target="_blank">https://html.spec.whatwg.org/multipage/server-sent-events.html#event-stream-interpretation</a></p>
+<p>首先第一点，简单来说，SSE本质上还是基于HTTP的，所以可以通过HTTP请求建立连接<br>第二点，因为我们平时的api接口返回的数据格式是<code>application/json</code>这种，而sse接口返回的格式是<code>text/event-stream</code>，所以response.body其实是个readableStream，所以可以不断传输数据回来。<br>第三点，因为这是协议规定的，按照协议来就好，这个是协议的规定：<a href="https://html.spec.whatwg.org/multipage/server-sent-events.html#event-stream-interpretation，也可以看这篇文章：https://www.cnblogs.com/goloving/p/9196066.html" rel="external nofollow noopener noreferrer" target="_blank">https://html.spec.whatwg.org/multipage/server-sent-events.html#event-stream-interpretation，也可以看这篇文章：https://www.cnblogs.com/goloving/p/9196066.html</a></p>
 <p>然后这里有可以引出一个新的问题，为什么SSE返回的可以是个流，也就是说HTTP为什么可以支持流输出：</p>
 <p>其实答案很简单：HTTP本来就支持，只是我们之前的那种常见的restful api都是短连接，一次性获取到json数据后就直接关闭连接了，让我们忘记了HTTP是可以支持不断返回数据的。</p>
 
