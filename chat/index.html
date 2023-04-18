@@ -1,1 +1,84 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/chat/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web site created using create-react-app"/><link rel="apple-touch-icon" href="/chat/logo192.png"/><link rel="manifest" href="/chat/manifest.json"/><title>React App</title><script defer="defer" src="/chat/static/js/main.64792819.js"></script><link href="/chat/static/css/main.073c9b0a.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+	<meta charset="UTF-8">
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+	<title>Rannie</title>
+	<script>
+		if(self != top) {
+		  document.documentElement.style.display = 'none';
+		}
+	</script>
+  <script type="module" crossorigin src="/assets/index-1a96b172.js"></script>
+  <link rel="stylesheet" href="/assets/index-ad40ac04.css">
+</head>
+
+
+<body>
+	<div id="app">
+		<style>
+			.loading-wrap {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+			}
+
+			.balls {
+				width: 4em;
+				display: flex;
+				flex-flow: row nowrap;
+				align-items: center;
+				justify-content: space-between;
+			}
+
+			.balls div {
+				width: 0.8em;
+				height: 0.8em;
+				border-radius: 50%;
+				background-color: #4b9e5f;
+			}
+
+			.balls div:nth-of-type(1) {
+				transform: translateX(-100%);
+				animation: left-swing 0.5s ease-in alternate infinite;
+			}
+
+			.balls div:nth-of-type(3) {
+				transform: translateX(-95%);
+				animation: right-swing 0.5s ease-out alternate infinite;
+			}
+
+			@keyframes left-swing {
+
+				50%,
+				100% {
+					transform: translateX(95%);
+				}
+			}
+
+			@keyframes right-swing {
+				50% {
+					transform: translateX(-95%);
+				}
+
+				100% {
+					transform: translateX(100%);
+				}
+			}
+		</style>
+		<div class="loading-wrap">
+			<div class="balls">
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+	</div>
+	
+</body>
+
+</html>
