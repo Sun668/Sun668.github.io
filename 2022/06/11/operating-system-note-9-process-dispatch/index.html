@@ -28,7 +28,7 @@
 <meta property="og:description" content="之前一篇博客讲过了进程存在的意义是什么，我们为什么要搞出进程这个概念。 但是随之而来的就是几个连续的问题，也是多道并发会遇到的几个问题：  多个进程并发的时候，如何进行调度，调度的原则是什么？ 如果多个进程之间有相互依赖关系怎么办，比如同步和互斥关系？ 如果因为依赖关系，产生了循环依赖，可能导致死锁，又该怎么办？  这篇博客我们就第一个问题进行解释，那就是处理机如何进行调度的。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1654927138/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20220611135815_dug3d2.png">
-<meta property="og:updated_time" content="2023-04-18T07:08:48.672Z">
+<meta property="og:updated_time" content="2023-04-18T07:14:22.567Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="操作系统学习笔记（三）进程的调度，同步&#x2F;互斥与死锁">
 <meta name="twitter:description" content="之前一篇博客讲过了进程存在的意义是什么，我们为什么要搞出进程这个概念。 但是随之而来的就是几个连续的问题，也是多道并发会遇到的几个问题：  多个进程并发的时候，如何进行调度，调度的原则是什么？ 如果多个进程之间有相互依赖关系怎么办，比如同步和互斥关系？ 如果因为依赖关系，产生了循环依赖，可能导致死锁，又该怎么办？  这篇博客我们就第一个问题进行解释，那就是处理机如何进行调度的。">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-18 15:08:48" itemprop="dateModified" datetime="2023-04-18T15:08:48+08:00">2023-04-18</time>
+                <time title="Modified: 2023-04-18 15:14:22" itemprop="dateModified" datetime="2023-04-18T15:14:22+08:00">2023-04-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
