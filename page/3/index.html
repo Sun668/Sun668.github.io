@@ -199,6 +199,87 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/12/16/vue-router-source-code-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/12/16/vue-router-source-code-2/" class="post-title-link" itemprop="url">Vue Router 源码解析（二）内部路由的跳转</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-12-16 16:28:29" itemprop="dateCreated datePublished" datetime="2022-12-16T16:28:29+08:00">2022-12-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-04-20 15:55:20" itemprop="dateModified" datetime="2023-04-20T15:55:20+08:00">2023-04-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://sunra.top/2022/12/10/vue-router-source-code-1/">之前的博客</a>我们讲了我们创建VueRouter实例并通过Vue.use应用之后，VueRouter内部如何生成一整套自己的数据结构来存储路由配置的，这次博客我们继续解读Vue Router的源码，大致内容是Vue Router的路由守卫的执行逻辑。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/12/16/vue-router-source-code-2/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/12/10/vue-router-source-code-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -230,7 +311,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-20 15:28:16" itemprop="dateModified" datetime="2023-04-20T15:28:16+08:00">2023-04-20</time>
+                <time title="Modified: 2023-04-20 15:55:20" itemprop="dateModified" datetime="2023-04-20T15:55:20+08:00">2023-04-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -313,7 +394,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-20 15:28:16" itemprop="dateModified" datetime="2023-04-20T15:28:16+08:00">2023-04-20</time>
+                <time title="Modified: 2023-04-20 15:55:20" itemprop="dateModified" datetime="2023-04-20T15:55:20+08:00">2023-04-20</time>
               </span>
 
           
@@ -386,7 +467,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-20 15:28:16" itemprop="dateModified" datetime="2023-04-20T15:28:16+08:00">2023-04-20</time>
+                <time title="Modified: 2023-04-20 15:55:20" itemprop="dateModified" datetime="2023-04-20T15:55:20+08:00">2023-04-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -468,7 +549,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-20 15:28:16" itemprop="dateModified" datetime="2023-04-20T15:28:16+08:00">2023-04-20</time>
+                <time title="Modified: 2023-04-20 15:55:20" itemprop="dateModified" datetime="2023-04-20T15:55:20+08:00">2023-04-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -550,7 +631,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-20 15:28:16" itemprop="dateModified" datetime="2023-04-20T15:28:16+08:00">2023-04-20</time>
+                <time title="Modified: 2023-04-20 15:55:20" itemprop="dateModified" datetime="2023-04-20T15:55:20+08:00">2023-04-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -631,7 +712,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-20 15:28:16" itemprop="dateModified" datetime="2023-04-20T15:28:16+08:00">2023-04-20</time>
+                <time title="Modified: 2023-04-20 15:55:20" itemprop="dateModified" datetime="2023-04-20T15:55:20+08:00">2023-04-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -720,7 +801,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-20 15:28:16" itemprop="dateModified" datetime="2023-04-20T15:28:16+08:00">2023-04-20</time>
+                <time title="Modified: 2023-04-20 15:55:20" itemprop="dateModified" datetime="2023-04-20T15:55:20+08:00">2023-04-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -801,7 +882,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-20 15:28:16" itemprop="dateModified" datetime="2023-04-20T15:28:16+08:00">2023-04-20</time>
+                <time title="Modified: 2023-04-20 15:55:20" itemprop="dateModified" datetime="2023-04-20T15:55:20+08:00">2023-04-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -889,7 +970,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-20 15:28:16" itemprop="dateModified" datetime="2023-04-20T15:28:16+08:00">2023-04-20</time>
+                <time title="Modified: 2023-04-20 15:55:20" itemprop="dateModified" datetime="2023-04-20T15:55:20+08:00">2023-04-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -916,87 +997,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/10/28/redux-origin-code/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/10/26/leetcode-862/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/26/leetcode-862/" class="post-title-link" itemprop="url">单调队列</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-10-26 11:19:51" itemprop="dateCreated datePublished" datetime="2022-10-26T11:19:51+08:00">2022-10-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-20 15:28:16" itemprop="dateModified" datetime="2023-04-20T15:28:16+08:00">2023-04-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>今天leetcode的每日一题是<a href="https://leetcode.cn/problems/shortest-subarray-with-sum-at-least-k/" rel="external nofollow noopener noreferrer" target="_blank">和至少为 K 的最短子数组</a>,这道题需要使用前缀和加单调队列。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/26/leetcode-862/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1086,7 +1086,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">259</span>
+          <span class="site-state-item-count">260</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
