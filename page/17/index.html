@@ -199,6 +199,92 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/12/07/javascript-scope-chain-and-closure/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/07/javascript-scope-chain-and-closure/" class="post-title-link" itemprop="url">Javascript执行机制（三）作用域链和闭包</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-12-07 21:33:14" itemprop="dateCreated datePublished" datetime="2020-12-07T21:33:14+08:00">2020-12-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-04-23 16:52:30" itemprop="dateModified" datetime="2023-04-23T16:52:30+08:00">2023-04-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在<a href="https://sunra.top/2020/11/22/javascript-scope/">上一篇关于作用域的文章</a>中我们通过调用栈讲什么是作用域。</p>
+<p><strong>每当我们调用一个函数时就会在调用栈中为该函数创建执行上下文，到目前为止我们知道了该执行上下文中有变量环境，用于存储通过var声明的变量，也有一个词法环境，词法环境又是一个栈，依次放置了函数中通过let和const声明的在不同层级的块级作用域中的变量</strong>。</p>
+<p>基于上面的变量环境和词法环境，我们可以明白如何在一个函数的执行上下文中找到正确的变量。</p>
+<p>那如果我们所需要的变量其实不在当前执行上下文，而是在上一级的执行上下文中呢？我们怎么确定上一级的执行上下文是哪个？</p>
+<p>这个问题就涉及了我们今天的主题：作用域链。</p>
+<p>理解作用域链是理解闭包的基础，而闭包在 JavaScript 中几乎无处不在，同时作用域和作用域链还是所有编程语言的基础。所以，如果你想学透一门语言，作用域和作用域链一定是绕不开的。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/07/javascript-scope-chain-and-closure/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/12/03/browser-architecture/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -230,7 +316,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-22 09:13:02" itemprop="dateModified" datetime="2023-04-22T09:13:02+08:00">2023-04-22</time>
+                <time title="Modified: 2023-04-23 16:52:30" itemprop="dateModified" datetime="2023-04-23T16:52:30+08:00">2023-04-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -312,7 +398,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-22 09:13:02" itemprop="dateModified" datetime="2023-04-22T09:13:02+08:00">2023-04-22</time>
+                <time title="Modified: 2023-04-23 16:52:30" itemprop="dateModified" datetime="2023-04-23T16:52:30+08:00">2023-04-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -393,7 +479,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-22 09:13:02" itemprop="dateModified" datetime="2023-04-22T09:13:02+08:00">2023-04-22</time>
+                <time title="Modified: 2023-04-23 16:52:30" itemprop="dateModified" datetime="2023-04-23T16:52:30+08:00">2023-04-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -476,7 +562,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-22 09:13:02" itemprop="dateModified" datetime="2023-04-22T09:13:02+08:00">2023-04-22</time>
+                <time title="Modified: 2023-04-23 16:52:30" itemprop="dateModified" datetime="2023-04-23T16:52:30+08:00">2023-04-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -557,7 +643,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-22 09:13:02" itemprop="dateModified" datetime="2023-04-22T09:13:02+08:00">2023-04-22</time>
+                <time title="Modified: 2023-04-23 16:52:30" itemprop="dateModified" datetime="2023-04-23T16:52:30+08:00">2023-04-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -638,7 +724,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-22 09:13:02" itemprop="dateModified" datetime="2023-04-22T09:13:02+08:00">2023-04-22</time>
+                <time title="Modified: 2023-04-23 16:52:30" itemprop="dateModified" datetime="2023-04-23T16:52:30+08:00">2023-04-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -722,7 +808,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-22 09:13:02" itemprop="dateModified" datetime="2023-04-22T09:13:02+08:00">2023-04-22</time>
+                <time title="Modified: 2023-04-23 16:52:30" itemprop="dateModified" datetime="2023-04-23T16:52:30+08:00">2023-04-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -805,7 +891,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-22 09:13:02" itemprop="dateModified" datetime="2023-04-22T09:13:02+08:00">2023-04-22</time>
+                <time title="Modified: 2023-04-23 16:52:30" itemprop="dateModified" datetime="2023-04-23T16:52:30+08:00">2023-04-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -888,7 +974,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-22 09:13:02" itemprop="dateModified" datetime="2023-04-22T09:13:02+08:00">2023-04-22</time>
+                <time title="Modified: 2023-04-23 16:52:30" itemprop="dateModified" datetime="2023-04-23T16:52:30+08:00">2023-04-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -937,93 +1023,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/10/26/four-algorithm-thought/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/10/26/four-algorithm-thought/" class="post-title-link" itemprop="url">四种基本算法思想</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-10-26 19:04:07" itemprop="dateCreated datePublished" datetime="2020-10-26T19:04:07+08:00">2020-10-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-22 09:13:02" itemprop="dateModified" datetime="2023-04-22T09:13:02+08:00">2023-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>数据结构与算法是一个非常大的范围，各种不同的问题需要不同的算法，这些算法或复杂或简单。这篇博客简单通过经典的背包问题介绍四种非常基本且常用的算法思想，分别是贪心，分治，回溯，动规。</p>
-<p>这四种是算法思想，不是具体的算法，主要是理解其思路，而不是具体的实现。</p>
-<p>这篇文章主要是帮我我把以前略显零散的知识点重新总结一下，所以很多具体内容在以前的其他博客中。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/10/26/four-algorithm-thought/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/16/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/18/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/16/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" href="/page/18/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1090,7 +1093,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">260</span>
+          <span class="site-state-item-count">261</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

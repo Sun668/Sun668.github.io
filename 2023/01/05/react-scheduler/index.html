@@ -28,7 +28,7 @@
 <meta property="og:description" content="之前一篇博客讲过React的更新过程，不过在那个博客中，任务调度使用的是浏览器的requestIdleCallback，而实际上React使用的自己实现的一个任务调度器，我们这次就开分析一下它的源码，以及React为什么要自己实现任务调度器。 本文基于React仓库中的16.18.6分支进行解读。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1672979542/origin-of-ray/screenshot-20230106-123045_zosxud.png">
-<meta property="og:updated_time" content="2023-04-22T01:13:02.950Z">
+<meta property="og:updated_time" content="2023-04-23T08:52:30.801Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React Scheduler 源码解析">
 <meta name="twitter:description" content="之前一篇博客讲过React的更新过程，不过在那个博客中，任务调度使用的是浏览器的requestIdleCallback，而实际上React使用的自己实现的一个任务调度器，我们这次就开分析一下它的源码，以及React为什么要自己实现任务调度器。 本文基于React仓库中的16.18.6分支进行解读。">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-22 09:13:02" itemprop="dateModified" datetime="2023-04-22T09:13:02+08:00">2023-04-22</time>
+                <time title="Modified: 2023-04-23 16:52:30" itemprop="dateModified" datetime="2023-04-23T16:52:30+08:00">2023-04-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -473,7 +473,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">260</span>
+          <span class="site-state-item-count">261</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
