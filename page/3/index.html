@@ -199,6 +199,88 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/01/05/react-scheduler/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/01/05/react-scheduler/" class="post-title-link" itemprop="url">React Scheduler 源码解析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-01-05 20:31:36" itemprop="dateCreated datePublished" datetime="2023-01-05T20:31:36+08:00">2023-01-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>之前一篇博客讲过React的更新过程，不过在那个博客中，任务调度使用的是浏览器的requestIdleCallback，而实际上React使用的自己实现的一个任务调度器，我们这次就开分析一下它的源码，以及React为什么要自己实现任务调度器。</p>
+<p>本文基于React仓库中的16.18.6分支进行解读。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/01/05/react-scheduler/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/01/04/leetcode-1802/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -230,7 +312,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -311,7 +393,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -392,7 +474,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -473,7 +555,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -554,7 +636,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -637,7 +719,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
 
           
@@ -710,7 +792,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -792,7 +874,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -874,7 +956,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -901,95 +983,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/11/22/micro-frontend-qiankun-sandbox/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/11/19/javascript-design-parttern-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/11/19/javascript-design-parttern-1/" class="post-title-link" itemprop="url">JavaScript 设计模式学习与实践（一）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-11-19 14:24:48" itemprop="dateCreated datePublished" datetime="2022-11-19T14:24:48+08:00">2022-11-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>随着对JS的知识的了解和实际的开发需要，内心对于重读设计模式的感触越来越深，所以就重新拿起了《JavaScrip设计模式与开发实践》一书，并结合《设计模式之美》的部分内容，先做个总结，并先讲一下单例模式，剩下的后续慢慢讲。</p>
-<p>首先提出几个问题，也是我这次的几个比较总结性的收获：</p>
-<ul>
-<li>JavaScript是面向对象还是面向过程</li>
-<li>函数是一等公民这一点是面向对象还是面向过程</li>
-</ul>
-<p>然后抛出我这次对设计模式的一个最大的收获，就是<strong>所有的设计模式，其实都是识别出代码中不变的部分和易变的部分，分别封装起来，然后组合二者,而要准确地识别出这一点，不仅需要代码能力的深厚，更是要真正地去理解业务</strong>。</p>
-<p>比如策略模式，一个个策略就是易变的部分，而对策略的调用则是不变的部分。代理模式中，被代理的操作就是不变的，而代理本身就是易变的。</p>
-<p>其实，设计模式的出现某种程度上就是为了弥补语言的不足，比如原型模式算是一种设计模式，但是JavaScript本身就通过原型链支持了这种模式。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/11/19/javascript-design-parttern-1/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1079,7 +1072,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">263</span>
+          <span class="site-state-item-count">264</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

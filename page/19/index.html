@@ -199,6 +199,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/09/29/vue-diff/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/29/vue-diff/" class="post-title-link" itemprop="url">Vue源码学习（五） diff算法解析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-09-29 19:58:32" itemprop="dateCreated datePublished" datetime="2020-09-29T19:58:32+08:00">2020-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>上篇关于<a href="https://sunra.top/2020/09/25/vue-watcher/">Vue Watcher原理分析的文章中</a>，在解释了Vue watcher的源码之后，将watcher分为了三类，分别是userWatcher，computeWatcher，以及renderWatcher。</p>
+<p>这三者的主要不同之一就是求Watcher.value时的不同，userWatcher的value就是我们的观察对象，computeWatcher的value求值是通过我们在computed属性中定义的handler，而renderWatcher的value就是更新视图的结果。</p>
+<p>上篇博客中主要讲的是前两者，对于renderWatcher的具体的更新视图的流程没有详细解释，也就是update，这其中最主要的逻辑就是vue的diff算法。</p>
+<p>这篇博客就来讲一下vue的diff算法，并通过这个算法来讲一下啊我们平时写vue时的一点相关的注意事项。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/09/29/vue-diff/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/09/25/vue-watcher/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -230,7 +314,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -313,7 +397,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -396,7 +480,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -480,7 +564,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -562,7 +646,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -649,7 +733,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -734,7 +818,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -816,7 +900,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -899,7 +983,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
+                <time title="Modified: 2023-05-16 13:31:16" itemprop="dateModified" datetime="2023-05-16T13:31:16+08:00">2023-05-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -933,89 +1017,6 @@
         
       
     </p></div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/07/24/blob/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/24/blob/" class="post-title-link" itemprop="url">Blob 与 大文件分片上传</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-07-24 20:15:35" itemprop="dateCreated datePublished" datetime="2020-07-24T20:15:35+08:00">2020-07-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-10 22:10:03" itemprop="dateModified" datetime="2023-05-10T22:10:03+08:00">2023-05-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Blob是什么"><a href="#Blob是什么" class="headerlink" title="Blob是什么"></a>Blob是什么</h2><p>Blob（Binary Large Object）表示二进制类型的大对象。在数据库管理系统中，将二进制数据存储为一个单一个体的集合。Blob 通常是影像、声音或多媒体文件。<strong>在 JavaScript 中 Blob 类型的对象表示不可变的类似文件对象的原始数据。</strong></p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1595596596/js/image-20200724202124460_csorcu.png" alt="image-20200724202124460"></p>
-<p>如你所见，myBlob 对象含有两个属性：size 和 type。其中 <code>size</code> 属性用于表示数据的大小（以字节为单位），<code>type</code> 是 MIME 类型的字符串。Blob 表示的不一定是 JavaScript 原生格式的数据。比如 <code>File</code> 接口基于 <code>Blob</code>，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/07/24/blob/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
     
     
@@ -1098,7 +1099,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">263</span>
+          <span class="site-state-item-count">264</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
