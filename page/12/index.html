@@ -199,6 +199,88 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/07/27/javascript-obj-attr-search/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/27/javascript-obj-attr-search/" class="post-title-link" itemprop="url">Javascript执行机制（七）如何快速查找对象上的属性</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-07-27 08:07:16" itemprop="dateCreated datePublished" datetime="2021-07-27T08:07:16+08:00">2021-07-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-21 09:47:12" itemprop="dateModified" datetime="2023-05-21T09:47:12+08:00">2023-05-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>上一篇博客我们讲了V8的整体执行的流程，这次我就继续总结下，V8是如何实现对象上属性的快速查找的。</p>
+<p>注意，这部分内容不是作用域链，也不是原型链。作用域链是用来找到对象的，如obj，原型链是如果obj上没有属性a，去它的原型上找，而本文的主题，是如何快速在obj上找到a。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/07/27/javascript-obj-attr-search/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/07/24/javascript-v8-run-flow/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -230,7 +312,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-16 14:22:36" itemprop="dateModified" datetime="2023-05-16T14:22:36+08:00">2023-05-16</time>
+                <time title="Modified: 2023-05-21 09:47:12" itemprop="dateModified" datetime="2023-05-21T09:47:12+08:00">2023-05-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -312,7 +394,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-16 14:22:36" itemprop="dateModified" datetime="2023-05-16T14:22:36+08:00">2023-05-16</time>
+                <time title="Modified: 2023-05-21 09:47:12" itemprop="dateModified" datetime="2023-05-21T09:47:12+08:00">2023-05-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -393,7 +475,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-16 14:22:36" itemprop="dateModified" datetime="2023-05-16T14:22:36+08:00">2023-05-16</time>
+                <time title="Modified: 2023-05-21 09:47:12" itemprop="dateModified" datetime="2023-05-21T09:47:12+08:00">2023-05-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -475,7 +557,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-16 14:22:36" itemprop="dateModified" datetime="2023-05-16T14:22:36+08:00">2023-05-16</time>
+                <time title="Modified: 2023-05-21 09:47:12" itemprop="dateModified" datetime="2023-05-21T09:47:12+08:00">2023-05-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -559,7 +641,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-16 14:22:36" itemprop="dateModified" datetime="2023-05-16T14:22:36+08:00">2023-05-16</time>
+                <time title="Modified: 2023-05-21 09:47:12" itemprop="dateModified" datetime="2023-05-21T09:47:12+08:00">2023-05-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -640,7 +722,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-16 14:22:36" itemprop="dateModified" datetime="2023-05-16T14:22:36+08:00">2023-05-16</time>
+                <time title="Modified: 2023-05-21 09:47:12" itemprop="dateModified" datetime="2023-05-21T09:47:12+08:00">2023-05-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -729,7 +811,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-16 14:22:36" itemprop="dateModified" datetime="2023-05-16T14:22:36+08:00">2023-05-16</time>
+                <time title="Modified: 2023-05-21 09:47:12" itemprop="dateModified" datetime="2023-05-21T09:47:12+08:00">2023-05-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -811,7 +893,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-16 14:22:36" itemprop="dateModified" datetime="2023-05-16T14:22:36+08:00">2023-05-16</time>
+                <time title="Modified: 2023-05-21 09:47:12" itemprop="dateModified" datetime="2023-05-21T09:47:12+08:00">2023-05-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -894,7 +976,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-16 14:22:36" itemprop="dateModified" datetime="2023-05-16T14:22:36+08:00">2023-05-16</time>
+                <time title="Modified: 2023-05-21 09:47:12" itemprop="dateModified" datetime="2023-05-21T09:47:12+08:00">2023-05-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -922,87 +1004,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/05/18/react-and-redux/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/05/15/npm-package-develop/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/15/npm-package-develop/" class="post-title-link" itemprop="url">在Monorepo中开发一个新的npm package过程总结</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-05-15 10:37:56" itemprop="dateCreated datePublished" datetime="2021-05-15T10:37:56+08:00">2021-05-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-16 14:22:36" itemprop="dateModified" datetime="2023-05-16T14:22:36+08:00">2023-05-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Sundry/" itemprop="url" rel="index"><span itemprop="name">Sundry</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这周在工作中需要开发一个npm的package，是辅助其他已有的pacakge。整个仓库采用了monorepo的形式，记录一下整个过程中踩的坑和学到的新技术</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/05/15/npm-package-develop/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1092,7 +1093,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">264</span>
+          <span class="site-state-item-count">265</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
