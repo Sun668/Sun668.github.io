@@ -20,6 +20,7 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
   <meta name="description" content="纹理最初的目的就是使用一张图片来控制模型的外观。使用纹理映射技术，我们可以把一张图“黏”在模型表面，逐纹素（为了和像素区分）的控制模型颜色。 美术人员在建模的时候，通常会在建模软件中利用纹理展开技术把纹理映射坐标存储在每个顶点上。纹理映射坐标定义了该顶点在纹理中对应的2D坐标。通常，这些坐标使用一个二维变量（u,v）来表示，其中u是横坐标，v是纵坐标，所以纹理坐标也称为uv坐标。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity 渲染原理（十）Unity基础纹理（普通纹理与法线纹理）">
@@ -27,7 +28,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="纹理最初的目的就是使用一张图片来控制模型的外观。使用纹理映射技术，我们可以把一张图“黏”在模型表面，逐纹素（为了和像素区分）的控制模型颜色。 美术人员在建模的时候，通常会在建模软件中利用纹理展开技术把纹理映射坐标存储在每个顶点上。纹理映射坐标定义了该顶点在纹理中对应的2D坐标。通常，这些坐标使用一个二维变量（u,v）来表示，其中u是横坐标，v是纵坐标，所以纹理坐标也称为uv坐标。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-24T12:59:11.474Z">
+<meta property="og:updated_time" content="2023-05-25T07:43:35.348Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity 渲染原理（十）Unity基础纹理（普通纹理与法线纹理）">
 <meta name="twitter:description" content="纹理最初的目的就是使用一张图片来控制模型的外观。使用纹理映射技术，我们可以把一张图“黏”在模型表面，逐纹素（为了和像素区分）的控制模型颜色。 美术人员在建模的时候，通常会在建模软件中利用纹理展开技术把纹理映射坐标存储在每个顶点上。纹理映射坐标定义了该顶点在纹理中对应的2D坐标。通常，这些坐标使用一个二维变量（u,v）来表示，其中u是横坐标，v是纵坐标，所以纹理坐标也称为uv坐标。">
@@ -231,7 +232,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-24 20:59:11" itemprop="dateModified" datetime="2023-05-24T20:59:11+08:00">2023-05-24</time>
+                <time title="Modified: 2023-05-25 15:43:35" itemprop="dateModified" datetime="2023-05-25T15:43:35+08:00">2023-05-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
