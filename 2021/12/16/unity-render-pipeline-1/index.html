@@ -22,6 +22,7 @@
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
   <meta name="description" content="总述本文大概总结下一些三维空间的坐标数据是如何通过渲染流水线变为屏幕上不同颜色的像素的，阅读之时，需要注意，图元，片元，和像素三者的区别。 下图是一个总体的流程图，具体细节可以看后面的解释。">
+<meta name="keywords" content="Unity 流水线 矩阵 MVP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity 渲染原理 (一) 渲染流水线：从模型上的点到屏幕上的点">
 <meta property="og:url" content="https://sunra.top/2021/12/16/unity-render-pipeline-1/index.html">
@@ -39,7 +40,7 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646357/origin-of-ray/asynccode_viggia.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646391/origin-of-ray/asynccode_wyxw6o.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646424/origin-of-ray/asynccode_dk5lwg.png">
-<meta property="og:updated_time" content="2023-05-25T07:43:35.348Z">
+<meta property="og:updated_time" content="2023-05-25T08:16:27.096Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity 渲染原理 (一) 渲染流水线：从模型上的点到屏幕上的点">
 <meta name="twitter:description" content="总述本文大概总结下一些三维空间的坐标数据是如何通过渲染流水线变为屏幕上不同颜色的像素的，阅读之时，需要注意，图元，片元，和像素三者的区别。 下图是一个总体的流程图，具体细节可以看后面的解释。">
@@ -244,7 +245,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 15:43:35" itemprop="dateModified" datetime="2023-05-25T15:43:35+08:00">2023-05-25</time>
+                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">

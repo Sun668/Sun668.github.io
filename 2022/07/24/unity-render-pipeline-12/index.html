@@ -22,6 +22,7 @@
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
   <meta name="description" content="透明是游戏中经常使用的一种场景，在实时渲染中要实现透明效果，通常会在渲染模型时控制它的透明通道。当开启透明混合后，当一个物体被渲染到屏幕上，每个片元除了颜色值和深度值之外，它还有另一个属性，透明度。当透明度为1时，表示该像素完全不透明，当为0时，表示该像素完全不会显示。 在Unity中，我们通常使用两种方法来实现透明效果：第一种是使用透明度测试（Alpha Test），这种方法其实无法得到真正的半">
+<meta name="keywords" content="Unity 渲染队列 深度测试 透明效果">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity 渲染原理（十二）透明效果与渲染队列">
 <meta property="og:url" content="https://sunra.top/2022/07/24/unity-render-pipeline-12/index.html">
@@ -29,7 +30,7 @@
 <meta property="og:description" content="透明是游戏中经常使用的一种场景，在实时渲染中要实现透明效果，通常会在渲染模型时控制它的透明通道。当开启透明混合后，当一个物体被渲染到屏幕上，每个片元除了颜色值和深度值之外，它还有另一个属性，透明度。当透明度为1时，表示该像素完全不透明，当为0时，表示该像素完全不会显示。 在Unity中，我们通常使用两种方法来实现透明效果：第一种是使用透明度测试（Alpha Test），这种方法其实无法得到真正的半">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1658626131/origin-of-ray/screenshot-20220724-092801_czvuok.png">
-<meta property="og:updated_time" content="2023-05-25T07:43:35.348Z">
+<meta property="og:updated_time" content="2023-05-25T08:16:27.096Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity 渲染原理（十二）透明效果与渲染队列">
 <meta name="twitter:description" content="透明是游戏中经常使用的一种场景，在实时渲染中要实现透明效果，通常会在渲染模型时控制它的透明通道。当开启透明混合后，当一个物体被渲染到屏幕上，每个片元除了颜色值和深度值之外，它还有另一个属性，透明度。当透明度为1时，表示该像素完全不透明，当为0时，表示该像素完全不会显示。 在Unity中，我们通常使用两种方法来实现透明效果：第一种是使用透明度测试（Alpha Test），这种方法其实无法得到真正的半">
@@ -234,7 +235,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 15:43:35" itemprop="dateModified" datetime="2023-05-25T15:43:35+08:00">2023-05-25</time>
+                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">

@@ -22,6 +22,7 @@
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
   <meta name="description" content="最近在开发一个Unity人物形象的SDK，目标是该SDK可以动态下载最新的人物和服装的模型而不用让提前内置在SDK中。 一开始我打算采用的方案是传统的比较成熟的Addressables去打包bundle的方式，但是bundle的划分是个问题，而且这种方式需要每次把模型导入unity然后再出包，再更新catalog，整个流程比较繁琐。 所以我就在想，能不能直接从远程加载FBX和贴图，然后直接使用FB">
+<meta name="keywords" content="Unity TrLib 实时加载 FBX">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity下TriLib远程加载FBX的使用与源码解析">
 <meta property="og:url" content="https://sunra.top/2022/06/03/unity-trilib-import-fbx/index.html">
@@ -29,7 +30,7 @@
 <meta property="og:description" content="最近在开发一个Unity人物形象的SDK，目标是该SDK可以动态下载最新的人物和服装的模型而不用让提前内置在SDK中。 一开始我打算采用的方案是传统的比较成熟的Addressables去打包bundle的方式，但是bundle的划分是个问题，而且这种方式需要每次把模型导入unity然后再出包，再更新catalog，整个流程比较繁琐。 所以我就在想，能不能直接从远程加载FBX和贴图，然后直接使用FB">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1654240809/origin-of-ray/screenshot-20220603-151953_fuledj.png">
-<meta property="og:updated_time" content="2023-05-25T07:43:35.348Z">
+<meta property="og:updated_time" content="2023-05-25T08:16:27.096Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity下TriLib远程加载FBX的使用与源码解析">
 <meta name="twitter:description" content="最近在开发一个Unity人物形象的SDK，目标是该SDK可以动态下载最新的人物和服装的模型而不用让提前内置在SDK中。 一开始我打算采用的方案是传统的比较成熟的Addressables去打包bundle的方式，但是bundle的划分是个问题，而且这种方式需要每次把模型导入unity然后再出包，再更新catalog，整个流程比较繁琐。 所以我就在想，能不能直接从远程加载FBX和贴图，然后直接使用FB">
@@ -234,7 +235,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 15:43:35" itemprop="dateModified" datetime="2023-05-25T15:43:35+08:00">2023-05-25</time>
+                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">

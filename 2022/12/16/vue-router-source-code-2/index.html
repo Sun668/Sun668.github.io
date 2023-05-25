@@ -22,13 +22,14 @@
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
   <meta name="description" content="之前的博客我们讲了我们创建VueRouter实例并通过Vue.use应用之后，VueRouter内部如何生成一整套自己的数据结构来存储路由配置的，这次博客我们继续解读Vue Router的源码，大致内容是Vue Router的路由守卫的执行逻辑。">
+<meta name="keywords" content="Vue Router 源码解析 路由跳转原理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Vue Router 源码解析（二）内部路由的跳转">
 <meta property="og:url" content="https://sunra.top/2022/12/16/vue-router-source-code-2/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="之前的博客我们讲了我们创建VueRouter实例并通过Vue.use应用之后，VueRouter内部如何生成一整套自己的数据结构来存储路由配置的，这次博客我们继续解读Vue Router的源码，大致内容是Vue Router的路由守卫的执行逻辑。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-25T07:43:35.352Z">
+<meta property="og:updated_time" content="2023-05-25T08:16:27.096Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vue Router 源码解析（二）内部路由的跳转">
 <meta name="twitter:description" content="之前的博客我们讲了我们创建VueRouter实例并通过Vue.use应用之后，VueRouter内部如何生成一整套自己的数据结构来存储路由配置的，这次博客我们继续解读Vue Router的源码，大致内容是Vue Router的路由守卫的执行逻辑。">
@@ -232,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 15:43:35" itemprop="dateModified" datetime="2023-05-25T15:43:35+08:00">2023-05-25</time>
+                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
