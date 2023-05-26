@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="谈起VPN我们很多人的第一反应都是翻墙，这其实也是VPN一个比较有名的原因。VPN其实会为你直接分配一个外网的IP，只是这个IP只在这条专线的另一头的代理服务器上有效，VPN的优点和用法并不在于翻墙，而是数据的加密，而且由于其流量特征明显，它用来翻墙的表现其实也不是很好。SS等代理则是帮你进行请求的转发，前提是你能找到一台在墙内能访问的服务器，并且该服务器愿意帮你转发流量。我们就从翻墙开始讲VPN">
+<meta name="keywords" content="VPN 代理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VPN 与 代理">
+<meta property="og:url" content="https://sunra.top/[object Object]/70a4f80e">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="谈起VPN我们很多人的第一反应都是翻墙，这其实也是VPN一个比较有名的原因。VPN其实会为你直接分配一个外网的IP，只是这个IP只在这条专线的另一头的代理服务器上有效，VPN的优点和用法并不在于翻墙，而是数据的加密，而且由于其流量特征明显，它用来翻墙的表现其实也不是很好。SS等代理则是帮你进行请求的转发，前提是你能找到一台在墙内能访问的服务器，并且该服务器愿意帮你转发流量。我们就从翻墙开始讲VPN">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2023-05-26T03:50:25.180Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="VPN 与 代理">
+<meta name="twitter:description" content="谈起VPN我们很多人的第一反应都是翻墙，这其实也是VPN一个比较有名的原因。VPN其实会为你直接分配一个外网的IP，只是这个IP只在这条专线的另一头的代理服务器上有效，VPN的优点和用法并不在于翻墙，而是数据的加密，而且由于其流量特征明显，它用来翻墙的表现其实也不是很好。SS等代理则是帮你进行请求的转发，前提是你能找到一台在墙内能访问的服务器，并且该服务器愿意帮你转发流量。我们就从翻墙开始讲VPN">
+
+<link rel="canonical" href="https://sunra.top/[object Object]/70a4f80e">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>VPN 与 代理 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/[object Object]/70a4f80e">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VPN 与 代理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-04-30 19:16:36" itemprop="dateCreated datePublished" datetime="2020-04-30T19:16:36+08:00">2020-04-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-26 11:50:25" itemprop="dateModified" datetime="2023-05-26T11:50:25+08:00">2023-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Network/" itemprop="url" rel="index"><span itemprop="name">Network</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>谈起VPN我们很多人的第一反应都是翻墙，这其实也是VPN一个比较有名的原因。<strong>VPN其实会为你直接分配一个外网的IP，只是这个IP只在这条专线的另一头的代理服务器上有效</strong>，VPN的优点和用法并不在于翻墙，而是数据的加密，而且由于其流量特征明显，它用来翻墙的表现其实也不是很好。<strong>SS等代理则是帮你进行请求的转发，前提是你能找到一台在墙内能访问的服务器</strong>，并且该服务器愿意帮你转发流量。我们就从翻墙开始讲VPN到底是什么。它和代理有什么区别。</p>
+<a id="more"></a>
+<h2 id="什么是“墙”"><a href="#什么是“墙”" class="headerlink" title="什么是“墙”"></a>什么是“墙”</h2><p>我们平时说的墙其实指的是防火墙，它是运行在我们国内网络与国外网络之间的网关上的一套软硬件的合集，它会通过dns劫持或者通过IP地址过滤等方式让我们的请求无法正确通过防火墙。</p>
+<p>防火墙是指设置在不同网络（如可信任的企业内部网和不可信的公共网）或网络安全域之间的一系列部件的组合。它是不同网络或网络安全域之间信息的唯一出入口，通过监测、限制、更改跨越防火墙的数据流，尽可能地对外部屏蔽网络内部的信息、结构和运行状况，有选择地接受外部访问，对内部强化设备监管、控制对服务器与外部网络的访问，在被保护网络和外部网络之间架起一道屏障，以防止发生不可预测的、潜在的破坏性侵入。</p>
+<p><a href="http://www.nowamagic.net/academy/tag/防火墙" rel="external nofollow noopener noreferrer" target="_blank">防火墙</a>有两种，硬件防火墙和软件防火墙，他们都能起到保护作用并筛选出网络上的攻击者。</p>
+<p>防火墙技术经历了包过滤、应用代理网关、再到状态检测三个阶段。</p>
+<p>包过滤技术是一种简单、有效的安全控制技术，它通过在网络间相互连接的设备上加载允许、禁止来自某些特定的源地址、目的地址、TCP端口号等规则，对通过设备的数据包进行检查，限制数据包进出内部网络。包过滤的最大优点是对用户透明，传输性能高。但由于安全控制层次在网络层、传输层，安全控制的力度也只限于源地址、目的地址和端口号，因而只能进行较为初步的安全控制，对于恶意的拥塞攻击、内存覆盖攻击或病毒等高层次的攻击手段，则无能为力。</p>
+<p>状态检测是比包过滤更为有效的安全控制方法。对新建的应用连接，状态检测检查预先设置的安全规则，允许符合规则的连接通过，并在内存中记录下该连接的相关信息，生成状态表。对该连接的后续数据包，只要符合状态表，就可以通过。这种方式的好处在于：由于不需要对每个数据包进行规则检查，而是一个连接的后续数据包（通常是大量的数据包）通过散列算法，直接进行状态检查，从而使得性能得到了较大提高；而且，由于状态表是动态的，因而可以有选择地、动态地开通1024号以上的端口，使得安全性得到进一步地提高。</p>
+<h3 id="包过滤技术"><a href="#包过滤技术" class="headerlink" title="包过滤技术"></a>包过滤技术</h3><p>包过滤防火墙一般在路由器上实现，用以过滤用户定义的内容，如IP地址。包过滤防火墙的工作原理是：系统在网络层检查数据包，与应用层无关。这样系统就具有很好的传输性能，可扩展能力强。但是，包过滤防火墙的安全性有一定的缺陷，因为系统对应用层信息无感知，也就是说，防火墙不理解通信的内容，所以可能被黑客所攻破。</p>
+<p>包过滤防火墙工作在网络层，对数据包的源及目地IP具有识别和控制作用，对于传输层，也只能识别数据包是TCP还是UDP及所用的端口信息。现在的路由器、Switch Router以及某些操作系统已经具有用Packet Filter控制的能力。 </p>
+<p>由于只对<a href="http://www.nowamagic.net/academy/tag/数据包" rel="external nofollow noopener noreferrer" target="_blank">数据包</a>的IP地址、TCP/UDP协议和端口进行分析，包过滤防火墙的处理速度较快，并且易于配置。 </p>
+<p>包过滤防火墙具有根本的缺陷： </p>
+<ol>
+<li>不能防范黑客攻击。包过滤防火墙的工作基于一个前提，就是网管知道哪些IP是可信网络，哪些是不可信网络的IP地址。但是随着远程办公等新应用的出现，网管不可能区分出可信网络与不可信网络的界限，对于黑客来说，只需将源IP包改成合法IP即可轻松通过包过滤防火墙，进入内网，而任何一个初级水平的黑客都能进行IP地址欺骗。 </li>
+<li>不支持应用层协议。假如内网用户提出这样一个需求，只允许内网员工访问外网的网页（使用HTTP协议），不允许去外网下载电影（一般使用FTP协议）。包过滤防火墙无能为力，因为它不认识数据包中的应用层协议，访问控制粒度太粗糙。 </li>
+<li>不能处理新的安全威胁。它不能跟踪TCP状态，所以对TCP层的控制有漏洞。如当它配置了仅允许从内到外的TCP访问时，一些以TCP应答包的形式从外部对内网进行的攻击仍可以穿透防火墙。 </li>
+</ol>
+<p>综上可见，包过滤防火墙技术面太过初级，就好比一位保安只能根据访客来自哪个省市来判断是否允许他（她）进入一样，难以履行保护内网安全的职责。 </p>
+<h3 id="应用网关防火墙"><a href="#应用网关防火墙" class="headerlink" title="应用网关防火墙"></a>应用网关防火墙</h3><p>应用网关防火墙检查所有应用层的信息包，并将检查的内容信息放入决策过程，从而提高网络的安全性。然而，应用网关防火墙是通过打破客户机/服务器模式实现的。每个客户机/服务器通信需要两个连接：一个是从客户端到防火墙，另一个是从防火墙到服务器。另外，每个代理需要一个不同的应用进程，或一个后台运行的服务程序，对每个新的应用必须添加针对此应用的服务程序，否则不能使用该服务。所以，应用网关防火墙具有可伸缩性差的缺点。</p>
+<p>应用代理网关防火墙彻底隔断内网与外网的直接通信，内网用户对外网的访问变成防火墙对外网的访问，然后再由防火墙转发给内网用户。所有通信都必须经应用层代理软件转发，访问者任何时候都不能与服务器建立直接的TCP连接，应用层的协议会话过程必须符合代理的安全策略要求。 </p>
+<p>应用代理网关的优点是可以检查应用层、传输层和网络层的协议特征，对数据包的检测能力比较强。 </p>
+<p>缺点也非常突出，主要有： </p>
+<ul>
+<li>难于配置。由于每个应用都要求单独的代理进程，这就要求网管能理解每项应用协议的弱点，并能合理的配置安全策略，由于配置繁琐，难于理解，容易出现配置失误，最终影响内网的安全防范能力。 </li>
+<li>处理速度非常慢。断掉所有的连接，由防火墙重新建立连接，理论上可以使应用代理防火墙具有极高的安全性。但是实际应用中并不可行，因为对于内网的每个Web访问请求，应用代理都需要开一个单独的代理进程，它要保护内网的Web服务器、数据库服务器、文件服务器、邮件服务器，及业务程序等，就需要建立一个个的服务代理，以处理客户端的访问请求。这样，应用代理的处理延迟会很大，内网用户的正常Web访问不能及时得到响应。 </li>
+</ul>
+<p>总之，应用代理防火墙不能支持大规模的并发连接，在对速度敏感的行业使用这类防火墙时简直是灾难。另外，防火墙核心要求预先内置一些已知应用程序的代理，使得一些新出现的应用在代理防火墙内被无情地阻断，不能很好地支持新应用。 </p>
+<p>在IT领域中，新应用、新技术、新协议层出不穷，代理防火墙很难适应这种局面。因此，在一些重要的领域和行业的核心业务应用中，代理防火墙正被逐渐疏远。 </p>
+<p>但是，自适应代理技术的出现让应用代理防火墙技术出现了新的转机，它结合了代理防火墙的安全性和包过滤防火墙的高速度等优点，在不损失安全性的基础上将代理防火墙的性能提高了10倍。 </p>
+<h3 id="状态检测防火墙"><a href="#状态检测防火墙" class="headerlink" title="状态检测防火墙"></a>状态检测防火墙</h3><p>状态检测防火墙基本保持了简单包过滤防火墙的优点，性能比较好，同时对应用是透明的，在此基础上，对于安全性有了大幅提升。这种防火墙摒弃了简单包过滤防火墙仅仅考察进出网络的数据包，不关心数据包状态的缺点，在防火墙的核心部分建立状态连接表，维护了连接，将进出网络的数据当成一个个的事件来处理。可以这样说，状态检测包过滤防火墙规范了网络层和传输层行为，而应用代理型防火墙则是规范了特定的应用协议上的行为。</p>
+<p>我们知道，Internet上传输的数据都必须遵循TCP/IP协议，根据TCP协议，每个可靠连接的建立需要经过“客户端同步请求”、“服务器应答”、“客户端再应答”三个阶段，我们最常用到的Web浏览、文件下载、收发邮件等都要经过这三个阶段。这反映出数据包并不是独立的，而是前后之间有着密切的状态联系，基于这种状态变化，引出了状态检测技术。</p>
+<p>状态检测防火墙摒弃了包过滤防火墙仅考查数据包的IP地址等几个参数，而不关心数据包连接状态变化的缺点，在防火墙的核心部分建立状态连接表，并将进出网络的数据当成一个个的会话，利用状态表跟踪每一个会话状态。状态监测对每一个包的检查不仅根据规则表，更考虑了数据包是否符合会话所处的状态，因此提供了完整的对传输层的控制能力。</p>
+<p>网关防火墙的一个挑战就是能处理的流量，状态检测技术在大为提高安全防范能力的同时也改进了流量处理速度。状态监测技术采用了一系列优化技术，使防火墙性能大幅度提升，能应用在各类网络环境中，尤其是在一些规则复杂的大型网络上。</p>
+<p>任何一款高性能的防火墙，都会采用状态检测技术。</p>
+<h3 id="复合型防火墙"><a href="#复合型防火墙" class="headerlink" title="复合型防火墙"></a>复合型防火墙</h3><p>复合型防火墙是指综合了状态检测与透明代理的新一代的防火墙，进一步基于ASIC架构，把防病毒、内容过滤整合到防火墙里，其中还包括VPN、IDS功能，多单元融为一体，是一种新突破。常规的防火墙并不能防止隐蔽在网络流量里的攻击，在网络界面对应用层扫描，把防病毒、内容过滤与防火墙结合起来，这体现了网络与信息安全的新思路。它在网络边界实施OSI第七层的内容扫描，实现了实时在网络边缘布署病毒防护、内容过滤等应用层服务措施。</p>
+<h3 id="四类防火墙的对比"><a href="#四类防火墙的对比" class="headerlink" title="四类防火墙的对比"></a>四类防火墙的对比</h3><ul>
+<li>包过滤防火墙：包过滤防火墙不检查数据区，包过滤防火墙不建立连接状态表，前后报文无关，应用层控制很弱。</li>
+<li>应用网关防火墙：不检查IP、TCP报头，不建立连接状态表，网络层保护比较弱。</li>
+<li>状态检测防火墙：不检查数据区，建立连接状态表，前后报文相关，应用层控制很弱。</li>
+<li>复合型防火墙：可以检查整个数据包内容，根据需要建立连接状态表，网络层保护强，应用层控制细，会话控制较弱。</li>
+</ul>
+<h2 id="什么是代理"><a href="#什么是代理" class="headerlink" title="什么是代理"></a>什么是代理</h2><p>我个人感觉代理更像是一种概念，它可以帮你做一些额外的事情，这些事情有可能是你无法做到的，比如访问国外资源，有可能是你委托它做的，比如帮你缓存最近访问过的信息。</p>
+<p>代理也可以工作在不同的网络层次，比如在应用层你可以将某个应用产生的HTTP请求导向某个指定的端口，也可以将整个系统产生的IP数据包导向某个服务器。</p>
+<p><strong>所以从这个角度讲，防火墙也算是代理的一种。</strong></p>
+<p>代理也分为<a href="https://sunra.top/Network/45898d51/">正向代理和反向代理</a>。也有很多的功能，只不过这些功能都不是其本质，其本质就是帮你做了一些事情，只要符合这个本质就叫做代理，至于怎么做，在那个层面做，做了什么可以细分出很多不同种类的代理。</p>
+<h3 id="代理的几种常见的功能"><a href="#代理的几种常见的功能" class="headerlink" title="代理的几种常见的功能"></a>代理的几种常见的功能</h3><ul>
+<li>突破IP限制。这是我们最常听的功能，所谓的IP限制就是对于某些指定IP的请求进行限制，最出名的就是我们的防火长城，但是我们也明白，<strong>我们不可能搞个超大的内网出来，和国外的任何网络都不连接，那么就一定有某台服务器是可以在墙内访问的。我们只需要找到这台服务器</strong>，假设为A，在上面搭建一个服务，然后将本地的一些对墙外服务访问的IP请求连带头部再本地加密之后作为请求体再生成一个新的IP数据报发送给这个服务，防火墙只能看到这个数据报的头部是发送给A的就放行，就算拿出内容来也无法分析其行为，因为内容也被加密过。这个请求到了A之后被我们的服务解密出来，发现它是访问另一个服务，就帮我们去请求，并将请求结果再次封装发送回来，我们本地的服务再进行解密。</li>
+<li>访问一些单位或团体内部资源，如某大学FTP(前提是该代理地址在该资源 的允许访问范围之内)，使用教育网内地址段免费代理服务器，就可以用于对教育网开放的各类<a href="https://baike.baidu.com/item/FTP/13839" rel="external nofollow noopener noreferrer" target="_blank">FTP</a>下载上传，以及各类资料查询共享等服务。</li>
+<li>突破中国电信的IP封锁：中国电信用户有很多网站是被限制访问的，这种限制是人为的，不同Serve对地址的封锁是不同的。所以不能访问时可以换一个国 外的代理服务器试试。</li>
+<li>提高访问速度：通常代理服务器都设置一个较大的硬盘<a href="https://baike.baidu.com/item/缓冲区" rel="external nofollow noopener noreferrer" target="_blank">缓冲区</a>，当有外界的信息通过时，同时也将其保存到缓冲区中，当其他用户再访问相同的信息时， 则直接由缓冲区中取出信息，传给用户，以提高访问速度。</li>
+<li>隐藏真实IP：上网者也可以通过这种方法隐藏自己的IP，免受攻击。</li>
+</ul>
+<p>工作在不同层次的代理利用的协议也都不同，比如有专门针对HTTP的HTTP代理，也有更低层次的，比如SOCKS代理。</p>
+<h2 id="什么是VPN"><a href="#什么是VPN" class="headerlink" title="什么是VPN"></a>什么是VPN</h2><p><strong>vpn在很多人心目中就是用来翻墙的工具，其实不是</strong>。vpn最主要的功能，并不是用来翻墙，只是它可以达到翻墙的目的。vpn—虚拟专用网络，<strong>它的功能是：在公用网络上建立专用网络，进行加密通讯</strong>。在企业网络和高校的网络中应用很广泛。你接入vpn，其实就是接入了一个专有网络，你的网络访问都从这个出口出去，你和vpn之间的通信是否加密，取决于你连接vpn的方式或者协议。</p>
+<p>实际上<strong>一旦你成功连接上一个VPN，你就会被分配一个该虚拟专用网的IP地址</strong>，如果你发现自己能访问谷歌，但是IP地址还是本地的，那说明你只是通过代理进行了流量转发，但是如果你发现自己的IP地址都已经被改了，那说明你通过VPN加入了一个虚拟专线，并获得了一个该网络的内部IP，只不过这个IP只在这条专线上有效，所以你所有的流量都要先发送到这个内网，在经内网转发。</p>
+<p>所以理论上如果你的公司内网无法访问某个网站，而你又让VPN全局代理你的流量，那么你也无法访问该网站。</p>
+<p><strong>我们平时经常听的SS和SSR其实算不上VPN，ss和ssr它的原理都是一样的，就是socks5代理</strong>。socks代理只是简单的传递数据包，而不必关心是何种协议，所以socks代理比其他应用层代理要快的多。socks5代理是把你的网络数据请求通过一条连接你和代理服务器之间的通道，由服务器转发到目的地，这个过程中你是没有通过一条专用通道的，只是数据包的发出，然后被代理服务器收到，整个过程并没有额外的处理。通俗的说，现在你有一个代理服务器在香港，比如你现在想要访问google，你的电脑发出请求，流量通过socks5连接发到你在香港的服务器上，然后再由你在香港的服务器去访问google，再把访问结果传回你的电脑，这样就实现了翻墙。</p>
+<h3 id="vpn和ss-ssr的区别和优缺点"><a href="#vpn和ss-ssr的区别和优缺点" class="headerlink" title="vpn和ss/ssr的区别和优缺点"></a>vpn和ss/ssr的区别和优缺点</h3><p>通过上面的介绍，其实基本已经能看出vpn和ss/ssr的区别了，那么他们到底孰优孰劣。</p>
+<p>因为v<strong>pn是走的专用通道，它是用来给企业传输加密数据用的，所以vpn的流量特征很明显</strong>，以openvpn为例，更详细的在这里不说了，流量特征明显，防火墙直接分析你的流量，如果特征匹配，直接封掉。目前就翻墙来说，PPTP类型的vpn基本死的差不多了，L2TP大部分地区干扰严重很不稳定。</p>
+<p><strong>ss/ssr的目的就是用来翻墙的，而vpn的目的是用来加密企业数据的，对于vpn来说安全是第一位的，而对于ss/ssr来说穿透防火墙是第一位，抗干扰性强，而且对流量做了混淆，所有流量在通过防火墙的时候，基本上都被识别为普通流量</strong>，也就是说你翻墙了，但是政府是检测不到你在翻墙的。两者的出发点和着重点就不同，ss/ssr更注重流量的混淆加密。如果要安全匿名上网，可以用vpn+tor或者ss/ssr+tor。</p>
+<p>而安全性方面还要补充的一点就是，国内vpn服务商，政府是很容易拿到他们的服务器日志的，如果他们真的这样做了，你翻墙做了什么，一览无余。</p>
+<h2 id="什么是网关"><a href="#什么是网关" class="headerlink" title="什么是网关"></a>什么是网关</h2><p>在计算机网络中，网关的定义是两个不同网络之间的路由器，也就是某个局域网的出口，比如我们每个人家里都会有一个路由器，这个路由器上连接着很多设备，这些设备都拥有者路由器分配的一个内网IP，我们所有的请求都需要首先经过这个路由器才能到达这个内网之外，那么这些设备的网关就是这个路由器。</p>
+<p>网关一开始最基本的功能应该就是进行协议的转化，比如我们通过HTTP请求去请求一个FTP服务器上的资源，就要先将请求发送给FTP服务器的网关，网关将该请求解析为FTP协议，获取文件后再将文件封装进HTTP的返回体中返回给客户端。</p>
+<p>API应该也算是一种网关，一开始我们的HTTP请求其实只是负责去获取WEB资源，但是我们可以通过自己实现的API去将这个请求转向不同的服务或者进行不同的处理。</p>
+<p>网关应该也算是代理的一种，只不过网关是某个服务或者局域网的统一入口，你可以集成很多功能在网关上，比如流量控制，负载均衡，反向代理等等。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>综上所述，代理其实就是帮你做一些事情，无论是帮你做了一层缓存，帮你做了流量转发，还是帮你加密数据，其实都算是代理，从这个角度将HTTPS其实也算是一个本地的代理，他会将你的HTTP数据先加密一次然后丢给IP层。如果防火墙只通过分析你的请求内容进行过滤，那么HTTPS代理可以帮你很好地翻墙。</p>
+<p>VPN又叫做虚拟专用网，其实它是为了帮助你访问一个内网数据，一旦你连接VPN成功，你的IP地址就会被分配成该内网的IP，这个IP也只在这个内网有效，不过别担心，如果你选择了全局代理，你所有的流量都会本VPN的客户端封装好转发向该内网的代理服务器，到了代理服务器再解包看看其真实的请求进行转发，所以说VPN也使用了代理服务器，只不过它是一种正向代理。</p>
+<p>我们平时用的SS和SSR其实只是一种代理，算不上VPN，它最基本的原理就是进行流量转发，因为我们不可能完全与外网一点联系都没有，只要找到了一台没有被墙的服务器，我们就可以把所有流量发送给这台服务器，让它代理我们进行请求的发送。</p>
+<p>从翻墙的角度将，VPN和代理都可以进行翻墙，但是不同点在于VPN通过隧道技术在你和代理服务器之间建立了一条专用的通道，然后直接分配给你一个IP，你这个IP只有该代理服务器认识，你所有的流量都是发送给该代理服务器，代理服务器收到之后再利用分配给你的IP进行数据的访问，感觉就像你的电脑连接在公司内网一样。但是SS这种代理只是帮你进行代理的转发，你的IP地址没有改变，只是你需要先找到一台可以在国内访问的服务器，租下来，然后在上面启动服务帮助你转发流量。</p>
+<p>网关应该算是一种加强版的代理，集成了很多功能，比如协议的转换，负载均衡等等。</p>
+<p>以上就是作者对于网关，VPN，代理等之间的关系的理解。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/[object Object]/70a4f80e" title="VPN 与 代理">https://sunra.top/[object Object]/70a4f80e</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/[object Object]/f6e4faf0" rel="prev" title="Token的安全存储与传输">
+      <i class="fa fa-chevron-left"></i> Token的安全存储与传输
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/[object Object]/7474c898" rel="next" title="分治算法">
+      分治算法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是“墙”"><span class="nav-number">1.</span> <span class="nav-text">什么是“墙”</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#包过滤技术"><span class="nav-number">1.1.</span> <span class="nav-text">包过滤技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用网关防火墙"><span class="nav-number">1.2.</span> <span class="nav-text">应用网关防火墙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态检测防火墙"><span class="nav-number">1.3.</span> <span class="nav-text">状态检测防火墙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复合型防火墙"><span class="nav-number">1.4.</span> <span class="nav-text">复合型防火墙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四类防火墙的对比"><span class="nav-number">1.5.</span> <span class="nav-text">四类防火墙的对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是代理"><span class="nav-number">2.</span> <span class="nav-text">什么是代理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代理的几种常见的功能"><span class="nav-number">2.1.</span> <span class="nav-text">代理的几种常见的功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是VPN"><span class="nav-number">3.</span> <span class="nav-text">什么是VPN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vpn和ss-ssr的区别和优缺点"><span class="nav-number">3.1.</span> <span class="nav-text">vpn和ss/ssr的区别和优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是网关"><span class="nav-number">4.</span> <span class="nav-text">什么是网关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

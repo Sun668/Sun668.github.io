@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Props 作为组件的核心特性之一，也是我们平时开发 Vue 项目中接触最多的特性之一，它可以让组件的功能变得丰富，也是父子组件通讯的一个渠道。 在这里感谢ustbhuangyi大佬的慕课教程。">
+<meta name="keywords" content="Vue prop 原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue源码学习（六） Props属性解析">
+<meta property="og:url" content="https://sunra.top/posts/32f8c0ce">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="Props 作为组件的核心特性之一，也是我们平时开发 Vue 项目中接触最多的特性之一，它可以让组件的功能变得丰富，也是父子组件通讯的一个渠道。 在这里感谢ustbhuangyi大佬的慕课教程。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2021-09-03T00:51:54.212Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue源码学习（六） Props属性解析">
+<meta name="twitter:description" content="Props 作为组件的核心特性之一，也是我们平时开发 Vue 项目中接触最多的特性之一，它可以让组件的功能变得丰富，也是父子组件通讯的一个渠道。 在这里感谢ustbhuangyi大佬的慕课教程。">
+
+<link rel="canonical" href="https://sunra.top/posts/32f8c0ce">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>Vue源码学习（六） Props属性解析 | Origin of Ray</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/32f8c0ce">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vue源码学习（六） Props属性解析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-01 08:19:49" itemprop="dateCreated datePublished" datetime="2020-10-01T08:19:49+08:00">2020-10-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-03 08:51:54" itemprop="dateModified" datetime="2021-09-03T08:51:54+08:00">2021-09-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><code>Props</code> 作为组件的核心特性之一，也是我们平时开发 Vue 项目中接触最多的特性之一，它可以让组件的功能变得丰富，也是父子组件通讯的一个渠道。</p>
+<p>在这里感谢<a href="https://www.imooc.com/t/3017249" rel="external nofollow noopener noreferrer" target="_blank">ustbhuangyi</a>大佬的慕课教程。</p>
+<a id="more"></a>
+<h2 id="规范化"><a href="#规范化" class="headerlink" title="规范化"></a>规范化</h2><p>在初始化 <code>props</code> 之前，首先会对 <code>props</code> 做一次 <code>normalize</code>，它发生在 <code>mergeOptions</code> 的时候，在 <code>src/core/util/options.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">mergeOptions</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  parent: Object,</span></span></span><br><span class="line"><span class="function"><span class="params">  child: Object,</span></span></span><br><span class="line"><span class="function"><span class="params">  vm?: Component</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">Object</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  normalizeProps(child, vm)</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">normalizeProps</span> (<span class="params">options: Object, vm: ?Component</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> props = options.props</span><br><span class="line">  <span class="keyword">if</span> (!props) <span class="keyword">return</span></span><br><span class="line">  <span class="keyword">const</span> res = &#123;&#125;</span><br><span class="line">  <span class="keyword">let</span> i, val, name</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(props)) &#123;</span><br><span class="line">    i = props.length</span><br><span class="line">    <span class="keyword">while</span> (i--) &#123;</span><br><span class="line">      val = props[i]</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> val === <span class="string">'string'</span>) &#123;</span><br><span class="line">        name = camelize(val)</span><br><span class="line">        res[name] = &#123; <span class="attr">type</span>: <span class="literal">null</span> &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">        warn(<span class="string">'props must be strings when using array syntax.'</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isPlainObject(props)) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> props) &#123;</span><br><span class="line">      val = props[key]</span><br><span class="line">      name = camelize(key)</span><br><span class="line">      res[name] = isPlainObject(val)</span><br><span class="line">        ? val</span><br><span class="line">        : &#123; <span class="attr">type</span>: val &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">    warn(</span><br><span class="line">      <span class="string">`Invalid value for option "props": expected an Array or an Object, `</span> +</span><br><span class="line">      <span class="string">`but got <span class="subst">$&#123;toRawType(props)&#125;</span>.`</span>,</span><br><span class="line">      vm</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">  options.props = res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>合并配置我们在组件化章节讲过，它主要就是处理我们定义组件的对象 <code>option</code>，然后挂载到组件的实例 <code>this.$options</code> 中。</p>
+<p>我们接下来重点看 <code>normalizeProps</code> 的实现，其实这个函数的主要目的就是把我们编写的 <code>props</code> 转成对象格式，因为实际上 <code>props</code> 除了对象格式，还允许写成数组格式。</p>
+<p>当 <code>props</code> 是一个数组，每一个数组元素 <code>prop</code> 只能是一个 <code>string</code>，表示 <code>prop</code> 的 <code>key</code>，转成驼峰格式，<code>prop</code> 的类型为空。</p>
+<p>当 <code>props</code> 是一个对象，对于 <code>props</code> 中每个 <code>prop</code> 的 <code>key</code>，我们会转驼峰格式，而它的 <code>value</code>，如果不是一个对象，我们就把它规范成一个对象。</p>
+<p>如果 <code>props</code> 既不是数组也不是对象，就抛出一个警告。</p>
+<p>举个例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  props: [<span class="string">'name'</span>, <span class="string">'nick-name'</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>经过 <code>normalizeProps</code> 后，会被规范成：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">options.props = &#123;</span><br><span class="line">  name: &#123; <span class="attr">type</span>: <span class="literal">null</span> &#125;,</span><br><span class="line">  nickName: &#123; <span class="attr">type</span>: <span class="literal">null</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  props: &#123;</span><br><span class="line">    name: <span class="built_in">String</span>,</span><br><span class="line">    nickName: &#123;</span><br><span class="line">      type: <span class="built_in">Boolean</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>经过 <code>normalizeProps</code> 后，会被规范成：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">options.props = &#123;</span><br><span class="line">  name: &#123; <span class="attr">type</span>: <span class="built_in">String</span> &#125;,</span><br><span class="line">  nickName: &#123; <span class="attr">type</span>: <span class="built_in">Boolean</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于对象形式的 <code>props</code> 可以指定每个 <code>prop</code> 的类型和定义其它的一些属性，推荐用对象形式定义 <code>props</code>。</p>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p><code>Props</code> 的初始化主要发生在 <code>new Vue</code> 中的 <code>initState</code> 阶段，在 <code>src/core/instance/state.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">initState</span> (<span class="params">vm: Component</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ....</span></span><br><span class="line">  <span class="keyword">const</span> opts = vm.$options</span><br><span class="line">  <span class="keyword">if</span> (opts.props) initProps(vm, opts.props)</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initProps</span> (<span class="params">vm: Component, propsOptions: Object</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> propsData = vm.$options.propsData || &#123;&#125;</span><br><span class="line">  <span class="keyword">const</span> props = vm._props = &#123;&#125;</span><br><span class="line">  <span class="comment">// cache prop keys so that future props updates can iterate using Array</span></span><br><span class="line">  <span class="comment">// instead of dynamic object key enumeration.</span></span><br><span class="line">  <span class="keyword">const</span> keys = vm.$options._propKeys = []</span><br><span class="line">  <span class="keyword">const</span> isRoot = !vm.$parent</span><br><span class="line">  <span class="comment">// root instance props should be converted</span></span><br><span class="line">  <span class="keyword">if</span> (!isRoot) &#123;</span><br><span class="line">    toggleObserving(<span class="literal">false</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> propsOptions) &#123;</span><br><span class="line">    keys.push(key)</span><br><span class="line">    <span class="keyword">const</span> value = validateProp(key, propsOptions, propsData, vm)</span><br><span class="line">    <span class="comment">/* istanbul ignore else */</span></span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> hyphenatedKey = hyphenate(key)</span><br><span class="line">      <span class="keyword">if</span> (isReservedAttribute(hyphenatedKey) ||</span><br><span class="line">          config.isReservedAttr(hyphenatedKey)) &#123;</span><br><span class="line">        warn(</span><br><span class="line">          <span class="string">`"<span class="subst">$&#123;hyphenatedKey&#125;</span>" is a reserved attribute and cannot be used as component prop.`</span>,</span><br><span class="line">          vm</span><br><span class="line">        )</span><br><span class="line">      &#125;</span><br><span class="line">      defineReactive(props, key, value, () =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (!isRoot &amp;&amp; !isUpdatingChildComponent) &#123;</span><br><span class="line">          warn(</span><br><span class="line">            <span class="string">`Avoid mutating a prop directly since the value will be `</span> +</span><br><span class="line">            <span class="string">`overwritten whenever the parent component re-renders. `</span> +</span><br><span class="line">            <span class="string">`Instead, use a data or computed property based on the prop's `</span> +</span><br><span class="line">            <span class="string">`value. Prop being mutated: "<span class="subst">$&#123;key&#125;</span>"`</span>,</span><br><span class="line">            vm</span><br><span class="line">          )</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      defineReactive(props, key, value)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// static props are already proxied on the component's prototype</span></span><br><span class="line">    <span class="comment">// during Vue.extend(). We only need to proxy props defined at</span></span><br><span class="line">    <span class="comment">// instantiation here.</span></span><br><span class="line">    <span class="keyword">if</span> (!(key <span class="keyword">in</span> vm)) &#123;</span><br><span class="line">      proxy(vm, <span class="string">`_props`</span>, key)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  toggleObserving(<span class="literal">true</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>initProps</code> 主要做 3 件事情：校验、响应式和代理。</p>
+<h3 id="校验"><a href="#校验" class="headerlink" title="校验"></a>校验</h3><p>校验的逻辑很简单，遍历 <code>propsOptions</code>，执行 <code>validateProp(key, propsOptions, propsData, vm)</code> 方法。这里的 <code>propsOptions</code> 就是我们定义的 <code>props</code> 在规范后生成的 <code>options.props</code> 对象，<code>propsData</code> 是从父组件传递的 <code>prop</code> 数据。所谓校验的目的就是检查一下我们传递的数据是否满足 <code>prop</code>的定义规范。再来看一下 <code>validateProp</code> 方法，它定义在 <code>src/core/util/props.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">validateProp</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  key: string,</span></span></span><br><span class="line"><span class="function"><span class="params">  propOptions: Object,</span></span></span><br><span class="line"><span class="function"><span class="params">  propsData: Object,</span></span></span><br><span class="line"><span class="function"><span class="params">  vm?: Component</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">any</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> prop = propOptions[key]</span><br><span class="line">  <span class="keyword">const</span> absent = !hasOwn(propsData, key)</span><br><span class="line">  <span class="keyword">let</span> value = propsData[key]</span><br><span class="line">  <span class="comment">// boolean casting</span></span><br><span class="line">  <span class="keyword">const</span> booleanIndex = getTypeIndex(<span class="built_in">Boolean</span>, prop.type)</span><br><span class="line">  <span class="keyword">if</span> (booleanIndex &gt; <span class="number">-1</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (absent &amp;&amp; !hasOwn(prop, <span class="string">'default'</span>)) &#123;</span><br><span class="line">      value = <span class="literal">false</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value === <span class="string">''</span> || value === hyphenate(key)) &#123;</span><br><span class="line">      <span class="comment">// only cast empty string / same name to boolean if</span></span><br><span class="line">      <span class="comment">// boolean has higher priority</span></span><br><span class="line">      <span class="keyword">const</span> stringIndex = getTypeIndex(<span class="built_in">String</span>, prop.type)</span><br><span class="line">      <span class="keyword">if</span> (stringIndex &lt; <span class="number">0</span> || booleanIndex &lt; stringIndex) &#123;</span><br><span class="line">        value = <span class="literal">true</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// check default value</span></span><br><span class="line">  <span class="keyword">if</span> (value === <span class="literal">undefined</span>) &#123;</span><br><span class="line">    value = getPropDefaultValue(vm, prop, key)</span><br><span class="line">    <span class="comment">// since the default value is a fresh copy,</span></span><br><span class="line">    <span class="comment">// make sure to observe it.</span></span><br><span class="line">    <span class="keyword">const</span> prevShouldObserve = shouldObserve</span><br><span class="line">    toggleObserving(<span class="literal">true</span>)</span><br><span class="line">    observe(value)</span><br><span class="line">    toggleObserving(prevShouldObserve)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp;</span><br><span class="line">    <span class="comment">// skip validation for weex recycle-list child component props</span></span><br><span class="line">    !(__WEEX__ &amp;&amp; isObject(value) &amp;&amp; (<span class="string">'@binding'</span> <span class="keyword">in</span> value))</span><br><span class="line">  ) &#123;</span><br><span class="line">    assertProp(prop, key, value, vm, absent)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>validateProp</code> 主要就做 3 件事情：处理 <code>Boolean</code> 类型的数据，处理默认数据，<code>prop</code> 断言，并最终返回 <code>prop</code> 的值。</p>
+<p>先来看 <code>Boolean</code> 类型数据的处理逻辑：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> prop = propOptions[key]</span><br><span class="line"><span class="keyword">const</span> absent = !hasOwn(propsData, key)</span><br><span class="line"><span class="keyword">let</span> value = propsData[key]</span><br><span class="line"><span class="comment">// boolean casting</span></span><br><span class="line"><span class="keyword">const</span> booleanIndex = getTypeIndex(<span class="built_in">Boolean</span>, prop.type)</span><br><span class="line"><span class="keyword">if</span> (booleanIndex &gt; <span class="number">-1</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (absent &amp;&amp; !hasOwn(prop, <span class="string">'default'</span>)) &#123;</span><br><span class="line">    value = <span class="literal">false</span></span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value === <span class="string">''</span> || value === hyphenate(key)) &#123;</span><br><span class="line">    <span class="comment">// only cast empty string / same name to boolean if</span></span><br><span class="line">    <span class="comment">// boolean has higher priority</span></span><br><span class="line">    <span class="keyword">const</span> stringIndex = getTypeIndex(<span class="built_in">String</span>, prop.type)</span><br><span class="line">    <span class="keyword">if</span> (stringIndex &lt; <span class="number">0</span> || booleanIndex &lt; stringIndex) &#123;</span><br><span class="line">      value = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先通过 <code>const booleanIndex = getTypeIndex(Boolean, prop.type)</code> 来判断 <code>prop</code> 的定义是否是 <code>Boolean</code> 类型的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getType</span> (<span class="params">fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> match = fn &amp;&amp; fn.toString().match(<span class="regexp">/^\s*function (\w+)/</span>)</span><br><span class="line">  <span class="keyword">return</span> match ? match[<span class="number">1</span>] : <span class="string">''</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isSameType</span> (<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> getType(a) === getType(b)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getTypeIndex</span> (<span class="params">type, expectedTypes</span>): <span class="title">number</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="built_in">Array</span>.isArray(expectedTypes)) &#123;</span><br><span class="line">    <span class="keyword">return</span> isSameType(expectedTypes, type) ? <span class="number">0</span> : <span class="number">-1</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>, len = expectedTypes.length; i &lt; len; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (isSameType(expectedTypes[i], type)) &#123;</span><br><span class="line">      <span class="keyword">return</span> i</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>getTypeIndex</code> 函数就是找到 <code>type</code> 和 <code>expectedTypes</code> 匹配的索引并返回。</p>
+<p><code>prop</code> 类型定义的时候可以是某个原生构造函数，也可以是原生构造函数的数组，比如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  props: &#123;</span><br><span class="line">    name: <span class="built_in">String</span>,</span><br><span class="line">    value: [<span class="built_in">String</span>, <span class="built_in">Boolean</span>]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果 <code>expectedTypes</code> 是单个构造函数，就执行 <code>isSameType</code> 去判断是否是同一个类型；如果是数组，那么就遍历这个数组，找到第一个同类型的，返回它的索引。</p>
+<p>回到 <code>validateProp</code> 函数，通过 <code>const booleanIndex = getTypeIndex(Boolean, prop.type)</code> 得到 <code>booleanIndex</code>，如果 <code>prop.type</code> 是一个 <code>Boolean</code> 类型，则通过 <code>absent &amp;&amp; !hasOwn(prop, &#39;default&#39;)</code> 来判断如果父组件没有传递这个 <code>prop</code> 数据并且没有设置 <code>default</code> 的情况，则 <code>value</code> 为 false。</p>
+<p>接着判断<code>value === &#39;&#39; || value === hyphenate(key)</code> 的情况，如果满足则先通过 <code>const stringIndex = getTypeIndex(String, prop.type)</code> 获取匹配 <code>String</code> 类型的索引，然后判断 <code>stringIndex &lt; 0 || booleanIndex &lt; stringIndex</code> 的值来决定 <code>value</code> 的值是否为 <code>true</code>。这块逻辑稍微有点绕，我们举 2 个例子来说明：</p>
+<p>例如你定义一个组件 <code>Student</code>:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  name: <span class="built_in">String</span>,</span><br><span class="line">  nickName: [<span class="built_in">Boolean</span>, <span class="built_in">String</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在父组件中引入这个组件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;student name=&quot;Kate&quot; nick-name&gt;&lt;/student&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+<p>或者是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;student name=&quot;Kate&quot; nick-name=&quot;nick-name&quot;&gt;&lt;/student&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+<p>第一种情况没有写属性的值，满足 <code>value === &#39;&#39;</code>，第二种满足 <code>value === hyphenate(key)</code> 的情况，另外 <code>nickName</code> 这个 <code>prop</code> 的类型是 <code>Boolean</code> 或者是 <code>String</code>，并且满足 <code>booleanIndex &lt; stringIndex</code>，所以对 <code>nickName</code> 这个 <code>prop</code> 的 <code>value</code> 为 <code>true</code>。</p>
+<p>接下来看一下默认数据处理逻辑：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// check default value</span></span><br><span class="line"><span class="keyword">if</span> (value === <span class="literal">undefined</span>) &#123;</span><br><span class="line">  value = getPropDefaultValue(vm, prop, key)</span><br><span class="line">  <span class="comment">// since the default value is a fresh copy,</span></span><br><span class="line">  <span class="comment">// make sure to observe it.</span></span><br><span class="line">  <span class="keyword">const</span> prevShouldObserve = shouldObserve</span><br><span class="line">  toggleObserving(<span class="literal">true</span>)</span><br><span class="line">  observe(value)</span><br><span class="line">  toggleObserving(prevShouldObserve)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当 <code>value</code> 的值为 <code>undefined</code> 的时候，说明父组件根本就没有传这个 <code>prop</code>，那么我们就需要通过 <code>getPropDefaultValue(vm, prop, key)</code> 获取这个 <code>prop</code> 的默认值。我们这里只关注 <code>getPropDefaultValue</code> 的实现，<code>toggleObserving</code> 和 <code>observe</code> 的作用我们之后会说。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getPropDefaultValue</span> (<span class="params">vm: ?Component, prop: PropOptions, key: string</span>): <span class="title">any</span> </span>&#123;</span><br><span class="line">  <span class="comment">// no default, return undefined</span></span><br><span class="line">  <span class="keyword">if</span> (!hasOwn(prop, <span class="string">'default'</span>)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">undefined</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> def = prop.default</span><br><span class="line">  <span class="comment">// warn against non-factory defaults for Object &amp; Array</span></span><br><span class="line">  <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp; isObject(def)) &#123;</span><br><span class="line">    warn(</span><br><span class="line">      <span class="string">'Invalid default value for prop "'</span> + key + <span class="string">'": '</span> +</span><br><span class="line">      <span class="string">'Props with type Object/Array must use a factory function '</span> +</span><br><span class="line">      <span class="string">'to return the default value.'</span>,</span><br><span class="line">      vm</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// the raw prop value was also undefined from previous render,</span></span><br><span class="line">  <span class="comment">// return previous default value to avoid unnecessary watcher trigger</span></span><br><span class="line">  <span class="keyword">if</span> (vm &amp;&amp; vm.$options.propsData &amp;&amp;</span><br><span class="line">    vm.$options.propsData[key] === <span class="literal">undefined</span> &amp;&amp;</span><br><span class="line">    vm._props[key] !== <span class="literal">undefined</span></span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">return</span> vm._props[key]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// call factory function for non-Function types</span></span><br><span class="line">  <span class="comment">// a value is Function if its prototype is function even across different execution context</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">typeof</span> def === <span class="string">'function'</span> &amp;&amp; getType(prop.type) !== <span class="string">'Function'</span></span><br><span class="line">    ? def.call(vm)</span><br><span class="line">    : def</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>检测如果 <code>prop</code> 没有定义 <code>default</code> 属性，那么返回 <code>undefined</code>，通过这块逻辑我们知道除了 <code>Boolean</code> 类型的数据，其余没有设置 <code>default</code> 属性的 <code>prop</code> 默认值都是 <code>undefined</code>。</p>
+<p>接着是开发环境下对 <code>prop</code> 的默认值是否为对象或者数组类型的判断，如果是的话会报警告，因为对象和数组类型的 <code>prop</code>，他们的默认值必须要返回一个工厂函数。</p>
+<p>接下来的判断是如果上一次组件渲染父组件传递的 <code>prop</code> 的值是 <code>undefined</code>，则直接返回 上一次的默认值 <code>vm._props[key]</code>，这样可以避免触发不必要的 <code>watcher</code> 的更新。</p>
+<p>最后就是判断 <code>def</code> 如果是工厂函数且 <code>prop</code> 的类型不是 <code>Function</code> 的时候，返回工厂函数的返回值，否则直接返回 <code>def</code>。</p>
+<p>至此，我们讲完了 <code>validateProp</code> 函数的 <code>Boolean</code> 类型数据的处理逻辑和默认数据处理逻辑，最后来看一下 <code>prop</code> 断言逻辑。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (</span><br><span class="line">process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp;</span><br><span class="line"><span class="comment">// skip validation for weex recycle-list child component props</span></span><br><span class="line">!(__WEEX__ &amp;&amp; isObject(value) &amp;&amp; (<span class="string">'@binding'</span> <span class="keyword">in</span> value))</span><br><span class="line">) &#123;</span><br><span class="line">  assertProp(prop, key, value, vm, absent)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在开发环境且非 <code>weex</code> 的某种环境下，执行 <code>assertProp</code> 做属性断言。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">assertProp</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  prop: PropOptions,</span></span></span><br><span class="line"><span class="function"><span class="params">  name: string,</span></span></span><br><span class="line"><span class="function"><span class="params">  value: any,</span></span></span><br><span class="line"><span class="function"><span class="params">  vm: ?Component,</span></span></span><br><span class="line"><span class="function"><span class="params">  absent: boolean</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (prop.required &amp;&amp; absent) &#123;</span><br><span class="line">    warn(</span><br><span class="line">      <span class="string">'Missing required prop: "'</span> + name + <span class="string">'"'</span>,</span><br><span class="line">      vm</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (value == <span class="literal">null</span> &amp;&amp; !prop.required) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> type = prop.type</span><br><span class="line">  <span class="keyword">let</span> valid = !type || type === <span class="literal">true</span></span><br><span class="line">  <span class="keyword">const</span> expectedTypes = []</span><br><span class="line">  <span class="keyword">if</span> (type) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">Array</span>.isArray(type)) &#123;</span><br><span class="line">      type = [type]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; type.length &amp;&amp; !valid; i++) &#123;</span><br><span class="line">      <span class="keyword">const</span> assertedType = assertType(value, type[i])</span><br><span class="line">      expectedTypes.push(assertedType.expectedType || <span class="string">''</span>)</span><br><span class="line">      valid = assertedType.valid</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!valid) &#123;</span><br><span class="line">    warn(</span><br><span class="line">      getInvalidTypeMessage(name, value, expectedTypes),</span><br><span class="line">      vm</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> validator = prop.validator</span><br><span class="line">  <span class="keyword">if</span> (validator) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!validator(value)) &#123;</span><br><span class="line">      warn(</span><br><span class="line">        <span class="string">'Invalid prop: custom validator check failed for prop "'</span> + name + <span class="string">'".'</span>,</span><br><span class="line">        vm</span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>assertProp</code> 函数的目的是断言这个 <code>prop</code> 是否合法。</p>
+<p>首先判断如果 <code>prop</code> 定义了 <code>required</code> 属性但父组件没有传递这个 <code>prop</code> 数据的话会报一个警告。</p>
+<p>接着判断如果 <code>value</code> 为空且 <code>prop</code> 没有定义 <code>required</code> 属性则直接返回。</p>
+<p>然后再去对 <code>prop</code> 的类型做校验，先是拿到 <code>prop</code> 中定义的类型 <code>type</code>，并尝试把它转成一个类型数组，然后依次遍历这个数组，执行 <code>assertType(value, type[i])</code> 去获取断言的结果，直到遍历完成或者是 <code>valid</code> 为 <code>true</code> 的时候跳出循环。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> simpleCheckRE = <span class="regexp">/^(String|Number|Boolean|Function|Symbol)$/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">assertType</span> (<span class="params">value: any, type: Function</span>): </span>&#123;</span><br><span class="line">  valid: boolean;</span><br><span class="line">  expectedType: string;</span><br><span class="line">&#125; &#123;</span><br><span class="line">  <span class="keyword">let</span> valid</span><br><span class="line">  <span class="keyword">const</span> expectedType = getType(type)</span><br><span class="line">  <span class="keyword">if</span> (simpleCheckRE.test(expectedType)) &#123;</span><br><span class="line">    <span class="keyword">const</span> t = <span class="keyword">typeof</span> value</span><br><span class="line">    valid = t === expectedType.toLowerCase()</span><br><span class="line">    <span class="comment">// for primitive wrapper objects</span></span><br><span class="line">    <span class="keyword">if</span> (!valid &amp;&amp; t === <span class="string">'object'</span>) &#123;</span><br><span class="line">      valid = value <span class="keyword">instanceof</span> type</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (expectedType === <span class="string">'Object'</span>) &#123;</span><br><span class="line">    valid = isPlainObject(value)</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (expectedType === <span class="string">'Array'</span>) &#123;</span><br><span class="line">    valid = <span class="built_in">Array</span>.isArray(value)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    valid = value <span class="keyword">instanceof</span> type</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    valid,</span><br><span class="line">    expectedType</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>assertType</code> 的逻辑很简单，先通过 <code>getType(type)</code> 获取 <code>prop</code> 期望的类型 <code>expectedType</code>，然后再去根据几种不同的情况对比 <code>prop</code> 的值 <code>value</code> 是否和 <code>expectedType</code> 匹配，最后返回匹配的结果。</p>
+<p>如果循环结束后 <code>valid</code> 仍然为 <code>false</code>，那么说明 <code>prop</code> 的值 <code>value</code> 与 <code>prop</code> 定义的类型都不匹配，那么就会输出一段通过 <code>getInvalidTypeMessage(name, value, expectedTypes)</code> 生成的警告信息，就不细说了。</p>
+<p>最后判断当 <code>prop</code> 自己定义了 <code>validator</code> 自定义校验器，则执行 <code>validator</code> 校验器方法，如果校验不通过则输出警告信息。</p>
+<h3 id="响应式"><a href="#响应式" class="headerlink" title="响应式"></a>响应式</h3><p>回到 <code>initProps</code> 方法，当我们通过 <code>const value = validateProp(key, propsOptions, propsData, vm)</code> 对 <code>prop</code> 做验证并且获取到 <code>prop</code> 的值后，接下来需要通过 <code>defineReactive</code> 把 <code>prop</code> 变成响应式。</p>
+<p><code>defineReactive</code> 我们之前已经介绍过，这里要注意的是，在开发环境中我们会校验 <code>prop</code> 的 <code>key</code> 是否是 <code>HTML</code> 的保留属性，并且在 <code>defineReactive</code> 的时候会添加一个自定义 <code>setter</code>，当我们直接对 <code>prop</code> 赋值的时候会输出警告：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> hyphenatedKey = hyphenate(key)</span><br><span class="line">  <span class="keyword">if</span> (isReservedAttribute(hyphenatedKey) ||</span><br><span class="line">      config.isReservedAttr(hyphenatedKey)) &#123;</span><br><span class="line">    warn(</span><br><span class="line">      <span class="string">`"<span class="subst">$&#123;hyphenatedKey&#125;</span>" is a reserved attribute and cannot be used as component prop.`</span>,</span><br><span class="line">      vm</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">  defineReactive(props, key, value, () =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (!isRoot &amp;&amp; !isUpdatingChildComponent) &#123;</span><br><span class="line">      warn(</span><br><span class="line">        <span class="string">`Avoid mutating a prop directly since the value will be `</span> +</span><br><span class="line">        <span class="string">`overwritten whenever the parent component re-renders. `</span> +</span><br><span class="line">        <span class="string">`Instead, use a data or computed property based on the prop's `</span> +</span><br><span class="line">        <span class="string">`value. Prop being mutated: "<span class="subst">$&#123;key&#125;</span>"`</span>,</span><br><span class="line">        vm</span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关于 <code>prop</code> 的响应式有一点不同的是当 <code>vm</code> 是非根实例的时候，会先执行 <code>toggleObserving(false)</code>，它的目的是为了响应式的优化，我们先跳过，之后会详细说明。</p>
+<h3 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h3><p>在经过响应式处理后，我们会把 <code>prop</code> 的值添加到 <code>vm._props</code> 中，比如 key 为 <code>name</code> 的 <code>prop</code>，它的值保存在 <code>vm._props.name</code> 中，但是我们在组件中可以通过 <code>this.name</code> 访问到这个 <code>prop</code>，这就是代理做的事情。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// static props are already proxied on the component's prototype</span></span><br><span class="line"><span class="comment">// during Vue.extend(). We only need to proxy props defined at</span></span><br><span class="line"><span class="comment">// instantiation here.</span></span><br><span class="line"><span class="keyword">if</span> (!(key <span class="keyword">in</span> vm)) &#123;</span><br><span class="line">  proxy(vm, <span class="string">`_props`</span>, key)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过 <code>proxy</code> 函数实现了上述需求。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sharedPropertyDefinition = &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  <span class="keyword">get</span>: noop,</span><br><span class="line">  <span class="keyword">set</span>: noop</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export function proxy (target: Object, sourceKey: string, key: string) &#123;</span><br><span class="line">  sharedPropertyDefinition.get = <span class="function"><span class="keyword">function</span> <span class="title">proxyGetter</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>[sourceKey][key]</span><br><span class="line">  &#125;</span><br><span class="line">  sharedPropertyDefinition.set = <span class="function"><span class="keyword">function</span> <span class="title">proxySetter</span> (<span class="params">val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>[sourceKey][key] = val</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(target, key, sharedPropertyDefinition)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当访问 <code>this.name</code> 的时候就相当于访问 <code>this._props.name</code>。</p>
+<p>其实对于非根实例的子组件而言，<code>prop</code> 的代理发生在 <code>Vue.extend</code> 阶段，在 <code>src/core/global-api/extend.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">Vue.extend = <span class="function"><span class="keyword">function</span> (<span class="params">extendOptions: Object</span>): <span class="title">Function</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">const</span> Sub = <span class="function"><span class="keyword">function</span> <span class="title">VueComponent</span> (<span class="params">options</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>._init(options)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// For props and computed properties, we define the proxy getters on</span></span><br><span class="line">  <span class="comment">// the Vue instances at extension time, on the extended prototype. This</span></span><br><span class="line">  <span class="comment">// avoids Object.defineProperty calls for each instance created.</span></span><br><span class="line">  <span class="keyword">if</span> (Sub.options.props) &#123;</span><br><span class="line">    initProps(Sub)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (Sub.options.computed) &#123;</span><br><span class="line">    initComputed(Sub)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">return</span> Sub</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initProps</span> (<span class="params">Comp</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> props = Comp.options.props</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> props) &#123;</span><br><span class="line">    proxy(Comp.prototype, <span class="string">`_props`</span>, key)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这么做的好处是不用为每个组件实例都做一层 <code>proxy</code>，是一种优化手段。</p>
+<h2 id="Props-更新"><a href="#Props-更新" class="headerlink" title="Props 更新"></a>Props 更新</h2><p>我们知道，当父组件传递给子组件的 <code>props</code> 值变化，子组件对应的值也会改变，同时会触发子组件的重新渲染。那么接下来我们就从源码角度来分析这两个过程。</p>
+<h3 id="子组件-props-更新"><a href="#子组件-props-更新" class="headerlink" title="子组件 props 更新"></a>子组件 props 更新</h3><p>首先，<code>prop</code> 数据的值变化在父组件，我们知道在父组件的 <code>render</code> 过程中会访问到这个 <code>prop</code> 数据，所以当 <code>prop</code> 数据变化一定会触发父组件的重新渲染，那么重新渲染是如何更新子组件对应的 <code>prop</code> 的值呢？</p>
+<p>在父组件重新渲染的最后，会执行 <code>patch</code> 过程，进而执行 <code>patchVnode</code> 函数，<code>patchVnode</code> 通常是一个递归过程，当它遇到组件 <code>vnode</code> 的时候，会执行组件更新过程的 <code>prepatch</code> 钩子函数，在 <code>src/core/vdom/patch.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">patchVnode</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  oldVnode,</span></span></span><br><span class="line"><span class="function"><span class="params">  vnode,</span></span></span><br><span class="line"><span class="function"><span class="params">  insertedVnodeQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">  ownerArray,</span></span></span><br><span class="line"><span class="function"><span class="params">  index,</span></span></span><br><span class="line"><span class="function"><span class="params">  removeOnly</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> i</span><br><span class="line">  <span class="keyword">const</span> data = vnode.data</span><br><span class="line">  <span class="keyword">if</span> (isDef(data) &amp;&amp; isDef(i = data.hook) &amp;&amp; isDef(i = i.prepatch)) &#123;</span><br><span class="line">    i(oldVnode, vnode)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>prepatch</code> 函数定义在 <code>src/core/vdom/create-component.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">prepatch (oldVnode: MountedComponentVNode, <span class="attr">vnode</span>: MountedComponentVNode) &#123;</span><br><span class="line">  <span class="keyword">const</span> options = vnode.componentOptions</span><br><span class="line">  <span class="keyword">const</span> child = vnode.componentInstance = oldVnode.componentInstance</span><br><span class="line">  updateChildComponent(</span><br><span class="line">    child,</span><br><span class="line">    options.propsData, <span class="comment">// updated props</span></span><br><span class="line">    options.listeners, <span class="comment">// updated listeners</span></span><br><span class="line">    vnode, <span class="comment">// new parent vnode</span></span><br><span class="line">    options.children <span class="comment">// new children</span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>内部会调用 <code>updateChildComponent</code> 方法来更新 <code>props</code>，注意第二个参数就是父组件的 <code>propData</code>，那么为什么 <code>vnode.componentOptions.propsData</code> 就是父组件传递给子组件的 <code>prop</code> 数据呢（这个也同样解释了第一次渲染的 <code>propsData</code> 来源）？原来在组件的 <code>render</code> 过程中，对于组件节点会通过 <code>createComponent</code> 方法来创建组件 <code>vnode</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createComponent</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  Ctor: Class&lt;Component&gt; | Function | Object | void,</span></span></span><br><span class="line"><span class="function"><span class="params">  data: ?VNodeData,</span></span></span><br><span class="line"><span class="function"><span class="params">  context: Component,</span></span></span><br><span class="line"><span class="function"><span class="params">  children: ?Array&lt;VNode&gt;,</span></span></span><br><span class="line"><span class="function"><span class="params">  tag?: string</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">VNode</span> | <span class="title">Array</span>&lt;<span class="title">VNode</span>&gt; | <span class="title">void</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// extract props</span></span><br><span class="line">  <span class="keyword">const</span> propsData = extractPropsFromVNodeData(data, Ctor, tag)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> vnode = <span class="keyword">new</span> VNode(</span><br><span class="line">    <span class="string">`vue-component-<span class="subst">$&#123;Ctor.cid&#125;</span><span class="subst">$&#123;name ? <span class="string">`-<span class="subst">$&#123;name&#125;</span>`</span> : <span class="string">''</span>&#125;</span>`</span>,</span><br><span class="line">    data, <span class="literal">undefined</span>, <span class="literal">undefined</span>, <span class="literal">undefined</span>, context,</span><br><span class="line">    &#123; Ctor, propsData, listeners, tag, children &#125;,</span><br><span class="line">    asyncFactory</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> vnode</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在创建组件 <code>vnode</code> 的过程中，首先从 <code>data</code> 中提取出 <code>propData</code>，然后在 <code>new VNode</code> 的时候，作为第七个参数 <code>VNodeComponentOptions</code> 中的一个属性传入，所以我们可以通过 <code>vnode.componentOptions.propsData</code> 拿到 <code>prop</code> 数据。</p>
+<p>接着看 <code>updateChildComponent</code> 函数，它的定义在 <code>src/core/instance/lifecycle.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">updateChildComponent</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  vm: Component,</span></span></span><br><span class="line"><span class="function"><span class="params">  propsData: ?Object,</span></span></span><br><span class="line"><span class="function"><span class="params">  listeners: ?Object,</span></span></span><br><span class="line"><span class="function"><span class="params">  parentVnode: MountedComponentVNode,</span></span></span><br><span class="line"><span class="function"><span class="params">  renderChildren: ?Array&lt;VNode&gt;</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// update props</span></span><br><span class="line">  <span class="keyword">if</span> (propsData &amp;&amp; vm.$options.props) &#123;</span><br><span class="line">    toggleObserving(<span class="literal">false</span>)</span><br><span class="line">    <span class="keyword">const</span> props = vm._props</span><br><span class="line">    <span class="keyword">const</span> propKeys = vm.$options._propKeys || []</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; propKeys.length; i++) &#123;</span><br><span class="line">      <span class="keyword">const</span> key = propKeys[i]</span><br><span class="line">      <span class="keyword">const</span> propOptions: any = vm.$options.props <span class="comment">// wtf flow?</span></span><br><span class="line">      props[key] = validateProp(key, propOptions, propsData, vm)</span><br><span class="line">    &#125;</span><br><span class="line">    toggleObserving(<span class="literal">true</span>)</span><br><span class="line">    <span class="comment">// keep a copy of raw propsData</span></span><br><span class="line">    vm.$options.propsData = propsData</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们重点来看更新 <code>props</code> 的相关逻辑，这里的 <code>propsData</code> 是父组件传递的 <code>props</code> 数据，<code>vm</code> 是子组件的实例。<code>vm._props</code> 指向的就是子组件的 <code>props</code> 值，<code>propKeys</code> 就是在之前 <code>initProps</code> 过程中，缓存的子组件中定义的所有 <code>prop</code> 的 <code>key</code>。主要逻辑就是遍历 <code>propKeys</code>，然后执行 <code>props[key] = validateProp(key, propOptions, propsData, vm)</code> 重新验证和计算新的 <code>prop</code> 数据，更新 <code>vm._props</code>，也就是子组件的 <code>props</code>，这个就是子组件  <code>props</code> 的更新过程。</p>
+<h3 id="子组件重新渲染"><a href="#子组件重新渲染" class="headerlink" title="子组件重新渲染"></a>子组件重新渲染</h3><p>其实子组件的重新渲染有 2 种情况，一个是 <code>prop</code> 值被修改，另一个是对象类型的 <code>prop</code> 内部属性的变化。</p>
+<p>先来看一下 <code>prop</code> 值被修改的情况，当执行 <code>props[key] = validateProp(key, propOptions, propsData, vm)</code> 更新子组件 <code>prop</code> 的时候，会触发 <code>prop</code> 的 <code>setter</code> 过程，只要在渲染子组件的时候访问过这个 <code>prop</code> 值，那么根据响应式原理，就会触发子组件的重新渲染。</p>
+<p>再来看一下当对象类型的 <code>prop</code> 的内部属性发生变化的时候，这个时候其实并没有触发子组件 <code>prop</code> 的更新。但是在子组件的渲染过程中，访问过这个对象 <code>prop</code>，所以这个对象 <code>prop</code> 在触发 <code>getter</code> 的时候会把子组件的 <code>render watcher</code> 收集到依赖中，然后当我们在父组件更新这个对象 <code>prop</code> 的某个属性的时候，会触发 <code>setter</code> 过程，也就会通知子组件 <code>render watcher</code> 的 <code>update</code>，进而触发子组件的重新渲染。</p>
+<p>以上就是当父组件 <code>props</code> 更新，触发子组件重新渲染的 2 种情况。</p>
+<h2 id="toggleObserving"><a href="#toggleObserving" class="headerlink" title="toggleObserving"></a>toggleObserving</h2><p>最后我们在来聊一下 <code>toggleObserving</code>，它的定义在 <code>src/core/observer/index.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">let</span> shouldObserve: boolean = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">toggleObserving</span> (<span class="params">value: boolean</span>) </span>&#123;</span><br><span class="line">  shouldObserve = value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它在当前模块中定义了 <code>shouldObserve</code> 变量，用来控制在 <code>observe</code> 的过程中是否需要把当前值变成一个 <code>Observer</code> 对象。</p>
+<p>那么为什么在 <code>props</code> 的初始化和更新过程中，多次执行 <code>toggleObserving(false)</code> 呢，接下来我们就来分析这几种情况。</p>
+<p>在 <code>initProps</code> 的过程中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isRoot = !vm.$parent</span><br><span class="line"><span class="comment">// root instance props should be converted</span></span><br><span class="line"><span class="keyword">if</span> (!isRoot) &#123;</span><br><span class="line">  toggleObserving(<span class="literal">false</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> propsOptions) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">const</span> value = validateProp(key, propsOptions, propsData, vm)</span><br><span class="line">  defineReactive(props, key, value)</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line">toggleObserving(<span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+<p>对于非根实例的情况，我们会执行 <code>toggleObserving(false)</code>，然后对于每一个 <code>prop</code> 值，去执行 <code>defineReactive(props, key, value)</code> 去把它变成响应式。</p>
+<p>回顾一下 <code>defineReactive</code> 的定义：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  obj: Object,</span></span></span><br><span class="line"><span class="function"><span class="params">  key: string,</span></span></span><br><span class="line"><span class="function"><span class="params">  val: any,</span></span></span><br><span class="line"><span class="function"><span class="params">  customSetter?: ?Function,</span></span></span><br><span class="line"><span class="function"><span class="params">  shallow?: boolean</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">let</span> childOb = !shallow &amp;&amp; observe(val)</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    configurable: <span class="literal">true</span>,</span><br><span class="line">    <span class="keyword">get</span>: function reactiveGetter () &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="keyword">set</span>: function reactiveSetter (newVal) &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通常对于值 <code>val</code> 会执行 <code>observe</code> 函数，然后遇到 <code>val</code> 是对象或者数组的情况会递归执行 <code>defineReactive</code> 把它们的子属性都变成响应式的，但是由于 <code>shouldObserve</code> 的值变成了 <code>false</code>，这个递归过程被省略了。为什么会这样呢？</p>
+<p>因为正如我们前面分析的，对于对象的 <code>prop</code> 值，子组件的 <code>prop</code> 值始终指向父组件的 <code>prop</code> 值，只要父组件的 <code>prop</code> 值变化，就会触发子组件的重新渲染，所以这个 <code>observe</code> 过程是可以省略的。</p>
+<p>最后再执行 <code>toggleObserving(true)</code> 恢复 <code>shouldObserve</code> 为 <code>true</code>。</p>
+<p>在 <code>validateProp</code> 的过程中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// check default value</span></span><br><span class="line"><span class="keyword">if</span> (value === <span class="literal">undefined</span>) &#123;</span><br><span class="line">  value = getPropDefaultValue(vm, prop, key)</span><br><span class="line">  <span class="comment">// since the default value is a fresh copy,</span></span><br><span class="line">  <span class="comment">// make sure to observe it.</span></span><br><span class="line">  <span class="keyword">const</span> prevShouldObserve = shouldObserve</span><br><span class="line">  toggleObserving(<span class="literal">true</span>)</span><br><span class="line">  observe(value)</span><br><span class="line">  toggleObserving(prevShouldObserve)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种是父组件没有传递 <code>prop</code> 值对默认值的处理逻辑，因为这个值是一个拷贝，所以我们需要 <code>toggleObserving(true)</code>，然后执行 <code>observe(value)</code> 把值变成响应式。</p>
+<p>在 <code>updateChildComponent</code> 过程中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// update props</span></span><br><span class="line"><span class="keyword">if</span> (propsData &amp;&amp; vm.$options.props) &#123;</span><br><span class="line">  toggleObserving(<span class="literal">false</span>)</span><br><span class="line">  <span class="keyword">const</span> props = vm._props</span><br><span class="line">  <span class="keyword">const</span> propKeys = vm.$options._propKeys || []</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; propKeys.length; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> key = propKeys[i]</span><br><span class="line">    <span class="keyword">const</span> propOptions: any = vm.$options.props <span class="comment">// wtf flow?</span></span><br><span class="line">    props[key] = validateProp(key, propOptions, propsData, vm)</span><br><span class="line">  &#125;</span><br><span class="line">  toggleObserving(<span class="literal">true</span>)</span><br><span class="line">  <span class="comment">// keep a copy of raw propsData</span></span><br><span class="line">  vm.$options.propsData = propsData</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实和 <code>initProps</code> 的逻辑一样，不需要对引用类型 <code>props</code> 递归做响应式处理，所以也需要 <code>toggleObserving(false)</code>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过这一节的分析，我们了解了 <code>props</code> 的规范化、初始化、更新等过程的实现原理；也了解了 Vue 内部对 <code>props</code> 如何做响应式的优化；同时还了解到 <code>props</code> 的变化是如何触发子组件的更新。了解这些对我们平时对 <code>props</code> 的应用，遇到问题时的定位追踪会有很大的帮助。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/posts/32f8c0ce" title="Vue源码学习（六） Props属性解析">https://sunra.top/posts/32f8c0ce</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/4c20763f" rel="prev" title="Vue源码学习（五） diff算法解析">
+      <i class="fa fa-chevron-left"></i> Vue源码学习（五） diff算法解析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/8a7b9568" rel="next" title="基本数据结构：队列">
+      基本数据结构：队列 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#规范化"><span class="nav-number">1.</span> <span class="nav-text">规范化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化"><span class="nav-number">2.</span> <span class="nav-text">初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#校验"><span class="nav-number">2.1.</span> <span class="nav-text">校验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#响应式"><span class="nav-number">2.2.</span> <span class="nav-text">响应式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理"><span class="nav-number">2.3.</span> <span class="nav-text">代理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Props-更新"><span class="nav-number">3.</span> <span class="nav-text">Props 更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#子组件-props-更新"><span class="nav-number">3.1.</span> <span class="nav-text">子组件 props 更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子组件重新渲染"><span class="nav-number">3.2.</span> <span class="nav-text">子组件重新渲染</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toggleObserving"><span class="nav-number">4.</span> <span class="nav-text">toggleObserving</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

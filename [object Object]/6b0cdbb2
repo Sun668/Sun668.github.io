@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="这个周工作中遇到了几个问题，都是关于http协议的头部报错的，大致可以分为三类，Referrer Policy, 断点续传，范围请求的。这里搜索和整理了一点内容还有应用。">
+<meta name="keywords" content="http 头部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="http协议头部部分参数解析与应用">
+<meta property="og:url" content="https://sunra.top/[object Object]/6b0cdbb2">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="这个周工作中遇到了几个问题，都是关于http协议的头部报错的，大致可以分为三类，Referrer Policy, 断点续传，范围请求的。这里搜索和整理了一点内容还有应用。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2023-05-26T03:50:25.160Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="http协议头部部分参数解析与应用">
+<meta name="twitter:description" content="这个周工作中遇到了几个问题，都是关于http协议的头部报错的，大致可以分为三类，Referrer Policy, 断点续传，范围请求的。这里搜索和整理了一点内容还有应用。">
+
+<link rel="canonical" href="https://sunra.top/[object Object]/6b0cdbb2">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>http协议头部部分参数解析与应用 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/[object Object]/6b0cdbb2">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          http协议头部部分参数解析与应用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-01-25 10:09:23" itemprop="dateCreated datePublished" datetime="2020-01-25T10:09:23+08:00">2020-01-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-26 11:50:25" itemprop="dateModified" datetime="2023-05-26T11:50:25+08:00">2023-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Network/" itemprop="url" rel="index"><span itemprop="name">Network</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这个周工作中遇到了几个问题，都是关于http协议的头部报错的，大致可以分为三类，Referrer Policy, 断点续传，范围请求的。这里搜索和整理了一点内容还有应用。</p>
+<a id="more"></a>
+<h2 id="Referrer-Policy"><a href="#Referrer-Policy" class="headerlink" title="Referrer Policy"></a>Referrer Policy</h2><h3 id="Referer"><a href="#Referer" class="headerlink" title="Referer"></a>Referer</h3><p>首先要搞明白Referer是什么。</p>
+<p>简单来说，当你发起一个http请求，请求头中的<code>referrer</code>字段就说明了你是从哪个页面发起该请求的。详细的解释可以看阮一峰老师的<a href="http://www.ruanyifeng.com/blog/2019/06/http-referer.html" rel="external nofollow noopener noreferrer" target="_blank">Http Referer 教程</a></p>
+<h3 id="Referer-Policy"><a href="#Referer-Policy" class="headerlink" title="Referer Policy"></a>Referer Policy</h3><p><code>Referrer-Policy</code>的作用就是为了控制请求头中<code>referrer</code>的内容，目前是一个候选标准，不过已经有部分浏览器支持该标准。</p>
+<p>目前<code>Referrer-Policy</code>只包含以下几种值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">enum ReferrerPolicy &#123;</span><br><span class="line">&quot;&quot;,</span><br><span class="line">&quot;no-referrer&quot;,</span><br><span class="line">&quot;no-referrer-when-downgrade&quot;,</span><br><span class="line">&quot;same-origin&quot;,</span><br><span class="line">&quot;origin&quot;,</span><br><span class="line">&quot;strict-origin&quot;,</span><br><span class="line">&quot;origin-when-cross-origin&quot;,</span><br><span class="line">&quot;strict-origin-when-cross-origin&quot;,</span><br><span class="line">&quot;unsafe-url&quot;</span><br><span class="line">&#125;;复制代码</span><br></pre></td></tr></table></figure>
+<h4 id="空字符串"><a href="#空字符串" class="headerlink" title="空字符串"></a>空字符串</h4><p>若设为空串则默认按照浏览器的机制设置<code>referrer</code>的内容，默认情况下是和<code>no-referrer-when-downgrade</code>设置得一样。</p>
+<h4 id="no-referrer"><a href="#no-referrer" class="headerlink" title="no-referrer"></a>no-referrer</h4><p>不显示<code>referrer</code>的任何信息在请求头中。</p>
+<h4 id="no-referrer-when-downgrade"><a href="#no-referrer-when-downgrade" class="headerlink" title="no-referrer-when-downgrade"></a>no-referrer-when-downgrade</h4><p>这是默认值。当从https网站跳转到http网站或者请求其资源时（安全降级HTTPS→HTTP），不显示<code>referrer</code>的信息，其他情况（安全同级HTTPS→HTTPS，或者HTTP→HTTP）则在<code>referrer</code>中显示完整的源网站的URL信息。</p>
+<h4 id="same-origin"><a href="#same-origin" class="headerlink" title="same-origin"></a>same-origin</h4><p>表示浏览器只会显示<code>referrer</code>信息给同源网站，并且是完整的URL信息。所谓同源网站，是协议、域名、端口都相同的网站。</p>
+<h3 id="origin"><a href="#origin" class="headerlink" title="origin"></a>origin</h3><p>表示浏览器在<code>referrer</code>字段中只显示源网站的源地址（即协议、域名、端口），而不包括完整的路径。</p>
+<h4 id="strict-origin"><a href="#strict-origin" class="headerlink" title="strict-origin"></a>strict-origin</h4><p>该策略更为安全些，和<code>origin</code>策略相似，只是不允许<code>referrer</code>信息显示在从https网站到http网站的请求中（安全降级）。</p>
+<h4 id="origin-when-cross-origin"><a href="#origin-when-cross-origin" class="headerlink" title="origin-when-cross-origin"></a>origin-when-cross-origin</h4><p>当发请求给同源网站时，浏览器会在<code>referrer</code>中显示完整的URL信息，发个非同源网站时，则只显示源地址（协议、域名、端口）</p>
+<h4 id="strict-origin-when-cross-origin"><a href="#strict-origin-when-cross-origin" class="headerlink" title="strict-origin-when-cross-origin"></a>strict-origin-when-cross-origin</h4><p>和<code>origin-when-cross-origin</code>相似，只是不允许<code>referrer</code>信息显示在从https网站到http网站的请求中（安全降级）。</p>
+<h4 id="unsaft-url"><a href="#unsaft-url" class="headerlink" title="unsaft-url"></a>unsaft-url</h4><p>浏览器总是会将完整的URL信息显示在<code>referrer</code>字段中，无论请求发给任何网站</p>
+<h3 id="Referrer-Policy更改方法"><a href="#Referrer-Policy更改方法" class="headerlink" title="Referrer-Policy更改方法"></a>Referrer-Policy更改方法</h3><p>可以有以下5种方法：</p>
+<p><strong>1.</strong> 通过<code>Referrer-Policy</code> HTTP <code>header</code>设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Referrer-Policy: origin复制代码</span><br></pre></td></tr></table></figure>
+<p><strong>2.</strong> 通过<code>`元素改变</code>Referrer Policy<code>，直接修改名为</code>referrer`的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=&quot;referrer&quot; content=&quot;origin&quot;&gt;复制代码</span><br></pre></td></tr></table></figure>
+<p><strong>3.</strong> 给 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a" rel="external nofollow noopener noreferrer" target="_blank">``</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area" rel="external nofollow noopener noreferrer" target="_blank">``</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img" rel="external nofollow noopener noreferrer" target="_blank"><code>![img]()</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" rel="external nofollow noopener noreferrer" target="_blank">``</a>, 或者<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link" rel="external nofollow noopener noreferrer" target="_blank">``</a>元素设置<code>referrerpolicy</code>属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;http://example.com&quot; referrerpolicy=&quot;origin&quot;&gt;复制代码</span><br></pre></td></tr></table></figure>
+<p><strong>4.</strong> 如需设置不显示<code>referrer</code>信息时，也可以给 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a" rel="external nofollow noopener noreferrer" target="_blank">``</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/area" rel="external nofollow noopener noreferrer" target="_blank">``</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link" rel="external nofollow noopener noreferrer" target="_blank">``</a>元素设置<code>rel</code>的链接关系。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;http://example.com&quot; rel=&quot;noreferrer&quot;&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="范围请求"><a href="#范围请求" class="headerlink" title="范围请求"></a>范围请求</h2><p>范围请求主要是针对较大的文件的请求或者上传，可以仅操作它的某一段。</p>
+<p>一个比较常见的场景，就是断点续传/下载，在网络情况不好的时候，可以在断开连接以后，仅继续获取部分内容。例如在网上下载软件，已经下载了 95% 了，此时网络断了，如果不支持范围请求，那就只有被迫重头开始下载。但是如果有范围请求的加持，就只需要下载最后 5% 的资源，避免重新下载。</p>
+<p>另一个场景就是多线程下载，对大型文件，开启多个线程，每个线程下载其中的某一段，最后下载完成之后，在本地拼接成一个完整的文件，可以更有效的利用资源。</p>
+<p>这算是两个比较常见的场景，接下来我们来看看范围请求的 HTTP 协议支持的技术细节。</p>
+<h2 id="HTTP-的范围请求"><a href="#HTTP-的范围请求" class="headerlink" title="HTTP 的范围请求"></a>HTTP 的范围请求</h2><h3 id="是否支持范围请求"><a href="#是否支持范围请求" class="headerlink" title="是否支持范围请求"></a>是否支持范围请求</h3><p>HTTP 本身是一种无状态的“松散”协议，而在经历了很多版本的迭代之后，只在 HTTP/1.1（RFC2616） 之上，才支持范围请求。所以如果客户端或者服务端两端的某一端低于 HTTP/1.1，我们就不应该使用范围请求的功能。</p>
+<p>而在 HTTP/1.1 中，很明确的声明了一个响应头部 <code>Access-Ranges</code> 来标记是否支持范围请求，它只有一个可选参数 <code>bytes</code>。</p>
+<p>例如这里给了一个 MP4 的响应头，可以看到它是有 <code>Accept-Ranges:bytes</code> 来标记的，有此标记标识当前资源支持范围请求。</p>
+<h3 id="使用范围请求"><a href="#使用范围请求" class="headerlink" title="使用范围请求"></a>使用范围请求</h3><p>如果已经确定双端都支持范围请求，我们就可以在请求资源的时候使用它。</p>
+<p>所有的文件最终都是存储在磁盘或者内存中的字节，对于待操作的文件可以将其以字节为单位分割。这样只需要 HTTP 支持请求该文件从 n 到 n+x 这个范围内的资源，就可以实现范围请求了。</p>
+<p>HTTP/1.1 中定义了一个 Ranges 的请求头，来指定请求实体的范围。它的范围取值是在 <code>0 - Content-Length</code> 之间，使用 <code>-</code> 分割。。</p>
+<p>例如已经下载了 1000 bytes 的资源内容，想接着继续下载之后的资源内容，只要在 HTTP 请求头部，增加 <code>Ranges:bytes=1000-</code> 就可以了。</p>
+<p>Range 还有几种不同的方式来限定范围，可以根据需要灵活定制：</p>
+<p><em>1.</em> 500-1000：指定开始和结束的范围，一般用于多线程下载。</p>
+<p><em>2.</em> 500- ：指定开始区间，一直传递到结束。这个就比较适用于断点续传、或者在线播放等等。</p>
+<p><em>3.</em> -500：无开始区间，只意思是需要最后 500 bytes 的内容实体。</p>
+<p><em>4.</em> 100-300,1000-3000：指定多个范围，这种方式使用的场景很少，了解一下就好了。</p>
+<p>HTTP 协议是一种双边协商的协议，既然请求头部已经确定是使用 Ranges 了，还有响应头部中，也需要使用 <code>Content-Ragne</code> 这个响应头来标记响应的实体内容范围。</p>
+<p><code>Content-Range</code> 的格式也很清晰，首先标记它的单位是 bytes 然后标记当前传递的内容实体范围和总长度。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Range: bytes 100-999/1000</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，会传递 100 ~ 999 范围的内容实体，而该资源文件的总大小是 1000 bytes。并且此时的 HTTP  响应状态码为 <code>206 Partial Content</code> 。</p>
+<h3 id="资源变化"><a href="#资源变化" class="headerlink" title="资源变化"></a>资源变化</h3><p>当我们在一些下载工具中，下载大尺寸资源的时候，偶尔中间暂停过再重新下载，可能会遇见它又重头开始下载的情况。</p>
+<p>这看似是 HTTP 的范围请求失效了，但是实际上并不一定如此，很可能是因为请求的资源，在请求的这个过程中，发生了改变。</p>
+<p>假如你下载的过程中，下载的源资源文件发生了变化，但是 URL 没有改变，此时文件长度可能已经变化了（这是非常容易发现的），极端情况下就算没有长度没有变化，你再继续下载，很可能最终下载完成之后，无法将下载的内容拼接成我们需要的文件。</p>
+<p>如果我们需要从服务器上下载某个资源，一定要预防此资源可能发生的变动。在之前讲 <a href="http://mp.weixin.qq.com/s?__biz=MzIxNjc0ODExMA==&amp;mid=2247485517&amp;idx=1&amp;sn=3edffef8db15d92c26072d85df1cc5a8&amp;chksm=9785116ca0f2987a4ccf77339800873d092c1bded522d50fcf03aec98a9f51b23355e28aa3b7#rd" rel="external nofollow noopener noreferrer" target="_blank">HTTP 缓存</a>的时候讲到，在 HTTP 协议中，可以通过 ETag 或者 Last-Modified 来标识当前资源是否变化。</p>
+<ul>
+<li>ETag：当前文件的一个验证令牌指纹，用于标识文件的唯一性。</li>
+<li>Last-Modified：标记当前文件最后被修改的时间。</li>
+</ul>
+<p>在 HTTP 的范围请求中，也可以使用这两个字段来区分分段请求的资源，是否有修改过，只需要在请求头中，将它放在 <code>If-Range</code> 这个请求报文头中即可。<code>If-Range</code> 使用 <code>ETag</code> 或者 <code>Last-Modified</code> 两个参数任意一个，原样填入即可。</p>
+<p>参考文献：</p>
+<p><a href="https://juejin.im/post/5cd81b59518825686a06fd05" rel="external nofollow noopener noreferrer" target="_blank">https://juejin.im/post/5cd81b59518825686a06fd05</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Referrer-Policy" rel="external nofollow noopener noreferrer" target="_blank">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Referrer-Policy</a></p>
+<p><a href="https://juejin.im/post/5b555f055188251af25700aa" rel="external nofollow noopener noreferrer" target="_blank">https://juejin.im/post/5b555f055188251af25700aa</a></p>
+<p><a href="https://www.jianshu.com/p/934d3e8d371e" rel="external nofollow noopener noreferrer" target="_blank">https://www.jianshu.com/p/934d3e8d371e</a></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/[object Object]/6b0cdbb2" title="http协议头部部分参数解析与应用">https://sunra.top/[object Object]/6b0cdbb2</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/[object Object]/d3bc7e1c" rel="prev" title="JavaScript 模块化语法">
+      <i class="fa fa-chevron-left"></i> JavaScript 模块化语法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/[object Object]/67dc4d37" rel="next" title="PWA">
+      PWA <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Referrer-Policy"><span class="nav-number">1.</span> <span class="nav-text">Referrer Policy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Referer"><span class="nav-number">1.1.</span> <span class="nav-text">Referer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Referer-Policy"><span class="nav-number">1.2.</span> <span class="nav-text">Referer Policy</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#空字符串"><span class="nav-number">1.2.1.</span> <span class="nav-text">空字符串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#no-referrer"><span class="nav-number">1.2.2.</span> <span class="nav-text">no-referrer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#no-referrer-when-downgrade"><span class="nav-number">1.2.3.</span> <span class="nav-text">no-referrer-when-downgrade</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#same-origin"><span class="nav-number">1.2.4.</span> <span class="nav-text">same-origin</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#origin"><span class="nav-number">1.3.</span> <span class="nav-text">origin</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#strict-origin"><span class="nav-number">1.3.1.</span> <span class="nav-text">strict-origin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#origin-when-cross-origin"><span class="nav-number">1.3.2.</span> <span class="nav-text">origin-when-cross-origin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#strict-origin-when-cross-origin"><span class="nav-number">1.3.3.</span> <span class="nav-text">strict-origin-when-cross-origin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#unsaft-url"><span class="nav-number">1.3.4.</span> <span class="nav-text">unsaft-url</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Referrer-Policy更改方法"><span class="nav-number">1.4.</span> <span class="nav-text">Referrer-Policy更改方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#范围请求"><span class="nav-number">2.</span> <span class="nav-text">范围请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-的范围请求"><span class="nav-number">3.</span> <span class="nav-text">HTTP 的范围请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#是否支持范围请求"><span class="nav-number">3.1.</span> <span class="nav-text">是否支持范围请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用范围请求"><span class="nav-number">3.2.</span> <span class="nav-text">使用范围请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#资源变化"><span class="nav-number">3.3.</span> <span class="nav-text">资源变化</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="今天无意间点开了MDN中关于性能优化的系列文章，学到了很多新的东西，也把很多旧的东西重新梳理了一下。 比如HTML不同的类型资源的加载顺序，是否会互相阻塞等问题，又比如学到了一些新的优化方式，如14K优化，dns-prefetch等 这个是入口地址：https://developer.mozilla.org/zh-CN/docs/Web/Performance">
+<meta name="keywords" content="Web 性能指标 优化方案">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web性能指标与优化手段">
+<meta property="og:url" content="https://sunra.top/posts/9394">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="今天无意间点开了MDN中关于性能优化的系列文章，学到了很多新的东西，也把很多旧的东西重新梳理了一下。 比如HTML不同的类型资源的加载顺序，是否会互相阻塞等问题，又比如学到了一些新的优化方式，如14K优化，dns-prefetch等 这个是入口地址：https://developer.mozilla.org/zh-CN/docs/Web/Performance">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2023-05-25T07:58:22.830Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Web性能指标与优化手段">
+<meta name="twitter:description" content="今天无意间点开了MDN中关于性能优化的系列文章，学到了很多新的东西，也把很多旧的东西重新梳理了一下。 比如HTML不同的类型资源的加载顺序，是否会互相阻塞等问题，又比如学到了一些新的优化方式，如14K优化，dns-prefetch等 这个是入口地址：https://developer.mozilla.org/zh-CN/docs/Web/Performance">
+
+<link rel="canonical" href="https://sunra.top/posts/9394">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>Web性能指标与优化手段 | Origin of Ray</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/9394">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Web性能指标与优化手段
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-09-30 16:23:12" itemprop="dateCreated datePublished" datetime="2022-09-30T16:23:12+08:00">2022-09-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-25 15:58:22" itemprop="dateModified" datetime="2023-05-25T15:58:22+08:00">2023-05-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Sundry/" itemprop="url" rel="index"><span itemprop="name">Sundry</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>今天无意间点开了MDN中关于性能优化的系列文章，学到了很多新的东西，也把很多旧的东西重新梳理了一下。</p>
+<p>比如HTML不同的类型资源的加载顺序，是否会互相阻塞等问题，又比如学到了一些新的优化方式，如14K优化，dns-prefetch等</p>
+<p>这个是入口地址：<a href="https://developer.mozilla.org/zh-CN/docs/Web/Performance" rel="external nofollow noopener noreferrer" target="_blank">https://developer.mozilla.org/zh-CN/docs/Web/Performance</a></p>
+<a id="more"></a>
+<h2 id="Web渲染的性能指标"><a href="#Web渲染的性能指标" class="headerlink" title="Web渲染的性能指标"></a>Web渲染的性能指标</h2><p>在进行性能优化之前，我们需要为应用选择一个正确的度量标准（性能指标）以及设定一个合理的优化目标。</p>
+<p>并不是所有指标都同样重要，这取决于你的应用。最后根据度量标准设定一个现实的目标。</p>
+<p>下面是一些值得考虑的指标：</p>
+<ul>
+<li><p>首次有效绘制（First Meaningful Paint，简称FMP，当主要内容呈现在页面上）</p>
+</li>
+<li><p>英雄渲染时间（Hero Rendering Times，度量用户体验的新指标，当用户最关心的内容渲染完成）</p>
+</li>
+<li><p>可交互时间（Time to Interactive，简称TTI，指页面布局已经稳定，关键的页面字体是可见的，并且主进程可用于处理用户输入，基本上用户可以点击UI并与其交互）</p>
+</li>
+<li><p>输入响应（Input responsiveness，界面响应用户输入所需的时间）</p>
+</li>
+<li><p>感知速度指数（Perceptual Speed Index，简称PSI，测量页面在加载过程中视觉上的变化速度，分数越低越好）</p>
+</li>
+<li><p>自定义指标，由业务需求和用户体验来决定。</p>
+</li>
+</ul>
+<p>FMP与英雄渲染时间非常相似，但它们不一样的地方在于FMP不区分内容是否有用，不区分渲染出的内容是否是用户关心的。</p>
+<p>基于以上这些指标以及RAIL性能模型，我们可以设立一些目标，比如</p>
+<ul>
+<li><p>100毫秒的界面响应时间与60FPS</p>
+</li>
+<li><p>速度指标（Speed Index）小于1250ms</p>
+</li>
+<li><p>3G网络环境下可交互时间小于5s</p>
+</li>
+<li><p>重要文件的大小预算小于170kb</p>
+</li>
+</ul>
+<h2 id="浏览器渲染原理以及关键渲染路径"><a href="#浏览器渲染原理以及关键渲染路径" class="headerlink" title="浏览器渲染原理以及关键渲染路径"></a>浏览器渲染原理以及关键渲染路径</h2><p>快速响应的网站提供更好的用户体验。用户期待内容快速加载和交互流畅的 Web 体验。</p>
+<p>等待资源加载时间和大部分情况下的浏览器单线程执行是影响 Web 性能的两大主要原因。</p>
+<p>等待时间是需要去克服来让浏览器快速加载资源的主要威胁。为了实现快速加载，开发者的目标就是尽可能快的发送请求的信息，至少看起来相当快。网络等待时间是在链路上传送二进制到电脑端所消耗的链路传输时间。Web 性能优化需要做的就是尽可能快的使页面加载完成。</p>
+<p>大部分情况下，浏览器是单线程执行的。为了有流畅的交互，开发者的目标是确保网站从流畅的页面滚动到点击响应的交互性能。渲染时间是关键要素，确保主线程可以完成所有给它的任务并且仍然一直可以处理用户的交互。通过了解浏览器单线程的本质与最小化主线程的责任可以优化 Web 性能，来确保渲染的流畅和交互响应的及时。</p>
+<h3 id="第一步：导航"><a href="#第一步：导航" class="headerlink" title="第一步：导航"></a>第一步：导航</h3><p>导航是加载 web 页面的第一步。它发生在以下情形：用户通过在地址栏输入一个 URL、点击一个链接、提交表单或者是其他的行为。</p>
+<p>Web 性能优化的目标之一就是缩短导航完成所花费的时间，在理想情况下，它通常不会花费太多的时间，但是等待时间和带宽会导致它的延时。</p>
+<h4 id="DNS查询"><a href="#DNS查询" class="headerlink" title="DNS查询"></a>DNS查询</h4><p>对于一个 web 页面来说导航的第一步是要去寻找页面资源的位置。如果导航到 <a href="https://example.com，HTML" rel="external nofollow noopener noreferrer" target="_blank">https://example.com，HTML</a> 页面被定位到 IP 地址为 93.184.216.34 的服务器。如果以前没有访问过这个网站，就需要进行 DNS 查询。</p>
+<p>浏览器向名称服务器发起 DNS 查询请求，最终得到一个 IP 地址。第一次请求之后，这个 IP 地址可能会被缓存一段时间，这样可以通过从缓存里面检索 IP 地址而不是再通过名称服务器进行查询来加速后续的请求。</p>
+<p>通过主机名加载一个页面通常仅需要一次 DNS 查询。但是，对于页面指向的不同的主机名，则需要多次 DNS 查询。如果字体（fonts）、图像（images）、脚本（scripts）、广告（ads）和网站统计（metrics）都有不同的主机名，则需要对每一个主机名进行 DNS 查询。</p>
+<h4 id="TCP握手"><a href="#TCP握手" class="headerlink" title="TCP握手"></a>TCP握手</h4><p>一旦获取到服务器 IP 地址，浏览器就会通过 TCP“三次握手” (en-US)与服务器建立连接。这个机制的是用来让两端尝试进行通信——在浏览器和服务器通过上层协议 HTTPS 发送数据之前，可以协商网络 TCP 套接字连接的一些参数。</p>
+<p>TCP 的“三次握手”技术经常被称为“SYN-SYN-ACK”——更确切的说是 SYN、SYN-ACK、ACK——因为通过 TCP 首先发送了三个消息进行协商，然后在两台电脑之间开始一个 TCP 会话。是的，这意味着终端与每台服务器之间还要来回发送三条消息，而请求尚未发出。</p>
+<h4 id="TLS协商"><a href="#TLS协商" class="headerlink" title="TLS协商"></a>TLS协商</h4><p>为了在 HTTPS 上建立安全连接，另一种握手是必须的。更确切的说是 TLS 协商，它决定了什么密码将会被用来加密通信，验证服务器，在进行真实的数据传输之前建立安全连接。在发送真正的请求内容之前还需要三次往返服务器。</p>
+<p>虽然建立安全连接对增加了加载页面的等待时间，对于建立一个安全的连接来说，以增加等待时间为代价是值得的，因为在浏览器和 web 服务器之间传输的数据不可以被第三方解密。</p>
+<p>经过 8 次往返，浏览器终于可以发出请求。</p>
+<h3 id="第二步：响应"><a href="#第二步：响应" class="headerlink" title="第二步：响应"></a>第二步：响应</h3><p>一旦我们建立了到 web 服务器的连接，浏览器就代表用户发送一个初始的 HTTP GET 请求，对于网站来说，这个请求通常是一个 HTML 文件。一旦服务器收到请求，它将使用相关的响应头和 HTML 的内容进行回复。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">HTML</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>My simple page<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">src</span>=<span class="string">"styles.css"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"myscript.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">"heading"</span>&gt;</span>My Page<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>A paragraph with a <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"https://example.com/about"</span>&gt;</span>link<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"myimage.jpg"</span> <span class="attr">alt</span>=<span class="string">"image description"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"anotherscript.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>初始请求的响应包含所接收数据的第一个字节。Time to First Byte（TTFB）是用户通过点击链接进行请求与收到第一个 HTML 数据包之间的时间。第一个内容分块通常是 14KB 的数据。</p>
+<p>上面的例子中，这个请求肯定是小于 14KB 的，但是直到浏览器在解析阶段遇到链接时才会去请求链接的资源，下面有进行描述。</p>
+<h4 id="TCP慢启动-14kB规则"><a href="#TCP慢启动-14kB规则" class="headerlink" title="TCP慢启动/14kB规则"></a>TCP慢启动/14kB规则</h4><p>第一个响应数据包是 14KB 大小的。这是慢启动的一部分，慢启动是一种均衡网络连接速度的算法。慢启动逐渐增加发送数据的数量直到达到网络的最大带宽。</p>
+<p>在 TCP 慢启动 中，在收到初始包之后，服务器会将下一个数据包的大小加倍到大约 28KB。后续的数据包依次是前一个包大小的二倍直到达到预定的阈值，或者遇到拥塞。</p>
+<p>如果您听说过初始页面加载的 14KB 规则，TCP 慢启动就是初始响应为 14KB 的原因，也是为什么 web 性能优化需要将此初始 14KB 响应作为优化重点的原因。TCP 慢启动逐渐建立适合网络能力的传输速度，以避免拥塞。</p>
+<h3 id="第三步：解析和渲染"><a href="#第三步：解析和渲染" class="headerlink" title="第三步：解析和渲染"></a>第三步：解析和渲染</h3><p>一旦浏览器收到数据的第一块，它就可以开始解析收到的信息。“解析”是浏览器将通过网络接收的数据转换为 DOM 和 CSSOM 的步骤，通过渲染器把 DOM 和 CSSOM 在屏幕上绘制成页面。</p>
+<p>DOM 是浏览器标记的内部表示。DOM 也是被暴露的，可以通过 JavaScript 中的各种 API 进行 DOM 操作。</p>
+<p>即使请求页面的 HTML 大于初始的 14KB 数据包，浏览器也将开始解析并尝试根据其拥有的数据进行渲染。这就是为什么在前 14KB 中包含浏览器开始渲染页面所需的所有内容，或者至少包含页面模板（第一次渲染所需的 CSS 和 HTML）对于 web 性能优化来说是重要的。但是在渲染到屏幕上面之前，HTML、CSS、JavaScript 必须被解析完成。</p>
+<h4 id="关键渲染路径（CRP）"><a href="#关键渲染路径（CRP）" class="headerlink" title="关键渲染路径（CRP）"></a>关键渲染路径（CRP）</h4><p>在解析 HTML 时会创建文档对象模型。HTML 可以请求 JavaScript，而 JavaScript 反过来，又可以更改 DOM。HTML 包含或请求样式，依次来构建 CSS 对象模型。浏览器引擎将两者结合起来以创建渲染树。布局确定页面上所有内容的大小和位置。确定布局后，将像素绘制到屏幕上。</p>
+<p>优化关键渲染路径可以缩短首次渲染的时间。了解和优化关键渲染路径对于确保重排和重绘可以每秒 60 帧的速度进行，以确保高效的用户交互并避免讨厌是很重要的。</p>
+<p>Web 性能包含了服务器请求和响应、加载、执行脚本、渲染、布局和绘制每个像素到屏幕上。</p>
+<p>网页请求从 HTML 文件请求开始。服务器返回 HTML — 响应头和数据。然后浏览器开始解析 HTML，转换收到的数据为 DOM 树。浏览器每次发现外部资源就初始化请求，无论是样式、脚本或者嵌入的图片引用。有时请求会阻塞，这意味着解析剩下的 HTML 会被终止直到重要的资源被处理。浏览器接着解析 HTML，发请求和构造 DOM 直到文件结尾，这时开始构造 CSS 对象模型。等到 DOM 和 CSSOM 完成之后，浏览器构造渲染树，计算所有可见内容的样式。一旦渲染树完成布局开始，定义所有渲染树元素的位置和大小。完成之后，页面被渲染完成，或者说是绘制到屏幕上。</p>
+<h5 id="DOM（文档对象模型）"><a href="#DOM（文档对象模型）" class="headerlink" title="DOM（文档对象模型）"></a>DOM（文档对象模型）</h5><p>DOM 构建是增量的。HTML 响应变成令牌（token），令牌变成节点，而节点又变成 DOM 树。单个 DOM 节点以 startTag 令牌开始，以 endTag 令牌结束。节点包含有关 HTML 元素的所有相关信息。该信息是使用令牌描述的。节点根据令牌层次结构连接到 DOM 树中。如果另一组 startTag 和 endTag 令牌位于一组 startTag 和 endTag 之间，则您在节点内有一个节点，这就是我们定义 DOM 树层次结构的方式。</p>
+<p>节点数量越多，关键渲染路径中的后续事件将花费的时间就越长。</p>
+<h5 id="CSSOM"><a href="#CSSOM" class="headerlink" title="CSSOM"></a>CSSOM</h5><p>DOM 包含页面所有的内容。CSSOM 包含了页面所有的样式，也就是如何展示 DOM 的信息。CSSOM 跟 DOM 很像，但是不同。DOM 构造是增量的，CSSOM 却不是。CSS 是渲染阻塞的：浏览器会阻塞页面渲染直到它接收和执行了所有的 CSS。CSS 是渲染阻塞是因为规则可以被覆盖，所以内容不能被渲染直到 CSSOM 的完成。</p>
+<p>CSS 有其自身的规则集合用来定义标识。注意 CSS 中的 C 代表的是“层叠”。CSS 规则是级联的。随着解析器转换标识为节点，节点的后代继承了样式。像处理 HTML 那样的增量处理功能没有被应用到 CSS 上，因为后续规则可能被之前的所覆盖。CSS 对象模型随着 CSS 的解析而被构建，但是直到完成都不能被用来构建渲染树，因为样式将会被之后的解析所覆盖而不应该被渲染到屏幕上。</p>
+<p>从选择器性能的角度，更少的特定选择器是比更多的要快。例如，.foo {} 是比 .bar .foo {} 更快的因为当浏览器发现 .foo ，接下来必须沿着 DOM 向上走来检查 .foo 是不是有一个祖先 .bar。越是具体的标签浏览器就需要更多的工作，但这样的弊端未必值得优化。</p>
+<p>如果你测量过解析 CSS 的时间，你将会被浏览器实在地快所震惊。更具体的规则更昂贵因为它必须遍历更多的 DOM 树节点，但这所带来的额外的消耗通常很小。先测量一下。然后按需优化。特定化或许不是你的低垂的果实。在 CSS 中选择器的性能优化，提升仅仅是毫秒级的。有其他一些方式来优化 CSS，例如压缩和使用媒体查询来异步处理 CSS 为非阻塞的请求。</p>
+<h5 id="渲染树"><a href="#渲染树" class="headerlink" title="渲染树"></a>渲染树</h5><p>渲染树包括了内容和样式：DOM 和 CSSOM 树结合为渲染树。为了构造渲染树，浏览器检查每个节点，从 DOM 树的根节点开始，并且决定哪些 CSS 规则被添加。</p>
+<p>渲染树只包含了可见内容。头部（通常）不包含任何可见信息，因此不会被包含在渲染树种。如果有元素上有 display: none;，它本身和其后代都不会出现在渲染树中。</p>
+<h5 id="布局"><a href="#布局" class="headerlink" title="布局"></a>布局</h5><p>一旦渲染树被构建，布局变成了可能。布局取决于屏幕的尺寸。布局这个步骤决定了在哪里和如何在页面上放置元素，决定了每个元素的宽和高，以及他们之间的相关性。</p>
+<p>什么是一个元素的宽？块级元素，根据定义，默认有父级宽度的 100%。一个宽度 50% 的元素，将占据父级宽度的一半。除非另外定义，body 有 100% 的宽，意味着它占据视窗的 100%。设备的宽度影响布局。</p>
+<p>视窗的元标签定义了布局视窗的宽度，从而影响布局。没有的话，浏览器使用视窗的默认宽度，默认全屏浏览器通常是 960px。在默认情况下像你的手机浏览器的全屏浏览器，通过设置 <meta name="viewport" content="width=device-width">，宽度将会是设备的宽度而不是默认的视窗宽度。设备宽度当用户在横向和纵向模式旋转他们的手机时将会改变。布局发生在每次设备旋转或浏览器缩放时。</p>
+<p>布局性能受 DOM 影响 — 节点数越多，布局就需要更长的时间。布局将会变成瓶颈，如果期间需要滚动或者其他动画将会导致迟滞。20ms 的延迟在加载或者方向改变时或许还可以接受，但在动画或滚动时就会迟滞。任何渲染树改变的时候，像添加节点、改变内容或者在一个节点更新盒模型样式的时候布局就会发生。</p>
+<p>为了减小布局事件的频率和时长，批量更新或者避免改动盒模型属性。</p>
+<h5 id="绘制"><a href="#绘制" class="headerlink" title="绘制"></a>绘制</h5><p>最后一步是将像素绘制在屏幕上。一旦渲染树创建并且布局完成，像素就可以被绘制在屏幕上。加载时，整个屏幕被绘制出来。之后，只有受影响的屏幕区域会被重绘，浏览器被优化为只重绘需要绘制的最小区域。绘制时间取决于何种类型的更新被附加在渲染树上。绘制是一个非常快的过程，所以聚焦在提升性能时这大概不是最有效的部分，重点要记住的是当测量一个动画帧需要的时间需要考虑到布局和重绘时间。添加到节点的样式会增加渲染时间，但是移除样式增加的 0.001ms 或许不能让你的优化物有所值。记住先测量。然后你可决定它的优化优先级。</p>
+<h4 id="预加载扫描器"><a href="#预加载扫描器" class="headerlink" title="预加载扫描器"></a>预加载扫描器</h4><p>浏览器构建 DOM 树时，这个过程占用了主线程。当这种情况发生时，预加载扫描仪将解析可用的内容并请求高优先级资源，如 CSS、JavaScript 和 web 字体。多亏了预加载扫描器，我们不必等到解析器找到对外部资源的引用来请求它。它将在后台检索资源，以便在主 HTML 解析器到达请求的资源时，它们可能已经在运行，或者已经被下载。预加载扫描仪提供的优化减少了阻塞。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">src</span>=<span class="string">"styles.css"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"myscript.js"</span> <span class="attr">async</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"myimage.jpg"</span> <span class="attr">alt</span>=<span class="string">"image description"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"anotherscript.js"</span> <span class="attr">async</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中，当主线程在解析 HTML 和 CSS 时，预加载扫描器将找到脚本和图像，并开始下载它们。为了确保脚本不会阻塞进程，当 JavaScript 解析和执行顺序不重要时，可以添加 async 属性或 defer 属性。</p>
+<p><strong>等待获取 CSS 不会阻塞 HTML 的解析或者下载，但是它确实会阻塞 JavaScript，因为 JavaScript 经常用于查询元素的 CSS 属性</strong>。</p>
+<h3 id="第四步：交互"><a href="#第四步：交互" class="headerlink" title="第四步：交互"></a>第四步：交互</h3><p>一旦主线程绘制页面完成，你会认为我们已经“准备好了”，但事实并非如此。如果加载包含 JavaScript（并且延迟到 onload 事件激发后执行），则主线程可能很忙，无法用于滚动、触摸和其他交互。</p>
+<p>Time to Interactive (en-US)（TTI）是测量从第一个请求导致 DNS 查询和 SSL 连接到页面可交互时所用的时间——可交互是 First Contentful Paint (en-US) 之后的时间点，页面在 50ms 内响应用户的交互。如果主线程正在解析、编译和执行 JavaScript，则它不可用，因此无法及时（小于 50ms）响应用户交互。</p>
+<p>在我们的示例中，可能图像加载很快，但 anotherscript.js 文件可能是 2MB，而且用户的网络连接很慢。在这种情况下，用户可以非常快地看到页面，但是在下载、解析和执行脚本之前，就无法滚动。这不是一个好的用户体验。避免占用主线程</p>
+<h2 id="优化手段总结"><a href="#优化手段总结" class="headerlink" title="优化手段总结"></a>优化手段总结</h2><h3 id="导航阶段"><a href="#导航阶段" class="headerlink" title="导航阶段"></a>导航阶段</h3><ul>
+<li>通过dns-prefetch来预解析域名对应的IP地址，减少导航时间</li>
+<li>尽量将不同的资源放到同一个服务器域名下，减少DNS解析的需求</li>
+</ul>
+<h3 id="响应阶段"><a href="#响应阶段" class="headerlink" title="响应阶段"></a>响应阶段</h3><ul>
+<li>通过SSR来渲染首屏页面。</li>
+<li>首屏页面所需内容尽量小于14kb，让其能够在TCP的首包中就能一次性返回并加载</li>
+</ul>
+<h3 id="解析阶段"><a href="#解析阶段" class="headerlink" title="解析阶段"></a>解析阶段</h3><ul>
+<li>使用预加载扫描器，资源提示（Resource Hints），如preload，prefetch等</li>
+<li>合理规划css和script标签的位置，因为css不会block html解析，但是会block js解析和执行，而js如果不是defer或者async，又会block html解析</li>
+<li>使用CDN来加速资源的加载</li>
+<li>优先加载关键的CSS，将首屏需要的CSS单独拆分出来</li>
+</ul>
+<h3 id="交互阶段"><a href="#交互阶段" class="headerlink" title="交互阶段"></a>交互阶段</h3><ul>
+<li>优化JS的写法：<a href="https://developer.mozilla.org/en-US/docs/Learn/Performance/JavaScript" rel="external nofollow noopener noreferrer" target="_blank">https://developer.mozilla.org/en-US/docs/Learn/Performance/JavaScript</a></li>
+</ul>
+<h3 id="优化首屏时间"><a href="#优化首屏时间" class="headerlink" title="优化首屏时间"></a>优化首屏时间</h3><p>提升页面加载速度需要通过被加载资源的优先级、控制它们加载的顺序和减小这些资源的体积。</p>
+<ul>
+<li>通过异步重要资源的下载来减小请求数量</li>
+<li>优化必须的请求数量和每个请求的文件体积</li>
+<li>通过区分关键资源的优先级来优化被加载关键资源的顺序，来缩短关键路径长度。</li>
+</ul>
+<h3 id="编码优化"><a href="#编码优化" class="headerlink" title="编码优化"></a>编码优化</h3><p>事实上数据访问速度有快慢之分，下面列出几个影响数据访问速度的因素：</p>
+<ul>
+<li><p>字面量与局部变量的访问速度最快，数组元素和对象成员相对较慢</p>
+</li>
+<li><p>变量从局部作用域到全局作用域的搜索过程越长速度越慢</p>
+</li>
+<li><p>对象嵌套的越深，读取速度就越慢</p>
+</li>
+<li><p>对象在原型链中存在的位置越深，找到它的速度就越慢</p>
+</li>
+<li><p>推荐的做法是缓存对象成员值。将对象成员值缓存到局部变量中会加快访问速度</p>
+</li>
+</ul>
+<p>应用在运行时，性能的瓶颈主要在于DOM操作的代价非常昂贵，下面列出一些关于DOM操作相关提升性能的建议：</p>
+<ul>
+<li><p>在JS中对DOM进行访问的代价非常高。请尽可能减少访问DOM的次数（建议缓存DOM属性和元素、把DOM集合的长度缓存到变量中并在迭代中使用。读变量比读DOM的速度要快很多。）</p>
+</li>
+<li><p>重排与重绘的代价非常昂贵。如果操作需要进行多次重排与重绘，建议先让元素脱离文档流，处理完毕后再让元素回归文档流，这样浏览器只会进行两次重排与重绘（脱离时和回归时）。</p>
+</li>
+<li><p>善于使用事件委托</p>
+</li>
+</ul>
+<p>下面列出一些流程控制相关的一些可以略微提升性能的细节，这些细节在大型开源项目中大量运用（例如Vue）：</p>
+<ul>
+<li><p>避免使用for…in（它能枚举到原型，所以很慢）</p>
+</li>
+<li><p>在JS中倒序循环会略微提升性能</p>
+</li>
+<li><p>减少迭代的次数</p>
+</li>
+<li><p>基于循环的迭代比基于函数的迭代快8倍</p>
+</li>
+<li><p>用Map表代替大量的if-else和switch会提升性能</p>
+</li>
+</ul>
+<h3 id="静态资源优化"><a href="#静态资源优化" class="headerlink" title="静态资源优化"></a>静态资源优化</h3><ul>
+<li><p>使用Brotli或Zopfli进行纯文本压缩</p>
+</li>
+<li><p>尽可能通过srcset，sizes和<picture>元素使用响应式图片。还可以通过<picture>元素使用WebP格式的图像。</picture></picture></p>
+</li>
+<li><p>使用Tree-shaking，code-splitting等进行产物的压缩和拆分</p>
+</li>
+</ul>
+<h3 id="网络优化"><a href="#网络优化" class="headerlink" title="网络优化"></a>网络优化</h3><ul>
+<li><p>使用HTTP缓存</p>
+</li>
+<li><p>使用HTTP2的多路复用来合并请求</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/posts/9394" title="Web性能指标与优化手段">https://sunra.top/posts/9394</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/38991" rel="prev" title="消失的两个数字">
+      <i class="fa fa-chevron-left"></i> 消失的两个数字
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/40806" rel="next" title="flex 布局的基本概念">
+      flex 布局的基本概念 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web渲染的性能指标"><span class="nav-number">1.</span> <span class="nav-text">Web渲染的性能指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器渲染原理以及关键渲染路径"><span class="nav-number">2.</span> <span class="nav-text">浏览器渲染原理以及关键渲染路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：导航"><span class="nav-number">2.1.</span> <span class="nav-text">第一步：导航</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS查询"><span class="nav-number">2.1.1.</span> <span class="nav-text">DNS查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP握手"><span class="nav-number">2.1.2.</span> <span class="nav-text">TCP握手</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TLS协商"><span class="nav-number">2.1.3.</span> <span class="nav-text">TLS协商</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：响应"><span class="nav-number">2.2.</span> <span class="nav-text">第二步：响应</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP慢启动-14kB规则"><span class="nav-number">2.2.1.</span> <span class="nav-text">TCP慢启动/14kB规则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步：解析和渲染"><span class="nav-number">2.3.</span> <span class="nav-text">第三步：解析和渲染</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关键渲染路径（CRP）"><span class="nav-number">2.3.1.</span> <span class="nav-text">关键渲染路径（CRP）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#DOM（文档对象模型）"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">DOM（文档对象模型）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CSSOM"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">CSSOM</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#渲染树"><span class="nav-number">2.3.1.3.</span> <span class="nav-text">渲染树</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#布局"><span class="nav-number">2.3.1.4.</span> <span class="nav-text">布局</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#绘制"><span class="nav-number">2.3.1.5.</span> <span class="nav-text">绘制</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#预加载扫描器"><span class="nav-number">2.3.2.</span> <span class="nav-text">预加载扫描器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四步：交互"><span class="nav-number">2.4.</span> <span class="nav-text">第四步：交互</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化手段总结"><span class="nav-number">3.</span> <span class="nav-text">优化手段总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#导航阶段"><span class="nav-number">3.1.</span> <span class="nav-text">导航阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#响应阶段"><span class="nav-number">3.2.</span> <span class="nav-text">响应阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析阶段"><span class="nav-number">3.3.</span> <span class="nav-text">解析阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交互阶段"><span class="nav-number">3.4.</span> <span class="nav-text">交互阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化首屏时间"><span class="nav-number">3.5.</span> <span class="nav-text">优化首屏时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编码优化"><span class="nav-number">3.6.</span> <span class="nav-text">编码优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态资源优化"><span class="nav-number">3.7.</span> <span class="nav-text">静态资源优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络优化"><span class="nav-number">3.8.</span> <span class="nav-text">网络优化</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

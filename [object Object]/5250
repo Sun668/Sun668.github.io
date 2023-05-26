@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="最近尝试实现了下AVL树，发现这玩意写起来还是很多细节的，搞了半天，所以就在这里记录下。 AVL树就是平衡二叉检索树，一方面它是BST，即二叉检索树，一方面它是平衡的，也就是任何一个节点为根结点的子树的左子树和右子树的高度差不到1。">
+<meta name="keywords" content="AVL JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript实现AVL树">
+<meta property="og:url" content="https://sunra.top/[object Object]/5250">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="最近尝试实现了下AVL树，发现这玩意写起来还是很多细节的，搞了半天，所以就在这里记录下。 AVL树就是平衡二叉检索树，一方面它是BST，即二叉检索树，一方面它是平衡的，也就是任何一个节点为根结点的子树的左子树和右子树的高度差不到1。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1675307019/origin-of-ray/912c7f2fdaf3490689db1a7144775b11_tplv-k3u1fbpfcp-zoom-in-crop-mark_4536_0_0_0_qzoplx.webp">
+<meta property="og:updated_time" content="2023-05-26T03:50:25.152Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript实现AVL树">
+<meta name="twitter:description" content="最近尝试实现了下AVL树，发现这玩意写起来还是很多细节的，搞了半天，所以就在这里记录下。 AVL树就是平衡二叉检索树，一方面它是BST，即二叉检索树，一方面它是平衡的，也就是任何一个节点为根结点的子树的左子树和右子树的高度差不到1。">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1675307019/origin-of-ray/912c7f2fdaf3490689db1a7144775b11_tplv-k3u1fbpfcp-zoom-in-crop-mark_4536_0_0_0_qzoplx.webp">
+
+<link rel="canonical" href="https://sunra.top/[object Object]/5250">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>JavaScript实现AVL树 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/[object Object]/5250">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript实现AVL树
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-02-02 10:56:03" itemprop="dateCreated datePublished" datetime="2023-02-02T10:56:03+08:00">2023-02-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-26 11:50:25" itemprop="dateModified" datetime="2023-05-26T11:50:25+08:00">2023-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>最近尝试实现了下AVL树，发现这玩意写起来还是很多细节的，搞了半天，所以就在这里记录下。</p>
+<p>AVL树就是平衡二叉检索树，一方面它是BST，即二叉检索树，一方面它是平衡的，也就是任何一个节点为根结点的子树的左子树和右子树的高度差不到1。</p>
+<a id="more"></a>
+<h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>关于BST就不多说了，比较简单，就是每个节点的左孩子都小于根节点，右孩子都大于根节点，插入的时候注意就好。</p>
+<p>但是BST有个问题，比如依次插入1，2，3，4，5，6，那么最终会得到一个只有右孩子的树，其实这个BST已经退化成了普通链表，所以我们需要一定的方式保持这个树的平衡，而保持平衡的方式如下：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1675307019/origin-of-ray/912c7f2fdaf3490689db1a7144775b11_tplv-k3u1fbpfcp-zoom-in-crop-mark_4536_0_0_0_qzoplx.webp" alt></p>
+<h1 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h1><h2 id="四种不平衡的情况"><a href="#四种不平衡的情况" class="headerlink" title="四种不平衡的情况"></a>四种不平衡的情况</h2><h3 id="左左情况"><a href="#左左情况" class="headerlink" title="左左情况"></a>左左情况</h3><p>这个情况下要右旋，然后返回旋转后新的根节点，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#_rotateRight(node) &#123;</span><br><span class="line">    <span class="keyword">const</span> avlNode = node.left;</span><br><span class="line">    node.left = avlNode.right;</span><br><span class="line">    avlNode.right = node;</span><br><span class="line">    <span class="keyword">return</span> avlNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="右右情况"><a href="#右右情况" class="headerlink" title="右右情况"></a>右右情况</h3><p>这个情况下要左旋，然后返回旋转后新的根节点，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#_rotateLeft(node) &#123;</span><br><span class="line">    <span class="keyword">const</span> avlNode = node.right;</span><br><span class="line">    node.right = avlNode.left;</span><br><span class="line">    avlNode.left = node;</span><br><span class="line">    <span class="keyword">return</span> avlNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="左右情况"><a href="#左右情况" class="headerlink" title="左右情况"></a>左右情况</h3><p>这个情况下先要对根节点的左子节点做左旋，变为左左情况，然后再对根节点做右旋，然后返回旋转后新的根节点，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#_rotateLeftRight(node) &#123;</span><br><span class="line">    node.left = this.#_rotateLeft(node.left);</span><br><span class="line">    return this.#_rotateRight(node)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="右左情况"><a href="#右左情况" class="headerlink" title="右左情况"></a>右左情况</h3><p>这个情况下先要对根节点的右子节点做右旋，变为右右情况，然后再对根节点做左旋，然后返回旋转后新的根节点，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#_rotateRightLeft(node) &#123;</span><br><span class="line">    node.right = this.#_rotateRight(node.right);</span><br><span class="line">    return this.#_rotateLeft(node);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="修复不平衡的情况"><a href="#修复不平衡的情况" class="headerlink" title="修复不平衡的情况"></a>修复不平衡的情况</h2><h3 id="获取节点的高度"><a href="#获取节点的高度" class="headerlink" title="获取节点的高度"></a>获取节点的高度</h3><p>我们在做平衡的时候需要判断是否需要平衡以及是哪种不平衡的情况好选择不同的旋转方式</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#_getAvlTreeHeight(node) &#123;</span><br><span class="line">    <span class="comment">// 空节点的高度为0</span></span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里使用后序遍历，因为每次递归的结果需要子节点递归的结果</span></span><br><span class="line">    const leftHeight = this.#_getAvlTreeHeight(node.left);</span><br><span class="line">    const rightHeight = this.#_getAvlTreeHeight(node.right);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 节点高度为左右子树高度中的较大值加上1</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.max(leftHeight, rightHeight) + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="平衡"><a href="#平衡" class="headerlink" title="平衡"></a>平衡</h3><p>平衡以node为根节点的子树，并返回新的根节点。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">#_balance(node) &#123;</span><br><span class="line">    <span class="comment">// 空节点不需要平衡，直接返回空节点</span></span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取左右子树的高度</span></span><br><span class="line">    const leftSubTreeHeight = this.#_getAvlTreeHeight(node.left);</span><br><span class="line">    const rightSubTreeHeight = this.#_getAvlTreeHeight(node.right);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果左子树高度大于右子树高度，且大不止1，说明不平衡，且这里隐含一个逻辑，就是左子树的左子树一定不为空</span></span><br><span class="line">    <span class="keyword">if</span> (leftSubTreeHeight - rightSubTreeHeight &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// 左左情况，直接右旋</span></span><br><span class="line">        if (this.#_getAvlTreeHeight(node.left.left) &gt;= this.#_getAvlTreeHeight(node.left.right)) &#123;</span><br><span class="line">            node = this.#_rotateRight(node)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 左右情况，先左旋后右旋</span></span><br><span class="line">            node = this.#_rotateLeftRight(node);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (rightSubTreeHeight - leftSubTreeHeight &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// 右右情况，直接左旋</span></span><br><span class="line">        if (this.#_getAvlTreeHeight(node.right.right) &gt;= this.#_getAvlTreeHeight(node.right.left)) &#123;</span><br><span class="line">            node = this.#_rotateLeft(node)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 右左情况，先右旋，后左旋</span></span><br><span class="line">            node = this.#_rotateRightLeft(node)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回平衡后的子树的新的根节点</span></span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><h3 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h3><p>插入新的节点，并返回新的根节点</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这段代码最需要理解的地方是，这个递归函数每次返回的是在以node节点为根节点的树上插入newNode并平衡后的新子树的根节点。</span></span><br><span class="line">#_insertHelper(node, newNode) &#123;</span><br><span class="line">    <span class="comment">// 如果是根节点为空，则直接把newNode当作根节点返回</span></span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> newNode;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果新节点的值比当前节点小</span></span><br><span class="line">    <span class="keyword">if</span> (newNode.val &lt; node.val) &#123;</span><br><span class="line">        <span class="comment">// 左节点为空，那么直接就把新节点当作左子节点</span></span><br><span class="line">        <span class="keyword">if</span> (node.left === <span class="literal">null</span>) &#123;</span><br><span class="line">            node.left = newNode;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 如果左子节点不为空，那么在左子树中插入新节点，并把插入后返回的新子树的根节点作为左子树</span></span><br><span class="line">            node.left = this.#_insertHelper(node.left, newNode);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 右节点为空，那么直接就把新节点当作右子节点</span></span><br><span class="line">        <span class="keyword">if</span> (node.right === <span class="literal">null</span>) &#123;</span><br><span class="line">            node.right = newNode;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 如果右子节点不为空，那么在右子树中插入新节点，并把插入后返回的新子树的根节点作为右子树</span></span><br><span class="line">            node.right = this.#_insertHelper(node.right, newNode);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 插入后进行平衡，并返回平衡后的新子树的根节点</span></span><br><span class="line">    return this.#_balance(node)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">insert(newNode) &#123;</span><br><span class="line">    <span class="comment">// 从根节点开始插入newNode，并且重新赋值根节点，保证下次调用的正确</span></span><br><span class="line">    this.#_root = this.#_insertHelper(this.#_root, newNode);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h3><p>这个比较简单，和BST没什么区别</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> #_searchHelper(node, val) &#123;</span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (node.val === val) &#123;</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; node.val) &#123;</span><br><span class="line">        return this.#_searchHelper(node.left, val)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        return this.#_searchHelper(node.right, val);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">search(val) &#123;</span><br><span class="line">    return this.#_searchHelper(this.#_root, val);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><p>在以node为根节点的子树上删除值为val的节点，并返回平衡后新的树的根节点</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">#_removeHelper(node, val) &#123;</span><br><span class="line">    <span class="comment">// 如果node为空，说明树为空，不需要删除，新树的根节点也是null</span></span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">// 如果找到了要删除的节点</span></span><br><span class="line">    <span class="keyword">if</span> (val === node.val) &#123;</span><br><span class="line">        <span class="comment">// 要删除的节点左右子树都有</span></span><br><span class="line">        <span class="keyword">if</span> (node.left &amp;&amp; node.right) &#123;</span><br><span class="line">            <span class="comment">// 那就找到该节点右子树</span></span><br><span class="line">            <span class="keyword">let</span> p = node.right;</span><br><span class="line">            <span class="comment">// 然后在右子树中一直找左子树</span></span><br><span class="line">            <span class="keyword">while</span>(p.left) &#123;</span><br><span class="line">                p = p.left;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 然后把结果替换到当前节点中，因为右子树中最左的子节点一定小于右子树中其他的节点，同时大雨左子树中所有节点</span></span><br><span class="line">            node.val = p.val;</span><br><span class="line">            <span class="comment">// 上一步只是把节点值替换，但是节点还在，我们需要右子树中删除该节点，然后返回平衡后新的右子树作为node的右子树。</span></span><br><span class="line">            <span class="comment">// 而记住，此时我们要删除的是p.val了，而不是val，因为我们已经把p.val放到了node.val，且这个p有个性质就是它最起码没有左子节点了，座椅下一次会进入紧接着的else逻辑</span></span><br><span class="line">            node.right = this.#_removeHelper(node.right, p.val)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 如果不是左右子树都有，直接就替换上来，然后删除原本的就好</span></span><br><span class="line">            <span class="keyword">let</span> p = node.left !== <span class="literal">null</span> ? node.left : node.right;</span><br><span class="line">            node = <span class="literal">null</span>;</span><br><span class="line">            <span class="keyword">return</span> p;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; node.val) &#123;</span><br><span class="line">        <span class="comment">// 如果要删除的值比当前小，就去左子树删除</span></span><br><span class="line">        node.left = this.#_removeHelper(node.left, val)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 如果要删除的值比当前大，就去右子树删除</span></span><br><span class="line">        node.right = this.#_removeHelper(node.right, val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回平衡后新的子树根节点</span></span><br><span class="line">    return this.#_balance(node);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">remove(val) &#123;</span><br><span class="line">    return this.#_removeHelper(this.#_root, val);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="完整代码和测试"><a href="#完整代码和测试" class="headerlink" title="完整代码和测试"></a>完整代码和测试</h1><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AvlTree</span></span>&#123;</span><br><span class="line">    #_rotateLeft(node) &#123;</span><br><span class="line">        <span class="keyword">const</span> avlNode = node.right;</span><br><span class="line">        node.right = avlNode.left;</span><br><span class="line">        avlNode.left = node;</span><br><span class="line">        <span class="keyword">return</span> avlNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #_rotateRight(node) &#123;</span><br><span class="line">        <span class="keyword">const</span> avlNode = node.left;</span><br><span class="line">        node.left = avlNode.right;</span><br><span class="line">        avlNode.right = node;</span><br><span class="line">        <span class="keyword">return</span> avlNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #_rotateLeftRight(node) &#123;</span><br><span class="line">        node.left = this.#_rotateLeft(node.left);</span><br><span class="line">        return this.#_rotateRight(node)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #_rotateRightLeft(node) &#123;</span><br><span class="line">        node.right = this.#_rotateRight(node.right);</span><br><span class="line">        return this.#_rotateLeft(node);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #_getAvlTreeHeight(node) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        const leftHeight = this.#_getAvlTreeHeight(node.left);</span><br><span class="line">        const rightHeight = this.#_getAvlTreeHeight(node.right);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Math</span>.max(leftHeight, rightHeight) + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #_balance(node) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        const leftSubTreeHeight = this.#_getAvlTreeHeight(node.left);</span><br><span class="line">        const rightSubTreeHeight = this.#_getAvlTreeHeight(node.right);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (leftSubTreeHeight - rightSubTreeHeight &gt; <span class="number">1</span>) &#123;</span><br><span class="line">            if (this.#_getAvlTreeHeight(node.left.left) &gt;= this.#_getAvlTreeHeight(node.left.right)) &#123;</span><br><span class="line">                node = this.#_rotateRight(node)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                node = this.#_rotateLeftRight(node);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (rightSubTreeHeight - leftSubTreeHeight &gt; <span class="number">1</span>) &#123;</span><br><span class="line">            if (this.#_getAvlTreeHeight(node.right.right) &gt;= this.#_getAvlTreeHeight(node.right.left)) &#123;</span><br><span class="line">                node = this.#_rotateLeft(node)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                node = this.#_rotateRightLeft(node)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #_insertHelper(node, newNode) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> newNode;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (newNode.val &lt; node.val) &#123;</span><br><span class="line">            <span class="keyword">if</span> (node.left === <span class="literal">null</span>) &#123;</span><br><span class="line">                node.left = newNode;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                node.left = this.#_insertHelper(node.left, newNode);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (node.right === <span class="literal">null</span>) &#123;</span><br><span class="line">                node.right = newNode;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                node.right = this.#_insertHelper(node.right, newNode);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return this.#_balance(node)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    insert(newNode) &#123;</span><br><span class="line">        this.#_root = this.#_insertHelper(this.#_root, newNode);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #_inOrder(node) &#123;</span><br><span class="line">        <span class="keyword">const</span> stack = [node];</span><br><span class="line">        <span class="keyword">const</span> result = [];</span><br><span class="line">        <span class="keyword">while</span>(stack.length) &#123;</span><br><span class="line">            <span class="keyword">let</span> current = stack.pop();</span><br><span class="line">            <span class="keyword">if</span> (current !== <span class="literal">null</span>) &#123;</span><br><span class="line">                current.right &amp;&amp; stack.push(current.right);</span><br><span class="line"></span><br><span class="line">                stack.push(current, <span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">                current.left &amp;&amp; stack.push(current.left);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                current = stack.pop();</span><br><span class="line">                result.push(current.val);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">console</span>.log(result);</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    print() &#123;</span><br><span class="line">        if (this.#_root === null) return;</span><br><span class="line">        this.#_inOrder(this.#_root);</span><br><span class="line">        console.log(this.#_getAvlTreeHeight(this.#_root.left))</span><br><span class="line">        console.log(this.#_getAvlTreeHeight(this.#_root.right))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #_searchHelper(node, val) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (node.val === val) &#123;</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; node.val) &#123;</span><br><span class="line">            return this.#_searchHelper(node.left, val)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            return this.#_searchHelper(node.right, val);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    search(val) &#123;</span><br><span class="line">        return this.#_searchHelper(this.#_root, val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #_removeHelper(node, val) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (val === node.val) &#123;</span><br><span class="line">            <span class="keyword">if</span> (node.left &amp;&amp; node.right) &#123;</span><br><span class="line">                <span class="keyword">let</span> p = node.right;</span><br><span class="line">                <span class="keyword">while</span>(p.left) &#123;</span><br><span class="line">                    p = p.left;</span><br><span class="line">                &#125;</span><br><span class="line">                node.val = p.val;</span><br><span class="line">                node.right = this.#_removeHelper(node.right, p.val)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">let</span> p = node.left !== <span class="literal">null</span> ? node.left : node.right;</span><br><span class="line">                node = <span class="literal">null</span>;</span><br><span class="line">                <span class="keyword">return</span> p;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; node.val) &#123;</span><br><span class="line">            node.left = this.#_removeHelper(node.left, val)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            node.right = this.#_removeHelper(node.right, val);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return this.#_balance(node);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    remove(val) &#123;</span><br><span class="line">        return this.#_removeHelper(this.#_root, val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #_root = null;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> avlTree = <span class="keyword">new</span> AvlTree();</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">0</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">2</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">3</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">4</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">6</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">8</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">9</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">14</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">15</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">16</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">17</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">18</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">19</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">20</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">21</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">11</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">31</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">61</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">111</span>));</span><br><span class="line">avlTree.insert(<span class="keyword">new</span> TreeNode(<span class="number">221</span>));</span><br><span class="line"></span><br><span class="line">avlTree.remove(<span class="number">20</span>);</span><br><span class="line">avlTree.print()</span><br><span class="line"></span><br><span class="line">avlTree.remove(<span class="number">1</span>);</span><br><span class="line">avlTree.print()</span><br><span class="line"></span><br><span class="line">avlTree.remove(<span class="number">11</span>);</span><br><span class="line">avlTree.print()</span><br><span class="line"></span><br><span class="line">avlTree.remove(<span class="number">221</span>);</span><br><span class="line">avlTree.print()</span><br><span class="line"></span><br><span class="line">avlTree.remove(<span class="number">8</span>);</span><br><span class="line">avlTree.print()</span><br><span class="line"></span><br><span class="line">avlTree.remove(<span class="number">4</span>);</span><br><span class="line">avlTree.print()</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/[object Object]/5250" title="JavaScript实现AVL树">https://sunra.top/[object Object]/5250</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/[object Object]/29283" rel="prev" title="分析模式——可复用的对象模型">
+      <i class="fa fa-chevron-left"></i> 分析模式——可复用的对象模型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/[object Object]/37760" rel="next" title="10倍程序员工作法">
+      10倍程序员工作法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本原理"><span class="nav-number">1.</span> <span class="nav-text">基本原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#具体实现"><span class="nav-number">2.</span> <span class="nav-text">具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#四种不平衡的情况"><span class="nav-number">2.1.</span> <span class="nav-text">四种不平衡的情况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#左左情况"><span class="nav-number">2.1.1.</span> <span class="nav-text">左左情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#右右情况"><span class="nav-number">2.1.2.</span> <span class="nav-text">右右情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#左右情况"><span class="nav-number">2.1.3.</span> <span class="nav-text">左右情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#右左情况"><span class="nav-number">2.1.4.</span> <span class="nav-text">右左情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修复不平衡的情况"><span class="nav-number">2.2.</span> <span class="nav-text">修复不平衡的情况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取节点的高度"><span class="nav-number">2.2.1.</span> <span class="nav-text">获取节点的高度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#平衡"><span class="nav-number">2.2.2.</span> <span class="nav-text">平衡</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本操作"><span class="nav-number">2.3.</span> <span class="nav-text">基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入"><span class="nav-number">2.3.1.</span> <span class="nav-text">插入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找"><span class="nav-number">2.3.2.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除"><span class="nav-number">2.3.3.</span> <span class="nav-text">删除</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#完整代码和测试"><span class="nav-number">3.</span> <span class="nav-text">完整代码和测试</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

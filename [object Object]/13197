@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="之前一篇博客讲过了进程存在的意义是什么，我们为什么要搞出进程这个概念。 但是随之而来的就是几个连续的问题，也是多道并发会遇到的几个问题：  多个进程并发的时候，如何进行调度，调度的原则是什么？ 如果多个进程之间有相互依赖关系怎么办，比如同步和互斥关系？ 如果因为依赖关系，产生了循环依赖，可能导致死锁，又该怎么办？  这篇博客我们就第一个问题进行解释，那就是处理机如何进行调度的。">
+<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统学习笔记（三）进程的调度，同步&#x2F;互斥与死锁">
+<meta property="og:url" content="https://sunra.top/[object Object]/13197">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="之前一篇博客讲过了进程存在的意义是什么，我们为什么要搞出进程这个概念。 但是随之而来的就是几个连续的问题，也是多道并发会遇到的几个问题：  多个进程并发的时候，如何进行调度，调度的原则是什么？ 如果多个进程之间有相互依赖关系怎么办，比如同步和互斥关系？ 如果因为依赖关系，产生了循环依赖，可能导致死锁，又该怎么办？  这篇博客我们就第一个问题进行解释，那就是处理机如何进行调度的。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1654927138/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20220611135815_dug3d2.png">
+<meta property="og:updated_time" content="2023-05-26T03:50:25.168Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统学习笔记（三）进程的调度，同步&#x2F;互斥与死锁">
+<meta name="twitter:description" content="之前一篇博客讲过了进程存在的意义是什么，我们为什么要搞出进程这个概念。 但是随之而来的就是几个连续的问题，也是多道并发会遇到的几个问题：  多个进程并发的时候，如何进行调度，调度的原则是什么？ 如果多个进程之间有相互依赖关系怎么办，比如同步和互斥关系？ 如果因为依赖关系，产生了循环依赖，可能导致死锁，又该怎么办？  这篇博客我们就第一个问题进行解释，那就是处理机如何进行调度的。">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1654927138/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20220611135815_dug3d2.png">
+
+<link rel="canonical" href="https://sunra.top/[object Object]/13197">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>操作系统学习笔记（三）进程的调度，同步/互斥与死锁 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/[object Object]/13197">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          操作系统学习笔记（三）进程的调度，同步/互斥与死锁
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-06-11 08:25:55" itemprop="dateCreated datePublished" datetime="2022-06-11T08:25:55+08:00">2022-06-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-26 11:50:25" itemprop="dateModified" datetime="2023-05-26T11:50:25+08:00">2023-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OS/" itemprop="url" rel="index"><span itemprop="name">OS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>之前一篇博客讲过了进程存在的意义是什么，我们为什么要搞出进程这个概念。</p>
+<p>但是随之而来的就是几个连续的问题，也是多道并发会遇到的几个问题：</p>
+<ul>
+<li>多个进程并发的时候，如何进行调度，调度的原则是什么？</li>
+<li>如果多个进程之间有相互依赖关系怎么办，比如同步和互斥关系？</li>
+<li>如果因为依赖关系，产生了循环依赖，可能导致死锁，又该怎么办？</li>
+</ul>
+<p>这篇博客我们就第一个问题进行解释，那就是处理机如何进行调度的。</p>
+<a id="more"></a>
+<h2 id="调度的概念"><a href="#调度的概念" class="headerlink" title="调度的概念"></a>调度的概念</h2><p>在多道程序中，进程的数量往往多于处理机个数，所以进程争用处理机的情况在所难免。处理机调度是对处理机进行分配，即就绪队列中按照一定的算法选择一个进程将处理及分配给它运行，以实现进程并发执行。</p>
+<h2 id="调度的层次"><a href="#调度的层次" class="headerlink" title="调度的层次"></a>调度的层次</h2><p>一个作业从提交开始直到完成，往往要经历三级调度，如图所示：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1654927138/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20220611135815_dug3d2.png" alt></p>
+<h3 id="高级调度（作业调度）"><a href="#高级调度（作业调度）" class="headerlink" title="高级调度（作业调度）"></a>高级调度（作业调度）</h3><p>按照一定原则从外存上处于后备队列的作业中挑选一个或者多个，给它们分配内存，输入输出设备等必要的资源，并建立相应的进程，以使他们获得竞争处理机的权力。简言之，作业调度就是内存和辅存之间的调度。每个作业只调入一次，调出一次。</p>
+<p>多道批处理系统中大多配有作业调度，其他系统通常不需要作业调度。</p>
+<h3 id="中级调度（内存调度）"><a href="#中级调度（内存调度）" class="headerlink" title="中级调度（内存调度）"></a>中级调度（内存调度）</h3><p>引入中级调度的目的是提高内存利用率和系统吞吐量，为此将那些暂时不能运行的进程调至外存等待，此时进程的状态称为挂起态。当他们具备运行条件且内存又稍有空闲是，有中级调度来决定把外存上哪些已具备运行条件的就绪进程再重新调入内存，将其状态改为就绪态，挂在就绪队列上等待。</p>
+<p>就绪态时间久了或者阻塞态时间久了都可能被挂起。中级调度实际上是存储管理中的对换。</p>
+<h3 id="低级调度（进程调度）"><a href="#低级调度（进程调度）" class="headerlink" title="低级调度（进程调度）"></a>低级调度（进程调度）</h3><p>按照某种算法从就绪队列中选取一个进程，将处理机分配给它。进程调度是最基本的调度。</p>
+<h3 id="三级调度的联系"><a href="#三级调度的联系" class="headerlink" title="三级调度的联系"></a>三级调度的联系</h3><p>作业调度从外村的后备队列选择一批作业进入内存，为他们建立进程，这些进程被送入就绪队列，进程调度从就绪队列中选择一个，将其状态改为运行态，把CPU分配给它。中级调度则是为了提高内存利用率，将那些暂时不能运行的进程挂起来。</p>
+<ul>
+<li>作业调度为进程活动做准备，进程调度使进程正常活动起来。</li>
+<li>中级调度将暂时不能运行的进程挂起，处于作业调度和进程调度之间。</li>
+<li>作业调度次数最少，进程调度次数最多。</li>
+<li>进程调度是最基本的，不可或缺的。</li>
+</ul>
+<h2 id="进程调度的目标"><a href="#进程调度的目标" class="headerlink" title="进程调度的目标"></a>进程调度的目标</h2><p>不同调度算法有不同的特性，在选择算法的时候，我们需要考虑其性能，人们有很多评价标准，最主要的有：</p>
+<h3 id="CPU利用率"><a href="#CPU利用率" class="headerlink" title="CPU利用率"></a>CPU利用率</h3><p>尽可能使CPU处于“忙”状态，使这一资源利用率最高。CPU利用率计算方法如下：</p>
+<script type="math/tex; mode=display">
+CPU利用率= \frac{CPU有效工作时间}{CPU有效工作时间+CPU空闲等待时间}</script><h3 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h3><p>单位时间内CPU完成作业的数量</p>
+<h3 id="周转时间"><a href="#周转时间" class="headerlink" title="周转时间"></a>周转时间</h3><p>指从作业提交到作业完成所经历的时间总和，是作业等待，在就绪队列中排队，在处理机上运行以及输入输出所花费时间的总和</p>
+<script type="math/tex; mode=display">
+周转时间 = 作业完成时间 - 作业提交时间 \\
+平均周转时间 = （作业1周转时间 + ... + 作业n周转时间）/ n \\
+带权周转时间 = \frac{作业周转时间}{作业实际运行时间} \\
+平均带权周转时间 = （作业1带权周转时间 + ... + 作业n带权周转时间）/ n</script><h3 id="等待时间"><a href="#等待时间" class="headerlink" title="等待时间"></a>等待时间</h3><p>作业处于等待处理机的时间总和，等待时间越长，用户满意度越低。处理机调度算法实际上并不影响作业执行或输入输出时间。</p>
+<h3 id="响应时间"><a href="#响应时间" class="headerlink" title="响应时间"></a>响应时间</h3><p>指从用户提交青岛到系统首次产生响应所用的时间。</p>
+<h2 id="调度的实现"><a href="#调度的实现" class="headerlink" title="调度的实现"></a>调度的实现</h2><h3 id="调度程序（调度器）"><a href="#调度程序（调度器）" class="headerlink" title="调度程序（调度器）"></a>调度程序（调度器）</h3><p>在操作系统中，用于调度和分派CPU的组件称为调度程序，通常由三部分组成</p>
+<ol>
+<li>排队器。将系统中所有就绪进程按照一定的策略排成一个或多个队列，以便于调度程序选择。每当有一个进程转变为就绪态时，排队器就将其插入到相应的就绪队列。</li>
+<li>分派器。依据调度程序所选的进程，将其从就绪队列中取出，将CPU分配给新进程。</li>
+<li>上下文切换器。在对处理机进行切换时，会发生两对上下文的切换操作。第一对，将当前进程的上下文保存到PCB中，再装入分派程序的上下文，以便分派程序运行；第二对，移出分派程序上下文，将新选进程的CPU现场信息装入处理机的各个相应的寄存器。</li>
+</ol>
+<blockquote>
+<p>在上下文切换的时，需要大量的load和store指令，以保存寄存器的内容，因此会花费较多的时间。现在已有硬件方法来减少上下文切换时间。通常采用两组寄存器，其中一组供内核使用，一组供用户使用。这样，上下文切换时，只需要改变指针，让其指向当前寄存器组。</p>
+</blockquote>
+<h3 id="调度的时机，切换与过程"><a href="#调度的时机，切换与过程" class="headerlink" title="调度的时机，切换与过程"></a>调度的时机，切换与过程</h3><p>调度程序是系统内核程序，请求调度的事件发生后，才可能运行调度程序。调度了新的就绪进程后，才会进行进程切换。理论上这三件事应该顺序执行。但是实际上操作系统内核程序运行中，若某时刻发生了进程调度的因素，不一定马上进行调度与切换。</p>
+<p>不能进行进程调度和切换的情况有：</p>
+<ul>
+<li>在处理中断过程中。</li>
+<li>进程在操作系统内核临界区。在进入临界区后，需要独占式地访问，理论上必须加锁，以防止其他并行进程进入，在解锁前不应该切换到其他进程，以加快临界区的释放。</li>
+<li>其他需要完全屏蔽中断的原子操作过程。如加锁，解锁，中断保护现场，恢复等原子操作。在原子操作中，连中断都要屏蔽，更不应该进行进程的调度和切换。</li>
+</ul>
+<p>应该进行进程调度的情况：</p>
+<ul>
+<li>发生引起调度条件且当前进程无法继续运行下去，可以马上进行调度和切换。若操作系统只在这种情况下进行进程调度，则是非剥夺式调度。</li>
+<li>中断处理结束或者自陷处理结束后，返回被中断进程的用户态程序执行现场前，若置上请求调度标志，即可马上进行进程的调度与切换。若操作系统支持这种情况下的运行调度程序，则实现了剥夺式调度。</li>
+</ul>
+<h3 id="进程的调度方式"><a href="#进程的调度方式" class="headerlink" title="进程的调度方式"></a>进程的调度方式</h3><p>所谓进程调度方式，是指某个进程正在处理机上运行时，若有某个更为重要或紧迫的进程需要处理，分为非抢占式调度（适用于大多数批处理系统，但是不适用于分时系统和大多数实时系统）和抢占式调度。</p>
+<h3 id="闲逛进程"><a href="#闲逛进程" class="headerlink" title="闲逛进程"></a>闲逛进程</h3><p>在进程切换时，如果系统中没有就绪进程，就会调用闲逛进程，如果没有其他进程就绪，该进程就会一直运行。闲逛进程优先级最低，没有就绪进程时才会调用闲逛进程。</p>
+<p>它不需要CPU以外的资源，所以不会被阻塞</p>
+<h3 id="两种线程的调度"><a href="#两种线程的调度" class="headerlink" title="两种线程的调度"></a>两种线程的调度</h3><p>用户级线程。由于内核不知道线程的存在，所以内核还是和以前一样，选择一个进程并给予时间控制。由进程中的调度程序决定哪个线程运行</p>
+<p>内核级线程调度。内核选择一个特定的线程运行，通常不考虑该线程属于哪个进程。对被选择的线程赋予一个时间片，如果超过了时间片，就强制挂起。</p>
+<h2 id="典型的调度算法"><a href="#典型的调度算法" class="headerlink" title="典型的调度算法"></a>典型的调度算法</h2><h3 id="先来先服务（FCFS）算法"><a href="#先来先服务（FCFS）算法" class="headerlink" title="先来先服务（FCFS）算法"></a>先来先服务（FCFS）算法</h3><p>最简单的调度算法，既可以用于作业调度，又可以用于进程调度。</p>
+<p>在作业调度中，算法每次从后备作业队列中选择最先进入该队列的一个或几个作业，将它们调入内存，分配必要的资源，创建进程并放入就绪队列。</p>
+<p>在进程调度中，FCFS调度算法每次从就绪队列中选择最先进入该队列的进程，将处理机分配给它，使之投入运行，知道运行完成或由于某种原因阻塞才释放处理机。</p>
+<p>FCFS属于不可剥夺算法，从表面上看，对所有作业都公平，但是如果一个长作业先到达系统，就会使后面许多短作业等待很久，因此并不能作为分时系统和实时系统的主调度策略。</p>
+<p>FCFS特点是简单，但效率低，对长作业有利。有利于CPU繁忙型，而不利于I/O繁忙型。</p>
+<h3 id="短作业优先（SJF）算法"><a href="#短作业优先（SJF）算法" class="headerlink" title="短作业优先（SJF）算法"></a>短作业优先（SJF）算法</h3><p>作业调度时，从后备队列中选择一个估计运行时间最短的作业。进程调度时，从就绪队列中选择一个估计运行时间最短的进程</p>
+<p>SJF的平均等待时间与平均周转时间都最少，但是也有缺点：</p>
+<ul>
+<li>对长作业不利，可能会导致饥饿现象</li>
+<li>完全未考虑作业的紧迫程度</li>
+<li>作业长短根据用户提供的估计时间决定的，而用户可能会有意无意缩短其作业的估计运行时间，导致该算法不一定真的是短作业优先</li>
+</ul>
+<h3 id="优先级调度算法"><a href="#优先级调度算法" class="headerlink" title="优先级调度算法"></a>优先级调度算法</h3><p>优先级调度算法既可用于作业调度，又可用于进程调度。</p>
+<p>根据更高优先级进程能否抢占当前正在执行的进程，可将调度算法分为两种：</p>
+<ul>
+<li>非抢占式优先级调度算法。</li>
+<li>抢占式优先级调度算法。</li>
+</ul>
+<p>根据优先级是否可以改变，可以将优先级分为以下两种：</p>
+<ul>
+<li>静态优先级。优先级在创建进程时确定，主要依据有进程类型，对资源的要求，用户要求等。</li>
+<li>动态优先级。在运行过程中，可以动态调整优先级，主要依据有CPU时间长短，就绪进程等待CPU时间等。</li>
+</ul>
+<h3 id="高响应比优先算法"><a href="#高响应比优先算法" class="headerlink" title="高响应比优先算法"></a>高响应比优先算法</h3><p>结合FCFS和SJF算法，同时考虑可每个作业的等待时间和估计运行时间。</p>
+<script type="math/tex; mode=display">
+响应比R_{p} = \frac{等待时间 + 要求服务时间}{要求服务时间}</script><p>根据公式可知：</p>
+<ul>
+<li>作业等待时间相同，要求服务时间越短，响应比越高，有利于短作业，类似SJF</li>
+<li>要求服务时间相同，等待时间越长，响应比越高，类似于FCFS</li>
+<li>对于长作业，作业的响应比岁等待时间的增加而提高，等待时间足够长也可获取处理机，克服了饥饿现象</li>
+</ul>
+<h3 id="时间片轮转调度算法"><a href="#时间片轮转调度算法" class="headerlink" title="时间片轮转调度算法"></a>时间片轮转调度算法</h3><p>适用于分时系统。在使用完一个时间片后，即使进程没有执行完成，也必须释放处理机给下一个就绪进程，被剥夺的进程返回就绪队列末尾。</p>
+<p>时间片过大，会退化为FCFS，过小又会导致频繁切换。</p>
+<h3 id="多级队列调度算法"><a href="#多级队列调度算法" class="headerlink" title="多级队列调度算法"></a>多级队列调度算法</h3><p>前面各种算法中，由于系统中仅设置一个进程的就绪队列，即调度算法是固定且单一的，无法满足系统中不同用户对进程调度策略的不同要求。在多处理机系统中，这种单一的调度策略实现机制更为突出，多级队列调度算法能在一定程度上弥补这一缺点。</p>
+<p>为每个处理机单独设置一个就绪队列，每个队列实现不同的调度算法。</p>
+<h3 id="多级反馈队列调度算法（融合前面所有算法）"><a href="#多级反馈队列调度算法（融合前面所有算法）" class="headerlink" title="多级反馈队列调度算法（融合前面所有算法）"></a>多级反馈队列调度算法（融合前面所有算法）</h3><p>是时间片轮转调度算法和优先级调度算法的综合与发展，通过动态调整进程优先级大小和时间片大小，多级反馈队列可以兼顾多方面的系统目标。</p>
+<p>实现思路如下：</p>
+<ul>
+<li>设置多个就绪队列，并为每个队列设置不同的优先级，第一集队列优先级最高，依次递减</li>
+<li>赋予各个队列进程运行的时间片大小不同，优先级越高，时间片越小</li>
+<li>每个队里采取FCFS。新进程进入内存后，首先放入第一级队列的末尾，当轮到该进程执行时，如果能在时间片内完成，则撤离系统，如果不行，则转入第二级队列，如果仍未完成，继续往后推，直到降到第n级队列，在第n级队列中采用时间片轮转方式。</li>
+<li>按队列优先级调度。只有第一级队列为空，才会调度第2级队列。若处理机正在执行第i级队列某个进程，又有新进程进入任一优先级较高队列，此时须立即把当前进程放到第i级队列末尾，把处理机重新分配给高优先级进程。</li>
+</ul>
+<h2 id="进程切换"><a href="#进程切换" class="headerlink" title="进程切换"></a>进程切换</h2><p>进程切换时在内核支持下实现的，因此可以说，任何进程都是操作系统内核支持下运行的，是与内核紧密相关的</p>
+<h3 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h3><p>切换CPU到另一个进程需要保存当前进程状态并恢复另一个进程的状态，这个任务称为上下文切换。上下文是指某一时刻CPU寄存器和程序计数器的内容，进行上下文切换时，内存会将旧进程的状态保存在其PCB中。其流程如下：</p>
+<ul>
+<li>挂起一个进程，保存了CPU上下文，包括程序计数器和其他寄存器</li>
+<li>更新PCB信息</li>
+<li>把新进程的PCB移入相应的队列，如就绪，在某事件阻塞等队列</li>
+<li>选择另一个进程执行，并更新其PCB</li>
+<li>跳转到新进程的PCB中程序计数器所指向的位置执行</li>
+<li>回复处理机上下文</li>
+</ul>
+<h3 id="上下文切换的消耗"><a href="#上下文切换的消耗" class="headerlink" title="上下文切换的消耗"></a>上下文切换的消耗</h3><p>上下文切换是计算密集型，即它需要相当可观的CPU时间，所以上下文切换对系统来说意味着消耗大量的CPU时间。有些处理器提供多个寄存器组，这样上下文切换就只需要简单改变当前寄存器组的指针。</p>
+<h3 id="上下文切换和模式切换"><a href="#上下文切换和模式切换" class="headerlink" title="上下文切换和模式切换"></a>上下文切换和模式切换</h3><p>模式切换时，CPU逻辑上可能还是在执行同一进程。用户进程最开始都在用户态，如果因为中断或异常进入核心态，执行完后又回到用户态刚被中止的进程运行。用户态和内核态之间切换叫做模式切换而不是上下文切换，没有改变当前进程。</p>
+<p>上下文切换只能发生在内核态。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/[object Object]/13197" title="操作系统学习笔记（三）进程的调度，同步/互斥与死锁">https://sunra.top/[object Object]/13197</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/[object Object]/48749" rel="prev" title="Unity下TriLib远程加载FBX的使用与源码解析">
+      <i class="fa fa-chevron-left"></i> Unity下TriLib远程加载FBX的使用与源码解析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/[object Object]/55153" rel="next" title="Unity 渲染原理（十）Unity基础纹理（普通纹理与法线纹理）">
+      Unity 渲染原理（十）Unity基础纹理（普通纹理与法线纹理） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#调度的概念"><span class="nav-number">1.</span> <span class="nav-text">调度的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调度的层次"><span class="nav-number">2.</span> <span class="nav-text">调度的层次</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#高级调度（作业调度）"><span class="nav-number">2.1.</span> <span class="nav-text">高级调度（作业调度）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中级调度（内存调度）"><span class="nav-number">2.2.</span> <span class="nav-text">中级调度（内存调度）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#低级调度（进程调度）"><span class="nav-number">2.3.</span> <span class="nav-text">低级调度（进程调度）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三级调度的联系"><span class="nav-number">2.4.</span> <span class="nav-text">三级调度的联系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程调度的目标"><span class="nav-number">3.</span> <span class="nav-text">进程调度的目标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU利用率"><span class="nav-number">3.1.</span> <span class="nav-text">CPU利用率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#吞吐量"><span class="nav-number">3.2.</span> <span class="nav-text">吞吐量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#周转时间"><span class="nav-number">3.3.</span> <span class="nav-text">周转时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#等待时间"><span class="nav-number">3.4.</span> <span class="nav-text">等待时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#响应时间"><span class="nav-number">3.5.</span> <span class="nav-text">响应时间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调度的实现"><span class="nav-number">4.</span> <span class="nav-text">调度的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#调度程序（调度器）"><span class="nav-number">4.1.</span> <span class="nav-text">调度程序（调度器）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调度的时机，切换与过程"><span class="nav-number">4.2.</span> <span class="nav-text">调度的时机，切换与过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程的调度方式"><span class="nav-number">4.3.</span> <span class="nav-text">进程的调度方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#闲逛进程"><span class="nav-number">4.4.</span> <span class="nav-text">闲逛进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两种线程的调度"><span class="nav-number">4.5.</span> <span class="nav-text">两种线程的调度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#典型的调度算法"><span class="nav-number">5.</span> <span class="nav-text">典型的调度算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#先来先服务（FCFS）算法"><span class="nav-number">5.1.</span> <span class="nav-text">先来先服务（FCFS）算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#短作业优先（SJF）算法"><span class="nav-number">5.2.</span> <span class="nav-text">短作业优先（SJF）算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优先级调度算法"><span class="nav-number">5.3.</span> <span class="nav-text">优先级调度算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高响应比优先算法"><span class="nav-number">5.4.</span> <span class="nav-text">高响应比优先算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间片轮转调度算法"><span class="nav-number">5.5.</span> <span class="nav-text">时间片轮转调度算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多级队列调度算法"><span class="nav-number">5.6.</span> <span class="nav-text">多级队列调度算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多级反馈队列调度算法（融合前面所有算法）"><span class="nav-number">5.7.</span> <span class="nav-text">多级反馈队列调度算法（融合前面所有算法）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程切换"><span class="nav-number">6.</span> <span class="nav-text">进程切换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文切换"><span class="nav-number">6.1.</span> <span class="nav-text">上下文切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文切换的消耗"><span class="nav-number">6.2.</span> <span class="nav-text">上下文切换的消耗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文切换和模式切换"><span class="nav-number">6.3.</span> <span class="nav-text">上下文切换和模式切换</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

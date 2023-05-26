@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="webpack性能提升方案收集。">
+<meta name="keywords" content="Webpack 性能优化 提升">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Webpack 性能优化方案">
+<meta property="og:url" content="https://sunra.top/posts/99d6a94a">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="webpack性能提升方案收集。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2023-05-25T07:57:10.039Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Webpack 性能优化方案">
+<meta name="twitter:description" content="webpack性能提升方案收集。">
+
+<link rel="canonical" href="https://sunra.top/posts/99d6a94a">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>Webpack 性能优化方案 | Origin of Ray</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/99d6a94a">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Webpack 性能优化方案
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-08 11:44:39" itemprop="dateCreated datePublished" datetime="2020-02-08T11:44:39+08:00">2020-02-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-25 15:57:10" itemprop="dateModified" datetime="2023-05-25T15:57:10+08:00">2023-05-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Webpack/" itemprop="url" rel="index"><span itemprop="name">Webpack</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>webpack性能提升方案收集。</p>
+<a id="more"></a>
+<h2 id="DllPlugin-2020-02-08"><a href="#DllPlugin-2020-02-08" class="headerlink" title="DllPlugin(2020.02.08)"></a>DllPlugin(2020.02.08)</h2><p>我们在构建一个项目的过程中不可避免地会引入许多的第三方包，而这些第三方包在我们项目开发过程中不会有任何的变化，但是我们每次修改代码的时候去重新打包都会再次将这些代码分析一遍，非常影响效率。</p>
+<p>那么有没有什么办法可以让这些第三方包只打包一次呢？</p>
+<p>webpack官方就提供了一种解决方案。</p>
+<p><code>DLLPlugin</code> 和 <code>DLLReferencePlugin</code> 用某种方法实现了拆分 bundles，同时还大大提升了构建的速度。</p>
+<h3 id="DllPlugin"><a href="#DllPlugin" class="headerlink" title="DllPlugin"></a><code>DllPlugin</code></h3><p>这个插件是在一个额外的独立的 webpack 设置中创建一个只有 dll 的 bundle(dll-only-bundle)。 这个插件会生成一个名为 <code>manifest.json</code> 的文件，这个文件是用来让 <a href="https://webpack.docschina.org/plugins/dll-plugin#dllreferenceplugin" rel="external nofollow noopener noreferrer" target="_blank"><code>DLLReferencePlugin</code></a> 映射到相关的依赖上去的。</p>
+<ul>
+<li><code>context</code> (optional): manifest 文件中请求的上下文(context)(默认值为 webpack 的上下文(context))</li>
+<li><code>name</code>: 暴露出的 DLL 的函数名 (<a href="https://github.com/webpack/webpack/blob/master/lib/TemplatedPathPlugin.js" rel="external nofollow noopener noreferrer" target="_blank">TemplatePaths</a>: <code>[hash]</code> &amp; <code>[name]</code> )</li>
+<li><code>path</code>: manifest json 文件的<strong>绝对路径</strong> (输出文件)</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.DllPlugin(options);</span><br></pre></td></tr></table></figure>
+<p>在给定的 <code>path</code> 路径下创建一个名为 <code>manifest.json</code> 的文件。 这个文件包含了从 <code>require</code> 和 <code>import</code> 的request到模块 id 的映射。 <code>DLLReferencePlugin</code> 也会用到这个文件。</p>
+<p>这个插件与 <a href="https://webpack.docschina.org/configuration/output/#output-library" rel="external nofollow noopener noreferrer" target="_blank"><code>output.library</code></a> 的选项相结合可以暴露出 (也叫做放入全局域) dll 函数。</p>
+<h3 id="DllReferencePlugin"><a href="#DllReferencePlugin" class="headerlink" title="DllReferencePlugin"></a><code>DllReferencePlugin</code></h3><p>这个插件是在 webpack 主配置文件中设置的， 这个插件把只有 dll 的 bundle(们)(dll-only-bundle(s)) 引用到需要的预编译的依赖。</p>
+<ul>
+<li><code>context</code>: (<strong>绝对路径</strong>) manifest (或者是内容属性)中请求的上下文</li>
+<li><code>manifest</code>: 包含 <code>content</code> 和 <code>name</code> 的对象，或者在编译时(compilation)的一个用于加载的 JSON manifest 绝对路径</li>
+<li><code>content</code> (optional): 请求到模块 id 的映射 (默认值为 <code>manifest.content</code>)</li>
+<li><code>name</code> (optional): dll 暴露的地方的名称 (默认值为 <code>manifest.name</code>) (可参考 <a href="https://webpack.docschina.org/configuration/externals/" rel="external nofollow noopener noreferrer" target="_blank"><code>externals</code></a>)</li>
+<li><code>scope</code> (optional): dll 中内容的前缀</li>
+<li><code>sourceType</code> (optional): dll 是如何暴露的 (<a href="https://webpack.docschina.org/configuration/output/#output-librarytarget" rel="external nofollow noopener noreferrer" target="_blank">libraryTarget</a>)</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.DllReferencePlugin(options);</span><br></pre></td></tr></table></figure>
+<p>通过引用 dll 的 manifest 文件来把依赖的名称映射到模块的 id 上，之后再在需要的时候通过内置的 <code>__webpack_require__</code> 函数来 <code>require</code> 他们</p>
+<blockquote>
+<p>与 <a href="https://webpack.docschina.org/configuration/output/#output-library" rel="external nofollow noopener noreferrer" target="_blank"><code>output.library</code></a> 保持 <code>name</code> 的一致性。</p>
+</blockquote>
+<h4 id="模式-Modes"><a href="#模式-Modes" class="headerlink" title="模式(Modes)"></a>模式(Modes)</h4><p>这个插件支持两种模式，分别是<em>作用域(scoped)</em>和<em>映射(mapped)</em>。</p>
+<h5 id="作用域模式-Scoped-Mode"><a href="#作用域模式-Scoped-Mode" class="headerlink" title="作用域模式(Scoped Mode)"></a>作用域模式(Scoped Mode)</h5><p>dll 中的内容可以在模块前缀下才能被引用，举例来说，令<code>scope = &quot;xyz&quot;</code>的话，这个 dll 中的名为 <code>abc</code> 的文件可以通过 <code>require(&quot;xyz/abc&quot;)</code> 来获取</p>
+<blockquote>
+<p><a href="https://github.com/webpack/webpack/tree/master/examples/dll-user" rel="external nofollow noopener noreferrer" target="_blank">作用域的用例</a></p>
+</blockquote>
+<h5 id="映射模式-Mapped-Mode"><a href="#映射模式-Mapped-Mode" class="headerlink" title="映射模式(Mapped Mode)"></a>映射模式(Mapped Mode)</h5><p>dll 中的内容被映射到了当前目录下。如果一个被 <code>require</code> 的文件符合 dll 中的某个文件(解析之后)，那么这个dll中的这个文件就会被使用。</p>
+<p>由于这是在解析了 dll 中每个文件之后才发生的，相同的路径必须能够确保这个 dll bundle 的使用者(不一定是人，可指某些代码)有权限访问。 举例来说， 假如一个 dll bundle 中含有 <code>loadash</code>库 以及 文件<code>abc</code>， 那么 <code>require(&quot;lodash&quot;)</code> 和 <code>require(&quot;./abc&quot;)</code> 都不会被编译进主要的 bundle文件，而是会被 dll 所使用。</p>
+<h3 id="用法-Usage"><a href="#用法-Usage" class="headerlink" title="用法(Usage)"></a>用法(Usage)</h3><blockquote>
+<p><code>DllReferencePlugin</code> 和 <code>DLL插件DllPlugin</code> 都是在<em>另外</em>的 webpack 设置中使用的。</p>
+</blockquote>
+<p><strong>webpack.vendor.config.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.DllPlugin(&#123;</span><br><span class="line">  context: __dirname,</span><br><span class="line">  name: <span class="string">'[name]_[hash]'</span>,</span><br><span class="line">  path: path.join(__dirname, <span class="string">'manifest.json'</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>webpack.app.config.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.DllReferencePlugin(&#123;</span><br><span class="line">  context: __dirname,</span><br><span class="line">  manifest: <span class="built_in">require</span>(<span class="string">'./manifest.json'</span>),</span><br><span class="line">  name: <span class="string">'./my-dll.js'</span>,</span><br><span class="line">  scope: <span class="string">'xyz'</span>,</span><br><span class="line">  sourceType: <span class="string">'commonjs2'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><h4 id="webpack-config-js"><a href="#webpack-config-js" class="headerlink" title="webpack.config.js"></a>webpack.config.js</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">"path"</span>);</span><br><span class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">"../../"</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">	<span class="comment">// mode: "development || "production",</span></span><br><span class="line">	resolve: &#123;</span><br><span class="line">		extensions: [<span class="string">".js"</span>, <span class="string">".jsx"</span>]</span><br><span class="line">	&#125;,</span><br><span class="line">	entry: &#123;</span><br><span class="line">		alpha: [<span class="string">"./alpha"</span>, <span class="string">"./a"</span>, <span class="string">"module"</span>],</span><br><span class="line">		beta: [<span class="string">"./beta"</span>, <span class="string">"./b"</span>, <span class="string">"./c"</span>]</span><br><span class="line">	&#125;,</span><br><span class="line">	output: &#123;</span><br><span class="line">		path: path.join(__dirname, <span class="string">"dist"</span>),</span><br><span class="line">		filename: <span class="string">"MyDll.[name].js"</span>,</span><br><span class="line">		library: <span class="string">"[name]_[fullhash]"</span></span><br><span class="line">	&#125;,</span><br><span class="line">	plugins: [</span><br><span class="line">		<span class="keyword">new</span> webpack.DllPlugin(&#123;</span><br><span class="line">			path: path.join(__dirname, <span class="string">"dist"</span>, <span class="string">"[name]-manifest.json"</span>),</span><br><span class="line">			name: <span class="string">"[name]_[fullhash]"</span></span><br><span class="line">		&#125;)</span><br><span class="line">	]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>首先利用上述配置进行打包，会将entry中的模块进行打包，随后DllPlugin会将打包好的文件进行module id的映射，并将映射关系保存进manifest文件中</p>
+<p>如根据上述配置，”./alpha”, “./a”, “module”三个包会被打包进 ./dist/MyDll.alpha.js中，同时这三个包的映射关系会被保存进 ./dist/alpha-manifest.json中。</p>
+<p>同时打包好的文件会被暴露为output.library中规定的文件名被入口html引入。</p>
+<p>而此时DllPlugin的name属性与libray是相同的，所以manifest中保存了这个library与三个模块之间的映射关系。</p>
+<p>entry中的beta同理。</p>
+<h4 id="webpack-config-js-1"><a href="#webpack-config-js-1" class="headerlink" title="webpack.config.js"></a>webpack.config.js</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">"path"</span>);</span><br><span class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">"../../"</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">	<span class="comment">// mode: "development || "production",</span></span><br><span class="line">	plugins: [</span><br><span class="line">		<span class="keyword">new</span> webpack.DllReferencePlugin(&#123;</span><br><span class="line">			context: path.join(__dirname, <span class="string">".."</span>, <span class="string">"dll"</span>),</span><br><span class="line">			manifest: <span class="built_in">require</span>(<span class="string">"../dll/dist/alpha-manifest.json"</span>) <span class="comment">// eslint-disable-line</span></span><br><span class="line">		&#125;),</span><br><span class="line">		<span class="keyword">new</span> webpack.DllReferencePlugin(&#123;</span><br><span class="line">			scope: <span class="string">"beta"</span>,</span><br><span class="line">			manifest: <span class="built_in">require</span>(<span class="string">"../dll/dist/beta-manifest.json"</span>), <span class="comment">// eslint-disable-line</span></span><br><span class="line">			extensions: [<span class="string">".js"</span>, <span class="string">".jsx"</span>]</span><br><span class="line">		&#125;)</span><br><span class="line">	]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>此时再通过上述配置文件打包，当遇到了需要引入的模块时，就会先通过DllReferencePlugin插件就会去寻找前面打包好的manifest对应的模块，而不会去node_modules中去寻找，如果找不到才回去node_modules中寻找打包，这样就能有效提升第三方包的打包速度，只需要提前运行一次打包并生成dll，接下来的打包只需要去查看manifest就可以了。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/posts/99d6a94a" title="Webpack 性能优化方案">https://sunra.top/posts/99d6a94a</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/67dc4d37" rel="prev" title="PWA">
+      <i class="fa fa-chevron-left"></i> PWA
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/e726988d" rel="next" title="Solace Endpoints">
+      Solace Endpoints <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#DllPlugin-2020-02-08"><span class="nav-number">1.</span> <span class="nav-text">DllPlugin(2020.02.08)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DllPlugin"><span class="nav-number">1.1.</span> <span class="nav-text">DllPlugin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DllReferencePlugin"><span class="nav-number">1.2.</span> <span class="nav-text">DllReferencePlugin</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模式-Modes"><span class="nav-number">1.2.1.</span> <span class="nav-text">模式(Modes)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#作用域模式-Scoped-Mode"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">作用域模式(Scoped Mode)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#映射模式-Mapped-Mode"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">映射模式(Mapped Mode)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用法-Usage"><span class="nav-number">1.3.</span> <span class="nav-text">用法(Usage)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例"><span class="nav-number">1.4.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#webpack-config-js"><span class="nav-number">1.4.1.</span> <span class="nav-text">webpack.config.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#webpack-config-js-1"><span class="nav-number">1.4.2.</span> <span class="nav-text">webpack.config.js</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

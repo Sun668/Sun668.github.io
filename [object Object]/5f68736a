@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="nodejs的两大特性，即异步IO和事件驱动。通过对《深入浅出nodejs》\和几篇博客的阅读以后，有了大致的了解，总结一下。 注意本文的内容基于node11以上。 同步与异步，阻塞与非阻塞“阻塞”与”非阻塞”与”同步”与“异步”不能简单的从字面理解，提供一个从分布式系统角度的回答。1.同步与异步同步和异步关注的是消息通信机制 (synchronous communication/ asynchr">
+<meta name="keywords" content="Node IO EventLoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nodejs 异步IO与事件驱动">
+<meta property="og:url" content="https://sunra.top/[object Object]/5f68736a">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="nodejs的两大特性，即异步IO和事件驱动。通过对《深入浅出nodejs》\和几篇博客的阅读以后，有了大致的了解，总结一下。 注意本文的内容基于node11以上。 同步与异步，阻塞与非阻塞“阻塞”与”非阻塞”与”同步”与“异步”不能简单的从字面理解，提供一个从分布式系统角度的回答。1.同步与异步同步和异步关注的是消息通信机制 (synchronous communication/ asynchr">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://segmentfault.com/img/remote/1460000005173228">
+<meta property="og:image" content="https://segmentfault.com/img/remote/1460000006792647">
+<meta property="og:updated_time" content="2023-05-26T03:50:25.164Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nodejs 异步IO与事件驱动">
+<meta name="twitter:description" content="nodejs的两大特性，即异步IO和事件驱动。通过对《深入浅出nodejs》\和几篇博客的阅读以后，有了大致的了解，总结一下。 注意本文的内容基于node11以上。 同步与异步，阻塞与非阻塞“阻塞”与”非阻塞”与”同步”与“异步”不能简单的从字面理解，提供一个从分布式系统角度的回答。1.同步与异步同步和异步关注的是消息通信机制 (synchronous communication/ asynchr">
+<meta name="twitter:image" content="https://segmentfault.com/img/remote/1460000005173228">
+
+<link rel="canonical" href="https://sunra.top/[object Object]/5f68736a">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>Nodejs 异步IO与事件驱动 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/[object Object]/5f68736a">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Nodejs 异步IO与事件驱动
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-30 08:07:24" itemprop="dateCreated datePublished" datetime="2020-05-30T08:07:24+08:00">2020-05-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-26 11:50:25" itemprop="dateModified" datetime="2023-05-26T11:50:25+08:00">2023-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><code>nodejs</code>的两大特性，即<code>异步IO</code>和<code>事件驱动</code>。通过对<strong><em>《深入浅出nodejs》\</em></strong>和几篇博客的阅读以后，有了大致的了解，总结一下。</p>
+<p><strong>注意本文的内容基于node11以上。</strong></p>
+<h2 id="同步与异步，阻塞与非阻塞"><a href="#同步与异步，阻塞与非阻塞" class="headerlink" title="同步与异步，阻塞与非阻塞"></a>同步与异步，阻塞与非阻塞</h2><p>“阻塞”与”非阻塞”与”同步”与“异步”不能简单的从字面理解，提供一个从分布式系统角度的回答。<br><strong>1.同步与异步</strong><br>同步和异步关注的是<strong>消息通信机制</strong> (synchronous communication/ asynchronous communication)<br>所谓同步，就是在发出一个<em>调用</em>时，在没有得到结果之前，该<em>调用</em>就不返回。但是一旦调用返回，就得到返回值了。<br>换句话说，就是由<em>调用者</em>主动等待这个<em>调用</em>的结果。</p>
+<p>而异步则是相反，<strong><em>调用\</em>在发出之后，这个调用就直接返回了，所以没有返回结果</strong>。换句话说，当一个异步过程调用发出后，调用者不会立刻得到结果。而是在<em>调用</em>发出后，<em>被调用者</em>通过状态、通知来通知调用者，或通过回调函数处理这个调用。</p>
+<a id="more"></a>
+<p>典型的异步编程模型比如Node.js</p>
+<p>举个通俗的例子：<br>你打电话问书店老板有没有《分布式系统》这本书，如果是同步通信机制，书店老板会说，你稍等，”我查一下”，然后开始查啊查，等查好了（可能是5秒，也可能是一天）告诉你结果（返回结果）。<br>而异步通信机制，书店老板直接告诉你我查一下啊，查好了打电话给你，然后直接挂电话了（不返回结果）。然后查好了，他会主动打电话给你。在这里老板通过“回电”这种方式来回调。</p>
+<p>\2. 阻塞与非阻塞<br>阻塞和非阻塞关注的是<strong>程序在等待调用结果（消息，返回值）时的状态.</strong></p>
+<p>阻塞调用是指调用结果返回之前，当前线程会被挂起。调用线程只有在得到结果之后才会返回。<br>非阻塞调用指在不能立刻得到结果之前，该调用不会阻塞当前线程。</p>
+<p>还是上面的例子，<br>你打电话问书店老板有没有《分布式系统》这本书，你如果是阻塞式调用，你会一直把自己“挂起”，直到得到这本书有没有的结果，如果是非阻塞式调用，你不管老板有没有告诉你，你自己先一边去玩了， 当然你也要偶尔过几分钟check一下老板有没有返回结果。<br>在这里阻塞与非阻塞与是否同步异步无关。跟老板通过什么方式回答你结果无关。</p>
+<h2 id="几个例子"><a href="#几个例子" class="headerlink" title="几个例子"></a>几个例子</h2><p>在开始之前，先来看几个简单例子，这也是我在使用<code>nodejs</code>时候遇到的几个比较困惑的例子。</p>
+<hr>
+<h3 id="example-1"><a href="#example-1" class="headerlink" title="example 1"></a>example 1</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">var fs = require(&quot;fs&quot;);</span><br><span class="line">var debug = require(&apos;debug&apos;)(&apos;example1&apos;);</span><br><span class="line"></span><br><span class="line">debug(&quot;begin&quot;);</span><br><span class="line"></span><br><span class="line">setTimeout(function()&#123;</span><br><span class="line">    debug(&quot;timeout1&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">setTimeout(function()&#123;</span><br><span class="line">    debug(&quot;timeout2&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">debug(&apos;end&apos;);</span><br><span class="line">/** 运行结果</span><br><span class="line">Sat, 21 May 2016 08:41:09 GMT example1 begin</span><br><span class="line">Sat, 21 May 2016 08:41:09 GMT example1 end</span><br><span class="line">Sat, 21 May 2016 08:41:09 GMT example1 timeout1</span><br><span class="line">Sat, 21 May 2016 08:41:09 GMT example1 timeout2</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<p><strong>question 1</strong></p>
+<blockquote>
+<p>为何<code>timeout1</code>和<code>timeout2</code>的结果会在<code>end</code>后面？</p>
+</blockquote>
+<hr>
+<h3 id="example-2"><a href="#example-2" class="headerlink" title="example 2"></a>example 2</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">var fs = require(&quot;fs&quot;);</span><br><span class="line">var debug = require(&apos;debug&apos;)(&apos;example2&apos;);</span><br><span class="line"></span><br><span class="line">debug(&quot;begin&quot;);</span><br><span class="line"></span><br><span class="line">setTimeout(function()&#123;</span><br><span class="line">    debug(&quot;timeout1&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">setTimeout(function()&#123;</span><br><span class="line">    debug(&quot;timeout2&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">debug(&apos;end&apos;);</span><br><span class="line"></span><br><span class="line">while(true);</span><br><span class="line">/**  运行结果</span><br><span class="line">Sat, 21 May 2016 08:45:47 GMT example2 begin</span><br><span class="line">Sat, 21 May 2016 08:45:47 GMT example2 end</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<p><strong>question 2</strong></p>
+<blockquote>
+<p>为何<code>timeout1</code>和<code>timeout2</code>没有输出到终端？<code>while(true)</code>到底阻塞了什么？</p>
+</blockquote>
+<hr>
+<h3 id="example-3"><a href="#example-3" class="headerlink" title="example 3"></a>example 3</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">var fs = require(&quot;fs&quot;);</span><br><span class="line">var debug = require(&apos;debug&apos;)(&apos;example3&apos;);</span><br><span class="line"></span><br><span class="line">debug(&quot;begin&quot;);</span><br><span class="line"></span><br><span class="line">setTimeout(function()&#123;</span><br><span class="line">    debug(&quot;timeout1&quot;);</span><br><span class="line">    while (true);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">setTimeout(function()&#123;</span><br><span class="line">    debug(&quot;timeout2&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">debug(&apos;end&apos;);</span><br><span class="line">/**  运行结果</span><br><span class="line">Sat, 21 May 2016 08:49:12 GMT example3 begin</span><br><span class="line">Sat, 21 May 2016 08:49:12 GMT example3 end</span><br><span class="line">Sat, 21 May 2016 08:49:12 GMT example3 timeout1</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<p><strong>question 3</strong></p>
+<blockquote>
+<p>为什么<code>timeout1</code>中回调函数会阻塞<code>timeout2</code>中的回调函数的执行？</p>
+</blockquote>
+<hr>
+<h3 id="example-4"><a href="#example-4" class="headerlink" title="example 4"></a>example 4</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">var fs = require(&quot;fs&quot;);</span><br><span class="line">var debug = require(&apos;debug&apos;)(&apos;example4&apos;);</span><br><span class="line"></span><br><span class="line">debug(&quot;begin&quot;);</span><br><span class="line"></span><br><span class="line">setTimeout(function()&#123;</span><br><span class="line">    debug(&quot;timeout1&quot;);</span><br><span class="line">    /**</span><br><span class="line">     * 模拟计算密集</span><br><span class="line">     */</span><br><span class="line">    for(var i = 0 ; i &lt; 1000000 ; ++i)&#123;</span><br><span class="line">        for(var j = 0 ; j &lt; 100000 ; ++j);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">setTimeout(function()&#123;</span><br><span class="line">    debug(&quot;timeout2&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">debug(&apos;end&apos;);</span><br><span class="line">/**</span><br><span class="line">Sat, 21 May 2016 08:53:27 GMT example4 begin</span><br><span class="line">Sat, 21 May 2016 08:53:27 GMT example4 end</span><br><span class="line">Sat, 21 May 2016 08:53:27 GMT example4 timeout1</span><br><span class="line">Sat, 21 May 2016 08:54:09 GMT example4 timeout2  //注意这里的时间晚了好久</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<p><strong>question 4</strong></p>
+<blockquote>
+<p>和上面的问题一样，为何<code>timeout1</code>的计算密集型工作将会阻塞<code>timeout2</code>的回调函数的执行？</p>
+</blockquote>
+<hr>
+<h3 id="example-5"><a href="#example-5" class="headerlink" title="example 5"></a>example 5</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">var fs = require(&quot;fs&quot;);</span><br><span class="line">var debug = require(&apos;debug&apos;)(&apos;example5&apos;);</span><br><span class="line"></span><br><span class="line">debug(&quot;begin&quot;);</span><br><span class="line"></span><br><span class="line">fs.readFile(&apos;package.json&apos;,&apos;utf-8&apos;,function(err,data)&#123;</span><br><span class="line">    if(err)  </span><br><span class="line">        debug(err);</span><br><span class="line">    else</span><br><span class="line">        debug(&quot;get file content&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">setTimeout(function()&#123;</span><br><span class="line">    debug(&quot;timeout2&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">debug(&apos;end&apos;);</span><br><span class="line">/** 运行结果</span><br><span class="line">Sat, 21 May 2016 08:59:14 GMT example5 begin</span><br><span class="line">Sat, 21 May 2016 08:59:14 GMT example5 end</span><br><span class="line">Sat, 21 May 2016 08:59:14 GMT example5 timeout2</span><br><span class="line">Sat, 21 May 2016 08:59:14 GMT example5 get file content</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<p><strong>question 5</strong></p>
+<blockquote>
+<p>为何读取文件的<code>IO</code>操作不会阻塞<code>timeout2</code>的执行？</p>
+</blockquote>
+<hr>
+<p>接下来我们就带着上面几个疑惑去理解<code>nodejs</code>中的<code>异步IO</code>和<code>事件驱动</code>是如何工作的。</p>
+<h2 id="异步IO-asynchronous-I-O"><a href="#异步IO-asynchronous-I-O" class="headerlink" title="异步IO(asynchronous I/O)"></a>异步IO(asynchronous I/O)</h2><p>首先来理解几个容易混淆的概念，<code>阻塞IO(blocking I/O)</code>和<code>非阻塞IO(non-blocking I/O)</code>，<code>同步IO(synchronous I/O)和异步IO(synchronous I/O)</code>。</p>
+<p>博主一直天真的以为<code>非阻塞I/O</code>就是<code>异步I/O</code> T_T，<code>apue</code>一直没有读懂。</p>
+<h3 id="阻塞I-O-和-非阻塞I-O"><a href="#阻塞I-O-和-非阻塞I-O" class="headerlink" title="阻塞I/O 和 非阻塞I/O"></a>阻塞I/O 和 非阻塞I/O</h3><p>简单来说，<strong>阻塞I/O</strong>就是当用户发一个读取文件描述符的操作的时候，进程就会被阻塞，直到要读取的数据全部准备好返回给用户，这时候进程才会解除<code>block</code>的状态。</p>
+<p>那<strong>非阻塞I/O</strong>呢，就与上面的情况相反，用户发起一个读取文件描述符操作的时，函数立即返回，不作任何等待，进程继续执行。但是程序如何知道要读取的数据已经准备好了呢？最简单的方法就是轮询。</p>
+<p>除此之外，还有一种叫做<code>IO多路复用</code>的模式，就是用一个阻塞函数同时监听多个文件描述符，当其中有一个文件描述符准备好了，就马上返回，在<code>linux</code>下，<code>select</code>,<code>poll</code>,<code>epoll</code>都提供了<code>IO多路复用</code>的功能。</p>
+<h3 id="同步I-O-和-异步I-O"><a href="#同步I-O-和-异步I-O" class="headerlink" title="同步I/O 和 异步I/O"></a>同步I/O 和 异步I/O</h3><p>那么<code>同步I/O</code>和<code>异步I/O</code>又有什么区别么？是不是只要做到<code>非阻塞IO</code>就可以实现<code>异步I/O</code>呢？</p>
+<p>其实不然。</p>
+<ul>
+<li><code>同步I/O(synchronous I/O)</code>做<code>I/O operation</code>的时候会将process阻塞,所以<code>阻塞I/O</code>，<code>非阻塞I/O</code>，<code>IO多路复用I/O</code>都是<code>同步I/O</code>。</li>
+<li><code>异步I/O(asynchronous I/O)</code>做<code>I/O opertaion</code>的时候将不会造成任何的阻塞。</li>
+</ul>
+<p><code>非阻塞I/O</code>都不阻塞了为什么不是<code>异步I/O</code>呢？其实当<code>非阻塞I/O</code>准备好数据以后还是要阻塞住进程去内核拿数据的。所以算不上<code>异步I/O</code>。</p>
+<p>这里借一张图(图来自<a href="https://segmentfault.com/a/1190000003063859?utm_source=Weibo&amp;utm_medium=shareLink&amp;utm_campaign=socialShare" rel="external nofollow noopener noreferrer" target="_blank">这里</a>)来说明他们之间的区别</p>
+<p><img src="https://segmentfault.com/img/remote/1460000005173228" alt></p>
+<h2 id="事件驱动"><a href="#事件驱动" class="headerlink" title="事件驱动"></a>事件驱动</h2><p><code>事件驱动(event-driven)</code>是<code>nodejs</code>中的第二大特性。何为<code>事件驱动</code>呢？简单来说，就是通过监听事件的状态变化来做出相应的操作。比如读取一个文件，文件读取完毕，或者文件读取错误，那么就触发对应的状态，然后调用对应的回掉函数来进行处理。</p>
+<h3 id="线程驱动和事件驱动"><a href="#线程驱动和事件驱动" class="headerlink" title="线程驱动和事件驱动"></a>线程驱动和事件驱动</h3><p>那么<code>线程驱动</code>编程和<code>事件驱动</code>编程之间的区别是什么呢？</p>
+<ul>
+<li><code>线程驱动</code>就是当收到一个请求的时候，将会为该请求开一个新的线程来处理请求。一般存在一个线程池，线程池中有空闲的线程，会从线程池中拿取线程来进行处理，如果线程池中没有空闲的线程，新来的请求将会进入队列排队，直到线程池中空闲线程。</li>
+<li><code>事件驱动</code>就是当进来一个新的请求的时，请求将会被压入队列中，然后通过一个循环来检测队列中的事件状态变化，如果检测到有状态变化的事件，那么就执行该事件对应的处理代码，一般都是回调函数。</li>
+</ul>
+<p>对于<code>事件驱动</code>编程来说，如果某个时间的回调函数是<code>计算密集型</code>，或者是<code>阻塞I/O</code>,那么这个回调函数将会阻塞后面所有事件回调函数的执行。这一点尤为重要。</p>
+<h2 id="nodejs的事件驱动和异步I-O"><a href="#nodejs的事件驱动和异步I-O" class="headerlink" title="nodejs的事件驱动和异步I/O"></a>nodejs的事件驱动和异步I/O</h2><h3 id="事件驱动模型"><a href="#事件驱动模型" class="headerlink" title="事件驱动模型"></a>事件驱动模型</h3><p>上面介绍了那么多的概念，现在我们来看看<code>nodejs</code>中的<code>事件驱动</code>和<code>异步I/O</code>是如何实现的.</p>
+<p><code>nodejs</code>是<strong>单线程(single thread)</strong>运行的，通过一个<strong>事件循环(event-loop)</strong>来循环取出<strong>消息队列(event-queue)</strong>中的消息进行处理,处理过程基本上就是去调用该<strong>消息</strong>对应的回调函数。<strong>消息队列</strong>就是当一个事件状态发生变化时，就将一个消息压入队列中。</p>
+<p><code>nodejs</code>的时间驱动模型一般要注意下面几个点：</p>
+<ul>
+<li>因为是<strong>单线程</strong>的，所以当顺序执行<code>js</code>文件中的代码的时候，<strong>事件循环</strong>是被暂停的。</li>
+<li>当<code>js</code>文件执行完以后，<strong>事件循环</strong>开始运行，并从<strong>消息队列</strong>中取出消息，开始执行回调函数</li>
+<li>因为是<strong>单线程</strong>的，所以当回调函数被执行的时候，<strong>事件循环</strong>是被暂停的</li>
+<li>当涉及到I/O操作的时候，<code>nodejs</code>会开一个独立的线程来进行<code>异步I/O</code>操作，操作结束以后将消息压入<strong>消息队列</strong>。</li>
+</ul>
+<p>下面我们从一个简单的<code>js</code>文件入手，来看看 <code>nodejs</code>是如何执行的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">var fs = require(&quot;fs&quot;);</span><br><span class="line">var debug = require(&apos;debug&apos;)(&apos;example1&apos;);</span><br><span class="line"></span><br><span class="line">debug(&quot;begin&quot;);</span><br><span class="line"></span><br><span class="line">fs.readFile(&apos;package.json&apos;,&apos;utf-8&apos;,function(err,data)&#123;</span><br><span class="line">    if(err)  </span><br><span class="line">        debug(err);</span><br><span class="line">    else</span><br><span class="line">        debug(&quot;get file content&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">setTimeout(function()&#123;</span><br><span class="line">    debug(&quot;timeout2&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">debug(&apos;end&apos;); // 运行到这里之前，事件循环是暂停的</span><br></pre></td></tr></table></figure>
+<ol>
+<li>同步执行<code>debug(&quot;begin&quot;)</code></li>
+<li>异步调用<code>fs.readFile()</code>，此时会开一个新的线程去进行<code>异步I/O</code>操作</li>
+<li>异步调用<code>setTimeout()</code>，马上将超时信息压入到<strong>消息队列</strong>中</li>
+<li>同步调用<code>debug(&quot;end&quot;)</code></li>
+<li>开启<strong>事件循环</strong>，弹出<strong>消息队列</strong>中的信息(目前是超时信息)</li>
+<li>然后执行信息对应的回调函数(<strong>事件循环</strong>又被暂停)</li>
+<li><strong>回调函数</strong>执行结束后，开始<strong>事件循环</strong>(目前<strong>消息队列</strong>中没有任何东西，文件还没读完)</li>
+<li><code>异步I/O</code>读取文件完毕，将消息压入<strong>消息队列(</strong>消息中含有文件内容或者是出错信息)</li>
+<li><strong>事件循环</strong>取得消息，执行回调</li>
+<li>程序退出。</li>
+</ol>
+<p>这里借一张图来说明<code>nodejs</code>的事件驱动模型（图来自<a href="http://blog.carbonfive.com/2013/10/27/the-javascript-event-loop-explained/" rel="external nofollow noopener noreferrer" target="_blank">这里</a>）<br><img src="https://segmentfault.com/img/remote/1460000006792647" alt></p>
+<h3 id="JS的事件循环-eventloop-是怎么运作的？"><a href="#JS的事件循环-eventloop-是怎么运作的？" class="headerlink" title="JS的事件循环(eventloop)是怎么运作的？"></a>JS的事件循环(eventloop)是怎么运作的？</h3><p>“先执行同步操作异步操作排在事件队列里”这样的理解其实也没有任何问题但如果深入的话会引出来很多其他概念，比如event table和event queue，我们来看运行过程：</p>
+<ol>
+<li>首先判断JS是同步还是异步，同步就进入主线程运行，异步就进入event table。</li>
+<li>异步任务在event table中注册事件，当满足触发条件后（触发条件可能是延时也可能是ajax回调），被推入event queue。</li>
+<li>同步任务进入主线程后一直执行，直到主线程空闲时，才会去event queue中查看是否有可执行的异步任务，如果有就推入主线程中。</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'2秒到了'</span>)</span><br><span class="line">&#125;, <span class="number">2000</span>)</span><br></pre></td></tr></table></figure>
+<p>我们用上面的第二条来分析一下这段脚本，setTimeout是异步操作首先进入event table，注册的事件就是他的回调，触发条件就是2秒之后，当满足条件回调被推入event queue，当主线程空闲时会去event queue里查看是否有可执行的任务。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">1</span>) <span class="comment">// 同步任务进入主线程</span></span><br><span class="line">setTimeout(fun(),<span class="number">0</span>)   <span class="comment">// 异步任务，被放入event table， 0秒之后被推入event queue里</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">3</span>) <span class="comment">// 同步任务进入主线程</span></span><br></pre></td></tr></table></figure>
+<p>1、3是同步任务马上会被执行，执行完成之后主线程空闲去event queue(事件队列)里查看是否有任务在等待执行，这就是为什么setTimeout的延迟时间是0毫秒却在最后执行的原因。</p>
+<p>关于setTimeout有一点要注意延时的时间有时候并不是那么准确。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'2秒到了'</span>)</span><br><span class="line">&#125;, <span class="number">2000</span>)</span><br><span class="line">wait(<span class="number">9999999999</span>)</span><br></pre></td></tr></table></figure>
+<p>分析运行过程：</p>
+<ol>
+<li>console进入Event Table并注册，计时开始。</li>
+<li>执行sleep函数，sleep方法虽然是同步任务但sleep方法进行了大量的逻辑运算，耗时超过了2秒。</li>
+<li>2秒到了，计时事件timeout完成，console进入Event Queue，但是sleep还没执行完，主线程还被占用，只能等着。</li>
+<li>sleep终于执行完了，console终于从Event Queue进入了主线程执行，这个时候已经远远超过了2秒。</li>
+</ol>
+<p>其实延迟2秒只是表示2秒后，setTimeout里的函数被会推入event queue，而event queue(事件队列)里的任务，只有在主线程空闲时才会执行。上述的流程走完，我们知道setTimeout这个函数，是经过指定时间后，把要执行的任务(本例中为console)加入到Event Queue中，又因为是单线程任务要一个一个执行，如果前面的任务需要的时间太久，那么只能等着，导致真正的延迟时间远远大于2秒。 我们还经常遇到setTimeout(fn，0)这样的代码，它的含义是，指定某个任务在主线程最早的空闲时间执行，意思就是不用再等多少秒了，只要主线程执行栈内的同步任务全部执行完成，栈为空就马上执行。但是即便主线程为空，0毫秒实际上也是达不到的。根据HTML的标准，最低是4毫秒。</p>
+<p>关于setInterval： 以setInterval(fn，ms)为例，setInterval是循环执行的，setInterval会每隔指定的时间将注册的函数置入Event Queue，不是每过ms秒会执行一次fn，而是每过ms秒，会有fn进入Event Queue。需要注意的一点是，一旦setInterval的回调函数fn执行时间超过了延迟时间ms，那么就完全看不出来有时间间隔了。</p>
+<p>上面的概念很基础也很容易理解但不幸的消息是上面讲的一切都不是绝对的正确，因为涉及到Promise、async/await、process.nextTick(node)所以要对任务有更精细的定义：</p>
+<p><strong>我们把宿主发起的任务称为宏观任务，把 JavaScript 引擎发起的任务称为微观任务。</strong></p>
+<p>宏任务(macro-task)：包括整体代码script、setTimeout、setInterval、MessageChannel、postMessage、setImmediate。<br> 微任务(micro-task)：Promise、process.nextTick、MutationObsever。</p>
+<p>在划分宏任务、微任务的时候并没有提到async/await因为async/await的本质就是Promise。</p>
+<p><strong>事件循环机制到底是怎么样的？ *不同类型的任务会进入对应的Event Queue，比如setTimeout和setInterval会进入相同(宏任务)的Event Queue。而Promise和process.nextTick会进入相同(微任务)的Event Queue</strong>。*</p>
+<ol>
+<li>「宏任务」、「微任务」都是队列，一段代码执行时，会先执行<strong>宏任务中的同步代码</strong>。</li>
+<li>进行<strong>第一轮事件循环的时候会把全部的js脚本当成一个宏任务</strong>来运行。</li>
+<li>如果执行中遇到setTimeout之类宏任务，那么就把这个setTimeout内部的函数推入「宏任务的队列」中，下一轮宏任务执行时调用。</li>
+<li>如果执行中遇到 promise.then() 之类的微任务，就会推入到「<strong>当前宏任务的微任务队列</strong>」（也就是说这些微任务仍属于当前宏任务）中，在本轮宏任务的同步代码都执行完成后，依次执行所有的微任务。</li>
+<li>第一轮事件循环中当执行完全部的同步脚本以及微任务队列中的事件，这一轮事件循环就结束了，开始第二轮事件循环。</li>
+<li>第二轮事件循环同理<strong>先执行宏任务中的同步脚本</strong>，遇到其他宏任务代码块继续追加到「宏任务的队列」中，遇到微任务，就会推入到「当前宏任务的微任务队列」中，在本轮宏任务的同步代码执行都完成后，依次执行当前所有的微任务。</li>
+<li>开始第三轮，循环往复…</li>
+</ol>
+<p>下面用代码来深入理解上面的机制：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'4'</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'1'</span>) <span class="comment">// 同步任务</span></span><br><span class="line">    resolve()</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'3'</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'2'</span>)</span><br></pre></td></tr></table></figure>
+<ol>
+<li>这段代码作为宏任务，进入主线程。</li>
+<li>先遇到setTimeout，那么将其回调函数注册后分发到宏任务Event Queue。</li>
+<li>接下来遇到了Promise，new Promise立即执行，then函数分发到微任务Event Queue。</li>
+<li>遇到console.log()，立即执行。</li>
+<li>整体代码script作为第一个宏任务执行结束。查看当前有没有可执行的微任务，执行then的回调。 （第一轮事件循环结束了，我们开始第二轮循环。）</li>
+<li>从宏任务Event Queue开始。我们发现了宏任务Event Queue中setTimeout对应的回调函数，立即执行。 执行结果：`1 - 2 - 3 - 4</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123; </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'1'</span>)<span class="comment">// 宏任务一</span></span><br><span class="line">    resolve()</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'3'</span>) <span class="comment">// 宏任务一的微任务</span></span><br><span class="line">&#125;)</span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="comment">// 宏任务二</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'4'</span>)</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="comment">// 宏任务五</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'7'</span>)</span><br><span class="line">        <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'8'</span>)</span><br><span class="line">            resolve()</span><br><span class="line">        &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'10'</span>)</span><br><span class="line">            setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;  <span class="comment">// 宏任务七</span></span><br><span class="line">                <span class="built_in">console</span>.log(<span class="string">'12'</span>)</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'9'</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="comment">// 宏任务三</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'5'</span>)</span><br><span class="line">&#125;)</span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;  <span class="comment">// 宏任务四</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'6'</span>)</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="comment">// 宏任务六</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'11'</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'2'</span>) <span class="comment">// 宏任务一</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>全部的代码作为第一个宏任务进入主线程执行。</li>
+<li>首先输出1，是同步代码。then回调作为微任务进入到宏任务一的微任务队列。</li>
+<li>下面最外层的三个setTimeout分别是宏任务二、宏任务三、宏任务四按序排入宏任务队列。</li>
+<li>输出2，现在宏任务一的同步代码都执行完成了接下来执行宏任务一的微任务输出3。 第一轮事件循环完成了</li>
+<li>现在执行宏任务二输出4，后面的setTimeout作为宏任务五排入宏任务队列。</li>
+<li>执行宏任务三输出5，执行宏任务四输出6，宏任务四里面的setTimeout作为宏任务六。</li>
+<li>执行宏任务五输出7，8。then回调作为宏任务五的微任务排入宏任务五的微任务队列。</li>
+<li>输出同步代码9，宏任务五的同步代码执行完了，现在执行宏任务五的微任务。</li>
+<li>输出10，后面的setTimeout作为宏任务七排入宏任务的队列。 宏任务五执行完成了。</li>
+<li>执行宏任务六输出11，执行宏任务七输出12。</li>
+</ol>
+<p><em>*-^-\</em>，这个案例是有点恶心，目的是让大家明白各宏任务之间执行的顺序以及宏任务和微任务的执行关系。*</p>
+<p>我们把主线程（执行队列）中的内容从开始执行到结束叫做一次tick，一旦主线程内容执行完成，就回去宏任务队列头部拿一个加入主线程开始一次新的tick，如果在找个tick期间有其他方法注册了新的微任务或者宏任务本身注册了微任务，则回在本次tick结束之前拿出所有的微任务执行完成。</p>
+<ol>
+<li>在当前tick中添加的微任务都不会留到下一个tick，而是在tick的尾部触发执行</li>
+<li>一个事件循环中，在tick里的任务执行完毕以后，会有一个单独的步骤，叫 Perform a microtask checkpoint，即执行微任务检查点。这个操作是检查否有微任务，如果有，便将微任务队列也会当作执行队列来继续执行，完毕后将执行队列置空。</li>
+<li><p>同一个tick产生的微任务总是会在宏任务之前被执行，因为本次tick结束之前注册的微任务会在微任务检查点执行，但是宏任务要等到下一次tick。</p>
+<p>（<strong>注意，这里讨论的所有的宏任务和微任务已经是进入event loop中的任务</strong>，也就是异步条件达成后从event table进入event queue的状态）。</p>
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123; </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'1'</span>)<span class="comment">// 宏任务一</span></span><br><span class="line">    resolve()</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'3'</span>) <span class="comment">// 宏任务一的微任务</span></span><br><span class="line">&#125;)</span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="comment">// 宏任务二</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'4'</span>)</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="comment">// 宏任务五</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'7'</span>)</span><br><span class="line">        <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'8'</span>)</span><br><span class="line">            resolve()</span><br><span class="line">        &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'10'</span>)</span><br><span class="line">            setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;  <span class="comment">// 宏任务七</span></span><br><span class="line">                <span class="built_in">console</span>.log(<span class="string">'12'</span>)</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'9'</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;, <span class="number">2000</span>)</span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="comment">// 宏任务三</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'5'</span>)</span><br><span class="line">&#125;, <span class="number">1000</span>)</span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;  <span class="comment">// 宏任务四</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'6'</span>)</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="comment">// 宏任务六</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'11'</span>)</span><br><span class="line">    &#125;, <span class="number">2000</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'2'</span>) <span class="comment">// 宏任务一</span></span><br></pre></td></tr></table></figure>
+<p>如果进一步在timeout中加入延迟时间，不让他们的回调函数立即进入宏任务队列中，打印顺序又是什么呢？</p>
+<p>先给出答案：1，2，3，6，5，4，7，8，9，10，11，12(或者1，2，3，6，5，4，11， 7，8，9，10，12)</p>
+<blockquote>
+<p>其实完全按照刚才我们讲的逻辑，顺序应该是1，2，3，6，5，4，11， 7，8，9，10，12</p>
+<p>为什么会出现两种不同的可能呢？</p>
+<p>是因为Chrome中根据 <a href="https://links.jianshu.com/go?to=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FWindow%2FsetTimeout" rel="external nofollow noopener noreferrer" target="_blank">mdn</a> <code>setTimeout()</code>/<code>setInterval()</code> 的每调用一次定时器的最小间隔是4ms，所以被合入了一个宏任务一起执行。宏任务五和六都是嵌套的两个setTimeOut加起来2000ms，先后问题，也有可能被合并了。</p>
+</blockquote>
+<p>这个例子和上面那个例子的不同之处就在于通过设置了不同的timeout时间，使得回调函数按照不同的顺序被推入宏任务队列。</p>
+<h2 id="问题答案"><a href="#问题答案" class="headerlink" title="问题答案"></a>问题答案</h2><p>好，到目前为止，已经可以回答上面的问题了</p>
+<hr>
+<p><strong>question 1</strong></p>
+<blockquote>
+<p>为何<code>timeout1</code>和<code>timeout2</code>的结果会在end后面？</p>
+</blockquote>
+<p><strong>answer 1</strong></p>
+<blockquote>
+<p>因为此时<code>timeout1</code>和<code>timeout2</code>只是被异步函数推入到了队列中，<strong>事件循环</strong>还是暂停状态</p>
+</blockquote>
+<hr>
+<p><strong>question 2</strong></p>
+<blockquote>
+<p>为何<code>timeout1</code>和<code>timeout2</code>没有输出到终端？<code>while(true)</code>到底阻塞了什么？</p>
+</blockquote>
+<p><strong>answer 2</strong></p>
+<blockquote>
+<p>因为此处直接阻塞了<strong>事件循环</strong>，还没开始，就已经被阻塞了</p>
+</blockquote>
+<hr>
+<p><strong>question 3,4</strong></p>
+<blockquote>
+<ol>
+<li>为什么<code>timeout1</code>中回调函数会阻塞<code>timeout2</code>中的回调函数的执行？</li>
+<li>为何<code>timeout1</code>的计算密集型工作将会阻塞<code>timeout2</code>的回调函数的执行？</li>
+</ol>
+</blockquote>
+<p><strong>answer 3,4</strong></p>
+<blockquote>
+<p>因为该回调函数执行返回<strong>事件循环</strong>才会继续执行，回调函数将会阻塞事件循环的运行</p>
+</blockquote>
+<hr>
+<p><strong>question 5</strong></p>
+<blockquote>
+<p>为何读取文件的IO操作不会阻塞<code>timeout2</code>的执行？</p>
+</blockquote>
+<p><strong>answer 5</strong></p>
+<blockquote>
+<p>因为<code>IO</code>操作是异步的，会开启一个新的线程，不会阻塞到<strong>事件循环</strong></p>
+</blockquote>
+<p>参考链接：</p>
+<p><a href="https://www.zhihu.com/question/19732473" rel="external nofollow noopener noreferrer" target="_blank">https://www.zhihu.com/question/19732473</a></p>
+<p><a href="https://segmentfault.com/a/1190000005173218" rel="external nofollow noopener noreferrer" target="_blank">https://segmentfault.com/a/1190000005173218</a></p>
+<p><a href="https://juejin.im/post/5c148ec8e51d4576e83fd836" rel="external nofollow noopener noreferrer" target="_blank">https://juejin.im/post/5c148ec8e51d4576e83fd836</a></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/[object Object]/5f68736a" title="Nodejs 异步IO与事件驱动">https://sunra.top/[object Object]/5f68736a</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/[object Object]/6b3a9e14" rel="prev" title="Docker 入门笔记">
+      <i class="fa fa-chevron-left"></i> Docker 入门笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/[object Object]/2552a57d" rel="next" title="JavaScript 异步编程语法">
+      JavaScript 异步编程语法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#同步与异步，阻塞与非阻塞"><span class="nav-number">1.</span> <span class="nav-text">同步与异步，阻塞与非阻塞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个例子"><span class="nav-number">2.</span> <span class="nav-text">几个例子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example-1"><span class="nav-number">2.1.</span> <span class="nav-text">example 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example-2"><span class="nav-number">2.2.</span> <span class="nav-text">example 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example-3"><span class="nav-number">2.3.</span> <span class="nav-text">example 3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example-4"><span class="nav-number">2.4.</span> <span class="nav-text">example 4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example-5"><span class="nav-number">2.5.</span> <span class="nav-text">example 5</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步IO-asynchronous-I-O"><span class="nav-number">3.</span> <span class="nav-text">异步IO(asynchronous I/O)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#阻塞I-O-和-非阻塞I-O"><span class="nav-number">3.1.</span> <span class="nav-text">阻塞I/O 和 非阻塞I/O</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步I-O-和-异步I-O"><span class="nav-number">3.2.</span> <span class="nav-text">同步I/O 和 异步I/O</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件驱动"><span class="nav-number">4.</span> <span class="nav-text">事件驱动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#线程驱动和事件驱动"><span class="nav-number">4.1.</span> <span class="nav-text">线程驱动和事件驱动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nodejs的事件驱动和异步I-O"><span class="nav-number">5.</span> <span class="nav-text">nodejs的事件驱动和异步I/O</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#事件驱动模型"><span class="nav-number">5.1.</span> <span class="nav-text">事件驱动模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JS的事件循环-eventloop-是怎么运作的？"><span class="nav-number">5.2.</span> <span class="nav-text">JS的事件循环(eventloop)是怎么运作的？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题答案"><span class="nav-number">6.</span> <span class="nav-text">问题答案</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="各类实用的 Chrome 扩展是不少人选择 Chrome 浏览器的重要原因，经过多年发展，Chrome 的扩展种类已经非常丰富，除了那些「即装即用」的小工具之外，也有很多被誉为「神器」的强大扩展程序。">
+<meta name="keywords" content="油猴 教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TamperMonkey">
+<meta property="og:url" content="https://sunra.top/posts/e438c689">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="各类实用的 Chrome 扩展是不少人选择 Chrome 浏览器的重要原因，经过多年发展，Chrome 的扩展种类已经非常丰富，除了那些「即装即用」的小工具之外，也有很多被誉为「神器」的强大扩展程序。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1590193109/Devtools/WeChat_Screenshot_20200523081809_llx9zu.png">
+<meta property="og:updated_time" content="2023-05-25T08:11:43.870Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TamperMonkey">
+<meta name="twitter:description" content="各类实用的 Chrome 扩展是不少人选择 Chrome 浏览器的重要原因，经过多年发展，Chrome 的扩展种类已经非常丰富，除了那些「即装即用」的小工具之外，也有很多被誉为「神器」的强大扩展程序。">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1590193109/Devtools/WeChat_Screenshot_20200523081809_llx9zu.png">
+
+<link rel="canonical" href="https://sunra.top/posts/e438c689">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>TamperMonkey | Origin of Ray</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/e438c689">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TamperMonkey
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-23 07:47:53" itemprop="dateCreated datePublished" datetime="2020-05-23T07:47:53+08:00">2020-05-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-25 16:11:43" itemprop="dateModified" datetime="2023-05-25T16:11:43+08:00">2023-05-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Sundry/" itemprop="url" rel="index"><span itemprop="name">Sundry</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>各类实用的 Chrome 扩展是不少人选择 Chrome 浏览器的重要原因，经过多年发展，Chrome 的扩展种类已经非常丰富，除了那些「即装即用」的小工具之外，也有很多被誉为「神器」的强大扩展程序。</p>
+<a id="more"></a>
+<p>「油猴」也可以通过安装各类脚本对网站进行定制。不过它能定制的不仅仅是网站的样式，还能实现更多更强大的功能，例如：</p>
+<ul>
+<li>直接下载百度网盘文件</li>
+<li>重新定制繁杂的微博页面</li>
+<li>去掉视频播放广告</li>
+<li>将网站默认的「二维码登录」改回「账号密码登录」</li>
+<li>绕过搜索引擎的跳转提示</li>
+<li>还原清新的小说阅读模式</li>
+<li>豆瓣和 IMDb 互相显示评分</li>
+</ul>
+<h2 id="TamperMonkey简介"><a href="#TamperMonkey简介" class="headerlink" title="TamperMonkey简介"></a>TamperMonkey简介</h2><p>TamperMonkey可以让我们编写一些js脚本来帮助我们做一些特定的工作，它的脚本的编写与普通的js代码无异，但是还是有一些自己的特性。</p>
+<p>全部的特性可以直接去看官方文档：<a href="https://www.tampermonkey.net/documentation.php?ext=dhdg" rel="external nofollow noopener noreferrer" target="_blank">https://www.tampermonkey.net/documentation.php?ext=dhdg</a></p>
+<p>这里就简单介绍几个常用的：</p>
+<h3 id="常用属性"><a href="#常用属性" class="headerlink" title="常用属性"></a>常用属性</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>作用</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>油猴脚本的名字</td>
+<td></td>
+</tr>
+<tr>
+<td>namespace</td>
+<td>命名空间，类似于Java的包名，用来区分相同名称的脚本，一般写成作者名字或者网址就可以了</td>
+<td></td>
+</tr>
+<tr>
+<td>version</td>
+<td>脚本版本，油猴脚本的更新会读取这个版本号</td>
+<td></td>
+</tr>
+<tr>
+<td>description</td>
+<td>描述，用来告诉用户这个脚本是干什么用的</td>
+<td></td>
+</tr>
+<tr>
+<td>author</td>
+<td>作者名字</td>
+<td></td>
+</tr>
+<tr>
+<td>match</td>
+<td>只有匹配的网址才会执行对应的脚本，例如<code>*</code>、<code>http://*</code>、<code>http://www.baidu.com/*</code>等，参见<a href="https://developer.chrome.com/extensions/match_patterns" rel="external nofollow noopener noreferrer" target="_blank">谷歌开发者文档</a></td>
+<td></td>
+</tr>
+<tr>
+<td>grant</td>
+<td>指定脚本运行所需权限，如果脚本拥有相应的权限，就可以调用油猴扩展提供的API与浏览器进行交互。如果设置为<code>none</code>的话，则不使用沙箱环境，脚本会直接运行在网页的环境中，这时候无法使用大部分油猴扩展的API。如果不指定的话，油猴会默认添加几个最常用的API</td>
+<td></td>
+</tr>
+<tr>
+<td>require</td>
+<td>如果脚本依赖其他js库的话，可以使用require指令，在运行脚本之前先加载其他库，常见用法是加载jquery</td>
+<td></td>
+</tr>
+<tr>
+<td>connect</td>
+<td>当用户使用<a href="https://www.tampermonkey.net/documentation.php?version=4.9&amp;ext=dhdg&amp;show=dhdg#GM_xmlhttpRequest" rel="external nofollow noopener noreferrer" target="_blank">GM_xmlhttpRequest</a>请求远程数据的时候，需要使用connect指定允许访问的域名，支持域名、子域名、IP地址以及<code>*</code>通配符</td>
+<td></td>
+</tr>
+<tr>
+<td>updateURL</td>
+<td>脚本更新网址，当油猴扩展检查更新的时候，会尝试从这个网址下载脚本，然后比对版本号确认是否更新</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="举例：时间掌控者"><a href="#举例：时间掌控者" class="headerlink" title="举例：时间掌控者"></a>举例：时间掌控者</h2><p>tamperMonkey上有一款非常火的脚本叫做时间掌控者，可以以任意倍速播放视频，我们就简单分析一下它的工作原理</p>
+<p>首先是一些头部的特性</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @name        计时器掌控者|视频广告跳过|视频广告加速器</span></span><br><span class="line"><span class="comment">// @name:en      TimerHooker</span></span><br><span class="line"><span class="comment">// @name:zh-CN   计时器掌控者|视频广告跳过|视频广告加速器</span></span><br><span class="line"><span class="comment">// @namespace    https://gitee.com/HGJing/everthing-hook/</span></span><br><span class="line"><span class="comment">// @version      1.0.39</span></span><br><span class="line"><span class="comment">// @description       控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.</span></span><br><span class="line"><span class="comment">// @description:en  it can hook the timer speed to change.</span></span><br><span class="line"><span class="comment">// @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.</span></span><br><span class="line"><span class="comment">// @include      *</span></span><br><span class="line"><span class="comment">// @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=784972</span></span><br><span class="line"><span class="comment">// @author       Cangshi</span></span><br><span class="line"><span class="comment">// @match        http://*/*</span></span><br><span class="line"><span class="comment">// @run-at       document-start</span></span><br><span class="line"><span class="comment">// @grant        none</span></span><br><span class="line"><span class="comment">// @license      GPL-3.0-or-later</span></span><br></pre></td></tr></table></figure>
+<p>其中最主要的就是require特性，它引入了一个叫做everything-hook的插件，可以劫持所有浏览器的方法</p>
+<p>这个组件中大部分代码都是用来在页面中插入几个按钮，或者注册一些快捷键的，另外就是用everything-hook劫持setTimeout和setInterval方法。</p>
+<p>但是其中最重要，最后发挥作用的就是</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">changeVideoSpeed: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">var</span> rate = <span class="number">1</span> / <span class="keyword">this</span>._percentage;</span><br><span class="line">                    rate &gt; <span class="number">16</span> &amp;&amp; (rate = <span class="number">16</span>);</span><br><span class="line">                    rate &lt; <span class="number">0.065</span> &amp;&amp; (rate = <span class="number">0.065</span>);</span><br><span class="line">                    <span class="keyword">var</span> videos = querySelectorAll(<span class="built_in">document</span>, <span class="string">'video'</span>, <span class="literal">true</span>) || [];</span><br><span class="line">                    <span class="keyword">if</span> (videos.length) &#123;</span><br><span class="line">                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; videos.length; i++) &#123;</span><br><span class="line">                            videos[i].playbackRate = rate;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br></pre></td></tr></table></figure>
+<p>获取页面中所有的video标签，改变其playbackRate，来修改其播放速率。</p>
+<h2 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h2><p>既然了解了如何编写一个油猴脚本，我们就简单尝试一下。</p>
+<p>作为一个程序员，我们平时开发时肯定会同时在不同环境开发测试不同的平台，这些大量的url我们一般都是找个地方存起来，或者存在本地，或者存在浏览器，那我们是不是可以写个插件将所有url配置起来，每次需要的时候把插件打开，然后根据配置名去直接打开。</p>
+<p>直接上代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ==UserScript==</span></span><br><span class="line"><span class="comment">// @name         URL Manager</span></span><br><span class="line"><span class="comment">// @namespace    https://sunra.top/</span></span><br><span class="line"><span class="comment">// @version      0.1</span></span><br><span class="line"><span class="comment">// @description  Manage URL!</span></span><br><span class="line"><span class="comment">// @author       You</span></span><br><span class="line"><span class="comment">// @match        http://*/*</span></span><br><span class="line"><span class="comment">// @grant        none</span></span><br><span class="line"><span class="comment">// @require      https://res.cloudinary.com/dvtfhjxi4/raw/upload/v1590135992/url_rpyrxm.js</span></span><br><span class="line"><span class="comment">// ==/UserScript==</span></span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="meta">    'use strict'</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.onkeydown = <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> e = event || <span class="built_in">window</span>.event;</span><br><span class="line">        <span class="keyword">if</span> (e.key == <span class="string">'q'</span> &amp;&amp; e.ctrlKey) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">document</span>.getElementById(<span class="string">"gsbn_urls"</span>)) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            addEnvironmentFormToBody();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">generateForm</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">`&lt;form id="gsbn_urls"&gt;</span></span><br><span class="line"><span class="string">    &lt;label&gt;Platform:&lt;/label&gt;</span></span><br><span class="line"><span class="string">    &lt;select id="openPlatform"&gt;</span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;<span class="built_in">Object</span>.keys(urls).map((platform) =&gt; &#123;</span></span></span><br><span class="line"><span class="string"><span class="subst">            <span class="keyword">return</span> <span class="string">`&lt;option value="<span class="subst">$&#123;platform&#125;</span>"&gt;<span class="subst">$&#123;platform&#125;</span>&lt;/option&gt;`</span></span></span></span><br><span class="line"><span class="string"><span class="subst">    &#125;</span>).join('\n')&#125;</span></span><br><span class="line"><span class="string">&lt;/select&gt;</span></span><br><span class="line"><span class="string">    &lt;label&gt;Environment:&lt;/label&gt;</span></span><br><span class="line"><span class="string">    &lt;select id="openUrl"&gt;</span></span><br><span class="line"><span class="string">    &lt;/select&gt;</span></span><br><span class="line"><span class="string">    &lt;button id="openBtn"&gt;open&lt;/button&gt;</span></span><br><span class="line"><span class="string">  &lt;/form&gt;`</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">addEnvironmentFormToBody</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> form = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">        form.style = <span class="string">"position:absolute;width:600px;height:100px;top:200px;"</span></span><br><span class="line">        form.innerHTML = generateForm();</span><br><span class="line">        <span class="built_in">document</span>.body.appendChild(form);</span><br><span class="line">        addChangeEventListenerToPlatformSelect();</span><br><span class="line">        addClickEventListenerToOpenButton();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">addClickEventListenerToOpenButton</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">document</span>.getElementById(<span class="string">'openBtn'</span>).onclick = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> urlSelect = <span class="built_in">document</span>.getElementById(<span class="string">"openUrl"</span>);</span><br><span class="line">            <span class="keyword">var</span> index = urlSelect.selectedIndex;</span><br><span class="line">            <span class="built_in">window</span>.open(urlSelect.options[index].value);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">addChangeEventListenerToPlatformSelect</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> platformSelect = <span class="built_in">document</span>.getElementById(<span class="string">'openPlatform'</span>);</span><br><span class="line">        <span class="keyword">var</span> urlSelect = <span class="built_in">document</span>.getElementById(<span class="string">"openUrl"</span>);</span><br><span class="line">        platformSelect.onchange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> index = platformSelect.selectedIndex;</span><br><span class="line">            urlSelect.innerHTML = <span class="string">""</span>;</span><br><span class="line">            <span class="keyword">var</span> urlOptions = urls[platformSelect.options[index].value];</span><br><span class="line">            urlSelect.innerHTML = <span class="built_in">Object</span>.keys(urlOptions).map(<span class="function">(<span class="params">env</span>) =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">`&lt;option value='<span class="subst">$&#123;urlOptions[env]&#125;</span>'&gt;<span class="subst">$&#123;env&#125;</span>&lt;/option&gt;`</span>;</span><br><span class="line">            &#125;).join(<span class="string">'\n'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        fireChange(platformSelect);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">fireChange</span>(<span class="params">element</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"createEvent"</span> <span class="keyword">in</span> <span class="built_in">document</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> evt = <span class="built_in">document</span>.createEvent(<span class="string">"HTMLEvents"</span>);</span><br><span class="line">            evt.initEvent(<span class="string">"change"</span>, <span class="literal">false</span>, <span class="literal">true</span>);</span><br><span class="line">            element.dispatchEvent(evt);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            element.fireEvent(<span class="string">"onchange"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p>上面的代码中url是通过require属性从cdn中导入了脚本中定义的，大致格式就是这样的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> urls = &#123;</span><br><span class="line">	pm_console: &#123;</span><br><span class="line">		dev2: <span class="string">""</span>,</span><br><span class="line">		dev: <span class="string">""</span></span><br><span class="line">	&#125;,</span><br><span class="line">	hm_console: &#123;</span><br><span class="line">		dev2: <span class="string">""</span>,</span><br><span class="line">		prod: <span class="string">""</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最终效果就是，在任意页面输入快捷键Ctrl + Q就会出现下面这个简陋的界面，可以在左边选择了</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1590193109/Devtools/WeChat_Screenshot_20200523081809_llx9zu.png" alt></p>
+<h3 id="一些小坑"><a href="#一些小坑" class="headerlink" title="一些小坑"></a>一些小坑</h3><ul>
+<li>每次修改脚本如果想要立即生效，请重启浏览器。</li>
+<li>fireEvent在谷歌浏览器中不好使，需要用dispatchEvent。</li>
+<li>需要在脚本的设置页面设置哪些网站不使用本脚本，或者哪些使用，符合规则的脚本才会生效。</li>
+</ul>
+<p>还有大量优秀的插件等我们去发现，最大的插件共享网站：<a href="https://greasyfork.org/zh-CN" rel="external nofollow noopener noreferrer" target="_blank">https://greasyfork.org/zh-CN</a></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/posts/e438c689" title="TamperMonkey">https://sunra.top/posts/e438c689</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/efdea9ac" rel="prev" title="浏览器渲染HTML过程">
+      <i class="fa fa-chevron-left"></i> 浏览器渲染HTML过程
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/6b3a9e14" rel="next" title="Docker 入门笔记">
+      Docker 入门笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TamperMonkey简介"><span class="nav-number">1.</span> <span class="nav-text">TamperMonkey简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用属性"><span class="nav-number">1.1.</span> <span class="nav-text">常用属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#举例：时间掌控者"><span class="nav-number">2.</span> <span class="nav-text">举例：时间掌控者</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实践"><span class="nav-number">3.</span> <span class="nav-text">实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一些小坑"><span class="nav-number">3.1.</span> <span class="nav-text">一些小坑</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

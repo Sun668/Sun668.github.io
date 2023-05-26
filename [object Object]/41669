@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="loopback4使用，自定义RequestBody，JWT">
+<meta name="keywords" content="loopback4 使用教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="loopback4 体验">
+<meta property="og:url" content="https://sunra.top/[object Object]/41669">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="loopback4使用，自定义RequestBody，JWT">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2023-05-26T03:50:25.164Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="loopback4 体验">
+<meta name="twitter:description" content="loopback4使用，自定义RequestBody，JWT">
+
+<link rel="canonical" href="https://sunra.top/[object Object]/41669">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>loopback4 体验 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/[object Object]/41669">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          loopback4 体验
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-13 21:16:23" itemprop="dateCreated datePublished" datetime="2021-03-13T21:16:23+08:00">2021-03-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-26 11:50:25" itemprop="dateModified" datetime="2023-05-26T11:50:25+08:00">2023-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">loopback4使用，自定义RequestBody，JWT</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>最近心血来潮看了一遍loopback4的文档，说实话，看的有点吐血，可能是我太菜了，全英的不说，这个还好，没什么奇怪的单词，但东一头西一头的。总体看下来就是两个感觉，第一，看起来敲几行命令代码就出来了，但是你搞不懂那些奇奇怪怪语法糖的话，你没法敲自己的代码，就是不灵活，第二，文档确实没有看到一个完整的例子，都是说到一半突然给你个github链接，让你去看项目。</p>
+<p>但是看了这么久，也简单总结下怎么用它去搭建个项目</p>
+<a id="more"></a>
+<h2 id="安装脚手架"><a href="#安装脚手架" class="headerlink" title="安装脚手架"></a>安装脚手架</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i -g @loopback/cli</span><br></pre></td></tr></table></figure>
+<p>如果你用的是</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn global add @loopback/cli</span><br></pre></td></tr></table></figure>
+<p>注意要把你yarn的bin配到环境变量里，不然下面一步你执行不了</p>
+<h2 id="创建新项目"><a href="#创建新项目" class="headerlink" title="创建新项目"></a>创建新项目</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lb4 app</span><br></pre></td></tr></table></figure>
+<p>Answer the prompts as follows:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">? Project name: getting-started</span><br><span class="line">? Project description: Getting started tutorial</span><br><span class="line">? Project root directory: (getting-started)</span><br><span class="line">? Application class name: StarterApplication</span><br><span class="line">? Select features to enable in the project:</span><br><span class="line">❯◉ Enable eslint: add a linter with pre-configured lint rules</span><br><span class="line"> ◉ Enable prettier: install prettier to format code conforming to rules</span><br><span class="line"> ◉ Enable mocha: install mocha to run tests</span><br><span class="line"> ◉ Enable loopbackBuild: use @loopback/build helpers (e.g. lb-eslint)</span><br><span class="line"> ◉ Enable vscode: add VSCode config files</span><br><span class="line"> ◉ Enable docker: include Dockerfile and .dockerignore</span><br><span class="line"> ◉ Enable repositories: include repository imports and RepositoryMixin</span><br><span class="line"> ◉ Enable services: include service-proxy imports and ServiceMixin</span><br></pre></td></tr></table></figure>
+<p>然后这个时候，你就可以跑起来自己的项目了。</p>
+<h3 id="创建空的Controller"><a href="#创建空的Controller" class="headerlink" title="创建空的Controller"></a>创建空的Controller</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lb4 controller</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><em>Note: If your application is still running, press <strong>CTRL+C</strong> to stop it before calling the command</em></p>
+</li>
+<li><p>Answer the prompts as follows:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">? Controller class name: hello</span><br><span class="line">? What kind of controller would you like to generate? Empty Controller</span><br><span class="line">  create src/controllers/hello.controller.ts</span><br><span class="line">  update src/controllers/index.ts</span><br><span class="line"></span><br><span class="line">Controller hello was now created in src/controllers/</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Paste the following contents into the file <code>/src/controllers/hello.controller.ts</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import &#123;get&#125; from &apos;@loopback/rest&apos;;</span><br><span class="line"></span><br><span class="line">export class HelloController &#123;</span><br><span class="line">  @get(&apos;/hello&apos;)</span><br><span class="line">  hello(): string &#123;</span><br><span class="line">    return &apos;Hello world!&apos;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Start the application using <code>npm start</code>.</p>
+</li>
+<li><p>Visit <a href="http://127.0.0.1:3000/hello" rel="external nofollow noopener noreferrer" target="_blank">http://127.0.0.1:3000/hello</a> to see <code>Hello world!</code></p>
+</li>
+</ul>
+<p>目前看起来一起都好。</p>
+<h3 id="创建CRUD-Controller"><a href="#创建CRUD-Controller" class="headerlink" title="创建CRUD Controller"></a>创建CRUD Controller</h3><p>要创建带有CRUD项目的Controller，首先你就要有model，还是借用官方文档，而且这几步的步骤不能乱</p>
+<h4 id="创建model"><a href="#创建model" class="headerlink" title="创建model"></a>创建model</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">lb4 model</span><br><span class="line">? Model class name: todo</span><br><span class="line">? Please select the model base class Entity (A persisted model with an ID)</span><br><span class="line">? Allow additional (free-form) properties? No</span><br><span class="line">Model Todo will be created in src/models/todo.model.ts</span><br><span class="line"></span><br><span class="line">Let&apos;s add a property to Todo</span><br><span class="line">Enter an empty property name when done</span><br><span class="line"></span><br><span class="line">? Enter the property name: id</span><br><span class="line">? Property type: number</span><br><span class="line">? Is id the ID property? Yes</span><br><span class="line">? Is id generated automatically? No</span><br><span class="line">? Is it required?: No</span><br><span class="line">? Default value [leave blank for none]:</span><br><span class="line"></span><br><span class="line">Let&apos;s add another property to Todo</span><br><span class="line">Enter an empty property name when done</span><br><span class="line"></span><br><span class="line">? Enter the property name: title</span><br><span class="line">? Property type: string</span><br><span class="line">? Is it required?: Yes</span><br><span class="line">? Default value [leave blank for none]:</span><br><span class="line"></span><br><span class="line">Let&apos;s add another property to Todo</span><br><span class="line">Enter an empty property name when done</span><br><span class="line"></span><br><span class="line">? Enter the property name: desc</span><br><span class="line">? Property type: string</span><br><span class="line">? Is it required?: No</span><br><span class="line">? Default value [leave blank for none]:</span><br><span class="line"></span><br><span class="line">Let&apos;s add another property to Todo</span><br><span class="line">Enter an empty property name when done</span><br><span class="line"></span><br><span class="line">? Enter the property name: isComplete</span><br><span class="line">? Property type: boolean</span><br><span class="line">? Is it required?: No</span><br><span class="line">? Default value [leave blank for none]:</span><br><span class="line"></span><br><span class="line">Let&apos;s add another property to Todo</span><br><span class="line">Enter an empty property name when done</span><br><span class="line"></span><br><span class="line">? Enter the property name:</span><br><span class="line"></span><br><span class="line">   create src/models/todo.model.ts</span><br><span class="line">   update src/models/index.ts</span><br><span class="line"></span><br><span class="line">Model Todo was created in src/models/</span><br></pre></td></tr></table></figure>
+<h4 id="创建DataSource"><a href="#创建DataSource" class="headerlink" title="创建DataSource"></a>创建DataSource</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">lb4 datasource</span><br><span class="line">? Datasource name: db</span><br><span class="line">? Select the connector for db: In-memory db (supported by StrongLoop)</span><br><span class="line">? window.localStorage key to use for persistence (browser only):</span><br><span class="line">? Full path to file for persistence (server only): ./data/db.json</span><br><span class="line"></span><br><span class="line">  create src/datasources/db.datasource.ts</span><br><span class="line">  update src/datasources/index.ts</span><br><span class="line"></span><br><span class="line">Datasource Db was created in src/datasources/</span><br></pre></td></tr></table></figure>
+<h4 id="创建Repository"><a href="#创建Repository" class="headerlink" title="创建Repository"></a>创建Repository</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">lb4 repository</span><br><span class="line">? Please select the datasource DbDatasource</span><br><span class="line">? Select the model(s) you want to generate a repository Todo</span><br><span class="line">? Please select the repository base class DefaultCrudRepository (Juggler bridge)</span><br><span class="line"></span><br><span class="line">   create src/repositories/todo.repository.ts</span><br><span class="line">   update src/repositories/index.ts</span><br><span class="line"></span><br><span class="line">Repository TodoRepository was created in src/repositories/</span><br></pre></td></tr></table></figure>
+<h4 id="创建Controller"><a href="#创建Controller" class="headerlink" title="创建Controller"></a>创建Controller</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">lb4 controller</span><br><span class="line">? Controller class name: todo</span><br><span class="line">Controller Todo will be created in src/controllers/todo.controller.ts</span><br><span class="line"></span><br><span class="line">? What kind of controller would you like to generate? REST Controller with CRUD functions</span><br><span class="line">? What is the name of the model to use with this CRUD repository? Todo</span><br><span class="line">? What is the name of your CRUD repository? TodoRepository</span><br><span class="line">? What is the name of ID property? id</span><br><span class="line">? What is the type of your ID? number</span><br><span class="line">? Is the id omitted when creating a new instance? Yes</span><br><span class="line">? What is the base HTTP path name of the CRUD operations? /todos</span><br><span class="line">   create src/controllers/todo.controller.ts</span><br><span class="line">   update src/controllers/index.ts</span><br><span class="line"></span><br><span class="line">Controller Todo was created in src/controllers/</span><br></pre></td></tr></table></figure>
+<h3 id="创建Relation"><a href="#创建Relation" class="headerlink" title="创建Relation"></a>创建Relation</h3><p>通过上面的步骤我们再创建一个TodoList 的 model和repositorie</p>
+<p>然后我们创建他们两之间的联系</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> lb4 relation</span></span><br><span class="line">? Please select the relation type hasMany</span><br><span class="line">? Please select source model TodoList</span><br><span class="line">? Please select target model Todo</span><br><span class="line">? Foreign key name to define on the target model todoListId</span><br><span class="line">? Source property name for the relation getter (will be the relation name) todos</span><br><span class="line">? Allow TodoList queries to include data from related Todo instances? Yes</span><br><span class="line">   create src/controllers/todo-list-todo.controller.ts</span><br><span class="line"></span><br><span class="line">Relation HasMany was created in src/</span><br></pre></td></tr></table></figure>
+<p>这样我们就给两个model之间创建了联系。</p>
+<p>注意，二者必须都有repositorie才可以，不然没法创建关联。</p>
+<p>因为创建关联这一步会创建一个Controller出来。</p>
+<h2 id="添加JWT校验"><a href="#添加JWT校验" class="headerlink" title="添加JWT校验"></a>添加JWT校验</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> lb4 example todo</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> loopback4-example-todo</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> npm i --save @loopback/authentication @loopback/authentication-jwt</span></span><br></pre></td></tr></table></figure>
+<h3 id="绑定Component"><a href="#绑定Component" class="headerlink" title="绑定Component"></a>绑定Component</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">src/application.ts</span><br><span class="line"></span><br><span class="line"><span class="comment">// ---------- ADD IMPORTS -------------</span></span><br><span class="line"><span class="keyword">import</span> &#123;AuthenticationComponent&#125; <span class="keyword">from</span> <span class="string">'@loopback/authentication'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  JWTAuthenticationComponent,</span><br><span class="line">  SECURITY_SCHEME_SPEC,</span><br><span class="line">  UserServiceBindings,</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">'@loopback/authentication-jwt'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;DbDataSource&#125; <span class="keyword">from</span> <span class="string">'./datasources'</span>;</span><br><span class="line"><span class="comment">// ------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> TodoListApplication <span class="keyword">extends</span> BootMixin(</span><br><span class="line">  ServiceMixin(RepositoryMixin(RestApplication)),</span><br><span class="line">) &#123;</span><br><span class="line">  <span class="keyword">constructor</span>(<span class="params">options: ApplicationConfig = &#123;&#125;</span>) &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="comment">// ------ ADD SNIPPET AT THE BOTTOM ---------</span></span><br><span class="line">    <span class="comment">// Mount authentication system</span></span><br><span class="line">    <span class="keyword">this</span>.component(AuthenticationComponent);</span><br><span class="line">    <span class="comment">// Mount jwt component</span></span><br><span class="line">    <span class="keyword">this</span>.component(JWTAuthenticationComponent);</span><br><span class="line">    <span class="comment">// Bind datasource</span></span><br><span class="line">    <span class="keyword">this</span>.dataSource(DbDataSource, UserServiceBindings.DATASOURCE_NAME);</span><br><span class="line">    <span class="comment">// ------------- END OF SNIPPET -------------</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="创建UserController"><a href="#创建UserController" class="headerlink" title="创建UserController"></a>创建UserController</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> lb4 controller</span></span><br><span class="line">? Controller class name: User</span><br><span class="line">Controller User will be created in src/controllers/user.controller.ts</span><br><span class="line"></span><br><span class="line">? What kind of controller would you like to generate? Empty Controller</span><br><span class="line"></span><br><span class="line">create src/controllers/user.controller.ts</span><br><span class="line">   update src/controllers/index.ts</span><br><span class="line"></span><br><span class="line">Controller User was created in src/controllers/</span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">/src/controllers/user.controller.ts</span><br><span class="line"></span><br><span class="line"><span class="comment">// ---------- ADD IMPORTS -------------</span></span><br><span class="line"><span class="keyword">import</span> &#123;inject&#125; <span class="keyword">from</span> <span class="string">'@loopback/core'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  TokenServiceBindings,</span><br><span class="line">  MyUserService,</span><br><span class="line">  UserServiceBindings,</span><br><span class="line">  UserRepository,</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">'@loopback/authentication-jwt'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;TokenService&#125; <span class="keyword">from</span> <span class="string">'@loopback/authentication'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;SecurityBindings, UserProfile&#125; <span class="keyword">from</span> <span class="string">'@loopback/security'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;repository&#125; <span class="keyword">from</span> <span class="string">'@loopback/repository'</span>;</span><br><span class="line"><span class="comment">// ----------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">constructor</span>(<span class="params"></span></span><br><span class="line"><span class="params">    <span class="meta">@inject</span>(TokenServiceBindings.TOKEN_SERVICE)</span></span><br><span class="line"><span class="params">    <span class="keyword">public</span> jwtService: TokenService,</span></span><br><span class="line"><span class="params">    <span class="meta">@inject</span>(UserServiceBindings.USER_SERVICE)</span></span><br><span class="line"><span class="params">    <span class="keyword">public</span> userService: MyUserService,</span></span><br><span class="line"><span class="params">    <span class="meta">@inject</span>(SecurityBindings.USER, &#123;optional: <span class="literal">true</span>&#125;)</span></span><br><span class="line"><span class="params">    <span class="keyword">public</span> user: UserProfile,</span></span><br><span class="line"><span class="params">    <span class="meta">@repository</span>(UserRepository) <span class="keyword">protected</span> userRepository: UserRepository,</span></span><br><span class="line"><span class="params">  </span>) &#123;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="添加JWT校验-1"><a href="#添加JWT校验-1" class="headerlink" title="添加JWT校验"></a>添加JWT校验</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ---------- ADD IMPORTS -------------</span></span><br><span class="line"><span class="keyword">import</span> &#123;authenticate&#125; <span class="keyword">from</span> <span class="string">'@loopback/authentication'</span>;</span><br><span class="line"><span class="comment">// ------------------------------------</span></span><br><span class="line"><span class="meta">@authenticate</span>(<span class="string">'jwt'</span>) <span class="comment">// &lt;---- Apply the @authenticate decorator at the class level</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> TodoController &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>到目前为止，你已经可以通过loopback提供的api来进行todo的CRUD了，看起来很happy是不是</p>
+<p>但是有几个问题我在文档没有找到答案</p>
+<ul>
+<li><p>我没找到可以通过一个请求更新两个model的地方，比如上面的TodoList和Todo，我想要更新这两个相关的model，我必须发两个请求才可以。</p>
+</li>
+<li><p>自定义Request body非常麻烦，你必须严格符合它的规范。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> requestBodyObject = &#123;</span><br><span class="line">  description: <span class="string">'data'</span>,</span><br><span class="line">  content: &#123;</span><br><span class="line">    <span class="string">'application/x-www-form-urlencoded'</span>: &#123;</span><br><span class="line">      schema: &#123;</span><br><span class="line">        type: <span class="string">'object'</span>,</span><br><span class="line">        properties: &#123;</span><br><span class="line">          name: &#123;<span class="attr">type</span>: <span class="string">'string'</span>&#125;,</span><br><span class="line">          location: &#123;</span><br><span class="line">            type: <span class="string">'object'</span>,</span><br><span class="line">            properties: &#123;</span><br><span class="line">              lat: &#123;<span class="attr">type</span>: <span class="string">'number'</span>&#125;,</span><br><span class="line">              lng: &#123;<span class="attr">type</span>: <span class="string">'number'</span>&#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">          tags: &#123;</span><br><span class="line">            type: <span class="string">'array'</span>,</span><br><span class="line">            items: &#123;<span class="attr">type</span>: <span class="string">'string'</span>&#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Model中我定义一个变量的类型是我自定义的一个enum类型，项目没法启动，错误原因是无法解析我自定义的类型。</p>
+</li>
+<li>用它的JWT校验，可以不用自定义UserModel，虽然省事，但是我也没找到可以让我自定义User的地方，那我就没法给User加我需要的字段了。</li>
+<li>鉴权用了一个叫casbin的包，文档也是全英的，看不太懂。</li>
+</ul>
+<p>以上就是我遇到的一些问题，希望随着我对它理解的加深，可以解决吧。</p>
+<h2 id="2021-03-20更新（填上期的坑）"><a href="#2021-03-20更新（填上期的坑）" class="headerlink" title="2021.03.20更新（填上期的坑）"></a>2021.03.20更新（填上期的坑）</h2><h3 id="如何自定义RequestBody"><a href="#如何自定义RequestBody" class="headerlink" title="如何自定义RequestBody"></a>如何自定义RequestBody</h3><p>目前发现最快捷的方法就是通过 <code>lb4 model</code>，创建一个Model，格式就是你需要的RequestBody，当然你也可以自己完全手打一个，比如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@model()</span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">NewUserRequest</span> <span class="keyword">extends</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">  @property(&#123;</span><br><span class="line">    type: <span class="string">'string'</span>,</span><br><span class="line">    required: <span class="literal">true</span>,</span><br><span class="line">  &#125;)</span><br><span class="line">  password: string;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在请求上</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@requestBody(&#123;</span><br><span class="line">    content: &#123;</span><br><span class="line">        <span class="string">'application/json'</span>: &#123;</span><br><span class="line">            schema: getModelSchemaRef(NewUserRequest, &#123;</span><br><span class="line">                title: <span class="string">'NewUser'</span>,</span><br><span class="line">            &#125;),</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="JWT校验如何用自己的Model"><a href="#JWT校验如何用自己的Model" class="headerlink" title="JWT校验如何用自己的Model"></a>JWT校验如何用自己的Model</h2><p>在application.ts中改变User，UserCredentials，RefreshToken，的Model，Repository，Service的绑定</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//application.ts</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Mount authentication system</span></span><br><span class="line"><span class="keyword">this</span>.component(AuthenticationComponent);</span><br><span class="line"><span class="comment">// Mount jwt component</span></span><br><span class="line"><span class="keyword">this</span>.component(JWTAuthenticationComponent);</span><br><span class="line"><span class="comment">// Bind datasource</span></span><br><span class="line"><span class="keyword">this</span>.dataSource(MemoryDataSource, UserServiceBindings.DATASOURCE_NAME);</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.bind(UserServiceBindings.USER_REPOSITORY).toClass(UserRepository);</span><br><span class="line"><span class="keyword">this</span>.bind(UserServiceBindings.USER_CREDENTIALS_REPOSITORY).toClass(</span><br><span class="line">    UserCredentialsRepository,</span><br><span class="line">);</span><br><span class="line"><span class="keyword">this</span>.bind(UserServiceBindings.USER_SERVICE).toClass(MyUserService);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.bind(TokenServiceBindings.TOKEN_SECRET).to(<span class="string">'my-secret'</span>);</span><br><span class="line"><span class="keyword">this</span>.bind(TokenServiceBindings.TOKEN_SERVICE).toClass(JWTService);</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.bind(RefreshTokenServiceBindings.REFRESH_REPOSITORY).toClass(RefreshTokenRepository);</span><br><span class="line"><span class="keyword">this</span>.bind(RefreshTokenServiceBindings.REFRESH_TOKEN_SERVICE).toClass(RefreshtokenService);</span><br><span class="line"><span class="keyword">this</span>.bind(RefreshTokenServiceBindings.REFRESH_SECRET).to(</span><br><span class="line">    <span class="string">'my-refresh-secret'</span>,</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to((<span class="number">60</span> * <span class="number">60</span>).toString());</span><br><span class="line"><span class="keyword">this</span>.bind(RefreshTokenServiceBindings.REFRESH_EXPIRES_IN).to(</span><br><span class="line">    (<span class="number">7</span> * <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span>).toString(),</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/[object Object]/41669" title="loopback4 体验">https://sunra.top/[object Object]/41669</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/[object Object]/54964" rel="prev" title="单调栈的思想与应用">
+      <i class="fa fa-chevron-left"></i> 单调栈的思想与应用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/[object Object]/10540" rel="next" title="React入门系列（一）语法与概念初读">
+      React入门系列（一）语法与概念初读 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装脚手架"><span class="nav-number">1.</span> <span class="nav-text">安装脚手架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建新项目"><span class="nav-number">2.</span> <span class="nav-text">创建新项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建空的Controller"><span class="nav-number">2.1.</span> <span class="nav-text">创建空的Controller</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建CRUD-Controller"><span class="nav-number">2.2.</span> <span class="nav-text">创建CRUD Controller</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建model"><span class="nav-number">2.2.1.</span> <span class="nav-text">创建model</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建DataSource"><span class="nav-number">2.2.2.</span> <span class="nav-text">创建DataSource</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建Repository"><span class="nav-number">2.2.3.</span> <span class="nav-text">创建Repository</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建Controller"><span class="nav-number">2.2.4.</span> <span class="nav-text">创建Controller</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Relation"><span class="nav-number">2.3.</span> <span class="nav-text">创建Relation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加JWT校验"><span class="nav-number">3.</span> <span class="nav-text">添加JWT校验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#绑定Component"><span class="nav-number">3.1.</span> <span class="nav-text">绑定Component</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建UserController"><span class="nav-number">3.2.</span> <span class="nav-text">创建UserController</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加JWT校验-1"><span class="nav-number">3.3.</span> <span class="nav-text">添加JWT校验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">4.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-03-20更新（填上期的坑）"><span class="nav-number">5.</span> <span class="nav-text">2021.03.20更新（填上期的坑）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何自定义RequestBody"><span class="nav-number">5.1.</span> <span class="nav-text">如何自定义RequestBody</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JWT校验如何用自己的Model"><span class="nav-number">6.</span> <span class="nav-text">JWT校验如何用自己的Model</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
