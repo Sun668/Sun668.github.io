@@ -22,13 +22,14 @@
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
   <meta name="description" content="我们都知道ChatGPT的接口支持流式SSE的方式进行数据返回，而前端浏览器默认提供了EventSource去接收SSE，但是问题在于，默认的EventSource只支持Get请求，切不支持任何自定义的头部，而ChatGPT的接口就是POST请求，且需要在头部携带token，于是使用了一个微软的库，我们来解释一下它的用法，源码以及从协议角度简单说一下它的源码可以运行的基础，即它的源码为什么可以工作">
+<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="fetch-event-source源码解析">
 <meta property="og:url" content="https://sunra.top/2023/04/15/fetch-event-source-code/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="我们都知道ChatGPT的接口支持流式SSE的方式进行数据返回，而前端浏览器默认提供了EventSource去接收SSE，但是问题在于，默认的EventSource只支持Get请求，切不支持任何自定义的头部，而ChatGPT的接口就是POST请求，且需要在头部携带token，于是使用了一个微软的库，我们来解释一下它的用法，源码以及从协议角度简单说一下它的源码可以运行的基础，即它的源码为什么可以工作">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-26T02:35:03.384Z">
+<meta property="og:updated_time" content="2023-05-26T03:05:43.845Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fetch-event-source源码解析">
 <meta name="twitter:description" content="我们都知道ChatGPT的接口支持流式SSE的方式进行数据返回，而前端浏览器默认提供了EventSource去接收SSE，但是问题在于，默认的EventSource只支持Get请求，切不支持任何自定义的头部，而ChatGPT的接口就是POST请求，且需要在头部携带token，于是使用了一个微软的库，我们来解释一下它的用法，源码以及从协议角度简单说一下它的源码可以运行的基础，即它的源码为什么可以工作">
@@ -232,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-26 10:35:03" itemprop="dateModified" datetime="2023-05-26T10:35:03+08:00">2023-05-26</time>
+                <time title="Modified: 2023-05-26 11:05:43" itemprop="dateModified" datetime="2023-05-26T11:05:43+08:00">2023-05-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
