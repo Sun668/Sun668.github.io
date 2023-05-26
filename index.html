@@ -200,6 +200,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/05/25/games101-apply-texture/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/05/25/games101-apply-texture/" class="post-title-link" itemprop="url">GAMES101 系列总结（四）：如何应用纹理贴图</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-05-25 18:43:16" itemprop="dateCreated datePublished" datetime="2023-05-25T18:43:16+08:00">2023-05-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-26 10:35:03" itemprop="dateModified" datetime="2023-05-26T10:35:03+08:00">2023-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://sunra.top/2023/04/29/games101-shading/">上一篇关于Shading的博客</a>中最后我们提到了Texture是我们用来对点进行输入的方式。</p>
+<p>之前我们的说，每个点都有自己的UV坐标，然后通过UV坐标去贴图上找到对应的点，然后把值取出来就好，三角形中间的像素点我们可以通过中心坐标来进行插值。</p>
+<p>但是问题来，如果我们的贴图过小，就可能导致模型是上多个点对应相同的UV，那么就会造成模糊，反之如果贴图过大，UV坐标差别过大，会造成最后产生锯齿或者摩尔纹的效果。</p>
+<p>本文就来讲一下，游戏引擎是如何解决这两种问题的。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/05/25/games101-apply-texture/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
     <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/05/21/management-methods-of-technical-people-4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -231,7 +315,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
+                <time title="Modified: 2023-05-26 10:35:03" itemprop="dateModified" datetime="2023-05-26T10:35:03+08:00">2023-05-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -334,7 +418,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
+                <time title="Modified: 2023-05-26 10:35:03" itemprop="dateModified" datetime="2023-05-26T10:35:03+08:00">2023-05-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -416,7 +500,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
+                <time title="Modified: 2023-05-26 10:35:03" itemprop="dateModified" datetime="2023-05-26T10:35:03+08:00">2023-05-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -499,7 +583,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
+                <time title="Modified: 2023-05-26 10:35:03" itemprop="dateModified" datetime="2023-05-26T10:35:03+08:00">2023-05-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -584,7 +668,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
+                <time title="Modified: 2023-05-26 10:35:03" itemprop="dateModified" datetime="2023-05-26T10:35:03+08:00">2023-05-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -666,7 +750,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
+                <time title="Modified: 2023-05-26 10:35:03" itemprop="dateModified" datetime="2023-05-26T10:35:03+08:00">2023-05-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -751,7 +835,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
+                <time title="Modified: 2023-05-26 10:35:03" itemprop="dateModified" datetime="2023-05-26T10:35:03+08:00">2023-05-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -832,7 +916,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
+                <time title="Modified: 2023-05-26 10:35:03" itemprop="dateModified" datetime="2023-05-26T10:35:03+08:00">2023-05-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -913,7 +997,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
+                <time title="Modified: 2023-05-26 10:35:03" itemprop="dateModified" datetime="2023-05-26T10:35:03+08:00">2023-05-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -940,87 +1024,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/03/30/games101-linear-algebra-and-transform/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/03/30/canvas-to-svg/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
-      <meta itemprop="name" content="Ray Sun">
-      <meta itemprop="description" content="拨开互联网的迷雾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Origin of Ray">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/03/30/canvas-to-svg/" class="post-title-link" itemprop="url">如何将Canvas转为SVG</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-03-30 12:27:55" itemprop="dateCreated datePublished" datetime="2023-03-30T12:27:55+08:00">2023-03-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-25 16:16:27" itemprop="dateModified" datetime="2023-05-25T16:16:27+08:00">2023-05-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Sundry/" itemprop="url" rel="index"><span itemprop="name">Sundry</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>之前做了个关系图谱的需求，因为导出png等图片放大会失真，所以希望导出为矢量图。但是G6自带的导出图谱功能再Canvas模式下无法导出为SVG，而SVG模式又有很多特性不支持，所以就想办法能不能把Canvas导出为SVG了。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/03/30/canvas-to-svg/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1110,7 +1113,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">265</span>
+          <span class="site-state-item-count">266</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
