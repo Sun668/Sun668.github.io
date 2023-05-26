@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="GAMES101 系列总结（一）：线性代数与模型变换中我们讲了如何通过MVP矩阵将模型上的点坐标变为$[-1,1]^3$的一个立方体之中的坐标，这篇文章我们继续介绍，如何将这个立方体中的点绘制到屏幕上。 光栅化主要分为三个部分，首先是将所有的点拆分为一个个的三角形，这个过程叫做Triangles，在这个过程中，可能出现某些三角形覆盖的位置没法用像素来表示而导致的锯齿，所以我们要做抗锯齿，这个过程叫">
+<meta name="keywords" content="GAMES101 triangle z-buffer 光栅化 抗锯齿">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GAMES101 系列总结（二）：光栅化">
+<meta property="og:url" content="https://sunra.top/2023/04/23/games101-raterization/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="GAMES101 系列总结（一）：线性代数与模型变换中我们讲了如何通过MVP矩阵将模型上的点坐标变为$[-1,1]^3$的一个立方体之中的坐标，这篇文章我们继续介绍，如何将这个立方体中的点绘制到屏幕上。 光栅化主要分为三个部分，首先是将所有的点拆分为一个个的三角形，这个过程叫做Triangles，在这个过程中，可能出现某些三角形覆盖的位置没法用像素来表示而导致的锯齿，所以我们要做抗锯齿，这个过程叫">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1681720879/origin-of-ray/WX20230417-163612_2x_ho2ysf.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682224085/origin-of-ray/WX20230423-122659_2x_knddox.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682224586/origin-of-ray/WX20230423-123612_2x_alvppe.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682225195/origin-of-ray/WX20230423-124617_2x_abyded.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682225371/origin-of-ray/WX20230423-124919_2x_iqhlki.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682225487/origin-of-ray/WX20230423-125058_2x_siokxw.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682225489/origin-of-ray/WX20230423-125109_2x_czfmgt.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682238556/origin-of-ray/WX20230423-162853_2x_b3c5qy.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682238980/origin-of-ray/WX20230423-163607_2x_m7ykgb.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682239657/origin-of-ray/WX20230423-164718_2x_vl0tpl.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682239858/origin-of-ray/WX20230423-165046_2x_e2rts3.png">
+<meta property="og:updated_time" content="2023-05-26T04:00:11.672Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GAMES101 系列总结（二）：光栅化">
+<meta name="twitter:description" content="GAMES101 系列总结（一）：线性代数与模型变换中我们讲了如何通过MVP矩阵将模型上的点坐标变为$[-1,1]^3$的一个立方体之中的坐标，这篇文章我们继续介绍，如何将这个立方体中的点绘制到屏幕上。 光栅化主要分为三个部分，首先是将所有的点拆分为一个个的三角形，这个过程叫做Triangles，在这个过程中，可能出现某些三角形覆盖的位置没法用像素来表示而导致的锯齿，所以我们要做抗锯齿，这个过程叫">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1681720879/origin-of-ray/WX20230417-163612_2x_ho2ysf.png">
+
+<link rel="canonical" href="https://sunra.top/2023/04/23/games101-raterization/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>GAMES101 系列总结（二）：光栅化 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2023/04/23/games101-raterization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GAMES101 系列总结（二）：光栅化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-04-23 08:33:58" itemprop="dateCreated datePublished" datetime="2023-04-23T08:33:58+08:00">2023-04-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-26 12:00:11" itemprop="dateModified" datetime="2023-05-26T12:00:11+08:00">2023-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a href="https://sunra.top/2023/03/30/games101-linear-algebra-and-transform/">GAMES101 系列总结（一）：线性代数与模型变换</a>中我们讲了如何通过MVP矩阵将模型上的点坐标变为$[-1,1]^3$的一个立方体之中的坐标，这篇文章我们继续介绍，如何将这个立方体中的点绘制到屏幕上。</p>
+<p>光栅化主要分为三个部分，首先是将所有的点拆分为一个个的三角形，这个过程叫做Triangles，在这个过程中，可能出现某些三角形覆盖的位置没法用像素来表示而导致的锯齿，所以我们要做抗锯齿，这个过程叫做Antialiasin，还有就是我们从三维映射到二维的过程中，如何进行深度测试，即如何使用Z-Buffer。</p>
+<a id="more"></a>
+<h1 id="Triangles"><a href="#Triangles" class="headerlink" title="Triangles"></a>Triangles</h1><h2 id="屏幕是什么"><a href="#屏幕是什么" class="headerlink" title="屏幕是什么"></a>屏幕是什么</h2><p>首先我们要明白，屏幕是由什么组成的。这个问题的答案是，屏幕由一个个像素组成，其实我们平时说的屏幕分辨率，如1920*1080,2K，4K指的就是这个屏幕一共有多少个像素点，每个像素点我们可以先简单理解为一个个可以发出不同颜色的小灯。</p>
+<p>当然，像素点越多，我们能够模拟的和还原的效果越细腻，像素点多到一定程度，即我们肉眼完全无法识别出有像素点的时候，就是我们常说的视网膜屏了。</p>
+<p>我们假设一个块屏幕由以下几个像素点组成；</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1681720879/origin-of-ray/WX20230417-163612_2x_ho2ysf.png" alt></p>
+<ul>
+<li>我们可以用坐标(x,y)来表示像素点，并且x和y都是整数</li>
+<li>像素的坐标从（0，0）到（width - 1，height - 1）</li>
+<li>像素（x，y）的中心在（x + 0.5， y + 0.5）</li>
+<li>屏幕的覆盖范围是（0，0）到（width，height）</li>
+</ul>
+<p>我们经过之前的MVP矩阵，其实已经把整个视锥体调整到了一个$[-1,1]^3$的立方体之中，现在我们要做的事，将这个立方体中的点的坐标调整到$[0,width] * [0, height]$的屏幕之中</p>
+<p>具体分为两个步骤：</p>
+<ol>
+<li>暂时忽略z坐标（这里说暂时忽略的意思是，z坐标在这里用不到，但是后面的深度测试还要用到），那么点的坐标就从$[-1,1]^2$变成了$[-1,1]^3$</li>
+<li>使用一个矩阵将$[-1,1]^2$转换到$[0,width]*[0,height]$<script type="math/tex; mode=display">
+M_{viewport} = \begin{bmatrix}
+\frac{width}{2} & 0 & 0 & \frac{width}{2} \\
+0 & \frac{height}{2} & \frac{height}{2} & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix}</script></li>
+</ol>
+<h2 id="三角面"><a href="#三角面" class="headerlink" title="三角面"></a>三角面</h2><p>我们刚才讲了如何将点的坐标变为屏幕上的像素坐标，但是一个个孤立的点并不能表示一个物体，我们需要这些点连接起来形成的面来表示物体。</p>
+<p>那么我们应该将这些点连接成几边形呢？</p>
+<p>答案是三角形？</p>
+<p>那么为什么采用三角形呢？原因有如下几点：</p>
+<ol>
+<li>三角形是最基础的多边形，任意的多边形都可以拆分为几个三角形组成</li>
+<li>独特的属性<ol>
+<li>保证是平面的。比如四边形，四个点可能不在同一个平面上</li>
+<li>内部定义明确。比如四边形，有凸多边形和凹多边形，后者比较难判断点是否在四边形内部</li>
+<li>定义良好的插值方法，顶点在三角形上(重心插值)</li>
+</ol>
+</li>
+</ol>
+<h2 id="三角面转换为屏幕像素点"><a href="#三角面转换为屏幕像素点" class="headerlink" title="三角面转换为屏幕像素点"></a>三角面转换为屏幕像素点</h2><p>现在，我们已经将模型上的点转化到了二维的屏幕空间$[0,0]$到$[width, height]$了，并且变成了一个个的三角面片，现在的问题是，如何确定这些面片覆盖了那些像素点，或者说，如何用这个三角面的颜色来确定屏幕像素的颜色，即如下图所示：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682224085/origin-of-ray/WX20230423-122659_2x_knddox.png" alt></p>
+<h3 id="采样"><a href="#采样" class="headerlink" title="采样"></a>采样</h3><p>第一种方法就是简单的进行采样，对屏幕上的每个像素点进行一次遍历，对于每个像素点的颜色，我们定义一个函数来通过计算得到，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for (int x = 0; x &lt; xmax; ++x) </span><br><span class="line">    output[x] = f(x);</span><br></pre></td></tr></table></figure>
+<p>那么这个f又如何定义呢？</p>
+<p>一种方式是，判断一下这个像素的中心是否在三角形内部，如果在，则将三角形面上盖点的颜色赋值给它，如下图所示：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682224586/origin-of-ray/WX20230423-123612_2x_alvppe.png" alt></p>
+<p>用公式表达就是：</p>
+<script type="math/tex; mode=display">
+inside(t,x,y) = \begin{cases}
+1, &Point(x,y) &in & triangle \\
+0, & otherwise
+\end{cases}</script><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for (int x = 0; x &lt; xmax; ++x) </span><br><span class="line">    for (int y = 0; y &lt; ymax; ++y) </span><br><span class="line">        image[x][y] = inside(tri,x + 0.5, y + 0.5);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>那么如何判断一个点是否在三角形内部呢？可以看上一篇博客，讲过这个问提，通过向量的叉乘</p>
+</blockquote>
+<p>那么，这个方法是不是这样就完成了呢？还没有，还有一种情况我们没有考虑，即，如果像素的中心点不在三角形内部也不在三角形外部怎么办，也就是正好在边上，甚至同时在两个三角形的边上怎么办，如下图所示：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682225195/origin-of-ray/WX20230423-124617_2x_abyded.png" alt></p>
+<p>解决方法比较简单，可以随便选一个就好</p>
+<h3 id="包围盒"><a href="#包围盒" class="headerlink" title="包围盒"></a>包围盒</h3><p>除此之外，还有一个问题，我们是否要对屏幕上的每个像素点都执行一遍这个inside函数？</p>
+<p>答案是不用的，我们可以先计算出三角形的包围盒，然后遍历包围盒之内的像素点就好，包围盒之外的像素点绝对不会被这个三角形影响到。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682225371/origin-of-ray/WX20230423-124919_2x_iqhlki.png" alt></p>
+<h3 id="采样结果"><a href="#采样结果" class="headerlink" title="采样结果"></a>采样结果</h3><p>经过上面的过程，一个三角形在屏幕上的像素点就会被表示为：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682225487/origin-of-ray/WX20230423-125058_2x_siokxw.png" alt></p>
+<p>可以看出来，如果分辨率不够就会出现明显的锯齿，如下，</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682225489/origin-of-ray/WX20230423-125109_2x_czfmgt.png" alt></p>
+<h1 id="采样会出现什么问题"><a href="#采样会出现什么问题" class="headerlink" title="采样会出现什么问题"></a>采样会出现什么问题</h1><h2 id="Jaggies（锯齿）"><a href="#Jaggies（锯齿）" class="headerlink" title="Jaggies（锯齿）"></a>Jaggies（锯齿）</h2><p>锯齿的效果就是上一张图展示的样子</p>
+<p>那么我们有什么方式去作抗锯齿呢？</p>
+<h3 id="Blurring-Pre-Filtering-Before"><a href="#Blurring-Pre-Filtering-Before" class="headerlink" title="Blurring (Pre-Filtering) Before"></a>Blurring (Pre-Filtering) Before</h3><p>这种方式的核心思想，出现锯齿的原因是所有的像素点都是要不纯粹的红色，要不纯粹的白色</p>
+<p>我们可以通过提前的进行一定的模糊来避免这种非红即白的情况，如下图所示：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682238556/origin-of-ray/WX20230423-162853_2x_b3c5qy.png" alt></p>
+<h3 id="超采样"><a href="#超采样" class="headerlink" title="超采样"></a>超采样</h3><p>所谓超采样的意思是，之前我们是一个像素点的值对应一个坐标去三角形上去做判断，现在我们一个像素点我们拆分成多个采样点去三角形上去采样</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682238980/origin-of-ray/WX20230423-163607_2x_m7ykgb.png" alt></p>
+<p>基本步骤为：</p>
+<ol>
+<li>选择一个N*N的矩阵去对每个像素点进行采样</li>
+<li>对每个采样点的进行采样，然后取平均值作为该像素点的最终值</li>
+</ol>
+<h2 id="摩尔纹"><a href="#摩尔纹" class="headerlink" title="摩尔纹"></a>摩尔纹</h2><p>占个位置</p>
+<h2 id="Wagon-wheel-effect-–-sampling-in-time"><a href="#Wagon-wheel-effect-–-sampling-in-time" class="headerlink" title="Wagon wheel effect – sampling in time"></a>Wagon wheel effect – sampling in time</h2><p>占个位置</p>
+<h1 id="z-bufferings"><a href="#z-bufferings" class="headerlink" title="z-bufferings"></a>z-bufferings</h1><p>其实这个问题就是，我们虽然刚才光栅化的时候我们虽然暂时忽略了z坐标，但是我们是3D的，在同一个像素点上可能有多个三角形覆盖，这个时候我们应该怎么做呢？</p>
+<p>一种方式是我们遍历每个三角形，看看他的z坐标大小，如果遇到了一个距离摄像机更近的三角形，我们就用它的颜色值替代当前像素的颜色。</p>
+<p>但是有个问题是，我们只有每个点的坐标，如何判断一个三角形的z坐标，其次是，如果遇到三个三角形互相盖在上面的情况，怎么处理，如下图：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682239657/origin-of-ray/WX20230423-164718_2x_vl0tpl.png" alt></p>
+<p>解决方案就是，我们还是遍历每个三角形，不过深度值由每个像素自己记录，我们记录的是像素点当前的颜色对应在三角形上某一点的深度信息，而不是三角形的深度信息</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1682239858/origin-of-ray/WX20230423-165046_2x_e2rts3.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for (each triangle T)</span><br><span class="line">    for (each sample (x,y,z) in T)</span><br><span class="line">        if (z &lt; zbuffer[x,y]) // closest sample so far</span><br><span class="line">            framebuffer[x,y] = rgb; // update color</span><br><span class="line">            zbuffer[x,y] = z; // update depth</span><br><span class="line">        else</span><br><span class="line">            ; // do nothing, this sample is occluded</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/2023/04/23/games101-raterization/" title="GAMES101 系列总结（二）：光栅化">https://sunra.top/2023/04/23/games101-raterization/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/04/20/python-sse/" rel="prev" title="如何用Python返回SSE数据">
+      <i class="fa fa-chevron-left"></i> 如何用Python返回SSE数据
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/04/29/games101-shading/" rel="next" title="GAMES101 系列总结（三）：Shading">
+      GAMES101 系列总结（三）：Shading <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Triangles"><span class="nav-number">1.</span> <span class="nav-text">Triangles</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#屏幕是什么"><span class="nav-number">1.1.</span> <span class="nav-text">屏幕是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三角面"><span class="nav-number">1.2.</span> <span class="nav-text">三角面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三角面转换为屏幕像素点"><span class="nav-number">1.3.</span> <span class="nav-text">三角面转换为屏幕像素点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#采样"><span class="nav-number">1.3.1.</span> <span class="nav-text">采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#包围盒"><span class="nav-number">1.3.2.</span> <span class="nav-text">包围盒</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#采样结果"><span class="nav-number">1.3.3.</span> <span class="nav-text">采样结果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#采样会出现什么问题"><span class="nav-number">2.</span> <span class="nav-text">采样会出现什么问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Jaggies（锯齿）"><span class="nav-number">2.1.</span> <span class="nav-text">Jaggies（锯齿）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Blurring-Pre-Filtering-Before"><span class="nav-number">2.1.1.</span> <span class="nav-text">Blurring (Pre-Filtering) Before</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#超采样"><span class="nav-number">2.1.2.</span> <span class="nav-text">超采样</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#摩尔纹"><span class="nav-number">2.2.</span> <span class="nav-text">摩尔纹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Wagon-wheel-effect-–-sampling-in-time"><span class="nav-number">2.3.</span> <span class="nav-text">Wagon wheel effect – sampling in time</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#z-bufferings"><span class="nav-number">3.</span> <span class="nav-text">z-bufferings</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

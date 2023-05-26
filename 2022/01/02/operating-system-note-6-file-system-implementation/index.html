@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="阅读前的思考 在目录中找到某个文件可以使用什么方法？ 文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构之间是否存在某些制约关系？  上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。">
+<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统学习笔记（六）文件管理系统实现">
+<meta property="og:url" content="https://sunra.top/2022/01/02/operating-system-note-6-file-system-implementation/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="阅读前的思考 在目录中找到某个文件可以使用什么方法？ 文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构之间是否存在某些制约关系？  上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=MjNkMTljMmYzNTA4MDg5YWI5MzY1ODdkYzg4ZGJmMDhfa1poRVoyZTVQSmV0MmFnNW1CTnFIOXZ6UFRxTUpuejhfVG9rZW46Ym94Y25KUkg1M1E0NXNwbFB6TUJsQXZVbFliXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
+<meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDZkOTY5ZDYzZjllMWMzY2RkOWVjMjg0NjI3MDllNmNfUU94d3duenUzajVzcHlGSmJ2b25MeUNtbUdkRWNDazFfVG9rZW46Ym94Y25BZ21tcmJaWnExWTU1WGlHWVhSNHRiXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
+<meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmY1MmJlNzc2ODMyZGEzNzYzNzhiZThlZmRjNThhZDdfQXM3NHpTdDdmZWhDaVoyMkRFbXJQNjhNRGw5MmV2aHpfVG9rZW46Ym94Y25SV214OTNOakZrNXdXeFZNNmxMT0lkXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
+<meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmUyYjE0MjVkOWFhZTg1MzNkNjc4NDgzYmRlMmY0ODNfamdHOXpzaklPUzFCR3VNZ2J2ZWdJOUo5SzE4WG8zdUhfVG9rZW46Ym94Y25xT1NQYUVwZ2NBNlJ3UDZtQks3cXpjXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
+<meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWJhN2NkZGQ4NWYzYThjNjVhYzlhODNlNDkyMzIwZGZfWU5WQWo4eVk0T2hYVW9NemZiR1pUczRTaXNzTjVCWHdfVG9rZW46Ym94Y241THZNYmE1SkZqZVdCcWJTVm9xblBiXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
+<meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=MmI3YTEzMzY2OWM4NGE5ODc1Yjk4OGFhOTA3OTNlMDBfMWFwaUM4dU1UUDlBYXJYbE1YQmJUSUp4ZTRBdVlra1FfVG9rZW46Ym94Y25OSmRlTTRUNms1cUhTTnUySk9PMjBkXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
+<meta property="og:updated_time" content="2023-05-26T04:00:11.680Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统学习笔记（六）文件管理系统实现">
+<meta name="twitter:description" content="阅读前的思考 在目录中找到某个文件可以使用什么方法？ 文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构之间是否存在某些制约关系？  上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。">
+<meta name="twitter:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=MjNkMTljMmYzNTA4MDg5YWI5MzY1ODdkYzg4ZGJmMDhfa1poRVoyZTVQSmV0MmFnNW1CTnFIOXZ6UFRxTUpuejhfVG9rZW46Ym94Y25KUkg1M1E0NXNwbFB6TUJsQXZVbFliXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
+
+<link rel="canonical" href="https://sunra.top/2022/01/02/operating-system-note-6-file-system-implementation/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>操作系统学习笔记（六）文件管理系统实现 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/01/02/operating-system-note-6-file-system-implementation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          操作系统学习笔记（六）文件管理系统实现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-01-02 07:56:20" itemprop="dateCreated datePublished" datetime="2022-01-02T07:56:20+08:00">2022-01-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-26 12:00:11" itemprop="dateModified" datetime="2023-05-26T12:00:11+08:00">2023-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OS/" itemprop="url" rel="index"><span itemprop="name">OS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="阅读前的思考"><a href="#阅读前的思考" class="headerlink" title="阅读前的思考"></a>阅读前的思考</h2><ul>
+<li>在目录中找到某个文件可以使用什么方法？</li>
+<li>文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构之间是否存在某些制约关系？</li>
+</ul>
+<p>上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。</p>
+<a id="more"></a>
+<h2 id="文件系统的层次结构"><a href="#文件系统的层次结构" class="headerlink" title="文件系统的层次结构"></a>文件系统的层次结构</h2><p>现代操作系统有多种文件系统类型，如FAT32，NTFS，ext2，ext3，ext4等，因此文件系统的层次结构也不尽相同。下面这种是一种比较通用的层次结构。</p>
+<p>不支持在 Docs 外粘贴 block</p>
+<ol>
+<li>用户调用接口</li>
+</ol>
+<p>文件系统为用户提供与文件及目录相关的调用，如新建，打开，读写，关闭，删除文件，建立，删除目录等。这一层由若干模块组成，每个模块对应一条系统调用，用户发出系统调用时，控制即转入相应的模块。</p>
+<ol>
+<li>文件目录系统</li>
+</ol>
+<p>文件目录系统的主要功能是管理文件目录，其任务有：</p>
+<ul>
+<li>管理活跃文件目录表。</li>
+<li>管理读写状态信息表。</li>
+<li>管理用户进程打开表。</li>
+<li>管理与组织存储设备上的文件目录结构。</li>
+<li>调用下一级存取控制模块。</li>
+</ul>
+<ol>
+<li>存取控制验证模块</li>
+</ol>
+<p>实现文件保护主要由该级软件完成，它把用户的访问要求与FCB中指示的访问控制权限进行比较，以确认访问的合法性。</p>
+<ol>
+<li>逻辑文件系统与文件信息缓冲区</li>
+</ol>
+<p>根据文件的逻辑结构将用户要读写的逻辑记录转换成文件逻辑结构内的相应块号。</p>
+<ol>
+<li>物理文件系统</li>
+</ol>
+<p>将逻辑记录的相对块号转换成实际的物理地址。</p>
+<ol>
+<li>辅助分配模块</li>
+</ol>
+<p>主要功能是管理辅存空间，即负责分配辅存空闲空间和回收辅存空间</p>
+<p>这里应该要回头联系下内存分配</p>
+<ol>
+<li>设备管理程序模块</li>
+</ol>
+<p>分配设备，分配设备读写缓冲区，磁盘调度，启动设备，处理设备中断，释放设备读写缓冲区，释放设备等。</p>
+<h2 id="目录的实现"><a href="#目录的实现" class="headerlink" title="目录的实现"></a>目录的实现</h2><p>目录实现的基本方法有线性列表和哈希表两种，要注意目录的实现就是为了查找，因此线性列表对应线性查找，哈希表对应散列查找。</p>
+<ol>
+<li>线性列表</li>
+</ol>
+<p>最简单的目录实现方法，是使用存储文件名和数据块指针的线性表。</p>
+<p>在创建新文件时，必须搜索目录上有没有同名的文件存在，然后在目录表上增加一个目录项，删除文件则根据给定的文件名搜索目录，接着释放它的空间。</p>
+<p>重用目录项有很多方法：</p>
+<ul>
+<li>可以将目录项标记为不再使用。</li>
+<li>将其加到空闲目录项表上。</li>
+<li>可以将目录表中最后一个目录项复制到空闲位置，降低目录表长度。</li>
+</ul>
+<p>这里的空闲目录表的思想，有点像内存的页面分配策略（固定分配局部置换，可变分配全局置换，可变分配局部置换）</p>
+<p>采用链表结构可以减少删除时间，优点在于实现简单，不过由于线性表的特殊性，比较费时。</p>
+<ol>
+<li>哈希表</li>
+</ol>
+<p>最大的困难是哈希表的长度固定以及哈希函数对表长的依赖。</p>
+<p>目录查询是通过在磁盘上反复搜索完成的，需要不断的进行I/O操作，开销较大。</p>
+<p>所以为了减少I/O操作，把当前使用的文件目录复制到内存。</p>
+<h2 id="文件的实现"><a href="#文件的实现" class="headerlink" title="文件的实现"></a>文件的实现</h2><p>文件的实现，研究的是文件的物理结构，即文件数据在物理存储设备上是如何分布和组织的。</p>
+<p>这个问题有两个方面：</p>
+<ul>
+<li>文件的分配方式，讲的是对磁盘非空闲块的管理。</li>
+<li>文件存储空间管理，对磁盘空闲块的管理。</li>
+</ul>
+<h3 id="文件的分配方式"><a href="#文件的分配方式" class="headerlink" title="文件的分配方式"></a>文件的分配方式</h3><h4 id="连续分配"><a href="#连续分配" class="headerlink" title="连续分配"></a>连续分配</h4><p>连续分配方法要求每个文件在磁盘上占有一组连续的块，如下图所示，磁盘地址定义了磁盘上的一个线性排序。这种排序使作业访问磁盘时需要的寻道数和寻道时间最小。</p>
+<p>文件的连续分配可以用第一块的磁盘地址和连续块的数量来定义。一个文件的目录条目包含开始块的地址和该文件所分配区域的长度。</p>
+<p><img src="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=MjNkMTljMmYzNTA4MDg5YWI5MzY1ODdkYzg4ZGJmMDhfa1poRVoyZTVQSmV0MmFnNW1CTnFIOXZ6UFRxTUpuejhfVG9rZW46Ym94Y25KUkg1M1E0NXNwbFB6TUJsQXZVbFliXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA" alt="img"></p>
+<p>连续分配支持<strong>顺序访问和直接访问</strong>，其优点是实现简单，存取速度快。缺点是长度不宜动态增加，因为一个文件末尾后的盘块可能已经分配给其他文件了，一旦需要增加，就需要重新找一片更大的连续内存，然后把数据复制过去。因而这种方式只适用于长度固定的文件。</p>
+<h4 id="链接分配"><a href="#链接分配" class="headerlink" title="链接分配"></a>链接分配</h4><p>链接分配采取离散分配的方式，消除了外部碎片，显著提高磁盘利用率，且文件可以很容易地动态增长，无需事先指导文件的大小。</p>
+<p>链接分配又可以分为隐式链接和显式链接两种形式。</p>
+<ol>
+<li>隐式链接</li>
+</ol>
+<p>隐式链接如图所示，每个文件对应一个磁盘块的链表，磁盘块分布在磁盘的任何地方，排除最后一个盘块外，每个盘块都有指向下一个盘块的指针。</p>
+<p><img src="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDZkOTY5ZDYzZjllMWMzY2RkOWVjMjg0NjI3MDllNmNfUU94d3duenUzajVzcHlGSmJ2b25MeUNtbUdkRWNDazFfVG9rZW46Ym94Y25BZ21tcmJaWnExWTU1WGlHWVhSNHRiXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA" alt="img"></p>
+<p>创建新文件时，目录中增加一个条目。每个目录项都有一个指向文件首块的指针，该指针初始化为NULL表示空文件，大小字段为0，写文件会通过空闲空间管理系统找到空间块，将该块链接到文件的尾部，然后写入。</p>
+<p>隐式链接的缺点是无法直接访问盘块，只能通过指针顺序访问文件，且盘块指针会消耗一定空间，其稳定性也是一个问题，一旦某一个指针丢了，会导致文件数据丢失。</p>
+<ol>
+<li>显式链接</li>
+</ol>
+<p>把用于链接文件各物理块的指针，从每个物理块的末尾提取出来，显式存放在内存的一张链表中。该表在整个磁盘中仅设置一张（也就是说，并不是每个文件都有自己的一张表），称为文件分配表（File Allocation Table， FAT）。每个表项存放对应块的下一块链接指针，即下一个盘块号。文件的第一个盘块号记录在目录中，后续的盘块号通过查FAT找到。</p>
+<p><img src="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmY1MmJlNzc2ODMyZGEzNzYzNzhiZThlZmRjNThhZDdfQXM3NHpTdDdmZWhDaVoyMkRFbXJQNjhNRGw5MmV2aHpfVG9rZW46Ym94Y25SV214OTNOakZrNXdXeFZNNmxMT0lkXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA" alt="img"></p>
+<p>注意，上图中的盘块号只是一个隐含的序号而已，并不占用空间，就像是数组的索引一样。</p>
+<p>FAT的表项和全部磁盘块一一对应。用一个特殊数字-1表示文件末尾，-2表示是空闲块。</p>
+<p>FAT在系统启动时就会被读入内存。</p>
+<h4 id="索引分配"><a href="#索引分配" class="headerlink" title="索引分配"></a>索引分配</h4><p>链接分配解决了连续分配的外部碎片和文件大小的管理问题，但是链接分配并不能有效支持直接访问（FAT除外）。索引分配解决了这个问题，它把每个文件的所有盘块号几种放在一起构成了索引块。</p>
+<p><img src="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmUyYjE0MjVkOWFhZTg1MzNkNjc4NDgzYmRlMmY0ODNfamdHOXpzaklPUzFCR3VNZ2J2ZWdJOUo5SzE4WG8zdUhfVG9rZW46Ym94Y25xT1NQYUVwZ2NBNlJ3UDZtQks3cXpjXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA" alt="img"></p>
+<p>每个文件都有自己的索引块。这是一个磁盘块地址的数组。 索引块的第i个条目指向文件的第i个块。目录条目包括索引块地址。要读第i块，通过索引块的第i个条目的指针来查找和读入所需要的块。</p>
+<p>创建文件时，索引块的所有指针都设为空，首次写入第i块时，先从空闲块空间中取一个块，将其地址写入索引块的第i个条目。</p>
+<p>索引块的大小是个重要的问题，每个文件都必须有一个索引块，因此索引块应该尽可能小，但是如果索引块太小了，就无法支持大文件，我们有几种方案可以用来解决这个问题：</p>
+<ul>
+<li>链接方案。一个索引块通常为一个磁盘块，因此本身可以直接读写。为了处理大文件，可以将多个磁盘块链接起来。</li>
+<li>多层索引。多层索引使第一层索引块指向第二层的索引块，第二层索引块再指向文件块，这种方法根据最大文件大小的要求，可以继续到第三层或第四层。</li>
+<li>混合索引。将多种索引方式相结合的分配方式。例如系统既采用直接地址，又采用单击索引分配方式或者二级索引分配方式。</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>访问第n条记录</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连续分配</td>
+<td>需访问磁盘1次</td>
+<td>顺序存取时速度快，文件定长时可根据文件起始地址和记录长度随机访问。</td>
+<td>文件存储要求连续的存储空间，会产生碎片，不利于文件的动态扩充。</td>
+</tr>
+<tr>
+<td>链接分配</td>
+<td>需访问磁盘n次</td>
+<td>可解决外存的碎片问题，提高外存空间的利用率，动态增长较为方便。</td>
+<td>只能按照文件的指针链顺序访问，查找效率低，指针信息存放消耗额外空间。</td>
+</tr>
+<tr>
+<td>索引分配</td>
+<td>m级需访问磁盘m + 1次</td>
+<td>可以随机访问，文件易于增删</td>
+<td>索引表增加存储空间的开销，索引表的查找策略对文件系统效率影响较大。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>这三种方案都需要目录项中或者索引节点（i节点）中存放索引块的地址。</p>
+<h3 id="文件存储空间管理"><a href="#文件存储空间管理" class="headerlink" title="文件存储空间管理"></a>文件存储空间管理</h3><h4 id="文件存储器空间的划分与初始化"><a href="#文件存储器空间的划分与初始化" class="headerlink" title="文件存储器空间的划分与初始化"></a>文件存储器空间的划分与初始化</h4><p>一般来说，一个文件存储在一个文件卷中。文件卷可以是物理盘的一部分，也可以是整个物理盘，支持超大文件的文件卷也可以由多个物理盘组成。</p>
+<p><img src="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWJhN2NkZGQ4NWYzYThjNjVhYzlhODNlNDkyMzIwZGZfWU5WQWo4eVk0T2hYVW9NemZiR1pUczRTaXNzTjVCWHdfVG9rZW46Ym94Y241THZNYmE1SkZqZVdCcWJTVm9xblBiXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA" alt="img"></p>
+<p>在一个文件卷中，文件数据信息的空间（文件区）和存放文件控制信息FCB的空间（目录区）是分离的。由于存在很多种类的文件表示和存放格式，所以现代操作系统中一般都有很多不同的文件管理模块，通过它们可以访问不同格式的逻辑卷中的文件。</p>
+<p>逻辑卷在提供文件服务前，必须由对应的文件程序进行初始化，划分好目录区和文件区，建立空闲空间管理表格以及存放逻辑卷信息的超级块。</p>
+<h4 id="文件存储器空间管理"><a href="#文件存储器空间管理" class="headerlink" title="文件存储器空间管理"></a>文件存储器空间管理</h4><p>文件存储设备分成许多大小相同的物理块，并以块为单位进行信息交换。因此文件存储设备的管理实质上是对空闲块的组织和管理。它包含空闲块的组织，分配和回收问题。</p>
+<p>这种物理块的划分思想有些像内存中页的划分，进程中的叫页，内存中的叫页框。</p>
+<h5 id="空闲表法"><a href="#空闲表法" class="headerlink" title="空闲表法"></a>空闲表法</h5><p>空闲表法属于连续分配方式，它与内存的动态分配方案类似，为每个文件分配一块连续的存储空间。</p>
+<p>系统为外存上的所有空闲区建立一张空闲盘块表，每个空闲区对应于一个空闲表项，其中包括表项序号，该空闲区第一个块号，该空闲区盘块数等。再将所有空闲区按其起始盘块号递增的次序排列。</p>
+<p>首先，这里说的属于连续分配方式，指的是空闲盘区的组织方式是连续的方式。</p>
+<p>其次看了这种方式以后，会有一种熟悉的感觉，很像内存的页面分配（策略有最佳适应算法等。）</p>
+<h5 id="空闲链表法"><a href="#空闲链表法" class="headerlink" title="空闲链表法"></a>空闲链表法</h5><p>将所有空闲盘区拉成一条空闲链，根据构成链所用的基本元素不同，可把链表分成两种形式，空闲盘块链和空闲盘区链。</p>
+<p>空闲盘块链将磁盘上的所有空闲空间以盘块为单位拉成一条链。当用户因创建文件而请求分配空间时，系统从链首开始，依次摘下适当数目的空闲盘块分配给用户。当用户因删除文件而释放存储空间时，系统将回收的盘块依次插入空闲盘块链的末尾。这种方法的优点是分配和回收一个盘块的过程非常简单，但在为一个文件分配盘块时可能要重复多次操作。</p>
+<p>空闲盘区链将磁盘上的所有空闲盘区（每个盘区可能包含多个盘块）拉成一条链。在每个盘区上除了含有用于指示下一个空闲盘区的指针外，还应该有能指明本盘区大小的信息。分配盘区的方法与内存的动态分区类似，通常采用首次适应算法，在回收盘区时，同样也要将回收区与相邻的空闲盘区合并。</p>
+<p>空闲表法，空闲盘区链比较类似，都与内存的动态分区类似。</p>
+<h5 id="位示图法"><a href="#位示图法" class="headerlink" title="位示图法"></a>位示图法</h5><p>利用二进制中的一位表示磁盘中一个盘块的使用情况，磁盘上所有的盘块都有一个二进制与之对应。当其值为0时，表示盘块空闲，为1时，表示已分配。</p>
+<h5 id="成组链表法"><a href="#成组链表法" class="headerlink" title="成组链表法"></a>成组链表法</h5><p>空闲表法和空闲链表法都不适合大型文件系统，因为这会使空闲表或者空闲链表过大。</p>
+<p>在UNIX中，采用的是成组链表法，这种方法结合了空闲表和空闲链表两种方法，克服了表太大的缺点</p>
+<p>其大致思想是：把顺序的n个空闲扇区地址保存在第一个空闲扇区，其后一个空闲扇区内则保存另一顺序空闲扇区的地址，如此继续，直至所有空闲扇区都予以链接。</p>
+<p>假设磁盘最初全为空闲扇区，其成组链接如图所示，通过这种方式可以迅速找到大批空闲块地址。</p>
+<p><img src="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=MmI3YTEzMzY2OWM4NGE5ODc1Yjk4OGFhOTA3OTNlMDBfMWFwaUM4dU1UUDlBYXJYbE1YQmJUSUp4ZTRBdVlra1FfVG9rZW46Ym94Y25OSmRlTTRUNms1cUhTTnUySk9PMjBkXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA" alt="img"></p>
+<p>这种成组链表法与多级的思想还不是完全相同。</p>
+<p>表示文件存储器空闲空间的“位向量”表或第一个成组链块，以及卷中的目录区，文件区划分信息都需要存放在辅存储器中，一般放在卷头位置，在UNIX中称为超级块。</p>
+<p>在对卷中文件进行操作前，超级块需要预先读入系统空闲的主存，并且经常保持主存超级块与辅存卷中超级块的一致性。</p>
+<h2 id="回答开始问题"><a href="#回答开始问题" class="headerlink" title="回答开始问题"></a>回答开始问题</h2><ol>
+<li>在目录中查找某个文件有什么方法</li>
+</ol>
+<p>可以采用线性列表法或哈希表法。线性列表把文件名组织成一个线性表，查找时依次与线性表中的每一个表项比较。</p>
+<p>若把文件名按序排列，则二分法可以降低平均查找时间，但是建立新文件会增加维护线性表的开销。</p>
+<p>哈希表用文件名通过哈希函数得到一个指向文件的指针，这种方法非常迅速，但是要注意哈希冲突。</p>
+<ol>
+<li>文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构是否存在某种制约关系？</li>
+</ol>
+<p>文件的逻辑结构是用户的可见结构，即用户使用文件的结构。</p>
+<p>文件的物理结构是文件在存储器上的组织结构，它表示一个文件在辅存上的安置，链接，编目的方法，它和文件的存取方法以及辅存设备的特性都有着密切的联系。</p>
+<p>单个文件的逻辑结构和物理结构之间虽无明显的制约或者关联关系，但是如果物理结构选择不慎，也很难体现逻辑结构的特点。比如一个逻辑结构是顺序结构，但是物理结构是隐式链接结构文件，即使理论上可以快速找到，但是还是需要在磁盘块上一块一块找。</p>
+<p>再次注意，逻辑结构指的是文件记录之间的管理，比如按照关键字顺序排序。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/2022/01/02/operating-system-note-6-file-system-implementation/" title="操作系统学习笔记（六）文件管理系统实现">https://sunra.top/2022/01/02/operating-system-note-6-file-system-implementation/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/12/26/operating-system-note-5-file-system-basics/" rel="prev" title="操作系统学习笔记（五）文件管理系统基础">
+      <i class="fa fa-chevron-left"></i> 操作系统学习笔记（五）文件管理系统基础
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/01/07/operating-system-note-7-io-introduction/" rel="next" title="操作系统学习笔记（七）I/O管理概述">
+      操作系统学习笔记（七）I/O管理概述 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#阅读前的思考"><span class="nav-number">1.</span> <span class="nav-text">阅读前的思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统的层次结构"><span class="nav-number">2.</span> <span class="nav-text">文件系统的层次结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目录的实现"><span class="nav-number">3.</span> <span class="nav-text">目录的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件的实现"><span class="nav-number">4.</span> <span class="nav-text">文件的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件的分配方式"><span class="nav-number">4.1.</span> <span class="nav-text">文件的分配方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#连续分配"><span class="nav-number">4.1.1.</span> <span class="nav-text">连续分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#链接分配"><span class="nav-number">4.1.2.</span> <span class="nav-text">链接分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引分配"><span class="nav-number">4.1.3.</span> <span class="nav-text">索引分配</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件存储空间管理"><span class="nav-number">4.2.</span> <span class="nav-text">文件存储空间管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件存储器空间的划分与初始化"><span class="nav-number">4.2.1.</span> <span class="nav-text">文件存储器空间的划分与初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件存储器空间管理"><span class="nav-number">4.2.2.</span> <span class="nav-text">文件存储器空间管理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#空闲表法"><span class="nav-number">4.2.2.1.</span> <span class="nav-text">空闲表法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#空闲链表法"><span class="nav-number">4.2.2.2.</span> <span class="nav-text">空闲链表法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#位示图法"><span class="nav-number">4.2.2.3.</span> <span class="nav-text">位示图法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#成组链表法"><span class="nav-number">4.2.2.4.</span> <span class="nav-text">成组链表法</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回答开始问题"><span class="nav-number">5.</span> <span class="nav-text">回答开始问题</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

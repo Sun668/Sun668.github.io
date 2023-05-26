@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="我们在将Unity打包成il2cpp+release模式的apk的之后，内部的代码是会被打包成so文件的，这个东西其实是linux的动态链接库的格式，对应的就是windows的dll或者Mac的dylib之类的东西。在android这边也可以叫做符号表，因为它内部会保存虚拟内存地址与汇编代码的的对应关系。 这样打包以后，会降低我们的包体积，而且有助于我们的代码保护不被抄袭，但是同时也会导致我们开发">
+<meta name="keywords" content="Unity 符号表 日志解析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity Android符号表解析崩溃日志">
+<meta property="og:url" content="https://sunra.top/2022/04/02/unity-android-symbols-analysis/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="我们在将Unity打包成il2cpp+release模式的apk的之后，内部的代码是会被打包成so文件的，这个东西其实是linux的动态链接库的格式，对应的就是windows的dll或者Mac的dylib之类的东西。在android这边也可以叫做符号表，因为它内部会保存虚拟内存地址与汇编代码的的对应关系。 这样打包以后，会降低我们的包体积，而且有助于我们的代码保护不被抄袭，但是同时也会导致我们开发">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2023-05-26T04:00:11.688Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Unity Android符号表解析崩溃日志">
+<meta name="twitter:description" content="我们在将Unity打包成il2cpp+release模式的apk的之后，内部的代码是会被打包成so文件的，这个东西其实是linux的动态链接库的格式，对应的就是windows的dll或者Mac的dylib之类的东西。在android这边也可以叫做符号表，因为它内部会保存虚拟内存地址与汇编代码的的对应关系。 这样打包以后，会降低我们的包体积，而且有助于我们的代码保护不被抄袭，但是同时也会导致我们开发">
+
+<link rel="canonical" href="https://sunra.top/2022/04/02/unity-android-symbols-analysis/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>Unity Android符号表解析崩溃日志 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2022/04/02/unity-android-symbols-analysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Unity Android符号表解析崩溃日志
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-04-02 21:42:41" itemprop="dateCreated datePublished" datetime="2022-04-02T21:42:41+08:00">2022-04-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-26 12:00:11" itemprop="dateModified" datetime="2023-05-26T12:00:11+08:00">2023-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>我们在将Unity打包成il2cpp+release模式的apk的之后，内部的代码是会被打包成so文件的，这个东西其实是linux的动态链接库的格式，对应的就是windows的dll或者Mac的dylib之类的东西。在android这边也可以叫做符号表，因为它内部会保存虚拟内存地址与汇编代码的的对应关系。</p>
+<p>这样打包以后，会降低我们的包体积，而且有助于我们的代码保护不被抄袭，但是同时也会导致我们开发者看不懂报错信息，因为这些报错信息都是些虚拟内存地址，而不是函数的名字，那么对于线上发生的报错信息，我们怎么去阅读呢？</p>
+<a id="more"></a>
+<p>其实刚才我们就说过了，这个so文件不仅是动态链接库，内部还保存着虚拟内存地址与函数之间的映射关系，所以我们要读懂这些报错信息，还需要借助这个动态链接库。</p>
+<p>接下来我们就讲一下，如何利用这so文件</p>
+<h2 id="打包过程中保存so文件"><a href="#打包过程中保存so文件" class="headerlink" title="打包过程中保存so文件"></a>打包过程中保存so文件</h2><p>打包android项目，我们是可以选择直接导出为apk或者导出为gradle项目的，如果我们在打包位apk的时候，勾选打包设置<code>Create Symbols.zip</code>，就会在apk的同级目录下将所有的so文件保存下来</p>
+<p>而如果选择的是导出为gradle项目，并且架构选择是arm64-v8a，那么我们自己的代码因为选择了il2cpp，就会将我们的代码打包为libil2cpp.so，作为动态链接库存放在gradle项目的的unityLibrary/src/main/jniLibs/arm64-v8a下面</p>
+<blockquote>
+<p>这里解释一下这个路径，如果熟悉安卓开发的同学会对这个路径很敏感，这个路径基本就是普通安卓项目默认的动态链接库的路径，jniLibs，拆开是jni + libs，jni的意思是java native interface，就是java的原生方法的意思，后面那个文件夹是架构，在不同架构的手机上，会调用不同的文件夹下的动态链接库。如果只选择了arm64-v8a，那么这个apk就只能运行在改架构下的手机上。</p>
+</blockquote>
+<p>除了我们自己代码会打包成libil2cpp.so，unity自身引擎代码，或者第三方包的代码，也会打包成各种so文件，如libunity.so, 但是这些文件是不在这个目录下的，我们有两个地方可以找到这些so文件，一个就是unityLibrary/src/symbols/arm64-v8a，另一种就是在Unity项目的/Temp/StagingArea/libs/下面，我们需要在打包完成之后把它们复制出来。</p>
+<p>这里需要注意一点，如果是用editor来手动build，那么手动拷贝就好，但是如果是通过命令行batchmode的方式打包，就要注意，如果想要BuildPlayer方法运行完成以后再去复制，是获取不到的，因为一旦editor关闭，Temp文件夹就会被删除。</p>
+<p>这个时候我们就需要用到PostProcessBuildAttribute这个hook，在Build完成之后，退出editor之前加上一段逻辑去保存。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">using UnityEngine;</span><br><span class="line">using System.Collections;</span><br><span class="line">using UnityEditor.Callbacks;</span><br><span class="line">using UnityEditor;</span><br><span class="line">using System.IO;</span><br><span class="line">using System;</span><br><span class="line">public class PostProcessBuild</span><br><span class="line">&#123;</span><br><span class="line">    [PostProcessBuildAttribute()]</span><br><span class="line">    public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)</span><br><span class="line">    &#123;</span><br><span class="line">        if (target == BuildTarget.Android)</span><br><span class="line">            PostProcessAndroidBuild(pathToBuiltProject);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    public static void PostProcessAndroidBuild(string pathToBuiltProject)</span><br><span class="line">    &#123;</span><br><span class="line">        UnityEditor.ScriptingImplementation backend = UnityEditor.PlayerSettings.GetScriptingBackend(UnityEditor.BuildTargetGroup.Android);</span><br><span class="line"> </span><br><span class="line">        if (backend == UnityEditor.ScriptingImplementation.IL2CPP)</span><br><span class="line">        &#123;</span><br><span class="line">            CopyARMSymbols(&quot;armeabi-v7a&quot;);</span><br><span class="line">            CopyARMSymbols(&quot;arm64-v8a&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    private static void CopyARMSymbols(string target)</span><br><span class="line">    &#123;</span><br><span class="line">        const string libpath = &quot;/Temp/StagingArea/libs/&quot;;</span><br><span class="line">        string sourcePath = Directory.GetCurrentDirectory() + libpath + $&quot;&#123;target&#125;/&quot;;</span><br><span class="line">        string desPath = Directory.GetCurrentDirectory() + $&quot;/Build/android/unityLibrary/symbols/&#123;target&#125;&quot;;</span><br><span class="line">        if (!Directory.Exists(desPath))</span><br><span class="line">        &#123;</span><br><span class="line">            Directory.CreateDirectory(desPath);</span><br><span class="line">        &#125;</span><br><span class="line">        CopyDirectory(sourcePath, desPath);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static void CopyDirectory(string sourcePath, string targetPath)</span><br><span class="line">    &#123;</span><br><span class="line">        </span><br><span class="line">        if (System.IO.Directory.Exists(sourcePath))</span><br><span class="line">        &#123;</span><br><span class="line">            string[] files = System.IO.Directory.GetFiles(sourcePath);</span><br><span class="line"></span><br><span class="line">            // Copy the files and overwrite destination files if they already exist.</span><br><span class="line">            foreach (string s in files)</span><br><span class="line">            &#123;</span><br><span class="line">                // Use static Path methods to extract only the file name from the path.</span><br><span class="line">                var fileName = System.IO.Path.GetFileName(s);</span><br><span class="line">                var destFile = System.IO.Path.Combine(targetPath, fileName);</span><br><span class="line">                Debug.Log($&quot;fileName: &#123;fileName&#125;, destFile: &#123;destFile&#125;&quot;);</span><br><span class="line">                System.IO.File.Copy(s, destFile, true);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(&quot;Source path does not exist!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="使用保存的so去解析日志"><a href="#使用保存的so去解析日志" class="headerlink" title="使用保存的so去解析日志"></a>使用保存的so去解析日志</h2><p>有了so之后，我们就可以解析全是地址的日志了。</p>
+<p>因为这个其实是android的动态链接库，所以解析需要用到android的工具：addr2line，我是直接用了unity安装的android工具，而且根据架构不同，要用不同的工具，因为我的是arm64-v8a，我用到的是aarch64-linux-android-addr2line，具体路径每个人电脑不同，找到就好</p>
+<p>我们可以直接在命令行运行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aarch64-linux-android-addr2line -f -C -e libil2cpp.so 日志中的地址</span><br></pre></td></tr></table></figure>
+<p>当然也可以通过代码去做这件事，因为一行行解析很费劲，我这里只用了lib2cpp.so和libunity.so</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">OutCrash</span><span class="params">(filename, version, target)</span>:</span></span><br><span class="line">	</span><br><span class="line">	addr2linePath = <span class="string">"/Applications/Unity/Hub/Editor/2020.3.20f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android-addr2line -f -C -e "</span></span><br><span class="line">	il2cppdebugsoPath = <span class="string">"/Users/bytedance/Desktop/Unity/Android/symbols/"</span> + version + <span class="string">"/"</span> + target + <span class="string">"/libil2cpp.so "</span></span><br><span class="line">	unitydebugsoPath = <span class="string">"/Users/bytedance/Desktop/Unity/Android/symbols/"</span> + version + <span class="string">"/"</span> + target + <span class="string">"/libunity.so "</span></span><br><span class="line">	</span><br><span class="line">	f = open(filename,<span class="string">'r'</span>)</span><br><span class="line">	logstr = f.readlines()</span><br><span class="line">	il2cppflag = <span class="string">'libil2cpp'</span></span><br><span class="line">	unityflag = <span class="string">'libunity'</span></span><br><span class="line">	crashEndFlag = <span class="string">'libunity.so\n'</span></span><br><span class="line">	<span class="keyword">for</span> log <span class="keyword">in</span> logstr:</span><br><span class="line">		OutCmd(log,addr2linePath,crashEndFlag,unitydebugsoPath)</span><br><span class="line">		OutCmd(log,addr2linePath,il2cppflag,il2cppdebugsoPath)</span><br><span class="line">		OutCmd(log,addr2linePath,unityflag,unitydebugsoPath)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">OutCmd</span><span class="params">(log,addr2linePath,debugFlagStr,debugsoPath)</span>:</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span> log.endswith(debugFlagStr):</span><br><span class="line">		startIndex = log.index(<span class="string">' pc '</span>)</span><br><span class="line">		endflag = log.index(<span class="string">r' /data/'</span>)</span><br><span class="line">		addstr = log[startIndex+<span class="number">4</span>:endflag]</span><br><span class="line">		print(addstr)</span><br><span class="line">		cmdstr = addr2linePath +debugsoPath+addstr</span><br><span class="line">		os.system(cmdstr)</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		unitystart = log.find(debugFlagStr)</span><br><span class="line">		<span class="keyword">if</span> unitystart &gt;= <span class="number">0</span>:</span><br><span class="line">			unitylen = log.index(debugFlagStr)</span><br><span class="line">			unitylen = unitylen + len(debugFlagStr) +<span class="number">1</span></span><br><span class="line">			endlen = log.find(<span class="string">'('</span>)</span><br><span class="line">			<span class="keyword">if</span> endlen &gt;= <span class="number">0</span>:</span><br><span class="line">				endIndex = log.index(<span class="string">'('</span>) </span><br><span class="line">				addstr = log[unitylen:endIndex]</span><br><span class="line">				addstr = addstr.replace(<span class="string">' '</span>,<span class="string">''</span>)</span><br><span class="line">		</span><br><span class="line">				cmdstr = addr2linePath + debugsoPath +addstr</span><br><span class="line">				print(addstr)</span><br><span class="line">				os.system(cmdstr)</span><br><span class="line"></span><br><span class="line">OutCrash(sys.argv[<span class="number">1</span>], sys.argv[<span class="number">2</span>], sys.argv[<span class="number">3</span>])</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/2022/04/02/unity-android-symbols-analysis/" title="Unity Android符号表解析崩溃日志">https://sunra.top/2022/04/02/unity-android-symbols-analysis/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/03/25/unity-memory-best-practice/" rel="prev" title="Unity 内存最佳实践">
+      <i class="fa fa-chevron-left"></i> Unity 内存最佳实践
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/04/09/unity-performance-report/" rel="next" title="Unity 性能优化记录（一）性能分析工具的使用">
+      Unity 性能优化记录（一）性能分析工具的使用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#打包过程中保存so文件"><span class="nav-number">1.</span> <span class="nav-text">打包过程中保存so文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用保存的so去解析日志"><span class="nav-number">2.</span> <span class="nav-text">使用保存的so去解析日志</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

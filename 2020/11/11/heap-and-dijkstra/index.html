@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="上周的博客中我们讨论并实现了图的拓扑排序，这周我们继续学习图的另外一种基础的算法，最短路径算法Dijkstra算法，以及如何将其改造成我们平时导航或者游戏中经常使用中用到的寻路算法。">
+<meta name="keywords" content="最短路径算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最短路径算法">
+<meta property="og:url" content="https://sunra.top/2020/11/11/heap-and-dijkstra/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="上周的博客中我们讨论并实现了图的拓扑排序，这周我们继续学习图的另外一种基础的算法，最短路径算法Dijkstra算法，以及如何将其改造成我们平时导航或者游戏中经常使用中用到的寻路算法。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1605138918/Algorithm/e20907173c458fac741e556c947bb9a9_hpgxz9.jpg">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/11/dd/11840cc13071fe2da67675338e46cadd.jpg">
+<meta property="og:updated_time" content="2023-05-26T04:00:11.672Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="最短路径算法">
+<meta name="twitter:description" content="上周的博客中我们讨论并实现了图的拓扑排序，这周我们继续学习图的另外一种基础的算法，最短路径算法Dijkstra算法，以及如何将其改造成我们平时导航或者游戏中经常使用中用到的寻路算法。">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1605138918/Algorithm/e20907173c458fac741e556c947bb9a9_hpgxz9.jpg">
+
+<link rel="canonical" href="https://sunra.top/2020/11/11/heap-and-dijkstra/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>最短路径算法 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/11/11/heap-and-dijkstra/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          最短路径算法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-11-11 21:03:11" itemprop="dateCreated datePublished" datetime="2020-11-11T21:03:11+08:00">2020-11-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-26 12:00:11" itemprop="dateModified" datetime="2023-05-26T12:00:11+08:00">2023-05-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>上周的博客中我们讨论并实现了图的拓扑排序，这周我们继续学习图的另外一种基础的算法，最短路径算法Dijkstra算法，以及如何将其改造成我们平时导航或者游戏中经常使用中用到的寻路算法。</p>
+<a id="more"></a>
+<h2 id="优先级队列（堆）"><a href="#优先级队列（堆）" class="headerlink" title="优先级队列（堆）"></a>优先级队列（堆）</h2><p>由于Dijkstra算法中需要用到优先级队列，所以我们先模仿实现一个，采用堆的形式.</p>
+<p>首先解释下堆是什么：</p>
+<ul>
+<li><p>堆是一个完全二叉树；</p>
+</li>
+<li><p>堆中每一个节点的值都必须大于等于（或小于等于）其子树中每个节点的值。</p>
+</li>
+</ul>
+<h3 id="如何实现一个堆"><a href="#如何实现一个堆" class="headerlink" title="如何实现一个堆"></a>如何实现一个堆</h3><p>要实现一个堆，我们先要知道，堆都支持哪些操作以及如何存储一个堆。</p>
+<p>我们都知道，完全二叉树比较适合用数组来存储。用数组来存储完全二叉树是非常节省存储空间的。因为我们不需要存储左右子节点的指针，单纯地通过数组的下标，就可以找到一个节点的左右子节点和父节点，<strong>这一点也是我们要用堆来实现优先级队列的一点原因</strong>。</p>
+<h4 id="如何插入元素"><a href="#如何插入元素" class="headerlink" title="如何插入元素"></a>如何插入元素</h4><p>往堆中插入一个元素后，我们需要继续满足堆的两个特性。</p>
+<p>如果我们把新插入的元素放到堆的最后，你可以看我画的这个图，是不是不符合堆的特性了？于是，我们就需要进行调整，让其重新满足堆的特性，这个过程我们起了一个名字，就叫做堆化（heapify）。</p>
+<p>堆化实际上有两种，从下往上和从上往下。这里我先讲从下往上的堆化方法。</p>
+<p>我们可以让新插入的节点与父节点对比大小。如果不满足子节点小于等于父节点的大小关系，我们就互换两个节点。一直重复这个过程，直到父子节点之间满足刚说的那种大小关系。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Heap</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(capacity) &#123;</span><br><span class="line">        <span class="keyword">this</span>.n = capacity;</span><br><span class="line">        <span class="keyword">this</span>.a = <span class="keyword">new</span> <span class="built_in">Array</span>(capacity);</span><br><span class="line">        <span class="keyword">this</span>.count = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    swap(i, j) &#123;</span><br><span class="line">        <span class="keyword">const</span> temp = <span class="keyword">this</span>.a[i];</span><br><span class="line">        <span class="keyword">this</span>.a[i] = <span class="keyword">this</span>.a[j];</span><br><span class="line">        <span class="keyword">this</span>.a[j] = temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    add(data) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.count &gt;= <span class="keyword">this</span>.n) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.count++;</span><br><span class="line">        <span class="keyword">this</span>.a[<span class="keyword">this</span>.count] = data;</span><br><span class="line">        <span class="keyword">let</span> i = <span class="keyword">this</span>.count;</span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">Math</span>.floor(i / <span class="number">2</span>) &gt; <span class="number">0</span> &amp;&amp; <span class="keyword">this</span>.a[i] &lt; <span class="keyword">this</span>.a[<span class="built_in">Math</span>.floor(i / <span class="number">2</span>)]) &#123;</span><br><span class="line">            <span class="keyword">this</span>.swap(i, <span class="built_in">Math</span>.floor(i / <span class="number">2</span>));</span><br><span class="line">            i = <span class="built_in">Math</span>.floor(i / <span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="删除堆顶元素"><a href="#删除堆顶元素" class="headerlink" title="删除堆顶元素"></a>删除堆顶元素</h4><p>从堆的定义的第二条中，任何节点的值都大于等于（或小于等于）子树节点的值，我们可以发现，堆顶元素存储的就是堆中数据的最大值或者最小值。假设我们构造的是大顶堆，堆顶元素就是最大的元素。</p>
+<p>当我们删除堆顶元素之后，就需要把第二大的元素放到堆顶，那第二大元素肯定会出现在左右子节点中。然后我们再迭代地删除第二大节点，以此类推，直到叶子节点被删除。</p>
+<p>但是上述方法容易破坏掉堆的结构</p>
+<p>实际上，我们稍微改变一下思路，就可以解决这个问题。你看我画的下面这幅图。我们把最后一个节点放到堆顶，然后利用同样的父子节点对比方法。对于不满足父子节点大小关系的，互换两个节点，并且重复进行这个过程，直到父子节点之间满足大小关系为止。这就是从上往下的堆化方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Heap</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(capacity) &#123;</span><br><span class="line">        <span class="keyword">this</span>.n = capacity;</span><br><span class="line">        <span class="keyword">this</span>.a = <span class="keyword">new</span> <span class="built_in">Array</span>(capacity);</span><br><span class="line">        <span class="keyword">this</span>.count = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    swap(i, j) &#123;</span><br><span class="line">        <span class="keyword">const</span> temp = <span class="keyword">this</span>.a[i];</span><br><span class="line">        <span class="keyword">this</span>.a[i] = <span class="keyword">this</span>.a[j];</span><br><span class="line">        <span class="keyword">this</span>.a[j] = temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    add(data) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.count &gt;= <span class="keyword">this</span>.n) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.count++;</span><br><span class="line">        <span class="keyword">this</span>.a[<span class="keyword">this</span>.count] = data;</span><br><span class="line">        <span class="keyword">let</span> i = <span class="keyword">this</span>.count;</span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">Math</span>.floor(i / <span class="number">2</span>) &gt; <span class="number">0</span> &amp;&amp; <span class="keyword">this</span>.a[i] &lt; <span class="keyword">this</span>.a[<span class="built_in">Math</span>.floor(i / <span class="number">2</span>)]) &#123;</span><br><span class="line">            <span class="keyword">this</span>.swap(i, <span class="built_in">Math</span>.floor(i / <span class="number">2</span>));</span><br><span class="line">            i = <span class="built_in">Math</span>.floor(i / <span class="number">2</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    update(data) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.count; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.a[i].key === data.key) &#123;</span><br><span class="line">                <span class="keyword">this</span>.a[i] = data;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    poll() &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.count === <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.a[<span class="number">0</span>] = <span class="keyword">this</span>.a[<span class="keyword">this</span>.count];</span><br><span class="line">        <span class="keyword">this</span>.count--;</span><br><span class="line">        <span class="keyword">this</span>.heapify();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    heapify() &#123;</span><br><span class="line">        <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="keyword">let</span> maxPos = i;</span><br><span class="line">            <span class="keyword">if</span> (i * <span class="number">2</span> &lt;= <span class="keyword">this</span>.count &amp;&amp; <span class="keyword">this</span>.a[i] &gt; <span class="keyword">this</span>.a[i * <span class="number">2</span>]) &#123;</span><br><span class="line">                maxPos = i * <span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (i * <span class="number">2</span> + <span class="number">1</span> &lt;= <span class="keyword">this</span>.count &amp;&amp; <span class="keyword">this</span>.a[i] &gt; <span class="keyword">this</span>.a[i * <span class="number">2</span> + <span class="number">1</span>]) &#123;</span><br><span class="line">                maxPos = i * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (maxPos === i) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">this</span>.swap(i, maxPos);</span><br><span class="line">            i = maxPos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h2><p>首先来一张算法的步骤图</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1605138918/Algorithm/e20907173c458fac741e556c947bb9a9_hpgxz9.jpg" alt></p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Graph</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(v) &#123;</span><br><span class="line">        <span class="keyword">this</span>.v = v;</span><br><span class="line">        <span class="keyword">this</span>.adj = <span class="keyword">new</span> <span class="built_in">Array</span>(v).fill([]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    addEdge(s, t, w) &#123;</span><br><span class="line">        <span class="keyword">this</span>.adj[s].push(<span class="keyword">new</span> Edge(s, t, w));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dijkstra(s, t) &#123;</span><br><span class="line">        <span class="keyword">let</span> predecessor = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="keyword">this</span>.v);</span><br><span class="line">        <span class="keyword">let</span> vertexes = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="keyword">this</span>.v);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.v; i++) &#123;</span><br><span class="line">            vertexes[i] = <span class="keyword">new</span> Vertex(i, <span class="built_in">Number</span>.MAX_SAFE_INTEGER);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">let</span> queue = <span class="keyword">new</span> Heap(<span class="keyword">this</span>.v);</span><br><span class="line">        <span class="keyword">let</span> inqueue = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="keyword">this</span>.v).fill(<span class="literal">false</span>);</span><br><span class="line">        vertexes[s].dist = <span class="number">0</span>;</span><br><span class="line">        queue.add(vertexes[s]);</span><br><span class="line">        inqueue[s] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">const</span> minVertex = queue.poll();</span><br><span class="line">            <span class="keyword">if</span> (minVertex.id === t) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.adj[minVertex.id].length; i++) &#123;</span><br><span class="line">                <span class="keyword">const</span> edge = <span class="keyword">this</span>.adj[minVertex.id][i];</span><br><span class="line">                <span class="keyword">const</span> nexeVertex = vertexes[edge.tid];</span><br><span class="line">                <span class="keyword">if</span> (minVertex.dist + edge.w &lt; nexeVertex.dist) &#123;</span><br><span class="line">                    nexeVertex.dist = minVertex.dist + edge.w;</span><br><span class="line">                    predecessor[nexeVertex.id] = minVertex.id;</span><br><span class="line">                    <span class="keyword">if</span> (inqueue[nexeVertex.id]) &#123;</span><br><span class="line">                        queue.update(nexeVertex);</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        queue.add(nexeVertex);</span><br><span class="line">                        inqueue[nexeVertex.id] = <span class="literal">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">console</span>.log(s);</span><br><span class="line">        print(s, t, predecessor);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    print(s, t, predecessor) &#123;</span><br><span class="line">        <span class="keyword">if</span> (s === t) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        print(s, predecessor[t], predecessor);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">`-&gt;<span class="subst">$&#123;t&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Edge</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(sid, tid, weight) &#123;</span><br><span class="line">        <span class="keyword">this</span>.sid = sid;</span><br><span class="line">        <span class="keyword">this</span>.tid = tid;</span><br><span class="line">        <span class="keyword">this</span>.w = weight;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vertex</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(id, dist) &#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.dist = dist;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>dijkstra算法的思路有点像BFS，从起始顶点开始遍历它所能到的所有顶点，然后依次更新到这些顶点的最短路径，更新完之后加入到优先级队列中，接下来从优先级队列中拿出当前dist最小的顶点，然后计算出它所能到的所有顶点，依次更新，然后不断重复上述过程。</p>
+<p>但其实也不是完全的BFS，因为<strong>优先级队列与普通队列不同，它会在每次插入数据时调整数据的位置，保证头部的数据是队列中的最小值，并不是先进先出。</strong></p>
+<h2 id="A-算法（简化Dijkstra算法）"><a href="#A-算法（简化Dijkstra算法）" class="headerlink" title="A*算法（简化Dijkstra算法）"></a>A*算法（简化Dijkstra算法）</h2><p>魔兽世界、仙剑奇侠传这类 MMRPG 游戏，不知道你有没有玩过？在这些游戏中，有一个非常重要的功能，那就是人物角色自动寻路。当人物处于游戏地图中的某个位置的时候，我们用鼠标点击另外一个相对较远的位置，人物就会自动地绕过障碍物走过去。玩过这么多游戏，不知你是否思考过，这个功能是怎么实现的呢？</p>
+<p>算法解析实际上，这是一个非常典型的搜索问题。人物的起点就是他当下所在的位置，终点就是鼠标点击的位置。我们需要在地图中，找一条从起点到终点的路径。这条路径要绕过地图中所有障碍物，并且看起来要是一种非常聪明的走法。所谓“聪明”，笼统地解释就是，走的路不能太绕。<strong>理论上讲，最短路径显然是最聪明的走法，是这个问题的最优解。</strong></p>
+<p><strong>不过，如果图非常大，那 Dijkstra 最短路径算法的执行耗时会很多</strong>。在真实的软件开发中，我们面对的是超级大的地图和海量的寻路请求，算法的执行效率太低，这显然是无法接受的。</p>
+<p>实际上，像出行路线规划、游戏寻路，这些真实软件开发中的问题，一般情况下，我们都不需要非得求最优解（也就是最短路径）。在权衡路线规划质量和执行效率的情况下，我们只需要寻求一个次优解就足够了。那如何快速找出一条接近于最短路线的次优路线呢？</p>
+<p>这个快速的路径规划算法，就是我们今天要学习的 A<em> 算法。实际上，A</em> 算法是对 Dijkstra 算法的优化和改造。</p>
+<p><strong>Dijkstra 算法有点儿类似 BFS 算法，它每次找到跟起点最近的顶点</strong>，往外扩展。<strong>这种往外扩展的思路，其实有些盲目</strong>。为什么这么说呢？我举一个例子来给你解释一下。下面这个图对应一个真实的地图，每个顶点在地图中的位置，我们用一个二维坐标（x，y）来表示，其中，x 表示横坐标，y 表示纵坐标。</p>
+<p><img src="https://static001.geekbang.org/resource/image/11/dd/11840cc13071fe2da67675338e46cadd.jpg" alt></p>
+<p>在 Dijkstra 算法的实现思路中，我们用一个优先级队列，来记录已经遍历到的顶点以及这个顶点与起点的路径长度。顶点与起点路径长度越小，就越先被从优先级队列中取出来扩展，从图中举的例子可以看出，尽管我们找的是从 s 到 t 的路线，但是最先被搜索到的顶点依次是 1，2，3。通过肉眼来观察，这个搜索方向跟我们期望的路线方向（s 到 t 是从西向东）是反着的，路线搜索的方向明显“跑偏”了。</p>
+<p>之所以会“跑偏”，那是因为我们是按照顶点与起点的路径长度的大小，来安排出队列顺序的。与起点越近的顶点，就会越早出队列。我们并没有考虑到这个顶点到终点的距离，所以，在地图中，尽管 1，2，3 三个顶点离起始顶点最近，但离终点却越来越远。</p>
+<p>如果我们综合更多的因素，把这个顶点到终点可能还要走多远，也考虑进去，综合来判断哪个顶点该先出队列，那是不是就可以避免“跑偏”呢？当我们遍历到某个顶点的时候，从起点走到这个顶点的路径长度是确定的，我们记作 g(i)（i 表示顶点编号）。但是，从这个顶点到终点的路径长度，我们是未知的。虽然确切的值无法提前知道，但是我们可以用其他估计值来代替。</p>
+<p>这里我们可以通过这个顶点跟终点之间的直线距离，也就是欧几里得距离，来近似地估计这个顶点跟终点的路径长度（注意：路径长度跟直线距离是两个概念）。我们把这个距离记作 h(i)（i 表示这个顶点的编号），专业的叫法是启发函数（heuristic function）。因为欧几里得距离的计算公式，会涉及比较耗时的开根号计算，所以，我们一般通过另外一个更加简单的距离计算公式，那就是曼哈顿距离（Manhattan distance）。曼哈顿距离是两点之间横纵坐标的距离之和。计算的过程只涉及加减法、符号位反转，所以比欧几里得距离更加高效。</p>
+<p>原来只是单纯地通过顶点与起点之间的路径长度 g(i)，来判断谁先出队列，现在有了顶点到终点的路径长度估计值，我们通过两者之和 f(i)=g(i)+h(i)，来判断哪个顶点该最先出队列。综合两部分，我们就能有效避免刚刚讲的“跑偏”。这里 f(i) 的专业叫法是估价函数（evaluation function）。从刚刚的描述，我们可以发现，A<em> 算法就是对 Dijkstra 算法的简单改造。实际上，代码实现方面，我们也只需要稍微改动几行代码，就能把 Dijkstra 算法的代码实现，改成 A</em> 算法的代码实现。</p>
+<p>在 A* 算法的代码实现中，顶点 Vertex 类的定义，跟 Dijkstra 算法中的定义，稍微有点儿区别，多了 x，y 坐标，以及刚刚提到的 f(i) 值。</p>
+<p>A* 算法的代码实现的主要逻辑是下面这段代码。它跟 Dijkstra 算法的代码实现，主要有 3 点区别：</p>
+<ul>
+<li>优先级队列构建的方式不同。A* 算法是根据 f 值（也就是刚刚讲到的 f(i)=g(i)+h(i)）来构建优先级队列，而 Dijkstra 算法是根据 dist 值（也就是刚刚讲到的 g(i)）来构建优先级队列；</li>
+<li>A* 算法在更新顶点 dist 值的时候，会同步更新 f 值；循环结束的条件也不一样。</li>
+<li>Dijkstra 算法是在终点出队列的时候才结束，A* 算法是一旦遍历到终点就结束。</li>
+</ul>
+<p>注：</p>
+<p>本文中的所有图均来自于极客时间《数据结构与算法之美》一课</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/2020/11/11/heap-and-dijkstra/" title="最短路径算法">https://sunra.top/2020/11/11/heap-and-dijkstra/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/11/06/topological-sort/" rel="prev" title="拓扑排序">
+      <i class="fa fa-chevron-left"></i> 拓扑排序
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/11/20/javascript-variable-promotion/" rel="next" title="Javascript执行机制（一）变量提升">
+      Javascript执行机制（一）变量提升 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#优先级队列（堆）"><span class="nav-number">1.</span> <span class="nav-text">优先级队列（堆）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何实现一个堆"><span class="nav-number">1.1.</span> <span class="nav-text">如何实现一个堆</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何插入元素"><span class="nav-number">1.1.1.</span> <span class="nav-text">如何插入元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除堆顶元素"><span class="nav-number">1.1.2.</span> <span class="nav-text">删除堆顶元素</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dijkstra算法"><span class="nav-number">2.</span> <span class="nav-text">Dijkstra算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码"><span class="nav-number">2.1.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-算法（简化Dijkstra算法）"><span class="nav-number">3.</span> <span class="nav-text">A*算法（简化Dijkstra算法）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
