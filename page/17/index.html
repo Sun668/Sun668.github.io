@@ -201,7 +201,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/01/01/electron-multi-process/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/954dea55/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
@@ -215,7 +215,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/01/01/electron-multi-process/" class="post-title-link" itemprop="url">Electron 多进程方案</a>
+            <a href="/posts/954dea55/" class="post-title-link" itemprop="url">Electron 多进程方案</a>
         </h2>
 
         <div class="post-meta">
@@ -232,7 +232,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-26 17:59:37" itemprop="dateModified" datetime="2023-05-26T17:59:37+08:00">2023-05-26</time>
+                <time title="Modified: 2023-05-27 06:58:58" itemprop="dateModified" datetime="2023-05-27T06:58:58+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -258,12 +258,12 @@
           <p>这周大部分时间都是在开发一个基于Electron的客户端。</p>
 <p>Electron内置一个chrome内核，所以可以让我们像开发一个网站一样开发客户端。</p>
 <p>在开发过程中，遇到了一个问题，就是我们的项目需要从本地加载AI的模型并进行计算。</p>
-<p>看过我介绍<a href="https://sunra.top/2020/12/03/browser-architecture/">浏览器结构那篇文章</a>的应该知道，在当前chrome结构下，网络进程与渲染进程是完全分开的，所以加载模型并不会pend住渲染进程，所以就没有在意。</p>
+<p>看过我介绍<a href="https://sunra.top/posts/bbe10e1c/">浏览器结构那篇文章</a>的应该知道，在当前chrome结构下，网络进程与渲染进程是完全分开的，所以加载模型并不会pend住渲染进程，所以就没有在意。</p>
 <p>但是事实证明我的页面还是会存在卡顿。</p>
 <p>于是我就用开发者工具的Performance面板录制了一下，结果发现是模型加载完后的识别函数，它是一个Promise，属于微任务，实际上是个协程，而且是个CPU密集型的协程。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/01/01/electron-multi-process/#more" rel="contents">
+              <a class="btn" href="/posts/954dea55/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -287,7 +287,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/12/26/iteration-and-induction/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/a97149cb/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
@@ -301,7 +301,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/26/iteration-and-induction/" class="post-title-link" itemprop="url">程序员的数学（一）迭代法与数学归纳法</a>
+            <a href="/posts/a97149cb/" class="post-title-link" itemprop="url">程序员的数学（一）迭代法与数学归纳法</a>
         </h2>
 
         <div class="post-meta">
@@ -318,7 +318,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-26 17:59:37" itemprop="dateModified" datetime="2023-05-26T17:59:37+08:00">2023-05-26</time>
+                <time title="Modified: 2023-05-27 06:58:58" itemprop="dateModified" datetime="2023-05-27T06:58:58+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -347,7 +347,7 @@
 <p>这次博客看起来很简单，但是我想传递的是一种感觉，一种思考方式。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/26/iteration-and-induction/#more" rel="contents">
+              <a class="btn" href="/posts/a97149cb/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -371,7 +371,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/12/18/cookie-and-samesite/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/586529c7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
@@ -385,7 +385,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/18/cookie-and-samesite/" class="post-title-link" itemprop="url">Cookie与同站</a>
+            <a href="/posts/586529c7/" class="post-title-link" itemprop="url">Cookie与同站</a>
         </h2>
 
         <div class="post-meta">
@@ -402,7 +402,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-26 17:59:37" itemprop="dateModified" datetime="2023-05-26T17:59:37+08:00">2023-05-26</time>
+                <time title="Modified: 2023-05-27 06:58:58" itemprop="dateModified" datetime="2023-05-27T06:58:58+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -430,7 +430,7 @@
 <p>我们今天就来看一下这个同站是什么，它和同源有什么区别，为什么cookie明明都有domain和path来规定作用域了还需要sameSite这个属性。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/18/cookie-and-samesite/#more" rel="contents">
+              <a class="btn" href="/posts/586529c7/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -454,7 +454,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/12/10/javascript-prototype/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/7a3d3c75/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
@@ -468,7 +468,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/10/javascript-prototype/" class="post-title-link" itemprop="url">Javascript执行机制（五）用公式讲清楚原型链</a>
+            <a href="/posts/7a3d3c75/" class="post-title-link" itemprop="url">Javascript执行机制（五）用公式讲清楚原型链</a>
         </h2>
 
         <div class="post-meta">
@@ -485,7 +485,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-26 17:59:37" itemprop="dateModified" datetime="2023-05-26T17:59:37+08:00">2023-05-26</time>
+                <time title="Modified: 2023-05-27 06:58:58" itemprop="dateModified" datetime="2023-05-27T06:58:58+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -518,7 +518,7 @@
 </ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/10/javascript-prototype/#more" rel="contents">
+              <a class="btn" href="/posts/7a3d3c75/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -542,7 +542,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/12/10/javascript-this/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/5f6c244e/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
@@ -556,7 +556,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/10/javascript-this/" class="post-title-link" itemprop="url">Javascript执行机制（四）this指向的是什么？</a>
+            <a href="/posts/5f6c244e/" class="post-title-link" itemprop="url">Javascript执行机制（四）this指向的是什么？</a>
         </h2>
 
         <div class="post-meta">
@@ -573,7 +573,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-26 17:59:37" itemprop="dateModified" datetime="2023-05-26T17:59:37+08:00">2023-05-26</time>
+                <time title="Modified: 2023-05-27 06:58:58" itemprop="dateModified" datetime="2023-05-27T06:58:58+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -601,7 +601,7 @@
 <p>这篇文章有两个要点，第一，this是个什么东西，第二，this指向如何判断。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/10/javascript-this/#more" rel="contents">
+              <a class="btn" href="/posts/5f6c244e/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -625,7 +625,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/12/07/javascript-scope-chain-and-closure/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/25c6b127/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
@@ -639,7 +639,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/07/javascript-scope-chain-and-closure/" class="post-title-link" itemprop="url">Javascript执行机制（三）作用域链和闭包</a>
+            <a href="/posts/25c6b127/" class="post-title-link" itemprop="url">Javascript执行机制（三）作用域链和闭包</a>
         </h2>
 
         <div class="post-meta">
@@ -656,7 +656,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-26 17:59:37" itemprop="dateModified" datetime="2023-05-26T17:59:37+08:00">2023-05-26</time>
+                <time title="Modified: 2023-05-27 06:58:58" itemprop="dateModified" datetime="2023-05-27T06:58:58+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -679,7 +679,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>在<a href="https://sunra.top/2020/11/22/javascript-scope/">上一篇关于作用域的文章</a>中我们通过调用栈讲什么是作用域。</p>
+          <p>在<a href="https://sunra.top/posts/&#39;48445981&#39;/">上一篇关于作用域的文章</a>中我们通过调用栈讲什么是作用域。</p>
 <p><strong>每当我们调用一个函数时就会在调用栈中为该函数创建执行上下文，到目前为止我们知道了该执行上下文中有变量环境，用于存储通过var声明的变量，也有一个词法环境，词法环境又是一个栈，依次放置了函数中通过let和const声明的在不同层级的块级作用域中的变量</strong>。</p>
 <p>基于上面的变量环境和词法环境，我们可以明白如何在一个函数的执行上下文中找到正确的变量。</p>
 <p>那如果我们所需要的变量其实不在当前执行上下文，而是在上一级的执行上下文中呢？我们怎么确定上一级的执行上下文是哪个？</p>
@@ -687,7 +687,7 @@
 <p>理解作用域链是理解闭包的基础，而闭包在 JavaScript 中几乎无处不在，同时作用域和作用域链还是所有编程语言的基础。所以，如果你想学透一门语言，作用域和作用域链一定是绕不开的。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/07/javascript-scope-chain-and-closure/#more" rel="contents">
+              <a class="btn" href="/posts/25c6b127/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -711,7 +711,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/12/03/browser-architecture/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/bbe10e1c/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
@@ -725,7 +725,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/03/browser-architecture/" class="post-title-link" itemprop="url">浏览器架构</a>
+            <a href="/posts/bbe10e1c/" class="post-title-link" itemprop="url">浏览器架构</a>
         </h2>
 
         <div class="post-meta">
@@ -742,7 +742,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-26 17:59:37" itemprop="dateModified" datetime="2023-05-26T17:59:37+08:00">2023-05-26</time>
+                <time title="Modified: 2023-05-27 06:58:58" itemprop="dateModified" datetime="2023-05-27T06:58:58+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -769,7 +769,7 @@
 <p>这篇文章简单介绍下浏览器的架构演进。<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/12/03/browser-architecture/#more" rel="contents">
+              <a class="btn" href="/posts/bbe10e1c/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -793,7 +793,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/11/26/rendering-process/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/29f9a977/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
@@ -807,7 +807,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/11/26/rendering-process/" class="post-title-link" itemprop="url">浏览器渲染流程</a>
+            <a href="/posts/29f9a977/" class="post-title-link" itemprop="url">浏览器渲染流程</a>
         </h2>
 
         <div class="post-meta">
@@ -824,7 +824,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-26 17:59:37" itemprop="dateModified" datetime="2023-05-26T17:59:37+08:00">2023-05-26</time>
+                <time title="Modified: 2023-05-27 06:58:58" itemprop="dateModified" datetime="2023-05-27T06:58:58+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -850,7 +850,7 @@
           <p>最近看了几篇关于浏览器原理的文章，对浏览器的渲染流程有了个比较系统的了解，在这里简单总结下并顺便讲下老生常谈的重排和重绘是怎么回事。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/11/26/rendering-process/#more" rel="contents">
+              <a class="btn" href="/posts/29f9a977/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -874,7 +874,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/11/22/javascript-scope/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/48445981/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
@@ -888,7 +888,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/11/22/javascript-scope/" class="post-title-link" itemprop="url">Javascript执行机制（二）作用域</a>
+            <a href="/posts/48445981/" class="post-title-link" itemprop="url">Javascript执行机制（二）作用域</a>
         </h2>
 
         <div class="post-meta">
@@ -905,7 +905,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-26 17:59:37" itemprop="dateModified" datetime="2023-05-26T17:59:37+08:00">2023-05-26</time>
+                <time title="Modified: 2023-05-27 06:58:58" itemprop="dateModified" datetime="2023-05-27T06:58:58+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -928,12 +928,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>在<a href="https://sunra.top/2020/11/20/javascript-variable-promotion/">上一篇博客</a>中，我们从执行机制和上下文的角度讲了javascript中的变量提升。</p>
+          <p>在<a href="https://sunra.top/posts/480b6b42/">上一篇博客</a>中，我们从执行机制和上下文的角度讲了javascript中的变量提升。</p>
 <p>正是由于 JavaScript 存在变量提升这种特性，从而导致了很多与直觉不符的代码，这也是 JavaScript 的一个重要设计缺陷。</p>
 <p>虽然 ECMAScript6（以下简称 ES6）已经通过引入块级作用域并配合 let、const 关键字，来避开了这种设计缺陷，但是由于 JavaScript 需要保持向下兼容，所以变量提升在相当长一段时间内还会继续存在。这也加大了你理解概念的难度，因为既要理解新的机制，又要理解变量提升这套机制，关键这两套机制还是同时运行在“一套”系统中的。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/11/22/javascript-scope/#more" rel="contents">
+              <a class="btn" href="/posts/48445981/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -957,7 +957,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
-    <link itemprop="mainEntityOfPage" href="https://sunra.top/2020/11/20/javascript-variable-promotion/">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/480b6b42/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
@@ -971,7 +971,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/11/20/javascript-variable-promotion/" class="post-title-link" itemprop="url">Javascript执行机制（一）变量提升</a>
+            <a href="/posts/480b6b42/" class="post-title-link" itemprop="url">Javascript执行机制（一）变量提升</a>
         </h2>
 
         <div class="post-meta">
@@ -988,7 +988,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-26 17:59:37" itemprop="dateModified" datetime="2023-05-26T17:59:37+08:00">2023-05-26</time>
+                <time title="Modified: 2023-05-27 06:58:58" itemprop="dateModified" datetime="2023-05-27T06:58:58+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1014,7 +1014,7 @@
           <p>只有理解了 JavaScrip 的执行上下文，你才能更好地理解 JavaScript 语言本身，比如变量提升、作用域和闭包等。不仅如此，理解执行上下文和调用栈的概念还能助你成为一名更合格的前端开发者。这次我们就从上下文的角度讲一下js的变量提升。<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/11/20/javascript-variable-promotion/#more" rel="contents">
+              <a class="btn" href="/posts/480b6b42/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="vue作为现在前端最主流的框架之一，拥有者大量的使用者，从学生的练习项目到企业的大型项目，vue都有值得称道的地方。但是一旦项目变得庞大起来，任何项目都会变得卡顿，这里就整理了关于优化vue用户体验的方案之一——骨架屏的实现方案。严格来说骨架屏的也算是优化首屏体验的一种方式。">
+<meta name="keywords" content="Vue 骨架屏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue骨架屏实现方案">
+<meta property="og:url" content="https://sunra.top/posts/6ddddf41/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="vue作为现在前端最主流的框架之一，拥有者大量的使用者，从学生的练习项目到企业的大型项目，vue都有值得称道的地方。但是一旦项目变得庞大起来，任何项目都会变得卡顿，这里就整理了关于优化vue用户体验的方案之一——骨架屏的实现方案。严格来说骨架屏的也算是优化首屏体验的一种方式。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566827650/Vue/360%E6%88%AA%E5%9B%BE17860606373553_rnx8aj.png">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1567216104/Vue/skeleton_yuefj7.png">
+<meta property="og:updated_time" content="2023-05-26T22:58:58.588Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue骨架屏实现方案">
+<meta name="twitter:description" content="vue作为现在前端最主流的框架之一，拥有者大量的使用者，从学生的练习项目到企业的大型项目，vue都有值得称道的地方。但是一旦项目变得庞大起来，任何项目都会变得卡顿，这里就整理了关于优化vue用户体验的方案之一——骨架屏的实现方案。严格来说骨架屏的也算是优化首屏体验的一种方式。">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566827650/Vue/360%E6%88%AA%E5%9B%BE17860606373553_rnx8aj.png">
+
+<link rel="canonical" href="https://sunra.top/posts/6ddddf41/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>Vue骨架屏实现方案 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/6ddddf41/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vue骨架屏实现方案
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-08-26 20:21:54" itemprop="dateCreated datePublished" datetime="2019-08-26T20:21:54+08:00">2019-08-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-27 06:58:58" itemprop="dateModified" datetime="2023-05-27T06:58:58+08:00">2023-05-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>vue作为现在前端最主流的框架之一，拥有者大量的使用者，从学生的练习项目到企业的大型项目，vue都有值得称道的地方。但是一旦项目变得庞大起来，任何项目都会变得卡顿，这里就整理了关于优化vue用户体验的方案之一——骨架屏的实现方案。严格来说骨架屏的也算是优化首屏体验的一种方式。</p>
+<a id="more"></a>
+<h2 id="骨架屏介绍"><a href="#骨架屏介绍" class="headerlink" title="骨架屏介绍"></a>骨架屏介绍</h2><p>骨架屏可以理解为是当数据还未加载进来前，页面的一个空白版本，一个简单的关键渲染路径。可以看一下下面Facebook的骨架屏实现，可以看到在页面完全渲染完成之前，用户会看到一个样式简单，描绘了当前页面的大致框架的骨架屏页面，然后骨架屏中各个占位部分被实际资源完全替换，这个过程中用户会觉得内容正在逐渐加载即将呈现，降低了用户的焦躁情绪，使得加载过程主观上变得流畅。</p>
+<h2 id="骨架屏的生成方法"><a href="#骨架屏的生成方法" class="headerlink" title="骨架屏的生成方法"></a>骨架屏的生成方法</h2><h3 id="Vue-server-renderer"><a href="#Vue-server-renderer" class="headerlink" title="Vue-server-renderer"></a>Vue-server-renderer</h3><p>手写HTML、CSS的方式为目标页定制骨架屏，主要思路就是使用 vue-server-renderer这个本来用于服务端渲染的插件，用来把我们写的<code>.vue</code>文件处理为<code>HTML</code>，插入到页面模板的挂载点中，完成骨架屏的注入。这种方式不甚文明，如果页面样式改变了，还得改一遍骨架屏，增加了维护成本。</p>
+<h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>使用过vue的都清楚，vue项目打包过后都有一个入口的html文件，在那个文件中只有一个id为app的div，而其他所有的js文件其实都是动态地计算和生成HTML标签插入到id为app的div中。</p>
+<p>而我们去请求vue页面的时候都是先将index.html文件加载进来之后通过html文件中的script标签将对应的js代码引入进来，如果这些js文件过大导致下载过慢或者js运行时间太长都会导致页面长时间白屏。</p>
+<p>所以自然而然就会想到这种解决方案，先修改index.html文件，在id为app的div中加入原生的html作为骨架屏先展示，当js运算完成之后在替换div中的内容</p>
+<h4 id="实现流程"><a href="#实现流程" class="headerlink" title="实现流程"></a>实现流程</h4><p>但是手动在div#app中写入骨架屏明显是不合理的。</p>
+<p>既然我们是一个vue项目，骨架屏当然也需要是一个vue文件，它能够在构件时自动注入到div#app中</p>
+<h5 id="新建一个用于存储骨架屏文件的vue，如Skeleton-vue"><a href="#新建一个用于存储骨架屏文件的vue，如Skeleton-vue" class="headerlink" title="新建一个用于存储骨架屏文件的vue，如Skeleton.vue"></a>新建一个用于存储骨架屏文件的vue，如Skeleton.vue</h5><h5 id="新建一个入口文件，如skeleton-entry-js"><a href="#新建一个入口文件，如skeleton-entry-js" class="headerlink" title="新建一个入口文件，如skeleton.entry.js"></a>新建一个入口文件，如skeleton.entry.js</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> Skeleton <span class="keyword">from</span> <span class="string">'./Skeleton.vue'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  components: &#123;</span><br><span class="line">    Skeleton</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">'&lt;skeleton /&gt;'</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h5 id="使用vue-server-renderer插件"><a href="#使用vue-server-renderer插件" class="headerlink" title="使用vue-server-renderer插件"></a>使用vue-server-renderer插件</h5><p>该插件本来是用于服务端渲染（服务端根据不同的请求生成不同的html页面返回前端，浏览器直接进行渲染，与之相对的是前端渲染，前端首先拿到部分页面，再从后台拿到数据，然后在前端组装页面），但是我们在这里使用它将vue文件处理成html和css字符串的功能。流程如下：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1566827650/Vue/360%E6%88%AA%E5%9B%BE17860606373553_rnx8aj.png" alt></p>
+<h4 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h4><h5 id="新建webpack-skeleton-conf-js"><a href="#新建webpack-skeleton-conf-js" class="headerlink" title="新建webpack.skeleton.conf.js"></a>新建webpack.skeleton.conf.js</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"><span class="keyword">const</span> nodeExternals = <span class="built_in">require</span>(<span class="string">'webpack-node-externals'</span>)</span><br><span class="line"><span class="keyword">const</span> VueSSRServerPlugin = <span class="built_in">require</span>(<span class="string">'vue-server-renderer/server-plugin'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  target: <span class="string">'node'</span>,</span><br><span class="line">  entry: &#123;</span><br><span class="line">    skeleton: <span class="string">'./src/skeleton.entry.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'./dist'</span>),</span><br><span class="line">    publicPath: <span class="string">'/dist/'</span>,</span><br><span class="line">    filename: <span class="string">'[name].js'</span>,</span><br><span class="line">    libraryTarget: <span class="string">'commonjs2'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          <span class="string">'vue-style-loader'</span>,</span><br><span class="line">          <span class="string">'css-loader'</span></span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.vue$/</span>,</span><br><span class="line">        loader: <span class="string">'vue-loader'</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  externals: nodeExternals(&#123;</span><br><span class="line">    whitelist: <span class="regexp">/\.css$/</span></span><br><span class="line">  &#125;),</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    alias: &#123;</span><br><span class="line">      <span class="string">'vue$'</span>: <span class="string">'vue/dist/vue.esm.js'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    extensions: [<span class="string">'*'</span>, <span class="string">'.js'</span>, <span class="string">'.vue'</span>, <span class="string">'.json'</span>]</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> VueSSRServerPlugin(&#123;</span><br><span class="line">      filename: <span class="string">'skeleton.json'</span></span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行以下命令后会在dist文件夹下生成skeleton.json，该文件记录了skeleton.vue以及其引用的样式。这个文件会提供给vue-server-renderer使用</p>
+<h5 id="在根目录下新建skeleton-js，用于向index-html中插入骨架屏"><a href="#在根目录下新建skeleton-js，用于向index-html中插入骨架屏" class="headerlink" title="在根目录下新建skeleton.js，用于向index.html中插入骨架屏"></a>在根目录下新建skeleton.js，用于向index.html中插入骨架屏</h5><h3 id="使用图片作为骨架屏"><a href="#使用图片作为骨架屏" class="headerlink" title="使用图片作为骨架屏"></a>使用图片作为骨架屏</h3><p>这种方案比第一种还简单，只需要UI人员绘制一张图片即可，但是这种方式比第一种更加难以维护。</p>
+<h3 id="自动生成骨架屏"><a href="#自动生成骨架屏" class="headerlink" title="自动生成骨架屏"></a>自动生成骨架屏</h3><p>自动生成并自动插入静态骨架屏 这种方法跟第一种方法类似，不过是自动生成骨架屏，可以关注下饿了么开源的插件 <a href="https://link.juejin.im?target=https%3A%2F%2Fgithub.com%2FElemeFE%2Fpage-skeleton-webpack-plugin" rel="external nofollow noopener noreferrer" target="_blank">page-skeleton-webpack-plugin</a>，它根据项目中不同的路由页面生成相应的骨架屏页面，并将骨架屏页面通过 webpack 打包到对应的静态路由页面中，不过要注意的是这个插件目前只支持history方式的路由，不支持hash方式，且目前只支持首页的骨架屏，并没有组件级的局部骨架屏实现。</p>
+<h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><p>Page Skeleton 是一款 webpack 插件，该插件的目的是根据你项目中不同的路由页面生成相应的骨架屏页面，并将骨架屏页面通过 webpack 打包到对应的静态路由页面中。</p>
+<ul>
+<li>支持多种加载动画</li>
+<li>针对移动端 web 页面</li>
+<li>支持多路由</li>
+<li>可定制化，可以通过配置项对骨架块形状颜色进行配置，同时也可以在预览页面直接修改骨架页面源码</li>
+<li>几乎可以零配置使用</li>
+</ul>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>npm install —save-dev page-skeleton-webpack-plugin</p>
+<p>npm install —save-dev html-webpack-plugin</p>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><h5 id="修改build-webpack-base-config-js"><a href="#修改build-webpack-base-config-js" class="headerlink" title="修改build/webpack.base.config.js"></a>修改build/webpack.base.config.js</h5><p>这个文件配置的是webpack打包时的配置，既webpack打包的loader，插件，生成文件的路径等，这个文件会被webpack.dev.config.js和webpack.prod.config.js文件引用，用于开发环境和生产环境的打包。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; SkeletonPlugin &#125; = <span class="built_in">require</span>(<span class="string">'page-skeleton-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> webpackConfig = &#123;</span><br><span class="line">  entry: <span class="string">'index.js'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: __dirname + <span class="string">'/dist'</span>,</span><br><span class="line">    filename: <span class="string">'index.bundle.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  plugin: [</span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">       <span class="comment">// Your HtmlWebpackPlugin config</span></span><br><span class="line">    &#125;),</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> SkeletonPlugin(&#123;</span><br><span class="line">      pathname: path.resolve(__dirname, <span class="string">`<span class="subst">$&#123;customPath&#125;</span>`</span>), <span class="comment">// 用来存储 shell 文件的地址</span></span><br><span class="line">      staticDir: path.resolve(__dirname, <span class="string">'./dist'</span>), <span class="comment">// 最好和 `output.path` 相同</span></span><br><span class="line">      routes: [<span class="string">'/'</span>, <span class="string">'/search'</span>], <span class="comment">// 将需要生成骨架屏的路由添加到数组中</span></span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于插件是根据<code>process.env.NODE_ENV</code> 环境变量来选择不同的操作，因此需要在<code>package.json</code> 文件中 <code>scrpt</code>选项显示配置环境变量如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: &#123;</span><br><span class="line">  <span class="string">"dev"</span>: <span class="string">"cross-env NODE_ENV=development node server.js"</span>,</span><br><span class="line">  <span class="string">"build"</span>: <span class="string">"rm -rf dist &amp;&amp; cross-env NODE_ENV=production webpack --progress --hide-modules"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中的cross-env也是一个插件，可以动态修改NODE_ENV变量的值</p>
+<h5 id="修改-HTML-Webpack-Plugin-插件的模板"><a href="#修改-HTML-Webpack-Plugin-插件的模板" class="headerlink" title="修改 HTML Webpack Plugin 插件的模板"></a>修改 HTML Webpack Plugin 插件的模板</h5><p>在根元素内部添加<!-- shell --></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- shell --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="写入骨架页面"><a href="#写入骨架页面" class="headerlink" title="写入骨架页面"></a>写入骨架页面</h5><ol>
+<li><p>在开发页面中通过 Ctrl|Cmd + enter 呼出插件交互界面，或者在在浏览器的 JavaScript 控制台内输入<code>toggleBar</code> 呼出交互界面。</p>
+</li>
+<li><p>点击交互界面中的按钮，进行骨架页面的预览，这一过程可能会花费 20s 左右时间，当插件准备好骨架页面后，会自动通过浏览器打开预览页面</p>
+</li>
+<li><p>扫描预览页面中的二维码，可在手机端预览骨架页面，可以在预览页面直接编辑源码，通过点击右上角写入按钮，将骨架页面写入到 shell.html 文件中。</p>
+</li>
+<li><p>通过 webpack 重新打包应用，当页面重新启动后，就能够在获取到数据前看到应用的骨架结构了。</p>
+</li>
+</ol>
+<h5 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h5><p>这里可能会遇到一个问题，那就是开发环境可以显示，但是生产环境没有生成插入骨架屏，原因可能是在webpack.prod.config,js中存在一个配置会消除所有注释，这个配置会将<!--shell-->标签删除，所以找不到骨架屏的插入点</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">plugins: [</span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">      filename: config.build.index,</span><br><span class="line">      template: <span class="string">'index.html'</span>,</span><br><span class="line">      inject: <span class="literal">true</span>,</span><br><span class="line">      minify: &#123;</span><br><span class="line">        <span class="comment">// removeComments: true,  移除注释</span></span><br><span class="line">        collapseWhitespace: <span class="literal">true</span>,</span><br><span class="line">        removeAttributeQuotes: <span class="literal">true</span></span><br><span class="line">        <span class="comment">// more options:</span></span><br><span class="line">        <span class="comment">// https://github.com/kangax/html-minifier#options-quick-reference</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// necessary to consistently work with multiple chunks via CommonsChunkPlugin</span></span><br><span class="line">      chunksSortMode: <span class="string">'dependency'</span></span><br><span class="line">    &#125;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h3 id="使用vue-skeleton-webpack-plugin插件"><a href="#使用vue-skeleton-webpack-plugin插件" class="headerlink" title="使用vue-skeleton-webpack-plugin插件"></a>使用vue-skeleton-webpack-plugin插件</h3><p>它将插入骨架屏的方式由手动改为自动，原理在构建时使用 Vue 预渲染功能，将骨架屏组件的渲染结果 HTML 片段插入 HTML 页面模版的挂载点中，将样式内联到 <code>head</code> 标签中。这个插件可以给单页面的不同路由设置不同的骨架屏，也可以给多页面设置，同时为了开发时调试方便，会将骨架屏作为路由写入router中</p>
+<h5 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h5><p>npm install vue-skeleton-webpack-plugin</p>
+<h5 id="创建骨架屏组件-src-keleton-vue"><a href="#创建骨架屏组件-src-keleton-vue" class="headerlink" title="创建骨架屏组件 src/keleton.vue"></a>创建骨架屏组件 src/keleton.vue</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;div class=&quot;skeleton&quot;&gt;</span><br><span class="line">      &lt;div class=&quot;skeleton-head&quot;&gt;&lt;/div&gt;</span><br><span class="line">      &lt;div class=&quot;skeleton-body&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;skeleton-name&quot;&gt;&lt;/div&gt;</span><br><span class="line">        &lt;div class=&quot;skeleton-title&quot;&gt;&lt;/div&gt;</span><br><span class="line">        &lt;div class=&quot;skeleton-content&quot;&gt;&lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">  name: &apos;skeleton&apos;</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style scoped&gt;</span><br><span class="line">.skeleton &#123;</span><br><span class="line">  padding: 15px;</span><br><span class="line">&#125;</span><br><span class="line">.skeleton .skeleton-head,</span><br><span class="line">.skeleton .skeleton-name,</span><br><span class="line">.skeleton .skeleton-title,</span><br><span class="line">.skeleton .skeleton-content,</span><br><span class="line">.skeleton .skeleton-content &#123;</span><br><span class="line">  background: rgb(194, 207, 214);</span><br><span class="line">&#125;</span><br><span class="line">.skeleton-head &#123;</span><br><span class="line">  width: 33px;</span><br><span class="line">  height: 33px;</span><br><span class="line">  border-radius: 50%;</span><br><span class="line">  float: left;</span><br><span class="line">&#125;</span><br><span class="line">.skeleton-body &#123;</span><br><span class="line">  margin-left: 50px;</span><br><span class="line">&#125;</span><br><span class="line">.skeleton-name&#123;</span><br><span class="line">  width: 150px;</span><br><span class="line">  height: 30px;</span><br><span class="line">  margin-bottom: 10px;</span><br><span class="line">&#125;</span><br><span class="line">.skeleton-title &#123;</span><br><span class="line">  width: 100%;</span><br><span class="line">  height: 30px;</span><br><span class="line">&#125;</span><br><span class="line">.skeleton-content &#123;</span><br><span class="line">  width: 100%;</span><br><span class="line">  height: 30px;</span><br><span class="line">  margin-top: 10px;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="创建骨架屏的入口文件-src-entry-skeleton-js"><a href="#创建骨架屏的入口文件-src-entry-skeleton-js" class="headerlink" title="创建骨架屏的入口文件 src/entry-skeleton.js"></a>创建骨架屏的入口文件 src/entry-skeleton.js</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> Skeleton <span class="keyword">from</span> <span class="string">'./Skeleton'</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  components: &#123;</span><br><span class="line">    Skeleton</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div&gt;</span></span><br><span class="line"><span class="string">      &lt;skeleton id="skeleton1" style="display:none"/&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;`</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h5 id="创建骨架屏的webpack配置文件"><a href="#创建骨架屏的webpack配置文件" class="headerlink" title="创建骨架屏的webpack配置文件"></a>创建骨架屏的webpack配置文件</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span>;</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>) </span><br><span class="line"><span class="keyword">const</span> merge = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>) </span><br><span class="line"><span class="keyword">const</span> baseWebpackConfig = <span class="built_in">require</span>(<span class="string">'./webpack.base.conf'</span>) </span><br><span class="line"><span class="keyword">const</span> nodeExternals = <span class="built_in">require</span>(<span class="string">'webpack-node-externals'</span>)</span><br><span class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">'../config'</span>)</span><br><span class="line"><span class="keyword">const</span> utils = <span class="built_in">require</span>(<span class="string">'./utils'</span>)</span><br><span class="line"><span class="keyword">const</span> isProduction = process.env.NODE_ENV === <span class="string">'production'</span></span><br><span class="line"><span class="keyword">const</span> sourceMapEnabled = isProduction</span><br><span class="line">  ? config.build.productionSourceMap</span><br><span class="line">  : config.dev.cssSourceMap</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resolve</span>(<span class="params">dir</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> path.join(__dirname, dir)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> skeletonWebpackConfig = merge(baseWebpackConfig, &#123;</span><br><span class="line">  target: <span class="string">'node'</span>,</span><br><span class="line">  devtool: <span class="literal">false</span>,</span><br><span class="line">  entry: &#123;</span><br><span class="line">    app: resolve(<span class="string">'../src/entry-skeleton.js'</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  output: <span class="built_in">Object</span>.assign(&#123;&#125;, baseWebpackConfig.output, &#123;</span><br><span class="line">    libraryTarget: <span class="string">'commonjs2'</span></span><br><span class="line">  &#125;),</span><br><span class="line">  externals: nodeExternals(&#123;</span><br><span class="line">    whitelist: <span class="regexp">/\.css$/</span></span><br><span class="line">  &#125;),</span><br><span class="line">  plugins: []</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// important: enable extract-text-webpack-plugin </span></span><br><span class="line"><span class="comment">// 重点配置</span></span><br><span class="line">skeletonWebpackConfig.module.rules[<span class="number">0</span>].options.loaders = utils.cssLoaders(&#123;</span><br><span class="line">  sourceMap: sourceMapEnabled,</span><br><span class="line">  extract: <span class="literal">true</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = skeletonWebpackConfig</span><br></pre></td></tr></table></figure>
+<h5 id="分别在webpack-prod-conf-js和webpack-dev-conf-js-plugins中引入插件"><a href="#分别在webpack-prod-conf-js和webpack-dev-conf-js-plugins中引入插件" class="headerlink" title="分别在webpack.prod.conf.js和webpack.dev.conf.js plugins中引入插件"></a>分别在webpack.prod.conf.js和webpack.dev.conf.js plugins中引入插件</h5><p>首先需要引入vue-skeleton-webpack-plugin插件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> SkeletonWebpackPlugin = <span class="built_in">require</span>(<span class="string">'vue-skeleton-webpack-plugin'</span>)</span><br></pre></td></tr></table></figure>
+<p>使用插件，在plugins数组中添加一项</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> SkeletonWebpackPlugin(&#123;</span><br><span class="line">      webpackConfig: <span class="built_in">require</span>(<span class="string">'./webpack.skeleton.conf'</span>),</span><br><span class="line">      quiet: <span class="literal">true</span>,</span><br><span class="line">      minimize: <span class="literal">true</span>,</span><br><span class="line">      router: &#123;</span><br><span class="line">        mode: <span class="string">'history'</span>,</span><br><span class="line">        routes: [</span><br><span class="line">          &#123;</span><br><span class="line">            path: <span class="string">'/client/a/Quiksns/comment'</span>,    <span class="comment">//对应使用路由</span></span><br><span class="line">            skeletonId: <span class="string">'skeleton1'</span>    <span class="comment">// 所用骨架屏的id标识</span></span><br><span class="line">          &#125;,</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;),</span><br></pre></td></tr></table></figure>
+<h5 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h5><p>启动vue项目后在浏览器输入 <a href="http://localhost:8080/client/a/Quiksns/comment" rel="external nofollow noopener noreferrer" target="_blank">http://localhost:8080/client/a/Quiksns/comment</a></p>
+<p>我们可以看到在页面加载出来之前会有一个骨架屏出现，如果页面加载太快看不清楚也可以使用chrome Devtools 的 performance选项卡去录制操作（注意勾选screenshot选项），我们就可以看到每一帧的页面情况。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1567216104/Vue/skeleton_yuefj7.png" alt></p>
+<p>参考文章</p>
+<p><a href="https://zhuanlan.zhihu.com/p/35505062" rel="external nofollow noopener noreferrer" target="_blank">https://zhuanlan.zhihu.com/p/35505062</a></p>
+<p><a href="https://www.cnblogs.com/FarmanKKK/p/9712913.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.cnblogs.com/FarmanKKK/p/9712913.html</a></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/posts/6ddddf41/" title="Vue骨架屏实现方案">https://sunra.top/posts/6ddddf41/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/a8b43915/" rel="prev" title="前端性能分析工具">
+      <i class="fa fa-chevron-left"></i> 前端性能分析工具
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/dc372867/" rel="next" title="Vue使用注意事项总结（持续更新）">
+      Vue使用注意事项总结（持续更新） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#骨架屏介绍"><span class="nav-number">1.</span> <span class="nav-text">骨架屏介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#骨架屏的生成方法"><span class="nav-number">2.</span> <span class="nav-text">骨架屏的生成方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Vue-server-renderer"><span class="nav-number">2.1.</span> <span class="nav-text">Vue-server-renderer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原理"><span class="nav-number">2.1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现流程"><span class="nav-number">2.1.2.</span> <span class="nav-text">实现流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#新建一个用于存储骨架屏文件的vue，如Skeleton-vue"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">新建一个用于存储骨架屏文件的vue，如Skeleton.vue</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#新建一个入口文件，如skeleton-entry-js"><span class="nav-number">2.1.2.2.</span> <span class="nav-text">新建一个入口文件，如skeleton.entry.js</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用vue-server-renderer插件"><span class="nav-number">2.1.2.3.</span> <span class="nav-text">使用vue-server-renderer插件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#具体实现"><span class="nav-number">2.1.3.</span> <span class="nav-text">具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#新建webpack-skeleton-conf-js"><span class="nav-number">2.1.3.1.</span> <span class="nav-text">新建webpack.skeleton.conf.js</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#在根目录下新建skeleton-js，用于向index-html中插入骨架屏"><span class="nav-number">2.1.3.2.</span> <span class="nav-text">在根目录下新建skeleton.js，用于向index.html中插入骨架屏</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用图片作为骨架屏"><span class="nav-number">2.2.</span> <span class="nav-text">使用图片作为骨架屏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动生成骨架屏"><span class="nav-number">2.3.</span> <span class="nav-text">自动生成骨架屏</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#特点"><span class="nav-number">2.3.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装"><span class="nav-number">2.3.2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用"><span class="nav-number">2.3.3.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#修改build-webpack-base-config-js"><span class="nav-number">2.3.3.1.</span> <span class="nav-text">修改build/webpack.base.config.js</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#修改-HTML-Webpack-Plugin-插件的模板"><span class="nav-number">2.3.3.2.</span> <span class="nav-text">修改 HTML Webpack Plugin 插件的模板</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#写入骨架页面"><span class="nav-number">2.3.3.3.</span> <span class="nav-text">写入骨架页面</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#注意事项"><span class="nav-number">2.3.3.4.</span> <span class="nav-text">注意事项</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用vue-skeleton-webpack-plugin插件"><span class="nav-number">2.4.</span> <span class="nav-text">使用vue-skeleton-webpack-plugin插件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#安装-1"><span class="nav-number">2.4.0.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建骨架屏组件-src-keleton-vue"><span class="nav-number">2.4.0.2.</span> <span class="nav-text">创建骨架屏组件 src/keleton.vue</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建骨架屏的入口文件-src-entry-skeleton-js"><span class="nav-number">2.4.0.3.</span> <span class="nav-text">创建骨架屏的入口文件 src/entry-skeleton.js</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建骨架屏的webpack配置文件"><span class="nav-number">2.4.0.4.</span> <span class="nav-text">创建骨架屏的webpack配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分别在webpack-prod-conf-js和webpack-dev-conf-js-plugins中引入插件"><span class="nav-number">2.4.0.5.</span> <span class="nav-text">分别在webpack.prod.conf.js和webpack.dev.conf.js plugins中引入插件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#验证"><span class="nav-number">2.4.0.6.</span> <span class="nav-text">验证</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="这几天在看webpack的教学视频时对代码分离产生了一点疑惑，于是去翻看了官方文档，现在将原文档的翻译以及我对其中一些内容的理解整理下来。">
+<meta name="keywords" content="Webpack code splitting 代码分离">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Webpack Code Splitting">
+<meta property="og:url" content="https://sunra.top/posts/4cecd017/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="这几天在看webpack的教学视频时对代码分离产生了一点疑惑，于是去翻看了官方文档，现在将原文档的翻译以及我对其中一些内容的理解整理下来。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2023-05-26T22:58:58.588Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Webpack Code Splitting">
+<meta name="twitter:description" content="这几天在看webpack的教学视频时对代码分离产生了一点疑惑，于是去翻看了官方文档，现在将原文档的翻译以及我对其中一些内容的理解整理下来。">
+
+<link rel="canonical" href="https://sunra.top/posts/4cecd017/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>Webpack Code Splitting | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/4cecd017/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Webpack Code Splitting
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-01-12 07:46:48" itemprop="dateCreated datePublished" datetime="2020-01-12T07:46:48+08:00">2020-01-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-27 06:58:58" itemprop="dateModified" datetime="2023-05-27T06:58:58+08:00">2023-05-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Webpack/" itemprop="url" rel="index"><span itemprop="name">Webpack</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这几天在看webpack的教学视频时对代码分离产生了一点疑惑，于是去翻看了官方文档，现在将原文档的翻译以及我对其中一些内容的理解整理下来。</p>
+<a id="more"></a>
+<p>代码分离是 webpack 中最引人注目的特性之一。此特性能够把代码分离到不同的 bundle 中，然后可以按需加载或并行加载这些文件。代码分离可以用于获取更小的 bundle，以及控制资源加载优先级，如果使用合理，会极大影响加载时间。</p>
+<p>常用的代码分离方法有三种：</p>
+<ul>
+<li>入口起点：使用 <a href="https://webpack.docschina.org/configuration/entry-context" rel="external nofollow noopener noreferrer" target="_blank"><code>entry</code></a> 配置手动地分离代码。</li>
+<li>防止重复：使用 <a href="https://webpack.docschina.org/plugins/split-chunks-plugin/" rel="external nofollow noopener noreferrer" target="_blank"><code>SplitChunksPlugin</code></a> 去重和分离 chunk。</li>
+<li>动态导入：通过模块中的内联函数调用来分离代码。</li>
+</ul>
+<p>首先这里要解释一下bundle与chunk的区别与联系：</p>
+<p>具体的解释可以看<a href="https://stackoverflow.com/questions/42523436/what-are-module-chunk-and-bundle-in-webpack" rel="external nofollow noopener noreferrer" target="_blank">这里</a>，但是总结来讲就是：</p>
+<ol>
+<li>模块就是模块可以是ESM模块也可以是commonJS或者AMD模块</li>
+<li>打包过程中被操作的模块文件叫做chunk,例如异步加载一个模块就是一个chunk</li>
+<li>bundle是最后打包后的文件,最终文件可以和chunk长的一模一样,但是大部分情况下他是多个chunk的集合</li>
+</ol>
+<h2 id="入口起点-entry-points"><a href="#入口起点-entry-points" class="headerlink" title="入口起点(entry points)"></a>入口起点(entry points)</h2><p>这是迄今为止最简单、最直观的分离代码的方式。不过，这种方式手动配置较多，并有一些隐患，我们将会解决这些问题。先来看看如何从 main bundle 中分离 another module(另一个模块)：</p>
+<p><strong>project</strong></p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">webpack-demo</span><br><span class="line">|- package.json</span><br><span class="line">|- webpack.config.js</span><br><span class="line">|- /dist</span><br><span class="line">|- /src</span><br><span class="line">  |- index.js</span><br><span class="line"><span class="addition">+ |- another-module.js</span></span><br><span class="line">|- /node_modules</span><br></pre></td></tr></table></figure>
+<p><strong>another-module.js</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">'lodash'</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(</span><br><span class="line">  _.join([<span class="string">'Another'</span>, <span class="string">'module'</span>, <span class="string">'loaded!'</span>], <span class="string">' '</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p><strong>webpack.config.js</strong></p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const path = require('path');</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  mode: 'development',</span><br><span class="line">  entry: &#123;</span><br><span class="line">    index: './src/index.js',</span><br><span class="line"><span class="addition">+   another: './src/another-module.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: '[name].bundle.js',</span><br><span class="line">    path: path.resolve(__dirname, 'dist')</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>关于上述配置文件中的 output.filename 中的 [name]，它的作用是可以让打包生成的文件名称是入口[文件名称.bundle.js]，这里还可以配置许多其他的配置，详细的配置可以看<a href="https://webpack.docschina.org/configuration/output/" rel="external nofollow noopener noreferrer" target="_blank">官方文档</a>。</p>
+<p>这将生成如下构建结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">            Asset     Size   Chunks             Chunk Names</span><br><span class="line">another.bundle.js  550 KiB  another  [emitted]  another</span><br><span class="line">  index.bundle.js  550 KiB    index  [emitted]  index</span><br><span class="line">Entrypoint index = index.bundle.js</span><br><span class="line">Entrypoint another = another.bundle.js</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>正如前面提到的，这种方式存在一些隐患：</p>
+<ul>
+<li>如果入口 chunk 之间包含一些重复的模块，那些重复模块都会被引入到各个 bundle 中。因为这里会把根据每个入口文件产生的依赖关系中的所有文件都打包到各自的同一个文件中。</li>
+<li>这种方法不够灵活，并且不能动态地将核心应用程序逻辑中的代码拆分出来。</li>
+</ul>
+<p>这两点中的第一点，对我们的示例来说毫无疑问是个严重问题，因为我们在 <code>./src/index.js</code> 中也引入过 <code>lodash</code>，这样就造成在两个 bundle 中重复引用。我们可以通过使用 <a href="https://webpack.docschina.org/plugins/split-chunks-plugin/" rel="external nofollow noopener noreferrer" target="_blank"><code>SplitChunksPlugin</code></a> 插件来移除重复模块。</p>
+<h2 id="防止重复-prevent-duplication"><a href="#防止重复-prevent-duplication" class="headerlink" title="防止重复(prevent duplication)"></a>防止重复(prevent duplication)</h2><p><a href="https://webpack.docschina.org/plugins/split-chunks-plugin/" rel="external nofollow noopener noreferrer" target="_blank"><code>SplitChunksPlugin</code></a> 插件可以将公共的依赖模块提取到已有的 entry chunk 中，或者提取到一个新生成的 chunk。让我们使用这个插件，将前面示例中重复的 <code>lodash</code> 模块去除：</p>
+<blockquote>
+<p><code>CommonsChunkPlugin</code> 已经从 webpack v4（代号 legato）中移除。想要了解最新版本是如何处理 chunk，请查看 <a href="https://webpack.docschina.org/plugins/split-chunks-plugin/" rel="external nofollow noopener noreferrer" target="_blank"><code>SplitChunksPlugin</code></a>。</p>
+</blockquote>
+<p><strong>webpack.config.js</strong></p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">  const path = require('path');</span><br><span class="line"></span><br><span class="line">  module.exports = &#123;</span><br><span class="line">    mode: 'development',</span><br><span class="line">    entry: &#123;</span><br><span class="line">      index: './src/index.js',</span><br><span class="line">      another: './src/another-module.js'</span><br><span class="line">    &#125;,</span><br><span class="line">    output: &#123;</span><br><span class="line">      filename: '[name].bundle.js',</span><br><span class="line">      path: path.resolve(__dirname, 'dist')</span><br><span class="line">    &#125;,</span><br><span class="line"><span class="addition">+   optimization: &#123;</span></span><br><span class="line"><span class="addition">+     splitChunks: &#123;</span></span><br><span class="line"><span class="addition">+       chunks: 'all'</span></span><br><span class="line"><span class="addition">+     &#125;</span></span><br><span class="line"><span class="addition">+   &#125;</span></span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+<p>使用 <a href="https://webpack.docschina.org/plugins/split-chunks-plugin/#optimization-splitchunks" rel="external nofollow noopener noreferrer" target="_blank"><code>optimization.splitChunks</code></a> 配置选项，现在可以看到已经从 <code>index.bundle.js</code> 和 <code>another.bundle.js</code> 中删除了重复的依赖项。需要注意的是，此插件将 <code>lodash</code> 这个沉重负担从主 bundle 中移除，然后分离到一个单独的 chunk 中。执行 <code>npm run build</code> 查看效果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">                          Asset      Size                 Chunks             Chunk Names</span><br><span class="line">              another.bundle.js  5.95 KiB                another  [emitted]  another</span><br><span class="line">                index.bundle.js  5.89 KiB                  index  [emitted]  index</span><br><span class="line">vendors~another~index.bundle.js   547 KiB  vendors~another~index  [emitted]  vendors~another~index</span><br><span class="line">Entrypoint index = vendors~another~index.bundle.js index.bundle.js</span><br><span class="line">Entrypoint another = vendors~another~index.bundle.js another.bundle.js</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>以下是由社区提供，一些对于代码分离很有帮助的 plugin 和 loader：</p>
+<ul>
+<li><a href="https://webpack.docschina.org/plugins/mini-css-extract-plugin" rel="external nofollow noopener noreferrer" target="_blank"><code>mini-css-extract-plugin</code></a>：用于将 CSS 从主应用程序中分离。</li>
+<li><a href="https://webpack.docschina.org/loaders/bundle-loader" rel="external nofollow noopener noreferrer" target="_blank"><code>bundle-loader</code></a>：用于分离代码和延迟加载生成的 bundle。</li>
+<li><a href="https://github.com/gaearon/promise-loader" rel="external nofollow noopener noreferrer" target="_blank"><code>promise-loader</code></a>：类似于 <code>bundle-loader</code> ，但是使用了 promise API。</li>
+</ul>
+<h2 id="动态导入-dynamic-imports"><a href="#动态导入-dynamic-imports" class="headerlink" title="动态导入(dynamic imports)"></a>动态导入(dynamic imports)</h2><p>当涉及到动态代码拆分时，webpack 提供了两个类似的技术。第一种，也是推荐选择的方式是，使用符合 <a href="https://github.com/tc39/proposal-dynamic-import" rel="external nofollow noopener noreferrer" target="_blank">ECMAScript 提案</a> 的 <a href="https://webpack.docschina.org/api/module-methods#import-" rel="external nofollow noopener noreferrer" target="_blank"><code>import()</code> 语法</a> 来实现动态导入。第二种，则是 webpack 的遗留功能，使用 webpack 特定的 <a href="https://webpack.docschina.org/api/module-methods#require-ensure" rel="external nofollow noopener noreferrer" target="_blank"><code>require.ensure</code></a>。让我们先尝试使用第一种……</p>
+<blockquote>
+<p><code>import()</code> 调用会在内部用到 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" rel="external nofollow noopener noreferrer" target="_blank">promises</a>。如果在旧版本浏览器中使用 <code>import()</code>，记得使用一个 polyfill 库（例如 <a href="https://github.com/stefanpenner/es6-promise" rel="external nofollow noopener noreferrer" target="_blank">es6-promise</a> 或 <a href="https://github.com/taylorhakes/promise-polyfill" rel="external nofollow noopener noreferrer" target="_blank">promise-polyfill</a>），来 shim <code>Promise</code>。</p>
+</blockquote>
+<p>在开始之前，我们先从配置中移除掉多余的 <a href="https://webpack.docschina.org/concepts/entry-points/" rel="external nofollow noopener noreferrer" target="_blank"><code>entry</code></a> 和 <a href="https://webpack.docschina.org/plugins/split-chunks-plugin" rel="external nofollow noopener noreferrer" target="_blank"><code>optimization.splitChunks</code></a>，因为接下来的演示中并不需要它们：</p>
+<p><strong>webpack.config.js</strong></p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">  const path = require('path');</span><br><span class="line"></span><br><span class="line">  module.exports = &#123;</span><br><span class="line">    mode: 'development',</span><br><span class="line">    entry: &#123;</span><br><span class="line"><span class="addition">+     index: './src/index.js'</span></span><br><span class="line"><span class="deletion">-     index: './src/index.js',</span></span><br><span class="line"><span class="deletion">-     another: './src/another-module.js'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    output: &#123;</span><br><span class="line">      filename: '[name].bundle.js',</span><br><span class="line"><span class="addition">+     chunkFilename: '[name].bundle.js',</span></span><br><span class="line">      path: path.resolve(__dirname, 'dist')</span><br><span class="line">    &#125;,</span><br><span class="line"><span class="deletion">-   optimization: &#123;</span></span><br><span class="line"><span class="deletion">-     splitChunks: &#123;</span></span><br><span class="line"><span class="deletion">-       chunks: 'all'</span></span><br><span class="line"><span class="deletion">-     &#125;</span></span><br><span class="line"><span class="deletion">-   &#125;</span></span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+<p>注意，这里使用了 <code>chunkFilename</code>，它决定 non-entry chunk(非入口 chunk) 的名称。关于 <code>chunkFilename</code> 更多信息，请查看 <a href="https://webpack.docschina.org/configuration/output/#output-chunkfilename" rel="external nofollow noopener noreferrer" target="_blank">输出</a> 文档。更新我们的项目，移除现在不会用到的文件：</p>
+<p><strong>project</strong></p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">webpack-demo</span><br><span class="line">|- package.json</span><br><span class="line">|- webpack.config.js</span><br><span class="line">|- /dist</span><br><span class="line">|- /src</span><br><span class="line">  |- index.js</span><br><span class="line"><span class="deletion">- |- another-module.js</span></span><br><span class="line">|- /node_modules</span><br></pre></td></tr></table></figure>
+<p>现在，我们不再使用 statically import(静态导入) <code>lodash</code>，而是通过 dynamic import(动态导入) 来分离出一个 chunk：</p>
+<p><strong>src/index.js</strong></p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="deletion">- import _ from 'lodash';</span></span><br><span class="line"><span class="deletion">-</span></span><br><span class="line"><span class="deletion">- function component() &#123;</span></span><br><span class="line"><span class="addition">+ function getComponent() &#123;</span></span><br><span class="line"><span class="deletion">-   var element = document.createElement('div');</span></span><br><span class="line"><span class="deletion">-</span></span><br><span class="line"><span class="deletion">-   // Lodash, now imported by this script</span></span><br><span class="line"><span class="deletion">-   element.innerHTML = _.join(['Hello', 'webpack'], ' ');</span></span><br><span class="line"><span class="addition">+   return import(/* webpackChunkName: "lodash" */ 'lodash').then((&#123; default: _ &#125;) =&gt; &#123;</span></span><br><span class="line"><span class="addition">+     var element = document.createElement('div');</span></span><br><span class="line"><span class="addition">+</span></span><br><span class="line"><span class="addition">+     element.innerHTML = _.join(['Hello', 'webpack'], ' ');</span></span><br><span class="line"><span class="addition">+</span></span><br><span class="line"><span class="addition">+     return element;</span></span><br><span class="line"><span class="addition">+</span></span><br><span class="line"><span class="addition">+   &#125;).catch(error =&gt; 'An error occurred while loading the component');</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="deletion">- document.body.appendChild(component());</span></span><br><span class="line"><span class="addition">+ getComponent().then(component =&gt; &#123;</span></span><br><span class="line"><span class="addition">+   document.body.appendChild(component);</span></span><br><span class="line"><span class="addition">+ &#125;)</span></span><br></pre></td></tr></table></figure>
+<p>这里我们需要使用 <code>default</code> 的原因是，从 webpack v4 开始，在 import CommonJS 模块时，不会再将导入模块解析为 <code>module.exports</code> 的值，而是为 CommonJS 模块创建一个 artificial namespace object(人工命名空间对象)，关于其背后原因的更多信息，请阅读 <a href="https://medium.com/webpack/webpack-4-import-and-commonjs-d619d626b655" rel="external nofollow noopener noreferrer" target="_blank">webpack 4: import() 和 CommonJs</a>。</p>
+<p>注意，在注释中我们提供了 <code>webpackChunkName</code>。这样会将拆分出来的 bundle 命名为 <code>lodash.bundle.js</code>，而不是 <code>[id].bundle.js</code>。想了解更多关于 <code>webpackChunkName</code> 和其他可用选项，请查看 <a href="https://webpack.docschina.org/api/module-methods/#import-" rel="external nofollow noopener noreferrer" target="_blank"><code>import()</code></a> 文档。让我们执行 webpack，看到 <code>lodash</code> 分离出一个单独的 bundle：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">                   Asset      Size          Chunks             Chunk Names</span><br><span class="line">         index.bundle.js  7.88 KiB           index  [emitted]  index</span><br><span class="line">vendors~lodash.bundle.js   547 KiB  vendors~lodash  [emitted]  vendors~lodash</span><br><span class="line">Entrypoint index = index.bundle.js</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>由于 <code>import()</code> 会返回一个 promise，因此它可以和 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function" rel="external nofollow noopener noreferrer" target="_blank"><code>async</code> 函数</a>一起使用。但是，需要使用像 Babel 这样的预处理器和 <a href="https://babel.docschina.org/docs/en/babel-plugin-syntax-dynamic-import/#installation" rel="external nofollow noopener noreferrer" target="_blank">Syntax Dynamic Import Babel Plugin</a>。下面是如何通过 async 函数简化代码：</p>
+<p><strong>src/index.js</strong></p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="deletion">- function getComponent() &#123;</span></span><br><span class="line"><span class="addition">+ async function getComponent() &#123;</span></span><br><span class="line"><span class="deletion">-   return import(/* webpackChunkName: "lodash" */ 'lodash').then(&#123; default: _ &#125; =&gt; &#123;</span></span><br><span class="line"><span class="deletion">-     var element = document.createElement('div');</span></span><br><span class="line"><span class="deletion">-</span></span><br><span class="line"><span class="deletion">-     element.innerHTML = _.join(['Hello', 'webpack'], ' ');</span></span><br><span class="line"><span class="deletion">-</span></span><br><span class="line"><span class="deletion">-     return element;</span></span><br><span class="line"><span class="deletion">-</span></span><br><span class="line"><span class="deletion">-   &#125;).catch(error =&gt; 'An error occurred while loading the component');</span></span><br><span class="line"><span class="addition">+   var element = document.createElement('div');</span></span><br><span class="line"><span class="addition">+   const &#123; default: _ &#125; = await import(/* webpackChunkName: "lodash" */ 'lodash');</span></span><br><span class="line"><span class="addition">+</span></span><br><span class="line"><span class="addition">+   element.innerHTML = _.join(['Hello', 'webpack'], ' ');</span></span><br><span class="line"><span class="addition">+</span></span><br><span class="line"><span class="addition">+   return element;</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getComponent().then(component =&gt; &#123;</span><br><span class="line">    document.body.appendChild(component);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="预取-预加载模块-prefetch-preload-module"><a href="#预取-预加载模块-prefetch-preload-module" class="headerlink" title="预取/预加载模块(prefetch/preload module)"></a>预取/预加载模块(prefetch/preload module)</h2><p>webpack v4.6.0+ 添加了预取和预加载的支持。</p>
+<p>在声明 import 时，使用下面这些内置指令，可以让 webpack 输出 “resource hint(资源提示)”，来告知浏览器：</p>
+<ul>
+<li>prefetch(预取)：将来某些导航下可能需要的资源</li>
+<li>preload(预加载)：当前导航下可能需要资源</li>
+</ul>
+<p>下面这个 prefetch 的简单示例中，有一个 <code>HomePage</code> 组件，其内部渲染一个 <code>LoginButton</code> 组件，然后在点击后按需加载 <code>LoginModal</code> 组件。</p>
+<p><strong>LoginButton.js</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="keyword">import</span>(<span class="comment">/* webpackPrefetch: true */</span> <span class="string">'LoginModal'</span>);</span><br></pre></td></tr></table></figure>
+<p>这会生成 <code>` 并追加到页面头部，指示着浏览器在闲置时间预取</code>login-modal-chunk.js` 文件。</p>
+<blockquote>
+<p>只要父 chunk 完成加载，webpack 就会添加 prefetch hint(预取提示)。</p>
+</blockquote>
+<p>与 prefetch 指令相比，preload 指令有许多不同之处：</p>
+<ul>
+<li>preload chunk 会在父 chunk 加载时，以并行方式开始加载。prefetch chunk 会在父 chunk 加载结束后开始加载。</li>
+<li>preload chunk 具有中等优先级，并立即下载。prefetch chunk 在浏览器闲置时下载。</li>
+<li>preload chunk 会在父 chunk 中立即请求，用于当下时刻。prefetch chunk 会用于未来的某个时刻。</li>
+<li>浏览器支持程度不同。</li>
+</ul>
+<p>下面这个简单的 preload 示例中，有一个 <code>Component</code>，依赖于一个较大的 library，所以应该将其分离到一个独立的 chunk 中。</p>
+<p>我们假想这里的图表组件 <code>ChartComponent</code> 组件需要依赖体积巨大的 <code>ChartingLibrary</code> 库。它会在渲染时显示一个 <code>LoadingIndicator(加载进度条)</code> 组件，然后立即按需导入 <code>ChartingLibrary</code>：</p>
+<p><strong>ChartComponent.js</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="keyword">import</span>(<span class="comment">/* webpackPreload: true */</span> <span class="string">'ChartingLibrary'</span>);</span><br></pre></td></tr></table></figure>
+<p>在页面中使用 <code>ChartComponent</code> 时，在请求 ChartComponent.js 的同时，还会通过 <code>` 请求 charting-library-chunk。假定 page-chunk 体积很小，很快就被加载好，页面此时就会显示</code>LoadingIndicator(加载进度条)<code>，等到</code>charting-library-chunk` 请求完成，LoadingIndicator 组件才消失。启动仅需要很少的加载时间，因为只进行单次往返，而不是两次往返。尤其是在高延迟环境下。</p>
+<blockquote>
+<p>不正确地使用 webpackPreload 会有损性能，请谨慎使用。</p>
+</blockquote>
+<p>对于其他webpack支持的打包方法可以去看<a href="[https://webpack.docschina.org/api/module-methods/#es6-%E6%8E%A8%E8%8D%90-](https://webpack.docschina.org/api/module-methods/#es6-推荐-">这篇文档</a>)</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/posts/4cecd017/" title="Webpack Code Splitting">https://sunra.top/posts/4cecd017/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/aee1d6ef/" rel="prev" title="Vue-test-utils">
+      <i class="fa fa-chevron-left"></i> Vue-test-utils
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/d3bc7e1c/" rel="next" title="JavaScript 模块化语法">
+      JavaScript 模块化语法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#入口起点-entry-points"><span class="nav-number">1.</span> <span class="nav-text">入口起点(entry points)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防止重复-prevent-duplication"><span class="nav-number">2.</span> <span class="nav-text">防止重复(prevent duplication)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态导入-dynamic-imports"><span class="nav-number">3.</span> <span class="nav-text">动态导入(dynamic imports)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#预取-预加载模块-prefetch-preload-module"><span class="nav-number">4.</span> <span class="nav-text">预取/预加载模块(prefetch/preload module)</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

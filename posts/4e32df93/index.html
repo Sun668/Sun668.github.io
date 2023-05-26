@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="Vuex 初始化这一节我们主要来分析 Vuex 的初始化过程，它包括安装、Store 实例化过程 2 个方面。 安装过程比较简单，下图是一个简单的关于实例化的思维导图。">
+<meta name="keywords" content="Vuex 源码 source code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vuex 源码解析">
+<meta property="og:url" content="https://sunra.top/posts/4e32df93/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="Vuex 初始化这一节我们主要来分析 Vuex 的初始化过程，它包括安装、Store 实例化过程 2 个方面。 安装过程比较简单，下图是一个简单的关于实例化的思维导图。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1600494852/Blog/vuex_frzgmi.png">
+<meta property="og:updated_time" content="2023-05-26T22:58:58.588Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vuex 源码解析">
+<meta name="twitter:description" content="Vuex 初始化这一节我们主要来分析 Vuex 的初始化过程，它包括安装、Store 实例化过程 2 个方面。 安装过程比较简单，下图是一个简单的关于实例化的思维导图。">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1600494852/Blog/vuex_frzgmi.png">
+
+<link rel="canonical" href="https://sunra.top/posts/4e32df93/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>Vuex 源码解析 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/4e32df93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vuex 源码解析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-09-12 19:50:36" itemprop="dateCreated datePublished" datetime="2020-09-12T19:50:36+08:00">2020-09-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-27 06:58:58" itemprop="dateModified" datetime="2023-05-27T06:58:58+08:00">2023-05-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Vuex-初始化"><a href="#Vuex-初始化" class="headerlink" title="Vuex 初始化"></a>Vuex 初始化</h1><p>这一节我们主要来分析 Vuex 的初始化过程，它包括安装、Store 实例化过程 2 个方面。</p>
+<p>安装过程比较简单，下图是一个简单的关于实例化的思维导图。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1600494852/Blog/vuex_frzgmi.png" alt></p>
+<a id="more"></a>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>当我们在代码中通过 <code>import Vuex from &#39;vuex&#39;</code> 的时候，实际上引用的是一个对象，它的定义在 <code>src/index.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  Store,</span><br><span class="line">  install,</span><br><span class="line">  version: <span class="string">'__VERSION__'</span>,</span><br><span class="line">  mapState,</span><br><span class="line">  mapMutations,</span><br><span class="line">  mapGetters,</span><br><span class="line">  mapActions,</span><br><span class="line">  createNamespacedHelpers</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和 Vue-Router 一样，Vuex 也同样存在一个静态的 <code>install</code> 方法，它的定义在 <code>src/store.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">install</span> (<span class="params">_Vue</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (Vue &amp;&amp; _Vue === Vue) &#123;</span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      <span class="built_in">console</span>.error(</span><br><span class="line">        <span class="string">'[vuex] already installed. Vue.use(Vuex) should be called only once.'</span></span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  Vue = _Vue</span><br><span class="line">  applyMixin(Vue)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>install</code> 的逻辑很简单，把传入的 <code>_Vue</code> 赋值给 <code>Vue</code> 并执行了 <code>applyMixin(Vue)</code> 方法，它的定义在 <code>src/mixin.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> (<span class="params">Vue</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> version = <span class="built_in">Number</span>(Vue.version.split(<span class="string">'.'</span>)[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (version &gt;= <span class="number">2</span>) &#123;</span><br><span class="line">    Vue.mixin(&#123; <span class="attr">beforeCreate</span>: vuexInit &#125;)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// override init and inject vuex init procedure</span></span><br><span class="line">    <span class="comment">// for 1.x backwards compatibility.</span></span><br><span class="line">    <span class="keyword">const</span> _init = Vue.prototype._init</span><br><span class="line">    Vue.prototype._init = <span class="function"><span class="keyword">function</span> (<span class="params">options = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">      options.init = options.init</span><br><span class="line">        ? [vuexInit].concat(options.init)</span><br><span class="line">        : vuexInit</span><br><span class="line">      _init.call(<span class="keyword">this</span>, options)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Vuex init hook, injected into each instances init hooks list.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">vuexInit</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> options = <span class="keyword">this</span>.$options</span><br><span class="line">    <span class="comment">// store injection</span></span><br><span class="line">    <span class="keyword">if</span> (options.store) &#123;</span><br><span class="line">      <span class="keyword">this</span>.$store = <span class="keyword">typeof</span> options.store === <span class="string">'function'</span></span><br><span class="line">        ? options.store()</span><br><span class="line">        : options.store</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (options.parent &amp;&amp; options.parent.$store) &#123;</span><br><span class="line">      <span class="keyword">this</span>.$store = options.parent.$store</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>applyMixin</code> 就是这个 <code>export default function</code>，它还兼容了 Vue 1.0 的版本，这里我们只关注 Vue 2.0 以上版本的逻辑，它其实就全局混入了一个 <code>beforeCreate</code> 钩子函数，它的实现非常简单，就是把 <code>options.store</code> 保存在所有组件的 <code>this.$store</code> 中，这个 <code>options.store</code> 就是我们在实例化 <code>Store</code> 对象的实例，稍后我们会介绍，这也是为什么我们在组件中可以通过 <code>this.$store</code> 访问到这个实例。</p>
+<h2 id="Store-实例化"><a href="#Store-实例化" class="headerlink" title="Store 实例化"></a>Store 实例化</h2><p>我们在 <code>import Vuex</code> 之后，会实例化其中的 <code>Store</code> 对象，返回 <code>store</code> 实例并传入 <code>new Vue</code> 的 <code>options</code> 中，也就是我们刚才提到的 <code>options.store</code>.</p>
+<p>举个简单的例子，如下： </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  actions,</span><br><span class="line">  getters, </span><br><span class="line">  state,</span><br><span class="line">  mutations,</span><br><span class="line">  modules</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><code>Store</code> 对象的构造函数接收一个对象参数，它包含 <code>actions</code>、<code>getters</code>、<code>state</code>、<code>mutations</code>、<code>modules</code> 等 Vuex 的核心概念，它的定义在 <code>src/store.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">Store</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span> (options = &#123;&#125;) &#123;</span><br><span class="line">    <span class="comment">// Auto install if it is not done yet and `window` has `Vue`.</span></span><br><span class="line">    <span class="comment">// To allow users to avoid auto-installation in some cases,</span></span><br><span class="line">    <span class="comment">// this code should be placed here. See #731</span></span><br><span class="line">    <span class="keyword">if</span> (!Vue &amp;&amp; <span class="keyword">typeof</span> <span class="built_in">window</span> !== <span class="string">'undefined'</span> &amp;&amp; <span class="built_in">window</span>.Vue) &#123;</span><br><span class="line">      install(<span class="built_in">window</span>.Vue)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      assert(Vue, <span class="string">`must call Vue.use(Vuex) before creating a store instance.`</span>)</span><br><span class="line">      assert(<span class="keyword">typeof</span> <span class="built_in">Promise</span> !== <span class="string">'undefined'</span>, <span class="string">`vuex requires a Promise polyfill in this browser.`</span>)</span><br><span class="line">      assert(<span class="keyword">this</span> <span class="keyword">instanceof</span> Store, <span class="string">`Store must be called with the new operator.`</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> &#123;</span><br><span class="line">      plugins = [],</span><br><span class="line">      strict = <span class="literal">false</span></span><br><span class="line">    &#125; = options</span><br><span class="line"></span><br><span class="line">    <span class="comment">// store internal state</span></span><br><span class="line">    <span class="keyword">this</span>._committing = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">this</span>._actions = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">    <span class="keyword">this</span>._actionSubscribers = []</span><br><span class="line">    <span class="keyword">this</span>._mutations = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">    <span class="keyword">this</span>._wrappedGetters = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">    <span class="keyword">this</span>._modules = <span class="keyword">new</span> ModuleCollection(options)</span><br><span class="line">    <span class="keyword">this</span>._modulesNamespaceMap = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">    <span class="keyword">this</span>._subscribers = []</span><br><span class="line">    <span class="keyword">this</span>._watcherVM = <span class="keyword">new</span> Vue()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// bind commit and dispatch to self</span></span><br><span class="line">    <span class="keyword">const</span> store = <span class="keyword">this</span></span><br><span class="line">    <span class="keyword">const</span> &#123; dispatch, commit &#125; = <span class="keyword">this</span></span><br><span class="line">    <span class="keyword">this</span>.dispatch = <span class="function"><span class="keyword">function</span> <span class="title">boundDispatch</span> (<span class="params">type, payload</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> dispatch.call(store, type, payload)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.commit = <span class="function"><span class="keyword">function</span> <span class="title">boundCommit</span> (<span class="params">type, payload, options</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> commit.call(store, type, payload, options)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// strict mode</span></span><br><span class="line">    <span class="keyword">this</span>.strict = strict</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> state = <span class="keyword">this</span>._modules.root.state</span><br><span class="line"></span><br><span class="line">    <span class="comment">// init root module.</span></span><br><span class="line">    <span class="comment">// this also recursively registers all sub-modules</span></span><br><span class="line">    <span class="comment">// and collects all module getters inside this._wrappedGetters</span></span><br><span class="line">    installModule(<span class="keyword">this</span>, state, [], <span class="keyword">this</span>._modules.root)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// initialize the store vm, which is responsible for the reactivity</span></span><br><span class="line">    <span class="comment">// (also registers _wrappedGetters as computed properties)</span></span><br><span class="line">    resetStoreVM(<span class="keyword">this</span>, state)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// apply plugins</span></span><br><span class="line">    plugins.forEach(<span class="function"><span class="params">plugin</span> =&gt;</span> plugin(<span class="keyword">this</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (Vue.config.devtools) &#123;</span><br><span class="line">      devtoolPlugin(<span class="keyword">this</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们把 <code>Store</code> 的实例化过程拆成 3 个部分，分别是初始化模块，安装模块和初始化 <code>store._vm</code>，接下来我们来分析这 3 部分的实现。</p>
+<h3 id="初始化模块"><a href="#初始化模块" class="headerlink" title="初始化模块"></a>初始化模块</h3><p>在分析模块初始化之前，我们先来了解一下模块对于 Vuex 的意义：由于使用单一状态树，应用的所有状态会集中到一个比较大的对象，当应用变得非常复杂时，<code>store</code> 对象就有可能变得相当臃肿。为了解决以上问题，Vuex 允许我们将 <code>store</code> 分割成模块（module）。每个模块拥有自己的 <code>state</code>、<code>mutation</code>、<code>action</code>、<code>getter</code>，甚至是嵌套子模块——从上至下进行同样方式的分割：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> moduleA = &#123;</span><br><span class="line">  state: &#123; ... &#125;,</span><br><span class="line">  mutations: &#123; ... &#125;,</span><br><span class="line">  actions: &#123; ... &#125;,</span><br><span class="line">  getters: &#123; ... &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> moduleB = &#123;</span><br><span class="line">  state: &#123; ... &#125;,</span><br><span class="line">  mutations: &#123; ... &#125;,</span><br><span class="line">  actions: &#123; ... &#125;,</span><br><span class="line">  getters: &#123; ... &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  modules: &#123;</span><br><span class="line">    a: moduleA,</span><br><span class="line">    b: moduleB</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">store.state.a <span class="comment">// -&gt; moduleA 的状态</span></span><br><span class="line">store.state.b <span class="comment">// -&gt; moduleB 的状态</span></span><br></pre></td></tr></table></figure>
+<p>所以从数据结构上来看，模块的设计就是一个树型结构，<code>store</code> 本身可以理解为一个 <code>root module</code>，它下面的 <code>modules</code> 就是子模块，Vuex 需要完成这颗树的构建，构建过程的入口就是：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>._modules = <span class="keyword">new</span> ModuleCollection(options)</span><br></pre></td></tr></table></figure>
+<p><code>ModuleCollection</code> 的定义在 <code>src/module/module-collection.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">ModuleCollection</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span> (rawRootModule) &#123;</span><br><span class="line">    <span class="comment">// register root module (Vuex.Store options)</span></span><br><span class="line">    <span class="keyword">this</span>.register([], rawRootModule, <span class="literal">false</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">get</span> (path) &#123;</span><br><span class="line">    <span class="keyword">return</span> path.reduce(<span class="function">(<span class="params"><span class="built_in">module</span>, key</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">module</span>.getChild(key)</span><br><span class="line">    &#125;, <span class="keyword">this</span>.root)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getNamespace (path) &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="built_in">module</span> = <span class="keyword">this</span>.root</span><br><span class="line">    <span class="keyword">return</span> path.reduce(<span class="function">(<span class="params">namespace, key</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">module</span> = <span class="built_in">module</span>.getChild(key)</span><br><span class="line">      <span class="keyword">return</span> namespace + (<span class="built_in">module</span>.namespaced ? key + <span class="string">'/'</span> : <span class="string">''</span>)</span><br><span class="line">    &#125;, <span class="string">''</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  update (rawRootModule) &#123;</span><br><span class="line">    update([], <span class="keyword">this</span>.root, rawRootModule)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  register (path, rawModule, runtime = <span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      assertRawModule(path, rawModule)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> newModule = <span class="keyword">new</span> Module(rawModule, runtime)</span><br><span class="line">    <span class="keyword">if</span> (path.length === <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">this</span>.root = newModule</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> parent = <span class="keyword">this</span>.get(path.slice(<span class="number">0</span>, <span class="number">-1</span>))</span><br><span class="line">      parent.addChild(path[path.length - <span class="number">1</span>], newModule)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// register nested modules</span></span><br><span class="line">    <span class="keyword">if</span> (rawModule.modules) &#123;</span><br><span class="line">      forEachValue(rawModule.modules, (rawChildModule, key) =&gt; &#123;</span><br><span class="line">        <span class="keyword">this</span>.register(path.concat(key), rawChildModule, runtime)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  unregister (path) &#123;</span><br><span class="line">    <span class="keyword">const</span> parent = <span class="keyword">this</span>.get(path.slice(<span class="number">0</span>, <span class="number">-1</span>))</span><br><span class="line">    <span class="keyword">const</span> key = path[path.length - <span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> (!parent.getChild(key).runtime) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    parent.removeChild(key)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>ModuleCollection</code> 实例化的过程就是执行了 <code>register</code> 方法，<br><code>register</code> 接收 3 个参数，其中 <code>path</code> 表示路径，因为我们整体目标是要构建一颗模块树，<code>path</code> 是在构建树的过程中维护的路径；<code>rawModule</code> 表示定义模块的原始配置；<code>runtime</code> 表示是否是一个运行时创建的模块。</p>
+<p><code>register</code> 方法首先通过 <code>const newModule = new Module(rawModule, runtime)</code> 创建了一个 <code>Module</code> 的实例，<code>Module</code> 是用来描述单个模块的类，它的定义在 <code>src/module/module.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Module</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span> (rawModule, runtime) &#123;</span><br><span class="line">    <span class="keyword">this</span>.runtime = runtime</span><br><span class="line">    <span class="comment">// Store some children item</span></span><br><span class="line">    <span class="keyword">this</span>._children = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">    <span class="comment">// Store the origin module object which passed by programmer</span></span><br><span class="line">    <span class="keyword">this</span>._rawModule = rawModule</span><br><span class="line">    <span class="keyword">const</span> rawState = rawModule.state</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Store the origin module's state</span></span><br><span class="line">    <span class="keyword">this</span>.state = (<span class="keyword">typeof</span> rawState === <span class="string">'function'</span> ? rawState() : rawState) || &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">get</span> namespaced () &#123;</span><br><span class="line">    <span class="keyword">return</span> !!<span class="keyword">this</span>._rawModule.namespaced</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  addChild (key, <span class="built_in">module</span>) &#123;</span><br><span class="line">    <span class="keyword">this</span>._children[key] = <span class="built_in">module</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  removeChild (key) &#123;</span><br><span class="line">    <span class="keyword">delete</span> <span class="keyword">this</span>._children[key]</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getChild (key) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._children[key]</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  update (rawModule) &#123;</span><br><span class="line">    <span class="keyword">this</span>._rawModule.namespaced = rawModule.namespaced</span><br><span class="line">    <span class="keyword">if</span> (rawModule.actions) &#123;</span><br><span class="line">      <span class="keyword">this</span>._rawModule.actions = rawModule.actions</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (rawModule.mutations) &#123;</span><br><span class="line">      <span class="keyword">this</span>._rawModule.mutations = rawModule.mutations</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (rawModule.getters) &#123;</span><br><span class="line">      <span class="keyword">this</span>._rawModule.getters = rawModule.getters</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  forEachChild (fn) &#123;</span><br><span class="line">    forEachValue(<span class="keyword">this</span>._children, fn)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  forEachGetter (fn) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._rawModule.getters) &#123;</span><br><span class="line">      forEachValue(<span class="keyword">this</span>._rawModule.getters, fn)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  forEachAction (fn) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._rawModule.actions) &#123;</span><br><span class="line">      forEachValue(<span class="keyword">this</span>._rawModule.actions, fn)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  forEachMutation (fn) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._rawModule.mutations) &#123;</span><br><span class="line">      forEachValue(<span class="keyword">this</span>._rawModule.mutations, fn)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>来看一下 <code>Module</code> 的构造函数，对于每个模块而言，<code>this._rawModule</code> 表示模块的配置，<code>this._children</code> 表示它的所有子模块，<code>this.state</code> 表示这个模块定义的 <code>state</code>。</p>
+<p>回到 <code>register</code>，那么在实例化一个 <code>Module</code> 后，判断当前的 <code>path</code> 的长度如果为 0，则说明它是一个根模块，所以把 <code>newModule</code> 赋值给了 <code>this.root</code>，否则就需要建立父子关系了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> parent = <span class="keyword">this</span>.get(path.slice(<span class="number">0</span>, <span class="number">-1</span>))</span><br><span class="line">parent.addChild(path[path.length - <span class="number">1</span>], newModule)</span><br></pre></td></tr></table></figure>
+<p>我们先大体上了解它的逻辑：首先根据路径获取到父模块，然后再调用父模块的 <code>addChild</code> 方法建立父子关系。</p>
+<p><code>register</code> 的最后一步，就是遍历当前模块定义中的所有 <code>modules</code>，根据 <code>key</code> 作为 <code>path</code>，递归调用 <code>register</code> 方法，这样我们再回过头看一下建立父子关系的逻辑，首先执行了 <code>this.get(path.slice(0, -1)</code> 方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">get</span> (path) &#123;</span><br><span class="line">  <span class="keyword">return</span> path.reduce(<span class="function">(<span class="params"><span class="built_in">module</span>, key</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">module</span>.getChild(key)</span><br><span class="line">  &#125;, <span class="keyword">this</span>.root)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>传入的 <code>path</code> 是它的父模块的 <code>path</code>，然后从根模块开始，通过 <code>reduce</code> 方法一层层去找到对应的模块，查找的过程中，执行的是 <code>module.getChild(key)</code> 方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">getChild (key) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>._children[key]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实就是返回当前模块的 <code>_children</code> 中对应 <code>key</code> 的模块，那么每个模块的 <code>_children</code> 是如何添加的呢，是通过执行 <code>parent.addChild(path[path.length - 1], newModule)</code> 方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">addChild (key, <span class="built_in">module</span>) &#123;</span><br><span class="line">  <span class="keyword">this</span>._children[key] = <span class="built_in">module</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以说对于 <code>root module</code> 的下一层 <code>modules</code> 来说，它们的 <code>parent</code> 就是 <code>root module</code>，那么他们就会被添加的 <code>root module</code> 的 <code>_children</code> 中。每个子模块通过路径找到它的父模块，然后通过父模块的 <code>addChild</code> 方法建立父子关系，递归执行这样的过程，最终就建立一颗完整的模块树。</p>
+<h3 id="安装模块"><a href="#安装模块" class="headerlink" title="安装模块"></a>安装模块</h3><p>初始化模块后，执行安装模块的相关逻辑，它的目标就是对模块中的 <code>state</code>、<code>getters</code>、<code>mutations</code>、<code>actions</code> 做初始化工作，它的入口代码是：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> state = <span class="keyword">this</span>._modules.root.state</span><br><span class="line">installModule(<span class="keyword">this</span>, state, [], <span class="keyword">this</span>._modules.root)</span><br></pre></td></tr></table></figure>
+<p>来看一下 <code>installModule</code> 的定义：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">installModule</span> (<span class="params">store, rootState, path, module, hot</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> isRoot = !path.length</span><br><span class="line">  <span class="keyword">const</span> namespace = store._modules.getNamespace(path)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// register in namespace map</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">module</span>.namespaced) &#123;</span><br><span class="line">    store._modulesNamespaceMap[namespace] = <span class="built_in">module</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// set state</span></span><br><span class="line">  <span class="keyword">if</span> (!isRoot &amp;&amp; !hot) &#123;</span><br><span class="line">    <span class="keyword">const</span> parentState = getNestedState(rootState, path.slice(<span class="number">0</span>, <span class="number">-1</span>))</span><br><span class="line">    <span class="keyword">const</span> moduleName = path[path.length - <span class="number">1</span>]</span><br><span class="line">    store._withCommit(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      Vue.set(parentState, moduleName, <span class="built_in">module</span>.state)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> local = <span class="built_in">module</span>.context = makeLocalContext(store, namespace, path)</span><br><span class="line"></span><br><span class="line">  <span class="built_in">module</span>.forEachMutation(<span class="function">(<span class="params">mutation, key</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> namespacedType = namespace + key</span><br><span class="line">    registerMutation(store, namespacedType, mutation, local)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="built_in">module</span>.forEachAction(<span class="function">(<span class="params">action, key</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> type = action.root ? key : namespace + key</span><br><span class="line">    <span class="keyword">const</span> handler = action.handler || action</span><br><span class="line">    registerAction(store, type, handler, local)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="built_in">module</span>.forEachGetter(<span class="function">(<span class="params">getter, key</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> namespacedType = namespace + key</span><br><span class="line">    registerGetter(store, namespacedType, getter, local)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="built_in">module</span>.forEachChild(<span class="function">(<span class="params">child, key</span>) =&gt;</span> &#123;</span><br><span class="line">    installModule(store, rootState, path.concat(key), child, hot)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>installModule</code> 方法支持 5 个参数，<code>store</code> 表示 <code>root store</code>；<code>state</code> 表示 <code>root state</code>；<code>path</code> 表示模块的访问路径；<code>module</code> 表示当前的模块，<code>hot</code> 表示是否是热更新。</p>
+<p>接下来看函数逻辑，这里涉及到了命名空间的概念，默认情况下，模块内部的 <code>action</code>、<code>mutation</code> 和 <code>getter</code> 是注册在全局命名空间的——这样使得多个模块能够对同一 <code>mutation</code> 或 <code>action</code> 作出响应。如果我们希望模块具有更高的封装度和复用性，可以通过添加 <code>namespaced: true</code> 的方式使其成为带命名空间的模块。当模块被注册后，它的所有 <code>getter</code>、<code>action</code> 及 <code>mutation</code> 都会自动根据模块注册的路径调整命名。例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  modules: &#123;</span><br><span class="line">    account: &#123;</span><br><span class="line">      namespaced: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 模块内容（module assets）</span></span><br><span class="line">      state: &#123; ... &#125;, <span class="comment">// 模块内的状态已经是嵌套的了，使用 `namespaced` 属性不会对其产生影响</span></span><br><span class="line">      getters: &#123;</span><br><span class="line">        isAdmin () &#123; ... &#125; <span class="comment">// -&gt; getters['account/isAdmin']</span></span><br><span class="line">      &#125;,</span><br><span class="line">      actions: &#123;</span><br><span class="line">        login () &#123; ... &#125; <span class="comment">// -&gt; dispatch('account/login')</span></span><br><span class="line">      &#125;,</span><br><span class="line">      mutations: &#123;</span><br><span class="line">        login () &#123; ... &#125; <span class="comment">// -&gt; commit('account/login')</span></span><br><span class="line">      &#125;,</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 嵌套模块</span></span><br><span class="line">      modules: &#123;</span><br><span class="line">        <span class="comment">// 继承父模块的命名空间</span></span><br><span class="line">        myPage: &#123;</span><br><span class="line">          state: &#123; ... &#125;,</span><br><span class="line">          getters: &#123;</span><br><span class="line">            profile () &#123; ... &#125; <span class="comment">// -&gt; getters['account/profile']</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 进一步嵌套命名空间</span></span><br><span class="line">        posts: &#123;</span><br><span class="line">          namespaced: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">          state: &#123; ... &#125;,</span><br><span class="line">          getters: &#123;</span><br><span class="line">            popular () &#123; ... &#125; <span class="comment">// -&gt; getters['account/posts/popular']</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>回到 <code>installModule</code> 方法，我们首先根据 <code>path</code> 获取 <code>namespace</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> namespace = store._modules.getNamespace(path)</span><br></pre></td></tr></table></figure>
+<p><code>getNamespace</code> 的定义在 <code>src/module/module-collection.js</code> 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">getNamespace (path) &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="built_in">module</span> = <span class="keyword">this</span>.root</span><br><span class="line">  <span class="keyword">return</span> path.reduce(<span class="function">(<span class="params">namespace, key</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">module</span> = <span class="built_in">module</span>.getChild(key)</span><br><span class="line">    <span class="keyword">return</span> namespace + (<span class="built_in">module</span>.namespaced ? key + <span class="string">'/'</span> : <span class="string">''</span>)</span><br><span class="line">  &#125;, <span class="string">''</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从 <code>root module</code> 开始，通过 <code>reduce</code> 方法一层层找子模块，如果发现该模块配置了 <code>namespaced</code> 为 true，则把该模块的 <code>key</code> 拼到 <code>namesapce</code> 中，最终返回完整的 <code>namespace</code> 字符串。</p>
+<p>回到 <code>installModule</code> 方法，接下来把 <code>namespace</code> 对应的模块保存下来，为了方便以后能根据 <code>namespace</code> 查找模块：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.namespaced) &#123;</span><br><span class="line">  store._modulesNamespaceMap[namespace] = <span class="built_in">module</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来判断非 <code>root module</code> 且非 <code>hot</code> 的情况执行一些逻辑，我们稍后再看。</p>
+<p>接着是很重要的逻辑，构造了一个本地上下文环境：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> local = <span class="built_in">module</span>.context = makeLocalContext(store, namespace, path)</span><br></pre></td></tr></table></figure>
+<p>来看一下 <code>makeLocalContext</code> 实现：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">makeLocalContext</span> (<span class="params">store, namespace, path</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> noNamespace = namespace === <span class="string">''</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> local = &#123;</span><br><span class="line">    dispatch: noNamespace ? store.dispatch : <span class="function">(<span class="params">_type, _payload, _options</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> args = unifyObjectStyle(_type, _payload, _options)</span><br><span class="line">      <span class="keyword">const</span> &#123; payload, options &#125; = args</span><br><span class="line">      <span class="keyword">let</span> &#123; type &#125; = args</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (!options || !options.root) &#123;</span><br><span class="line">        type = namespace + type</span><br><span class="line">        <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp; !store._actions[type]) &#123;</span><br><span class="line">          <span class="built_in">console</span>.error(<span class="string">`[vuex] unknown local action type: <span class="subst">$&#123;args.type&#125;</span>, global type: <span class="subst">$&#123;type&#125;</span>`</span>)</span><br><span class="line">          <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> store.dispatch(type, payload)</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    commit: noNamespace ? store.commit : <span class="function">(<span class="params">_type, _payload, _options</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> args = unifyObjectStyle(_type, _payload, _options)</span><br><span class="line">      <span class="keyword">const</span> &#123; payload, options &#125; = args</span><br><span class="line">      <span class="keyword">let</span> &#123; type &#125; = args</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (!options || !options.root) &#123;</span><br><span class="line">        type = namespace + type</span><br><span class="line">        <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp; !store._mutations[type]) &#123;</span><br><span class="line">          <span class="built_in">console</span>.error(<span class="string">`[vuex] unknown local mutation type: <span class="subst">$&#123;args.type&#125;</span>, global type: <span class="subst">$&#123;type&#125;</span>`</span>)</span><br><span class="line">          <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      store.commit(type, payload, options)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// getters and state object must be gotten lazily</span></span><br><span class="line">  <span class="comment">// because they will be changed by vm update</span></span><br><span class="line">  <span class="built_in">Object</span>.defineProperties(local, &#123;</span><br><span class="line">    getters: &#123;</span><br><span class="line">      <span class="keyword">get</span>: noNamespace</span><br><span class="line">        ? () =&gt; store.getters</span><br><span class="line">        : () =&gt; makeLocalGetters(store, namespace)</span><br><span class="line">    &#125;,</span><br><span class="line">    state: &#123;</span><br><span class="line">      <span class="keyword">get</span>: () =&gt; getNestedState(store.state, path)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  return local</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>makeLocalContext</code> 支持 3 个参数相关，<code>store</code> 表示 <code>root store</code>；<code>namespace</code> 表示模块的命名空间，<code>path</code> 表示模块的 <code>path</code>。</p>
+<p>该方法定义了 <code>local</code> 对象，对于 <code>dispatch</code> 和 <code>commit</code> 方法，如果没有 <code>namespace</code>，它们就直接指向了 <code>root store</code> 的 <code>dispatch</code> 和 <code>commit</code> 方法，否则会创建方法，把 <code>type</code> 自动拼接上 <code>namespace</code>，然后执行 <code>store</code> 上对应的方法。</p>
+<p>对于 <code>getters</code> 而言，如果没有 <code>namespace</code>，则直接返回 <code>root store</code> 的 <code>getters</code>，否则返回 <code>makeLocalGetters(store, namespace)</code> 的返回值：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">makeLocalGetters</span> (<span class="params">store, namespace</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> gettersProxy = &#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> splitPos = namespace.length</span><br><span class="line">  <span class="built_in">Object</span>.keys(store.getters).forEach(<span class="function"><span class="params">type</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// skip if the target getter is not match this namespace</span></span><br><span class="line">    <span class="keyword">if</span> (type.slice(<span class="number">0</span>, splitPos) !== namespace) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// extract local getter type</span></span><br><span class="line">    <span class="keyword">const</span> localType = type.slice(splitPos)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Add a port to the getters proxy.</span></span><br><span class="line">    <span class="comment">// Define as getter property because</span></span><br><span class="line">    <span class="comment">// we do not want to evaluate the getters in this time.</span></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(gettersProxy, localType, &#123;</span><br><span class="line">      <span class="keyword">get</span>: () =&gt; store.getters[type],</span><br><span class="line">      enumerable: true</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  return gettersProxy</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>makeLocalGetters</code> 首先获取了 <code>namespace</code> 的长度，然后遍历 <code>root store</code> 下的所有 <code>getters</code>，先判断它的类型是否匹配 <code>namespace</code>，只有匹配的时候我们从 <code>namespace</code> 的位置截取后面的字符串得到 <code>localType</code>，接着用 <code>Object.defineProperty</code> 定义了 <code>gettersProxy</code>，获取 <code>localType</code> 实际上是访问了 <code>store.getters[type]</code>。</p>
+<p>回到 <code>makeLocalContext</code> 方法，再来看一下对 <code>state</code> 的实现，它的获取则是通过 <code>getNestedState(store.state, path)</code> 方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getNestedState</span> (<span class="params">state, path</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> path.length</span><br><span class="line">    ? path.reduce(<span class="function">(<span class="params">state, key</span>) =&gt;</span> state[key], state)</span><br><span class="line">    : state</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>getNestedState</code> 逻辑很简单，从 <code>root state</code> 开始，通过 <code>path.reduce</code> 方法一层层查找子模块 <code>state</code>，最终找到目标模块的 <code>state</code>。</p>
+<p>那么构造完 <code>local</code> 上下文后，我们再回到 <code>installModule</code> 方法，接下来它就会遍历模块中定义的 <code>mutations</code>、<code>actions</code>、<code>getters</code>，分别执行它们的注册工作，它们的注册逻辑都大同小异。</p>
+<ul>
+<li><code>registerMutation</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.forEachMutation(<span class="function">(<span class="params">mutation, key</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> namespacedType = namespace + key</span><br><span class="line">  registerMutation(store, namespacedType, mutation, local)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">registerMutation</span> (<span class="params">store, type, handler, local</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> entry = store._mutations[type] || (store._mutations[type] = [])</span><br><span class="line">  entry.push(<span class="function"><span class="keyword">function</span> <span class="title">wrappedMutationHandler</span> (<span class="params">payload</span>) </span>&#123;</span><br><span class="line">    handler.call(store, local.state, payload)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先遍历模块中的 <code>mutations</code> 的定义，拿到每一个 <code>mutation</code> 和 <code>key</code>，并把 <code>key</code> 拼接上 <code>namespace</code>，然后执行 <code>registerMutation</code> 方法。该方法实际上就是给 <code>root store</code> 上的 <code>_mutations[types]</code> 添加 <code>wrappedMutationHandler</code> 方法，该方法的具体实现我们之后会提到。注意，同一 <code>type</code> 的 <code>_mutations</code> 可以对应多个方法。</p>
+<ul>
+<li><code>registerAction</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.forEachAction(<span class="function">(<span class="params">action, key</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> type = action.root ? key : namespace + key</span><br><span class="line">  <span class="keyword">const</span> handler = action.handler || action</span><br><span class="line">  registerAction(store, type, handler, local)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">registerAction</span> (<span class="params">store, type, handler, local</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> entry = store._actions[type] || (store._actions[type] = [])</span><br><span class="line">  entry.push(<span class="function"><span class="keyword">function</span> <span class="title">wrappedActionHandler</span> (<span class="params">payload, cb</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> res = handler.call(store, &#123;</span><br><span class="line">      dispatch: local.dispatch,</span><br><span class="line">      commit: local.commit,</span><br><span class="line">      getters: local.getters,</span><br><span class="line">      state: local.state,</span><br><span class="line">      rootGetters: store.getters,</span><br><span class="line">      rootState: store.state</span><br><span class="line">    &#125;, payload, cb)</span><br><span class="line">    <span class="keyword">if</span> (!isPromise(res)) &#123;</span><br><span class="line">      res = <span class="built_in">Promise</span>.resolve(res)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (store._devtoolHook) &#123;</span><br><span class="line">      <span class="keyword">return</span> res.catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">        store._devtoolHook.emit(<span class="string">'vuex:error'</span>, err)</span><br><span class="line">        <span class="keyword">throw</span> err</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> res</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先遍历模块中的 <code>actions</code> 的定义，拿到每一个 <code>action</code> 和 <code>key</code>，并判断 <code>action.root</code>，如果否的情况把 <code>key</code> 拼接上 <code>namespace</code>，然后执行 <code>registerAction</code> 方法。该方法实际上就是给 <code>root store</code> 上的 <code>_actions[types]</code> 添加 <code>wrappedActionHandler</code> 方法，该方法的具体实现我们之后会提到。注意，同一 <code>type</code> 的 <code>_actions</code> 可以对应多个方法。</p>
+<ul>
+<li><code>registerGetter</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.forEachGetter(<span class="function">(<span class="params">getter, key</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> namespacedType = namespace + key</span><br><span class="line">  registerGetter(store, namespacedType, getter, local)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">registerGetter</span> (<span class="params">store, type, rawGetter, local</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (store._wrappedGetters[type]) &#123;</span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      <span class="built_in">console</span>.error(<span class="string">`[vuex] duplicate getter key: <span class="subst">$&#123;type&#125;</span>`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  store._wrappedGetters[type] = <span class="function"><span class="keyword">function</span> <span class="title">wrappedGetter</span> (<span class="params">store</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> rawGetter(</span><br><span class="line">      local.state, <span class="comment">// local state</span></span><br><span class="line">      local.getters, <span class="comment">// local getters</span></span><br><span class="line">      store.state, <span class="comment">// root state</span></span><br><span class="line">      store.getters <span class="comment">// root getters</span></span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先遍历模块中的 <code>getters</code> 的定义，拿到每一个 <code>getter</code> 和 <code>key</code>，并把 <code>key</code> 拼接上 <code>namespace</code>，然后执行 <code>registerGetter</code> 方法。该方法实际上就是给 <code>root store</code> 上的 <code>_wrappedGetters[key]</code> 指定 <code>wrappedGetter</code> 方法，该方法的具体实现我们之后会提到。注意，同一 <code>type</code> 的 <code>_wrappedGetters</code> 只能定义一个。</p>
+<p>再回到 <code>installModule</code> 方法，最后一步就是遍历模块中的所有子 <code>modules</code>，递归执行 <code>installModule</code> 方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.forEachChild(<span class="function">(<span class="params">child, key</span>) =&gt;</span> &#123;</span><br><span class="line">  installModule(store, rootState, path.concat(key), child, hot)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>之前我们忽略了非 <code>root module</code> 下的 <code>state</code> 初始化逻辑，现在来看一下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!isRoot &amp;&amp; !hot) &#123;</span><br><span class="line">  <span class="keyword">const</span> parentState = getNestedState(rootState, path.slice(<span class="number">0</span>, <span class="number">-1</span>))</span><br><span class="line">  <span class="keyword">const</span> moduleName = path[path.length - <span class="number">1</span>]</span><br><span class="line">  store._withCommit(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    Vue.set(parentState, moduleName, <span class="built_in">module</span>.state)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>之前我们提到过 <code>getNestedState</code> 方法，它是从 <code>root state</code> 开始，一层层根据模块名能访问到对应 <code>path</code> 的 <code>state</code>，那么它每一层关系的建立实际上就是通过这段 <code>state</code> 的初始化逻辑。<code>store._withCommit</code> 方法我们之后再介绍。</p>
+<p>所以 <code>installModule</code> 实际上就是完成了模块下的 <code>state</code>、<code>getters</code>、<code>actions</code>、<code>mutations</code> 的初始化工作，并且通过递归遍历的方式，就完成了所有子模块的安装工作。</p>
+<h3 id="初始化-store-vm"><a href="#初始化-store-vm" class="headerlink" title="初始化 store._vm"></a>初始化 <code>store._vm</code></h3><p><code>Store</code> 实例化的最后一步，就是执行初始化 <code>store._vm</code> 的逻辑，它的入口代码是：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">resetStoreVM(<span class="keyword">this</span>, state)</span><br></pre></td></tr></table></figure>
+<p>来看一下 <code>resetStoreVM</code> 的定义：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resetStoreVM</span> (<span class="params">store, state, hot</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> oldVm = store._vm</span><br><span class="line"></span><br><span class="line">  <span class="comment">// bind store public getters</span></span><br><span class="line">  store.getters = &#123;&#125;</span><br><span class="line">  <span class="keyword">const</span> wrappedGetters = store._wrappedGetters</span><br><span class="line">  <span class="keyword">const</span> computed = &#123;&#125;</span><br><span class="line">  forEachValue(wrappedGetters, (fn, key) =&gt; &#123;</span><br><span class="line">    <span class="comment">// use computed to leverage its lazy-caching mechanism</span></span><br><span class="line">    computed[key] = <span class="function"><span class="params">()</span> =&gt;</span> fn(store)</span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(store.getters, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>: () =&gt; store._vm[key],</span><br><span class="line">      enumerable: true // for local getters</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  // use a Vue instance to store the state tree</span><br><span class="line">  // suppress warnings just in case the user has added</span><br><span class="line">  // some funky global mixins</span><br><span class="line">  const silent = Vue.config.silent</span><br><span class="line">  Vue.config.silent = true</span><br><span class="line">  store._vm = new Vue(&#123;</span><br><span class="line">    data: &#123;</span><br><span class="line">      $$state: state</span><br><span class="line">    &#125;,</span><br><span class="line">    computed</span><br><span class="line">  &#125;)</span><br><span class="line">  Vue.config.silent = silent</span><br><span class="line"></span><br><span class="line">  <span class="comment">// enable strict mode for new vm</span></span><br><span class="line">  <span class="keyword">if</span> (store.strict) &#123;</span><br><span class="line">    enableStrictMode(store)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (oldVm) &#123;</span><br><span class="line">    <span class="keyword">if</span> (hot) &#123;</span><br><span class="line">      <span class="comment">// dispatch changes in all subscribed watchers</span></span><br><span class="line">      <span class="comment">// to force getter re-evaluation for hot reloading.</span></span><br><span class="line">      store._withCommit(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        oldVm._data.$$state = <span class="literal">null</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    Vue.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> oldVm.$destroy())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>resetStoreVM</code> 的作用实际上是想建立 <code>getters</code> 和 <code>state</code> 的联系，因为从设计上  <code>getters</code> 的获取就依赖了 <code>state</code> ，并且希望它的依赖能被缓存起来，且只有当它的依赖值发生了改变才会被重新计算。因此这里利用了 Vue 中用 <code>computed</code> 计算属性来实现。</p>
+<p><code>resetStoreVM</code> 首先遍历了 <code>_wrappedGetters</code> 获得每个 <code>getter</code> 的函数 <code>fn</code> 和 <code>key</code>，然后定义了 <code>computed[key] = () =&gt; fn(store)</code>。我们之前提到过 <code>_wrappedGetters</code> 的初始化过程，这里 <code>fn(store)</code> 相当于执行如下方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">store._wrappedGetters[type] = <span class="function"><span class="keyword">function</span> <span class="title">wrappedGetter</span> (<span class="params">store</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> rawGetter(</span><br><span class="line">    local.state, <span class="comment">// local state</span></span><br><span class="line">    local.getters, <span class="comment">// local getters</span></span><br><span class="line">    store.state, <span class="comment">// root state</span></span><br><span class="line">    store.getters <span class="comment">// root getters</span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>返回的就是 <code>rawGetter</code> 的执行函数，<code>rawGetter</code> 就是用户定义的 <code>getter</code> 函数，它的前 2 个参数是 <code>local state</code> 和 <code>local getters</code>，后 2 个参数是 <code>root state</code> 和 <code>root getters</code>。</p>
+<p>接着实例化一个 Vue 实例 <code>store._vm</code>，并把 <code>computed</code> 传入：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">store._vm = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    $$state: state</span><br><span class="line">  &#125;,</span><br><span class="line">  computed</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>我们发现 <code>data</code> 选项里定义了 <code>$$state</code> 属性，而我们访问 <code>store.state</code> 的时候，实际上会访问 <code>Store</code> 类上定义的 <code>state</code> 的 <code>get</code> 方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">get</span> state () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>._vm._data.$$state</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它实际上就访问了 <code>store._vm._data.$$state</code>。那么 <code>getters</code> 和 <code>state</code> 是如何建立依赖逻辑的呢，我们再看这段代码逻辑：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">forEachValue(wrappedGetters, (fn, key) =&gt; &#123;</span><br><span class="line">    <span class="comment">// use computed to leverage its lazy-caching mechanism</span></span><br><span class="line">    computed[key] = <span class="function"><span class="params">()</span> =&gt;</span> fn(store)</span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(store.getters, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>: () =&gt; store._vm[key],</span><br><span class="line">      enumerable: true // for local getters</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+<p>当我根据 <code>key</code> 访问 <code>store.getters</code> 的某一个 <code>getter</code> 的时候，实际上就是访问了 <code>store._vm[key]</code>，也就是 <code>computed[key]</code>，在执行 <code>computed[key]</code> 对应的函数的时候，会执行 <code>rawGetter(local.state,...)</code> 方法，那么就会访问到 <code>store.state</code>，进而访问到 <code>store._vm._data.$$state</code>，这样就建立了一个依赖关系。当 <code>store.state</code> 发生变化的时候，下一次再访问 <code>store.getters</code> 的时候会重新计算。</p>
+<p>我们再来看一下 <code>strict mode</code> 的逻辑：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (store.strict) &#123;</span><br><span class="line">  enableStrictMode(store)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">enableStrictMode</span> (<span class="params">store</span>) </span>&#123;</span><br><span class="line">  store._vm.$watch(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>._data.$$state &#125;, () =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      assert(store._committing, <span class="string">`Do not mutate vuex store state outside mutation handlers.`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, &#123; <span class="attr">deep</span>: <span class="literal">true</span>, <span class="attr">sync</span>: <span class="literal">true</span> &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当严格模式下，<code>store._vm</code> 会添加一个 <code>wathcer</code> 来观测 <code>this._data.$$state</code> 的变化，也就是当 <code>store.state</code> 被修改的时候, <code>store._committing</code> 必须为 true，否则在开发阶段会报警告。<code>store._committing</code> 默认值是 <code>false</code>，那么它什么时候会 true 呢，<code>Store</code> 定义了 <code>_withCommit</code> 实例方法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">_withCommit (fn) &#123;</span><br><span class="line">  <span class="keyword">const</span> committing = <span class="keyword">this</span>._committing</span><br><span class="line">  <span class="keyword">this</span>._committing = <span class="literal">true</span></span><br><span class="line">  fn()</span><br><span class="line">  <span class="keyword">this</span>._committing = committing</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它就是对 <code>fn</code> 包装了一个环境，确保在 <code>fn</code> 中执行任何逻辑的时候 <code>this._committing = true</code>。所以外部任何非通过 Vuex 提供的接口直接操作修改 <code>state</code> 的行为都会在开发阶段触发警告。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>那么至此，Vuex 的初始化过程就分析完毕了，除了安装部分，我们重点分析了 <code>Store</code> 的实例化过程。我们要把 <code>store</code> 想象成一个数据仓库，为了更方便的管理仓库，我们把一个大的 <code>store</code> 拆成一些 <code>modules</code>，整个 <code>modules</code> 是一个树型结构。每个 <code>module</code> 又分别定义了 <code>state</code>，<code>getters</code>，<code>mutations</code>、<code>actions</code>，我们也通过递归遍历模块的方式都完成了它们的初始化。为了 <code>module</code> 具有更高的封装度和复用性，还定义了 <code>namespace</code> 的概念。最后我们还定义了一个内部的 <code>Vue</code> 实例，用来建立 <code>state</code> 到 <code>getters</code> 的联系，并且可以在严格模式下监测 <code>state</code> 的变化是不是来自外部，确保改变 <code>state</code> 的唯一途径就是显式地提交 <code>mutation</code>。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/posts/4e32df93/" title="Vuex 源码解析">https://sunra.top/posts/4e32df93/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/fd954d01/" rel="prev" title="Vue源码学习（三）组件化原理">
+      <i class="fa fa-chevron-left"></i> Vue源码学习（三）组件化原理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/171fa8f4/" rel="next" title="Vue源码学习（四） Watcher原理解析">
+      Vue源码学习（四） Watcher原理解析 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Vuex-初始化"><span class="nav-number">1.</span> <span class="nav-text">Vuex 初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">1.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Store-实例化"><span class="nav-number">1.2.</span> <span class="nav-text">Store 实例化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化模块"><span class="nav-number">1.2.1.</span> <span class="nav-text">初始化模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装模块"><span class="nav-number">1.2.2.</span> <span class="nav-text">安装模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化-store-vm"><span class="nav-number">1.2.3.</span> <span class="nav-text">初始化 store._vm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
