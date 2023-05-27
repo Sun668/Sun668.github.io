@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Hook 的发展历程React 团队从一开始就很注重 React 的代码复用性 他们对代码复用性的解决方案历经：Mixin, HOC, Render Prop，直到现在的 Custom Hook 所以 Custom Hook 并不是一拍脑门横空出世的产物，即使是很多对 Custom Hook 有丰富开发经验的开发者，也不了解 Hook 到底是怎么来的，以及在 React 里扮演什么角色 不理解这段">
+<meta name="keywords" content="React Hook 历史 实战">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React Hook的历史以及实战中的坑">
+<meta property="og:url" content="https://sunra.top/2021/05/13/react-hook/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="Hook 的发展历程React 团队从一开始就很注重 React 的代码复用性 他们对代码复用性的解决方案历经：Mixin, HOC, Render Prop，直到现在的 Custom Hook 所以 Custom Hook 并不是一拍脑门横空出世的产物，即使是很多对 Custom Hook 有丰富开发经验的开发者，也不了解 Hook 到底是怎么来的，以及在 React 里扮演什么角色 不理解这段">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1620866482/origin-of-ray/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210513084055_cx2rak.jpg">
+<meta property="og:updated_time" content="2023-05-26T22:57:24.360Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React Hook的历史以及实战中的坑">
+<meta name="twitter:description" content="Hook 的发展历程React 团队从一开始就很注重 React 的代码复用性 他们对代码复用性的解决方案历经：Mixin, HOC, Render Prop，直到现在的 Custom Hook 所以 Custom Hook 并不是一拍脑门横空出世的产物，即使是很多对 Custom Hook 有丰富开发经验的开发者，也不了解 Hook 到底是怎么来的，以及在 React 里扮演什么角色 不理解这段">
+<meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1620866482/origin-of-ray/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210513084055_cx2rak.jpg">
+
+<link rel="canonical" href="https://sunra.top/2021/05/13/react-hook/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>React Hook的历史以及实战中的坑 | Origin of Ray</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2021/05/13/react-hook/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          React Hook的历史以及实战中的坑
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-05-13 07:35:27" itemprop="dateCreated datePublished" datetime="2021-05-13T07:35:27+08:00">2021-05-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Hook-的发展历程"><a href="#Hook-的发展历程" class="headerlink" title="Hook 的发展历程"></a>Hook 的发展历程</h2><p>React 团队从一开始就很注重 React 的代码复用性</p>
+<p>他们对代码复用性的解决方案历经：Mixin, HOC, Render Prop，直到现在的 Custom Hook</p>
+<p>所以 Custom Hook 并不是一拍脑门横空出世的产物，即使是很多对 Custom Hook 有丰富开发经验的开发者，也不了解 Hook 到底是怎么来的，以及在 React 里扮演什么角色</p>
+<p>不理解这段设计思路是无法深刻的理解 Custom Hook 的，今天我们就一起来学习一下</p>
+<a id="more"></a>
+<h3 id="1-Mixin"><a href="#1-Mixin" class="headerlink" title="1. Mixin"></a>1. Mixin</h3><p>这种方式在Vue2中很常见，也是其源码中的重要组成部分，比如父子组件生命周期函数的merge</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> SetIntervalMixin = &#123;</span><br><span class="line">  componentWillMount: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.intervals = [];</span><br><span class="line">  &#125;,</span><br><span class="line">  setInterval: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.intervals.push(setInterval.apply(<span class="literal">null</span>, <span class="built_in">arguments</span>));</span><br><span class="line">  &#125;,</span><br><span class="line">  componentWillUnmount: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.intervals.forEach(clearInterval);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> createReactClass = <span class="built_in">require</span>(<span class="string">'create-react-class'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> TickTock = createReactClass(&#123;</span><br><span class="line">  mixins: [SetIntervalMixin], <span class="comment">// 使用 mixin</span></span><br><span class="line">  getInitialState: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="attr">seconds</span>: <span class="number">0</span>&#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  componentDidMount: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.setInterval(<span class="keyword">this</span>.tick, <span class="number">1000</span>); <span class="comment">// 调用 mixin 上的方法</span></span><br><span class="line">  &#125;,</span><br><span class="line">  tick: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;<span class="attr">seconds</span>: <span class="keyword">this</span>.state.seconds + <span class="number">1</span>&#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  render: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;p&gt;</span><br><span class="line">        React has been running <span class="keyword">for</span> &#123;<span class="keyword">this</span>.state.seconds&#125; seconds.</span><br><span class="line">      &lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;);</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">ReactDOM.render(</span></span><br><span class="line"><span class="regexp">  &lt;TickTock /</span>&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'example'</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>优点：</p>
+<ol>
+<li>确实起到了重用代码的作用</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>它是隐式依赖，隐式依赖被认为在 React 中是不好的</li>
+<li>名字冲突问题</li>
+<li>只能在 <code>React.createClass</code>里工作，不支持 ES6 的 Class Component</li>
+<li>实践下来发现：难以维护</li>
+</ol>
+<p>在 React 官网中已经被标记为 ‘不推荐使用’，官方吐槽点<a href="https://zh-hans.reactjs.org/blog/2016/07/13/mixins-considered-harmful.html" rel="external nofollow noopener noreferrer" target="_blank">这里</a></p>
+<h3 id="2-HOC"><a href="#2-HOC" class="headerlink" title="2. HOC"></a>2. HOC</h3><p>2015 年开始，React 团队宣布不推荐使用 Mixin，推荐大家使用 HOC 模式</p>
+<p>HOC 采用了 ‘装饰器模式’ 来复用代码</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">withWindowWidth</span>(<span class="params">BaseComponent</span>) </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">DerivedClass</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">    state = &#123;</span><br><span class="line">      windowWidth: <span class="built_in">window</span>.innerWidth,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    onResize = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">        windowWidth: <span class="built_in">window</span>.innerWidth,</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    componentDidMount() &#123;</span><br><span class="line">      <span class="built_in">window</span>.addEventListener(<span class="string">'resize'</span>, <span class="keyword">this</span>.onResize)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    componentWillUnmount() &#123;</span><br><span class="line">      <span class="built_in">window</span>.removeEventListener(<span class="string">'resize'</span>, <span class="keyword">this</span>.onResize);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">BaseComponent</span> &#123;<span class="attr">...this.props</span>&#125; &#123;<span class="attr">...this.state</span>&#125;/&gt;</span></span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> DerivedClass;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> MyComponent = <span class="function">(<span class="params">props</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Window width is: &#123;props.windowWidth&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>经典的 容器组件与展示组件分离 (separation of container presidential) 就是从这里开始的</p>
+<p>下面是最最经典的 HOC 容器组件与展示组件分离 案例 - Redux中的connect 的实例代码</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> createInfoScreen = <span class="function">(<span class="params">ChildComponent, fetchData, dataName</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">HOComponent</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    state = &#123; <span class="attr">counter</span>: <span class="number">0</span> &#125;</span><br><span class="line">    handleIncrementCounter = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">       <span class="keyword">this</span>.setState(&#123; <span class="attr">counter</span>: <span class="keyword">this</span>.state.counter + <span class="number">1</span> &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">	componentDidMount() &#123;</span><br><span class="line">      <span class="keyword">this</span>.props.fetchData();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">      <span class="keyword">const</span> &#123; data = &#123;&#125;, isFetching, error &#125; = <span class="keyword">this</span>.props[dataName]; </span><br><span class="line">      <span class="keyword">if</span> (isFetching) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">          &lt;div&gt;Loading&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        );</span></span><br><span class="line"><span class="regexp">      &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">      if (error) &#123;</span></span><br><span class="line"><span class="regexp">        return (</span></span><br><span class="line"><span class="regexp">          &lt;div&gt;Something is wrong. Please try again!&lt;/</span>div&gt;</span><br><span class="line">        );</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (isEmpty(data)) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">          &lt;div&gt;No Data!&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        );</span></span><br><span class="line"><span class="regexp">      &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">      return (</span></span><br><span class="line"><span class="regexp">        &lt;ChildComponent </span></span><br><span class="line"><span class="regexp">          counter=&#123;this.state.counter&#125;</span></span><br><span class="line"><span class="regexp">          onIncrementCounterClick=&#123;this.handleIncrementCounter&#125;</span></span><br><span class="line"><span class="regexp">          &#123;...this.props&#125;</span></span><br><span class="line"><span class="regexp">        /</span>&gt;</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> dataSelector = <span class="function"><span class="params">state</span> =&gt;</span> state[dataName];</span><br><span class="line">  <span class="keyword">const</span> getData = <span class="function"><span class="params">()</span> =&gt;</span> createSelector(dataSelector, data =&gt; data);</span><br><span class="line">  <span class="keyword">const</span> mapStateToProps = <span class="function"><span class="params">state</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> data = getData();</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      [dataName]: data(state),</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  HOComponent.propTypes = &#123;</span><br><span class="line">    fetchData: PropTypes.func.isRequired,</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  HOComponent.displayName = <span class="string">`createInfoScreen(<span class="subst">$&#123;getDisplayName(HOComponent)&#125;</span>)`</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> connect(</span><br><span class="line">    mapStateToProps,</span><br><span class="line">    &#123; fetchData &#125;,</span><br><span class="line">  )(HOComponent);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>优点：</p>
+<ol>
+<li>可以在任何组件包括 Class Component 中工作</li>
+<li>它所倡导的 容器组件与展示组件分离 原则做到了：关注点分离</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>不直观，难以阅读</li>
+<li>名字冲突</li>
+<li>组件层层层层层层嵌套</li>
+</ol>
+<h3 id="3-Render-Prop"><a href="#3-Render-Prop" class="headerlink" title="3. Render Prop"></a>3. Render Prop</h3><p>2017 年开始，Render Prop 流行了起来</p>
+<p>Render Prop 采用了 ‘代理模式’ 来复用代码</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WindowWidth</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  propTypes = &#123;</span><br><span class="line">    children: PropTypes.func.isRequired</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  state = &#123;</span><br><span class="line">    windowWidth: <span class="built_in">window</span>.innerWidth,</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  onResize = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">      windowWidth: <span class="built_in">window</span>.innerWidth,</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(<span class="string">'resize'</span>, <span class="keyword">this</span>.onResize)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  componentWillUnmount() &#123;</span><br><span class="line">    <span class="built_in">window</span>.removeEventListener(<span class="string">'resize'</span>, <span class="keyword">this</span>.onResize);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.props.children(<span class="keyword">this</span>.state.windowWidth);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> MyComponent = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;WindowWidth&gt;</span><br><span class="line">      &#123;width =&gt; <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Window width is: &#123;width&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>&#125;</span><br><span class="line">    &lt;<span class="regexp">/WindowWidth&gt;</span></span><br><span class="line"><span class="regexp">  )</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>React Router 也采用了这样的API设计：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Route path = &quot;/about&quot; render= &#123; (props) =&gt; &lt;About &#123;...props&#125; /&gt;&#125;&gt;</span><br></pre></td></tr></table></figure>
+<p>优点：</p>
+<ol>
+<li>灵活</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>难以阅读，难以理解</li>
+</ol>
+<h3 id="4-Hook"><a href="#4-Hook" class="headerlink" title="4. Hook"></a>4. Hook</h3><p>2018 年，React 团队宣布推出一种全新的重用代码的方式 - React Hook</p>
+<p>它的核心改变是：允许函数式组件存储自己的状态，在这之前函数式组件是不能有自己的状态的</p>
+<p>这个改变使我们可以像抽象一个普通函数一样抽象React组件中的逻辑</p>
+<p>实现的原理：闭包</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useState, useEffect &#125; <span class="keyword">from</span> <span class="string">"react"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> useWindowsWidth = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [isScreenSmall, setIsScreenSmall] = useState(<span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> checkScreenSize = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    setIsScreenSmall(<span class="built_in">window</span>.innerWidth &lt; <span class="number">600</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">  useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    checkScreenSize();</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(<span class="string">"resize"</span>, checkScreenSize);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">window</span>.removeEventListener(<span class="string">"resize"</span>, checkScreenSize);</span><br><span class="line">  &#125;, []);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> isScreenSmall;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> useWindowsWidth;</span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> useWindowWidth <span class="keyword">from</span> <span class="string">'./useWindowWidth.js'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> MyComponent = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> onSmallScreen = useWindowWidth();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="comment">// Return some elements</span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>优点：</p>
+<ol>
+<li>提取逻辑出来非常容易</li>
+<li>非常易于组合</li>
+<li>可读性非常强</li>
+<li>没有名字冲突问题</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>Hook有自身的用法限制: 只能在组件顶层使用，只能在组件中使用</li>
+<li>由于原理为闭包，所以极少数情况下会出现难以理解的问题</li>
+</ol>
+<h2 id="Hook使用过程中需要注意的几个点"><a href="#Hook使用过程中需要注意的几个点" class="headerlink" title="Hook使用过程中需要注意的几个点"></a>Hook使用过程中需要注意的几个点</h2><h3 id="闭包问题"><a href="#闭包问题" class="headerlink" title="闭包问题"></a>闭包问题</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function WatchCount() &#123;</span><br><span class="line">  const [count, setCount] = useState(0);</span><br><span class="line"></span><br><span class="line">  useEffect(function() &#123;</span><br><span class="line">    setInterval(function log() &#123;</span><br><span class="line">      console.log(`Count is: $&#123;count&#125;`);</span><br><span class="line">    &#125;, 2000);</span><br><span class="line">  &#125;, []);</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &#123;count&#125;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; setCount(count + 1) &#125;&gt;</span><br><span class="line">        加1</span><br><span class="line">      &lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码大家认为会打印什么？<br>没错，每次打印出来的都是“Count is 0”</p>
+<p>因为我们设置定时器的时候传入的是个函数闭包，这个闭包中已经缓存了count的值，所以每次调用的是同一个log函数。</p>
+<p>解决方式也很简单</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">function WatchCount() &#123;</span><br><span class="line">  const [count, setCount] = useState(0);</span><br><span class="line"></span><br><span class="line">  useEffect(function() &#123;</span><br><span class="line">    const id = setInterval(function log() &#123;</span><br><span class="line">      console.log(`Count is: $&#123;count&#125;`);</span><br><span class="line">    &#125;, 2000);</span><br><span class="line">    return function() &#123;</span><br><span class="line">      clearInterval(id);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, [count]); // 看这里，这行是重点</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &#123;count&#125;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; setCount(count + 1) &#125;&gt;</span><br><span class="line">        Increase</span><br><span class="line">      &lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这就告诉useEffect，每当count变化是，重新创建副作用函数。</p>
+<p>闭包问题不仅仅是useEffect的问题，而是所有可能用到函数闭包的hook的通用问题。</p>
+<h3 id="useState第二个修改state的参数是异步的，需要在下一次渲染才生效"><a href="#useState第二个修改state的参数是异步的，需要在下一次渲染才生效" class="headerlink" title="useState第二个修改state的参数是异步的，需要在下一次渲染才生效"></a>useState第二个修改state的参数是异步的，需要在下一次渲染才生效</h3><h3 id="Hook的无限循环渲染问题"><a href="#Hook的无限循环渲染问题" class="headerlink" title="Hook的无限循环渲染问题"></a>Hook的无限循环渲染问题</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">export default function App() &#123;</span><br><span class="line">  // 当obj是基本类型的时候，就不会无限循环</span><br><span class="line">  // 当 obj是对象的时候，就会无限循环</span><br><span class="line">  // 当 obj 是对象的state时，不会无限循环</span><br><span class="line">  const [obj, setObj] = useState(&#123; name: &quot;Jack&quot; &#125;);</span><br><span class="line">  // const obj = 1;</span><br><span class="line">  // const obj = &#123;name: &apos;Jack&apos;&#125;</span><br><span class="line">  const [num, setNum] = useState(0);</span><br><span class="line"></span><br><span class="line">  useEffect(() =&gt; &#123;</span><br><span class="line">    console.log(&quot;effect&quot;);</span><br><span class="line">    setNum(num + 1);</span><br><span class="line">  &#125;, [obj]);</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div className=&quot;App&quot;&gt;</span><br><span class="line">      &#123;num&#125;</span><br><span class="line">      &lt;h1&gt;Hello CodeSandbox&lt;/h1&gt;</span><br><span class="line">      &lt;h2&gt;Start editing to see some magic happen!&lt;/h2&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​    我们分析下为什么obj是普通对象时会触发无限渲染</p>
+<p>第一次渲染时，执行useEffect的副作用，也就是会调用setNum去更新num</p>
+<p>调用了setNum会更新num，导致组件重新渲染，这个时候obj已经是另一个对象了（虽然属性和值完全相同，但是地址已经变了，而react比较useEffect的方式很粗暴，应该也是为了性能的原因，只是简单的判等），所以又会重新执行setNum，又会出发重新渲染，所以进入了无限循环。</p>
+<p>明白了obj是对象的时候为什么会无限渲染，我们就可以理解obj是基础类型的时候为什么不会进入无限循环了。</p>
+<p><strong>而当obj是个state时，除非手动调用对应的setState，react不会认为state发生了改变</strong></p>
+<h3 id="useState惰性初始化"><a href="#useState惰性初始化" class="headerlink" title="useState惰性初始化"></a>useState惰性初始化</h3><p>useState如果第一个参数传入一个函数，作用并不是以这个函数作为state的初始值，而是这个函数的返回值作为初始值，这叫做惰性初始化。所以尽量不要用useState保存函数。</p>
+<h3 id="useRef返回值并不是组件状态，所以它的改变不会触发重新渲染，而且它每次渲染会返回同一个值"><a href="#useRef返回值并不是组件状态，所以它的改变不会触发重新渲染，而且它每次渲染会返回同一个值" class="headerlink" title="useRef返回值并不是组件状态，所以它的改变不会触发重新渲染，而且它每次渲染会返回同一个值"></a>useRef返回值并不是组件状态，所以它的改变不会触发重新渲染，而且它每次渲染会返回同一个值</h3><p>本质上，<code>useRef</code> 就像是可以在其 <code>.current</code> 属性中保存一个可变值的“盒子”。</p>
+<p>你应该熟悉 ref 这一种<a href="https://zh-hans.reactjs.org/docs/refs-and-the-dom.html" rel="external nofollow noopener noreferrer" target="_blank">访问 DOM</a> 的主要方式。如果你将 ref 对象以 <code>&lt;div ref={myRef} /&gt;</code> 形式传入组件，则无论该节点如何改变，React 都会将 ref 对象的 <code>.current</code> 属性设置为相应的 DOM 节点。</p>
+<p>然而，<code>useRef()</code> 比 <code>ref</code> 属性更有用。它可以<a href="https://zh-hans.reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables" rel="external nofollow noopener noreferrer" target="_blank">很方便地保存任何可变值</a>，其类似于在 class 中使用实例字段的方式。</p>
+<p>这是因为它创建的是一个普通 Javascript 对象。而 <code>useRef()</code> 和自建一个 <code>{current: ...}</code> 对象的唯一区别是，<code>useRef</code> 会在每次渲染时返回同一个 ref 对象。</p>
+<p>请记住，当 ref 对象内容发生变化时，<code>useRef</code> 并<em>不会</em>通知你。变更 <code>.current</code> 属性不会引发组件重新渲染。如果想要在 React 绑定或解绑 DOM 节点的 ref 时运行某些代码，则需要使用<a href="https://zh-hans.reactjs.org/docs/hooks-faq.html#how-can-i-measure-a-dom-node" rel="external nofollow noopener noreferrer" target="_blank">回调 ref</a> 来实现。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1620866482/origin-of-ray/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210513084055_cx2rak.jpg" alt><code> </code></p>
+<p>也就是说这段代码即使你点击了setCallback也不会触发重新渲染，所以点击call callback调用的还是一开始的callback</p>
+<p>可以将call callback的onClick改为 () =&gt; callbackRef.current()</p>
+<blockquote>
+<p>注意，改成onclick={callbackRef.current}无效，这个和图上的形式没什么区别</p>
+</blockquote>
+<h3 id="自定义hook中如果要返回函数，可以用useCallback包裹"><a href="#自定义hook中如果要返回函数，可以用useCallback包裹" class="headerlink" title="自定义hook中如果要返回函数，可以用useCallback包裹"></a>自定义hook中如果要返回函数，可以用useCallback包裹</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> memoizedCallback = useCallback(</span><br><span class="line">  () =&gt; &#123;</span><br><span class="line">    doSomething(a, b);</span><br><span class="line">  &#125;,</span><br><span class="line">  [a, b],</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>返回一个 <a href="https://en.wikipedia.org/wiki/Memoization" rel="external nofollow noopener noreferrer" target="_blank">memoized</a> 回调函数。</p>
+<p>把内联回调函数及依赖项数组作为参数传入 <code>useCallback</code>，它将返回该回调函数的 memoized 版本，该回调函数仅在某个依赖项改变时才会更新。当你把回调函数传递给经过优化的并使用引用相等性去避免非必要渲染（例如 <code>shouldComponentUpdate</code>）的子组件时，它将非常有用。</p>
+<p><code>useCallback(fn, deps)</code> 相当于 <code>useMemo(() =&gt; fn, deps)</code>。</p>
+<blockquote>
+<p>注意</p>
+<p>依赖项数组不会作为参数传给回调函数。虽然从概念上来说它表现为：所有回调函数中引用的值都应该出现在依赖项数组中。未来编译器会更加智能，届时自动创建数组将成为可能。</p>
+<p>我们推荐启用 <a href="https://www.npmjs.com/package/eslint-plugin-react-hooks#installation" rel="external nofollow noopener noreferrer" target="_blank"><code>eslint-plugin-react-hooks</code></a> 中的 <a href="https://github.com/facebook/react/issues/14920" rel="external nofollow noopener noreferrer" target="_blank"><code>exhaustive-deps</code></a> 规则。此规则会在添加错误依赖时发出警告并给出修复建议。</p>
+</blockquote>
+<p>参考链接：<a href="https://www.notion.so/10-7-React-Hook-14e8a28e607f45e2a4787ad9cebbbe66" rel="external nofollow noopener noreferrer" target="_blank">https://www.notion.so/10-7-React-Hook-14e8a28e607f45e2a4787ad9cebbbe66</a></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/2021/05/13/react-hook/" title="React Hook的历史以及实战中的坑">https://sunra.top/2021/05/13/react-hook/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/05/11/redux/" rel="prev" title="Redux入门笔记">
+      <i class="fa fa-chevron-left"></i> Redux入门笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/05/14/codesandbox/" rel="next" title="codesandbox是如何在浏览器中运行npm模块">
+      codesandbox是如何在浏览器中运行npm模块 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hook-的发展历程"><span class="nav-number">1.</span> <span class="nav-text">Hook 的发展历程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Mixin"><span class="nav-number">1.1.</span> <span class="nav-text">1. Mixin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-HOC"><span class="nav-number">1.2.</span> <span class="nav-text">2. HOC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Render-Prop"><span class="nav-number">1.3.</span> <span class="nav-text">3. Render Prop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Hook"><span class="nav-number">1.4.</span> <span class="nav-text">4. Hook</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hook使用过程中需要注意的几个点"><span class="nav-number">2.</span> <span class="nav-text">Hook使用过程中需要注意的几个点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#闭包问题"><span class="nav-number">2.1.</span> <span class="nav-text">闭包问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#useState第二个修改state的参数是异步的，需要在下一次渲染才生效"><span class="nav-number">2.2.</span> <span class="nav-text">useState第二个修改state的参数是异步的，需要在下一次渲染才生效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook的无限循环渲染问题"><span class="nav-number">2.3.</span> <span class="nav-text">Hook的无限循环渲染问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#useState惰性初始化"><span class="nav-number">2.4.</span> <span class="nav-text">useState惰性初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#useRef返回值并不是组件状态，所以它的改变不会触发重新渲染，而且它每次渲染会返回同一个值"><span class="nav-number">2.5.</span> <span class="nav-text">useRef返回值并不是组件状态，所以它的改变不会触发重新渲染，而且它每次渲染会返回同一个值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义hook中如果要返回函数，可以用useCallback包裹"><span class="nav-number">2.6.</span> <span class="nav-text">自定义hook中如果要返回函数，可以用useCallback包裹</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

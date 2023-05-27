@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Azure Key Vault is a tool for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, or certificates. A vault is logical">
+<meta name="keywords" content="Azure Key Vault">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Azure Key Vault">
+<meta property="og:url" content="https://sunra.top/2019/11/30/Azure-Key-Vault/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="Azure Key Vault is a tool for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, or certificates. A vault is logical">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2023-05-26T22:57:23.883Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Azure Key Vault">
+<meta name="twitter:description" content="Azure Key Vault is a tool for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, or certificates. A vault is logical">
+
+<link rel="canonical" href="https://sunra.top/2019/11/30/Azure-Key-Vault/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>Azure Key Vault | Origin of Ray</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/2019/11/30/Azure-Key-Vault/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Azure Key Vault
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-30 13:08:46" itemprop="dateCreated datePublished" datetime="2019-11-30T13:08:46+08:00">2019-11-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-27 06:57:23" itemprop="dateModified" datetime="2023-05-27T06:57:23+08:00">2023-05-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cloud/" itemprop="url" rel="index"><span itemprop="name">Cloud</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Azure Key Vault is a tool for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, or certificates. A vault is logical group of secrets.</p>
+<a id="more"></a>
+<p>上面这一段是Azure官方文档的描述，作者在阅读了Microsoft Azure文档之后，对其基本的概念进行了提取和总结，并在原文中加入了一些自己的理解。阅读完中文就能对key vault有个大概的认识，英文原文是比较专业的描述，不影响理解，如果想进一步了解可以去阅读文末提供的链接。</p>
+<h2 id="What-is-Azure-Key-Vault"><a href="#What-is-Azure-Key-Vault" class="headerlink" title="What is Azure Key Vault"></a>What is Azure Key Vault</h2><p>简单来讲，Azure Key Vault 就是提供了一个能够安全存储你的敏感数据的地方，想要获取这些数据就必须通过身份校验以及权限校验，我们可以把类似于证书，数据库配置等敏感信息放在这里，而不需要硬编码到代码中。在使用时我们将敏感信息存储到key vault上后，会获取对应的名称，我们只需要通过api去key vault中通过名字（也可以添加版本信息）获取对应的信息就好，这些信息可以是密钥（只能get公钥），证书信息，或者一些配置信息。当然这些信息并不是任何人直接去调用api就可以获取的，而是需要你的Identity信息被用于创建该Key Vault的Tenant下面的Subscription所承认，获取承认的方式有很多种，可以通过id-token，或者密码等。</p>
+<p>Azure Key Vault帮助解决以下问题：</p>
+<ul>
+<li><strong>秘密管理</strong> -Azure Key Vault可用于安全存储和严格控制对令牌，密码，证书，API密钥和其他秘密的访问。</li>
+<li><strong>密钥管理</strong> -Azure Key Vault也可以用作密钥管理解决方案。使用Azure Key Vault可以轻松创建和控制用于加密数据的加密密钥。</li>
+<li><strong>证书管理</strong> -Azure Key Vault也是一项服务，使您可以轻松地调配，管理和部署公共和私有安全套接字层/传输层安全性（SSL / TLS）证书，以与Azure和内部连接的资源一起使用。</li>
+<li><strong>存储由硬件安全模块支持</strong>的机密-机密和密钥可以通过软件或FIPS 140-2 2级验证HSM进行保护。</li>
+</ul>
+<p>使用Azure Key Vault 可以集中存储应用程序的机密数据并可以控制这些数据的分发。而且由于开发人员可以不用在程序中硬编码安全信息，大大提高了程序的安全性。</p>
+<p>存储在Azure Key Vault中的信息会被可靠的加密算法保存。</p>
+<p>同时Azure Key Vault可以基于Azure AD进行访问的权限控制，同时可以记录下来是谁在什么时间访问了哪一条数据。</p>
+<h2 id="Azure-Key-Vault-basic-concepts"><a href="#Azure-Key-Vault-basic-concepts" class="headerlink" title="Azure Key Vault basic concepts"></a>Azure Key Vault basic concepts</h2><ul>
+<li><strong>承租人/租户</strong>( <strong>Tenant</strong> )：承租人是拥有和管理Microsoft云服务的特定实例的组织。最常用于指组织的Azure和Office 365服务集。</li>
+<li><strong>保管库所有者</strong>( <strong>Vault owner</strong> )：保管库所有者可以创建密钥保管库并获得对其的完全访问权和控制权。保管库所有者还可以设置审核以记录谁访问了机密和密钥。管理员可以控制密钥生命周期。他们可以滚动到密钥的新版本，进行备份并执行相关任务。</li>
+<li><strong>保管箱使用者</strong>( <strong>Vault consumer</strong> )：当保管库所有者授予使用者访问权时，<strong>保管箱使用者</strong>可以对密钥保管库内的资产执行操作。可用的操作取决于所授予的权限。</li>
+<li><strong>资源</strong>( <strong>Resource</strong> )：资源是可通过Azure进行管理的项目。常见示例包括虚拟机，存储帐户，Web应用程序，数据库和虚拟网络。还有更多。</li>
+<li><strong>资源组</strong>( <strong>Resource group</strong> )：资源组是一个容器，其中包含Azure解决方案的相关资源。资源组可以包含解决方案的所有资源，也可以仅包含您要作为组进行管理的资源。您可以根据对组织最有意义的决定来决定如何向资源组分配资源。</li>
+<li><strong>服务主体</strong>( <strong>Service principal</strong> )：Azure服务主体是用户创建的应用程序，服务和自动化工具用来访问特定Azure资源的安全身份。可以将其视为具有特定角色且受到严格控制的权限的“用户身份”（用户名，密码或证书）。与一般用户身份不同，服务主体只需要做特定的事情。如果仅授予它执行管理任务所需的最低权限级别，则可以提高安全性。</li>
+<li>Azure Active Directory（Azure AD）：Azure AD是租户的Active Directory服务。每个目录都有一个或多个域。一个目录可以有许多与之关联的订阅，但只能有一个租户。每个组织可以有一个租户，这个租户有自己的ID用于标识自己，每个Tenant都有自己的一个或者多个SubScription，Subscription与Azure AD directory是多对一的关系。每个人都可以去Azure上申请自己的账号，这个账号在Azure上叫做Identity，每个Identity可以创建Azure AD account。如果你的Azure AD account在某个Tenant的Azure AD directory中，并且Tenant授予了你某个Subscription的权限，你就可以使用该Subscription下的Services。具体可以去查看<a href="https://docs.microsoft.com/en-us/azure/active-directory/active-directory-whatis" rel="external nofollow noopener noreferrer" target="_blank">文档</a></li>
+<li><strong>Azure租户ID</strong>( <strong>Azure tenant ID</strong> )：租户ID是在Azure订阅中标识Azure AD实例的独特方法。</li>
+<li><strong>托管身份</strong>( <strong>Managed identities</strong> )：Azure Key Vault提供了一种安全存储凭据以及其他密钥和机密的方法，但是您的代码需要通过Key Vault进行身份验证才能检索它们。通过使用托管身份，可以通过在Azure AD中为Azure服务提供自动托管身份来简化解决此问题的步骤。您可以使用此身份对Key Vault或支持Azure AD身份验证的任何服务进行身份验证，而无需在代码中包含任何凭据。</li>
+</ul>
+<p><strong>Anybody with an Azure subscription can create and use key vaults</strong>. Although Key Vault benefits developers and security administrators, it can be implemented and managed by an organization’s administrator who manages other Azure services. </p>
+<h2 id="Security"><a href="#Security" class="headerlink" title="Security"></a>Security</h2><p> 这一部分主要讲的就是Azure Key Vault是如何确保你的信息只能被你授权的人看到。</p>
+<p>对于Key Vault的管理有两种级别，也对应着两种access model，第一种级别叫做management plane，这种级别的关系可以对Key Vault本身进行操作，可以创建和删除一个Key Vault，第二种级别就是对Key Vault中的数据进行管理。但是不管那种级别，其身份校验都是通过Azure AD来实现的，通过基于<strong>角色的权限控制（RBAC）</strong>来判断一个用户可以对Key Vault做出怎样的操作。</p>
+<p>在不同级别之下做出的RBAC只适用于该级别之下的用户，比如你在Subscription的级别下做出的RBAC就只适用于该Subscription下的用户。</p>
+<p>同时对于secret， key，certificate的权限管理是分开的，也就是说你同一个Subscription下的用户在同一个Key Vault中可能对secret有访问权限，但是对于key却没有。</p>
+<p>You need to protect encryption keys and secrets like certificates, connection strings, and passwords in the cloud so you are using Azure Key Vault. Since you are storing sensitive and business critical data, you need to take steps to maximize the security of your vaults and the data stored in them. </p>
+<h3 id="Identity-and-access-management"><a href="#Identity-and-access-management" class="headerlink" title="Identity and access management"></a>Identity and access management</h3><p>When you create a key vault in an Azure subscription, it’s automatically associated with the Azure AD tenant of the subscription. Anyone trying to manage or retrieve content from a vault must be authenticated by Azure AD.</p>
+<ul>
+<li>Authentication establishes the identity of the caller.</li>
+<li>Authorization determines which operations the caller can perform. Authorization in Key Vault uses a combination of <a href="https://docs.microsoft.com/en-us/azure/role-based-access-control/overview" rel="external nofollow noopener noreferrer" target="_blank">Role based access control</a> (RBAC) and Azure Key Vault access policies.</li>
+</ul>
+<h4 id="Access-model-overview"><a href="#Access-model-overview" class="headerlink" title="Access model overview"></a>Access model overview</h4><p>Access to vaults takes place through two interfaces or planes. These planes are the management plane and the data plane.</p>
+<ul>
+<li>The <em>management plane</em> is where you manage Key Vault itself and it is the interface used to create and delete vaults. You can also read key vault properties and manage access policies.</li>
+<li>The <em>data plane</em> allows you to work with the data stored in a key vault. You can add, delete, and modify keys, secrets, and certificates.</li>
+</ul>
+<p>To access a key vault in either plane, all callers (users or applications) must be authenticated and authorized. Both planes use Azure Active Directory (Azure AD) for authentication. For authorization, the management plane uses role-based access control (RBAC) and the data plane uses a Key Vault access policy.</p>
+<p>The model of a single mechanism for authentication to both planes has several benefits:</p>
+<ul>
+<li>Organizations can control access centrally to all key vaults in their organization.</li>
+<li>If a user leaves, they instantly lose access to all key vaults in the organization.</li>
+<li>Organizations can customize authentication by using the options in Azure AD, such as to enable multi-factor authentication for added security</li>
+</ul>
+<h4 id="Managing-administrative-access-to-Key-Vault"><a href="#Managing-administrative-access-to-Key-Vault" class="headerlink" title="Managing administrative access to Key Vault"></a>Managing administrative access to Key Vault</h4><p>When you create a key vault in a resource group, you manage access by using Azure AD. You grant users or groups the ability to manage the key vaults in a resource group. You can grant access at a specific scope level by assigning the appropriate RBAC roles. To grant access to a user to manage key vaults, you assign a predefined <code>key vault Contributor</code> role to the user at a specific scope. The following scopes levels can be assigned to an RBAC role:</p>
+<ul>
+<li><strong>Subscription</strong>: An RBAC role assigned at the subscription level applies to all resource groups and resources within that subscription.</li>
+<li><strong>Resource group</strong>: An RBAC role assigned at the resource group level applies to all resources in that resource group.</li>
+<li><strong>Specific resource</strong>: An RBAC role assigned for a specific resource applies to that resource. In this case, the resource is a specific key vault.</li>
+</ul>
+<h4 id="Controlling-access-to-Key-Vault-data"><a href="#Controlling-access-to-Key-Vault-data" class="headerlink" title="Controlling access to Key Vault data"></a>Controlling access to Key Vault data</h4><p>Key Vault access policies grant permissions separately to keys, secrets, or certificate. You can grant a user access only to keys and not to secrets. Access permissions for keys, secrets, and certificates are managed at the vault level.</p>
+<h4 id="Network-access"><a href="#Network-access" class="headerlink" title="Network access"></a>Network access</h4><p>You can reduce the exposure of your vaults by specifying which IP addresses have access to them. The virtual network service endpoints for Azure Key Vault allow you to restrict access to a specified virtual network. The endpoints also allow you to restrict access to a list of IPv4 (internet protocol version 4) address ranges. Any user connecting to your key vault from outside those sources is denied access.</p>
+<p>After firewall rules are in effect, users can only read data from Key Vault when their requests originate from allowed virtual networks or IPv4 address ranges. This also applies to accessing Key Vault from the Azure portal. Although users can browse to a key vault from the Azure portal, they might not be able to list keys, secrets, or certificates if their client machine is not in the allowed list. This also affects the Key Vault Picker by other Azure services. Users might be able to see list of key vaults, but not list keys, if firewall rules prevent their client machine.</p>
+<h3 id="Azure-Key-Vault-security-worlds-and-geographic-boundaries"><a href="#Azure-Key-Vault-security-worlds-and-geographic-boundaries" class="headerlink" title="Azure Key Vault security worlds and geographic boundaries"></a>Azure Key Vault security worlds and geographic boundaries</h3><p>Azure Key Vault 是一个多租户服务，同一个Azure Location使用同一个HSM，享有相同的安全边界，也就是在同一个安全世界中。</p>
+<p>同时Azure Key Vault可以对数据进行备份，但是备份需要满足两个条件：</p>
+<ul>
+<li>两个Azure locations 在同一地理位置</li>
+<li>两个key vaults 属于同一个订阅</li>
+</ul>
+<h3 id="Secure-access-to-a-key-vault"><a href="#Secure-access-to-a-key-vault" class="headerlink" title="Secure access to a key vault"></a>Secure access to a key vault</h3><h4 id="Access-model-overview-1"><a href="#Access-model-overview-1" class="headerlink" title="Access model overview"></a>Access model overview</h4><p>对密钥库的访问通过两个接口进行控制:管理平面和数据平面。管理平面是您管理密钥库本身的地方。此平面中的操作包括创建和删除密钥保险库、检索密钥保险库属性和更新访问策略。数据平面是处理存储在密钥库中的数据的地方。您可以添加、删除和修改密钥、秘密和证书。<br>要访问任一平面中的密钥库，所有调用方(用户或应用程序)必须具有适当的身份验证和授权。身份验证建立</p>
+<h4 id="Active-Directory-authentication"><a href="#Active-Directory-authentication" class="headerlink" title="Active Directory authentication"></a>Active Directory authentication</h4><p>When you create a key vault in an Azure subscription, it’s automatically associated with the Azure AD tenant of the subscription. All callers in both planes must register in this tenant and authenticate to access the key vault. In both cases, applications can access Key Vault in two ways:</p>
+<ul>
+<li><strong>User plus application access</strong>: The application accesses Key Vault on behalf of a signed-in user. Examples of this type of access include Azure PowerShell and the Azure portal. User access is granted in two ways. Users can access Key Vault from any application, or they must use a specific application (referred to as <em>compound identity</em>).</li>
+<li><strong>Application-only access</strong>: The application runs as a daemon service or background job. The application identity is granted access to the key vault.</li>
+</ul>
+<p>For both types of access, the application authenticates with Azure AD. The application uses any <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/authentication-scenarios" rel="external nofollow noopener noreferrer" target="_blank">supported authentication method</a> based on the application type. The application acquires a token for a resource in the plane to grant access. The resource is an endpoint in the management or data plane, based on the Azure environment. The application uses the token and sends a REST API request to Key Vault. To learn more, review the <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow" rel="external nofollow noopener noreferrer" target="_blank">whole authentication flow</a>.</p>
+<p>The model of a single mechanism for authentication to both planes has several benefits:</p>
+<ul>
+<li>Organizations can control access centrally to all key vaults in their organization.</li>
+<li>If a user leaves, they instantly lose access to all key vaults in the organization.</li>
+<li>Organizations can customize authentication by using the options in Azure AD, such as to enable multi-factor authentication for added security.</li>
+</ul>
+<h4 id="Resource-endpoints"><a href="#Resource-endpoints" class="headerlink" title="Resource endpoints"></a>Resource endpoints</h4><p> 应用程序通过端点访问两个平面。 </p>
+<p>The access controls for the two planes work independently. To grant an application access to use keys in a key vault, you grant data plane access by using a Key Vault access policy. To grant a user read access to Key Vault properties and tags, but not access to data (keys, secrets, or certificates), you grant management plane access with RBAC. **</p>
+<h2 id="Certificate"><a href="#Certificate" class="headerlink" title="Certificate"></a>Certificate</h2><h3 id="About-keys-secrets-and-certificates"><a href="#About-keys-secrets-and-certificates" class="headerlink" title="About keys, secrets, and certificates"></a>About keys, secrets, and certificates</h3><p>Azure Key Vault使Microsoft Azure应用程序和用户能够存储和使用几种类型的秘密/密钥数据</p>
+<ul>
+<li>加密密钥（Cryptographic key）：支持多种密钥类型和算法，并允许对高价值密钥使用硬件安全模块（HSM）。我们通过api其实只能获取到公钥。</li>
+<li>机密(Secrets)：提供机密的安全存储，例如密码和数据库连接字符串。</li>
+<li>证书(Certificates)：支持基于密钥和机密构建的证书，并添加了自动续订功能。</li>
+<li>Azure存储(Azure Storage)：可以为您管理Azure存储帐户的密钥。在内部，Key Vault可以使用Azure存储帐户列出（同步）密钥，并定期重新生成（旋转）密钥。</li>
+</ul>
+<h4 id="Key-Vaults-keys"><a href="#Key-Vaults-keys" class="headerlink" title="Key Vaults keys"></a>Key Vaults keys</h4><p>Key Vault中的加密密钥表示为JSON Web密钥[JWK]对象。JWK / JWA基本规范也得到了扩展，以启用Key Vault实施所特有的密钥类型。例如，使用特定于HSM供应商的包装导入密钥，可以安全地运输只能在Key Vault HSM中使用的密钥。</p>
+<ul>
+<li><strong>“软”密钥</strong>：Key Vault在软件中处理过的密钥，但是使用HSM中的系统密钥在静止状态下进行了加密。客户可以导入现有的RSA或EC（椭圆曲线）密钥，或请求Key Vault生成一个。</li>
+<li><strong>“硬”键</strong>：在HSM（硬件安全模块）中处理的键。这些密钥在Key Vault HSM安全世界之一（每个地理区域都有一个安全世界以保持隔离）中受到保护。客户端可以以软形式或通过从兼容的HSM设备导出来导入RSA或EC密钥。客户还可以请求Key Vault生成密钥。此密钥类型将key_hsm属性添加到JWK获取以携带HSM密钥材料。</li>
+</ul>
+<p>在密钥库中创建密钥后，可以使用该密钥执行以下加密操作：</p>
+<ul>
+<li><strong>签名并验证</strong>：严格来说，此操作是“签名哈希”或“验证哈希”，因为Key Vault不支持内容哈希作为签名创建的一部分。应用程序应对要在本地签名的数据进行哈希处理，然后请求Key Vault对哈希进行签名。对于可能无法访问[公开]密钥材料的应用程序，为方便操作提供了对签名哈希的验证的支持。为了获得最佳的应用程序性能，请验证是否在本地执行操作。</li>
+<li><strong>密钥加密/包装</strong>：可以将存储在Key Vault中的密钥用于保护另一个密钥，通常是对称内容加密密钥（CEK）。当Key Vault中的密钥不对称时，将使用密钥加密。例如，RSA-OAEP和WRAPKEY / UNWRAPKEY操作等效于ENCRYPT / DECRYPT。如果“密钥保管库”中的密钥是对称的，则使用密钥包装。例如，AES-KW。支持WRAPKEY操作是为了方便无法访问[公开]密钥资料的应用程序。为了获得最佳的应用程序性能，WRAPKEY操作应在本地执行。</li>
+<li><strong>加密和解密</strong>：存储在Key Vault中的密钥可用于加密或解密单个数据块。块的大小由密钥类型和所选的加密算法确定。为方便起见，提供了Encrypt操作，用于可能无法访问[公开]密钥资料的应用程序。为了获得最佳的应用程序性能，应在本地执行加密操作。</li>
+</ul>
+<h4 id="Key-Vault-secrets"><a href="#Key-Vault-secrets" class="headerlink" title="Key Vault secrets"></a>Key Vault secrets</h4><p>From a developer’s perspective, Key Vault APIs accept and return secret values as strings. Internally, Key Vault stores and manages secrets as sequences of octets (8-bit bytes), with a maximum size of 25k bytes each. The Key Vault service doesn’t provide semantics for secrets. It merely accepts the data, encrypts it, stores it, and returns a secret identifier (“id”). The identifier can be used to retrieve the secret at a later time.</p>
+<p>For highly sensitive data, clients should consider additional layers of protection for data. Encrypting data using a separate protection key prior to storage in Key Vault is one example.</p>
+<p>Key Vault also supports a contentType field for secrets. Clients may specify the content type of a secret to assist in interpreting the secret data when it’s retrieved. The maximum length of this field is 255 characters. There are no pre-defined values. The suggested usage is as a hint for interpreting the secret data. For instance, an implementation may store both passwords and certificates as secrets, then use this field to differentiate. There are no predefined values.</p>
+<h4 id="Key-Vault-Certificates"><a href="#Key-Vault-Certificates" class="headerlink" title="Key Vault Certificates"></a>Key Vault Certificates</h4><p>Key Vault certificates support provides for management of your x509 certificates and the following behaviors:</p>
+<ul>
+<li>Allows a certificate owner to create a certificate through a Key Vault creation process or through the import of an existing certificate. Includes both self-signed and Certificate Authority generated certificates.</li>
+<li>Allows a Key Vault certificate owner to implement secure storage and management of X509 certificates without interaction with private key material.</li>
+<li>Allows a certificate owner to create a policy that directs Key Vault to manage the life-cycle of a certificate.</li>
+<li>Allows certificate owners to provide contact information for notification about life-cycle events of expiration and renewal of certificate.</li>
+<li>Supports automatic renewal with selected issuers - Key Vault partner X509 certificate providers / certificate authorities.</li>
+</ul>
+<p>本文章只是对于Azure Key Vault的基本概念的及其之间关系的简介，对于更加详细的信息，比如Key Vault具体是如何监控，节流，身份验证，请求参数之类的详细信息可以去查看文末的官方文档。</p>
+<p>参考文章：</p>
+<p> <a href="https://docs.microsoft.com/en-us/azure/key-vault/" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/key-vault/</a> </p>
+<p> <a href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis</a> </p>
+<p> <a href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-subscriptions-associated-directory" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-subscriptions-associated-directory</a> </p>
+<p> <a href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-manage-groups" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-manage-groups</a> </p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/2019/11/30/Azure-Key-Vault/" title="Azure Key Vault">https://sunra.top/2019/11/30/Azure-Key-Vault/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/11/22/passport-azure-ad-infine-callback/" rel="prev" title="passport-azure-ad_无限刷新问题">
+      <i class="fa fa-chevron-left"></i> passport-azure-ad_无限刷新问题
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/05/smart-contract/" rel="next" title="智能合约概述">
+      智能合约概述 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-Azure-Key-Vault"><span class="nav-number">1.</span> <span class="nav-text">What is Azure Key Vault</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Azure-Key-Vault-basic-concepts"><span class="nav-number">2.</span> <span class="nav-text">Azure Key Vault basic concepts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Security"><span class="nav-number">3.</span> <span class="nav-text">Security</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Identity-and-access-management"><span class="nav-number">3.1.</span> <span class="nav-text">Identity and access management</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Access-model-overview"><span class="nav-number">3.1.1.</span> <span class="nav-text">Access model overview</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Managing-administrative-access-to-Key-Vault"><span class="nav-number">3.1.2.</span> <span class="nav-text">Managing administrative access to Key Vault</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Controlling-access-to-Key-Vault-data"><span class="nav-number">3.1.3.</span> <span class="nav-text">Controlling access to Key Vault data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Network-access"><span class="nav-number">3.1.4.</span> <span class="nav-text">Network access</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Azure-Key-Vault-security-worlds-and-geographic-boundaries"><span class="nav-number">3.2.</span> <span class="nav-text">Azure Key Vault security worlds and geographic boundaries</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Secure-access-to-a-key-vault"><span class="nav-number">3.3.</span> <span class="nav-text">Secure access to a key vault</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Access-model-overview-1"><span class="nav-number">3.3.1.</span> <span class="nav-text">Access model overview</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Active-Directory-authentication"><span class="nav-number">3.3.2.</span> <span class="nav-text">Active Directory authentication</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Resource-endpoints"><span class="nav-number">3.3.3.</span> <span class="nav-text">Resource endpoints</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Certificate"><span class="nav-number">4.</span> <span class="nav-text">Certificate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#About-keys-secrets-and-certificates"><span class="nav-number">4.1.</span> <span class="nav-text">About keys, secrets, and certificates</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Key-Vaults-keys"><span class="nav-number">4.1.1.</span> <span class="nav-text">Key Vaults keys</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Key-Vault-secrets"><span class="nav-number">4.1.2.</span> <span class="nav-text">Key Vault secrets</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Key-Vault-Certificates"><span class="nav-number">4.1.3.</span> <span class="nav-text">Key Vault Certificates</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
