@@ -21,6 +21,12 @@
   </script>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="最近开始看一些关于react的知识，不可避免的接触到了redux。 去看了看他的文档，就来简单总结下。 注意，原大部分内容已经过时了，因为react更新了hook，我接下来回去研究下react-redux针对hook做了哪些改进，再来重新解释，不过本博客大部分内容是讲的原生的redux，还可以放心食用。">
 <meta name="keywords" content="Redux 使用教程 概念">
 <meta property="og:type" content="article">
@@ -29,7 +35,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近开始看一些关于react的知识，不可避免的接触到了redux。 去看了看他的文档，就来简单总结下。 注意，原大部分内容已经过时了，因为react更新了hook，我接下来回去研究下react-redux针对hook做了哪些改进，再来重新解释，不过本博客大部分内容是讲的原生的redux，还可以放心食用。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T04:00:20.949Z">
+<meta property="og:updated_time" content="2023-05-27T14:17:13.338Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redux入门笔记">
 <meta name="twitter:description" content="最近开始看一些关于react的知识，不可避免的接触到了redux。 去看了看他的文档，就来简单总结下。 注意，原大部分内容已经过时了，因为react更新了hook，我接下来回去研究下react-redux针对hook做了哪些改进，再来重新解释，不过本博客大部分内容是讲的原生的redux，还可以放心食用。">
@@ -233,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 12:00:20" itemprop="dateModified" datetime="2023-05-27T12:00:20+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
