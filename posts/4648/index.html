@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。">
+<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="矩阵运算的代数和几何意义">
+<meta property="og:url" content="https://sunra.top/posts/4648/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2023-05-27T03:54:39.013Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="矩阵运算的代数和几何意义">
+<meta name="twitter:description" content="这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。">
+
+<link rel="canonical" href="https://sunra.top/posts/4648/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>矩阵运算的代数和几何意义 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/4648/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          矩阵运算的代数和几何意义
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-12 18:48:11" itemprop="dateCreated datePublished" datetime="2022-02-12T18:48:11+08:00">2022-02-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-27 11:54:39" itemprop="dateModified" datetime="2023-05-27T11:54:39+08:00">2023-05-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Math/" itemprop="url" rel="index"><span itemprop="name">Math</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。</p>
+<a id="more"></a>
+<p>总的来说，矩阵和向量，在代数意义上讲，表现的是方程组解的问题，而从几何意义上讲，是坐标变换的问题。</p>
+<p>但是其实，我们从一个n维坐标空间到另一个n维坐标空间进行的运算，还是方程组。所以说，矩阵，方程组和坐标变换具有很强的共性。</p>
+<h2 id="代数意义"><a href="#代数意义" class="headerlink" title="代数意义"></a>代数意义</h2><p>我们慢慢梳理行列式，向量，矩阵，方程组以及坐标空间的关系：</p>
+<p>首先，并不是每个矩阵都有自己对应的行列式，只有方阵才有行列式。</p>
+<p>一个n阶行列式对应的矩阵，是一个由n个方程，n个未知量组成的方程组的系数矩阵。</p>
+<p>行列式的值的关键意义在于，它是否等于0，这关系着方程组是否有解，是否有唯一解。</p>
+<p>首先，什么时候行列式值会等于0呢？一种情况是，至少有一行为0，对应的方程组表现出来就是，那一行的n个未知量的系数都等于0，另一种情况是，有两行对应成比例，方程组表现出来就是，有两行的系数对应成比例。</p>
+<p>如果是齐次线性方程组，也就是方程组中所有方程的等号右边都是0。这两种情况，就相当于有n个未知量，但是有效方程个数小于n，那么我们势必就无法求出方程的唯一解，这个就是克拉默法则，当|A| = 0时，齐次线性方程组有非零解。</p>
+<p>如果是非齐次线性方程组，第一种情况，如果系数都为0的那一个方程右边不等于0，那么很明显，方程组无解，如果等于0，就相当于这不是一个有效方程；而第二种情况，如果两个系数对应成比例的方程右边的值不成比例，那就无解，如果成比例，也相当于两个方程其实是一个，也就是有一个无效方程。</p>
+<p>而这个有效方程的个数，其实就是系数矩阵的秩，也就是行列式的秩。所以说矩阵的秩小于n的系数矩阵对应的方程组，没有唯一解，其实就是有效方程个数不够，求不出唯一解。</p>
+<p>我们求取一个矩阵秩的过程，是做初等行变换，化成阶梯型，这个过程对于方程组来说，就是不断化简，变成同解方程组的过程，注意，只有初等行变换才是同解方程组，不能做列变换。</p>
+<p>虽然只有初等行变换才是同解方程组，但是所有的初等变换都不改变矩阵的秩。</p>
+<p>同时如果行列式的秩为n，我们转化为阶梯型就是一个上三角行列式（如果你继续做列变化，可以变成对角矩阵），如果每一行都是一个向量，那么这个向量组是线性无关的，所以说线性无关向量组组成的系数矩阵对应的方程组有唯一解，如果线性相关，那就说明，有效方程个数小于n。</p>
+<h2 id="几何意义"><a href="#几何意义" class="headerlink" title="几何意义"></a>几何意义</h2><p>上面说的方程组，其实说起来就是一个空间坐标转化的过程（也就是向量x投影到A矩阵对应的坐标空间的过程），也就是方程组等式坐边的系数矩阵按列分块得到的n个n维向量线性表出方程组右边值组成的n维向量的过程，系数矩阵的n个列向量就相当于n个坐标轴，如果秩等于n，那就说明，这n个坐标轴线性无关，方程组就只有一个解，也就是只有一种表出方法。</p>
+<p>一个向量左乘一个矩阵，可以有两种几何意义，一种是将向量投影到一个新的坐标系(这个投影矩阵其实也是新坐标系的坐标轴在原坐标系下的表示)中，也就是不改变向量，而是用另一个坐标系来表示该向量，一种是表示缩放旋转、</p>
+<p>前者左乘的矩阵必须是一个可逆矩阵，因为你能从A坐标系变换到B坐标系，就需要变回来，这个变回来的过程就是左乘逆矩阵，这也是为什么可逆矩阵的行列式值不能为0的一个原因，如果为零，说明丢了一个维度，那么就回不来了。</p>
+<h2 id="特征值和特征向量"><a href="#特征值和特征向量" class="headerlink" title="特征值和特征向量"></a>特征值和特征向量</h2><p>这一段可以直接看<a href="http://haoeric.github.io/matrix-eigenvectors/" rel="external nofollow noopener noreferrer" target="_blank">http://haoeric.github.io/matrix-eigenvectors/</a></p>
+<p>这篇博客详细的介绍了什么叫特征值和特征向量。</p>
+<p>我这里就只摘抄对我最有用的一段：</p>
+<p>如果一个n×n方阵A与一个非零向量x点乘满足如下条件：</p>
+<p>Ax = λx<br>那么向量x为矩阵A的一个特征向量，λ（非零）即特征向量x对应的特征值。</p>
+<p>等式左边我们可以看成是将非零向量x投影到以方阵A每一行为基的坐标系中，等式右边可以看成是对向量x进行伸缩变换，伸缩的比例为λ。所以，如果一个向量投影到一个方阵定义的空间中只发生伸缩变化，而不发生旋转变化，那么该向量就是这个方阵的一个特征向量，伸缩的比例就是特征值。</p>
+<h2 id="矩阵的相似"><a href="#矩阵的相似" class="headerlink" title="矩阵的相似"></a>矩阵的相似</h2><p>设A，B都是n阶矩阵，若存在可逆矩阵P，使得</p>
+<script type="math/tex; mode=display">
+P^{-1}AP = B</script><p>则称B是A的相似矩阵<br>若A与对角阵相似，则称A可以相似对角化，该对角阵称为A的相似标准型。</p>
+<p>两个矩阵相似，则两个矩阵的特征值和特征多项式都相等。</p>
+<p>n阶方阵可相似对角化的充分必要条件是，有n个线性无关的特征向量</p>
+<blockquote>
+<p>线性无关与正交并不同，正交一定线性无关，但是反过来不一定。如果把线性相关理解为平行的两个向量，那么线性相关则是相交，而正交是垂直相交。</p>
+</blockquote>
+<p>实对称矩阵一定可以相似对角化，且过度矩阵是个正交矩阵，实对称矩阵的不同特征值的特征向量不仅仅是线性无关，而且正交。</p>
+<p>矩阵相似的几何意义：假设空间中有一个向量v，我们可以将其的旋转和缩放表现为左乘一个矩阵，这同一个变换在不同坐标系下表示出来的矩阵就是相似的。</p>
+<ul>
+<li>首先将v从B对应的坐标系下转换到A对应的坐标系下，就是Pv</li>
+<li>然后在A坐标系下，做旋转缩放等操作，那就是APv</li>
+<li>然后把操作后的向量重新放回B对应的坐标系下，就是 P^{-1}APv，这一套操作下来的结果相当于直接在B的坐标系下直接进行旋转缩放，也就是 Bv = P^{-1}AP</li>
+</ul>
+<p>那么可以相似对角化的意义则是，在B坐标系下，我们可以表示为拆解为每个坐标轴独自的缩放，这一点和特征值和特征向量的定义又暗合（如果一个向量投影到一个方阵定义的空间中只发生伸缩变化，而不发生旋转变化，那么该向量就是这个方阵的一个特征向量，伸缩的比例就是特征值）。</p>
+<blockquote>
+<p>这里有个猜想，是不是说A对应的坐标空间的特征空间就是B对应的坐标空间？</p>
+<p>在理解特征值的时候，左乘矩阵的几何意义是投影变换，将向量投影到矩阵表示的向量空间中，而在理解相似的过程中，左乘P矩阵的几何意义是投影变换，左乘A矩阵的几何意义是进行旋转缩放。</p>
+</blockquote>
+<h2 id="矩阵的合同"><a href="#矩阵的合同" class="headerlink" title="矩阵的合同"></a>矩阵的合同</h2><p>这个也可以参考这篇博客：<a href="https://www.cnblogs.com/yanghh/p/13492614.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.cnblogs.com/yanghh/p/13492614.html</a></p>
+<p>我也只摘抄对我最有用的一段：</p>
+<p>在不同的参考系下得到的多项式或二次型矩阵不同，但我们得知道它们是不是同一个图形，于是有合同的概念。</p>
+<p>两个合同的矩阵是：同一个图形在不同基下的表示。</p>
+<p>需要注意的是，考虑矩阵合同需要时二次型的前提下，也就是是实对称矩阵。</p>
+<blockquote>
+<p>矩阵的相似表示的是同一个向量的变换在不同坐标空间下的表示，矩阵的合同表示的是同一个图形在不同坐标空间下的表示。</p>
+</blockquote>
+<p>从代数角度讲，合同是针对实对称矩阵讲的，而实对称矩阵一定是相似于对角阵的，且过度矩阵是个正交阵，也就是说实对称矩阵一定是既相似又合同与对角阵。其实把求实对称矩阵合同的对角阵的过程，就是将二次型配方成标准型的过程，比如</p>
+<script type="math/tex; mode=display">
+f(x_1, x_2, x_3) = 2x_1^2 + 3x_2^2 + 5x_3^2 + 4x_1x_2 - 8x_2x_3 - 4x_3x_1</script><p>这是一个二次型，系数矩阵是个实对称矩阵，我们可以把它配成完全平方</p>
+<script type="math/tex; mode=display">
+f = 2(x_1 + x_2 - x_3)^2 + (x_2 - 2x_3)^2 - x_3^2</script><p>那么引入新变量</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+y_1 = x_ 1 + x_2 - x_3 \\
+y_2 = x_2 - 2x_3 \\
+y_3 = x_3
+\end{cases}
+即 
+\begin{cases}
+x_1 = y_ 1 - y_2 - y_3 \\
+x_2 = y_2 + 2y_3 \\
+x_3 = y_3
+\end{cases}</script><p>则f的标准型为</p>
+<script type="math/tex; mode=display">
+f = 2y_1^2 + y_2^2 - y_3^2</script><p>过度矩阵就是</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+1 & -1 & -1 \\
+0 & 1 & 2 \\
+0 & 0 & 1
+\end{bmatrix}</script><p>参考链接：<br><a href="http://haoeric.github.io/matrix-eigenvectors/" rel="external nofollow noopener noreferrer" target="_blank">http://haoeric.github.io/matrix-eigenvectors/</a><br><a href="https://www.cnblogs.com/yanghh/p/13492614.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.cnblogs.com/yanghh/p/13492614.html</a></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/posts/4648/" title="矩阵运算的代数和几何意义">https://sunra.top/posts/4648/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/38516/" rel="prev" title="Unity 渲染原理 (二) 一些容易疑惑的名词">
+      <i class="fa fa-chevron-left"></i> Unity 渲染原理 (二) 一些容易疑惑的名词
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/56279/" rel="next" title="Unity 渲染原理 (三) 渲染流水线：从模型上的点到屏幕上的点（矩阵版）">
+      Unity 渲染原理 (三) 渲染流水线：从模型上的点到屏幕上的点（矩阵版） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#代数意义"><span class="nav-number">1.</span> <span class="nav-text">代数意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几何意义"><span class="nav-number">2.</span> <span class="nav-text">几何意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征值和特征向量"><span class="nav-number">3.</span> <span class="nav-text">特征值和特征向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩阵的相似"><span class="nav-number">4.</span> <span class="nav-text">矩阵的相似</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩阵的合同"><span class="nav-number">5.</span> <span class="nav-text">矩阵的合同</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

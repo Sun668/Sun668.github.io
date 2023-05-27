@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="Tailwind这个CSS的框架不算是什么新东西了，不过也一直没有去研究过，最近有需要就看了下，看起来还是比较简单的。 这东西看起来就是个新的DSL之类的，提供了许多常用且内置的css样式，封装成语法，然后提供一个PostCSS插件，把封装好的语法又处理回普通的css。 我们需要做的事就是安装Tailwind的PostCSS插件，然后使用他封装好的DSL即可。">
+<meta name="keywords" content="tailwind css">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tailwind CSS 入门">
+<meta property="og:url" content="https://sunra.top/posts/53142/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="Tailwind这个CSS的框架不算是什么新东西了，不过也一直没有去研究过，最近有需要就看了下，看起来还是比较简单的。 这东西看起来就是个新的DSL之类的，提供了许多常用且内置的css样式，封装成语法，然后提供一个PostCSS插件，把封装好的语法又处理回普通的css。 我们需要做的事就是安装Tailwind的PostCSS插件，然后使用他封装好的DSL即可。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2023-05-27T03:54:39.017Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tailwind CSS 入门">
+<meta name="twitter:description" content="Tailwind这个CSS的框架不算是什么新东西了，不过也一直没有去研究过，最近有需要就看了下，看起来还是比较简单的。 这东西看起来就是个新的DSL之类的，提供了许多常用且内置的css样式，封装成语法，然后提供一个PostCSS插件，把封装好的语法又处理回普通的css。 我们需要做的事就是安装Tailwind的PostCSS插件，然后使用他封装好的DSL即可。">
+
+<link rel="canonical" href="https://sunra.top/posts/53142/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>Tailwind CSS 入门 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/53142/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Tailwind CSS 入门
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-03-18 09:17:30" itemprop="dateCreated datePublished" datetime="2023-03-18T09:17:30+08:00">2023-03-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-27 11:54:39" itemprop="dateModified" datetime="2023-05-27T11:54:39+08:00">2023-05-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CSS/" itemprop="url" rel="index"><span itemprop="name">CSS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Tailwind这个CSS的框架不算是什么新东西了，不过也一直没有去研究过，最近有需要就看了下，看起来还是比较简单的。</p>
+<p>这东西看起来就是个新的DSL之类的，提供了许多常用且内置的css样式，封装成语法，然后提供一个PostCSS插件，把封装好的语法又处理回普通的css。</p>
+<p>我们需要做的事就是安装Tailwind的PostCSS插件，然后使用他封装好的DSL即可。</p>
+<a id="more"></a>
+<h1 id="什么是PostCSS"><a href="#什么是PostCSS" class="headerlink" title="什么是PostCSS"></a>什么是PostCSS</h1><p>在 Web 应用开发中，CSS 代码的编写是重要的一部分。CSS 规范从最初的 CSS1 到现在的 CSS3，再到 CSS 规范的下一步版本，规范本身一直在不断的发展演化之中。这给开发人员带来了效率上的提高。不过与其他 Web 领域的规范相似的处境是，CSS 规范在浏览器兼容性方面一直存在各种各样的问题。不同浏览器在 CSS 规范的实现方面的进度也存在很大差异。另外，CSS 规范本身的发展速度与社区的期待还有一定的差距。这也是为什么 SASS 和 LESS 等 CSS 预处理语言可以流行的重要原因。SASS 和 LESS 等提供了很多更实用的功能，也体现了开发人员对 CSS 语言的需求。本文中要介绍的 PostCSS 是目前流行的一个对 CSS 进行处理的工具。PostCSS 依托其强大的插件体系为 CSS 处理增加了无穷的可能性。</p>
+<p>PostCSS 本身是一个功能比较单一的工具。它提供了一种方式用 JavaScript 代码来处理 CSS。它负责把 CSS 代码解析成抽象语法树结构（Abstract Syntax Tree，AST），再交由插件来进行处理。插件基于 CSS 代码的 AST 所能进行的操作是多种多样的，比如可以支持变量和混入（mixin），增加浏览器相关的声明前缀，或是把使用将来的 CSS 规范的样式规则转译（transpile）成当前的 CSS 规范支持的格式。从这个角度来说，PostCSS 的强大之处在于其不断发展的插件体系。目前 PostCSS 已经有 200 多个功能各异的插件。开发人员也可以根据项目的需要，开发出自己的 PostCSS 插件。</p>
+<p><strong>PostCSS 从其诞生之时就带来了社区对其类别划分的争议。这主要是由于其名称中的 post，很容易让人联想到 PostCSS 是用来做 CSS 后处理（post-processor）的，从而与已有的 CSS 预处理（pre-processor）语言，如 SASS 和 LESS 等进行类比</strong>。</p>
+<p>实际上，PostCSS 的主要功能只有两个：第一个就是前面提到的把 CSS 解析成 JavaScript 可以操作的 AST，第二个就是调用插件来处理 AST 并得到结果。因此，不能简单的把 PostCSS 归类成 CSS 预处理或后处理工具。PostCSS 所能执行的任务非常多，同时涵盖了传统意义上的预处理和后处理。PostCSS 是一个全新的工具，给前端开发人员带来了不一样的处理 CSS 的方式。</p>
+<h1 id="如何使用PostCSS"><a href="#如何使用PostCSS" class="headerlink" title="如何使用PostCSS"></a>如何使用PostCSS</h1><p>PostCSS 一般不单独使用，而是与已有的构建工具进行集成。PostCSS 与主流的构建工具，如 Webpack、Grunt 和 Gulp 都可以进行集成。完成集成之后，选择满足功能需求的 PostCSS 插件并进行配置。</p>
+<p>Webpack 中使用 postcss-loader 来执行插件处理。在清单 1 中，postcss-loader 用来对.css 文件进行处理，并添加在 style-loader 和 css-loader 之后。通过一个额外的 postcss 方法来返回所需要使用的 PostCSS 插件。require(‘autoprefixer’) 的作用是加载 Autoprefixer 插件。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">	context: path.join(__dirname, <span class="string">'app'</span>),</span><br><span class="line">	entry: <span class="string">'./app'</span>,</span><br><span class="line">	output: &#123;</span><br><span class="line">		path: path.join(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">		filename: <span class="string">'bundle.js'</span></span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="built_in">module</span>: &#123;</span><br><span class="line">		loaders: [</span><br><span class="line">			&#123;</span><br><span class="line">				test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">				loader: <span class="string">"style-loader!css-loader!postcss-loader"</span></span><br><span class="line">			&#125;</span><br><span class="line">		]</span><br><span class="line">	&#125;,</span><br><span class="line">	postcss: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> [<span class="built_in">require</span>(<span class="string">'autoprefixer'</span>)];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="如何启用并设置Tailwind-PostCSS"><a href="#如何启用并设置Tailwind-PostCSS" class="headerlink" title="如何启用并设置Tailwind PostCSS"></a>如何启用并设置Tailwind PostCSS</h1><h2 id="通过-npm-安装-Tailwind"><a href="#通过-npm-安装-Tailwind" class="headerlink" title="通过 npm 安装 Tailwind"></a>通过 npm 安装 Tailwind</h2><p>对于大多数项目（并利用 Tailwind 的自定义功能），您需要通过 npm 安装 Tailwind 及其依赖项。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -D tailwindcss@latest postcss@latest autoprefixer@latest</span><br></pre></td></tr></table></figure>
+<p>由于 Tailwind 不会自动添加浏览器引擎前缀到生成的 CSS 中，我们建议您安装 autoprefixer 去处理这个问题，就像上面的代码片段所展示的那样。</p>
+<h2 id="作为-PostCSS-插件来添加-Tailwind"><a href="#作为-PostCSS-插件来添加-Tailwind" class="headerlink" title="作为 PostCSS 插件来添加 Tailwind"></a>作为 PostCSS 插件来添加 Tailwind</h2><p>将 tailwindcss 和 autoprefixer 添加到您的 PostCSS 配置中。 多数情况下，这是项目根目录下的 postcss.config.js 文件，但也可能是 .postcssrc 文件或是由 package.json 文件中的 postcss 键所指定。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// postcss.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  plugins: &#123;</span><br><span class="line">    tailwindcss: &#123;&#125;,</span><br><span class="line">    autoprefixer: &#123;&#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="创建您的配置文件"><a href="#创建您的配置文件" class="headerlink" title="创建您的配置文件"></a>创建您的配置文件</h2><p>如果您想要自定义您的 Tailwind 安装，可以使用 Tailwind CLI 工具生成一份配置文件，这个命令行工具已包含在了 tailwindcss 这个 npm 包里了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx tailwindcss init</span><br></pre></td></tr></table></figure>
+<p>这将会在您的工程根目录创建一个最小的 tailwind.config.js 文件。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tailwind.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  purge: [],</span><br><span class="line">  darkMode: <span class="literal">false</span>, <span class="comment">// or 'media' or 'class'</span></span><br><span class="line">  theme: &#123;</span><br><span class="line">    extend: &#123;&#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  variants: &#123;&#125;,</span><br><span class="line">  plugins: [],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="包含-Tailwind-到您的-CSS-中"><a href="#包含-Tailwind-到您的-CSS-中" class="headerlink" title="包含 Tailwind 到您的 CSS 中"></a>包含 Tailwind 到您的 CSS 中</h2><p>如果您尚未创建一个 CSS 文件，请使用 @tailwind 指令注入 Tailwind 的基础 (base)，组件 (components) 和功能 (utilities) 样式：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ./your-css-folder/styles.css */</span></span><br><span class="line"><span class="keyword">@tailwind</span> base;</span><br><span class="line"><span class="keyword">@tailwind</span> components;</span><br><span class="line"><span class="keyword">@tailwind</span> utilities;</span><br></pre></td></tr></table></figure>
+<p>Tailwind 将在构建时将这些指令替换为基于您配置的设计系统生成的所有样式。</p>
+<p>如果您使用的是 postcss-import（或背后使用它的工具，例如 Webpacker for Rails），请使用我们的导入而不是 @tailwind 指令来避免在导入任何其他文件时出现问题：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@import</span> <span class="string">"tailwindcss/base"</span>;</span><br><span class="line"><span class="keyword">@import</span> <span class="string">"tailwindcss/components"</span>;</span><br><span class="line"><span class="keyword">@import</span> <span class="string">"tailwindcss/utilities"</span>;</span><br></pre></td></tr></table></figure>
+<p>如果您使用的是像 React 或 Vue 这样的 JavaScript 框架，支持直接将 CSS 文件导入到 JS 中，那么您也可以完全跳过创建 CSS 文件，而直接导入 tailwindcss / tailwind.css，而后者已经安装了所有这些指令：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app.js</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"tailwindcss/tailwind.css"</span></span><br></pre></td></tr></table></figure>
+<h2 id="生成您的-CSS"><a href="#生成您的-CSS" class="headerlink" title="生成您的 CSS"></a>生成您的 CSS</h2><p>实际构建项目的方式将取决于您使用的工具。 您的框架可能包含诸如 npm run dev 之类的命令，以启动在后台编译 CSS 的开发服务器，您可能自己在运行 webpack，或者您正在使用 postcss-cli 并运行诸如 postcss styles.css -o compiled.css 之类的命令。</p>
+<h2 id="使用其他预处理器优化"><a href="#使用其他预处理器优化" class="headerlink" title="使用其他预处理器优化"></a>使用其他预处理器优化</h2><p>由于 Tailwind 是一个 PostCSS 插件，没有什么可以阻止您使用 Sass，Less，Stylus 或其他预处理器，就像您可以使用其他 PostCSS 插件，如 Autoprefixer。</p>
+<p>重要的是要注意，您不需要在Tailwind中使用预处理器—您通常在 Tailwind 项目中写很少的 CSS，所以使用预处理器并不像在一个您写了很多自定义 CSS 的项目中那样有利。</p>
+<h3 id="构建时导入"><a href="#构建时导入" class="headerlink" title="构建时导入"></a>构建时导入</h3><p>预处理器提供的最有用的功能之一是能够将您的 CSS 组织成多个文件，并在构建时通过提前处理 @import 语句而不是在浏览器中结合它们。</p>
+<p>用于处理 PostCSS 的规范插件是 postcss-import。</p>
+<p>要使用它，请通过 npm 安装该插件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install postcss-import</span><br></pre></td></tr></table></figure>
+<p>然后把它作为 PostCS 配置中的第一个插件：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// postcss.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'postcss-import'</span>),</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'tailwindcss'</span>),</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'autoprefixer'</span>),</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关于 <code>postcss-import</code>，需要注意的一个重要问题是，它严格遵守 CSS 规范，不允许在任何地方使用 <code>@import</code> 语句，除非在文件的顶部。</p>
+<h3 id="内置Nesting插件以支持-apply等语法"><a href="#内置Nesting插件以支持-apply等语法" class="headerlink" title="内置Nesting插件以支持@apply等语法"></a>内置Nesting插件以支持<code>@apply</code>等语法</h3><p>为了增加对嵌套声明的支持，我们推荐我们捆绑的 tailwindcss/nesting 插件，这是一个 PostCSS 插件，它可以包装 PostCSS 嵌套或 PostCSS 嵌套，并作为一个兼容层来确保你选择的嵌套插件正确理解 Tailwind 的自定义语法，比如@application 和@screen。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// postcss.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'postcss-import'</span>),</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'tailwindcss/nesting'</span>),</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'tailwindcss'</span>),</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'autoprefixer'</span>),</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Variables"><a href="#Variables" class="headerlink" title="Variables"></a>Variables</h3><p>These days CSS variables (officially known as custom properties) have really good browser support, so you don’t need a preprocessor to use variables at all.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">:root</span> &#123;</span><br><span class="line">  <span class="attribute">--theme-color</span>: <span class="number">#52b3d0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ... */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-class">.btn</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">var</span>(--theme-color);</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>We use CSS variables extensively within Tailwind itself, so if you can use Tailwind, you can use native CSS variables.</p>
+<p>You may also find that most of the things you’ve used variables for in the past can be replaced with Tailwind’s theme() function, which gives you access to all of your design tokens from your tailwind.config.js file directly in your CSS:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.btn</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">theme</span>(<span class="string">'colors.blue.500'</span>);</span><br><span class="line">  <span class="attribute">padding</span>: <span class="built_in">theme</span>(<span class="string">'spacing.2'</span>) <span class="built_in">theme</span>(<span class="string">'spacing.4'</span>);</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Vendor-prefixes"><a href="#Vendor-prefixes" class="headerlink" title="Vendor prefixes"></a>Vendor prefixes</h3><p>For automatically managing vendor prefixes in your CSS, you should use Autoprefixer.</p>
+<p>To use it, install it via npm: —&gt; 您可以使用 postcss-preset-env 插件为您的项目添加对即将到来的 CSS 特性的支持。</p>
+<p>要使用它，请通过 npm 安装它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install autoprefixer</span><br></pre></td></tr></table></figure>
+<p>Then add it to the very end of your plugin list in your PostCSS configuration:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'tailwindcss'</span>),</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'autoprefixer'</span>),</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="生产优化"><a href="#生产优化" class="headerlink" title="生产优化"></a>生产优化</h2><p>使用默认配置，TailwindCSS 的开发版本是3645.2kB未压缩，294.2kB用Gzip进行压缩，72.8kB用Brotli进行压缩。</p>
+<p>这听起来可能很庞大，那是因为设计就很庞大。</p>
+<p>为了使开发经验尽可能的富有成效，Tailwind 为您生成了成千上万的功能类，其中大部分您可能不会真正使用。</p>
+<p>把 Tailwind 想象成一个巨大的乐高盒子—您把它倾倒在地板上，建造您想建造的东西，然后当您完成后，您把所有您不用的碎片放回盒子里。</p>
+<p>例如，Tailwind 为您的间距尺度中的每一个尺寸，为您可能想要应用边距的元素的每一个侧面，在您的项目中使用的每一个断点生成边距实用程序。这导致了数以百计的不同组合，这些组合都是重要的，但不可能都是需要的。</p>
+<p>当构建生产时，您应该总是使用 Tailwind 的 purge 选项来 tree-shake 优化未使用的样式，并优化您的最终构建大小当使用 Tailwind 删除未使用的样式时，很难最终得到超过 10kb 的压缩 CSS。</p>
+<h3 id="编写可清除的-HTML"><a href="#编写可清除的-HTML" class="headerlink" title="编写可清除的 HTML"></a>编写可清除的 HTML</h3><p>在开始使用 <code>Purge</code> 功能之前，重要的是要了解它是如何工作的，并建立正确的心理模型，以确保您在为生产构建时永远不会意外地删除重要的样式。</p>
+<p><code>PurgeCSS</code>(我们在引擎下使用的库)在寻找 HTML 中的类的方式上故意非常幼稚。它并不试图解析您的 HTML 并查找类的属性，也不动态执行您的 JavaScript —它只是在整个文件中查找符合这个正则表达式的任何字符串。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/[^<span class="xml"><span class="tag">&lt;&gt;</span>"'`\s]*[^<span class="tag">&lt;&gt;</span>"'`\s:]/g</span></span><br></pre></td></tr></table></figure>
+<p>这基本上可以匹配任何由空格、引号或角括号分隔的字符串，包括 HTML 标签、属性、类，甚至是您标记中的实际书面内容。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"md:flex"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"md:flex-shrink-0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">"rounded-lg md:w-56"</span> <span class="attr">src</span>=<span class="string">"/img/shopping.jpg"</span> <span class="attr">alt</span>=<span class="string">"Woman paying for a purchase"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"mt-4 md:mt-0 md:ml-6"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"uppercase tracking-wide text-sm text-indigo-600 font-bold"</span>&gt;</span></span><br><span class="line">      Marketing</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/get-started"</span> <span class="attr">class</span>=<span class="string">"block mt-1 text-lg leading-tight font-semibold text-gray-900 hover:underline"</span>&gt;</span></span><br><span class="line">      Finding customers for your new business</span><br><span class="line">    <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"mt-2 text-gray-600"</span>&gt;</span></span><br><span class="line">      Getting a new business off the ground is a lot of hard work.</span><br><span class="line">      Here are five ideas you can use to find your first customers.</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这意味着，重要的是避免在您的模板中使用字符串连接动态创建类字符串，否则 PurgeCSS 将不知道保存这些类。</p>
+<p>如，不要使用字符串连接：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"text-&#123;&#123;  error  ?  'red'  :  'green'  &#125;&#125;-600"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>而是动态选择一个完整的类名</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"&#123;&#123;  error  ?  'text-red-600'  :  'text-green-600'  &#125;&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>只要一个类名出现在您的模板中，PurgeCSS 就不会删除它。</p>
+<h3 id="删除未使用的CSS"><a href="#删除未使用的CSS" class="headerlink" title="删除未使用的CSS"></a>删除未使用的CSS</h3><p>基本用途<br>要开始使用，请使用 purge 选项为您所有的模板文件提供一个路径数组。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tailwind.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  purge: [</span><br><span class="line">    <span class="string">'./src/**/*.html'</span>,</span><br><span class="line">    <span class="string">'./src/**/*.vue'</span>,</span><br><span class="line">    <span class="string">'./src/**/*.jsx'</span>,</span><br><span class="line">  ],</span><br><span class="line">  theme: &#123;&#125;,</span><br><span class="line">  variants: &#123;&#125;,</span><br><span class="line">  plugins: [],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>例如，如果您的项目中有一个 JS 文件，在您的 HTML 中动态切换一些类，您应该确保在这个列表中包括该文件。</p>
+<p>现在，每当您在编译 <code>CSS</code> 时将 <code>NODE_ENV</code> 设置为 <code>production</code>，<code>Tailwind</code> 将自动从您的 <code>CSS</code> 中清除未使用的样式。</p>
+<h3 id="手动启用"><a href="#手动启用" class="headerlink" title="手动启用"></a>手动启用</h3><p>如果您想手动控制是否应该删除未使用的样式（而不是隐性地依赖环境变量），您可以使用一个对象语法，并提供 enabled 选项，使用 content 选项指定您的模板。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tailwind.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  purge: &#123;</span><br><span class="line">    enabled: <span class="literal">true</span>,</span><br><span class="line">    content: [<span class="string">'./src/**/*.html'</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>我们建议只在生产中移除未使用的样式，因为在开发中移除它们意味着您需要在任何时候改变您的模板时重新编译，并且在启用 PurgeCSS 的情况下编译速度要慢得多。</strong></p>
+<h1 id="如何使用Tailwind"><a href="#如何使用Tailwind" class="headerlink" title="如何使用Tailwind"></a>如何使用Tailwind</h1><h2 id="功能类优先"><a href="#功能类优先" class="headerlink" title="功能类优先"></a>功能类优先</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"flex-shrink-0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">"h-12 w-12"</span> <span class="attr">src</span>=<span class="string">"/img/logo.svg"</span> <span class="attr">alt</span>=<span class="string">"ChitChat Logo"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"text-xl font-medium text-black"</span>&gt;</span>ChitChat<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"text-gray-500"</span>&gt;</span>You have a new message!<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在上面的示例中，我们使用了：</p>
+<ul>
+<li><p>使用 Tailwind 的 <code>flexbox</code> 和 <code>padding</code> 功能类 (<code>flex</code>, <code>flex-shrink-0</code>, 和 <code>p-6</code>) 来控制整体的卡片布局</p>
+</li>
+<li><p>使用 <code>max-width</code> 和 <code>margin</code> 功能类 (<code>max-w-sm</code> 和 <code>mx-auto</code>) 来设置卡片的宽度和水平居中</p>
+</li>
+<li><p>使用 <code>background color</code>, <code>border radius</code>, 和 <code>box-shadow</code>功能类 (<code>bg-white</code>, <code>rounded-xl</code>, 和 <code>shadow-md</code>) 设置卡片的外观样式</p>
+</li>
+<li><p>使用 <code>width</code> 和 <code>height</code> 功能类 (<code>w-12</code> and <code>h-12</code>) 来设置 logo 图片的大小</p>
+</li>
+<li><p>使用 <code>space-between</code> 功能类 (<code>space-x-4</code>) 来处理 logo 和文本之间的间距</p>
+</li>
+<li><p>使用 <code>font size</code>，<code>text color</code>，和 f<code>ont-weight</code> 功能类 (<code>text-xl</code>，t<code>ext-black</code>，<code>font-medium</code> 等等) 给卡片文字设置样式</p>
+</li>
+</ul>
+<p>这种方法使我们无需编写一行自定义的 CSS 即可实现一个完全定制的组件设计。</p>
+<p>我知道您在想：“这太繁琐了，真是一团糟！” 您是对的，这有点丑陋。实际上，当您第一次看到它时，几乎不可能认为这是一个好主意—您必须实际尝试一下。</p>
+<p>但是，一旦您以这种方式实际构建了一些东西，您就会很快注意到一些真正重要的优点：</p>
+<ul>
+<li><p>您没有为了给类命名而浪费精力。 不需要仅仅为了设置一些样式而额外添加一些像 <code>sidebar-inner-wrapper</code> 这样愚蠢的类名，不必再为了一个 flex 容器的完美抽象命名而倍受折磨。</p>
+</li>
+<li><p>您的 CSS 停止增长。 使用传统方法，每次添加新功能时 CSS 文件都会变大。使用功能类，所有内容都是可重用的，因此您几乎不需要编写新的CSS。</p>
+</li>
+<li><p>更改会更安全。 CSS 是全局性的，您永远不知道当您进行更改时会破坏掉什么。您 HTML 中的类是本地的，因此您可以更改它们而不必担心其他问题。</p>
+</li>
+</ul>
+<p>当您意识到在 HTML 中使用预定义的功能类是多么的富有成效时，以任何其他方式工作都感觉像是折磨。</p>
+<h2 id="响应式设计"><a href="#响应式设计" class="headerlink" title="响应式设计"></a>响应式设计</h2><p>Tailwind 中的每个功能类都可以有条件的应用于不同的断点，这使得您可以轻松的构建复杂的响应式界面而不用离开 HTML。</p>
+<ol>
+<li>根据常用的设备分辨率方案，默认内置了 5 个断点：</li>
+</ol>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>断点前缀</th>
+<th>最小宽度</th>
+<th>CSS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sm</td>
+<td>640px</td>
+<td>@media (min-width: 640px) { … }</td>
+</tr>
+<tr>
+<td>md</td>
+<td>768px</td>
+<td>@media (min-width: 768px) { … }</td>
+</tr>
+<tr>
+<td>lg</td>
+<td>1024px</td>
+<td>@media (min-width: 1024px) { … }</td>
+</tr>
+<tr>
+<td>xl</td>
+<td>1280px</td>
+<td>@media (min-width: 1280px) { … }</td>
+</tr>
+<tr>
+<td>2xl</td>
+<td>1536px</td>
+<td>@media (min-width: 1536px) { … }</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>要添加一个仅在特定断点生效的功能类，只需要在该功能类前加上断点名称，后面跟 : 字符。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Width of 16 by default, 32 on medium screens, and 48 on large screens --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">"w-16 md:w-32 lg:w-48"</span> <span class="attr">src</span>=<span class="string">"..."</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这适用于框架中的每一个功能类，这意味着您可以在给定的断点更改任何东西，甚至包括字符间距和光标样式之类的内容。</p>
+<ol>
+<li>自定义断点</li>
+</ol>
+<p>您可以在 tailwind.config.js 文件中完全自定义您的断点：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tailwind.config.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  theme: &#123;</span><br><span class="line">    screens: &#123;</span><br><span class="line">      <span class="string">'tablet'</span>: <span class="string">'640px'</span>,</span><br><span class="line">      <span class="comment">// =&gt; @media (min-width: 640px) &#123; ... &#125;</span></span><br><span class="line"></span><br><span class="line">      <span class="string">'laptop'</span>: <span class="string">'1024px'</span>,</span><br><span class="line">      <span class="comment">// =&gt; @media (min-width: 1024px) &#123; ... &#125;</span></span><br><span class="line"></span><br><span class="line">      <span class="string">'desktop'</span>: <span class="string">'1280px'</span>,</span><br><span class="line">      <span class="comment">// =&gt; @media (min-width: 1280px) &#123; ... &#125;</span></span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Tailwind还支持许多其他常见的功能，比如，深色模式，提取组件，自定义功能类等，还提供了诸如<code>@apply</code>等函数与指令，具体文档可以参考下面的文档链接。</p>
+<p>参考文章：</p>
+<ul>
+<li><a href="https://www.dute.org/blog/what-is-postcss.html" rel="external nofollow noopener noreferrer" target="_blank">一文搞懂什么是PostCSS</a></li>
+<li><a href="https://www.tailwindcss.cn/docs/" rel="external nofollow noopener noreferrer" target="_blank">TailwindCSS 中文文档</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/posts/53142/" title="Tailwind CSS 入门">https://sunra.top/posts/53142/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/8324/" rel="prev" title="如何用G6开发一个关系图谱">
+      <i class="fa fa-chevron-left"></i> 如何用G6开发一个关系图谱
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/63479/" rel="next" title="贪心算法和模拟退火算法">
+      贪心算法和模拟退火算法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是PostCSS"><span class="nav-number">1.</span> <span class="nav-text">什么是PostCSS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何使用PostCSS"><span class="nav-number">2.</span> <span class="nav-text">如何使用PostCSS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何启用并设置Tailwind-PostCSS"><span class="nav-number">3.</span> <span class="nav-text">如何启用并设置Tailwind PostCSS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#通过-npm-安装-Tailwind"><span class="nav-number">3.1.</span> <span class="nav-text">通过 npm 安装 Tailwind</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作为-PostCSS-插件来添加-Tailwind"><span class="nav-number">3.2.</span> <span class="nav-text">作为 PostCSS 插件来添加 Tailwind</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建您的配置文件"><span class="nav-number">3.3.</span> <span class="nav-text">创建您的配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包含-Tailwind-到您的-CSS-中"><span class="nav-number">3.4.</span> <span class="nav-text">包含 Tailwind 到您的 CSS 中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成您的-CSS"><span class="nav-number">3.5.</span> <span class="nav-text">生成您的 CSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用其他预处理器优化"><span class="nav-number">3.6.</span> <span class="nav-text">使用其他预处理器优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构建时导入"><span class="nav-number">3.6.1.</span> <span class="nav-text">构建时导入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内置Nesting插件以支持-apply等语法"><span class="nav-number">3.6.2.</span> <span class="nav-text">内置Nesting插件以支持@apply等语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Variables"><span class="nav-number">3.6.3.</span> <span class="nav-text">Variables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Vendor-prefixes"><span class="nav-number">3.6.4.</span> <span class="nav-text">Vendor prefixes</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生产优化"><span class="nav-number">3.7.</span> <span class="nav-text">生产优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编写可清除的-HTML"><span class="nav-number">3.7.1.</span> <span class="nav-text">编写可清除的 HTML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除未使用的CSS"><span class="nav-number">3.7.2.</span> <span class="nav-text">删除未使用的CSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#手动启用"><span class="nav-number">3.7.3.</span> <span class="nav-text">手动启用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何使用Tailwind"><span class="nav-number">4.</span> <span class="nav-text">如何使用Tailwind</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#功能类优先"><span class="nav-number">4.1.</span> <span class="nav-text">功能类优先</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#响应式设计"><span class="nav-number">4.2.</span> <span class="nav-text">响应式设计</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

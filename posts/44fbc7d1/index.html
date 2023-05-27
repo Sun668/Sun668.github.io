@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+  <meta name="description" content="Session 与登录机制Session 概念指一类用来在客户端和服务器之间保持状态的方案的存储结构">
+<meta name="keywords" content="会话固定 Session Fixation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Session Fixation 原理与防御">
+<meta property="og:url" content="https://sunra.top/posts/44fbc7d1/index.html">
+<meta property="og:site_name" content="Origin of Ray">
+<meta property="og:description" content="Session 与登录机制Session 概念指一类用来在客户端和服务器之间保持状态的方案的存储结构">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2023-05-27T03:54:39.017Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Session Fixation 原理与防御">
+<meta name="twitter:description" content="Session 与登录机制Session 概念指一类用来在客户端和服务器之间保持状态的方案的存储结构">
+
+<link rel="canonical" href="https://sunra.top/posts/44fbc7d1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'default'
+  };
+</script>
+
+  <title>Session Fixation 原理与防御 | Origin of Ray</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Origin of Ray" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Origin of Ray</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一起探索互联网的秘密</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" placeholder="Searching..." spellcheck="false" type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://sunra.top/posts/44fbc7d1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+      <meta itemprop="name" content="Ray Sun">
+      <meta itemprop="description" content="拨开互联网的迷雾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Origin of Ray">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Session Fixation 原理与防御
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-09 08:08:41" itemprop="dateCreated datePublished" datetime="2019-11-09T08:08:41+08:00">2019-11-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-27 11:54:39" itemprop="dateModified" datetime="2023-05-27T11:54:39+08:00">2023-05-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Security/" itemprop="url" rel="index"><span itemprop="name">Security</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="Session-与登录机制"><a href="#Session-与登录机制" class="headerlink" title="Session 与登录机制"></a>Session 与登录机制</h3><h4 id="Session-概念"><a href="#Session-概念" class="headerlink" title="Session 概念"></a>Session 概念</h4><p>指一类用来在客户端和服务器之间保持状态的方案的存储结构</p>
+<a id="more"></a>
+<h4 id="Session-特点"><a href="#Session-特点" class="headerlink" title="Session 特点"></a>Session 特点</h4><p>由于Session是以文本文件形式存储在服务器端，所以不怕客户端修改内容，可以直接存储在内存中，也可以存储在redis这种内存数据库中，当然存储到其他数据库中也是可以的。</p>
+<p>Session是有生命周期的</p>
+<p>Session实例时轻量级的，所谓的轻量级，指的是它的创建和删除不需要消耗太多的资源</p>
+<p>Session对象内部有一个缓存</p>
+<h4 id="Session-用法"><a href="#Session-用法" class="headerlink" title="Session 用法"></a>Session 用法</h4><p>用于存储特定用户会话的属性以及配置信息，比如用户的身份信息等，这些信息在web页面跳转的时候信息将不会丢失。</p>
+<p>通常用于以下操作：</p>
+<ul>
+<li>存储整个会话过程中保持用户状态的信息，比如登录信息或者用户浏览时产生的其他信息</li>
+<li>存储只需要页面新加载过程中，或者一组功能页之间保持状态的对象</li>
+<li>在web服务器上保持用户的状态信息，供在任何时间从任何设备上的页面进行访问</li>
+</ul>
+<p>限制：</p>
+<ul>
+<li>用户登陆越多，session需要的内存越大</li>
+<li>每个session对象的持续时间是用户访问时间加上不活动时间</li>
+</ul>
+<h4 id="为何需要Session"><a href="#为何需要Session" class="headerlink" title="为何需要Session"></a>为何需要Session</h4><p>因为HTTP协议本身是无状态的，没有办法用户登陆之后能够在一段时间之内记住登录状态，那就需要另外一种工具来讲登录状态记录下来，并为这个记录生成一个id返回给客户端，客户端保存下来之后，接下来的每个请求都会带上这个id自动去认证这个登录态。</p>
+<p>举个喝咖啡的例子：</p>
+<p>1、该店的店员很厉害，能记住每位顾客的消费数量，只要顾客一走进咖啡店，店员就知道该怎么对待了。这种做法就是协议本身支持状态。</p>
+<p>2、发给顾客一张卡片，上面记录着消费的数量，一般还有个有效期限。每次消费时，如果顾客出示这张卡片，则此次消费就会与以前或以后的消费相联系起来。这种做法就是在客户端保持状态。</p>
+<p>3、发给顾客一张会员卡，除了卡号之外什么信息也不纪录，每次消费时，如果顾客出示该卡片，则店员在店里的纪录本上找到这个卡号对应的纪录添加一些消费信息。这种做法就是在服务器端保持状态。</p>
+<h4 id="具体机制"><a href="#具体机制" class="headerlink" title="具体机制"></a>具体机制</h4><ol>
+<li><p>当程序需要为某个客户端的请求创建一个<code>session</code>（一般是登陆信息验证成功之后为这些信息创建一个session）的时候，服务器首先检查这个客户端的请求里是否已包含了一个  <strong>session标识</strong>   - 称为<code>session id</code>，如果已包含一个<code>session id</code>则说明以前已经为此客户端创建过session，服务器就按照<code>session id</code>把这个<code>session</code>检索出来使用（如果检索不到，可能会新建一个），如果客户端请求不包含<code>session id</code>，则为此客户端创建一个<code>session</code>并且生成一个与此<code>session</code>相关联的<code>session id</code>，<code>session id</code>的值应该是一个 <strong>既不会重复，又不容易被找到规律以仿造的字符串</strong> ，这个<code>session id</code>将被在本次响应中返回给客户端保存（一般通过返回头中的set-cookie头将这个sessionid设置到cookie中，下次的请求就会通过cookie自动将这个sessionid发送到后台）。</p>
+</li>
+<li><p>由于<code>cookie</code>可以被人为的禁止，必须有其他机制以便在<code>cookie</code>被禁止时仍然能够把<code>session id</code>传递回服务器。经常被使用的一种技术叫做<code>URL</code>重写</p>
+<p>两种形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 作为url附加路径</span><br><span class="line">&apos;http://..../xxx;jsessionid=abcdefjijeoijoifjioe&apos;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 作为查询字符串</span><br><span class="line">&apos;http://..../xxx?jsessionid=abcdefjijeoijoifjioe&apos;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>较老的技术，<strong>表单隐藏字段</strong>，此方法在防止csrf中有用</p>
+</li>
+</ol>
+<h3 id="Session-Fixation-漏洞"><a href="#Session-Fixation-漏洞" class="headerlink" title="Session Fixation 漏洞"></a>Session Fixation 漏洞</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>会话固定攻击（session fixation attack）是利用应用系统在服务器的会话ID固定不变机制，借助他人用相同的会话ID获取认证和授权，然后利用该会话ID劫持他人的会话以成功冒充他人，造成会话固定攻击</p>
+<h4 id="攻击流程"><a href="#攻击流程" class="headerlink" title="攻击流程"></a>攻击流程</h4><p>1、攻击者Attacker能正常访问该应用网站；</p>
+<p>2、应用网站服务器返回一个会话ID(attackSessionID)给他；</p>
+<p>3、攻击者Attacker用该会话ID构造一个该网站链接（<a href="http://website.kom/login.php?sessionid=attackerSessionID）发给受害者Victim；" rel="external nofollow noopener noreferrer" target="_blank">http://website.kom/login.php?sessionid=attackerSessionID）发给受害者Victim；</a></p>
+<p>4、受害者Victim点击该链接，携带攻击者的会话ID和用户名密码正常登录了该网站，会话成功建立；这个时候如果再用attackerSessionID去访问服务器，服务器就会认为攻击者是受害者。</p>
+<p>5、攻击者Attacker用该会话ID成功冒充并劫持了受害者Victim的会话。</p>
+<h4 id="防御方式"><a href="#防御方式" class="headerlink" title="防御方式"></a>防御方式</h4><p>整个攻击过程的根本原因就是直接利用了链接发送过来的sessionID生成session，并直接将这个sessionID返回。</p>
+<p>解决方式也很简单，类似登陆这种有敏感信息的接口需要重新生成一个新的sessionID</p>
+<h3 id="Express-session-防御-Session-Fixation-举例"><a href="#Express-session-防御-Session-Fixation-举例" class="headerlink" title="Express-session 防御 Session Fixation 举例"></a>Express-session 防御 Session Fixation 举例</h3><p>express-session是node服务器框架express的一个插件，具体如何使用可以参考一下<a href="https://github.com/expressjs/session" rel="external nofollow noopener noreferrer" target="_blank">express-session文档</a>，如果想要了解原理，也可以去看一下源码，其实原理都很简单，只不过是被封装了起来，就是请求头部的cookie和set-cookie的生成，session的CRUD的封装。</p>
+<p>值得注意的是它的store选项，也就是存储位置，如果不传值会默认存储到内存中，我们可以自己实现一个插件，只要这个插件实现了上面文档中提到的get，set，touch等接口就可以，置于你的这几个接口是把数据存储到redis，MongoDB还是其他什么地方都无所谓。</p>
+<p>如果只是使用express-session来进行session的管理，是没有办法防御session fixation的，而且也没有必要对每一个请求都重新生成sessionID，我们只需要对某些敏感操作，如登陆进行重新生成sessionID的操作就好。如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fixation = <span class="function">(<span class="params">options</span>) =&gt;</span> &#123;</span><br><span class="line">  options = options || &#123;&#125;;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">    req.resetSessionID = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">let</span> session = req.session;</span><br><span class="line">        req.session.regenerate(<span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (err) &#123;</span><br><span class="line">            reject(err);</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> session) &#123;</span><br><span class="line">              <span class="keyword">if</span> (!req.session[i]) &#123;</span><br><span class="line">                req.session[i] = session[i];</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            resolve(req.session);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">if</span> (options.everyRequest &amp;&amp; req.headers[<span class="string">'X-Requested-With'</span>] !== <span class="string">'XMLHttpRequest'</span> &amp;&amp; !req.xhr) &#123;</span><br><span class="line">      req.resetSessionID().then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        next();</span><br><span class="line">      &#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">        next(err);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      next();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上述代码通过express-session自带regenerate方法重新生成一个id，并将原有的session内容设置给新生成的session。</p>
+<p>我们只需要在需要重置id的请求中调用该方法即可。</p>
+<p>参考文章：</p>
+<p> <a href="https://juejin.im/post/5af828e96fb9a07ab83e1f10" rel="external nofollow noopener noreferrer" target="_blank">https://juejin.im/post/5af828e96fb9a07ab83e1f10</a> </p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Ray Sun
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://sunra.top/posts/44fbc7d1/" title="Session Fixation 原理与防御">https://sunra.top/posts/44fbc7d1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/fd076279/" rel="prev" title="InfineScroll 无限加载bug">
+      <i class="fa fa-chevron-left"></i> InfineScroll 无限加载bug
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/46cef286/" rel="next" title="OAuth and OIDC">
+      OAuth and OIDC <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-与登录机制"><span class="nav-number">1.</span> <span class="nav-text">Session 与登录机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Session-概念"><span class="nav-number">1.1.</span> <span class="nav-text">Session 概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Session-特点"><span class="nav-number">1.2.</span> <span class="nav-text">Session 特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Session-用法"><span class="nav-number">1.3.</span> <span class="nav-text">Session 用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为何需要Session"><span class="nav-number">1.4.</span> <span class="nav-text">为何需要Session</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#具体机制"><span class="nav-number">1.5.</span> <span class="nav-text">具体机制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-Fixation-漏洞"><span class="nav-number">2.</span> <span class="nav-text">Session Fixation 漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#定义"><span class="nav-number">2.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击流程"><span class="nav-number">2.2.</span> <span class="nav-text">攻击流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防御方式"><span class="nav-number">2.3.</span> <span class="nav-text">防御方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Express-session-防御-Session-Fixation-举例"><span class="nav-number">3.</span> <span class="nav-text">Express-session 防御 Session Fixation 举例</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg">
+  <p class="site-author-name" itemprop="name">Ray Sun</p>
+  <div class="site-description" itemprop="description">拨开互联网的迷雾</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">266</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Sun668" title="GitHub → https://github.com/Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+      <div class="wechat_channel" style="width: 50%;margin-left: 25%;">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src="/images/wechat_channel.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ray Sun</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
