@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="上次博客分析了下XSS的分类和基本的实战方式，这次继续来接受一种XSS病毒。 定义首先我们来分析下什么是XSS蠕虫病毒。 它是一种跨站脚本病毒，大多是用JavaScript编写，突破浏览器的安全限制，它基于社会工程学诱使用户点击访问其发出的恶意邀请链接在网站上感染访问网站的用户，受感染的用户再发送含有蠕虫的内容继续感染安全的用户。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.068Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.108Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XSS 蠕虫定义与实战分析">
 <meta name="twitter:description" content="上次博客分析了下XSS的分类和基本的实战方式，这次继续来接受一种XSS病毒。 定义首先我们来分析下什么是XSS蠕虫病毒。 它是一种跨站脚本病毒，大多是用JavaScript编写，突破浏览器的安全限制，它基于社会工程学诱使用户点击访问其发出的恶意邀请链接在网站上感染访问网站的用户，受感染的用户再发送含有蠕虫的内容继续感染安全的用户。">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -354,6 +354,7 @@ script:eval(document.all.mycode.expr)&#39;)&quot;&gt;</code><br>4) OK，即使�
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -544,6 +545,26 @@ script:eval(document.all.mycode.expr)&#39;)&quot;&gt;</code><br>4) OK，即使�
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : 'ba57d057aa78c3df59cfad9670382a0a',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

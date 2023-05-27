@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="题目给你一个points 数组，表示 2D 平面上的一些点，其中 points[i] = [xi, yi] 。 连接点 [xi, yi] 和点 [xj, yj] 的费用为它们之间的 曼哈顿距离 ：|xi - xj| + |yi - yj| ，其中 |val| 表示 val 的绝对值。 请你返回将所有点连接的最小总费用。只有任意两点之间 有且仅有 一条简单路径时，才认为所有点都已连接。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.052Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.092Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="最小生成树算法">
 <meta name="twitter:description" content="题目给你一个points 数组，表示 2D 平面上的一些点，其中 points[i] = [xi, yi] 。 连接点 [xi, yi] 和点 [xj, yj] 的费用为它们之间的 曼哈顿距离 ：|xi - xj| + |yi - yj| ，其中 |val| 表示 val 的绝对值。 请你返回将所有点连接的最小总费用。只有任意两点之间 有且仅有 一条简单路径时，才认为所有点都已连接。">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -356,6 +356,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -546,6 +547,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : 'ab645bb50779194e97454ec54ee99cbf',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

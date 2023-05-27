@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/13734601-6a8e67d55c966687.png?imageMogr2/auto-orient/strip|imageView2/2/format/webp">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2019/1/11/1683d81674f076eb?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2019/1/12/16841bd9860c1ee9?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.044Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chrome与Node事件循环机制">
 <meta name="twitter:description" content="用了这么久的JavaScript，才发现自己对JavaScript的事件循环机制一直有些误解。 第一，事件循环机制不是V8实现的，V8引擎只是负责JavaScript代码的编译，内存分配等。 第二，Chrome的事件循环机制是通过Web API实现的，Node则是libuv。 第三，Node11之前，Node的事件循环的原理与Chrome是不同的。">
@@ -237,7 +237,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -419,6 +419,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -609,6 +610,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : '89c78d394d7c3506eab301871df78ce3',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

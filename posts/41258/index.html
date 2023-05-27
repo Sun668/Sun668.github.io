@@ -30,7 +30,7 @@
 <meta property="og:description" content="CSS用了很久，但是对于其中的一些用法总是有些模糊，没有一个系统的，有逻辑的认知。这次就先理清楚一下CSS中的BFC与盒子模型，以及相关的一些定位和布局属性。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model/box-model.png">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.044Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CSS的BFC与盒子模型">
 <meta name="twitter:description" content="CSS用了很久，但是对于其中的一些用法总是有些模糊，没有一个系统的，有逻辑的认知。这次就先理清楚一下CSS中的BFC与盒子模型，以及相关的一些定位和布局属性。">
@@ -235,7 +235,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -413,6 +413,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -603,6 +604,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : '86762dad2b155dbcba30d036ae2ed4cc',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

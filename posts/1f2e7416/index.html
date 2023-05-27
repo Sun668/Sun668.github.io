@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="就在大家 happy 的这几天期间，Google 公开了两个文档，我感觉作为程序员和工程师非常有必要了解一下。作者在阅读之后截取部分原文并精简了其他一些部分总结下来。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.044Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="codereview">
 <meta name="twitter:description" content="就在大家 happy 的这几天期间，Google 公开了两个文档，我感觉作为程序员和工程师非常有必要了解一下。作者在阅读之后截取部分原文并精简了其他一些部分总结下来。">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -461,6 +461,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -651,6 +652,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : 'a3b09410661f334a75c1dd53194449f7',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

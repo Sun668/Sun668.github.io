@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1585361138/Algorithm/1b4485704cf963fd49d597040ffbb3b5d4d2ca923752c8c78d00042df66343a9_zzg5tk.jpg">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1585361160/Algorithm/7db5a80dbffaf2337c0e0323437442d007987bce16b7fa86affbc5ca0e1132d0_vctecf.jpg">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1585361182/Algorithm/b4e6cf1bb8e2284bfc01dfef6c1a60c19f9c78238061b65370ccc01822161e83_qgnjw5.jpg">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.044Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="动态规划">
 <meta name="twitter:description" content="最近在做题的时候遇到了递归，隐约感觉与动规有点相似，但自已又说不清楚，于是找了很多文章，这里摘录一片最基础但也是最清楚的文章，原文链接是这个。 原理动态规划问题的一般形式就是求最值。动态规划其实是运筹学的一种最优化方法，只不过在计算机问题上应用比较多，比如说让你求最长递增子序列呀，最小编辑距离呀等等。 既然是要求最值，核心问题是什么呢？求解动态规划的核心问题是穷举。因为要求最值，肯定要把所有可行的">
@@ -239,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -426,6 +426,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -616,6 +617,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : '454505d3cde95c1369c2f045f9c4ae0a',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

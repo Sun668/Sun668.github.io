@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="队列是我们编程时必不可少的数据结构，可以用数组实现，也可以用链表实现，但是其实队列也有一些小的地方因为长时间不用而会忘记，这次就来稍微回忆一下。 什么是队列队列这个概念非常好理解。你可以把它想象成排队买票，先来的先买，后来的人只能站末尾，不允许插队。先进者先出，这就是典型的“队列”。 我们知道，栈只支持两个基本操作：入栈 push()和出栈 pop()。队列跟栈非常相似，支持的操作也很有限，最基本">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.056Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.096Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基本数据结构：队列">
 <meta name="twitter:description" content="队列是我们编程时必不可少的数据结构，可以用数组实现，也可以用链表实现，但是其实队列也有一些小的地方因为长时间不用而会忘记，这次就来稍微回忆一下。 什么是队列队列这个概念非常好理解。你可以把它想象成排队买票，先来的先买，后来的人只能站末尾，不允许插队。先进者先出，这就是典型的“队列”。 我们知道，栈只支持两个基本操作：入栈 push()和出栈 pop()。队列跟栈非常相似，支持的操作也很有限，最基本">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -364,6 +364,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -554,6 +555,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : '2f11d7ad8bb1450c0d392e8463c1c485',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

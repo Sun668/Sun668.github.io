@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="之前做了个关系图谱的需求，因为导出png等图片放大会失真，所以希望导出为矢量图。但是G6自带的导出图谱功能再Canvas模式下无法导出为SVG，而SVG模式又有很多特性不支持，所以就想办法能不能把Canvas导出为SVG了。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.044Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何将Canvas转为SVG">
 <meta name="twitter:description" content="之前做了个关系图谱的需求，因为导出png等图片放大会失真，所以希望导出为矢量图。但是G6自带的导出图谱功能再Canvas模式下无法导出为SVG，而SVG模式又有很多特性不支持，所以就想办法能不能把Canvas导出为SVG了。">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -332,6 +332,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -521,6 +522,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : '44011cd94cc21fde0e448f30a592b752',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

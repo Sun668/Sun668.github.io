@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="昨天是元宵节，leetcode的每日一题也很应景出了一道猜字谜的题目。 既然真正的猜字谜我不擅长，还是来看看这道算法的猜字谜吧。 首先上题目的链接： https://leetcode-cn.com/problems/number-of-valid-words-for-each-puzzle/ 解题思路我们可以设计出解决该字谜问题的一个算法流程：  首先我们计算出每一个word 对应的集合 Sw，存">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.052Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.092Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Leetcode 猜字谜">
 <meta name="twitter:description" content="昨天是元宵节，leetcode的每日一题也很应景出了一道猜字谜的题目。 既然真正的猜字谜我不擅长，还是来看看这道算法的猜字谜吧。 首先上题目的链接： https://leetcode-cn.com/problems/number-of-valid-words-for-each-puzzle/ 解题思路我们可以设计出解决该字谜问题的一个算法流程：  首先我们计算出每一个word 对应的集合 Sw，存">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -353,6 +353,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -543,6 +544,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : 'ffb7fc8d1641e417ee6f22c285efce50',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="Echarts是百度提供的一个用于在web端快速绘制图表的工具，它是通过js在canvas中进行图表的绘制，所以只要你的项目能够支持js，那就可以使用echarts。 Echarts有着丰富且详细的文档，可以让我们去定制自己喜欢的图表样式。但是这篇博客主要讲的是如何在vue项目中使用v-charts。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.064Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.104Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="v-charts">
 <meta name="twitter:description" content="Echarts是百度提供的一个用于在web端快速绘制图表的工具，它是通过js在canvas中进行图表的绘制，所以只要你的项目能够支持js，那就可以使用echarts。 Echarts有着丰富且详细的文档，可以让我们去定制自己喜欢的图表样式。但是这篇博客主要讲的是如何在vue项目中使用v-charts。">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -481,6 +481,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -671,6 +672,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : '7044c15f9acd2268f14e9b18f74f7e3d',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

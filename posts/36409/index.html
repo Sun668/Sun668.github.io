@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="随着使用的逐渐增多，慢慢受不了在对这些概念的模糊的情况下使用了，所以找了些官方文档来学习一下C#中的这些概念，主要是为了区分委托（Delegate），事件（Event）。 其实我个人在读文档之前一直是对这些概念很模糊的，甚至一度被网上的各种博客绕晕了，甚至把Action，Func和委托都混淆了。 终于在我去读了官方的文档之后，我才对这些概念有了一些认知。 首先抛出最重要的结论，委托和事件都是为了提">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.044Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C# 的委托和事件">
 <meta name="twitter:description" content="随着使用的逐渐增多，慢慢受不了在对这些概念的模糊的情况下使用了，所以找了些官方文档来学习一下C#中的这些概念，主要是为了区分委托（Delegate），事件（Event）。 其实我个人在读文档之前一直是对这些概念很模糊的，甚至一度被网上的各种博客绕晕了，甚至把Action，Func和委托都混淆了。 终于在我去读了官方的文档之后，我才对这些概念有了一些认知。 首先抛出最重要的结论，委托和事件都是为了提">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -425,6 +425,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -615,6 +616,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : '2140bf86607cd77cfd5ad83179143818',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

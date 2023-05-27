@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="在 ES6 中，我们知道 import、export 取代了 require、module.exports 用来引入和导出模块，但是如果不了解 ES6 模块特性的话，代码可能就会运行出一些匪夷所思的结果，下面我将通过这篇文章为你揭开 ES6 模块机制特点。 关于二者的使用方式我就不具体介绍了，有兴趣的可以看一下我以前的博客：JavaScript Module使用语法 本文主要针对以下几个问题：">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.044Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ESModule和CommonJS的比较以及注意事项">
 <meta name="twitter:description" content="在 ES6 中，我们知道 import、export 取代了 require、module.exports 用来引入和导出模块，但是如果不了解 ES6 模块特性的话，代码可能就会运行出一些匪夷所思的结果，下面我将通过这篇文章为你揭开 ES6 模块机制特点。 关于二者的使用方式我就不具体介绍了，有兴趣的可以看一下我以前的博客：JavaScript Module使用语法 本文主要针对以下几个问题：">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -455,6 +455,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -645,6 +646,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : 'fb37c24233a8cb4d34c96a5377139e6a',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="前面的六篇博客已经帮助我们基本搞清楚了，vue的响应式原理，数据驱动，组件化和组件更新等概念和原理，而其中关于组件化和组件更新的部分，我们是在已有render函数的基础上来讲的，也就是说我们已经有了vnode，再去讨论的vnode如何渲染更新的。 这篇博客我们就回过头来看看vue的compiler是如何将template变成render函数的。 了解编译的流程有什么好处呢？我个人觉得可以帮助我们对">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.068Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.104Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vue源码学习（七）Compiler原理">
 <meta name="twitter:description" content="前面的六篇博客已经帮助我们基本搞清楚了，vue的响应式原理，数据驱动，组件化和组件更新等概念和原理，而其中关于组件化和组件更新的部分，我们是在已有render函数的基础上来讲的，也就是说我们已经有了vnode，再去讨论的vnode如何渲染更新的。 这篇博客我们就回过头来看看vue的compiler是如何将template变成render函数的。 了解编译的流程有什么好处呢？我个人觉得可以帮助我们对">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -449,6 +449,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -639,6 +640,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : '01cbfff9ee6a50e92d016b976a751deb',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

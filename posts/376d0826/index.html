@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032359/origin-of-ray/微信截图_20201215193902_cao7zo.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032609/origin-of-ray/微信截图_20201215194319_ri7upg.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032818/origin-of-ray/微信截图_20201215194648_rfi3ci.png">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.040Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.080Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="回溯算法">
 <meta name="twitter:description" content="原理最近在做题的时候遇到了好几次回溯算法，每次都是慢慢试出来的，所以就去找一下有没有什么抽象出来的思路可以参考，于是找了很多文章，这里摘录一片最基础但也是最清楚的文章，原文链接是这个。 解决一个回溯问题，实际上就是一个决策树的遍历过程。你只需要思考 3 个问题： 1、路径：也就是已经做出的选择。 2、选择列表：也就是你当前可以做的选择。 3、结束条件：也就是到达决策树底层，无法再做选择的条件。">
@@ -238,7 +238,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -368,6 +368,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -558,6 +559,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : 'fd36a1fa0acb89bf0d961c897926407a',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

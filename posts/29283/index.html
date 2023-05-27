@@ -31,7 +31,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1674914530/origin-of-ray/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230128220145_aun9wt.jpg">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1674914530/origin-of-ray/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230128220202_mjg72s.jpg">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.040Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.080Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分析模式——可复用的对象模型">
 <meta name="twitter:description" content="业务领域的划分也要做到高内聚，低耦合，最少知识原则，如果每个业务领域需要知道很多其他业务领域的知识，那么其实还是耦合的">
@@ -236,7 +236,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -395,6 +395,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -585,6 +586,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : '98c7de8c69b11d9fc5659cf3b5d849f9',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

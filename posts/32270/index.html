@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近在leetcode上遇到了几个问题都是采用二分法来解决的，总结了一下其中的规律，简单来说，如果是要从有界区间中寻找符合条件的最大值或者最小值，可以考虑采用二分法，不过不是基础的二分法，而是不断寻找左侧边界或者右侧边界的二分法。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.052Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.092Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="二分法解决有界区间的最值问题">
 <meta name="twitter:description" content="最近在leetcode上遇到了几个问题都是采用二分法来解决的，总结了一下其中的规律，简单来说，如果是要从有界区间中寻找符合条件的最大值或者最小值，可以考虑采用二分法，不过不是基础的二分法，而是不断寻找左侧边界或者右侧边界的二分法。">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -331,6 +331,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -520,6 +521,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : 'c36d7645a5e75f5ef35bc939cdfb7c7e',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

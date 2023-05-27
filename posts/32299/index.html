@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="在接触Redux的内容时，不免接触了一些它的配套工具，一时之间被这些工具搞得有些混乱，不知道哪个是哪个，他们各自的作用与联系。这篇文章就来简单记录下我的查询结果。 首先说一下这几个工具，redux，redux-thunk，redux-toolkit，react-redux。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.056Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.096Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redux的一些常见工具以及与React的联动">
 <meta name="twitter:description" content="在接触Redux的内容时，不免接触了一些它的配套工具，一时之间被这些工具搞得有些混乱，不知道哪个是哪个，他们各自的作用与联系。这篇文章就来简单记录下我的查询结果。 首先说一下这几个工具，redux，redux-thunk，redux-toolkit，react-redux。">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -379,6 +379,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -569,6 +570,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : 'c8c996dc31495d0e7874dda6d8e2dfe3',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

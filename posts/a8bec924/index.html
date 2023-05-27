@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="问题描述passport-azure-ad 是我们在使用node express作为服务器，passport用于验证登陆，同时又需要去azure第三方认证登陆时需要用到的插件。 但是在使用过程中我们可能会遇到这样一种情况，就是明明我们的所有配置都已经配置好了，但是会遇到无限   回调的情况，具体表现形式就是我们利用微软账号登陆成功之后，页面会不断刷新，最终提示我们无法成功登录。 这个不断刷新的过程">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.056Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.096Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="passport-azure-ad_无限刷新问题">
 <meta name="twitter:description" content="问题描述passport-azure-ad 是我们在使用node express作为服务器，passport用于验证登陆，同时又需要去azure第三方认证登陆时需要用到的插件。 但是在使用过程中我们可能会遇到这样一种情况，就是明明我们的所有配置都已经配置好了，但是会遇到无限   回调的情况，具体表现形式就是我们利用微软账号登陆成功之后，页面会不断刷新，最终提示我们无法成功登录。 这个不断刷新的过程">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -356,6 +356,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -546,6 +547,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : '98b675f64270dd28bcfc2097793f810e',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

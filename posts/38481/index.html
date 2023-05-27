@@ -30,7 +30,7 @@
 <meta property="og:description" content="什么是Serverless Serverless，中文叫做无服务器。 无服务器是一种云原生开发模型，可使开发人员专注构建和运行应用，而无需管理服务器。 无服务器与其他云计算模型的区别在于，它是由云提供商负责管理云基础架构和应用扩展。无服务器应用部署在容器中，这些容器在被调用时会自动按需启动。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639981521/origin-of-ray/image_2_nboal1.png">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.068Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.108Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="什么是 Serverless">
 <meta name="twitter:description" content="什么是Serverless Serverless，中文叫做无服务器。 无服务器是一种云原生开发模型，可使开发人员专注构建和运行应用，而无需管理服务器。 无服务器与其他云计算模型的区别在于，它是由云提供商负责管理云基础架构和应用扩展。无服务器应用部署在容器中，这些容器在被调用时会自动按需启动。">
@@ -235,7 +235,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -353,6 +353,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -543,6 +544,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : 'be176b9d221d1fbd246b3ba63e921baa',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

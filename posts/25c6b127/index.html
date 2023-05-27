@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615207688/origin-of-ray/微信截图_20210308204757_sxwhgi.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615207902/origin-of-ray/微信截图_20210308205133_amqnac.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615208011/origin-of-ray/微信截图_20210308205319_qlouxj.png">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.048Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.088Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript执行机制（三）作用域链和闭包">
 <meta name="twitter:description" content="在上一篇关于作用域的文章中我们通过调用栈讲什么是作用域。 每当我们调用一个函数时就会在调用栈中为该函数创建执行上下文，到目前为止我们知道了该执行上下文中有变量环境，用于存储通过var声明的变量，也有一个词法环境，词法环境又是一个栈，依次放置了函数中通过let和const声明的在不同层级的块级作用域中的变量。 基于上面的变量环境和词法环境，我们可以明白如何在一个函数的执行上下文中找到正确的变量。 那">
@@ -239,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -384,6 +384,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -574,6 +575,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : '13bc193bf3169916f6b8b98adb8b1103',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

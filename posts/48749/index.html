@@ -30,7 +30,7 @@
 <meta property="og:description" content="最近在开发一个Unity人物形象的SDK，目标是该SDK可以动态下载最新的人物和服装的模型而不用让提前内置在SDK中。 一开始我打算采用的方案是传统的比较成熟的Addressables去打包bundle的方式，但是bundle的划分是个问题，而且这种方式需要每次把模型导入unity然后再出包，再更新catalog，整个流程比较繁琐。 所以我就在想，能不能直接从远程加载FBX和贴图，然后直接使用FB">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1654240809/origin-of-ray/screenshot-20220603-151953_fuledj.png">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.064Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.104Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity下TriLib远程加载FBX的使用与源码解析">
 <meta name="twitter:description" content="最近在开发一个Unity人物形象的SDK，目标是该SDK可以动态下载最新的人物和服装的模型而不用让提前内置在SDK中。 一开始我打算采用的方案是传统的比较成熟的Addressables去打包bundle的方式，但是bundle的划分是个问题，而且这种方式需要每次把模型导入unity然后再出包，再更新catalog，整个流程比较繁琐。 所以我就在想，能不能直接从远程加载FBX和贴图，然后直接使用FB">
@@ -235,7 +235,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -391,6 +391,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -581,6 +582,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : 'cab2e1e50d4825f997e9e458e626c5a4',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

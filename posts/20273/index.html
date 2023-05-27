@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这几天遇到个问题，就是在vue-router嵌套子路由的时候，如果深层的router-view组件没有声明key，且路由配置中的component是函数式的组件，就会导致在router.push的时候无法更新。 对于函数式组件和函数式编程，需要了记得可以我之前的相关博客; 本文主要是分析vue-router的源码，vue-router的源码主要是两部分，第一部分是做路由匹配，第二部分是做路由跳转的">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T02:46:43.068Z">
+<meta property="og:updated_time" content="2023-05-27T03:10:13.104Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vue Router 源码解析（一）内部路由配置的生成">
 <meta name="twitter:description" content="这几天遇到个问题，就是在vue-router嵌套子路由的时候，如果深层的router-view组件没有声明key，且路由配置中的component是函数式的组件，就会导致在router.push的时候无法更新。 对于函数式组件和函数式编程，需要了记得可以我之前的相关博客; 本文主要是分析vue-router的源码，vue-router的源码主要是两部分，第一部分是做路由匹配，第二部分是做路由跳转的">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 10:46:43" itemprop="dateModified" datetime="2023-05-27T10:46:43+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-27 11:10:13" itemprop="dateModified" datetime="2023-05-27T11:10:13+08:00">2023-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -349,6 +349,7 @@
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -539,6 +540,26 @@
   
 
   
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c96bd5b842ef25ec37b4',
+      clientSecret: '3aa1379592bcb2a5fe84791458cb67d41fa75f3e',
+      repo        : 'Sun668.github.io',
+      owner       : 'Sun668',
+      admin       : ['Sun668'],
+      id          : '3ad16f24b48e401077b87284764e9de8',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>
