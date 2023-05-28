@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,17 +28,17 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="这次我们的主要内容是错误边界。">
-<meta name="keywords" content="React 错误边界 Error Boundary">
 <meta property="og:type" content="article">
 <meta property="og:title" content="React入门（五）错误边界">
 <meta property="og:url" content="https://sunra.top/posts/5/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这次我们的主要内容是错误边界。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.334Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-04-01T11:40:23.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.939Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="React入门（五）错误边界">
-<meta name="twitter:description" content="这次我们的主要内容是错误边界。">
 
 <link rel="canonical" href="https://sunra.top/posts/5/">
 
@@ -239,7 +239,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -265,45 +265,45 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
       
         <p>这篇博客我们继续看React文档的高级指引。</p>
 <p>这次我们的主要内容是错误边界。</p>
-<a id="more"></a>
-<h2 id="什么是错误边界"><a href="#什么是错误边界" class="headerlink" title="什么是错误边界"></a>什么是错误边界</h2><p>过去，组件内的 JavaScript 错误会导致 React 的内部状态被破坏，并且在下一次渲染时 <a href="https://github.com/facebook/react/issues/4026" rel="external nofollow noopener noreferrer" target="_blank">产生</a> <a href="https://github.com/facebook/react/issues/6895" rel="external nofollow noopener noreferrer" target="_blank">可能无法追踪的</a> <a href="https://github.com/facebook/react/issues/8579" rel="external nofollow noopener noreferrer" target="_blank">错误</a>。这些错误基本上是由较早的其他代码（非 React 组件代码）错误引起的，但 React 并没有提供一种在组件中优雅处理这些错误的方式，也无法从错误中恢复。</p>
+<span id="more"></span>
+<h2 id="什么是错误边界"><a href="#什么是错误边界" class="headerlink" title="什么是错误边界"></a>什么是错误边界</h2><p>过去，组件内的 JavaScript 错误会导致 React 的内部状态被破坏，并且在下一次渲染时 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/facebook/react/issues/4026">产生</a> <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/facebook/react/issues/6895">可能无法追踪的</a> <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/facebook/react/issues/8579">错误</a>。这些错误基本上是由较早的其他代码（非 React 组件代码）错误引起的，但 React 并没有提供一种在组件中优雅处理这些错误的方式，也无法从错误中恢复。</p>
 <p>部分 UI 的 JavaScript 错误不应该导致整个应用崩溃，为了解决这个问题，React 16 引入了一个新的概念 —— 错误边界。</p>
 <p>错误边界是一种 React 组件，这种组件<strong>可以捕获并打印发生在其子组件树任何位置的 JavaScript 错误，并且，它会渲染出备用 UI</strong>，而不是渲染那些崩溃了的子组件树。错误边界在渲染期间、生命周期方法和整个组件树的构造函数中捕获错误。</p>
 <blockquote>
 <p>注意</p>
 <p>错误边界<strong>无法</strong>捕获以下场景中产生的错误：</p>
 <ul>
-<li>事件处理（<a href="https://zh-hans.reactjs.org/docs/error-boundaries.html#how-about-event-handlers" rel="external nofollow noopener noreferrer" target="_blank">了解更多</a>）</li>
+<li>事件处理（<a target="_blank" rel="external nofollow noopener noreferrer" href="https://zh-hans.reactjs.org/docs/error-boundaries.html#how-about-event-handlers">了解更多</a>）</li>
 <li>异步代码（例如 <code>setTimeout</code> 或 <code>requestAnimationFrame</code> 回调函数）</li>
 <li>服务端渲染</li>
 <li>它自身抛出来的错误（并非它的子组件）</li>
 </ul>
 </blockquote>
-<p>如果一个 class 组件中定义了 <a href="https://zh-hans.reactjs.org/docs/react-component.html#static-getderivedstatefromerror" rel="external nofollow noopener noreferrer" target="_blank"><code>static getDerivedStateFromError()</code></a> 或 <a href="https://zh-hans.reactjs.org/docs/react-component.html#componentdidcatch" rel="external nofollow noopener noreferrer" target="_blank"><code>componentDidCatch()</code></a> 这两个生命周期方法中的任意一个（或两个）时，那么它就变成一个错误边界。当抛出错误后，请使用 <code>static getDerivedStateFromError()</code> 渲染备用 UI ，使用 <code>componentDidCatch()</code> 打印错误信息。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">class ErrorBoundary extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">    this.state = &#123; hasError: false &#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  static getDerivedStateFromError(error) &#123;    // 更新 state 使下一次渲染能够显示降级后的 UI    </span><br><span class="line">      return &#123; hasError: true &#125;;  </span><br><span class="line">  &#125;</span><br><span class="line">  componentDidCatch(error, errorInfo) &#123;    // 你同样可以将错误日志上报给服务器    </span><br><span class="line">      logErrorToMyService(error, errorInfo);  </span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    if (this.state.hasError) &#123;      // 你可以自定义降级后的 UI 并渲染      </span><br><span class="line">        return &lt;h1&gt;Something went wrong.&lt;/h1&gt;;    </span><br><span class="line">    &#125;</span><br><span class="line">    return this.props.children; </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果一个 class 组件中定义了 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://zh-hans.reactjs.org/docs/react-component.html#static-getderivedstatefromerror"><code>static getDerivedStateFromError()</code></a> 或 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://zh-hans.reactjs.org/docs/react-component.html#componentdidcatch"><code>componentDidCatch()</code></a> 这两个生命周期方法中的任意一个（或两个）时，那么它就变成一个错误边界。当抛出错误后，请使用 <code>static getDerivedStateFromError()</code> 渲染备用 UI ，使用 <code>componentDidCatch()</code> 打印错误信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">class ErrorBoundary extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">    this.state = &#123; hasError: false &#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  static getDerivedStateFromError(error) &#123;    // 更新 state 使下一次渲染能够显示降级后的 UI    </span><br><span class="line">      return &#123; hasError: true &#125;;  </span><br><span class="line">  &#125;</span><br><span class="line">  componentDidCatch(error, errorInfo) &#123;    // 你同样可以将错误日志上报给服务器    </span><br><span class="line">      logErrorToMyService(error, errorInfo);  </span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    if (this.state.hasError) &#123;      // 你可以自定义降级后的 UI 并渲染      </span><br><span class="line">        return &lt;h1&gt;Something went wrong.&lt;/h1&gt;;    </span><br><span class="line">    &#125;</span><br><span class="line">    return this.props.children; </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后你可以将它作为一个常规组件去使用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;ErrorBoundary&gt;</span><br><span class="line">  &lt;MyWidget /&gt;</span><br><span class="line">&lt;/ErrorBoundary&gt;</span><br></pre></td></tr></table></figure>
-<p>错误边界的工作方式类似于 JavaScript 的 <code>catch {}</code>，不同的地方在于错误边界只针对 React 组件。只有 class 组件才可以成为错误边界组件。大多数情况下, 你只需要声明一次错误边界组件, 并在整个应用中使用它。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;ErrorBoundary&gt;</span><br><span class="line">  &lt;MyWidget /&gt;</span><br><span class="line">&lt;/ErrorBoundary&gt;</span><br></pre></td></tr></table></figure>
+<p>错误边界的工作方式类似于 JavaScript 的 <code>catch &#123;&#125;</code>，不同的地方在于错误边界只针对 React 组件。只有 class 组件才可以成为错误边界组件。大多数情况下, 你只需要声明一次错误边界组件, 并在整个应用中使用它。</p>
 <p>注意<strong>错误边界仅可以捕获其子组件的错误</strong>，它无法捕获其自身的错误。如果一个错误边界无法渲染错误信息，则错误会冒泡至最近的上层错误边界，这也类似于 JavaScript 中 catch {} 的工作机制。</p>
 <h2 id="错误边界应该放置在哪？"><a href="#错误边界应该放置在哪？" class="headerlink" title="错误边界应该放置在哪？"></a>错误边界应该放置在哪？</h2><p>错误边界的粒度由你来决定，可以将其包装在最顶层的路由组件并为用户展示一个 “Something went wrong” 的错误信息，就像服务端框架经常处理崩溃一样。你也可以将单独的部件包装在错误边界以保护应用其他部分不崩溃。</p>
 <h2 id="未捕获错误（Uncaught-Errors）的新行为"><a href="#未捕获错误（Uncaught-Errors）的新行为" class="headerlink" title="未捕获错误（Uncaught Errors）的新行为"></a>未捕获错误（Uncaught Errors）的新行为</h2><p>这一改变具有重要意义，<strong>自 React 16 起，任何未被错误边界捕获的错误将会导致整个 React 组件树被卸载。</strong></p>
 <h2 id="关于-try-catch-？"><a href="#关于-try-catch-？" class="headerlink" title="关于 try/catch ？"></a>关于 try/catch ？</h2><p><code>try</code> / <code>catch</code> 很棒但它仅能用于命令式代码（imperative code）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  showButton();</span><br><span class="line">&#125; catch (error) &#123;</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  showButton();</span><br><span class="line">&#125; catch (error) &#123;</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然而，React 组件是声明式的并且具体指出 <em>什么</em> 需要被渲染：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Button /&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Button /&gt;</span><br></pre></td></tr></table></figure>
 <p>错误边界保留了 React 的声明性质，其行为符合你的预期。例如，即使一个错误发生在 <code>componentDidUpdate</code> 方法中，并且由某一个深层组件树的 <code>setState</code> 引起，其仍然能够冒泡到最近的错误边界。</p>
 <h2 id="关于事件处理器"><a href="#关于事件处理器" class="headerlink" title="关于事件处理器"></a>关于事件处理器</h2><p>错误边界<strong>无法</strong>捕获事件处理器内部的错误。</p>
 <p>React 不需要错误边界来捕获事件处理器中的错误。与 render 方法和生命周期方法不同，事件处理器不会在渲染期间触发。因此，如果它们抛出异常，React 仍然能够知道需要在屏幕上显示什么。</p>
 <p>如果你需要在事件处理器内部捕获错误，使用普通的 JavaScript <code>try</code> / <code>catch</code> 语句：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">class MyComponent extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">    this.state = &#123; error: null &#125;;</span><br><span class="line">    this.handleClick = this.handleClick.bind(this);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleClick() &#123;</span><br><span class="line">    try &#123;      </span><br><span class="line">        // 执行操作，如有错误则会抛出    </span><br><span class="line">    &#125; catch (error) &#123;      </span><br><span class="line">        this.setState(&#123; error &#125;);    </span><br><span class="line">    &#125;  </span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    if (this.state.error) &#123;      </span><br><span class="line">        return &lt;h1&gt;Caught an error.&lt;/h1&gt;    </span><br><span class="line">    &#125;    </span><br><span class="line">    return &lt;button onClick=&#123;this.handleClick&#125;&gt;Click Me&lt;/button&gt;  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">class MyComponent extends React.Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">    this.state = &#123; error: null &#125;;</span><br><span class="line">    this.handleClick = this.handleClick.bind(this);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleClick() &#123;</span><br><span class="line">    try &#123;      </span><br><span class="line">        // 执行操作，如有错误则会抛出    </span><br><span class="line">    &#125; catch (error) &#123;      </span><br><span class="line">        this.setState(&#123; error &#125;);    </span><br><span class="line">    &#125;  </span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    if (this.state.error) &#123;      </span><br><span class="line">        return &lt;h1&gt;Caught an error.&lt;/h1&gt;    </span><br><span class="line">    &#125;    </span><br><span class="line">    return &lt;button onClick=&#123;this.handleClick&#125;&gt;Click Me&lt;/button&gt;  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>请注意上述例子只是演示了普通的 JavaScript 行为，并没有使用错误边界。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
-<li><p>首先错误边界也是一个组件，只不过是实现了定义了 <a href="https://zh-hans.reactjs.org/docs/react-component.html#static-getderivedstatefromerror" rel="external nofollow noopener noreferrer" target="_blank"><code>static getDerivedStateFromError()</code></a> 或 <a href="https://zh-hans.reactjs.org/docs/react-component.html#componentdidcatch" rel="external nofollow noopener noreferrer" target="_blank"><code>componentDidCatch()</code></a> 这两个生命周期方法中的任意一个（或两个）。</p>
+<li><p>首先错误边界也是一个组件，只不过是实现了定义了 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://zh-hans.reactjs.org/docs/react-component.html#static-getderivedstatefromerror"><code>static getDerivedStateFromError()</code></a> 或 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://zh-hans.reactjs.org/docs/react-component.html#componentdidcatch"><code>componentDidCatch()</code></a> 这两个生命周期方法中的任意一个（或两个）。</p>
 </li>
-<li><p>这个所谓的错误边界的作用类似<code>try/catch</code>，错误边界中间的内容可以类比成try中的内容，而catch到error之后，在错误边界的 <a href="https://zh-hans.reactjs.org/docs/react-component.html#static-getderivedstatefromerror" rel="external nofollow noopener noreferrer" target="_blank"><code>static getDerivedStateFromError()</code></a> 或 <a href="https://zh-hans.reactjs.org/docs/react-component.html#componentdidcatch" rel="external nofollow noopener noreferrer" target="_blank"><code>componentDidCatch()</code></a> 中去处理，前者用于渲染备用UI，后者用来打印log。</p>
+<li><p>这个所谓的错误边界的作用类似<code>try/catch</code>，错误边界中间的内容可以类比成try中的内容，而catch到error之后，在错误边界的 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://zh-hans.reactjs.org/docs/react-component.html#static-getderivedstatefromerror"><code>static getDerivedStateFromError()</code></a> 或 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://zh-hans.reactjs.org/docs/react-component.html#componentdidcatch"><code>componentDidCatch()</code></a> 中去处理，前者用于渲染备用UI，后者用来打印log。</p>
 </li>
 <li>错误边界<strong>无法</strong>捕获以下场景中产生的错误：<ul>
-<li>事件处理（<a href="https://zh-hans.reactjs.org/docs/error-boundaries.html#how-about-event-handlers" rel="external nofollow noopener noreferrer" target="_blank">了解更多</a>）</li>
+<li>事件处理（<a target="_blank" rel="external nofollow noopener noreferrer" href="https://zh-hans.reactjs.org/docs/error-boundaries.html#how-about-event-handlers">了解更多</a>）</li>
 <li>异步代码（例如 <code>setTimeout</code> 或 <code>requestAnimationFrame</code> 回调函数）</li>
 <li>服务端渲染</li>
 <li>它自身抛出来的错误（并非它的子组件）</li>
@@ -426,7 +426,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是错误边界"><span class="nav-number">1.</span> <span class="nav-text">什么是错误边界</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误边界应该放置在哪？"><span class="nav-number">2.</span> <span class="nav-text">错误边界应该放置在哪？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未捕获错误（Uncaught-Errors）的新行为"><span class="nav-number">3.</span> <span class="nav-text">未捕获错误（Uncaught Errors）的新行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于-try-catch-？"><span class="nav-number">4.</span> <span class="nav-text">关于 try/catch ？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于事件处理器"><span class="nav-number">5.</span> <span class="nav-text">关于事件处理器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%94%99%E8%AF%AF%E8%BE%B9%E7%95%8C"><span class="nav-number">1.</span> <span class="nav-text">什么是错误边界</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E8%BE%B9%E7%95%8C%E5%BA%94%E8%AF%A5%E6%94%BE%E7%BD%AE%E5%9C%A8%E5%93%AA%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">错误边界应该放置在哪？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AA%E6%8D%95%E8%8E%B7%E9%94%99%E8%AF%AF%EF%BC%88Uncaught-Errors%EF%BC%89%E7%9A%84%E6%96%B0%E8%A1%8C%E4%B8%BA"><span class="nav-number">3.</span> <span class="nav-text">未捕获错误（Uncaught Errors）的新行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-try-catch-%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">关于 try&#x2F;catch ？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E5%99%A8"><span class="nav-number">5.</span> <span class="nav-text">关于事件处理器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -516,9 +516,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -552,7 +560,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

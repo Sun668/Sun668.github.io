@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,21 +28,21 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="在上一篇博客中，我们从执行机制和上下文的角度讲了javascript中的变量提升。 正是由于 JavaScript 存在变量提升这种特性，从而导致了很多与直觉不符的代码，这也是 JavaScript 的一个重要设计缺陷。 虽然 ECMAScript6（以下简称 ES6）已经通过引入块级作用域并配合 let、const 关键字，来避开了这种设计缺陷，但是由于 JavaScript 需要保持向下兼容，">
-<meta name="keywords" content="JavaScript 作用域 scope">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Javascript执行机制（二）作用域">
 <meta property="og:url" content="https://sunra.top/posts/48445981/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="在上一篇博客中，我们从执行机制和上下文的角度讲了javascript中的变量提升。 正是由于 JavaScript 存在变量提升这种特性，从而导致了很多与直觉不符的代码，这也是 JavaScript 的一个重要设计缺陷。 虽然 ECMAScript6（以下简称 ES6）已经通过引入块级作用域并配合 let、const 关键字，来避开了这种设计缺陷，但是由于 JavaScript 需要保持向下兼容，">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/微信截图_20201215204135_tf6mt8.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/微信截图_20201215204144_dzlkwq.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/微信截图_20201215204151_izno2z.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036133/origin-of-ray/微信截图_20201215204157_g15aka.png">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.330Z">
+<meta property="article:published_time" content="2020-11-22T10:56:20.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.931Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Javascript执行机制（二）作用域">
-<meta name="twitter:description" content="在上一篇博客中，我们从执行机制和上下文的角度讲了javascript中的变量提升。 正是由于 JavaScript 存在变量提升这种特性，从而导致了很多与直觉不符的代码，这也是 JavaScript 的一个重要设计缺陷。 虽然 ECMAScript6（以下简称 ES6）已经通过引入块级作用域并配合 let、const 关键字，来避开了这种设计缺陷，但是由于 JavaScript 需要保持向下兼容，">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/微信截图_20201215204135_tf6mt8.png">
 
 <link rel="canonical" href="https://sunra.top/posts/48445981/">
@@ -244,7 +244,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -270,7 +270,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
         <p>在<a href="https://sunra.top/posts/480b6b42/">上一篇博客</a>中，我们从执行机制和上下文的角度讲了javascript中的变量提升。</p>
 <p>正是由于 JavaScript 存在变量提升这种特性，从而导致了很多与直觉不符的代码，这也是 JavaScript 的一个重要设计缺陷。</p>
 <p>虽然 ECMAScript6（以下简称 ES6）已经通过引入块级作用域并配合 let、const 关键字，来避开了这种设计缺陷，但是由于 JavaScript 需要保持向下兼容，所以变量提升在相当长一段时间内还会继续存在。这也加大了你理解概念的难度，因为既要理解新的机制，又要理解变量提升这套机制，关键这两套机制还是同时运行在“一套”系统中的。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><p>作用域是指在程序中定义变量的区域，该位置决定了变量的生命周期。通俗地理解，作用域就是变量与函数的可访问范围，即作用域控制着变量和函数的可见性和生命周期。</p>
 <p>在 ES6 之前，ES 的作用域只有两种：<strong>全局作用域和函数作用域</strong>。</p>
 <ul>
@@ -285,16 +285,16 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">5</span></span><br><span class="line"><span class="keyword">const</span> y = <span class="number">6</span></span><br><span class="line">x = <span class="number">7</span></span><br><span class="line">y = <span class="number">9</span> <span class="comment">//报错，const声明的变量不可以修改</span></span><br></pre></td></tr></table></figure>
 <p>从这段代码你可以看出来，两者之间的区别是，使用 let 关键字声明的变量是可以被改变的，而使用 const 声明的变量其值是不可以被改变的。但不管怎样，两者都可以生成块级作用域，为了简单起见，在下面的代码中，我统一使用 let 关键字来演示。</p>
 <p>那么接下来，我们就通过实际的例子来分析下，ES6 是如何通过块级作用域来解决上面的问题的。你可以先参考下面这段存在变量提升的代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">varTest</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> x = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">2</span>;  <span class="comment">// 同样的变量!</span></span><br><span class="line">    <span class="built_in">console</span>.log(x);  <span class="comment">// 2</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">console</span>.log(x);  <span class="comment">// 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">varTest</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> x = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">2</span>;  <span class="comment">// 同样的变量!</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(x);  <span class="comment">// 2</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(x);  <span class="comment">// 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在这段代码中，有两个地方都定义了变量 x，第一个地方在函数块的顶部，第二个地方在 if 块的内部，由于 var 的作用范围是整个函数，所以在编译阶段，会生成如下的执行上下文：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/微信截图_20201215204135_tf6mt8.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204135_tf6mt8.png"></p>
 <p>从执行上下文的变量环境中可以看出，<strong>最终只生成了一个变量 x，函数体内所有对 x 的赋值操作都会直接改变变量环境中的 x 值</strong>。</p>
 <p>所以上述代码最后通过 console.log(x) 输出的是 2，而对于相同逻辑的代码，其他语言最后一步输出的值应该是 1，因为在 if 块里面的声明不应该影响到块外面的变量。</p>
 <p>既然支持块级作用域和不支持块级作用域的代码执行逻辑是不一样的，那么接下来我们就来改造上面的代码，让其支持块级作用域。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">letTest</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> x = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">2</span>;  <span class="comment">// 不同的变量</span></span><br><span class="line">    <span class="built_in">console</span>.log(x);  <span class="comment">// 2</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">console</span>.log(x);  <span class="comment">// 1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">letTest</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> x = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="number">2</span>;  <span class="comment">// 不同的变量</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(x);  <span class="comment">// 2</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(x);  <span class="comment">// 1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>执行这段代码，其输出结果就和我们的预期是一致的。这是因为 let 关键字是支持块级作用域的，所以在编译阶段，JavaScript 引擎并不会把 if 块中通过 let 声明的变量存放到变量环境中，这也就意味着在 if 块通过 let 声明的关键字，并不会提升到全函数可见。所以在 if 块之内打印出来的值是 2，跳出语块之后，打印出来的值就是 1 了。这种就非常符合我们的编程习惯了：作用域块内声明的变量不影响块外面的变量。</p>
 <h2 id="JavaScript-是如何支持块级作用域的"><a href="#JavaScript-是如何支持块级作用域的" class="headerlink" title="JavaScript 是如何支持块级作用域的"></a>JavaScript 是如何支持块级作用域的</h2><p>你已经知道 JavaScript 引擎是通过变量环境实现函数级作用域的，那么 ES6 又是如何在函数级作用域的基础之上，实现对块级作用域的支持呢？你可以先看下面这段代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">    <span class="keyword">let</span> b = <span class="number">2</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">let</span> b = <span class="number">3</span></span><br><span class="line">      <span class="keyword">var</span> c = <span class="number">4</span></span><br><span class="line">      <span class="keyword">let</span> d = <span class="number">5</span></span><br><span class="line">      <span class="built_in">console</span>.log(a)</span><br><span class="line">      <span class="built_in">console</span>.log(b)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(b) </span><br><span class="line">    <span class="built_in">console</span>.log(c)</span><br><span class="line">    <span class="built_in">console</span>.log(d)</span><br><span class="line">&#125;   </span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">1</span></span><br><span class="line">    <span class="keyword">let</span> b = <span class="number">2</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">let</span> b = <span class="number">3</span></span><br><span class="line">      <span class="keyword">var</span> c = <span class="number">4</span></span><br><span class="line">      <span class="keyword">let</span> d = <span class="number">5</span></span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(a)</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(b)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(b) </span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(c)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(d)</span><br><span class="line">&#125;   </span><br><span class="line"><span class="title function_">foo</span>()</span><br></pre></td></tr></table></figure>
 <p>当执行上面这段代码的时候，JavaScript 引擎会先对其进行编译并创建执行上下文，然后再按照顺序执行代码，关于如何创建执行上下文我们在前面的文章中已经分析过了，但是现在的情况有点不一样，我们引入了 let 关键字，let 关键字会创建块级作用域，那么 let 关键字是如何影响执行上下文的呢？</p>
 <p>第一步是编译并创建执行上下文，下面是我画出来的执行上下文示意图:</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/微信截图_20201215204144_dzlkwq.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608036132/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215204144_dzlkwq.png"></p>
@@ -431,7 +431,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域"><span class="nav-number">1.</span> <span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES6-是如何解决变量提升带来的缺陷"><span class="nav-number">2.</span> <span class="nav-text">ES6 是如何解决变量提升带来的缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript-是如何支持块级作用域的"><span class="nav-number">3.</span> <span class="nav-text">JavaScript 是如何支持块级作用域的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">1.</span> <span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES6-%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87%E5%B8%A6%E6%9D%A5%E7%9A%84%E7%BC%BA%E9%99%B7"><span class="nav-number">2.</span> <span class="nav-text">ES6 是如何解决变量提升带来的缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript-%E6%98%AF%E5%A6%82%E4%BD%95%E6%94%AF%E6%8C%81%E5%9D%97%E7%BA%A7%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9A%84"><span class="nav-number">3.</span> <span class="nav-text">JavaScript 是如何支持块级作用域的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -521,9 +521,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -557,7 +565,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

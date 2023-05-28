@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,19 +28,19 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="微服务现在大行其道，不同服务之间的调用方式也经过一系列的发展，这次我们就一起看看他们的发展过程，一起看不仅有利于统一理解，也有助于我们看清变化的原因。 我们就拿最简单的场景，客户端调用一个加法函数，将两个整数加起来，返回它们的和。如果放在本地调用，那是简单的不能再简单了，只要稍微学过一种编程语言，三下五除二就搞定了。 但是一旦变成了远程调用，门槛一下子就上去了。首先你要会 Socket 编程，至少">
-<meta name="keywords" content="Network">
 <meta property="og:type" content="article">
 <meta property="og:title" content="微服务中的调用协议的发展">
 <meta property="og:url" content="https://sunra.top/posts/57949/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="微服务现在大行其道，不同服务之间的调用方式也经过一系列的发展，这次我们就一起看看他们的发展过程，一起看不仅有利于统一理解，也有助于我们看清变化的原因。 我们就拿最简单的场景，客户端调用一个加法函数，将两个整数加起来，返回它们的和。如果放在本地调用，那是简单的不能再简单了，只要稍微学过一种编程语言，三下五除二就搞定了。 但是一旦变成了远程调用，门槛一下子就上去了。首先你要会 Socket 编程，至少">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1618400952/origin-of-ray/8534c52daf3682cd1cfe5a3375ec9525_ptfocq.jpg">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1618402636/origin-of-ray/2aff190d1f878749d2a5bd73228ca37c_fneugl.jpg">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.326Z">
+<meta property="article:published_time" content="2021-04-14T11:31:44.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.931Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="微服务中的调用协议的发展">
-<meta name="twitter:description" content="微服务现在大行其道，不同服务之间的调用方式也经过一系列的发展，这次我们就一起看看他们的发展过程，一起看不仅有利于统一理解，也有助于我们看清变化的原因。 我们就拿最简单的场景，客户端调用一个加法函数，将两个整数加起来，返回它们的和。如果放在本地调用，那是简单的不能再简单了，只要稍微学过一种编程语言，三下五除二就搞定了。 但是一旦变成了远程调用，门槛一下子就上去了。首先你要会 Socket 编程，至少">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1618400952/origin-of-ray/8534c52daf3682cd1cfe5a3375ec9525_ptfocq.jpg">
 
 <link rel="canonical" href="https://sunra.top/posts/57949/">
@@ -242,7 +242,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
 
           
@@ -259,7 +259,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
         <p>微服务现在大行其道，不同服务之间的调用方式也经过一系列的发展，这次我们就一起看看他们的发展过程，一起看不仅有利于统一理解，也有助于我们看清变化的原因。</p>
 <p>我们就拿最简单的场景，客户端调用一个加法函数，将两个整数加起来，返回它们的和。如果放在本地调用，那是简单的不能再简单了，只要稍微学过一种编程语言，三下五除二就搞定了。</p>
 <p>但是一旦变成了远程调用，门槛一下子就上去了。首先你要会 Socket 编程，至少先要把咱们这门网络协议课学一下，然后再看 N 本砖头厚的 Socket 程序设计的书，学会咱们学过的几种 Socket 程序设计的模型。这就使得本来大学毕业就能干的一项工作，变成了一件五年工作经验都不一定干好的工作，而且，搞定了 Socket 程序设计，才是万里长征的第一步。后面还有很多问题呢！</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="远程调用需要解决的五个问题"><a href="#远程调用需要解决的五个问题" class="headerlink" title="远程调用需要解决的五个问题"></a>远程调用需要解决的五个问题</h2><h3 id="问题一：如何规定远程调用的语法？"><a href="#问题一：如何规定远程调用的语法？" class="headerlink" title="问题一：如何规定远程调用的语法？"></a>问题一：如何规定远程调用的语法？</h3><p>客户端如何告诉服务端，我是一个加法，而另一个是乘法。我是用字符串“add”传给你，还是传给你一个整数，比如 1 表示加法，2 表示乘法？服务端该如何告诉客户端，我的这个加法，目前只能加整数，不能加小数，不能加字符串；而另一个加法“add1”，它能实现小数和整数的混合加法。那返回值是什么？正确的时候返回什么，错误的时候又返回什么？</p>
 <h3 id="问题二：如果传递参数？"><a href="#问题二：如果传递参数？" class="headerlink" title="问题二：如果传递参数？"></a>问题二：如果传递参数？</h3><p>我是先传两个整数，后传一个操作符“add”，还是先传操作符，再传两个整数？是不是像咱们数据结构里一样，如果都是 UDP，想要实现一个逆波兰表达式，放在一个报文里面还好，如果是 TCP，是一个流，在这个流里面，如何将两次调用进行分界？什么时候是头，什么时候是尾？把这次的参数和上次的参数混了起来，TCP 一端发送出去的数据，另外一端不一定能一下子全部读取出来。所以，怎么才算读完呢？</p>
 <h3 id="问题三：如何表示数据？"><a href="#问题三：如何表示数据？" class="headerlink" title="问题三：如何表示数据？"></a>问题三：如何表示数据？</h3><p>在这个简单的例子中，传递的就是一个固定长度的 int 值，这种情况还好，如果是变长的类型，是一个结构体，甚至是一个类，应该怎么办呢？如果是 int，不同的平台上长度也不同，该怎么办呢？</p>
@@ -411,7 +411,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#远程调用需要解决的五个问题"><span class="nav-number">1.</span> <span class="nav-text">远程调用需要解决的五个问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题一：如何规定远程调用的语法？"><span class="nav-number">1.1.</span> <span class="nav-text">问题一：如何规定远程调用的语法？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题二：如果传递参数？"><span class="nav-number">1.2.</span> <span class="nav-text">问题二：如果传递参数？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题三：如何表示数据？"><span class="nav-number">1.3.</span> <span class="nav-text">问题三：如何表示数据？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题四：如何知道一个服务端都实现了哪些远程调用？"><span class="nav-number">1.4.</span> <span class="nav-text">问题四：如何知道一个服务端都实现了哪些远程调用？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题五：发生了错误、重传、丢包、性能等问题怎么办？"><span class="nav-number">1.5.</span> <span class="nav-text">问题五：发生了错误、重传、丢包、性能等问题怎么办？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC协议"><span class="nav-number">2.</span> <span class="nav-text">RPC协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#协议约定问题"><span class="nav-number">2.1.</span> <span class="nav-text">协议约定问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#传输问题"><span class="nav-number">2.2.</span> <span class="nav-text">传输问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务发现问题"><span class="nav-number">2.3.</span> <span class="nav-text">服务发现问题</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E9%9C%80%E8%A6%81%E8%A7%A3%E5%86%B3%E7%9A%84%E4%BA%94%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">远程调用需要解决的五个问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%B8%80%EF%BC%9A%E5%A6%82%E4%BD%95%E8%A7%84%E5%AE%9A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E7%9A%84%E8%AF%AD%E6%B3%95%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">问题一：如何规定远程调用的语法？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%BA%8C%EF%BC%9A%E5%A6%82%E6%9E%9C%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">问题二：如果传递参数？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%B8%89%EF%BC%9A%E5%A6%82%E4%BD%95%E8%A1%A8%E7%A4%BA%E6%95%B0%E6%8D%AE%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">问题三：如何表示数据？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%9B%9B%EF%BC%9A%E5%A6%82%E4%BD%95%E7%9F%A5%E9%81%93%E4%B8%80%E4%B8%AA%E6%9C%8D%E5%8A%A1%E7%AB%AF%E9%83%BD%E5%AE%9E%E7%8E%B0%E4%BA%86%E5%93%AA%E4%BA%9B%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%EF%BC%9F"><span class="nav-number">1.4.</span> <span class="nav-text">问题四：如何知道一个服务端都实现了哪些远程调用？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%BA%94%EF%BC%9A%E5%8F%91%E7%94%9F%E4%BA%86%E9%94%99%E8%AF%AF%E3%80%81%E9%87%8D%E4%BC%A0%E3%80%81%E4%B8%A2%E5%8C%85%E3%80%81%E6%80%A7%E8%83%BD%E7%AD%89%E9%97%AE%E9%A2%98%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="nav-number">1.5.</span> <span class="nav-text">问题五：发生了错误、重传、丢包、性能等问题怎么办？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.</span> <span class="nav-text">RPC协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E8%AE%AE%E7%BA%A6%E5%AE%9A%E9%97%AE%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text">协议约定问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E9%97%AE%E9%A2%98"><span class="nav-number">2.2.</span> <span class="nav-text">传输问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E9%97%AE%E9%A2%98"><span class="nav-number">2.3.</span> <span class="nav-text">服务发现问题</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -501,9 +501,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -537,7 +545,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

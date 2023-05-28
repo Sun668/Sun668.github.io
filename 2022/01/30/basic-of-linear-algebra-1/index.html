@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,18 +20,25 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="最近想看一看计算机图形学的知识，但是看到课程要求里面的前置知识有线性代数，就重新看了一些，目前是看了行列式，矩阵，向量和方程组的性质。这篇博客主要目的不是挨个总结矩阵的性质，而是梳理我在复习过程中一直有的一个疑问，就是，这几个东西为什么会放在一起讲，他们之间有什么关系，并且稍微结合一下渲染原理中的一些理念，矩阵是如何应用到其中的。">
-<meta name="keywords" content="矩阵 行列式 向量">
 <meta property="og:type" content="article">
 <meta property="og:title" content="线性代数基础（一）行列式，矩阵，向量与方程组之间的联系(上)">
 <meta property="og:url" content="https://sunra.top/2022/01/30/basic-of-linear-algebra-1/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近想看一看计算机图形学的知识，但是看到课程要求里面的前置知识有线性代数，就重新看了一些，目前是看了行列式，矩阵，向量和方程组的性质。这篇博客主要目的不是挨个总结矩阵的性质，而是梳理我在复习过程中一直有的一个疑问，就是，这几个东西为什么会放在一起讲，他们之间有什么关系，并且稍微结合一下渲染原理中的一些理念，矩阵是如何应用到其中的。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-26T22:57:23.931Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-01-30T09:14:47.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.923Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="线性代数基础（一）行列式，矩阵，向量与方程组之间的联系(上)">
-<meta name="twitter:description" content="最近想看一看计算机图形学的知识，但是看到课程要求里面的前置知识有线性代数，就重新看了一些，目前是看了行列式，矩阵，向量和方程组的性质。这篇博客主要目的不是挨个总结矩阵的性质，而是梳理我在复习过程中一直有的一个疑问，就是，这几个东西为什么会放在一起讲，他们之间有什么关系，并且稍微结合一下渲染原理中的一些理念，矩阵是如何应用到其中的。">
 
 <link rel="canonical" href="https://sunra.top/2022/01/30/basic-of-linear-algebra-1/">
 
@@ -48,6 +55,15 @@
 
   <title>线性代数基础（一）行列式，矩阵，向量与方程组之间的联系(上) | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -223,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:23" itemprop="dateModified" datetime="2023-05-27T06:57:23+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -247,7 +263,7 @@
 
       
         <p>最近想看一看计算机图形学的知识，但是看到课程要求里面的前置知识有线性代数，就重新看了一些，目前是看了行列式，矩阵，向量和方程组的性质。<br>这篇博客主要目的不是挨个总结矩阵的性质，而是梳理我在复习过程中一直有的一个疑问，就是，这几个东西为什么会放在一起讲，他们之间有什么关系，并且稍微结合一下渲染原理中的一些理念，矩阵是如何应用到其中的。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="行列式，矩阵，向量和方程组之间的关系的一些理解"><a href="#行列式，矩阵，向量和方程组之间的关系的一些理解" class="headerlink" title="行列式，矩阵，向量和方程组之间的关系的一些理解"></a>行列式，矩阵，向量和方程组之间的关系的一些理解</h2><ul>
 <li>行列式是一个值，他是一个数，是标量，而矩阵则是一个表格。</li>
 <li>行列式的值可以看作是矩阵的一个特性，通过行列式的值的计算，可以判断一些矩阵的性质。</li>
@@ -529,7 +545,7 @@ i = 1, 2, 3, ..., n</script><p>其中Ai是|A|中第i<strong>列</strong>元素�
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#行列式，矩阵，向量和方程组之间的关系的一些理解"><span class="nav-number">1.</span> <span class="nav-text">行列式，矩阵，向量和方程组之间的关系的一些理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩阵与渲染管线的关系"><span class="nav-number">2.</span> <span class="nav-text">矩阵与渲染管线的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行列式，矩阵，向量，方程组一些特性以及之间的关系"><span class="nav-number">3.</span> <span class="nav-text">行列式，矩阵，向量，方程组一些特性以及之间的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#行列式"><span class="nav-number">3.1.</span> <span class="nav-text">行列式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#行列式的性质"><span class="nav-number">3.1.1.</span> <span class="nav-text">行列式的性质</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#行列式的按行（或列）展开公式-拉普拉斯展开"><span class="nav-number">3.1.2.</span> <span class="nav-text">行列式的按行（或列）展开公式 (拉普拉斯展开)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#克拉默法则"><span class="nav-number">3.1.3.</span> <span class="nav-text">克拉默法则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#矩阵"><span class="nav-number">3.2.</span> <span class="nav-text">矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向量"><span class="nav-number">3.3.</span> <span class="nav-text">向量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方程组"><span class="nav-number">3.4.</span> <span class="nav-text">方程组</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E5%BC%8F%EF%BC%8C%E7%9F%A9%E9%98%B5%EF%BC%8C%E5%90%91%E9%87%8F%E5%92%8C%E6%96%B9%E7%A8%8B%E7%BB%84%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%86%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">行列式，矩阵，向量和方程组之间的关系的一些理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E4%B8%8E%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">2.</span> <span class="nav-text">矩阵与渲染管线的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E5%BC%8F%EF%BC%8C%E7%9F%A9%E9%98%B5%EF%BC%8C%E5%90%91%E9%87%8F%EF%BC%8C%E6%96%B9%E7%A8%8B%E7%BB%84%E4%B8%80%E4%BA%9B%E7%89%B9%E6%80%A7%E4%BB%A5%E5%8F%8A%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.</span> <span class="nav-text">行列式，矩阵，向量，方程组一些特性以及之间的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">行列式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E5%BC%8F%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="nav-number">3.1.1.</span> <span class="nav-text">行列式的性质</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E5%BC%8F%E7%9A%84%E6%8C%89%E8%A1%8C%EF%BC%88%E6%88%96%E5%88%97%EF%BC%89%E5%B1%95%E5%BC%80%E5%85%AC%E5%BC%8F-%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E5%B1%95%E5%BC%80"><span class="nav-number">3.1.2.</span> <span class="nav-text">行列式的按行（或列）展开公式 (拉普拉斯展开)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%8B%E6%8B%89%E9%BB%98%E6%B3%95%E5%88%99"><span class="nav-number">3.1.3.</span> <span class="nav-text">克拉默法则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5"><span class="nav-number">3.2.</span> <span class="nav-text">矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F"><span class="nav-number">3.3.</span> <span class="nav-text">向量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E7%A8%8B%E7%BB%84"><span class="nav-number">3.4.</span> <span class="nav-text">方程组</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -619,9 +635,17 @@ i = 1, 2, 3, ..., n</script><p>其中Ai是|A|中第i<strong>列</strong>元素�
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -655,7 +679,9 @@ i = 1, 2, 3, ..., n</script><p>其中Ai是|A|中第i<strong>列</strong>元素�
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

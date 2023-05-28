@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,17 +28,17 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="前面介绍了渲染流水线的基本内容，接下来就其中的我们可以编程的部分进行介绍，开始之前我们需要先介绍一些基础概念，对其中的一些属性进行简单说明。">
-<meta name="keywords" content="Unity Shader 原理 概念">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity 渲染原理(四) Unity Shader基础概念">
 <meta property="og:url" content="https://sunra.top/posts/47139/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="前面介绍了渲染流水线的基本内容，接下来就其中的我们可以编程的部分进行介绍，开始之前我们需要先介绍一些基础概念，对其中的一些属性进行简单说明。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.342Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-04-21T23:42:09.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.947Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Unity 渲染原理(四) Unity Shader基础概念">
-<meta name="twitter:description" content="前面介绍了渲染流水线的基本内容，接下来就其中的我们可以编程的部分进行介绍，开始之前我们需要先介绍一些基础概念，对其中的一些属性进行简单说明。">
 
 <link rel="canonical" href="https://sunra.top/posts/47139/">
 
@@ -239,7 +239,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,7 +263,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       
         <p>前面介绍了渲染流水线的基本内容，接下来就其中的我们可以编程的部分进行介绍，开始之前我们需要先介绍一些基础概念，对其中的一些属性进行简单说明。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="Shader-简介"><a href="#Shader-简介" class="headerlink" title="Shader 简介"></a>Shader 简介</h2><h3 id="Shader类型"><a href="#Shader类型" class="headerlink" title="Shader类型"></a>Shader类型</h3><p>Unity中的Shader被分为三种大的类型，分别用于不同的目的：</p>
 <ul>
 <li>Shader：是渲染流水线的一部分，也是最常使用的一种Shader，这种Shader用于计算屏幕上的每一点的像素值。这种着色器又分为多种类型<ul>
@@ -354,7 +354,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <li>在加载着色器变体时，编辑器使用占位着色器渲染几何体，该着色器显示为纯青色。 </li>
 <li>当编辑器完成对着色器变体的编译后，它会使用着色器变体来渲染几何体。</li>
 </ol>
-<p>具体还有一些通过设置和代码的方式去开关这种异步编译的方法，就不赘述，可以去看一下<a href="https://docs.unity3d.com/cn/current/Manual/AsynchronousShaderCompilation.html" rel="external nofollow noopener noreferrer" target="_blank">异步着色器编译的官方文档</a></p>
+<p>具体还有一些通过设置和代码的方式去开关这种异步编译的方法，就不赘述，可以去看一下<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/cn/current/Manual/AsynchronousShaderCompilation.html">异步着色器编译的官方文档</a></p>
 <h2 id="Shader中的分支，变体和关键字（keywords）"><a href="#Shader中的分支，变体和关键字（keywords）" class="headerlink" title="Shader中的分支，变体和关键字（keywords）"></a>Shader中的分支，变体和关键字（keywords）</h2><p>有时，我们希望同一个着色器在不同情况下有不同的行为。发生这种情况时，您使用条件来定义不同硬件的不同行为。</p>
 <p>本手册的本节包含有关定色器变体和关键字工作以及何时以及如何使用它们的信息。</p>
 <div class="table-container">
@@ -405,7 +405,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <li>Shader变体：Unity使用静态分支来讲Shader的源代码编译成多个shader代码，unity在运行时根据不同的条件选择不同的shader代码</li>
 </ul>
 <p>这三种其实也可以分为两种，静态条件和动态条件，因为Shader变体使用的其实也是静态条件，只不过静态分支是在编译阶段根据静态条件把用不到的代码剔除了，而变体则是在编译阶段把每个不同的条件都编译出了一个变体</p>
-<p>如何在这三种方式中进行选择，可以看一下<a href="https://docs.unity3d.com/Manual/shader-branching.html" rel="external nofollow noopener noreferrer" target="_blank">官方文档</a></p>
+<p>如何在这三种方式中进行选择，可以看一下<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Manual/shader-branching.html">官方文档</a></p>
 <p>简单来说，如果事先知道了需要满足的条件，采用静态分支，如果不知道，那么就是动态分支或者shaer变体选一个，动态分支是GPU运行时进行选择，所以会影响GPU性能，Shader变体则是会增加包体积。</p>
 <h3 id="Shader-Variants-Shader变体"><a href="#Shader-Variants-Shader变体" class="headerlink" title="Shader Variants(Shader变体)"></a>Shader Variants(Shader变体)</h3><p>着色器变体，有时也称为着色器排列，是将条件行为引入着色器代码的一种方法。Unity将着色器源文件编译成着色器程序。每个编译的着色器程序都有一个或多个变体:不同的着色器程序版本适用于不同的条件。在运行时，Unity使用匹配当前需求的变体。你可以使用shader keywords来配置变量。</p>
 <p>带有大量变体的着色器被称为mega着色器或uber着色器。Unity的标准着色器就是这样一个着色器的例子。</p>
@@ -430,8 +430,8 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 </ol>
 <p>对于每个着色器程序，Unity决定产生不同变体的着色器关键字的组合。这包括：</p>
 <ul>
-<li>着色器变量关键字的集合，在源文件中为该着色器声明。更多信息，参见<a href="https://docs.unity3d.com/Manual/shader-keywords.html#declaring-keywords" rel="external nofollow noopener noreferrer" target="_blank">声明着色关键字</a>。</li>
-<li>Unity自动添加的着色器关键字集。更多信息，参见<a href="https://docs.unity3d.com/Manual/shader-keywords.html#predefined-shader-keywords" rel="external nofollow noopener noreferrer" target="_blank">Unity预定义的shader关键字</a>。</li>
+<li>着色器变量关键字的集合，在源文件中为该着色器声明。更多信息，参见<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Manual/shader-keywords.html#declaring-keywords">声明着色关键字</a>。</li>
+<li>Unity自动添加的着色器关键字集。更多信息，参见<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Manual/shader-keywords.html#predefined-shader-keywords">Unity预定义的shader关键字</a>。</li>
 </ul>
 <p>For example, this set contains three shader variant keywords:</p>
 <p>COLOR_RED<br>COLOR_GREEN<br>COLOR_BLUE<br>This set contains four shader variant keywords:</p>
@@ -439,7 +439,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>COLOR_RED and QUALITY_LOW<br>COLOR_RED and QUALITY_MEDIUM<br>COLOR_RED and QUALITY_HIGH<br>COLOR_RED and QUALITY_ULTRA<br>COLOR_GREEN and QUALITY_LOW<br>COLOR_GREEN and QUALITY_MEDIUM<br>COLOR_GREEN and QUALITY_HIGH<br>COLOR_GREEN and QUALITY_ULTRA<br>COLOR_BLUE and QUALITY_LOW<br>COLOR_BLUE and QUALITY_MEDIUM<br>COLOR_BLUE and QUALITY_HIGH<br>COLOR_BLUE and QUALITY_ULTRA</p>
 <p>当你添加更多的着色器变量关键字集时，Unity编译的变量数量可以快速增长。这种快速增长的术语是组合爆炸。例如，考虑一个相当典型的用例，其中一个着色器有许多着色器变体关键字集，每个关键字包含两个关键字(&lt;特性名&gt; ON和&lt;特性名&gt; OFF)。如果着色器有两个这样的关键字集，这将导致四个变量。如果着色器有10组这样的关键字，这将导致1024个变体</p>
 <h4 id="着色器变种的重复数据消除"><a href="#着色器变种的重复数据消除" class="headerlink" title="着色器变种的重复数据消除"></a>着色器变种的重复数据消除</h4><p>编译后，Unity自动识别相同的变量在相同的Pass中，并确保这些相同的变量指向相同的字节码。这就是重复数据删除。重复数据删除可防止相同Pass中的相同变量增加文件大小;然而，相同的变体仍然会导致编译过程中的浪费工作，并增加内存使用和着色器加载时间在运行时。记住这一点，最好去掉不需要的变量。</p>
-<h4 id="如何从Shader变体角度优化打包体积"><a href="#如何从Shader变体角度优化打包体积" class="headerlink" title="如何从Shader变体角度优化打包体积"></a>如何从Shader变体角度优化打包体积</h4><p>有一篇文章写的不错，记录一下：<a href="https://blog.unity.com/technology/stripping-scriptable-shader-variants" rel="external nofollow noopener noreferrer" target="_blank">https://blog.unity.com/technology/stripping-scriptable-shader-variants</a></p>
+<h4 id="如何从Shader变体角度优化打包体积"><a href="#如何从Shader变体角度优化打包体积" class="headerlink" title="如何从Shader变体角度优化打包体积"></a>如何从Shader变体角度优化打包体积</h4><p>有一篇文章写的不错，记录一下：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://blog.unity.com/technology/stripping-scriptable-shader-variants">https://blog.unity.com/technology/stripping-scriptable-shader-variants</a></p>
 <h3 id="Shader-keywords"><a href="#Shader-keywords" class="headerlink" title="Shader keywords"></a>Shader keywords</h3><p>Shader 关键字可以让我们在shader code中使用条件行为代码，我们可以创建一些公共的code，但是这些code的行为和功能会根据关键字的不同而不同。</p>
 <p>我们可以在集合中定义关键字，一个集合包含包含互斥的关键字，例如：</p>
 <ul>
@@ -468,7 +468,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <h4 id="stage"><a href="#stage" class="headerlink" title="stage"></a>stage</h4><p>默认情况下，Unity为着色器的每个阶段生成关键字变体。例如，如果您的着色器包含顶点阶段和片段阶段，则Unity为顶点和片段着色程序程序都为每个关键字组合生成变体。如果仅在其中一个阶段中使用一组关键字，则会导致另一个阶段相同的变体。<br>Unity会自动识别和重复变性，以免增加构建大小，但仍会导致浪费的编译时间，增加着色器加载时间以及增加运行时内存的使用情况。</p>
 <p>为了避免此问题，当您在手工编码的着色器中声明一组关键字时，您可以指示Unity仅在给定的着色器阶段进行编译。然后，您负责确保仅在指定的着色器阶段中使用关键字。</p>
 <p>图形API不能完全支持特定阶段的关键字。在OpenGL和Vulkan中，在编译时，Unity自动将所有特定阶段的关键字指令转换为常规关键字指令。在Metal中，任何针对顶点阶段的关键字也会影响镶嵌阶段，反之亦然。</p>
-<h4 id="shader-keyword的修改"><a href="#shader-keyword的修改" class="headerlink" title="shader keyword的修改"></a>shader keyword的修改</h4><p>我们可以通过代码或者material inspector的方式去设置keyword的enable还是disable，具体可以看官方文档：<a href="https://docs.unity3d.com/Manual/shader-keywords-scripts.html" rel="external nofollow noopener noreferrer" target="_blank">Using shader keywords with C# scripts</a>, <a href="https://docs.unity3d.com/Manual/shader-keywords-material-inspector.html" rel="external nofollow noopener noreferrer" target="_blank"> Using shader keywords with the Material Inspector</a></p>
+<h4 id="shader-keyword的修改"><a href="#shader-keyword的修改" class="headerlink" title="shader keyword的修改"></a>shader keyword的修改</h4><p>我们可以通过代码或者material inspector的方式去设置keyword的enable还是disable，具体可以看官方文档：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Manual/shader-keywords-scripts.html">Using shader keywords with C# scripts</a>, <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Manual/shader-keywords-material-inspector.html"> Using shader keywords with the Material Inspector</a></p>
 
     </div>
 
@@ -585,7 +585,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader-简介"><span class="nav-number">1.</span> <span class="nav-text">Shader 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader类型"><span class="nav-number">1.1.</span> <span class="nav-text">Shader类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#术语表"><span class="nav-number">1.2.</span> <span class="nav-text">术语表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader-Class"><span class="nav-number">2.</span> <span class="nav-text">Shader Class</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Object基础"><span class="nav-number">2.1.</span> <span class="nav-text">Shader Object基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Object-内部结构"><span class="nav-number">2.2.</span> <span class="nav-text">Shader Object 内部结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SubShader"><span class="nav-number">2.2.1.</span> <span class="nav-text">SubShader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pass"><span class="nav-number">2.2.2.</span> <span class="nav-text">Pass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Shader-Variants"><span class="nav-number">2.2.3.</span> <span class="nav-text">Shader Variants</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#渲染过程中关于Shader的调用流程"><span class="nav-number">2.3.</span> <span class="nav-text">渲染过程中关于Shader的调用流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader的编译"><span class="nav-number">3.</span> <span class="nav-text">Shader的编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构建时剥离"><span class="nav-number">3.1.</span> <span class="nav-text">构建时剥离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步Shader编译"><span class="nav-number">3.2.</span> <span class="nav-text">异步Shader编译</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader中的分支，变体和关键字（keywords）"><span class="nav-number">4.</span> <span class="nav-text">Shader中的分支，变体和关键字（keywords）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Conditionals-in-shaders"><span class="nav-number">4.1.</span> <span class="nav-text">Conditionals in shaders</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Variants-Shader变体"><span class="nav-number">4.2.</span> <span class="nav-text">Shader Variants(Shader变体)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#变体生成的数量"><span class="nav-number">4.2.1.</span> <span class="nav-text">变体生成的数量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#着色器变种的重复数据消除"><span class="nav-number">4.2.2.</span> <span class="nav-text">着色器变种的重复数据消除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何从Shader变体角度优化打包体积"><span class="nav-number">4.2.3.</span> <span class="nav-text">如何从Shader变体角度优化打包体积</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-keywords"><span class="nav-number">4.3.</span> <span class="nav-text">Shader keywords</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#type：multi-compile-或-shader-feature"><span class="nav-number">4.3.1.</span> <span class="nav-text">type：multi compile 或 shader feature</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scope：local-或-global"><span class="nav-number">4.3.2.</span> <span class="nav-text">scope：local 或 global</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#stage"><span class="nav-number">4.3.3.</span> <span class="nav-text">stage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shader-keyword的修改"><span class="nav-number">4.3.4.</span> <span class="nav-text">shader keyword的修改</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader-%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">Shader 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">Shader类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AF%E8%AF%AD%E8%A1%A8"><span class="nav-number">1.2.</span> <span class="nav-text">术语表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader-Class"><span class="nav-number">2.</span> <span class="nav-text">Shader Class</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Object%E5%9F%BA%E7%A1%80"><span class="nav-number">2.1.</span> <span class="nav-text">Shader Object基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Object-%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84"><span class="nav-number">2.2.</span> <span class="nav-text">Shader Object 内部结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SubShader"><span class="nav-number">2.2.1.</span> <span class="nav-text">SubShader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pass"><span class="nav-number">2.2.2.</span> <span class="nav-text">Pass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Shader-Variants"><span class="nav-number">2.2.3.</span> <span class="nav-text">Shader Variants</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%85%B3%E4%BA%8EShader%E7%9A%84%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="nav-number">2.3.</span> <span class="nav-text">渲染过程中关于Shader的调用流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader%E7%9A%84%E7%BC%96%E8%AF%91"><span class="nav-number">3.</span> <span class="nav-text">Shader的编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E6%97%B6%E5%89%A5%E7%A6%BB"><span class="nav-number">3.1.</span> <span class="nav-text">构建时剥离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5Shader%E7%BC%96%E8%AF%91"><span class="nav-number">3.2.</span> <span class="nav-text">异步Shader编译</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shader%E4%B8%AD%E7%9A%84%E5%88%86%E6%94%AF%EF%BC%8C%E5%8F%98%E4%BD%93%E5%92%8C%E5%85%B3%E9%94%AE%E5%AD%97%EF%BC%88keywords%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">Shader中的分支，变体和关键字（keywords）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Conditionals-in-shaders"><span class="nav-number">4.1.</span> <span class="nav-text">Conditionals in shaders</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-Variants-Shader%E5%8F%98%E4%BD%93"><span class="nav-number">4.2.</span> <span class="nav-text">Shader Variants(Shader变体)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%98%E4%BD%93%E7%94%9F%E6%88%90%E7%9A%84%E6%95%B0%E9%87%8F"><span class="nav-number">4.2.1.</span> <span class="nav-text">变体生成的数量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9D%80%E8%89%B2%E5%99%A8%E5%8F%98%E7%A7%8D%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E6%B6%88%E9%99%A4"><span class="nav-number">4.2.2.</span> <span class="nav-text">着色器变种的重复数据消除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BB%8EShader%E5%8F%98%E4%BD%93%E8%A7%92%E5%BA%A6%E4%BC%98%E5%8C%96%E6%89%93%E5%8C%85%E4%BD%93%E7%A7%AF"><span class="nav-number">4.2.3.</span> <span class="nav-text">如何从Shader变体角度优化打包体积</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader-keywords"><span class="nav-number">4.3.</span> <span class="nav-text">Shader keywords</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#type%EF%BC%9Amulti-compile-%E6%88%96-shader-feature"><span class="nav-number">4.3.1.</span> <span class="nav-text">type：multi compile 或 shader feature</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scope%EF%BC%9Alocal-%E6%88%96-global"><span class="nav-number">4.3.2.</span> <span class="nav-text">scope：local 或 global</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#stage"><span class="nav-number">4.3.3.</span> <span class="nav-text">stage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shader-keyword%E7%9A%84%E4%BF%AE%E6%94%B9"><span class="nav-number">4.3.4.</span> <span class="nav-text">shader keyword的修改</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -675,9 +675,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -711,7 +719,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

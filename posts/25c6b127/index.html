@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,22 +28,22 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="在上一篇关于作用域的文章中我们通过调用栈讲什么是作用域。 每当我们调用一个函数时就会在调用栈中为该函数创建执行上下文，到目前为止我们知道了该执行上下文中有变量环境，用于存储通过var声明的变量，也有一个词法环境，词法环境又是一个栈，依次放置了函数中通过let和const声明的在不同层级的块级作用域中的变量。 基于上面的变量环境和词法环境，我们可以明白如何在一个函数的执行上下文中找到正确的变量。 那">
-<meta name="keywords" content="JavaScript 作用域 scope">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Javascript执行机制（三）作用域链和闭包">
 <meta property="og:url" content="https://sunra.top/posts/25c6b127/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="在上一篇关于作用域的文章中我们通过调用栈讲什么是作用域。 每当我们调用一个函数时就会在调用栈中为该函数创建执行上下文，到目前为止我们知道了该执行上下文中有变量环境，用于存储通过var声明的变量，也有一个词法环境，词法环境又是一个栈，依次放置了函数中通过let和const声明的在不同层级的块级作用域中的变量。 基于上面的变量环境和词法环境，我们可以明白如何在一个函数的执行上下文中找到正确的变量。 那">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615206801/origin-of-ray/微信截图_20210308203206_ik52ug.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615206965/origin-of-ray/微信截图_20210308203554_ww6kdz.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615207688/origin-of-ray/微信截图_20210308204757_sxwhgi.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615207902/origin-of-ray/微信截图_20210308205133_amqnac.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615208011/origin-of-ray/微信截图_20210308205319_qlouxj.png">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.330Z">
+<meta property="article:published_time" content="2020-12-07T13:33:14.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.931Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Javascript执行机制（三）作用域链和闭包">
-<meta name="twitter:description" content="在上一篇关于作用域的文章中我们通过调用栈讲什么是作用域。 每当我们调用一个函数时就会在调用栈中为该函数创建执行上下文，到目前为止我们知道了该执行上下文中有变量环境，用于存储通过var声明的变量，也有一个词法环境，词法环境又是一个栈，依次放置了函数中通过let和const声明的在不同层级的块级作用域中的变量。 基于上面的变量环境和词法环境，我们可以明白如何在一个函数的执行上下文中找到正确的变量。 那">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615206801/origin-of-ray/微信截图_20210308203206_ik52ug.png">
 
 <link rel="canonical" href="https://sunra.top/posts/25c6b127/">
@@ -245,7 +245,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -274,9 +274,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>那如果我们所需要的变量其实不在当前执行上下文，而是在上一级的执行上下文中呢？我们怎么确定上一级的执行上下文是哪个？</p>
 <p>这个问题就涉及了我们今天的主题：作用域链。</p>
 <p>理解作用域链是理解闭包的基础，而闭包在 JavaScript 中几乎无处不在，同时作用域和作用域链还是所有编程语言的基础。所以，如果你想学透一门语言，作用域和作用域链一定是绕不开的。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="作用域链"><a href="#作用域链" class="headerlink" title="作用域链"></a>作用域链</h2><p>首先我们来看下面这段代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(myName)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">"大树"</span></span><br><span class="line">    bar()</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> myName = <span class="string">"bigTree"</span></span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">bar</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(myName)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">&quot;大树&quot;</span></span><br><span class="line">    <span class="title function_">bar</span>()</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> myName = <span class="string">&quot;bigTree&quot;</span></span><br><span class="line"><span class="title function_">foo</span>()</span><br></pre></td></tr></table></figure>
 <p>你觉得这段代码中的 bar 函数和 foo 函数打印出来的内容是什么？</p>
 <p>那么当这段代码执行到 bar 函数内部时，其调用栈的状态图如下所示：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615206801/origin-of-ray/微信截图_20210308203206_ik52ug.png" alt="函数调用栈"></p>
@@ -299,7 +299,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>也就是说，词法作用域是代码编译阶段就决定好的，和函数是怎么调用的没有关系。</p>
 </blockquote>
 <h3 id="块级作用域中的变量查找"><a href="#块级作用域中的变量查找" class="headerlink" title="块级作用域中的变量查找"></a>块级作用域中的变量查找</h3><p>前面我们通过全局作用域和函数级作用域来分析了作用域链，那接下来我们再来看看块级作用域中变量是如何查找的？在编写代码的时候，如果你使用了一个在当前作用域中不存在的变量，这时 JavaScript 引擎就需要按照作用域链在其他作用域中查找该变量，如果你不了解该过程，那就会有很大概率写出不稳定的代码。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">"bigTree2"</span></span><br><span class="line">    <span class="keyword">let</span> test1 = <span class="number">100</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">let</span> myName = <span class="string">"Chrome浏览器"</span></span><br><span class="line">        <span class="built_in">console</span>.log(test)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">"大树"</span></span><br><span class="line">    <span class="keyword">let</span> test = <span class="number">2</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> test = <span class="number">3</span></span><br><span class="line">        bar()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> myName = <span class="string">"bigTree"</span></span><br><span class="line"><span class="keyword">let</span> myAge = <span class="number">10</span></span><br><span class="line"><span class="keyword">let</span> test = <span class="number">1</span></span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">bar</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">&quot;bigTree2&quot;</span></span><br><span class="line">    <span class="keyword">let</span> test1 = <span class="number">100</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">let</span> myName = <span class="string">&quot;Chrome浏览器&quot;</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(test)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">&quot;大树&quot;</span></span><br><span class="line">    <span class="keyword">let</span> test = <span class="number">2</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">let</span> test = <span class="number">3</span></span><br><span class="line">        <span class="title function_">bar</span>()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> myName = <span class="string">&quot;bigTree&quot;</span></span><br><span class="line"><span class="keyword">let</span> myAge = <span class="number">10</span></span><br><span class="line"><span class="keyword">let</span> test = <span class="number">1</span></span><br><span class="line"><span class="title function_">foo</span>()</span><br></pre></td></tr></table></figure>
 <p>你可以自己先分析下这段代码的执行流程，看看能否分析出来执行结果。要想得出其执行结果，那接下来我们就得站在作用域链和词法环境的角度来分析下其执行过程。</p>
 <p>ES6 是支持块级作用域的，当执行到代码块时，如果代码块中有 let 或者 const 声明的变量，那么变量就会存放到该函数的词法环境中。对于上面这段代码，当执行到 bar 函数内部的 if 语句块时，其调用栈的情况如下图所示：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615207688/origin-of-ray/微信截图_20210308204757_sxwhgi.png" alt="函数作用域链查找顺序"></p>
@@ -307,7 +307,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>第一种说法，也是最本质的说法，闭包就是带有自己运行环境的一个函数，也就是说，这个函数有自己的执行上下文。</p>
 <p>另外一种从使用上来说，一种通俗的，比较基于表象的说法来解释：首先它是闭合的，也就是说外界无法直接访问其中的变量，第二，它又是个包，所以它暴露出来某些方法可以让外界来操作它的内部数据。</p>
 <p>这里你可以结合下面这段代码来理解什么是闭包：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">"bigTree"</span></span><br><span class="line">    <span class="keyword">let</span> test1 = <span class="number">1</span></span><br><span class="line">    <span class="keyword">const</span> test2 = <span class="number">2</span></span><br><span class="line">    <span class="keyword">var</span> innerBar = &#123;</span><br><span class="line">        getName:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(test1)</span><br><span class="line">            <span class="keyword">return</span> myName</span><br><span class="line">        &#125;,</span><br><span class="line">        setName:<span class="function"><span class="keyword">function</span>(<span class="params">newName</span>)</span>&#123;</span><br><span class="line">            myName = newName</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> innerBar</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> bar = foo()</span><br><span class="line">bar.setName(<span class="string">"大树"</span>)</span><br><span class="line">bar.getName()</span><br><span class="line"><span class="built_in">console</span>.log(bar.getName())</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> myName = <span class="string">&quot;bigTree&quot;</span></span><br><span class="line">    <span class="keyword">let</span> test1 = <span class="number">1</span></span><br><span class="line">    <span class="keyword">const</span> test2 = <span class="number">2</span></span><br><span class="line">    <span class="keyword">var</span> innerBar = &#123;</span><br><span class="line">        <span class="attr">getName</span>:<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(test1)</span><br><span class="line">            <span class="keyword">return</span> myName</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">setName</span>:<span class="keyword">function</span>(<span class="params">newName</span>)&#123;</span><br><span class="line">            myName = newName</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> innerBar</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> bar = <span class="title function_">foo</span>()</span><br><span class="line">bar.<span class="title function_">setName</span>(<span class="string">&quot;大树&quot;</span>)</span><br><span class="line">bar.<span class="title function_">getName</span>()</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(bar.<span class="title function_">getName</span>())</span><br></pre></td></tr></table></figure>
 <p>首先我们看看当执行到 foo 函数内部的return innerBar这行代码时调用栈的情况，你可以参考下图：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615207902/origin-of-ray/微信截图_20210308205133_amqnac.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1615207902/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210308205133_amqnac.png"></p>
 <p>从上面的代码可以看出，innerBar 是一个对象，包含了 getName 和 setName 的两个方法（通常我们把对象内部的函数称为方法）。你可以看到，这两个方法都是在 foo 函数内部定义的，并且这两个方法内部都使用了 myName 和 test1 两个变量。</p>
@@ -436,7 +436,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域链"><span class="nav-number">1.</span> <span class="nav-text">作用域链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Outer指针"><span class="nav-number">1.1.</span> <span class="nav-text">Outer指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#块级作用域中的变量查找"><span class="nav-number">1.2.</span> <span class="nav-text">块级作用域中的变量查找</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#闭包"><span class="nav-number">2.</span> <span class="nav-text">闭包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#闭包的回收"><span class="nav-number">2.1.</span> <span class="nav-text">闭包的回收</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE"><span class="nav-number">1.</span> <span class="nav-text">作用域链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Outer%E6%8C%87%E9%92%88"><span class="nav-number">1.1.</span> <span class="nav-text">Outer指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%97%E7%BA%A7%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E6%9F%A5%E6%89%BE"><span class="nav-number">1.2.</span> <span class="nav-text">块级作用域中的变量查找</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AD%E5%8C%85"><span class="nav-number">2.</span> <span class="nav-text">闭包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E7%9A%84%E5%9B%9E%E6%94%B6"><span class="nav-number">2.1.</span> <span class="nav-text">闭包的回收</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -526,9 +526,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -562,7 +570,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

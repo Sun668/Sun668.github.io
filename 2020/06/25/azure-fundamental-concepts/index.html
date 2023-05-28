@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,18 +20,25 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="最近在看Azure文档的时候，被文档中的许多概念搞得非常困惑，就去查看了一些官方文档，算是一个临时的理解和总结。">
-<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Azure 基本概念梳理">
 <meta property="og:url" content="https://sunra.top/2020/06/25/azure-fundamental-concepts/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近在看Azure文档的时候，被文档中的许多概念搞得非常困惑，就去查看了一些官方文档，算是一个临时的理解和总结。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-26T22:57:23.920Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-06-24T23:15:56.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.923Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Azure 基本概念梳理">
-<meta name="twitter:description" content="最近在看Azure文档的时候，被文档中的许多概念搞得非常困惑，就去查看了一些官方文档，算是一个临时的理解和总结。">
 
 <link rel="canonical" href="https://sunra.top/2020/06/25/azure-fundamental-concepts/">
 
@@ -48,6 +55,15 @@
 
   <title>Azure 基本概念梳理 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -223,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:23" itemprop="dateModified" datetime="2023-05-27T06:57:23+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -247,8 +263,8 @@
 
       
         <p>最近在看Azure文档的时候，被文档中的许多概念搞得非常困惑，就去查看了一些官方文档，算是一个临时的理解和总结。</p>
-<a id="more"></a>
-<p>首先上一段我认为最能解决我疑惑的<a href="https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/considerations/fundamental-concepts" rel="external nofollow noopener noreferrer" target="_blank">原文档</a>：</p>
+<span id="more"></span>
+<p>首先上一段我认为最能解决我疑惑的<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/considerations/fundamental-concepts">原文档</a>：</p>
 <h2 id="Azure-terminology"><a href="#Azure-terminology" class="headerlink" title="Azure terminology"></a>Azure terminology</h2><p>It’s helpful to know the following definitions as you begin your Azure cloud adoption efforts:</p>
 <ul>
 <li><strong>Resource:</strong> An entity that’s managed by Azure. Examples include Azure Virtual Machines, virtual networks, and storage accounts.</li>
@@ -268,16 +284,16 @@
 <li>Azure role-based access control (RBAC) roles.</li>
 <li>Azure Active Directory (Azure AD) administrator roles.</li>
 </ul>
-<p>The account administrator role for an Azure subscription is assigned to the email account that’s used to create the Azure subscription. The account administrator is the billing owner of the subscription. The account administrator can manage the subscription details in the <a href="https://account.azure.com/subscriptions" rel="external nofollow noopener noreferrer" target="_blank">Azure account center</a>.</p>
+<p>The account administrator role for an Azure subscription is assigned to the email account that’s used to create the Azure subscription. The account administrator is the billing owner of the subscription. The account administrator can manage the subscription details in the <a target="_blank" rel="external nofollow noopener noreferrer" href="https://account.azure.com/subscriptions">Azure account center</a>.</p>
 <p>By default, the service administrator role for a subscription also is assigned to the email account that’s used to create the Azure subscription. The service administrator has permissions to the subscription equivalent to the RBAC-based Owner role. The service administrator also has full access to the Azure portal. The account administrator can change the service administrator to a different email account.</p>
 <p>When you create an Azure subscription, you can associate it with an existing Azure AD tenant. Otherwise, a new Azure AD tenant with an associated directory is created. The role of global administrator in the Azure AD directory is assigned to the email account that’s used to create the Azure AD subscription.</p>
 <p>An email account can be associated with multiple Azure subscriptions. The account administrator can transfer a subscription to another account.</p>
-<p>For a detailed description of the roles defined in Azure, see <a href="https://docs.microsoft.com/en-us/azure/role-based-access-control/rbac-and-directory-admin-roles" rel="external nofollow noopener noreferrer" target="_blank">Classic subscription administrator roles, Azure RBAC roles, and Azure AD administrator roles</a>.</p>
+<p>For a detailed description of the roles defined in Azure, see <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/role-based-access-control/rbac-and-directory-admin-roles">Classic subscription administrator roles, Azure RBAC roles, and Azure AD administrator roles</a>.</p>
 <h2 id="Subscriptions-and-regions"><a href="#Subscriptions-and-regions" class="headerlink" title="Subscriptions and regions"></a>Subscriptions and regions</h2><p>Every Azure resource is logically associated with only one subscription. When you create a resource, you choose which Azure subscription to deploy that resource to. You can move a resource to another subscription later.</p>
 <p>While a subscription isn’t tied to a specific Azure region, each Azure resource is deployed to only one region. You can have resources in multiple regions that are associated with the same subscription.</p>
 <p>就是是说同一个订阅中的资源可以在不同的地区，如东亚和北欧服务器中的资源可以在同一个资源组中。</p>
 <h2 id="Tenancy-in-Azure-Active-Directory"><a href="#Tenancy-in-Azure-Active-Directory" class="headerlink" title="Tenancy in Azure Active Directory"></a>Tenancy in Azure Active Directory</h2><p>Azure Active Directory (Azure AD) organizes objects like users and apps into groups called <em>tenants</em>. Tenants allow an administrator to set policies on the users within the organization and the apps that the organization owns to meet their security and operational policies.</p>
-<h3 id="Who-can-sign-in-to-your-app"><a href="#Who-can-sign-in-to-your-app" class="headerlink" title="Who can sign in to your app?"></a>Who can sign in to your app?</h3><p>When it comes to developing apps, developers can choose to configure their app to be either single-tenant or multi-tenant during app registration in the <a href="https://portal.azure.com/" rel="external nofollow noopener noreferrer" target="_blank">Azure portal</a>.</p>
+<h3 id="Who-can-sign-in-to-your-app"><a href="#Who-can-sign-in-to-your-app" class="headerlink" title="Who can sign in to your app?"></a>Who can sign in to your app?</h3><p>When it comes to developing apps, developers can choose to configure their app to be either single-tenant or multi-tenant during app registration in the <a target="_blank" rel="external nofollow noopener noreferrer" href="https://portal.azure.com/">Azure portal</a>.</p>
 <ul>
 <li>Single-tenant apps are only available in the tenant they were registered in, also known as their home tenant.</li>
 <li>Multi-tenant apps are available to users in both their home tenant and other tenants.</li>
@@ -316,10 +332,10 @@
 <p>Azure Active Directory（Azure AD）将诸如用户和应用程序之类的对象组织到称为“ <em>租户”的</em>组中。租户允许管理员为组织内的用户以及组织拥有的应用程序设置策略，以满足他们的安全和运营策略。</p>
 <p>每个应用可以设置多租户或者单租户，单租户的应用只能本租户中的用户才有可能访问到。</p>
 <p>参考文档：</p>
-<p><a href="https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/considerations/fundamental-concepts" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/considerations/fundamental-concepts</a></p>
-<p><a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/accounts-overview" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/develop/accounts-overview</a></p>
-<p><a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-create-new-tenant" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-create-new-tenant</a></p>
-<p><a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/single-and-multi-tenant-apps" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/develop/single-and-multi-tenant-apps</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/considerations/fundamental-concepts">https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/considerations/fundamental-concepts</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/active-directory/develop/accounts-overview">https://docs.microsoft.com/en-us/azure/active-directory/develop/accounts-overview</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-create-new-tenant">https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-create-new-tenant</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/active-directory/develop/single-and-multi-tenant-apps">https://docs.microsoft.com/en-us/azure/active-directory/develop/single-and-multi-tenant-apps</a></p>
 
     </div>
 
@@ -436,7 +452,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Azure-terminology"><span class="nav-number">1.</span> <span class="nav-text">Azure terminology</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Azure-administrative-roles"><span class="nav-number">2.</span> <span class="nav-text">Azure administrative roles</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Subscriptions-and-regions"><span class="nav-number">3.</span> <span class="nav-text">Subscriptions and regions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tenancy-in-Azure-Active-Directory"><span class="nav-number">4.</span> <span class="nav-text">Tenancy in Azure Active Directory</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Who-can-sign-in-to-your-app"><span class="nav-number">4.1.</span> <span class="nav-text">Who can sign in to your app?</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Azure-terminology"><span class="nav-number">1.</span> <span class="nav-text">Azure terminology</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Azure-administrative-roles"><span class="nav-number">2.</span> <span class="nav-text">Azure administrative roles</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Subscriptions-and-regions"><span class="nav-number">3.</span> <span class="nav-text">Subscriptions and regions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tenancy-in-Azure-Active-Directory"><span class="nav-number">4.</span> <span class="nav-text">Tenancy in Azure Active Directory</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Who-can-sign-in-to-your-app"><span class="nav-number">4.1.</span> <span class="nav-text">Who can sign in to your app?</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -526,9 +542,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -562,7 +586,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

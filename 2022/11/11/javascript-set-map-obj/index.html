@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,24 +20,31 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="最近在阅读《Web高效编程与实践优化》的计算机基础一节，看到他讲了JS中Set和Map的区别，以及Object的实现，算是解决了往常的一点疑惑吧，这里简单总结下：">
-<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript中Set，Map和Object的区别">
 <meta property="og:url" content="https://sunra.top/2022/11/11/javascript-set-map-obj/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近在阅读《Web高效编程与实践优化》的计算机基础一节，看到他讲了JS中Set和Map的区别，以及Object的实现，算是解决了往常的一点疑惑吧，这里简单总结下：">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1668209218/origin-of-ray/f530bc8e-4ea0-4fed-8cd3-c849a672889f_lts2tw.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1668344952/origin-of-ray/fe04589b-3119-4dab-a323-0d42b44c1576_oecgin.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1668345195/origin-of-ray/67b65186-fc61-4c38-8ca4-a32ecc812813_ykt8dm.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1668345886/origin-of-ray/2cc66895-f27b-4c7a-93bd-6cb29c3764a0_wsksby.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1668345953/origin-of-ray/d4f21b37-df29-497a-b109-f04af2790a75_ib658e.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1668346080/origin-of-ray/f342d1e1-b53d-4772-bbc4-d7afee416f53_yq0evb.png">
-<meta property="og:updated_time" content="2023-05-26T22:57:24.169Z">
+<meta property="article:published_time" content="2022-11-11T10:21:47.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.931Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JavaScript中Set，Map和Object的区别">
-<meta name="twitter:description" content="最近在阅读《Web高效编程与实践优化》的计算机基础一节，看到他讲了JS中Set和Map的区别，以及Object的实现，算是解决了往常的一点疑惑吧，这里简单总结下：">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1668209218/origin-of-ray/f530bc8e-4ea0-4fed-8cd3-c849a672889f_lts2tw.png">
 
 <link rel="canonical" href="https://sunra.top/2022/11/11/javascript-set-map-obj/">
@@ -55,6 +62,15 @@
 
   <title>JavaScript中Set，Map和Object的区别 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -230,7 +246,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -254,18 +270,18 @@
 
       
         <p>最近在阅读《Web高效编程与实践优化》的计算机基础一节，看到他讲了JS中Set和Map的区别，以及Object的实现，算是解决了往常的一点疑惑吧，这里简单总结下：</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h2><p>Set一般是使用红黑树实现的，红黑树是一种平衡查找二叉树，它的查找时间复杂度为O（logN）。实际上，Chrome V8的Set是用哈希实现的，它是一个哈希Set</p>
 <p>假设我们有这样一段代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="keyword">set</span> = new Set(); </span><br><span class="line">//数据为20个数 </span><br><span class="line">var data = [3, 62, 38, 42, 14, 4, 14, 33, 56, 20, 21, 63, 49, 41, 10, 14, 24, 59, 49, 29]; </span><br><span class="line">for(var i = 0; i &lt; data.length; i++)&#123; </span><br><span class="line">    <span class="keyword">set</span>.add(data[i]); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> set = <span class="keyword">new</span> <span class="title class_">Set</span>(); </span><br><span class="line"><span class="comment">//数据为20个数 </span></span><br><span class="line"><span class="keyword">var</span> data = [<span class="number">3</span>, <span class="number">62</span>, <span class="number">38</span>, <span class="number">42</span>, <span class="number">14</span>, <span class="number">4</span>, <span class="number">14</span>, <span class="number">33</span>, <span class="number">56</span>, <span class="number">20</span>, <span class="number">21</span>, <span class="number">63</span>, <span class="number">49</span>, <span class="number">41</span>, <span class="number">10</span>, <span class="number">14</span>, <span class="number">24</span>, <span class="number">59</span>, <span class="number">49</span>, <span class="number">29</span>]; </span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++)&#123; </span><br><span class="line">    set.<span class="title function_">add</span>(data[i]); </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
 <p>哈希的一个关键的地方是哈希算法，即对一堆数或者字符串做哈希运算得到它们的随机值</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ComputeIntegerHash</span>(<span class="params">key, seed</span>) </span>&#123; </span><br><span class="line">    <span class="keyword">var</span> hash = key; </span><br><span class="line">    hash = hash ^ seed; <span class="comment">//seed = 505553720 </span></span><br><span class="line">    hash = ~hash + (hash &lt;&lt; <span class="number">15</span>); <span class="comment">// hash = (hash &lt;&lt; 15) - hash - 1; </span></span><br><span class="line">    hash = hash ^ (hash &gt;&gt;&gt; <span class="number">12</span>); </span><br><span class="line">    hash = hash + (hash &lt;&lt; <span class="number">2</span>); </span><br><span class="line">    hash = hash ^ (hash &gt;&gt;&gt; <span class="number">4</span>); </span><br><span class="line">    hash = (hash * <span class="number">2057</span>) | <span class="number">0</span>; <span class="comment">// hash = (hash + (hash &lt;&lt; 3)) + (hash &lt;&lt; 11); </span></span><br><span class="line">    hash = hash ^ (hash &gt;&gt;&gt; <span class="number">16</span>); </span><br><span class="line">    <span class="keyword">return</span> hash &amp; <span class="number">0x3fffffff</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">ComputeIntegerHash</span>(<span class="params">key, seed</span>) &#123; </span><br><span class="line">    <span class="keyword">var</span> hash = key; </span><br><span class="line">    hash = hash ^ seed; <span class="comment">//seed = 505553720 </span></span><br><span class="line">    hash = ~hash + (hash &lt;&lt; <span class="number">15</span>); <span class="comment">// hash = (hash &lt;&lt; 15) - hash - 1; </span></span><br><span class="line">    hash = hash ^ (hash &gt;&gt;&gt; <span class="number">12</span>); </span><br><span class="line">    hash = hash + (hash &lt;&lt; <span class="number">2</span>); </span><br><span class="line">    hash = hash ^ (hash &gt;&gt;&gt; <span class="number">4</span>); </span><br><span class="line">    hash = (hash * <span class="number">2057</span>) | <span class="number">0</span>; <span class="comment">// hash = (hash + (hash &lt;&lt; 3)) + (hash &lt;&lt; 11); </span></span><br><span class="line">    hash = hash ^ (hash &gt;&gt;&gt; <span class="number">16</span>); </span><br><span class="line">    <span class="keyword">return</span> hash &amp; <span class="number">0x3fffffff</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>把数字进行各种位运算，得到一个比较随机的数，然后对这个数进行散射散射的目的是得到这个数放在数组的哪个index。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> capacity = <span class="number">64</span>; </span><br><span class="line"><span class="keyword">var</span> indexes = []; </span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; data.length; i++)&#123; </span><br><span class="line">    indexes.push(ComputeIntegerHash(data[i], seed)  &amp; (capacity - <span class="number">1</span>)); <span class="comment">//去掉高位 </span></span><br><span class="line">&#125; </span><br><span class="line"><span class="built_in">console</span>.log(indexes)</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> capacity = <span class="number">64</span>; </span><br><span class="line"><span class="keyword">var</span> indexes = []; </span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; data.<span class="property">length</span>; i++)&#123; </span><br><span class="line">    indexes.<span class="title function_">push</span>(<span class="title class_">ComputeIntegerHash</span>(data[i], seed)  &amp; (capacity - <span class="number">1</span>)); <span class="comment">//去掉高位 </span></span><br><span class="line">&#125; </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(indexes) </span><br></pre></td></tr></table></figure>
 <p>有20个数，容量capacity从16开始增长，每次扩大一倍，到64的时候，可以保证capacity&gt;size<em>2，因为<em>*只有容量是实际存储大小的两倍时，散射结果重复值才能比较低</em></em>。</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1668209218/origin-of-ray/f530bc8e-4ea0-4fed-8cd3-c849a672889f_lts2tw.png" alt></p>
 <p>现在要查找key=56是否存在这个Set里面，先把56进行哈希，然后散射，按照存放的时候同样的过程</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SetHas</span>(<span class="params">key</span>)</span>&#123; </span><br><span class="line">    <span class="keyword">var</span> index = ComputeIntegerHash(<span class="number">56</span>, seed) &amp; <span class="keyword">this</span>.capacity; </span><br><span class="line">    <span class="comment">//可能会有重复值，所以需要验证命中的index所存放的key是相等的 </span></span><br><span class="line">    <span class="keyword">return</span> setArray[index] !== <span class="literal">null</span>  &amp;&amp; setArray[index] === key; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">SetHas</span>(<span class="params">key</span>)&#123; </span><br><span class="line">    <span class="keyword">var</span> index = <span class="title class_">ComputeIntegerHash</span>(<span class="number">56</span>, seed) &amp; <span class="variable language_">this</span>.<span class="property">capacity</span>; </span><br><span class="line">    <span class="comment">//可能会有重复值，所以需要验证命中的index所存放的key是相等的 </span></span><br><span class="line">    <span class="keyword">return</span> setArray[index] !== <span class="literal">null</span>  &amp;&amp; setArray[index] === key; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
 <p>上面是哈希存储结构的一个典型实现，但是<strong>Chrome的V8的Set/Map 并不是这样实现的，略有不同</strong>。 </p>
 <p><strong>哈希算法是一样的，但是散射的时候用来去掉高位的并不是用 capacity，而是用capacity的一半，叫做buckets的数量</strong>，这个去掉高位其实就是通过hash值和容量做一个按位与运算，效果等同于取余。</p>
 <h3 id="插入过程"><a href="#插入过程" class="headerlink" title="插入过程"></a>插入过程</h3><p>假设我们依次插入9，33，68，57</p>
@@ -408,7 +424,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Set"><span class="nav-number">1.</span> <span class="nav-text">Set</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入过程"><span class="nav-number">1.1.</span> <span class="nav-text">插入过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找过程"><span class="nav-number">1.2.</span> <span class="nav-text">查找过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map"><span class="nav-number">2.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS-Object"><span class="nav-number">3.</span> <span class="nav-text">JS Object</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Set"><span class="nav-number">1.</span> <span class="nav-text">Set</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E8%BF%87%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">插入过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">查找过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map"><span class="nav-number">2.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS-Object"><span class="nav-number">3.</span> <span class="nav-text">JS Object</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -498,9 +514,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -534,7 +558,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

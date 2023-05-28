@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,14 +20,20 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="AA，全名叫做Addressable，可寻址资源，可以将一个完整的游戏资源进行拆分，达到减小安装包和内存使用的的目的。">
-<meta name="keywords" content="Unity AA Addressable 原理 教程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity Addressable 可寻址插件">
 <meta property="og:url" content="https://sunra.top/2021/10/21/unity-addressable/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="AA，全名叫做Addressable，可寻址资源，可以将一个完整的游戏资源进行拆分，达到减小安装包和内存使用的的目的。">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634797743/origin-of-ray/asynccode_xa4cfj.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634797760/origin-of-ray/asynccode_jvazqc.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634797779/origin-of-ray/asynccode_t5fj9o.png">
@@ -57,10 +63,11 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798691/origin-of-ray/asynccode_jwfgen.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798713/origin-of-ray/asynccode_swsy1k.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798749/origin-of-ray/asynccode_hpjuhj.png">
-<meta property="og:updated_time" content="2023-05-26T22:57:24.523Z">
+<meta property="article:published_time" content="2021-10-21T06:16:03.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.943Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Unity Addressable 可寻址插件">
-<meta name="twitter:description" content="AA，全名叫做Addressable，可寻址资源，可以将一个完整的游戏资源进行拆分，达到减小安装包和内存使用的的目的。">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634797743/origin-of-ray/asynccode_xa4cfj.png">
 
 <link rel="canonical" href="https://sunra.top/2021/10/21/unity-addressable/">
@@ -78,6 +85,15 @@
 
   <title>Unity Addressable 可寻址插件 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -253,7 +269,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -277,7 +293,7 @@
 
       
         <p>AA，全名叫做Addressable，可寻址资源，可以将一个完整的游戏资源进行拆分，达到减小安装包和内存使用的的目的。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h1 id="安装与初始化"><a href="#安装与初始化" class="headerlink" title="安装与初始化"></a>安装与初始化</h1><ul>
 <li>安装：Windows -&gt; Package Manager，搜索Addressable并安装。</li>
 </ul>
@@ -319,7 +335,7 @@
 <h2 id="启用Remote资源发布"><a href="#启用Remote资源发布" class="headerlink" title="启用Remote资源发布"></a>启用Remote资源发布</h2><p>启用Build Remote Catalog，然后Build &amp; Load Paths设置为custom，就可以选择上面说的profile中的五个变量了，这里能够显示根据Profile中的配置计算出来的实际路径。</p>
 <p>比如，我们目前的BuildTarget是OSX，所以此时RemoteBuildPath的ServerData/[BuildTarget]计算的结果就是ServerData/StandaloneOSX</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634797954/origin-of-ray/asynccode_yu3bb0.png" alt="img"></p>
-<p>不启动这个也可以，照样可以打包Local和Remote的资源，并且也可以加载远程的资源，但是如果不启动这个，就不能为Remote资源的单独生成带有时间戳或者版本号的Catalog（本来就会在streamAsset文件夹下有一个包含Local和Remote的Catalog），也就不能根据Remote的Catalog去不更新App而单独更新资源，详细内容参考这里：<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/RemoteContentDistribution.html#content-catalogs" rel="external nofollow noopener noreferrer" target="_blank">Remote content distribution | Addressables | 1.18.16</a></p>
+<p>不启动这个也可以，照样可以打包Local和Remote的资源，并且也可以加载远程的资源，但是如果不启动这个，就不能为Remote资源的单独生成带有时间戳或者版本号的Catalog（本来就会在streamAsset文件夹下有一个包含Local和Remote的Catalog），也就不能根据Remote的Catalog去不更新App而单独更新资源，详细内容参考这里：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/RemoteContentDistribution.html#content-catalogs">Remote content distribution | Addressables | 1.18.16</a></p>
 <h2 id="创建新的Group-Template（可选）"><a href="#创建新的Group-Template（可选）" class="headerlink" title="创建新的Group Template（可选）"></a>创建新的Group Template（可选）</h2><p>我们创建新的Group时，需要根据从某个Template来创建。默认在AddressableAssetData/AssetGroupTemplates下有一个PackedAsset的模版，所以我们在create 新的 group时只有一个选项：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634797988/origin-of-ray/asynccode_nztazp.png" alt="img"></p>
 <h3 id="新建Template"><a href="#新建Template" class="headerlink" title="新建Template"></a>新建Template</h3><p>如果您创建自己的构建脚本或需要额外设置的实用程序，您可以在您自己的架构对象中定义这些设置并创建您自己的组模板：</p>
@@ -336,15 +352,15 @@
 <ul>
 <li><p><strong>Content Packing &amp; Loading</strong>: this is the main Addressables schema used by the default build script and defines the settings for building and loading Addressable assets.</p>
 </li>
-<li><p><strong>Content Update Restrictions</strong>: defines settings for making differential updates of a previous build. See <a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/Builds.html" rel="external nofollow noopener noreferrer" target="_blank">Builds</a> for more information about update builds.</p>
+<li><p><strong>Content Update Restrictions</strong>: defines settings for making differential updates of a previous build. See <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/Builds.html">Builds</a> for more information about update builds.</p>
 </li>
 <li><p><strong>Resources and Built In Scenes</strong>: a special-purpose schema defining settings for which types of built-in assets to display in the <strong>Built In Data</strong> group.</p>
 </li>
 </ul>
 <p>这三个Schema在Library/PackageCache/com.unity.addressables@1.18.16/Editor/Settings/GroupSchemas中</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798017/origin-of-ray/asynccode_kmqek9.png" alt="img"></p>
-<h3 id="创建自定义的Schema"><a href="#创建自定义的Schema" class="headerlink" title="创建自定义的Schema"></a>创建自定义的Schema</h3><p>To create your own schema, extend the <a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEditor.AddressableAssets.Settings.AddressableAssetGroupSchema.html" rel="external nofollow noopener noreferrer" target="_blank">AddressableAssetGroupSchema</a> class (which is a kind of ScriptableObject).</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">using UnityEditor.AddressableAssets.Settings;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public class __CustomSchema __: AddressableAssetGroupSchema</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   public string CustomDescription;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="创建自定义的Schema"><a href="#创建自定义的Schema" class="headerlink" title="创建自定义的Schema"></a>创建自定义的Schema</h3><p>To create your own schema, extend the <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEditor.AddressableAssets.Settings.AddressableAssetGroupSchema.html">AddressableAssetGroupSchema</a> class (which is a kind of ScriptableObject).</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">using UnityEditor.AddressableAssets.Settings;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public class __CustomSchema __: AddressableAssetGroupSchema</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   public string CustomDescription;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Once you have defined your custom schema object, you can add it to existing groups and group templates using the Add Schema buttons found on the Inspector windows of those entities.</p>
 <h2 id="创建新的Group用于打包为远程bundle"><a href="#创建新的Group用于打包为远程bundle" class="headerlink" title="创建新的Group用于打包为远程bundle"></a>创建新的Group用于打包为远程bundle</h2><p>如果上一步创建了Template，则可以直接根据Template创建Group，如果没有，则选择创建Blank的Group，然后通过Add Schema，添加两个基本的schema</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798046/origin-of-ray/asynccode_wrhuvq.png" alt="img"></p>
@@ -357,7 +373,7 @@
 <p>默认会将资源放到Default Local Group中</p>
 <p>我们选择两个资源标记为可寻址，一个就放在默认位置，一个移动到我们新创建的Remote Group</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798132/origin-of-ray/asynccode_x3muax.png" alt="img"></p>
-<h1 id="如何管理AA资源"><a href="#如何管理AA资源" class="headerlink" title="如何管理AA资源"></a><a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/AddressableAssetsDevelopmentCycle.html" rel="external nofollow noopener noreferrer" target="_blank">如何管理AA资源</a></h1><p>几个基本的参考原则：<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/AddressableAssetsDevelopmentCycle.html#organizing-addressable-assets" rel="external nofollow noopener noreferrer" target="_blank">Managing Addressables in the Editor | Addressables | 1.18.16</a></p>
+<h1 id="如何管理AA资源"><a href="#如何管理AA资源" class="headerlink" title="如何管理AA资源"></a><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/AddressableAssetsDevelopmentCycle.html">如何管理AA资源</a></h1><p>几个基本的参考原则：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/AddressableAssetsDevelopmentCycle.html#organizing-addressable-assets">Managing Addressables in the Editor | Addressables | 1.18.16</a></p>
 <h2 id="AA资源打包后会占用多少体积"><a href="#AA资源打包后会占用多少体积" class="headerlink" title="AA资源打包后会占用多少体积"></a>AA资源打包后会占用多少体积</h2><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798165/origin-of-ray/asynccode_bb7fds.png" alt="img"></p>
 <p>如果您在多个类别中使用相同的资产，那么 Unity 在构建时会制作资产的副本，而不是共享单个实例。 例如，如果您在内置场景中使用了一个材质，并且也在位于 Resources 文件夹中的预制件中使用了它，那么您最终会在构建中拥有该材质的两个副本——即使材质资产本身不是 位于资源。 如果您随后将同一材料标记为可寻址，则最终会得到三份副本。 （项目 StreamingAssets 文件夹中的文件永远不能被该文件夹外的资产引用。）</p>
 <p>所以，尽量不使用Resources文件夹。</p>
@@ -382,38 +398,38 @@
 <li><p>物品可以从捆绑包中单独加载，但不能单独卸载。 例如，如果你在一个包中有 10 个材料，加载所有 10 个，然后告诉 Addressables 释放其中的 9 个，所有 10 个都可能在内存中。 有关更多信息，请参阅内存管理。</p>
 </li>
 </ul>
-<h1 id="如何在运行时使用AA资源"><a href="#如何在运行时使用AA资源" class="headerlink" title="如何在运行时使用AA资源"></a><a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/RuntimeAddressables.html" rel="external nofollow noopener noreferrer" target="_blank">如何在运行时使用AA资源</a></h1><p>一旦您将可寻址资产组织成组并内置到AssetBundles中，您仍然必须加载、实例化并最终在运行时发布它们。</p>
+<h1 id="如何在运行时使用AA资源"><a href="#如何在运行时使用AA资源" class="headerlink" title="如何在运行时使用AA资源"></a><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/RuntimeAddressables.html">如何在运行时使用AA资源</a></h1><p>一旦您将可寻址资产组织成组并内置到AssetBundles中，您仍然必须加载、实例化并最终在运行时发布它们。</p>
 <p>首先是一些AA资源在内存中的行为，可以帮助我们更好地管理AA资源，从而优化内存的使用</p>
-<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a><a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/MemoryManagement.html" rel="external nofollow noopener noreferrer" target="_blank">内存管理</a></h2><p>Addressables 系统通过保持它加载的每个项目的引用计数来管理用于加载资产和包的内存。</p>
+<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/MemoryManagement.html">内存管理</a></h2><p>Addressables 系统通过保持它加载的每个项目的引用计数来管理用于加载资产和包的内存。</p>
 <p>当一个 Addressable 被加载时，系统增加引用计数；当资产被释放时，系统会减少引用计数。当一个 Addressable 的引用计数归零时，它就有资格被卸载。当您显式加载可寻址资产时，您还必须在完成后释放该资产。</p>
 <p>避免“内存泄漏”（不再需要后仍保留在内存中的资产）的基本经验法则是将每次对加载函数的调用与对释放函数的调用进行镜像。您可以使用对资产实例本身的引用或使用原始加载操作返回的结果句柄来释放资产。</p>
-<p>但是请注意，释放的资产不一定会立即从内存中卸载。资产使用的内存在它所属的 AssetBundle 也被卸载之前不会被释放。（释放的资产也可以通过调用<a href="https://docs.unity3d.com/2019.4/Documentation/ScriptReference/Resources.UnloadUnusedAssets.html" rel="external nofollow noopener noreferrer" target="_blank">Resources.UnloadUnusedAssets</a>卸载，但这往往是一个缓慢的操作，可能会导致帧速率故障。）</p>
+<p>但是请注意，释放的资产不一定会立即从内存中卸载。资产使用的内存在它所属的 AssetBundle 也被卸载之前不会被释放。（释放的资产也可以通过调用<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/2019.4/Documentation/ScriptReference/Resources.UnloadUnusedAssets.html">Resources.UnloadUnusedAssets</a>卸载，但这往往是一个缓慢的操作，可能会导致帧速率故障。）</p>
 <p>AssetBundle 有自己的引用计数（系统将它们视为可寻址对象，并将它们包含的资产视为依赖项）。当您从包中加载资产时，包的引用计数会增加，而当您释放资产时，包的引用计数会减少。当一个包的引用计数归零时，这意味着它包含的所有资产都没有在使用，并且包和它包含的所有资产都从内存中卸载。</p>
-<p>使用<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/EventViewer.html" rel="external nofollow noopener noreferrer" target="_blank">事件查看器</a>来监控您的运行时内存管理。查看器显示加载和卸载资产及其依赖项的时间。</p>
+<p>使用<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/EventViewer.html">事件查看器</a>来监控您的运行时内存管理。查看器显示加载和卸载资产及其依赖项的时间。</p>
 <h3 id="避免资产churn"><a href="#避免资产churn" class="headerlink" title="避免资产churn"></a>避免资产churn</h3><p>如果您释放恰好是 AssetBundle 中最后一项的对象，然后立即重新加载该资产或捆绑包中的其他资产，则可能会出现资产churn问题。</p>
 <p>例如，假设你有两种材料，<code>boat</code>并且<code>plane</code>该份额纹理，<code>cammo</code>，已被拉入了自己的AssetBundle。1<code>boat</code>级使用和 2 级使用<code>plane</code>。当您退出第 1 级时，您释放<code>boat</code>并立即加载<code>plane</code>. 当您释放时<code>boat</code>，Addressables 卸载纹理<code>cammo</code>。然后，当您加载 时<code>plane</code>，Addressables 会立即重新加载<code>cammo</code>。</p>
 <h3 id="内存使用"><a href="#内存使用" class="headerlink" title="内存使用"></a>内存使用</h3><p>当你加载一个 AssetBundle 时，Unity 会分配内存来存储包的内部数据，这是除了用于它包含的资产的内存之外。加载的 AssetBundle 的主要内部数据类型包括：</p>
 <ul>
-<li><p><a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/MemoryManagement.html#serialized-file-buffers" rel="external nofollow noopener noreferrer" target="_blank">序列化文件缓冲区</a>：用于从包中加载数据</p>
+<li><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/MemoryManagement.html#serialized-file-buffers">序列化文件缓冲区</a>：用于从包中加载数据</p>
 </li>
-<li><p><a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/MemoryManagement.html#typetrees" rel="external nofollow noopener noreferrer" target="_blank">TypeTrees</a>：定义对象的序列化布局</p>
+<li><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/MemoryManagement.html#typetrees">TypeTrees</a>：定义对象的序列化布局</p>
 </li>
-<li><p><a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/MemoryManagement.html#table-of-contents" rel="external nofollow noopener noreferrer" target="_blank">目录</a>：列出捆绑中的资产</p>
+<li><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/MemoryManagement.html#table-of-contents">目录</a>：列出捆绑中的资产</p>
 </li>
-<li><p><a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/MemoryManagement.html#preload-table" rel="external nofollow noopener noreferrer" target="_blank">预加载表</a>：列出每个资产的依赖关系</p>
+<li><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/MemoryManagement.html#preload-table">预加载表</a>：列出每个资产的依赖关系</p>
 </li>
 </ul>
 <p>当你组织你的 Addressable 组和 AssetBundle 时，你通常必须在你创建和加载的 AssetBundle 的大小和数量之间进行权衡。一方面，更少、更大的包可以最大限度地减少 AssetBundles 的总内存使用量。另一方面，使用大量小包可以最大限度地减少峰值内存使用量，因为您可以更轻松地卸载资产和 AssetBundles。</p>
-<p>虽然磁盘上 AssetBundle 的大小与其运行时的大小不同，但您可以使用磁盘大小作为构建中 AssetBundle 内存开销的大致指南。您可以从<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/BuildLayoutReport.html" rel="external nofollow noopener noreferrer" target="_blank">Build Layout Report</a>获取包大小和其他可用于帮助分析 AssetBundles 的信息。</p>
-<h2 id="加载可寻址资产"><a href="#加载可寻址资产" class="headerlink" title="加载可寻址资产"></a><a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/LoadingAddressableAssets.html" rel="external nofollow noopener noreferrer" target="_blank">加载可寻址资产</a></h2><p>该<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.AddressableAssets.Addressables.html" rel="external nofollow noopener noreferrer" target="_blank">Addressables</a>类提供了加载寻址资产的几种方法。您可以一次或批量加载一个资产。要识别要加载的资产，您可以将单个键或键列表传递给加载函数。键可以是以下对象之一：</p>
+<p>虽然磁盘上 AssetBundle 的大小与其运行时的大小不同，但您可以使用磁盘大小作为构建中 AssetBundle 内存开销的大致指南。您可以从<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/BuildLayoutReport.html">Build Layout Report</a>获取包大小和其他可用于帮助分析 AssetBundles 的信息。</p>
+<h2 id="加载可寻址资产"><a href="#加载可寻址资产" class="headerlink" title="加载可寻址资产"></a><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/LoadingAddressableAssets.html">加载可寻址资产</a></h2><p>该<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.AddressableAssets.Addressables.html">Addressables</a>类提供了加载寻址资产的几种方法。您可以一次或批量加载一个资产。要识别要加载的资产，您可以将单个键或键列表传递给加载函数。键可以是以下对象之一：</p>
 <ul>
 <li><p>地址：包含您分配给资产的地址的字符串</p>
 </li>
 <li><p>标签：包含分配给一个或多个资产的标签的字符串</p>
 </li>
-<li><p>AssetReference对象：实例<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.AddressableAssets.AssetReference.html" rel="external nofollow noopener noreferrer" target="_blank">AssetReference</a></p>
+<li><p>AssetReference对象：实例<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.AddressableAssets.AssetReference.html">AssetReference</a></p>
 </li>
-<li><p><a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.ResourceLocations.IResourceLocation.html" rel="external nofollow noopener noreferrer" target="_blank">IResourceLocation</a>实例：一个中间对象，包含加载资产及其依赖项的信息。</p>
+<li><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.ResourceLocations.IResourceLocation.html">IResourceLocation</a>实例：一个中间对象，包含加载资产及其依赖项的信息。</p>
 </li>
 </ul>
 <p>当您调用资产加载功能之一时，Addressables 系统开始执行以下任务的异步操作：</p>
@@ -422,26 +438,26 @@
 <li>收集依赖项列表</li>
 <li>下载所需的任何远程 AssetBundle</li>
 <li>将 AssetBundles 加载到内存中</li>
-<li>将操作的<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle.Result.html#UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_Result" rel="external nofollow noopener noreferrer" target="_blank">Result</a>对象设置为加载的对象</li>
-<li>更新操作的<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle.Status.html#UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_Status" rel="external nofollow noopener noreferrer" target="_blank">状态</a>并调用任何 <a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle.Completed.html" rel="external nofollow noopener noreferrer" target="_blank">Completed</a>事件侦听器</li>
+<li>将操作的<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle.Result.html#UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_Result">Result</a>对象设置为加载的对象</li>
+<li>更新操作的<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle.Status.html#UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_Status">状态</a>并调用任何 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle.Completed.html">Completed</a>事件侦听器</li>
 </ol>
-<p>如果加载操作成功，Status 将设置为 Succeeded，并且可以从<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle.Result.html#UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_Result" rel="external nofollow noopener noreferrer" target="_blank">Result</a>对象访问加载的对象。</p>
-<p>如果发生错误，则将异常复制到操作对象的<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle.OperationException.html#UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_OperationException" rel="external nofollow noopener noreferrer" target="_blank">OperationException</a>成员中，并将 Status 设置为 Failed。默认情况下，异常不会作为操作的一部分抛出。但是，您可以为<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.ResourceManager.ExceptionHandler.html#UnityEngine_ResourceManagement_ResourceManager_ExceptionHandler" rel="external nofollow noopener noreferrer" target="_blank">ResourceManager.ExceptionHandler</a>属性分配一个处理程序函数来处理任何异常。此外，您可以在 Addressable 系统设置中启用<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/AddressableAssetSettings.html#diagnostics" rel="external nofollow noopener noreferrer" target="_blank">Log Runtime Exceptions</a>选项以将错误记录到 Unity<a href="https://docs.unity3d.com/2019.4/Documentation/Manual/Console.html" rel="external nofollow noopener noreferrer" target="_blank">控制台</a>。</p>
+<p>如果加载操作成功，Status 将设置为 Succeeded，并且可以从<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle.Result.html#UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_Result">Result</a>对象访问加载的对象。</p>
+<p>如果发生错误，则将异常复制到操作对象的<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle.OperationException.html#UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_OperationException">OperationException</a>成员中，并将 Status 设置为 Failed。默认情况下，异常不会作为操作的一部分抛出。但是，您可以为<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.ResourceManagement.ResourceManager.ExceptionHandler.html#UnityEngine_ResourceManagement_ResourceManager_ExceptionHandler">ResourceManager.ExceptionHandler</a>属性分配一个处理程序函数来处理任何异常。此外，您可以在 Addressable 系统设置中启用<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/AddressableAssetSettings.html#diagnostics">Log Runtime Exceptions</a>选项以将错误记录到 Unity<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/2019.4/Documentation/Manual/Console.html">控制台</a>。</p>
 <p>当您调用可以加载多个可寻址资产的加载函数时，您可以指定是否应该在任何单个加载操作失败时中止整个操作，或者该操作是否应该加载任何可以加载的资产。在这两种情况下，操作状态都设置为失败。（<code>releaseDependenciesOnFailure</code>在调用加载函数时将参数设置为 true 以在任何失败时中止整个操作。）</p>
 <h1 id="尝试构建全量打包"><a href="#尝试构建全量打包" class="headerlink" title="尝试构建全量打包"></a>尝试构建全量打包</h1><p>要构建您的内容工件：</p>
 <ol>
 <li>配置您的组设置。</li>
 <li>如果您要远程分发内容，请配置您的配置文件和可寻址系统设置以启用远程内容分发。</li>
 <li>选择正确的配置文件。</li>
-<li>从<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/Groups.html#groups-window" rel="external nofollow noopener noreferrer" target="_blank">Groups 窗口</a>启动构建。</li>
+<li>从<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/Groups.html#groups-window">Groups 窗口</a>启动构建。</li>
 </ol>
 <p>由于我们没有创建自定义的Profile，暂时使用默认的Profile进行打包测试</p>
-<h2 id="默认配置的路径"><a href="#默认配置的路径" class="headerlink" title="默认配置的路径"></a>默认配置的路径</h2><h3 id="默认本地路径"><a href="#默认本地路径" class="headerlink" title="默认本地路径"></a>默认本地路径</h3><p>本地构建路径默认为<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.AddressableAssets.Addressables.BuildPath.html#UnityEngine_AddressableAssets_Addressables_BuildPath" rel="external nofollow noopener noreferrer" target="_blank">Addressables.BuildPath</a>提供的路径，它位于 Unity 项目的 Library 文件夹中。Addressables 根据您当前的平台构建目标设置将文件夹附加到本地构建路径。当您为多个平台构建时，构建会将每个平台的工件放在不同的子文件夹中。</p>
-<p>同样，本地加载路径默认为<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.AddressableAssets.Addressables.RuntimePath.html#UnityEngine_AddressableAssets_Addressables_RuntimePath" rel="external nofollow noopener noreferrer" target="_blank">Addressables.RuntimePath</a>提供的路径，解析为 StreamingAssets 文件夹。再次 Addressables 将平台构建目标添加到路径中。</p>
+<h2 id="默认配置的路径"><a href="#默认配置的路径" class="headerlink" title="默认配置的路径"></a>默认配置的路径</h2><h3 id="默认本地路径"><a href="#默认本地路径" class="headerlink" title="默认本地路径"></a>默认本地路径</h3><p>本地构建路径默认为<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.AddressableAssets.Addressables.BuildPath.html#UnityEngine_AddressableAssets_Addressables_BuildPath">Addressables.BuildPath</a>提供的路径，它位于 Unity 项目的 Library 文件夹中。Addressables 根据您当前的平台构建目标设置将文件夹附加到本地构建路径。当您为多个平台构建时，构建会将每个平台的工件放在不同的子文件夹中。</p>
+<p>同样，本地加载路径默认为<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEngine.AddressableAssets.Addressables.RuntimePath.html#UnityEngine_AddressableAssets_Addressables_RuntimePath">Addressables.RuntimePath</a>提供的路径，解析为 StreamingAssets 文件夹。再次 Addressables 将平台构建目标添加到路径中。</p>
 <p>当您将本地包构建到默认构建路径时，构建代码会在您构建播放器时临时将工件从构建路径复制到 StreamingAssets 文件夹（并在构建后删除它们）。</p>
 <p>如果您构建到自定义本地路径或从自定义本地路径加载，则您有责任在进行播放器构建之前将构建工件复制到项目中的正确位置，并确保您的应用程序可以在运行时访问这些工件。</p>
 <h3 id="默认远程路径"><a href="#默认远程路径" class="headerlink" title="默认远程路径"></a>默认远程路径</h3><p>Addressables 将默认远程构建路径设置为在您的项目文件夹下创建的任意选择的文件夹名称“ServerData”。构建将当前平台目标作为子文件夹添加到路径中，以分离不同平台的独特工件。</p>
-<p>默认远程加载路径是“ <a href="http://localhost/" rel="external nofollow noopener noreferrer" target="_blank">http://localhost/</a> ”，附加了当前配置文件 BuildTarget 变量。您必须将此路径更改为计划加载可寻址资产的基本 URL。</p>
+<p>默认远程加载路径是“ <a target="_blank" rel="external nofollow noopener noreferrer" href="http://localhost/">http://localhost/</a> ”，附加了当前配置文件 BuildTarget 变量。您必须将此路径更改为计划加载可寻址资产的基本 URL。</p>
 <p>根据您正在进行的开发、测试或发布类型，使用不同的配置文件来设置远程加载路径。例如，您可以有一个配置文件从 localhost 服务器加载资产用于一般开发构建，一个配置文件从临时环境加载资产用于 QA 构建，还有一个配置文件从您的内容交付网络 (CDN) 加载资产用于发布构建</p>
 <h2 id="打包结果"><a href="#打包结果" class="headerlink" title="打包结果"></a>打包结果</h2><h3 id="本地打包结果"><a href="#本地打包结果" class="headerlink" title="本地打包结果"></a>本地打包结果</h3><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798251/origin-of-ray/asynccode_gvx9k7.png" alt="img"></p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798285/origin-of-ray/asynccode_qatfim.png" alt="img"></p>
@@ -455,10 +471,10 @@
 <ul>
 <li><p><code>addressables_content_state.bin</code>: used to make a content update build. If you support dynamic content updates, you must save this file after each content release. Otherwise, you can ignore this file.</p>
 </li>
-<li><p><code>AddressablesBuildTEP.json</code>: logs build performance data. See <a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.19/manual/BuildProfileLog.html" rel="external nofollow noopener noreferrer" target="_blank">Build Profiling</a>.</p>
+<li><p><code>AddressablesBuildTEP.json</code>: logs build performance data. See <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.19/manual/BuildProfileLog.html">Build Profiling</a>.</p>
 </li>
 </ul>
-<p>See <a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.19/manual/Builds.html" rel="external nofollow noopener noreferrer" target="_blank">Building Addressable content</a> for more information about how to set up and perform a content build.</p>
+<p>See <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.19/manual/Builds.html">Building Addressable content</a> for more information about how to set up and perform a content build.</p>
 <h3 id="远程资源打包产物"><a href="#远程资源打包产物" class="headerlink" title="远程资源打包产物"></a>远程资源打包产物</h3><p>远程打包的产物还会多一个hash，用于验证下载资源的正确性。</p>
 <p>但是它的bin文件在Asset目录下。</p>
 <p>产物的名字还会多一个时间戳，避免由于缓存而导致的更新不及时。</p>
@@ -468,19 +484,19 @@
 <p>当您远程分发内容时，您可以对先前发布的构建执行差异更新，以最大限度地减少用户必须下载的数据量（与完整构建相比）。</p>
 <p>正确配置远程组并拥有包含远程内容的先前构建后，您可以通过以下方式执行内容更新构建：</p>
 <blockquote>
-<p>除了开启Build Remote Catalog，对于每个Group的更新配置还有<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/ContentUpdateWorkflow.html#settings" rel="external nofollow noopener noreferrer" target="_blank">Content update builds Setting | Addressables | 1.18.16</a>：</p>
+<p>除了开启Build Remote Catalog，对于每个Group的更新配置还有<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/ContentUpdateWorkflow.html#settings">Content update builds Setting | Addressables | 1.18.16</a>：</p>
 <p>一个是Content Update Restriction是Cannot 还是 Can Change Post Release，Cannot的叫做Static</p>
 <p>另一个是Unique Build ID，开启后可以让用户在不重启App的情况下更新资源。</p>
 </blockquote>
 <ol>
-<li>Run the <a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/ContentUpdateWorkflow.html#check-for-content-update-restrictions-tool" rel="external nofollow noopener noreferrer" target="_blank">Check for Content Update Restrictions</a> tool.</li>
+<li>Run the <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/ContentUpdateWorkflow.html#check-for-content-update-restrictions-tool">Check for Content Update Restrictions</a> tool.</li>
 </ol>
 <blockquote>
-<p>这一步有可能显示没有更改，因为它不检测Static的Group，因为只有Static的才需要创建一个Content Update的Group，而Non-Static的直接就覆盖原有的bundle了，具体可以参考这里：<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/ContentUpdateWorkflow.html#content-update-examples" rel="external nofollow noopener noreferrer" target="_blank">Content update builds Example | Addressables | 1.18.16</a></p>
+<p>这一步有可能显示没有更改，因为它不检测Static的Group，因为只有Static的才需要创建一个Content Update的Group，而Non-Static的直接就覆盖原有的bundle了，具体可以参考这里：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/ContentUpdateWorkflow.html#content-update-examples">Content update builds Example | Addressables | 1.18.16</a></p>
 </blockquote>
 <p><strong>Important</strong>: Before you run the <strong>Check for Content Update Restrictions</strong> tool, you should make a branch with your version control system. The tool rearranges your asset groups in a way suited for updating content. Branching ensures that next time you ship a full player build, you can return to your preferred content arrangement.</p>
 <ol>
-<li>打开<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/Groups.html#groups-window" rel="external nofollow noopener noreferrer" target="_blank">Groups 窗口</a> （菜单：<strong>Windows &gt; Asset Management &gt; Addressables &gt; Groups</strong>）。</li>
+<li>打开<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/Groups.html#groups-window">Groups 窗口</a> （菜单：<strong>Windows &gt; Asset Management &gt; Addressables &gt; Groups</strong>）。</li>
 <li>从工具栏上的配置<strong>文件</strong>菜单中选择所需的配置文件。</li>
 <li>从<strong>Build</strong>菜单中选择<strong>Update a Previous Build</strong>。 <em>文件选择器对话框打开。</em></li>
 </ol>
@@ -498,13 +514,13 @@
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798583/origin-of-ray/asynccode_cylsxa.png" alt="img"></p>
 <p>选择enable之后，就会启动一个服务器</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798641/origin-of-ray/asynccode_cb3h3c.png" alt="img"></p>
-<p>此时的服务启动，我们成功托管了bundle在本地的8888端口，但是现在的问题是我们的Profile中的RemoteBuildPath仍然是 <a href="http://localhost/[BuildTarget]，如果我们使用者变量，我们将无法正确加载，所以我们需要创建一个新的Profile，并修改其RemoteLoadPath为本的的8888端口。" rel="external nofollow noopener noreferrer" target="_blank">http://localhost/[BuildTarget]，如果我们使用者变量，我们将无法正确加载，所以我们需要创建一个新的Profile，并修改其RemoteLoadPath为本的的8888端口。</a></p>
-<h2 id="新建Editor-Hosted-Profile"><a href="#新建Editor-Hosted-Profile" class="headerlink" title="新建Editor Hosted Profile"></a>新建Editor Hosted Profile</h2><p>在开发期间使用托管服务时，请考虑创建一个配置文件，将资产组配置为从托管服务加载。有关配置文件的更多信息，请参阅<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/AddressableAssetsProfiles.html" rel="external nofollow noopener noreferrer" target="_blank">可寻址资产配置文件</a>。</p>
+<p>此时的服务启动，我们成功托管了bundle在本地的8888端口，但是现在的问题是我们的Profile中的RemoteBuildPath仍然是 <a target="_blank" rel="external nofollow noopener noreferrer" href="http://localhost/[BuildTarget]，如果我们使用者变量，我们将无法正确加载，所以我们需要创建一个新的Profile，并修改其RemoteLoadPath为本的的8888端口。">http://localhost/[BuildTarget]，如果我们使用者变量，我们将无法正确加载，所以我们需要创建一个新的Profile，并修改其RemoteLoadPath为本的的8888端口。</a></p>
+<h2 id="新建Editor-Hosted-Profile"><a href="#新建Editor-Hosted-Profile" class="headerlink" title="新建Editor Hosted Profile"></a>新建Editor Hosted Profile</h2><p>在开发期间使用托管服务时，请考虑创建一个配置文件，将资产组配置为从托管服务加载。有关配置文件的更多信息，请参阅<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/AddressableAssetsProfiles.html">可寻址资产配置文件</a>。</p>
 <p>进入<strong>Addressables Profiles</strong>窗口后，通过<strong>Create</strong> &gt; <strong>Profile</strong>创建一个新的配置<strong>文件</strong>。在以下示例中，新配置文件称为“Editor Hosted”。</p>
 <p>修改远程加载 URL 以从托管服务加载。在<strong>Addressables Hosting</strong>窗口中，您可以使用远程<strong>LoadPath</strong>变量中名为<code>[PrivateIpAddress]</code>和的字段来构建路径 URL（例如，）。<code>http://[PrivateIpAddress]:[HostingServicePort]/[BuildTarget]</code></p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798659/origin-of-ray/asynccode_wbj3xx.png" alt="img"></p>
 <p><em>配置服务的配置文件。</em></p>
-<p>验证是否正确配置了每个组。确保您将<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEditor.AddressableAssets.Settings.GroupSchemas.BundledAssetGroupSchema.BuildPath.html#UnityEditor_AddressableAssets_Settings_GroupSchemas_BundledAssetGroupSchema_BuildPath" rel="external nofollow noopener noreferrer" target="_blank">BuildPath</a>和<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEditor.AddressableAssets.Settings.GroupSchemas.BundledAssetGroupSchema.LoadPath.html#UnityEditor_AddressableAssets_Settings_GroupSchemas_BundledAssetGroupSchema_LoadPath" rel="external nofollow noopener noreferrer" target="_blank">LoadPath</a>路径设置为您修改后用于托管服务的各自配置文件键。在此示例中，您可以看到应如何扩展<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEditor.AddressableAssets.Settings.GroupSchemas.BundledAssetGroupSchema.LoadPath.html#UnityEditor_AddressableAssets_Settings_GroupSchemas_BundledAssetGroupSchema_LoadPath" rel="external nofollow noopener noreferrer" target="_blank">LoadPath 中</a>的配置文件变量以构建正确的基本 URL，以便从托管服务加载资产。</p>
+<p>验证是否正确配置了每个组。确保您将<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEditor.AddressableAssets.Settings.GroupSchemas.BundledAssetGroupSchema.BuildPath.html#UnityEditor_AddressableAssets_Settings_GroupSchemas_BundledAssetGroupSchema_BuildPath">BuildPath</a>和<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEditor.AddressableAssets.Settings.GroupSchemas.BundledAssetGroupSchema.LoadPath.html#UnityEditor_AddressableAssets_Settings_GroupSchemas_BundledAssetGroupSchema_LoadPath">LoadPath</a>路径设置为您修改后用于托管服务的各自配置文件键。在此示例中，您可以看到应如何扩展<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/api/UnityEditor.AddressableAssets.Settings.GroupSchemas.BundledAssetGroupSchema.LoadPath.html#UnityEditor_AddressableAssets_Settings_GroupSchemas_BundledAssetGroupSchema_LoadPath">LoadPath 中</a>的配置文件变量以构建正确的基本 URL，以便从托管服务加载资产。</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798691/origin-of-ray/asynccode_jwfgen.png" alt="img"></p>
 <p>然后切换当前激活的Profile为Editor Hosted。</p>
 <h2 id="修改Play-Mode-Script"><a href="#修改Play-Mode-Script" class="headerlink" title="修改Play Mode Script"></a>修改Play Mode Script</h2><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798713/origin-of-ray/asynccode_swsy1k.png" alt="img"></p>
@@ -519,16 +535,16 @@
 <h1 id="新建生产环境配置"><a href="#新建生产环境配置" class="headerlink" title="新建生产环境配置"></a>新建生产环境配置</h1><p>对于生产环境，我们还需要创建一个Profile</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1634798749/origin-of-ray/asynccode_hpjuhj.png" alt="img"></p>
 <p>不要忘记将BuildPath下的内容上传到LoadPath中</p>
-<h1 id="CI-CD搭建"><a href="#CI-CD搭建" class="headerlink" title="CI/CD搭建"></a>CI/CD搭建</h1><p>打包所需要的脚本：<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.15/manual/BuildPlayerContent.html" rel="external nofollow noopener noreferrer" target="_blank">AddressableAssetSettings.BuildPlayerContent | Addressables | 1.15.1</a></p>
+<h1 id="CI-CD搭建"><a href="#CI-CD搭建" class="headerlink" title="CI/CD搭建"></a>CI/CD搭建</h1><p>打包所需要的脚本：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.15/manual/BuildPlayerContent.html">AddressableAssetSettings.BuildPlayerContent | Addressables | 1.15.1</a></p>
 <blockquote>
 <p>之所以用1.15版本的的文档，是因为1.18的文档里面没有改API的使用介绍了</p>
 </blockquote>
-<h1 id="高级教程"><a href="#高级教程" class="headerlink" title="高级教程"></a>高级教程</h1><p>其他配置：<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/AddressableAssetSettings.html" rel="external nofollow noopener noreferrer" target="_blank">Addressable Asset Settings | Addressables | 1.18.16</a></p>
-<p>资源管理：<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/AddressableAssetsDevelopmentCycle.html" rel="external nofollow noopener noreferrer" target="_blank">Managing Addressables in the Editor | Addressables | 1.18.16</a></p>
-<p>资源打包：<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/Builds.html" rel="external nofollow noopener noreferrer" target="_blank">Building content | Addressables | 1.18.16</a></p>
-<p>远程资源分发：<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/RemoteContentDistribution.html" rel="external nofollow noopener noreferrer" target="_blank">Remote content distribution | Addressables | 1.18.16</a></p>
-<p>分析工具：<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/DiagnosticTools.html" rel="external nofollow noopener noreferrer" target="_blank">Diagnostic tools | Addressables | 1.18.16</a></p>
-<p>资源预加载：<a href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/DownloadDependenciesAsync.html" rel="external nofollow noopener noreferrer" target="_blank">Preloading dependencies | Addressables | 1.18.16</a>，[AssetBundle Loading | Addressables | 1.18.16](</p>
+<h1 id="高级教程"><a href="#高级教程" class="headerlink" title="高级教程"></a>高级教程</h1><p>其他配置：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/AddressableAssetSettings.html">Addressable Asset Settings | Addressables | 1.18.16</a></p>
+<p>资源管理：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/AddressableAssetsDevelopmentCycle.html">Managing Addressables in the Editor | Addressables | 1.18.16</a></p>
+<p>资源打包：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/Builds.html">Building content | Addressables | 1.18.16</a></p>
+<p>远程资源分发：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/RemoteContentDistribution.html">Remote content distribution | Addressables | 1.18.16</a></p>
+<p>分析工具：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/DiagnosticTools.html">Diagnostic tools | Addressables | 1.18.16</a></p>
+<p>资源预加载：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.unity3d.com/Packages/com.unity.addressables@1.18/manual/DownloadDependenciesAsync.html">Preloading dependencies | Addressables | 1.18.16</a>，[AssetBundle Loading | Addressables | 1.18.16](</p>
 
     </div>
 
@@ -645,7 +661,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安装与初始化"><span class="nav-number">1.</span> <span class="nav-text">安装与初始化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AddressableAssetData目录"><span class="nav-number">2.</span> <span class="nav-text">AddressableAssetData目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础配置"><span class="nav-number">3.</span> <span class="nav-text">基础配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Profile：配置打包的地址和Target平台变量"><span class="nav-number">3.1.</span> <span class="nav-text">Profile：配置打包的地址和Target平台变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启用Remote资源发布"><span class="nav-number">3.2.</span> <span class="nav-text">启用Remote资源发布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建新的Group-Template（可选）"><span class="nav-number">3.3.</span> <span class="nav-text">创建新的Group Template（可选）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#新建Template"><span class="nav-number">3.3.1.</span> <span class="nav-text">新建Template</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为Template添加Schema"><span class="nav-number">3.3.2.</span> <span class="nav-text">为Template添加Schema</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建自定义的Schema"><span class="nav-number">3.3.3.</span> <span class="nav-text">创建自定义的Schema</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建新的Group用于打包为远程bundle"><span class="nav-number">3.4.</span> <span class="nav-text">创建新的Group用于打包为远程bundle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将资源标记为可寻址"><span class="nav-number">3.5.</span> <span class="nav-text">将资源标记为可寻址</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何管理AA资源"><span class="nav-number">4.</span> <span class="nav-text">如何管理AA资源</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AA资源打包后会占用多少体积"><span class="nav-number">4.1.</span> <span class="nav-text">AA资源打包后会占用多少体积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AA资源应该拆分多少Group"><span class="nav-number">4.2.</span> <span class="nav-text">AA资源应该拆分多少Group</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何在运行时使用AA资源"><span class="nav-number">5.</span> <span class="nav-text">如何在运行时使用AA资源</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#内存管理"><span class="nav-number">5.1.</span> <span class="nav-text">内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#避免资产churn"><span class="nav-number">5.1.1.</span> <span class="nav-text">避免资产churn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存使用"><span class="nav-number">5.1.2.</span> <span class="nav-text">内存使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加载可寻址资产"><span class="nav-number">5.2.</span> <span class="nav-text">加载可寻址资产</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#尝试构建全量打包"><span class="nav-number">6.</span> <span class="nav-text">尝试构建全量打包</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#默认配置的路径"><span class="nav-number">6.1.</span> <span class="nav-text">默认配置的路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#默认本地路径"><span class="nav-number">6.1.1.</span> <span class="nav-text">默认本地路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认远程路径"><span class="nav-number">6.1.2.</span> <span class="nav-text">默认远程路径</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打包结果"><span class="nav-number">6.2.</span> <span class="nav-text">打包结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#本地打包结果"><span class="nav-number">6.2.1.</span> <span class="nav-text">本地打包结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#远程内容打包结果"><span class="nav-number">6.2.2.</span> <span class="nav-text">远程内容打包结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打包产物分析"><span class="nav-number">6.3.</span> <span class="nav-text">打包产物分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#本地打包的产物"><span class="nav-number">6.3.1.</span> <span class="nav-text">本地打包的产物</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#远程资源打包产物"><span class="nav-number">6.3.2.</span> <span class="nav-text">远程资源打包产物</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#尝试增量式更新"><span class="nav-number">7.</span> <span class="nav-text">尝试增量式更新</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#本地环境搭建"><span class="nav-number">8.</span> <span class="nav-text">本地环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#新建Editor-Host"><span class="nav-number">8.1.</span> <span class="nav-text">新建Editor Host</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建Editor-Hosted-Profile"><span class="nav-number">8.2.</span> <span class="nav-text">新建Editor Hosted Profile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改Play-Mode-Script"><span class="nav-number">8.3.</span> <span class="nav-text">修改Play Mode Script</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#新建生产环境配置"><span class="nav-number">9.</span> <span class="nav-text">新建生产环境配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CI-CD搭建"><span class="nav-number">10.</span> <span class="nav-text">CI/CD搭建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高级教程"><span class="nav-number">11.</span> <span class="nav-text">高级教程</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">安装与初始化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AddressableAssetData%E7%9B%AE%E5%BD%95"><span class="nav-number">2.</span> <span class="nav-text">AddressableAssetData目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">基础配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Profile%EF%BC%9A%E9%85%8D%E7%BD%AE%E6%89%93%E5%8C%85%E7%9A%84%E5%9C%B0%E5%9D%80%E5%92%8CTarget%E5%B9%B3%E5%8F%B0%E5%8F%98%E9%87%8F"><span class="nav-number">3.1.</span> <span class="nav-text">Profile：配置打包的地址和Target平台变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E7%94%A8Remote%E8%B5%84%E6%BA%90%E5%8F%91%E5%B8%83"><span class="nav-number">3.2.</span> <span class="nav-text">启用Remote资源发布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84Group-Template%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">创建新的Group Template（可选）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%BB%BATemplate"><span class="nav-number">3.3.1.</span> <span class="nav-text">新建Template</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BATemplate%E6%B7%BB%E5%8A%A0Schema"><span class="nav-number">3.3.2.</span> <span class="nav-text">为Template添加Schema</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84Schema"><span class="nav-number">3.3.3.</span> <span class="nav-text">创建自定义的Schema</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84Group%E7%94%A8%E4%BA%8E%E6%89%93%E5%8C%85%E4%B8%BA%E8%BF%9C%E7%A8%8Bbundle"><span class="nav-number">3.4.</span> <span class="nav-text">创建新的Group用于打包为远程bundle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E8%B5%84%E6%BA%90%E6%A0%87%E8%AE%B0%E4%B8%BA%E5%8F%AF%E5%AF%BB%E5%9D%80"><span class="nav-number">3.5.</span> <span class="nav-text">将资源标记为可寻址</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86AA%E8%B5%84%E6%BA%90"><span class="nav-number">4.</span> <span class="nav-text">如何管理AA资源</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AA%E8%B5%84%E6%BA%90%E6%89%93%E5%8C%85%E5%90%8E%E4%BC%9A%E5%8D%A0%E7%94%A8%E5%A4%9A%E5%B0%91%E4%BD%93%E7%A7%AF"><span class="nav-number">4.1.</span> <span class="nav-text">AA资源打包后会占用多少体积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AA%E8%B5%84%E6%BA%90%E5%BA%94%E8%AF%A5%E6%8B%86%E5%88%86%E5%A4%9A%E5%B0%91Group"><span class="nav-number">4.2.</span> <span class="nav-text">AA资源应该拆分多少Group</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BD%BF%E7%94%A8AA%E8%B5%84%E6%BA%90"><span class="nav-number">5.</span> <span class="nav-text">如何在运行时使用AA资源</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">5.1.</span> <span class="nav-text">内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E8%B5%84%E4%BA%A7churn"><span class="nav-number">5.1.1.</span> <span class="nav-text">避免资产churn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8"><span class="nav-number">5.1.2.</span> <span class="nav-text">内存使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E5%8F%AF%E5%AF%BB%E5%9D%80%E8%B5%84%E4%BA%A7"><span class="nav-number">5.2.</span> <span class="nav-text">加载可寻址资产</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%9D%E8%AF%95%E6%9E%84%E5%BB%BA%E5%85%A8%E9%87%8F%E6%89%93%E5%8C%85"><span class="nav-number">6.</span> <span class="nav-text">尝试构建全量打包</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E9%85%8D%E7%BD%AE%E7%9A%84%E8%B7%AF%E5%BE%84"><span class="nav-number">6.1.</span> <span class="nav-text">默认配置的路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E6%9C%AC%E5%9C%B0%E8%B7%AF%E5%BE%84"><span class="nav-number">6.1.1.</span> <span class="nav-text">默认本地路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E8%BF%9C%E7%A8%8B%E8%B7%AF%E5%BE%84"><span class="nav-number">6.1.2.</span> <span class="nav-text">默认远程路径</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%8C%85%E7%BB%93%E6%9E%9C"><span class="nav-number">6.2.</span> <span class="nav-text">打包结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E6%89%93%E5%8C%85%E7%BB%93%E6%9E%9C"><span class="nav-number">6.2.1.</span> <span class="nav-text">本地打包结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E5%86%85%E5%AE%B9%E6%89%93%E5%8C%85%E7%BB%93%E6%9E%9C"><span class="nav-number">6.2.2.</span> <span class="nav-text">远程内容打包结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%8C%85%E4%BA%A7%E7%89%A9%E5%88%86%E6%9E%90"><span class="nav-number">6.3.</span> <span class="nav-text">打包产物分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E6%89%93%E5%8C%85%E7%9A%84%E4%BA%A7%E7%89%A9"><span class="nav-number">6.3.1.</span> <span class="nav-text">本地打包的产物</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E8%B5%84%E6%BA%90%E6%89%93%E5%8C%85%E4%BA%A7%E7%89%A9"><span class="nav-number">6.3.2.</span> <span class="nav-text">远程资源打包产物</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%9D%E8%AF%95%E5%A2%9E%E9%87%8F%E5%BC%8F%E6%9B%B4%E6%96%B0"><span class="nav-number">7.</span> <span class="nav-text">尝试增量式更新</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">8.</span> <span class="nav-text">本地环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%BB%BAEditor-Host"><span class="nav-number">8.1.</span> <span class="nav-text">新建Editor Host</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%BB%BAEditor-Hosted-Profile"><span class="nav-number">8.2.</span> <span class="nav-text">新建Editor Hosted Profile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9Play-Mode-Script"><span class="nav-number">8.3.</span> <span class="nav-text">修改Play Mode Script</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">9.</span> <span class="nav-text">新建生产环境配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CI-CD%E6%90%AD%E5%BB%BA"><span class="nav-number">10.</span> <span class="nav-text">CI&#x2F;CD搭建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E6%95%99%E7%A8%8B"><span class="nav-number">11.</span> <span class="nav-text">高级教程</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -735,9 +751,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -771,7 +795,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

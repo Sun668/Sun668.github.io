@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,18 +20,25 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="这个周的每日一题，做算法，要有想象力，要足够充分发掘已知条件。">
-<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="leetcode-1423">
 <meta property="og:url" content="https://sunra.top/2021/02/06/leetcode-1423/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这个周的每日一题，做算法，要有想象力，要足够充分发掘已知条件。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-26T22:57:24.192Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-02-05T23:02:48.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.931Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="leetcode-1423">
-<meta name="twitter:description" content="这个周的每日一题，做算法，要有想象力，要足够充分发掘已知条件。">
 
 <link rel="canonical" href="https://sunra.top/2021/02/06/leetcode-1423/">
 
@@ -48,6 +55,15 @@
 
   <title>leetcode-1423 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -223,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -247,16 +263,16 @@
 
       
         <p>这个周的每日一题，做算法，要有想象力，要足够充分发掘已知条件。</p>
-<a id="more"></a>
-<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a href="https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/" rel="external nofollow noopener noreferrer" target="_blank">https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/</a></p>
+<span id="more"></span>
+<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/">https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/</a></p>
 <h2 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h2><h3 id="回溯-双指针"><a href="#回溯-双指针" class="headerlink" title="回溯 + 双指针"></a>回溯 + 双指针</h3><p>这道题目每次都只能从开头或者末尾拿一个，那么做决策的过程可以是为一个二叉树。</p>
 <p>我们分别用两个指针指向还未遍历的队头结尾，用作指向左子树和右子树的指针。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> trackback = <span class="function">(<span class="params">cardPoints, k, count, left, right, result</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (count === k) &#123;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> leftresult = trackback(cardPoints, k, count + <span class="number">1</span>, left + <span class="number">1</span>, right, result + cardPoints[left]);</span><br><span class="line">        <span class="keyword">const</span> rightresult = trackback(cardPoints, k, count + <span class="number">1</span>, left, right - <span class="number">1</span>, result + cardPoints[right]);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Math</span>.max(leftresult, rightresult);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> maxScore = <span class="function"><span class="keyword">function</span>(<span class="params">cardPoints, k</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> trackback(cardPoints, k, <span class="number">0</span>, <span class="number">0</span>, cardPoints.length - <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">trackback</span> = (<span class="params">cardPoints, k, count, left, right, result</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (count === k) &#123;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> leftresult = <span class="title function_">trackback</span>(cardPoints, k, count + <span class="number">1</span>, left + <span class="number">1</span>, right, result + cardPoints[left]);</span><br><span class="line">        <span class="keyword">const</span> rightresult = <span class="title function_">trackback</span>(cardPoints, k, count + <span class="number">1</span>, left, right - <span class="number">1</span>, result + cardPoints[right]);</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">max</span>(leftresult, rightresult);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> maxScore = <span class="keyword">function</span>(<span class="params">cardPoints, k</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">trackback</span>(cardPoints, k, <span class="number">0</span>, <span class="number">0</span>, cardPoints.<span class="property">length</span> - <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <h3 id="反向思考-滑动窗口"><a href="#反向思考-滑动窗口" class="headerlink" title="反向思考+滑动窗口"></a>反向思考+滑动窗口</h3><p>上面这种解法是常规解法，但是其实这个题目还有个已知条件我们没有好好利用。</p>
 <p>就是每次只能从头或者尾取值，那也就是说完成k个的取值后，剩下的是连续的。</p>
 <p>那么假设数组长度为n，则取完k个值后剩n-k个连续数组。</p>
 <p>我们只需要求出n-k的连续数组的最小值，就可以推出取值的最大值。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> maxScore = <span class="function"><span class="keyword">function</span>(<span class="params">cardPoints, k</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> n = cardPoints.length;</span><br><span class="line">    <span class="comment">// 滑动窗口大小为 n-k</span></span><br><span class="line">    <span class="keyword">const</span> windowSize = n - k;</span><br><span class="line">    <span class="comment">// 选前 n-k 个作为初始值</span></span><br><span class="line">    <span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; windowSize; ++i) &#123;</span><br><span class="line">        sum += cardPoints[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> minSum = sum;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = windowSize; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="comment">// 滑动窗口每向右移动一格，增加从右侧进入窗口的元素值，并减少从左侧离开窗口的元素值</span></span><br><span class="line">        sum += cardPoints[i] - cardPoints[i - windowSize];</span><br><span class="line">        minSum = <span class="built_in">Math</span>.min(minSum, sum);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> totalSum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        totalSum += cardPoints[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> totalSum - minSum;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> maxScore = <span class="keyword">function</span>(<span class="params">cardPoints, k</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> n = cardPoints.<span class="property">length</span>;</span><br><span class="line">    <span class="comment">// 滑动窗口大小为 n-k</span></span><br><span class="line">    <span class="keyword">const</span> windowSize = n - k;</span><br><span class="line">    <span class="comment">// 选前 n-k 个作为初始值</span></span><br><span class="line">    <span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; windowSize; ++i) &#123;</span><br><span class="line">        sum += cardPoints[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> minSum = sum;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = windowSize; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="comment">// 滑动窗口每向右移动一格，增加从右侧进入窗口的元素值，并减少从左侧离开窗口的元素值</span></span><br><span class="line">        sum += cardPoints[i] - cardPoints[i - windowSize];</span><br><span class="line">        minSum = <span class="title class_">Math</span>.<span class="title function_">min</span>(minSum, sum);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> totalSum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        totalSum += cardPoints[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> totalSum - minSum;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -373,7 +389,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解法"><span class="nav-number">2.</span> <span class="nav-text">解法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#回溯-双指针"><span class="nav-number">2.1.</span> <span class="nav-text">回溯 + 双指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反向思考-滑动窗口"><span class="nav-number">2.2.</span> <span class="nav-text">反向思考+滑动窗口</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">解法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E6%BA%AF-%E5%8F%8C%E6%8C%87%E9%92%88"><span class="nav-number">2.1.</span> <span class="nav-text">回溯 + 双指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E6%80%9D%E8%80%83-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3"><span class="nav-number">2.2.</span> <span class="nav-text">反向思考+滑动窗口</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -463,9 +479,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -499,7 +523,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

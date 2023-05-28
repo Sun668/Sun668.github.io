@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,18 +28,18 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="做了一年多的前端，今天突然听到了一个名词叫做微前端，很好奇，于是去查询了一些资料，在这里总结下。">
-<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="微前端概念及方案对比">
 <meta property="og:url" content="https://sunra.top/posts/19537/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="做了一年多的前端，今天突然听到了一个名词叫做微前端，很好奇，于是去查询了一些资料，在这里总结下。">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1619705600/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210429221252_no36wf.png">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.330Z">
+<meta property="article:published_time" content="2021-04-28T14:21:55.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.935Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="微前端概念及方案对比">
-<meta name="twitter:description" content="做了一年多的前端，今天突然听到了一个名词叫做微前端，很好奇，于是去查询了一些资料，在这里总结下。">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1619705600/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210429221252_no36wf.png">
 
 <link rel="canonical" href="https://sunra.top/posts/19537/">
@@ -241,7 +241,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -265,7 +265,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       
         <p>做了一年多的前端，今天突然听到了一个名词叫做微前端，很好奇，于是去查询了一些资料，在这里总结下。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="微前端是什么"><a href="#微前端是什么" class="headerlink" title="微前端是什么"></a>微前端是什么</h2><p>微前端（Micro-Frontends）是一种类似于微服务的架构，它将微服务的理念应用于浏览器端，即将 Web 应用由单一的单体应用转变为多个小型前端应用聚合为一的应用。各个前端应用还可以独立运行、独立开发、独立部署。<strong>微前端不是单纯的前端框架或者工具，而是一套架构体系</strong>，这个概念最早在2016年底被提出，可以参考在Google上搜索Micro-Frontends。</p>
 <p>也就是说微前端更像是一种理念，像是微服务将一个大的系统拆分为多个系统一样，微前端也将一个大的前端项目拆分为多个。</p>
 <p>从这个角度讲，微前端并不是一定要用前端技术来实现，而事实也确实如此，微前端有很多方案，我们下面就会逐一介绍并进行比较。</p>
@@ -474,7 +474,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#微前端是什么"><span class="nav-number">1.</span> <span class="nav-text">微前端是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微前端是为了解决什么问题？"><span class="nav-number">2.</span> <span class="nav-text">微前端是为了解决什么问题？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为了解决上述问题，微前端要做什么？"><span class="nav-number">3.</span> <span class="nav-text">为了解决上述问题，微前端要做什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几种方案的比较"><span class="nav-number">4.</span> <span class="nav-text">几种方案的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#路由分发问题"><span class="nav-number">5.</span> <span class="nav-text">路由分发问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用隔离"><span class="nav-number">6.</span> <span class="nav-text">应用隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息通信"><span class="nav-number">7.</span> <span class="nav-text">消息通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#待检索问题"><span class="nav-number">8.</span> <span class="nav-text">待检索问题</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E5%89%8D%E7%AB%AF%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">微前端是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E5%89%8D%E7%AB%AF%E6%98%AF%E4%B8%BA%E4%BA%86%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">微前端是为了解决什么问题？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BA%86%E8%A7%A3%E5%86%B3%E4%B8%8A%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%8C%E5%BE%AE%E5%89%8D%E7%AB%AF%E8%A6%81%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">为了解决上述问题，微前端要做什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%A0%E7%A7%8D%E6%96%B9%E6%A1%88%E7%9A%84%E6%AF%94%E8%BE%83"><span class="nav-number">4.</span> <span class="nav-text">几种方案的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E5%88%86%E5%8F%91%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">路由分发问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E9%9A%94%E7%A6%BB"><span class="nav-number">6.</span> <span class="nav-text">应用隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%80%9A%E4%BF%A1"><span class="nav-number">7.</span> <span class="nav-text">消息通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%85%E6%A3%80%E7%B4%A2%E9%97%AE%E9%A2%98"><span class="nav-number">8.</span> <span class="nav-text">待检索问题</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -564,9 +564,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -600,7 +608,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

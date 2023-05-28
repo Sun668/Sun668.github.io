@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,18 +28,18 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="前面的几篇博客讲了游戏渲染的基本原理和如何在Unity里写一个Shader，这篇博客先插入两个概念：  Unity中不同物体之间的渲染顺序何覆盖关系是怎样的，也就是渲染顺序。 Unity的渲染路径又是什么，和渲染顺序有什么关系？">
-<meta name="keywords" content="Unity 渲染顺序 渲染路径">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity 渲染原理（八）Unity渲染顺序和渲染路径">
 <meta property="og:url" content="https://sunra.top/posts/27889/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="前面的几篇博客讲了游戏渲染的基本原理和如何在Unity里写一个Shader，这篇博客先插入两个概念：  Unity中不同物体之间的渲染顺序何覆盖关系是怎样的，也就是渲染顺序。 Unity的渲染路径又是什么，和渲染顺序有什么关系？">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1653094133/origin-of-ray/15536448-9a2deda21e4f661e.png_uxeyvt.webp">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.342Z">
+<meta property="article:published_time" content="2022-05-21T01:26:51.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.947Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Unity 渲染原理（八）Unity渲染顺序和渲染路径">
-<meta name="twitter:description" content="前面的几篇博客讲了游戏渲染的基本原理和如何在Unity里写一个Shader，这篇博客先插入两个概念：  Unity中不同物体之间的渲染顺序何覆盖关系是怎样的，也就是渲染顺序。 Unity的渲染路径又是什么，和渲染顺序有什么关系？">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1653094133/origin-of-ray/15536448-9a2deda21e4f661e.png_uxeyvt.webp">
 
 <link rel="canonical" href="https://sunra.top/posts/27889/">
@@ -241,7 +241,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -269,7 +269,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <li>Unity中不同物体之间的渲染顺序何覆盖关系是怎样的，也就是渲染顺序。</li>
 <li>Unity的渲染路径又是什么，和渲染顺序有什么关系？</li>
 </ul>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="渲染顺序"><a href="#渲染顺序" class="headerlink" title="渲染顺序"></a>渲染顺序</h2><p>在Unity中我们会有很多的物体，这些物体是不是同时渲染，渲染的顺序是怎样的，覆盖关系又是怎样的？我们一起看一下会影响的一些因素。</p>
 <h3 id="Camera-Depth"><a href="#Camera-Depth" class="headerlink" title="Camera Depth"></a>Camera Depth</h3><p>这个属性表明的是相机的深度，如果场景中存在多个摄像机，深度越大的越靠后，也就是说，深度大的摄像机的内容会直接覆盖在深底小的摄像机的内容上。</p>
 <h3 id="透明与不透明物体的分割线（Render-Queue-2500）"><a href="#透明与不透明物体的分割线（Render-Queue-2500）" class="headerlink" title="透明与不透明物体的分割线（Render Queue = 2500）"></a>透明与不透明物体的分割线（Render Queue = 2500）</h3><p>RenderQueue 2500是透明与不透明的分水岭。</p>
@@ -332,8 +332,8 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>延迟着色需要 GPU 支持，并且有一些局限性。这种着色方式不支持半透明对象（Unity 使用前向渲染来渲染这些对象）、正交投影（Unity 对这些摄像机使用前向渲染）或硬件抗锯齿（但可以使用后期处理效果来获得类似结果）。延迟着色对剔除遮罩的支持有限，并会将 Renderer.receiveShadows 标志始终视为 true。</p>
 <p>如果项目具有大量的实时光源并需要高级别的光照保真度，而目标硬件支持延迟着色，那么此渲染路径对于该项目而言可能是一个不错的选择。</p>
 <h3 id="LightMode"><a href="#LightMode" class="headerlink" title="LightMode"></a>LightMode</h3><p>渲染路径(Rendering Path)决定光照如何应用到UnityShader中。为了获取场景中的光源数据，需要为每个Pass指定其渲染路径。5.0以后的版本中，Unity支持前向渲染(Forward Renddering Path)和 延迟渲染(Deferred Rendering Path)。系统默认情况下选择的是前向渲染路径，可以更改，同时若想使用多个渲染路径，可以在不同的摄像机中调节 Rendering Path选项。<br>通过在每个Pass中使用标签来指定Pass使用的渲染路径，即使用 LightMode标签实现。不同类型的渲染路径可能包含多种标签设置。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Pass&#123;</span><br><span class="line">	Tags&#123;&quot;LightMode&quot;=&quot;ForwardBase&quot;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>参考文章：<br><a href="https://www.jianshu.com/p/0341f0ab9020" rel="external nofollow noopener noreferrer" target="_blank">Unity中渲染顺序总结</a><br><a href="https://www.bzetu.com/207/.html" rel="external nofollow noopener noreferrer" target="_blank">Unity渲染顺序(Queue,ZWrite,ZTest)</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Pass&#123;</span><br><span class="line">	Tags&#123;&quot;LightMode&quot;=&quot;ForwardBase&quot;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考文章：<br><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.jianshu.com/p/0341f0ab9020">Unity中渲染顺序总结</a><br><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.bzetu.com/207/.html">Unity渲染顺序(Queue,ZWrite,ZTest)</a></p>
 
     </div>
 
@@ -450,7 +450,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染顺序"><span class="nav-number">1.</span> <span class="nav-text">渲染顺序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Camera-Depth"><span class="nav-number">1.1.</span> <span class="nav-text">Camera Depth</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#透明与不透明物体的分割线（Render-Queue-2500）"><span class="nav-number">1.2.</span> <span class="nav-text">透明与不透明物体的分割线（Render Queue = 2500）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sorting-Layers"><span class="nav-number">1.3.</span> <span class="nav-text">Sorting Layers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Order-In-Layer"><span class="nav-number">1.4.</span> <span class="nav-text">Order In Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Render-Queue"><span class="nav-number">1.5.</span> <span class="nav-text">Render Queue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深度排序。按照包围盒的深度进行排序"><span class="nav-number">1.6.</span> <span class="nav-text">深度排序。按照包围盒的深度进行排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.7.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染路径"><span class="nav-number">2.</span> <span class="nav-text">渲染路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前向渲染"><span class="nav-number">2.1.</span> <span class="nav-text">前向渲染</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#延迟着色"><span class="nav-number">2.2.</span> <span class="nav-text">延迟着色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LightMode"><span class="nav-number">2.3.</span> <span class="nav-text">LightMode</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E9%A1%BA%E5%BA%8F"><span class="nav-number">1.</span> <span class="nav-text">渲染顺序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Camera-Depth"><span class="nav-number">1.1.</span> <span class="nav-text">Camera Depth</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%8F%E6%98%8E%E4%B8%8E%E4%B8%8D%E9%80%8F%E6%98%8E%E7%89%A9%E4%BD%93%E7%9A%84%E5%88%86%E5%89%B2%E7%BA%BF%EF%BC%88Render-Queue-2500%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">透明与不透明物体的分割线（Render Queue &#x3D; 2500）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sorting-Layers"><span class="nav-number">1.3.</span> <span class="nav-text">Sorting Layers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Order-In-Layer"><span class="nav-number">1.4.</span> <span class="nav-text">Order In Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Render-Queue"><span class="nav-number">1.5.</span> <span class="nav-text">Render Queue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E6%8E%92%E5%BA%8F%E3%80%82%E6%8C%89%E7%85%A7%E5%8C%85%E5%9B%B4%E7%9B%92%E7%9A%84%E6%B7%B1%E5%BA%A6%E8%BF%9B%E8%A1%8C%E6%8E%92%E5%BA%8F"><span class="nav-number">1.6.</span> <span class="nav-text">深度排序。按照包围盒的深度进行排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.7.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E8%B7%AF%E5%BE%84"><span class="nav-number">2.</span> <span class="nav-text">渲染路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E5%90%91%E6%B8%B2%E6%9F%93"><span class="nav-number">2.1.</span> <span class="nav-text">前向渲染</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E7%9D%80%E8%89%B2"><span class="nav-number">2.2.</span> <span class="nav-text">延迟着色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LightMode"><span class="nav-number">2.3.</span> <span class="nav-text">LightMode</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -540,9 +540,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -576,7 +584,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

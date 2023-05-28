@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,19 +20,26 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="概述在大致搞清楚比特币的基本概念之后，再来理解以太坊的概念就容易很多，其中最主要的就是搞清楚什么是智能合约。 只是合约其实就是存储在区块链上并运行在矿工机上的一段代码，由于以太坊的限制，这段代码并不能过大，也不能过于复杂。">
-<meta name="keywords" content="智能合约">
 <meta property="og:type" content="article">
 <meta property="og:title" content="智能合约概述">
 <meta property="og:url" content="https://sunra.top/2019/12/05/smart-contract/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="概述在大致搞清楚比特币的基本概念之后，再来理解以太坊的概念就容易很多，其中最主要的就是搞清楚什么是智能合约。 只是合约其实就是存储在区块链上并运行在矿工机上的一段代码，由于以太坊的限制，这段代码并不能过大，也不能过于复杂。">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="d:/document/study/YNote/qq063B60F6CBD116FB4E7479117DADDDEF/c84218cfc20e4f21be8e4befbd9157c4/4660_image3.jpeg">
-<meta property="og:updated_time" content="2023-05-26T22:57:24.463Z">
+<meta property="article:published_time" content="2019-12-05T11:59:23.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.943Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="智能合约概述">
-<meta name="twitter:description" content="概述在大致搞清楚比特币的基本概念之后，再来理解以太坊的概念就容易很多，其中最主要的就是搞清楚什么是智能合约。 只是合约其实就是存储在区块链上并运行在矿工机上的一段代码，由于以太坊的限制，这段代码并不能过大，也不能过于复杂。">
 <meta name="twitter:image" content="d:/document/study/YNote/qq063B60F6CBD116FB4E7479117DADDDEF/c84218cfc20e4f21be8e4befbd9157c4/4660_image3.jpeg">
 
 <link rel="canonical" href="https://sunra.top/2019/12/05/smart-contract/">
@@ -50,6 +57,15 @@
 
   <title>智能合约概述 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -225,7 +241,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -250,7 +266,7 @@
       
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在大致搞清楚比特币的基本概念之后，再来理解以太坊的概念就容易很多，其中最主要的就是搞清楚什么是智能合约。</p>
 <p>只是合约其实就是存储在区块链上并运行在矿工机上的一段代码，由于以太坊的限制，这段代码并不能过大，也不能过于复杂。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>那么智能合约大致是怎么工作的呢？</p>
 <p>目前的理解是以太坊存在两种账户，一种是外部账户，一种是合约账户，二者都有自己的地址和余额，唯一的区别就是合约账户上存储着智能合约合约的codehash，实际的合约代码已经通过一笔交易被矿工存储到了区块链上，所以发布合约实际上也是一笔交易。可以通过向全零地址发送一笔交易来创建合约，然后根据合约内容生成合约的地址用于标识合约账户，这个过程与创建外部账户不同，外部账户地址的生成是有公钥生成私钥，再由私钥计算出地址，这个过程不可逆，这也是为什么只有掌握了私钥就等于掌握了地址；但是合约账户的地址生成依赖的主要是合约代码的hash。</p>
 <p>当我们在dapp上通过界面发出一条指令时，可能就是向某个指定的合约账户发起了一场交易，矿工收到交易消息后通过codehash找到合约代码并运行，当然这笔交易也可以向合约账户转账。矿工运行合约之后在交易的基础上收取一定的费用，之后通过挖矿将这笔交易确认后就可以获取这笔费用。</p>
@@ -259,24 +275,24 @@
 <h2 id="详细文档摘要"><a href="#详细文档摘要" class="headerlink" title="详细文档摘要"></a>详细文档摘要</h2><h3 id="什么是智能合约"><a href="#什么是智能合约" class="headerlink" title="什么是智能合约"></a>什么是智能合约</h3><p>以太坊是一个可编程的区块链应用，像比特币一样，以太坊基于分布式计算机组成的点对点网络协议。但是以太坊不像比特币一样，提供某种特定的功能，事实上，以太坊没有提供任何现成的功能，包括交易，反而是让用户在它的基础上自行编程开发功能，然后将开发好的代码存储在区块链上并提供给所有人使用，这些程序运行在以太坊虚拟机上，也就是所有以太坊的节点组成的网络上，由整个以太坊的网络提供算力，并向最终实际提供算力的节点支付费用，这些运行在以太坊虚拟机上的程序就是智能合约。</p>
 <p>比特币网络中有大量计算机节点负责维护和更新区块链，在ETH中同样存在，被称为EVM（Eth虚拟机）。可以把EVM看作一台超级计算机，拥有网络中所有节点的计算能力，该计算能力用于在区块链上运行智能合约。EVM向用户收取非常小的ETH代币维护费作为回报，以提供智能合约需要使用的计算能力，这个费用被称为“gas”。所以ETH代币的核心意义不是作为一般等价物的货币，而是类似于石油一样作为动力驱动ETH网络。</p>
 <h3 id="简单的智能合约"><a href="#简单的智能合约" class="headerlink" title="简单的智能合约"></a>简单的智能合约</h3><p>我们通过官网的示例来进行解释</p>
-<h4 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract SimpleStorage &#123;</span><br><span class="line">    uint storedData;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">set</span>(<span class="params">uint x</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        storedData = x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params"></span>) <span class="title">public</span> <span class="title">view</span> <span class="title">returns</span> (<span class="params">uint</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> storedData;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>第一行就是告诉大家源代码使用Solidity版本0.4.0写的，并且使用0.4.0以上版本运行也没问题（最高到0.5.0，但是不包含0.5.0）。这是为了确保合约不会在新的编译器版本中突然行为异常。关键字 pragma 的含义是，一般来说，pragmas（编译指令）是告知编译器如何处理源代码的指令的（例如， <a href="https://en.wikipedia.org/wiki/Pragma_once" rel="external nofollow noopener noreferrer" target="_blank">pragma once</a> ）。</p>
+<h4 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract <span class="title class_">SimpleStorage</span> &#123;</span><br><span class="line">    uint storedData;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">set</span>(<span class="params">uint x</span>) public &#123;</span><br><span class="line">        storedData = x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">get</span>(<span class="params"></span>) public view returns (uint) &#123;</span><br><span class="line">        <span class="keyword">return</span> storedData;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一行就是告诉大家源代码使用Solidity版本0.4.0写的，并且使用0.4.0以上版本运行也没问题（最高到0.5.0，但是不包含0.5.0）。这是为了确保合约不会在新的编译器版本中突然行为异常。关键字 pragma 的含义是，一般来说，pragmas（编译指令）是告知编译器如何处理源代码的指令的（例如， <a target="_blank" rel="external nofollow noopener noreferrer" href="https://en.wikipedia.org/wiki/Pragma_once">pragma once</a> ）。</p>
 <p>Solidity中合约的含义就是一组代码（它的 <em>函数</em> )和数据（它的 <em>状态</em> ），它们位于以太坊区块链的一个特定地址上。 代码行 uint storedData; 声明一个类型为 uint (256位无符号整数）的状态变量，叫做 storedData 。 你可以认为它是数据库里的一个位置，可以通过调用管理数据库代码的函数进行查询和变更。对于以太坊来说，上述的合约就是拥有合约（owning contract）。在这种情况下，函数 set 和 get 可以用来变更或取出变量的值。</p>
 <p>要访问一个状态变量，并不需要像 this. 这样的前缀，虽然这是其他语言常见的做法。</p>
 <p>该合约能完成的事情并不多（由于以太坊构建的基础架构的原因）：它能允许任何人在合约中存储一个单独的数字，并且这个数字可以被世界上任何人访问，且没有可行的办法阻止你发布这个数字。当然，任何人都可以再次调用 set ，传入不同的值，覆盖你的数字，但是这个数字仍会被存储在区块链的历史记录中。随后，我们会看到怎样施加访问限制，以确保只有你才能改变这个数字。</p>
 <h5 id="注解"><a href="#注解" class="headerlink" title="注解"></a><strong>注解</strong></h5><p>所有的标识符（合约名称，函数名称和变量名称）都只能使用ASCII字符集。UTF-8编码的数据可以用字符串变量的形式存储。</p>
 <h5 id="警告"><a href="#警告" class="headerlink" title="警告"></a><strong>警告</strong></h5><p>小心使用Unicode文本，因为有些字符虽然长得相像（甚至一样），但其字符码是不同的，其编码后的字符数组也会不一样。</p>
 <h4 id="子货币（Subcurrency）例子"><a href="#子货币（Subcurrency）例子" class="headerlink" title="子货币（Subcurrency）例子"></a><strong>子货币（Subcurrency）例子</strong></h4><p>下面的合约实现了一个最简单的加密货币。这里，币确实可以无中生有地产生，但是只有创建合约的人才能做到（实现一个不同的发行计划也不难）。而且，任何人都可以给其他人转币，不需要注册用户名和密码 —— 所需要的只是以太坊密钥对。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.21</span>;</span><br><span class="line"></span><br><span class="line">contract Coin &#123;</span><br><span class="line">    <span class="comment">// 关键字“public”让这些变量可以从外部读取</span></span><br><span class="line">    address public minter;</span><br><span class="line">    mapping (<span class="function"><span class="params">address</span> =&gt;</span> uint) public balances;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 轻客户端可以通过事件针对变化作出高效的反应</span></span><br><span class="line">    event Sent(address <span class="keyword">from</span>, address to, uint amount);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这是构造函数，只有当合约创建时运行</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">Coin</span>(<span class="params"></span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        minter = msg.sender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">mint</span>(<span class="params">address receiver, uint amount</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (msg.sender != minter) <span class="keyword">return</span>;</span><br><span class="line">        balances[receiver] += amount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params">address receiver, uint amount</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (balances[msg.sender] &lt; amount) <span class="keyword">return</span>;</span><br><span class="line">        balances[msg.sender] -= amount;</span><br><span class="line">        balances[receiver] += amount;</span><br><span class="line">        emit Sent(msg.sender, receiver, amount);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.21</span>;</span><br><span class="line"></span><br><span class="line">contract <span class="title class_">Coin</span> &#123;</span><br><span class="line">    <span class="comment">// 关键字“public”让这些变量可以从外部读取</span></span><br><span class="line">    address public minter;</span><br><span class="line">    mapping (<span class="function"><span class="params">address</span> =&gt;</span> uint) public balances;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 轻客户端可以通过事件针对变化作出高效的反应</span></span><br><span class="line">    event <span class="title class_">Sent</span>(address <span class="keyword">from</span>, address to, uint amount);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这是构造函数，只有当合约创建时运行</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">Coin</span>(<span class="params"></span>) public &#123;</span><br><span class="line">        minter = msg.<span class="property">sender</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">mint</span>(<span class="params">address receiver, uint amount</span>) public &#123;</span><br><span class="line">        <span class="keyword">if</span> (msg.<span class="property">sender</span> != minter) <span class="keyword">return</span>;</span><br><span class="line">        balances[receiver] += amount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">send</span>(<span class="params">address receiver, uint amount</span>) public &#123;</span><br><span class="line">        <span class="keyword">if</span> (balances[msg.<span class="property">sender</span>] &lt; amount) <span class="keyword">return</span>;</span><br><span class="line">        balances[msg.<span class="property">sender</span>] -= amount;</span><br><span class="line">        balances[receiver] += amount;</span><br><span class="line">        emit <span class="title class_">Sent</span>(msg.<span class="property">sender</span>, receiver, amount);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这个合约引入了一些新的概念，让我们逐一解读。</p>
 <p>address public minter; 这一行声明了一个可以被公开访问的 address 类型的状态变量。 address 类型是一个160位的值，且不允许任何算数操作。这种类型适合存储合约地址或外部人员的密钥对。关键字 public 自动生成一个函数，允许你在这个合约之外访问这个状态变量的当前值。如果没有这个关键字，其他的合约没有办法访问这个变量。由编译器生成的函数的代码大致如下所示：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">minter</span>(<span class="params"></span>) <span class="title">returns</span> (<span class="params">address</span>) </span>&#123; <span class="keyword">return</span> minter; &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">minter</span>(<span class="params"></span>) returns (address) &#123; <span class="keyword">return</span> minter; &#125;</span><br></pre></td></tr></table></figure>
 <p>当然，加一个和上面完全一样的函数是行不通的，因为我们会有同名的一个函数和一个变量，这里，主要是希望你能明白——编译器已经帮你实现了。</p>
-<p>下一行， mapping (address =&gt; uint) public balances; 也创建一个公共状态变量，但它是一个更复杂的数据类型。 该类型将address映射为无符号整数。 Mappings 可以看作是一个 <a href="https://en.wikipedia.org/wiki/Hash_table" rel="external nofollow noopener noreferrer" target="_blank">哈希表</a> 它会执行虚拟初始化，以使所有可能存在的键都映射到一个字节表示为全零的值。 但是，这种类比并不太恰当，因为它既不能获得映射的所有键的列表，也不能获得所有值的列表。 因此，要么记住你添加到mapping中的数据（使用列表或更高级的数据类型会更好），要么在不需要键列表或值列表的上下文中使用它，就如本例。 而由 public 关键字创建的getter函数 <a href="https://solidity-cn.readthedocs.io/zh/develop/contracts.html#getter-functions" rel="external nofollow noopener noreferrer" target="_blank">getter function</a> 则是更复杂一些的情况， 它大致如下所示：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">balances</span>(<span class="params">address _account</span>) <span class="title">public</span> <span class="title">view</span> <span class="title">returns</span> (<span class="params">uint</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> balances[_account];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下一行， mapping (address =&gt; uint) public balances; 也创建一个公共状态变量，但它是一个更复杂的数据类型。 该类型将address映射为无符号整数。 Mappings 可以看作是一个 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://en.wikipedia.org/wiki/Hash_table">哈希表</a> 它会执行虚拟初始化，以使所有可能存在的键都映射到一个字节表示为全零的值。 但是，这种类比并不太恰当，因为它既不能获得映射的所有键的列表，也不能获得所有值的列表。 因此，要么记住你添加到mapping中的数据（使用列表或更高级的数据类型会更好），要么在不需要键列表或值列表的上下文中使用它，就如本例。 而由 public 关键字创建的getter函数 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://solidity-cn.readthedocs.io/zh/develop/contracts.html#getter-functions">getter function</a> 则是更复杂一些的情况， 它大致如下所示：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">balances</span>(<span class="params">address _account</span>) public view returns (uint) &#123;</span><br><span class="line">    <span class="keyword">return</span> balances[_account];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>正如你所看到的，你可以通过该函数轻松地查询到账户的余额。</p>
 <p>event Sent(address from, address to, uint amount); 这行声明了一个所谓的“事件（event）”，它会在 send 函数的最后一行被发出。用户界面（当然也包括服务器应用程序）可以监听区块链上正在发送的事件，而不会花费太多成本。一旦它被发出，监听该事件的listener都将收到通知。而所有的事件都包含了 from ， to 和 amount 三个参数，可方便追踪事务。 为了监听这个事件，你可以使用如下代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Coin.Sent().watch(&#123;&#125;, <span class="string">''</span>, <span class="function"><span class="keyword">function</span>(<span class="params">error, result</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!error) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"Coin transfer: "</span> + result.args.amount +</span><br><span class="line">            <span class="string">" coins were sent from "</span> + result.args.from +</span><br><span class="line">            <span class="string">" to "</span> + result.args.to + <span class="string">"."</span>);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"Balances now:\n"</span> +</span><br><span class="line">            <span class="string">"Sender: "</span> + Coin.balances.call(result.args.from) +</span><br><span class="line">            <span class="string">"Receiver: "</span> + Coin.balances.call(result.args.to));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Coin</span>.<span class="title class_">Sent</span>().<span class="title function_">watch</span>(&#123;&#125;, <span class="string">&#x27;&#x27;</span>, <span class="keyword">function</span>(<span class="params">error, result</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!error) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Coin transfer: &quot;</span> + result.<span class="property">args</span>.<span class="property">amount</span> +</span><br><span class="line">            <span class="string">&quot; coins were sent from &quot;</span> + result.<span class="property">args</span>.<span class="property">from</span> +</span><br><span class="line">            <span class="string">&quot; to &quot;</span> + result.<span class="property">args</span>.<span class="property">to</span> + <span class="string">&quot;.&quot;</span>);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Balances now:\n&quot;</span> +</span><br><span class="line">            <span class="string">&quot;Sender: &quot;</span> + <span class="title class_">Coin</span>.<span class="property">balances</span>.<span class="title function_">call</span>(result.<span class="property">args</span>.<span class="property">from</span>) +</span><br><span class="line">            <span class="string">&quot;Receiver: &quot;</span> + <span class="title class_">Coin</span>.<span class="property">balances</span>.<span class="title function_">call</span>(result.<span class="property">args</span>.<span class="property">to</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p>这里请注意自动生成的 balances 函数是如何从用户界面调用的。</p>
 <p>特殊函数 Coin 是在创建合约期间运行的构造函数，不能在事后调用。 它永久存储创建合约的人的地址: msg (以及 tx 和 block ) 是一个神奇的全局变量，其中包含一些允许访问区块链的属性。 msg.sender 始终是当前（外部）函数调用的来源地址。</p>
 <p>最后，真正被用户或其他合约所调用的，以完成本合约功能的方法是 mint 和 send。 如果 mint 被合约创建者外的其他人调用则什么也不会发生。 另一方面， send 函数可被任何人用于向他人发送币 (当然，前提是发送者拥有这些币)。记住，如果你使用合约发送币给一个地址，当你在区块链浏览器上查看该地址时是看不到任何相关信息的。因为，实际上你发送币和更改余额的信息仅仅存储在特定合约的数据存储器中。通过使用事件，你可以非常简单地为你的新币创建一个“区块链浏览器”来追踪交易和余额。</p>
@@ -322,7 +338,7 @@
 <p><strong>委托调用/代码调用和库</strong></p>
 <p>有一种特殊类型的消息调用，被称为 <strong>委托调用(delegatecall)</strong> 。它和一般的消息调用的区别在于，目标地址的代码将在发起调用的合约的上下文中执行，并且 msg.sender 和 msg.value 不变。 这意味着一个合约可以在运行时从另外一个地址动态加载代码。存储、当前地址和余额都指向发起调用的合约，只有代码是从被调用地址获取的。 这使得 Solidity 可以实现”库“能力：可复用的代码库可以放在一个合约的存储上，如用来实现复杂的数据结构的库。</p>
 <p><strong>日志</strong></p>
-<p>有一种特殊的可索引的数据结构，其存储的数据可以一路映射直到区块层级。这个特性被称为 <strong>日志(logs)</strong> ，Solidity用它来实现 <strong>事件(events)</strong> 。合约创建之后就无法访问日志数据，但是这些数据可以从区块链外高效的访问。因为部分日志数据被存储在 <a href="https://en.wikipedia.org/wiki/Bloom_filter" rel="external nofollow noopener noreferrer" target="_blank">布隆过滤器（Bloom filter)</a> 中，我们可以高效并且加密安全地搜索日志，所以那些没有下载整个区块链的网络节点（轻客户端）也可以找到这些日志。</p>
+<p>有一种特殊的可索引的数据结构，其存储的数据可以一路映射直到区块层级。这个特性被称为 <strong>日志(logs)</strong> ，Solidity用它来实现 <strong>事件(events)</strong> 。合约创建之后就无法访问日志数据，但是这些数据可以从区块链外高效的访问。因为部分日志数据被存储在 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://en.wikipedia.org/wiki/Bloom_filter">布隆过滤器（Bloom filter)</a> 中，我们可以高效并且加密安全地搜索日志，所以那些没有下载整个区块链的网络节点（轻客户端）也可以找到这些日志。</p>
 <p><strong>创建</strong></p>
 <p>合约甚至可以通过一个特殊的指令来创建其他合约（不是简单的调用零地址）。创建合约的调用 <strong>create calls</strong> 和普通消息调用的唯一区别在于，负载会被执行，执行的结果被存储为合约代码，调用者/创建者在栈上得到新合约的地址。</p>
 <p><strong>自毁</strong></p>
@@ -372,7 +388,7 @@
 <p>创世区块因为不是挖矿所得，无人为此消耗算力，自然也不会有任何区块奖励。</p>
 <p>转了一圈，这个全零地址中的ETH和创世区块并无关系。</p>
 <p>除了创世区块中发行的ETH，新的ETH只有一种产生途径，那就是挖矿。</p>
-<p>为了更加精确的计算，以下单位均使用ETH的最小单位Wei，关于单位问题，可以参看这里《<a href="https://zhuanlan.zhihu.com/p/28994731" rel="external nofollow noopener noreferrer" target="_blank">以太币(Ether)的单位</a>》。</p>
+<p>为了更加精确的计算，以下单位均使用ETH的最小单位Wei，关于单位问题，可以参看这里《<a target="_blank" rel="external nofollow noopener noreferrer" href="https://zhuanlan.zhihu.com/p/28994731">以太币(Ether)的单位</a>》。</p>
 <p>搜索下miner为这个全零地址的区块，还真不少呢。</p>
 <p>这个全零地址共挖出主链区块94个：</p>
 <p>那么问题来了，为什么有人会用全零地址挖矿，这样自己消耗了电力，最终获益的却是全零地址。</p>
@@ -408,12 +424,12 @@
 </ul>
 <h3 id="合约与合约账户"><a href="#合约与合约账户" class="headerlink" title="合约与合约账户"></a>合约与合约账户</h3><p>合约是代码与账户当前状态的一个集合，每次交易之后，当前的合约都会</p>
 <p>参考文章：</p>
-<p><a href="https://blog.csdn.net/sportshark/article/details/52249607" rel="external nofollow noopener noreferrer" target="_blank">https://blog.csdn.net/sportshark/article/details/52249607</a></p>
-<p><a href="https://solidity-cn.readthedocs.io/zh/develop/solidity-by-example.html" rel="external nofollow noopener noreferrer" target="_blank">https://solidity-cn.readthedocs.io/zh/develop/solidity-by-example.html</a></p>
-<p><a href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/" rel="external nofollow noopener noreferrer" target="_blank">https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/</a></p>
-<p><a href="https://blog.csdn.net/jiang_xinxing/article/details/80289694" rel="external nofollow noopener noreferrer" target="_blank">https://blog.csdn.net/jiang_xinxing/article/details/80289694</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/34363341" rel="external nofollow noopener noreferrer" target="_blank">https://zhuanlan.zhihu.com/p/34363341</a></p>
-<p><a href="https://www.chainnews.com/articles/891681682372.htm" rel="external nofollow noopener noreferrer" target="_blank">https://www.chainnews.com/articles/891681682372.htm</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://blog.csdn.net/sportshark/article/details/52249607">https://blog.csdn.net/sportshark/article/details/52249607</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://solidity-cn.readthedocs.io/zh/develop/solidity-by-example.html">https://solidity-cn.readthedocs.io/zh/develop/solidity-by-example.html</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/">https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://blog.csdn.net/jiang_xinxing/article/details/80289694">https://blog.csdn.net/jiang_xinxing/article/details/80289694</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://zhuanlan.zhihu.com/p/34363341">https://zhuanlan.zhihu.com/p/34363341</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.chainnews.com/articles/891681682372.htm">https://www.chainnews.com/articles/891681682372.htm</a></p>
 
     </div>
 
@@ -530,7 +546,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#详细文档摘要"><span class="nav-number">2.</span> <span class="nav-text">详细文档摘要</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是智能合约"><span class="nav-number">2.1.</span> <span class="nav-text">什么是智能合约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单的智能合约"><span class="nav-number">2.2.</span> <span class="nav-text">简单的智能合约</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#存储"><span class="nav-number">2.2.1.</span> <span class="nav-text">存储</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#注解"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">注解</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#警告"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">警告</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#子货币（Subcurrency）例子"><span class="nav-number">2.2.2.</span> <span class="nav-text">子货币（Subcurrency）例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以太坊虚拟机"><span class="nav-number">2.3.</span> <span class="nav-text">以太坊虚拟机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重点概念再次解释"><span class="nav-number">2.4.</span> <span class="nav-text">重点概念再次解释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#题外话"><span class="nav-number">3.</span> <span class="nav-text">题外话</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全零地址"><span class="nav-number">3.1.</span> <span class="nav-text">全零地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#智能合约如何运行"><span class="nav-number">3.2.</span> <span class="nav-text">智能合约如何运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合约与合约账户"><span class="nav-number">3.3.</span> <span class="nav-text">合约与合约账户</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E6%96%87%E6%A1%A3%E6%91%98%E8%A6%81"><span class="nav-number">2.</span> <span class="nav-text">详细文档摘要</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6"><span class="nav-number">2.1.</span> <span class="nav-text">什么是智能合约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6"><span class="nav-number">2.2.</span> <span class="nav-text">简单的智能合约</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%98%E5%82%A8"><span class="nav-number">2.2.1.</span> <span class="nav-text">存储</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">注解</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AD%A6%E5%91%8A"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">警告</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%90%E8%B4%A7%E5%B8%81%EF%BC%88Subcurrency%EF%BC%89%E4%BE%8B%E5%AD%90"><span class="nav-number">2.2.2.</span> <span class="nav-text">子货币（Subcurrency）例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">2.3.</span> <span class="nav-text">以太坊虚拟机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E7%82%B9%E6%A6%82%E5%BF%B5%E5%86%8D%E6%AC%A1%E8%A7%A3%E9%87%8A"><span class="nav-number">2.4.</span> <span class="nav-text">重点概念再次解释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E5%A4%96%E8%AF%9D"><span class="nav-number">3.</span> <span class="nav-text">题外话</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E9%9B%B6%E5%9C%B0%E5%9D%80"><span class="nav-number">3.1.</span> <span class="nav-text">全零地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C"><span class="nav-number">3.2.</span> <span class="nav-text">智能合约如何运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E7%BA%A6%E4%B8%8E%E5%90%88%E7%BA%A6%E8%B4%A6%E6%88%B7"><span class="nav-number">3.3.</span> <span class="nav-text">合约与合约账户</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -620,9 +636,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -656,7 +680,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,21 +20,28 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="上一篇博客讲了二分图匹配的匈牙利算法，但是匈牙利算法中的每个匹配边权重都是一样的，如果我们在匹配边权重不同的情况下得到最佳匹配，那么就需要用到KM算法。">
-<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="KM 算法">
 <meta property="og:url" content="https://sunra.top/2023/01/22/km-algorithm/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="上一篇博客讲了二分图匹配的匈牙利算法，但是匈牙利算法中的每个匹配边权重都是一样的，如果我们在匹配边权重不同的情况下得到最佳匹配，那么就需要用到KM算法。">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1674362847/origin-of-ray/v2-d41065309a9ebbebaba9697c72efd5b4_1440w_txjm2g.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1674362942/origin-of-ray/v2-e0c9824569b8e0f5908bb48f145d276f_1440w_ht9nwm.png">
 <meta property="og:image" content="https://pic3.zhimg.com/80/v2-51d28f52efd5d822280d3d0ba2540a9e_1440w.webp">
-<meta property="og:updated_time" content="2023-05-26T22:57:24.190Z">
+<meta property="article:published_time" content="2023-01-22T03:40:37.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.931Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="KM 算法">
-<meta name="twitter:description" content="上一篇博客讲了二分图匹配的匈牙利算法，但是匈牙利算法中的每个匹配边权重都是一样的，如果我们在匹配边权重不同的情况下得到最佳匹配，那么就需要用到KM算法。">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1674362847/origin-of-ray/v2-d41065309a9ebbebaba9697c72efd5b4_1440w_txjm2g.png">
 
 <link rel="canonical" href="https://sunra.top/2023/01/22/km-algorithm/">
@@ -52,6 +59,15 @@
 
   <title>KM 算法 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -227,7 +243,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -251,7 +267,7 @@
 
       
         <p>上一篇博客讲了二分图匹配的<a href="https://sunra.top/posts/5352/">匈牙利算法</a>，但是匈牙利算法中的每个匹配边权重都是一样的，如果我们在匹配边权重不同的情况下得到最佳匹配，那么就需要用到KM算法。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>其实我们在理解了匈牙利算法之后，再来理解KM算法就简单了。</p>
 <p>我们现在知道匈牙利算法能解决最大匹配的问题，现在加了权重，KM算法实际上就是想了个办法，将问题转换成了匈牙利算法可以解决的形式。</p>
 <p>现在二分图带了权重，可以理解为加了一种约束，这种约束让我们优先选择那些权重大的边出来，进行匹配。</p>
@@ -431,7 +447,7 @@ x5 & 1 & 2 & 1 & 3 & 3
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本原理"><span class="nav-number">1.</span> <span class="nav-text">基本原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一个问题-如何寻找“权重最大的”子图？"><span class="nav-number">1.1.</span> <span class="nav-text">第一个问题 如何寻找“权重最大的”子图？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二个问题-如何扩大择偶范围？"><span class="nav-number">1.2.</span> <span class="nav-text">第二个问题 如何扩大择偶范围？</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">基本原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98-%E5%A6%82%E4%BD%95%E5%AF%BB%E6%89%BE%E2%80%9C%E6%9D%83%E9%87%8D%E6%9C%80%E5%A4%A7%E7%9A%84%E2%80%9D%E5%AD%90%E5%9B%BE%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">第一个问题 如何寻找“权重最大的”子图？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E4%B8%AA%E9%97%AE%E9%A2%98-%E5%A6%82%E4%BD%95%E6%89%A9%E5%A4%A7%E6%8B%A9%E5%81%B6%E8%8C%83%E5%9B%B4%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">第二个问题 如何扩大择偶范围？</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -521,9 +537,17 @@ x5 & 1 & 2 & 1 & 3 & 3
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -557,7 +581,9 @@ x5 & 1 & 2 & 1 & 3 & 3
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

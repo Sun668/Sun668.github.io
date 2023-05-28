@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,17 +28,17 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="谈起VPN我们很多人的第一反应都是翻墙，这其实也是VPN一个比较有名的原因。VPN其实会为你直接分配一个外网的IP，只是这个IP只在这条专线的另一头的代理服务器上有效，VPN的优点和用法并不在于翻墙，而是数据的加密，而且由于其流量特征明显，它用来翻墙的表现其实也不是很好。SS等代理则是帮你进行请求的转发，前提是你能找到一台在墙内能访问的服务器，并且该服务器愿意帮你转发流量。我们就从翻墙开始讲VPN">
-<meta name="keywords" content="VPN 代理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VPN 与 代理">
 <meta property="og:url" content="https://sunra.top/posts/70a4f80e/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="谈起VPN我们很多人的第一反应都是翻墙，这其实也是VPN一个比较有名的原因。VPN其实会为你直接分配一个外网的IP，只是这个IP只在这条专线的另一头的代理服务器上有效，VPN的优点和用法并不在于翻墙，而是数据的加密，而且由于其流量特征明显，它用来翻墙的表现其实也不是很好。SS等代理则是帮你进行请求的转发，前提是你能找到一台在墙内能访问的服务器，并且该服务器愿意帮你转发流量。我们就从翻墙开始讲VPN">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.346Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-04-30T11:16:36.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.947Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="VPN 与 代理">
-<meta name="twitter:description" content="谈起VPN我们很多人的第一反应都是翻墙，这其实也是VPN一个比较有名的原因。VPN其实会为你直接分配一个外网的IP，只是这个IP只在这条专线的另一头的代理服务器上有效，VPN的优点和用法并不在于翻墙，而是数据的加密，而且由于其流量特征明显，它用来翻墙的表现其实也不是很好。SS等代理则是帮你进行请求的转发，前提是你能找到一台在墙内能访问的服务器，并且该服务器愿意帮你转发流量。我们就从翻墙开始讲VPN">
 
 <link rel="canonical" href="https://sunra.top/posts/70a4f80e/">
 
@@ -239,7 +239,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,16 +263,16 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       
         <p>谈起VPN我们很多人的第一反应都是翻墙，这其实也是VPN一个比较有名的原因。<strong>VPN其实会为你直接分配一个外网的IP，只是这个IP只在这条专线的另一头的代理服务器上有效</strong>，VPN的优点和用法并不在于翻墙，而是数据的加密，而且由于其流量特征明显，它用来翻墙的表现其实也不是很好。<strong>SS等代理则是帮你进行请求的转发，前提是你能找到一台在墙内能访问的服务器</strong>，并且该服务器愿意帮你转发流量。我们就从翻墙开始讲VPN到底是什么。它和代理有什么区别。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="什么是“墙”"><a href="#什么是“墙”" class="headerlink" title="什么是“墙”"></a>什么是“墙”</h2><p>我们平时说的墙其实指的是防火墙，它是运行在我们国内网络与国外网络之间的网关上的一套软硬件的合集，它会通过dns劫持或者通过IP地址过滤等方式让我们的请求无法正确通过防火墙。</p>
 <p>防火墙是指设置在不同网络（如可信任的企业内部网和不可信的公共网）或网络安全域之间的一系列部件的组合。它是不同网络或网络安全域之间信息的唯一出入口，通过监测、限制、更改跨越防火墙的数据流，尽可能地对外部屏蔽网络内部的信息、结构和运行状况，有选择地接受外部访问，对内部强化设备监管、控制对服务器与外部网络的访问，在被保护网络和外部网络之间架起一道屏障，以防止发生不可预测的、潜在的破坏性侵入。</p>
-<p><a href="http://www.nowamagic.net/academy/tag/防火墙" rel="external nofollow noopener noreferrer" target="_blank">防火墙</a>有两种，硬件防火墙和软件防火墙，他们都能起到保护作用并筛选出网络上的攻击者。</p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="http://www.nowamagic.net/academy/tag/防火墙">防火墙</a>有两种，硬件防火墙和软件防火墙，他们都能起到保护作用并筛选出网络上的攻击者。</p>
 <p>防火墙技术经历了包过滤、应用代理网关、再到状态检测三个阶段。</p>
 <p>包过滤技术是一种简单、有效的安全控制技术，它通过在网络间相互连接的设备上加载允许、禁止来自某些特定的源地址、目的地址、TCP端口号等规则，对通过设备的数据包进行检查，限制数据包进出内部网络。包过滤的最大优点是对用户透明，传输性能高。但由于安全控制层次在网络层、传输层，安全控制的力度也只限于源地址、目的地址和端口号，因而只能进行较为初步的安全控制，对于恶意的拥塞攻击、内存覆盖攻击或病毒等高层次的攻击手段，则无能为力。</p>
 <p>状态检测是比包过滤更为有效的安全控制方法。对新建的应用连接，状态检测检查预先设置的安全规则，允许符合规则的连接通过，并在内存中记录下该连接的相关信息，生成状态表。对该连接的后续数据包，只要符合状态表，就可以通过。这种方式的好处在于：由于不需要对每个数据包进行规则检查，而是一个连接的后续数据包（通常是大量的数据包）通过散列算法，直接进行状态检查，从而使得性能得到了较大提高；而且，由于状态表是动态的，因而可以有选择地、动态地开通1024号以上的端口，使得安全性得到进一步地提高。</p>
 <h3 id="包过滤技术"><a href="#包过滤技术" class="headerlink" title="包过滤技术"></a>包过滤技术</h3><p>包过滤防火墙一般在路由器上实现，用以过滤用户定义的内容，如IP地址。包过滤防火墙的工作原理是：系统在网络层检查数据包，与应用层无关。这样系统就具有很好的传输性能，可扩展能力强。但是，包过滤防火墙的安全性有一定的缺陷，因为系统对应用层信息无感知，也就是说，防火墙不理解通信的内容，所以可能被黑客所攻破。</p>
 <p>包过滤防火墙工作在网络层，对数据包的源及目地IP具有识别和控制作用，对于传输层，也只能识别数据包是TCP还是UDP及所用的端口信息。现在的路由器、Switch Router以及某些操作系统已经具有用Packet Filter控制的能力。 </p>
-<p>由于只对<a href="http://www.nowamagic.net/academy/tag/数据包" rel="external nofollow noopener noreferrer" target="_blank">数据包</a>的IP地址、TCP/UDP协议和端口进行分析，包过滤防火墙的处理速度较快，并且易于配置。 </p>
+<p>由于只对<a target="_blank" rel="external nofollow noopener noreferrer" href="http://www.nowamagic.net/academy/tag/数据包">数据包</a>的IP地址、TCP/UDP协议和端口进行分析，包过滤防火墙的处理速度较快，并且易于配置。 </p>
 <p>包过滤防火墙具有根本的缺陷： </p>
 <ol>
 <li>不能防范黑客攻击。包过滤防火墙的工作基于一个前提，就是网管知道哪些IP是可信网络，哪些是不可信网络的IP地址。但是随着远程办公等新应用的出现，网管不可能区分出可信网络与不可信网络的界限，对于黑客来说，只需将源IP包改成合法IP即可轻松通过包过滤防火墙，进入内网，而任何一个初级水平的黑客都能进行IP地址欺骗。 </li>
@@ -309,9 +309,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>代理也分为<a href="https://sunra.top/posts/45898d51/">正向代理和反向代理</a>。也有很多的功能，只不过这些功能都不是其本质，其本质就是帮你做了一些事情，只要符合这个本质就叫做代理，至于怎么做，在那个层面做，做了什么可以细分出很多不同种类的代理。</p>
 <h3 id="代理的几种常见的功能"><a href="#代理的几种常见的功能" class="headerlink" title="代理的几种常见的功能"></a>代理的几种常见的功能</h3><ul>
 <li>突破IP限制。这是我们最常听的功能，所谓的IP限制就是对于某些指定IP的请求进行限制，最出名的就是我们的防火长城，但是我们也明白，<strong>我们不可能搞个超大的内网出来，和国外的任何网络都不连接，那么就一定有某台服务器是可以在墙内访问的。我们只需要找到这台服务器</strong>，假设为A，在上面搭建一个服务，然后将本地的一些对墙外服务访问的IP请求连带头部再本地加密之后作为请求体再生成一个新的IP数据报发送给这个服务，防火墙只能看到这个数据报的头部是发送给A的就放行，就算拿出内容来也无法分析其行为，因为内容也被加密过。这个请求到了A之后被我们的服务解密出来，发现它是访问另一个服务，就帮我们去请求，并将请求结果再次封装发送回来，我们本地的服务再进行解密。</li>
-<li>访问一些单位或团体内部资源，如某大学FTP(前提是该代理地址在该资源 的允许访问范围之内)，使用教育网内地址段免费代理服务器，就可以用于对教育网开放的各类<a href="https://baike.baidu.com/item/FTP/13839" rel="external nofollow noopener noreferrer" target="_blank">FTP</a>下载上传，以及各类资料查询共享等服务。</li>
+<li>访问一些单位或团体内部资源，如某大学FTP(前提是该代理地址在该资源 的允许访问范围之内)，使用教育网内地址段免费代理服务器，就可以用于对教育网开放的各类<a target="_blank" rel="external nofollow noopener noreferrer" href="https://baike.baidu.com/item/FTP/13839">FTP</a>下载上传，以及各类资料查询共享等服务。</li>
 <li>突破中国电信的IP封锁：中国电信用户有很多网站是被限制访问的，这种限制是人为的，不同Serve对地址的封锁是不同的。所以不能访问时可以换一个国 外的代理服务器试试。</li>
-<li>提高访问速度：通常代理服务器都设置一个较大的硬盘<a href="https://baike.baidu.com/item/缓冲区" rel="external nofollow noopener noreferrer" target="_blank">缓冲区</a>，当有外界的信息通过时，同时也将其保存到缓冲区中，当其他用户再访问相同的信息时， 则直接由缓冲区中取出信息，传给用户，以提高访问速度。</li>
+<li>提高访问速度：通常代理服务器都设置一个较大的硬盘<a target="_blank" rel="external nofollow noopener noreferrer" href="https://baike.baidu.com/item/缓冲区">缓冲区</a>，当有外界的信息通过时，同时也将其保存到缓冲区中，当其他用户再访问相同的信息时， 则直接由缓冲区中取出信息，传给用户，以提高访问速度。</li>
 <li>隐藏真实IP：上网者也可以通过这种方法隐藏自己的IP，免受攻击。</li>
 </ul>
 <p>工作在不同层次的代理利用的协议也都不同，比如有专门针对HTTP的HTTP代理，也有更低层次的，比如SOCKS代理。</p>
@@ -449,7 +449,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是“墙”"><span class="nav-number">1.</span> <span class="nav-text">什么是“墙”</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#包过滤技术"><span class="nav-number">1.1.</span> <span class="nav-text">包过滤技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用网关防火墙"><span class="nav-number">1.2.</span> <span class="nav-text">应用网关防火墙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态检测防火墙"><span class="nav-number">1.3.</span> <span class="nav-text">状态检测防火墙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复合型防火墙"><span class="nav-number">1.4.</span> <span class="nav-text">复合型防火墙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四类防火墙的对比"><span class="nav-number">1.5.</span> <span class="nav-text">四类防火墙的对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是代理"><span class="nav-number">2.</span> <span class="nav-text">什么是代理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代理的几种常见的功能"><span class="nav-number">2.1.</span> <span class="nav-text">代理的几种常见的功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是VPN"><span class="nav-number">3.</span> <span class="nav-text">什么是VPN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vpn和ss-ssr的区别和优缺点"><span class="nav-number">3.1.</span> <span class="nav-text">vpn和ss/ssr的区别和优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是网关"><span class="nav-number">4.</span> <span class="nav-text">什么是网关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E2%80%9C%E5%A2%99%E2%80%9D"><span class="nav-number">1.</span> <span class="nav-text">什么是“墙”</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%85%E8%BF%87%E6%BB%A4%E6%8A%80%E6%9C%AF"><span class="nav-number">1.1.</span> <span class="nav-text">包过滤技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E7%BD%91%E5%85%B3%E9%98%B2%E7%81%AB%E5%A2%99"><span class="nav-number">1.2.</span> <span class="nav-text">应用网关防火墙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E6%A3%80%E6%B5%8B%E9%98%B2%E7%81%AB%E5%A2%99"><span class="nav-number">1.3.</span> <span class="nav-text">状态检测防火墙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E5%90%88%E5%9E%8B%E9%98%B2%E7%81%AB%E5%A2%99"><span class="nav-number">1.4.</span> <span class="nav-text">复合型防火墙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E7%B1%BB%E9%98%B2%E7%81%AB%E5%A2%99%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">1.5.</span> <span class="nav-text">四类防火墙的对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%BB%A3%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">什么是代理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="nav-number">2.1.</span> <span class="nav-text">代理的几种常见的功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFVPN"><span class="nav-number">3.</span> <span class="nav-text">什么是VPN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vpn%E5%92%8Css-ssr%E7%9A%84%E5%8C%BA%E5%88%AB%E5%92%8C%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">3.1.</span> <span class="nav-text">vpn和ss&#x2F;ssr的区别和优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BD%91%E5%85%B3"><span class="nav-number">4.</span> <span class="nav-text">什么是网关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -539,9 +539,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -575,7 +583,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

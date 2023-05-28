@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,17 +28,17 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="最近对chatgpt能够进行流式请求返回的协议产生了一点好奇，于是就去了解了一下，一开始我以为是HTTP2，或者是WS协议，后来发现都不是，而是一种叫做SSE（Server-Sent Events）的协议。">
-<meta name="keywords" content="Web 通讯协议 全双工 半双工">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Web即时通信方案梳理">
 <meta property="og:url" content="https://sunra.top/posts/60091/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近对chatgpt能够进行流式请求返回的协议产生了一点好奇，于是就去了解了一下，一开始我以为是HTTP2，或者是WS协议，后来发现都不是，而是一种叫做SSE（Server-Sent Events）的协议。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.338Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-04-08T01:35:32.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.939Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Web即时通信方案梳理">
-<meta name="twitter:description" content="最近对chatgpt能够进行流式请求返回的协议产生了一点好奇，于是就去了解了一下，一开始我以为是HTTP2，或者是WS协议，后来发现都不是，而是一种叫做SSE（Server-Sent Events）的协议。">
 
 <link rel="canonical" href="https://sunra.top/posts/60091/">
 
@@ -239,7 +239,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,7 +263,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       
         <p>最近对chatgpt能够进行流式请求返回的协议产生了一点好奇，于是就去了解了一下，一开始我以为是HTTP2，或者是WS协议，后来发现都不是，而是一种叫做SSE（Server-Sent Events）的协议。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h1 id="即时通讯协议分类"><a href="#即时通讯协议分类" class="headerlink" title="即时通讯协议分类"></a>即时通讯协议分类</h1><h2 id="HTTP与HTTP2"><a href="#HTTP与HTTP2" class="headerlink" title="HTTP与HTTP2"></a>HTTP与HTTP2</h2><p>HTTP协议是我们最常见的前后端即时通讯的协议了，比较常见的是HTTP1，后来为了解决它的一些问题，我们提出了HTTP2，但是本质上没有特别大的变化。</p>
 <p>http1的缺点</p>
 <ul>
@@ -332,7 +332,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 </blockquote>
 <h4 id="WebSocket-2"><a href="#WebSocket-2" class="headerlink" title="WebSocket"></a>WebSocket</h4><p>在上面的这些解决方案中，都是利用浏览器单向请求服务器或者服务器单向推送数据到浏览器这些技术组合在一起而形成的hack技术，在HTML5中，为了加强web的功能，提供了websocket技术，它不仅是一种web通信方式，也是一种应用层协议。它提供了浏览器和服务器之间原生的双全工跨域通信，通过浏览器和服务器之间建立websocket连接（实际上是TCP连接）,在同一时刻能够实现客户端到服务器和服务器到客户端的数据发送。关于该技术的原理，请参见：《WebSocket详解（一）：初步认识WebSocket技术》、《WebSocket详解（二）：技术原理、代码演示和应用案例》、《WebSocket详解（三）：深入WebSocket通信协议细节》，此处就不在赘述了，直接给出代码。在看代码之前，需要先了解websocket整个工作过程。</p>
 <p>首先是客户端new 一个websocket对象，该对象会发送一个http请求到服务端，服务端发现这是个webscoket请求，会同意协议转换，发送回客户端一个101状态码的response，以上过程称之为一次握手，经过这次握手之后，客户端就和服务端建立了一条TCP连接，在该连接上，服务端和客户端就可以进行双向通信了。这时的双向通信在应用层走的就是ws或者wss协议了，和http就没有关系了。所谓的ws协议，就是要求客户端和服务端遵循某种格式发送数据报文（帧），然后对方才能够理解。</p>
-<p>参考文章：<br><a href="http://www.52im.net/thread-336-1-1.html" rel="external nofollow noopener noreferrer" target="_blank">Web端即时通讯技术盘点：短轮询、Comet、Websocket、SSE</a><br><a href="http://www.52im.net/thread-338-1-1.html" rel="external nofollow noopener noreferrer" target="_blank">新手入门贴：史上最全Web端即时通讯技术原理详解</a></p>
+<p>参考文章：<br><a target="_blank" rel="external nofollow noopener noreferrer" href="http://www.52im.net/thread-336-1-1.html">Web端即时通讯技术盘点：短轮询、Comet、Websocket、SSE</a><br><a target="_blank" rel="external nofollow noopener noreferrer" href="http://www.52im.net/thread-338-1-1.html">新手入门贴：史上最全Web端即时通讯技术原理详解</a></p>
 
     </div>
 
@@ -449,7 +449,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#即时通讯协议分类"><span class="nav-number">1.</span> <span class="nav-text">即时通讯协议分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP与HTTP2"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP与HTTP2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebSocket"><span class="nav-number">1.2.</span> <span class="nav-text">WebSocket</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSE"><span class="nav-number">1.3.</span> <span class="nav-text">SSE</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#即时通讯方法概述"><span class="nav-number">2.</span> <span class="nav-text">即时通讯方法概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ajax短轮询：脚本发送http请求"><span class="nav-number">2.1.</span> <span class="nav-text">Ajax短轮询：脚本发送http请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Comet：一种Hack技术（仍然是HTTP协议）"><span class="nav-number">2.2.</span> <span class="nav-text">Comet：一种Hack技术（仍然是HTTP协议）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于Ajax长轮询"><span class="nav-number">2.2.1.</span> <span class="nav-text">基于Ajax长轮询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于Iframe及htmlfile的流"><span class="nav-number">2.2.2.</span> <span class="nav-text">基于Iframe及htmlfile的流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebSocket-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">WebSocket</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSE-1"><span class="nav-number">2.2.4.</span> <span class="nav-text">SSE</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#即时通讯方案简单原理解析"><span class="nav-number">3.</span> <span class="nav-text">即时通讯方案简单原理解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#传统Web的通信原理"><span class="nav-number">3.1.</span> <span class="nav-text">传统Web的通信原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#传统通信模式实现IM应用需要解决的问题"><span class="nav-number">3.2.</span> <span class="nav-text">传统通信模式实现IM应用需要解决的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全双工低延迟解决方案"><span class="nav-number">3.3.</span> <span class="nav-text">全双工低延迟解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端浏览器短轮询"><span class="nav-number">3.3.1.</span> <span class="nav-text">客户端浏览器短轮询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#长轮询"><span class="nav-number">3.3.2.</span> <span class="nav-text">长轮询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于http-stream通信"><span class="nav-number">3.3.3.</span> <span class="nav-text">基于http-stream通信</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于XHR对象的streaming方式"><span class="nav-number">3.3.3.1.</span> <span class="nav-text">基于XHR对象的streaming方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于iframe数据流"><span class="nav-number">3.3.3.2.</span> <span class="nav-text">基于iframe数据流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于htmlfile的数据流通信"><span class="nav-number">3.3.3.3.</span> <span class="nav-text">基于htmlfile的数据流通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SSE-2"><span class="nav-number">3.3.3.4.</span> <span class="nav-text">SSE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WebSocket-2"><span class="nav-number">3.3.3.5.</span> <span class="nav-text">WebSocket</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AF%E5%8D%8F%E8%AE%AE%E5%88%86%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">即时通讯协议分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP%E4%B8%8EHTTP2"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP与HTTP2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebSocket"><span class="nav-number">1.2.</span> <span class="nav-text">WebSocket</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSE"><span class="nav-number">1.3.</span> <span class="nav-text">SSE</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AF%E6%96%B9%E6%B3%95%E6%A6%82%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">即时通讯方法概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ajax%E7%9F%AD%E8%BD%AE%E8%AF%A2%EF%BC%9A%E8%84%9A%E6%9C%AC%E5%8F%91%E9%80%81http%E8%AF%B7%E6%B1%82"><span class="nav-number">2.1.</span> <span class="nav-text">Ajax短轮询：脚本发送http请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Comet%EF%BC%9A%E4%B8%80%E7%A7%8DHack%E6%8A%80%E6%9C%AF%EF%BC%88%E4%BB%8D%E7%84%B6%E6%98%AFHTTP%E5%8D%8F%E8%AE%AE%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">Comet：一种Hack技术（仍然是HTTP协议）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EAjax%E9%95%BF%E8%BD%AE%E8%AF%A2"><span class="nav-number">2.2.1.</span> <span class="nav-text">基于Ajax长轮询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EIframe%E5%8F%8Ahtmlfile%E7%9A%84%E6%B5%81"><span class="nav-number">2.2.2.</span> <span class="nav-text">基于Iframe及htmlfile的流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebSocket-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">WebSocket</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSE-1"><span class="nav-number">2.2.4.</span> <span class="nav-text">SSE</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%B3%E6%97%B6%E9%80%9A%E8%AE%AF%E6%96%B9%E6%A1%88%E7%AE%80%E5%8D%95%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">即时通讯方案简单原理解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9FWeb%E7%9A%84%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86"><span class="nav-number">3.1.</span> <span class="nav-text">传统Web的通信原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%BC%8F%E5%AE%9E%E7%8E%B0IM%E5%BA%94%E7%94%A8%E9%9C%80%E8%A6%81%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">3.2.</span> <span class="nav-text">传统通信模式实现IM应用需要解决的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%8F%8C%E5%B7%A5%E4%BD%8E%E5%BB%B6%E8%BF%9F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">3.3.</span> <span class="nav-text">全双工低延迟解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9F%AD%E8%BD%AE%E8%AF%A2"><span class="nav-number">3.3.1.</span> <span class="nav-text">客户端浏览器短轮询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%BF%E8%BD%AE%E8%AF%A2"><span class="nav-number">3.3.2.</span> <span class="nav-text">长轮询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Ehttp-stream%E9%80%9A%E4%BF%A1"><span class="nav-number">3.3.3.</span> <span class="nav-text">基于http-stream通信</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EXHR%E5%AF%B9%E8%B1%A1%E7%9A%84streaming%E6%96%B9%E5%BC%8F"><span class="nav-number">3.3.3.1.</span> <span class="nav-text">基于XHR对象的streaming方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Eiframe%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="nav-number">3.3.3.2.</span> <span class="nav-text">基于iframe数据流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Ehtmlfile%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E9%80%9A%E4%BF%A1"><span class="nav-number">3.3.3.3.</span> <span class="nav-text">基于htmlfile的数据流通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SSE-2"><span class="nav-number">3.3.3.4.</span> <span class="nav-text">SSE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WebSocket-2"><span class="nav-number">3.3.3.5.</span> <span class="nav-text">WebSocket</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -539,9 +539,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -575,7 +583,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

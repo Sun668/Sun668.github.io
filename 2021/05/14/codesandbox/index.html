@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,14 +20,20 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="目前，跑在浏览器端的web IDE产品越来越多，按照他们的功能特性来做划分的话，目前的web IDE可以分为两种，一种是将本地IDE的功能基本原封不动的迁移到了web端的IDE，像是目前最流行的前端IDE VS Code，借助于云+容器化的能力，在浏览器端VS Code拥有着跟本地IDE几乎完全一样的功能；还有一种web IDE则更多的聚焦于 页面开发与实时的代码解析、编译、预览的呈现，代码打包构">
-<meta name="keywords" content="codesandbox">
 <meta property="og:type" content="article">
 <meta property="og:title" content="codesandbox是如何在浏览器中运行npm模块">
 <meta property="og:url" content="https://sunra.top/2021/05/14/codesandbox/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="目前，跑在浏览器端的web IDE产品越来越多，按照他们的功能特性来做划分的话，目前的web IDE可以分为两种，一种是将本地IDE的功能基本原封不动的迁移到了web端的IDE，像是目前最流行的前端IDE VS Code，借助于云+容器化的能力，在浏览器端VS Code拥有着跟本地IDE几乎完全一样的功能；还有一种web IDE则更多的聚焦于 页面开发与实时的代码解析、编译、预览的呈现，代码打包构">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1621126841/origin-of-ray/1574822062018-7c62e623-e99b-43c1-80a4-a0eba2c3dfdb_ikivwp.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1621468814/origin-of-ray/packager1_qabrps.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1621128800/origin-of-ray/codesandbox-arch_b64xm7.png">
@@ -35,10 +41,11 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1621469683/origin-of-ray/editor-vs-compiler_m9eo6p.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1621469733/origin-of-ray/compiler_cgbsyb.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1621470036/origin-of-ray/evaluation_gseiqz.png">
-<meta property="og:updated_time" content="2023-05-26T22:57:23.956Z">
+<meta property="article:published_time" content="2021-05-14T00:01:33.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.923Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="codesandbox是如何在浏览器中运行npm模块">
-<meta name="twitter:description" content="目前，跑在浏览器端的web IDE产品越来越多，按照他们的功能特性来做划分的话，目前的web IDE可以分为两种，一种是将本地IDE的功能基本原封不动的迁移到了web端的IDE，像是目前最流行的前端IDE VS Code，借助于云+容器化的能力，在浏览器端VS Code拥有着跟本地IDE几乎完全一样的功能；还有一种web IDE则更多的聚焦于 页面开发与实时的代码解析、编译、预览的呈现，代码打包构">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1621126841/origin-of-ray/1574822062018-7c62e623-e99b-43c1-80a4-a0eba2c3dfdb_ikivwp.png">
 
 <link rel="canonical" href="https://sunra.top/2021/05/14/codesandbox/">
@@ -56,6 +63,15 @@
 
   <title>codesandbox是如何在浏览器中运行npm模块 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -231,7 +247,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:23" itemprop="dateModified" datetime="2023-05-27T06:57:23+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -257,8 +273,8 @@
         <p>目前，跑在浏览器端的web IDE产品越来越多，按照他们的功能特性来做划分的话，目前的web IDE可以分为两种，一种是将本地IDE的功能基本原封不动的迁移到了web端的IDE，像是目前最流行的前端IDE VS Code，借助于云+容器化的能力，在浏览器端VS Code拥有着跟本地IDE几乎完全一样的功能；还有一种web IDE则更多的聚焦于 <code>页面开发与实时的代码解析、编译、预览</code>的呈现，代码打包构建的实现则并不局限于在服务端（如基于Docker容器等）实现，部分的产品实现了 <code>基于浏览器端的代码编译、打包、构建、运行</code>的功能，而这一切在我们原来的开发体系里是只有基于 <code>本地IDE+Node本地构建、本地服务+浏览器访问预览</code>才有的能力。此类产品的代表是CodeSandbox，codepen，StackBlitz，JSFiddle等。</p>
 <p>也就是说前者只是将代码的编辑放在了web段，其实背后借助了云去做代码的存储，项目的编译打包运行等，这种方式下，我们最后得到的和本地开发并无区别，对我们的区别只是不用特地下个编辑器了。</p>
 <p>后者则是将一部分的编译打包功能以及最终的运行放在了浏览器，且由于浏览器的限制，其所能支持的应用大小是有限制的（PS：最近遇到一个问题，看错误应该是代码大小超过了500K，留个坑，留待以后解决，嘿嘿）</p>
-<a id="more"></a>
-<p>能将 <code>类似基于本地webpack打包构建</code>的能力迁移到浏览器端看起来是一件非常不可思议的事情，上面也已经讲到，实现方式往往有两种方式，一种是基于服务端的webpack的打包构建，构建完后将构建出的代码再转交给浏览器端解析执行，相关实践如：<a href="https://juejin.im/entry/5a372e6a6fb9a0450f220711" rel="external nofollow noopener noreferrer" target="_blank">基于webpack打造前端在线编译器</a>，还有一种实现则是由服务端提供依赖包的代码（从npm安装拉取）返回给客户端，打包构建则完全是在浏览器端实现，实现了浏览器端的’webpack’，比如CodeSandbox就是这种模式的实现。今天我们就来一起看下CodeSandbox的作者这篇文章的介绍，这一切究竟是如何实现的。</p>
+<span id="more"></span>
+<p>能将 <code>类似基于本地webpack打包构建</code>的能力迁移到浏览器端看起来是一件非常不可思议的事情，上面也已经讲到，实现方式往往有两种方式，一种是基于服务端的webpack的打包构建，构建完后将构建出的代码再转交给浏览器端解析执行，相关实践如：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://juejin.im/entry/5a372e6a6fb9a0450f220711">基于webpack打造前端在线编译器</a>，还有一种实现则是由服务端提供依赖包的代码（从npm安装拉取）返回给客户端，打包构建则完全是在浏览器端实现，实现了浏览器端的’webpack’，比如CodeSandbox就是这种模式的实现。今天我们就来一起看下CodeSandbox的作者这篇文章的介绍，这一切究竟是如何实现的。</p>
 <blockquote>
 <p>这里注意，codesandbox的实现经历了多次迭代，但改变的只是服务端如何提供依赖，从服务端加载依赖以后返回给客户端使用这一点是没有变的。</p>
 </blockquote>
@@ -281,25 +297,25 @@
 <h2 id="webpack版本"><a href="#webpack版本" class="headerlink" title="webpack版本"></a>webpack版本</h2><p>第一个版本作者认为完整支持npm是不可能的，直到有人真正实现了。</p>
 <p>所以作者就在考虑如何也实现一般出来，他一开始设计了一个算法，不过这个算法比较复杂，最终也没有实际使用，就不赘述了，感兴趣的可以去看文末的参考链接。</p>
 <p>紧接着，作者参考了webpack的DLLPlugin插件的实现方式。</p>
-<p>简单来说，DllPlugin做的事情就是把一个项目打包成一个dll依赖，将项目中的依赖关系包装在dll中，然后对外暴露接口。这是官方文档地址：<a href="https://webpack.docschina.org/plugins/dll-plugin/#root" rel="external nofollow noopener noreferrer" target="_blank">DllPlugin文档</a></p>
-<p>webpack的<a href="https://webpack.js.org/plugins/dll-plugin/" rel="external nofollow noopener noreferrer" target="_blank">DLLPlugin</a>可以打包依赖项，并且使用一个manifest清单来标记打出的js包包含哪些依赖项。这份清单看起来是这样的：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"dll_bundle"</span>,</span><br><span class="line">  <span class="attr">"content"</span>: &#123;</span><br><span class="line">    <span class="attr">"./node_modules/fbjs/lib/emptyFunction.js"</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"./node_modules/fbjs/lib/invariant.js"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">"./node_modules/fbjs/lib/warning.js"</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="attr">"./node_modules/react"</span>: <span class="number">3</span>,</span><br><span class="line">    <span class="attr">"./node_modules/fbjs/lib/emptyObject.js"</span>: <span class="number">4</span>,</span><br><span class="line">    <span class="attr">"./node_modules/object-assign/index.js"</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="attr">"./node_modules/prop-types/checkPropTypes.js"</span>: <span class="number">6</span>,</span><br><span class="line">    <span class="attr">"./node_modules/prop-types/lib/ReactPropTypesSecret.js"</span>: <span class="number">7</span>,</span><br><span class="line">    <span class="attr">"./node_modules/react/cjs/react.development.js"</span>: <span class="number">8</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单来说，DllPlugin做的事情就是把一个项目打包成一个dll依赖，将项目中的依赖关系包装在dll中，然后对外暴露接口。这是官方文档地址：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://webpack.docschina.org/plugins/dll-plugin/#root">DllPlugin文档</a></p>
+<p>webpack的<a target="_blank" rel="external nofollow noopener noreferrer" href="https://webpack.js.org/plugins/dll-plugin/">DLLPlugin</a>可以打包依赖项，并且使用一个manifest清单来标记打出的js包包含哪些依赖项。这份清单看起来是这样的：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;dll_bundle&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;./node_modules/fbjs/lib/emptyFunction.js&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;./node_modules/fbjs/lib/invariant.js&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;./node_modules/fbjs/lib/warning.js&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;./node_modules/react&quot;</span><span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;./node_modules/fbjs/lib/emptyObject.js&quot;</span><span class="punctuation">:</span> <span class="number">4</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;./node_modules/object-assign/index.js&quot;</span><span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;./node_modules/prop-types/checkPropTypes.js&quot;</span><span class="punctuation">:</span> <span class="number">6</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;./node_modules/prop-types/lib/ReactPropTypesSecret.js&quot;</span><span class="punctuation">:</span> <span class="number">7</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;./node_modules/react/cjs/react.development.js&quot;</span><span class="punctuation">:</span> <span class="number">8</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 <p>每一个路径都映射一个模块id。如果我想引入 <code>React</code>，我只需要调用 <code>dll_bundle(3)</code>，然后我就得到了React！这对需求来说简直就是完美，</p>
 <p>于是作者开始行动，基于Webpack DllPlugin的思想，思考出了一个下面的系统：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1621126841/origin-of-ray/1574822062018-7c62e623-e99b-43c1-80a4-a0eba2c3dfdb_ikivwp.png" alt></p>
-<p>对于打包的每一个请求，我将在 <code>tmp/:hash</code>下面创建一个新的目录，接着运行 <code>yarn add ${dependencyList}</code>，然后让 <code>webpack</code>做打包处理即可。同时作为一种缓存方案，我会将打出的新包保存至gcloud。这看起来比上面的方案图要简单的多，更多的是因为我使用yarn来安装依赖模块并使用 <code>webpack</code>做打包来作为前一个实现版本中的替代方案。</p>
+<p>对于打包的每一个请求，我将在 <code>tmp/:hash</code>下面创建一个新的目录，接着运行 <code>yarn add $&#123;dependencyList&#125;</code>，然后让 <code>webpack</code>做打包处理即可。同时作为一种缓存方案，我会将打出的新包保存至gcloud。这看起来比上面的方案图要简单的多，更多的是因为我使用yarn来安装依赖模块并使用 <code>webpack</code>做打包来作为前一个实现版本中的替代方案。</p>
 <blockquote>
 <p>这里可能有些难以理解，我来说一下我的看法，在上一版本，也就是第一个版本，codesandbox是需要事先把依赖下载到本地，然后在真正运行到require的时候，才会去递归分析依赖，然后将require给stub到本地的已经下载好的依赖中</p>
 <p>而这个版本，借助webpack DllPlugin的思想，codesandbox是先分析依赖关系，然后为这个依赖关系创建一个hash值，去缓存中查看是否有相同的hash，如果有的话，直接返回打包好的Dll，如果没有，再根据依赖关系去npm源下载所有的依赖，暂存在<code>tmp/:hash</code>下面，下载完后，然后将所有的依赖打包成一个Dll，缓存并返回给使用者，然后清除刚刚创建的<code>tmp/hash</code>文件夹。</p>
 </blockquote>
 <p>但是，这套系统仍然有一个非常大的限制，它不支持引入 <code>不在webpack依赖关系图</code>中的文件。这就意味着像是下面的这个例子：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">'react-icons/lib/fa/fa-beer'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;react-icons/lib/fa/fa-beer&#x27;</span>)</span><br></pre></td></tr></table></figure>
 <p>将不能正常运行，因为从依赖项的入口开始自始至终都不需要它，也就不会被打包进去。（webpack的打包是基于package.json里的依赖模块以及各个依赖模块的依赖项去做打包的，不被包含在这个体系里的文件则不会被打包进去）</p>
 <h2 id="带入口的webpack"><a href="#带入口的webpack" class="headerlink" title="带入口的webpack"></a>带入口的webpack</h2><p>为了解决刚才说的那个限制，也就是说不在webpack依赖关系中的文件无法打包进入最后的dll。</p>
 <p>手动的增加了入口配置，以确保 <code>webpack</code>也可以将这些文件能够打包进去。在对这个方案做了非常多的调整之后，这个系统已经可以支持任意（？译者注：作者这里加了问号，表示并不太确定支持任意）组合的打包需求。因此你也可以去加载 react-icons，css文件也是可以的。</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1621468814/origin-of-ray/packager1_qabrps.png" alt></p>
 <h2 id="接入Serverless"><a href="#接入Serverless" class="headerlink" title="接入Serverless"></a>接入Serverless</h2><h3 id="什么是serverless"><a href="#什么是serverless" class="headerlink" title="什么是serverless"></a>什么是serverless</h3><p>基于serverless，你可以定义一个函数，该函数会在服务器被请求的时候触发执行：该函数会首先被启动，然后处理请求，并在一段时间后杀掉并释放自己。这也就意味着你会有非常高的可伸缩性：如果你的服务器同时有1000个请求过来，你可以立即启动1000个服务。这也意味着你仅仅需要按照实际运行时间付费即可。</p>
-<h3 id="如何结合serverless"><a href="#如何结合serverless" class="headerlink" title="如何结合serverless"></a>如何结合serverless</h3><p>对于我们的服务来说，serverless听起来简直就是完美：服务不是一直都在运行的，而且如果同时有多个请求，我们需要高并发性。于是我开始非常急切的使用一个叫做<a href="https://serverless.com/" rel="external nofollow noopener noreferrer" target="_blank">Serverless</a>的框架。</p>
+<h3 id="如何结合serverless"><a href="#如何结合serverless" class="headerlink" title="如何结合serverless"></a>如何结合serverless</h3><p>对于我们的服务来说，serverless听起来简直就是完美：服务不是一直都在运行的，而且如果同时有多个请求，我们需要高并发性。于是我开始非常急切的使用一个叫做<a target="_blank" rel="external nofollow noopener noreferrer" href="https://serverless.com/">Serverless</a>的框架。</p>
 <p>得益于Serverless，我们的服务迁移非常顺畅，我在两天内就有了一个可以工作的版本。我创建了三个serverless函数：</p>
 <ul>
 <li>1、一个源数据解析器：此服务用于解析版本和peerDependencies，并请求打包函数；</li>
@@ -307,7 +323,7 @@
 <li>3、一个丑化器（压缩&amp;混淆）：负责异步丑化打包生成的包。</li>
 </ul>
 <p>几天后我还是发现了一个限制：一个lambda函数最大只能拥有500M的磁盘空间，这就意味着一些组合的依赖项无法进行安装（译者注：后端在做打包构建的时候需要将所有的依赖项的代码加载到内存中来进行）。这真的是一个毁灭性的限制，我不得不将服务切回原来的实现。</p>
-<p>几个月过去后，我发布了一个新的CodeSandbox的构建器（<a href="https://hackernoon.com/how-i-created-a-parallel-offline-extensible-browser-based-bundler-886db508cc31" rel="external nofollow noopener noreferrer" target="_blank">I released a new bundler for CodeSandbox</a>）。这个构建器非常强大，可以很容易的让我们来支持更多的像是Preact或者Vue的框架。通过支持这些框架，我们的服务收到了一些非常有意思的请求。比如：如果你想在Preact中使用React，你需要将 <code>require(&#39;react&#39;)</code>重命名为： <code>require(&#39;preact-compat&#39;)</code>。对Vue来说，你可能会引入 <code>@/components/App.vue</code>作为你沙箱里的文件。我们服务端的打包器（packager）不会处理这类的事情，但是我们浏览器端的构建器（bundler）会。</p>
+<p>几个月过去后，我发布了一个新的CodeSandbox的构建器（<a target="_blank" rel="external nofollow noopener noreferrer" href="https://hackernoon.com/how-i-created-a-parallel-offline-extensible-browser-based-bundler-886db508cc31">I released a new bundler for CodeSandbox</a>）。这个构建器非常强大，可以很容易的让我们来支持更多的像是Preact或者Vue的框架。通过支持这些框架，我们的服务收到了一些非常有意思的请求。比如：如果你想在Preact中使用React，你需要将 <code>require(&#39;react&#39;)</code>重命名为： <code>require(&#39;preact-compat&#39;)</code>。对Vue来说，你可能会引入 <code>@/components/App.vue</code>作为你沙箱里的文件。我们服务端的打包器（packager）不会处理这类的事情，但是我们浏览器端的构建器（bundler）会。</p>
 <p>就在那时，<strong>我开始想我们也许可以让浏览器端构建器做实际的打包</strong>。如果服务端只是将相关文件发送到浏览器（而不做服务端打包构建的事情），然后我们用浏览器端构建器对依赖模块进行实际的打包，这样处理应该会更快，因为我们没有处理整个的大包，只是部分包。</p>
 <p>服务端基于webpack DLLPLugin的打包构建会从依赖入口开始递归遍历所有依赖然后进行打包构建，而浏览器的打包构建只是 <code>按需</code>打包构建。所以会更快的原因有二，一是浏览器端打包构建就不需要服务端再做打包构建了，服务端只是纯粹的依赖项的递归获取，然后发送给浏览器端，这样就节省了服务端打包构建的时间，也节省了服务器开销；二是浏览器端的打包构建是按需构建而非全量构建。</p>
 <p>这个方案有一个非常大的优势：<strong>我们可以实现对依赖项单独的安装及缓存</strong>（还记得webpack版本那里所讲吗，从那个版本开始，我们缓存的不是一个个的依赖，而是一个个依赖关系组合中所有的依赖），然后我们在端上实现对依赖项的合并（merge）就好了。这就意味着，如果在现有所有依赖项的基础上再请求一个新的依赖项，则只需要为新的依赖项收集文件即可！这将很好地解决AWS Lambda500M内存限制的局限，因为我们在服务端只是会安装一个依赖模块而已。我们也可以在打包器中舍弃 <code>webpack</code>，因为现在打包器只全权负责找出被依赖的相关的那些文件并把它们发送给浏览器端。</p>
@@ -320,7 +336,7 @@
 <li><strong>Sandbox</strong>: 代码运行器。<strong>Sandbox 在一个单独的 iframe 中运行, 负责代码的转译(Transpiler)和运行(Evalation)</strong>. 如最上面的图，左边是Editor，右边是Sandbox</li>
 <li><strong>Packager</strong> 包管理器。类似于yarn和npm，负责拉取和缓存 npm 依赖</li>
 </ul>
-<p>CodeSandbox 的作者 <a href="https://twitter.com/CompuIves" rel="external nofollow noopener noreferrer" target="_blank">Ives van Hoorne</a> 也尝试过将 <code>Webpack</code> 移植到浏览器上运行，因为现在几乎所有的 CLI 都是使用 Webpack 进行构建的，如果能将 Webpack 移植到浏览器上, 可以利用 Webpack 强大的生态系统和转译机制(loader/plugin)，低成本兼容各种 CLI.</p>
+<p>CodeSandbox 的作者 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://twitter.com/CompuIves">Ives van Hoorne</a> 也尝试过将 <code>Webpack</code> 移植到浏览器上运行，因为现在几乎所有的 CLI 都是使用 Webpack 进行构建的，如果能将 Webpack 移植到浏览器上, 可以利用 Webpack 强大的生态系统和转译机制(loader/plugin)，低成本兼容各种 CLI.</p>
 <p>然而 Webpack 太重了😱，压缩过后的大小就得 3.5MB，这还算勉强可以接受吧；更大的问题是要在浏览器端模拟 Node 运行环境，这个成本太高了，得不偿失。</p>
 <p>所以 CodeSandbox 决定自己造个打包器，这个打包器更轻量，并且针对 CodeSandbox 平台进行优化. 比如 CodeSandbox 只关心开发环境的代码构建, 目标就是能跑起来就行了, 跟 Webpack 相比裁剪掉了以下特性:</p>
 <ul>
@@ -337,7 +353,7 @@
 <li>插件机制等等.</li>
 </ul>
 <p>所以可以认为<strong>CodeSandbox是一个简化版的Webpack, 且针对浏览器环境进行了优化，比如使用worker来进行并行转译</strong></p>
-<h3 id="项目构建过程"><a href="#项目构建过程" class="headerlink" title="项目构建过程"></a>项目构建过程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">packager -&gt; transpilation -&gt; evaluation</span><br></pre></td></tr></table></figure>
+<h3 id="项目构建过程"><a href="#项目构建过程" class="headerlink" title="项目构建过程"></a>项目构建过程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">packager -&gt; transpilation -&gt; evaluation</span><br></pre></td></tr></table></figure>
 <p>Sandbox 构建分为三个阶段:</p>
 <ul>
 <li><strong>Packager</strong> 包加载阶段，下载和处理所有npm模块依赖</li>
@@ -367,9 +383,9 @@
 <p><code>Transpilation</code>从<code>入口文件</code>开始转译, 再分析文件的模块导入规则，递归转译依赖的模块. 到<code>Evaluation</code>阶段，CodeSandbox 已经构建出了一个完整的<strong>依赖图</strong>. 现在要把应用跑起来了</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1621470036/origin-of-ray/evaluation_gseiqz.png" alt></p>
 <p>参考链接：</p>
-<p><a href="https://www.yuque.com/wangxiangzhong/aob8up/uf99c5?language=en-us" rel="external nofollow noopener noreferrer" target="_blank">https://www.yuque.com/wangxiangzhong/aob8up/uf99c5?language=en-us</a></p>
-<p><a href="https://hackernoon.com/how-we-make-npm-packages-work-in-the-browser-announcing-the-new-packager-6ce16aa4cee6" rel="external nofollow noopener noreferrer" target="_blank">codesandbox作者解读</a></p>
-<p><a href="https://segmentfault.com/a/1190000019679430" rel="external nofollow noopener noreferrer" target="_blank">https://segmentfault.com/a/1190000019679430</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.yuque.com/wangxiangzhong/aob8up/uf99c5?language=en-us">https://www.yuque.com/wangxiangzhong/aob8up/uf99c5?language=en-us</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://hackernoon.com/how-we-make-npm-packages-work-in-the-browser-announcing-the-new-packager-6ce16aa4cee6">codesandbox作者解读</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://segmentfault.com/a/1190000019679430">https://segmentfault.com/a/1190000019679430</a></p>
 
     </div>
 
@@ -486,7 +502,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#内容梳理"><span class="nav-number">1.</span> <span class="nav-text">内容梳理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一个版本"><span class="nav-number">2.</span> <span class="nav-text">第一个版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webpack版本"><span class="nav-number">3.</span> <span class="nav-text">webpack版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#带入口的webpack"><span class="nav-number">4.</span> <span class="nav-text">带入口的webpack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接入Serverless"><span class="nav-number">5.</span> <span class="nav-text">接入Serverless</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是serverless"><span class="nav-number">5.1.</span> <span class="nav-text">什么是serverless</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何结合serverless"><span class="nav-number">5.2.</span> <span class="nav-text">如何结合serverless</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加入浏览器缓存"><span class="nav-number">6.</span> <span class="nav-text">加入浏览器缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最终版本"><span class="nav-number">7.</span> <span class="nav-text">最终版本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目构建过程"><span class="nav-number">7.1.</span> <span class="nav-text">项目构建过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Packer"><span class="nav-number">7.1.1.</span> <span class="nav-text">Packer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transpilation"><span class="nav-number">7.1.2.</span> <span class="nav-text">Transpilation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Evaluation"><span class="nav-number">7.1.3.</span> <span class="nav-text">Evaluation</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AE%B9%E6%A2%B3%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">内容梳理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%89%88%E6%9C%AC"><span class="nav-number">2.</span> <span class="nav-text">第一个版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webpack%E7%89%88%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text">webpack版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A6%E5%85%A5%E5%8F%A3%E7%9A%84webpack"><span class="nav-number">4.</span> <span class="nav-text">带入口的webpack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%85%A5Serverless"><span class="nav-number">5.</span> <span class="nav-text">接入Serverless</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFserverless"><span class="nav-number">5.1.</span> <span class="nav-text">什么是serverless</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%BB%93%E5%90%88serverless"><span class="nav-number">5.2.</span> <span class="nav-text">如何结合serverless</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98"><span class="nav-number">6.</span> <span class="nav-text">加入浏览器缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E7%89%88%E6%9C%AC"><span class="nav-number">7.</span> <span class="nav-text">最终版本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA%E8%BF%87%E7%A8%8B"><span class="nav-number">7.1.</span> <span class="nav-text">项目构建过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Packer"><span class="nav-number">7.1.1.</span> <span class="nav-text">Packer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transpilation"><span class="nav-number">7.1.2.</span> <span class="nav-text">Transpilation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Evaluation"><span class="nav-number">7.1.3.</span> <span class="nav-text">Evaluation</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -576,9 +592,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -612,7 +636,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

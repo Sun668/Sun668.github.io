@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,17 +28,17 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="最近要使用到Docker，就在晚上找了几篇入门级别的博客，边总结，边实践。">
-<meta name="keywords" content="Dokcer 命令 概念">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Docker 入门笔记">
 <meta property="og:url" content="https://sunra.top/posts/6b3a9e14/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近要使用到Docker，就在晚上找了几篇入门级别的博客，边总结，边实践。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.322Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-05-29T22:26:32.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.927Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Docker 入门笔记">
-<meta name="twitter:description" content="最近要使用到Docker，就在晚上找了几篇入门级别的博客，边总结，边实践。">
 
 <link rel="canonical" href="https://sunra.top/posts/6b3a9e14/">
 
@@ -239,7 +239,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -262,7 +262,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>最近要使用到Docker，就在晚上找了几篇入门级别的博客，边总结，边实践。<br><a id="more"></a></p>
+        <p>最近要使用到Docker，就在晚上找了几篇入门级别的博客，边总结，边实践。<br><span id="more"></span></p>
 <h2 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h2><h3 id="环境配置的难题"><a href="#环境配置的难题" class="headerlink" title="环境配置的难题"></a>环境配置的难题</h3><p>软件开发最大的麻烦事之一，就是环境配置。用户计算机的环境都不相同，你怎么知道自家的软件，能在那些机器跑起来？</p>
 <p>用户必须保证两件事：操作系统的设置，各种库和组件的安装。只有它们都正确，软件才能运行。举例来说，安装一个 Python 应用，计算机必须有 Python 引擎，还必须有各种依赖，可能还要配置环境变量。</p>
 <p>如果某些老旧的模块与当前环境不兼容，那就麻烦了。开发者常常会说：”它在我的机器可以跑了”（It works on my machine），言下之意就是，其他机器很可能跑不了。</p>
@@ -276,7 +276,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p><strong>（3）启动慢</strong></p>
 <p>启动操作系统需要多久，启动虚拟机就需要多久。可能要等几分钟，应用程序才能真正运行。</p>
 <h3 id="Linux-容器"><a href="#Linux-容器" class="headerlink" title="Linux 容器"></a>Linux 容器</h3><p>由于虚拟机存在这些缺点，Linux 发展出了另一种虚拟化技术：Linux 容器（Linux Containers，缩写为 LXC）。</p>
-<p><strong>Linux 容器不是模拟一个完整的操作系统，而是对进程进行隔离。</strong>或者说，在正常进程的外面套了一个<a href="https://opensource.com/article/18/1/history-low-level-container-runtimes" rel="external nofollow noopener noreferrer" target="_blank">保护层</a>。对于容器里面的进程来说，它接触到的各种资源都是虚拟的，从而实现与底层系统的隔离。</p>
+<p><strong>Linux 容器不是模拟一个完整的操作系统，而是对进程进行隔离。</strong>或者说，在正常进程的外面套了一个<a target="_blank" rel="external nofollow noopener noreferrer" href="https://opensource.com/article/18/1/history-low-level-container-runtimes">保护层</a>。对于容器里面的进程来说，它接触到的各种资源都是虚拟的，从而实现与底层系统的隔离。</p>
 <p>由于容器是进程级别的，相比虚拟机有很多优势。</p>
 <p><strong>（1）启动快</strong></p>
 <p>容器里面的应用，直接就是底层系统的一个进程，而不是虚拟机内部的进程。所以，启动容器相当于启动本机的一个进程，而不是启动一个操作系统，速度就快很多。</p>
@@ -295,83 +295,83 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <h3 id="image-文件"><a href="#image-文件" class="headerlink" title="image 文件"></a>image 文件</h3><p><strong>Docker 把应用程序及其依赖，打包在 image 文件里面。</strong>只有通过这个文件，才能生成 Docker 容器。image 文件可以看作是容器的模板。Docker 根据 image 文件生成容器的实例。同一个 image 文件，可以生成多个同时运行的容器实例。</p>
 <p>image 是二进制文件。实际开发中，一个 image 文件往往通过继承另一个 image 文件，加上一些个性化设置而生成。举例来说，你可以在 Ubuntu 的 image 基础上，往里面加入 Apache 服务器，形成你的 image。</p>
 <blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment"># 列出本机的所有 image 文件。</span></span><br><span class="line">&gt; $ docker image ls</span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment"># 删除 image 文件</span></span><br><span class="line">&gt; $ docker image rm [imageName]</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出本机的所有 image 文件。</span></span><br><span class="line">$ docker image <span class="built_in">ls</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除 image 文件</span></span><br><span class="line">$ docker image <span class="built_in">rm</span> [imageName]</span><br></pre></td></tr></table></figure>
 </blockquote>
 <p>image 文件是通用的，一台机器的 image 文件拷贝到另一台机器，照样可以使用。一般来说，为了节省时间，我们应该尽量使用别人制作好的 image 文件，而不是自己制作。即使要定制，也应该基于别人的 image 文件进行加工，而不是从零开始制作。</p>
-<p>为了方便共享，image 文件制作完成后，可以上传到网上的仓库。Docker 的官方仓库 <a href="https://hub.docker.com/" rel="external nofollow noopener noreferrer" target="_blank">Docker Hub</a> 是最重要、最常用的 image 仓库。此外，出售自己制作的 image 文件也是可以的。</p>
-<h3 id="实例：hello-world"><a href="#实例：hello-world" class="headerlink" title="实例：hello world"></a>实例：hello world</h3><p>下面，我们通过最简单的 image 文件”<a href="https://hub.docker.com/r/library/hello-world/" rel="external nofollow noopener noreferrer" target="_blank">hello world”</a>，感受一下 Docker。</p>
-<p>需要说明的是，国内连接 Docker 的官方仓库很慢，还会断线，需要将默认仓库改成国内的镜像网站，具体的修改方法在<a href="http://www.ruanyifeng.com/blog/2018/02/docker-wordpress-tutorial.html" rel="external nofollow noopener noreferrer" target="_blank">下一篇文章</a>的第一节。有需要的朋友，可以先看一下。</p>
+<p>为了方便共享，image 文件制作完成后，可以上传到网上的仓库。Docker 的官方仓库 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://hub.docker.com/">Docker Hub</a> 是最重要、最常用的 image 仓库。此外，出售自己制作的 image 文件也是可以的。</p>
+<h3 id="实例：hello-world"><a href="#实例：hello-world" class="headerlink" title="实例：hello world"></a>实例：hello world</h3><p>下面，我们通过最简单的 image 文件”<a target="_blank" rel="external nofollow noopener noreferrer" href="https://hub.docker.com/r/library/hello-world/">hello world”</a>，感受一下 Docker。</p>
+<p>需要说明的是，国内连接 Docker 的官方仓库很慢，还会断线，需要将默认仓库改成国内的镜像网站，具体的修改方法在<a target="_blank" rel="external nofollow noopener noreferrer" href="http://www.ruanyifeng.com/blog/2018/02/docker-wordpress-tutorial.html">下一篇文章</a>的第一节。有需要的朋友，可以先看一下。</p>
 <p>首先，运行下面的命令，将 image 文件从仓库抓取到本地。</p>
 <blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; $ docker image pull library/hello-world</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker image pull library/hello-world</span><br></pre></td></tr></table></figure>
 </blockquote>
 <p>上面代码中，<code>docker image pull</code>是抓取 image 文件的命令。<code>library/hello-world</code>是 image 文件在仓库里面的位置，其中<code>library</code>是 image 文件所在的组，<code>hello-world</code>是 image 文件的名字。</p>
-<p>由于 Docker 官方提供的 image 文件，都放在<a href="https://hub.docker.com/r/library/" rel="external nofollow noopener noreferrer" target="_blank"><code>library</code></a>组里面，所以它的是默认组，可以省略。因此，上面的命令可以写成下面这样。</p>
+<p>由于 Docker 官方提供的 image 文件，都放在<a target="_blank" rel="external nofollow noopener noreferrer" href="https://hub.docker.com/r/library/"><code>library</code></a>组里面，所以它的是默认组，可以省略。因此，上面的命令可以写成下面这样。</p>
 <blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; $ docker image pull hello-world</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker image pull hello-world</span><br></pre></td></tr></table></figure>
 </blockquote>
 <p>抓取成功以后，就可以在本机看到这个 image 文件了。</p>
 <blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; $ docker image ls</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker image <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
 </blockquote>
 <p>现在，运行这个 image 文件。</p>
 <blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; $ docker container run hello-world</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker container run hello-world</span><br></pre></td></tr></table></figure>
 </blockquote>
 <p><code>docker container run</code>命令会从 image 文件，生成一个正在运行的容器实例。</p>
 <p>注意，<code>docker container run</code>命令具有自动抓取 image 文件的功能。如果发现本地没有指定的 image 文件，就会从仓库自动抓取。因此，前面的<code>docker image pull</code>命令并不是必需的步骤。</p>
 <p>如果运行成功，你会在屏幕上读到下面的输出。</p>
 <blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; $ docker container run hello-world</span><br><span class="line">&gt; </span><br><span class="line">&gt; Hello from Docker!</span><br><span class="line">&gt; This message shows that your installation appears to be working correctly.</span><br><span class="line">&gt; </span><br><span class="line">&gt; ... ...</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ docker container run hello-world</span><br><span class="line"></span><br><span class="line">Hello from Docker!</span><br><span class="line">This message shows that your installation appears to be working correctly.</span><br><span class="line"></span><br><span class="line">... ...</span><br></pre></td></tr></table></figure>
 </blockquote>
 <p>输出这段提示以后，<code>hello world</code>就会停止运行，容器自动终止。</p>
 <p>有些容器不会自动终止，因为提供的是服务。比如，安装运行 Ubuntu 的 image，就可以在命令行体验 Ubuntu 系统。</p>
 <blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; $ docker container run -it ubuntu bash</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker container run -it ubuntu bash</span><br></pre></td></tr></table></figure>
 </blockquote>
-<p>对于那些不会自动终止的容器，必须使用<a href="https://docs.docker.com/engine/reference/commandline/container_kill/" rel="external nofollow noopener noreferrer" target="_blank"><code>docker container kill</code></a> 命令手动终止。</p>
+<p>对于那些不会自动终止的容器，必须使用<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.docker.com/engine/reference/commandline/container_kill/"><code>docker container kill</code></a> 命令手动终止。</p>
 <blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; $ docker container <span class="built_in">kill</span> [containID]</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker container <span class="built_in">kill</span> [containID]</span><br></pre></td></tr></table></figure>
 </blockquote>
 <h3 id="容器文件"><a href="#容器文件" class="headerlink" title="容器文件"></a>容器文件</h3><p><strong>image 文件生成的容器实例，本身也是一个文件，称为容器文件。</strong>也就是说，一旦容器生成，就会同时存在两个文件： image 文件和容器文件。而且关闭容器并不会删除容器文件，只是容器停止运行而已。</p>
 <blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment"># 列出本机正在运行的容器</span></span><br><span class="line">&gt; $ docker container ls</span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment"># 列出本机所有容器，包括终止运行的容器</span></span><br><span class="line">&gt; $ docker container ls --all</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出本机正在运行的容器</span></span><br><span class="line">$ docker container <span class="built_in">ls</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出本机所有容器，包括终止运行的容器</span></span><br><span class="line">$ docker container <span class="built_in">ls</span> --all</span><br></pre></td></tr></table></figure>
 </blockquote>
 <p>上面命令的输出结果之中，包括容器的 ID。很多地方都需要提供这个 ID，比如上一节终止容器运行的<code>docker container kill</code>命令。</p>
-<p>终止运行的容器文件，依然会占据硬盘空间，可以使用<a href="https://docs.docker.com/engine/reference/commandline/container_rm/" rel="external nofollow noopener noreferrer" target="_blank"><code>docker container rm</code></a>命令删除。</p>
+<p>终止运行的容器文件，依然会占据硬盘空间，可以使用<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.docker.com/engine/reference/commandline/container_rm/"><code>docker container rm</code></a>命令删除。</p>
 <blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; $ docker container rm [containerID]</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker container <span class="built_in">rm</span> [containerID]</span><br></pre></td></tr></table></figure>
 </blockquote>
 <p>运行上面的命令之后，再使用<code>docker container ls --all</code>命令，就会发现被删除的容器文件已经消失了。</p>
 <h3 id="Dockerfile-文件"><a href="#Dockerfile-文件" class="headerlink" title="Dockerfile 文件"></a>Dockerfile 文件</h3><p>学会使用 image 文件以后，接下来的问题就是，如何可以生成 image 文件？如果你要推广自己的软件，势必要自己制作 image 文件。</p>
 <p>这就需要用到 Dockerfile 文件。它是一个文本文件，用来配置 image。Docker 根据 该文件生成二进制的 image 文件。</p>
 <h2 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h2><h3 id="搭建web服务"><a href="#搭建web服务" class="headerlink" title="搭建web服务"></a>搭建web服务</h3><p>首先，我们需要拉取 centos 镜像。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 80 --name web -i -t centos /bin/bash</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 80 --name web -i -t centos /bin/bash</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
 <p>紧接着，我们安装 nginx 服务器，执行以下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
 <p>安装完 Nginx 源后，就可以正式安装 Nginx 了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install -y nginx</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install -y nginx</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
 <p>至此，我们再输入 <code>whereis nginx</code> 命令就可以看到安装的路径了。最后，我们还需要将 Nginx 跑起来。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nginx</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nginx</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
 <p>现在，我们执行 <code>ctrl + P +  Q</code> 切换到后台。然后，通过 <code>docker ps -a</code> 来查看随机分配的端口。</p>
 <p>那么通过浏览器访问 <code>http://127.0.0.1:随机端口号</code> 即可。</p>
 <h3 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h3><p>Docker 构建镜像有两种方式，一种方式是使用 <code>docker commit</code> 命令，另外一种方式使用 <code>docker build</code> 命令和 <code>Dockerfile</code> 文件。其中，不推荐使用 <code>docker commit</code> 命令进行构建，因为它没有使得整个流程标准化，因此，在企业的中更加推荐使用 <code>docker build</code> 命令和 <code>Dockerfile</code> 文件来构建我们的镜像。我们使用<code>Dockerfile</code> 文件可以让构建镜像更具备可重复性，同时保证启动脚本和运行程序的标准化。</p>
 <h3 id="构建第一个-Dockerfile-文件"><a href="#构建第一个-Dockerfile-文件" class="headerlink" title="构建第一个 Dockerfile 文件"></a>构建第一个 Dockerfile 文件</h3><p>现在，我们继续实战。这里，我们把一开始搭建的 Web 服务器构建一个镜像。首先，我们需要创建一个空的 Dokcerfile 文件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir dockerfile_test</span><br><span class="line">cd dockerfile_test/</span><br><span class="line">touch Dockerfile</span><br><span class="line">nano Dockerfile</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir dockerfile_test</span><br><span class="line">cd dockerfile_test/</span><br><span class="line">touch Dockerfile</span><br><span class="line">nano Dockerfile</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
 <p>紧接着，我们需要编写一个 Dockerfile 文件，代码清单如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">FROM centos:7</span><br><span class="line">MAINTAINER LiangGzone &quot;lianggzone@163.com&quot;</span><br><span class="line">RUN rpm -ivh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</span><br><span class="line">RUN yum install -y nginx</span><br><span class="line">EXPOSE 80</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">FROM centos:7</span><br><span class="line">MAINTAINER LiangGzone &quot;lianggzone@163.com&quot;</span><br><span class="line">RUN rpm -ivh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</span><br><span class="line">RUN yum install -y nginx</span><br><span class="line">EXPOSE 80</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
 <p>最后，我们通过 <code>docker build</code> 命令进行构建。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker build -t=&quot;lianggzone/nginx_demo:v1&quot; .</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker build -t=&quot;lianggzone/nginx_demo:v1&quot; .</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
 <p>我们可以通过 <code>docker images</code> 看下我们的新镜像。</p>
 <p>现在，让我们来理解一下这个全过程吧。首先， <code>FROM centos:7</code> 是 Dockerfile 必须要的第一步，它会从一个已经存在的镜像运行一个容器，换句话说，Docker 需要依赖于一个基础镜像进行构建。这里，我们指定 centos 作为基础镜像，它的版本是 7 (CentOS 7)。然后，我们通过 <code>MAINTAINER LiangGzone &quot;lianggzone@163.com&quot;</code> 指定该镜像的作者是 LiangGzone，邮箱是 lianggzone@163.com。这有助于告诉使用者它的作者和联系方式。接着，我们执行两个 RUN 指令进行 Nginx 的下载安装，最后通过 <code>EXPOSE 80</code> 暴露 Dokcer 容器的 80 端口。注意的是，Docker 的执行顺序是从上而下执行的，所以我们要明确整个流程的执行顺序。除此之外，Docker 在执行每个指令之后都会创建一个新的镜像层并且进行提交。</p>
 <p>我们使用 <code>docker build</code> 命令进行构建，指定 <code>- t</code> 告诉 Docker 镜像的名称和版本。注意的是，如果没有指定任何标签，Docker 将会自动为镜像设置一个 lastest 标签。还有一点，我们最后还有一个 <code>.</code> 是为了让 Docker 到当前本地目录去寻找 Dockerfile 文件。注意的是，Docker 会在每一步构建都会将结果提交为镜像，然后将之前的镜像层看作缓存，因此我们重新构建类似的镜像层时会直接复用之前的镜像。如果我们需要跳过，可以使用 <code>--no-cache</code> 选项告诉 Docker 不进行缓存。</p>
 <h3 id="指令辨别一：RUN、CMD、ENTRYPOINT"><a href="#指令辨别一：RUN、CMD、ENTRYPOINT" class="headerlink" title="指令辨别一：RUN、CMD、ENTRYPOINT"></a>指令辨别一：RUN、CMD、ENTRYPOINT</h3><p><code>RUN</code> 、 <code>CMD</code> 、 <code>ENTRYPOINT</code> 三个指令的用途非常相识，不同在于，<code>RUN</code> 指令是在容器被构建时运行的命令，而<code>CMD</code> 、 <code>ENTRYPOINT</code> 是启动容器时执行 shell 命令，而 <code>RUN</code> 会被 <code>docker run</code> 命令覆盖，但是 <code>ENTRYPOINT</code> 不会被覆盖。事实上，<code>docker run</code> 命令指定的任何参数都会被当作参数再次传递给 <code>ENTRYPOINT</code> 指令。<code>CMD</code> 、 <code>ENTRYPOINT</code> 两个指令之间也可以一起使用。例如，我们 可以使用 <code>ENTRYPOINT</code> 的 exec 形式设置固定的默认命令和参数，然后使用任一形式的 <code>CMD</code> 来设置可能更改的其他默认值。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FROM ubuntu</span><br><span class="line">ENTRYPOINT [&quot;top&quot;, &quot;-b&quot;]</span><br><span class="line">CMD [&quot;-c&quot;]</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FROM ubuntu</span><br><span class="line">ENTRYPOINT [&quot;top&quot;, &quot;-b&quot;]</span><br><span class="line">CMD [&quot;-c&quot;]</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
 <h3 id="指令辨别二：ADD、COPY"><a href="#指令辨别二：ADD、COPY" class="headerlink" title="指令辨别二：ADD、COPY"></a>指令辨别二：ADD、COPY</h3><p><code>ADD</code> 、 <code>COPY</code> 指令用法一样，唯一不同的是 <code>ADD</code> 支持将归档文件（tar, gzip, bzip2, etc）做提取和解压操作。注意的是，<code>COPY</code> 指令需要复制的目录一定要放在 Dockerfile 文件的同级目录下。</p>
-<h3 id="更多docker命令"><a href="#更多docker命令" class="headerlink" title="更多docker命令"></a>更多docker命令</h3><p><a href="https://docs.docker.com/engine/reference/commandline/docker/" rel="external nofollow noopener noreferrer" target="_blank">https://docs.docker.com/engine/reference/commandline/docker/</a></p>
+<h3 id="更多docker命令"><a href="#更多docker命令" class="headerlink" title="更多docker命令"></a>更多docker命令</h3><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.docker.com/engine/reference/commandline/docker/">https://docs.docker.com/engine/reference/commandline/docker/</a></p>
 <p>参考链接：</p>
-<p><a href="https://juejin.im/post/5cacbfd7e51d456e8833390c" rel="external nofollow noopener noreferrer" target="_blank">https://juejin.im/post/5cacbfd7e51d456e8833390c</a></p>
-<p><a href="https://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://juejin.im/post/5cacbfd7e51d456e8833390c">https://juejin.im/post/5cacbfd7e51d456e8833390c</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html">https://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html</a></p>
 
     </div>
 
@@ -488,7 +488,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础概念"><span class="nav-number">1.</span> <span class="nav-text">基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境配置的难题"><span class="nav-number">1.1.</span> <span class="nav-text">环境配置的难题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟机"><span class="nav-number">1.2.</span> <span class="nav-text">虚拟机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-容器"><span class="nav-number">1.3.</span> <span class="nav-text">Linux 容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-是什么？"><span class="nav-number">1.4.</span> <span class="nav-text">Docker 是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-的用途"><span class="nav-number">1.5.</span> <span class="nav-text">Docker 的用途</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#image-文件"><span class="nav-number">1.6.</span> <span class="nav-text">image 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例：hello-world"><span class="nav-number">1.7.</span> <span class="nav-text">实例：hello world</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#容器文件"><span class="nav-number">1.8.</span> <span class="nav-text">容器文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dockerfile-文件"><span class="nav-number">1.9.</span> <span class="nav-text">Dockerfile 文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实践"><span class="nav-number">2.</span> <span class="nav-text">实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#搭建web服务"><span class="nav-number">2.1.</span> <span class="nav-text">搭建web服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建镜像"><span class="nav-number">2.2.</span> <span class="nav-text">构建镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建第一个-Dockerfile-文件"><span class="nav-number">2.3.</span> <span class="nav-text">构建第一个 Dockerfile 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指令辨别一：RUN、CMD、ENTRYPOINT"><span class="nav-number">2.4.</span> <span class="nav-text">指令辨别一：RUN、CMD、ENTRYPOINT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指令辨别二：ADD、COPY"><span class="nav-number">2.5.</span> <span class="nav-text">指令辨别二：ADD、COPY</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更多docker命令"><span class="nav-number">2.6.</span> <span class="nav-text">更多docker命令</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E7%9A%84%E9%9A%BE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">环境配置的难题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">1.2.</span> <span class="nav-text">虚拟机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-%E5%AE%B9%E5%99%A8"><span class="nav-number">1.3.</span> <span class="nav-text">Linux 容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.4.</span> <span class="nav-text">Docker 是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-%E7%9A%84%E7%94%A8%E9%80%94"><span class="nav-number">1.5.</span> <span class="nav-text">Docker 的用途</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#image-%E6%96%87%E4%BB%B6"><span class="nav-number">1.6.</span> <span class="nav-text">image 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%EF%BC%9Ahello-world"><span class="nav-number">1.7.</span> <span class="nav-text">实例：hello world</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E6%96%87%E4%BB%B6"><span class="nav-number">1.8.</span> <span class="nav-text">容器文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dockerfile-%E6%96%87%E4%BB%B6"><span class="nav-number">1.9.</span> <span class="nav-text">Dockerfile 文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5"><span class="nav-number">2.</span> <span class="nav-text">实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%90%AD%E5%BB%BAweb%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.1.</span> <span class="nav-text">搭建web服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E9%95%9C%E5%83%8F"><span class="nav-number">2.2.</span> <span class="nav-text">构建镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E7%AC%AC%E4%B8%80%E4%B8%AA-Dockerfile-%E6%96%87%E4%BB%B6"><span class="nav-number">2.3.</span> <span class="nav-text">构建第一个 Dockerfile 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E8%BE%A8%E5%88%AB%E4%B8%80%EF%BC%9ARUN%E3%80%81CMD%E3%80%81ENTRYPOINT"><span class="nav-number">2.4.</span> <span class="nav-text">指令辨别一：RUN、CMD、ENTRYPOINT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E8%BE%A8%E5%88%AB%E4%BA%8C%EF%BC%9AADD%E3%80%81COPY"><span class="nav-number">2.5.</span> <span class="nav-text">指令辨别二：ADD、COPY</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9Adocker%E5%91%BD%E4%BB%A4"><span class="nav-number">2.6.</span> <span class="nav-text">更多docker命令</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -578,9 +578,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -614,7 +622,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

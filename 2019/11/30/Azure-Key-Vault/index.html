@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,18 +20,25 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="Azure Key Vault is a tool for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, or certificates. A vault is logical">
-<meta name="keywords" content="Azure Key Vault">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Azure Key Vault">
 <meta property="og:url" content="https://sunra.top/2019/11/30/Azure-Key-Vault/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="Azure Key Vault is a tool for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, or certificates. A vault is logical">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-26T22:57:23.883Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-11-30T05:08:46.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.923Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Azure Key Vault">
-<meta name="twitter:description" content="Azure Key Vault is a tool for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, or certificates. A vault is logical">
 
 <link rel="canonical" href="https://sunra.top/2019/11/30/Azure-Key-Vault/">
 
@@ -48,6 +55,15 @@
 
   <title>Azure Key Vault | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -223,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:23" itemprop="dateModified" datetime="2023-05-27T06:57:23+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -247,7 +263,7 @@
 
       
         <p>Azure Key Vault is a tool for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, or certificates. A vault is logical group of secrets.</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>上面这一段是Azure官方文档的描述，作者在阅读了Microsoft Azure文档之后，对其基本的概念进行了提取和总结，并在原文中加入了一些自己的理解。阅读完中文就能对key vault有个大概的认识，英文原文是比较专业的描述，不影响理解，如果想进一步了解可以去阅读文末提供的链接。</p>
 <h2 id="What-is-Azure-Key-Vault"><a href="#What-is-Azure-Key-Vault" class="headerlink" title="What is Azure Key Vault"></a>What is Azure Key Vault</h2><p>简单来讲，Azure Key Vault 就是提供了一个能够安全存储你的敏感数据的地方，想要获取这些数据就必须通过身份校验以及权限校验，我们可以把类似于证书，数据库配置等敏感信息放在这里，而不需要硬编码到代码中。在使用时我们将敏感信息存储到key vault上后，会获取对应的名称，我们只需要通过api去key vault中通过名字（也可以添加版本信息）获取对应的信息就好，这些信息可以是密钥（只能get公钥），证书信息，或者一些配置信息。当然这些信息并不是任何人直接去调用api就可以获取的，而是需要你的Identity信息被用于创建该Key Vault的Tenant下面的Subscription所承认，获取承认的方式有很多种，可以通过id-token，或者密码等。</p>
 <p>Azure Key Vault帮助解决以下问题：</p>
@@ -267,7 +283,7 @@
 <li><strong>资源</strong>( <strong>Resource</strong> )：资源是可通过Azure进行管理的项目。常见示例包括虚拟机，存储帐户，Web应用程序，数据库和虚拟网络。还有更多。</li>
 <li><strong>资源组</strong>( <strong>Resource group</strong> )：资源组是一个容器，其中包含Azure解决方案的相关资源。资源组可以包含解决方案的所有资源，也可以仅包含您要作为组进行管理的资源。您可以根据对组织最有意义的决定来决定如何向资源组分配资源。</li>
 <li><strong>服务主体</strong>( <strong>Service principal</strong> )：Azure服务主体是用户创建的应用程序，服务和自动化工具用来访问特定Azure资源的安全身份。可以将其视为具有特定角色且受到严格控制的权限的“用户身份”（用户名，密码或证书）。与一般用户身份不同，服务主体只需要做特定的事情。如果仅授予它执行管理任务所需的最低权限级别，则可以提高安全性。</li>
-<li>Azure Active Directory（Azure AD）：Azure AD是租户的Active Directory服务。每个目录都有一个或多个域。一个目录可以有许多与之关联的订阅，但只能有一个租户。每个组织可以有一个租户，这个租户有自己的ID用于标识自己，每个Tenant都有自己的一个或者多个SubScription，Subscription与Azure AD directory是多对一的关系。每个人都可以去Azure上申请自己的账号，这个账号在Azure上叫做Identity，每个Identity可以创建Azure AD account。如果你的Azure AD account在某个Tenant的Azure AD directory中，并且Tenant授予了你某个Subscription的权限，你就可以使用该Subscription下的Services。具体可以去查看<a href="https://docs.microsoft.com/en-us/azure/active-directory/active-directory-whatis" rel="external nofollow noopener noreferrer" target="_blank">文档</a></li>
+<li>Azure Active Directory（Azure AD）：Azure AD是租户的Active Directory服务。每个目录都有一个或多个域。一个目录可以有许多与之关联的订阅，但只能有一个租户。每个组织可以有一个租户，这个租户有自己的ID用于标识自己，每个Tenant都有自己的一个或者多个SubScription，Subscription与Azure AD directory是多对一的关系。每个人都可以去Azure上申请自己的账号，这个账号在Azure上叫做Identity，每个Identity可以创建Azure AD account。如果你的Azure AD account在某个Tenant的Azure AD directory中，并且Tenant授予了你某个Subscription的权限，你就可以使用该Subscription下的Services。具体可以去查看<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/active-directory/active-directory-whatis">文档</a></li>
 <li><strong>Azure租户ID</strong>( <strong>Azure tenant ID</strong> )：租户ID是在Azure订阅中标识Azure AD实例的独特方法。</li>
 <li><strong>托管身份</strong>( <strong>Managed identities</strong> )：Azure Key Vault提供了一种安全存储凭据以及其他密钥和机密的方法，但是您的代码需要通过Key Vault进行身份验证才能检索它们。通过使用托管身份，可以通过在Azure AD中为Azure服务提供自动托管身份来简化解决此问题的步骤。您可以使用此身份对Key Vault或支持Azure AD身份验证的任何服务进行身份验证，而无需在代码中包含任何凭据。</li>
 </ul>
@@ -280,7 +296,7 @@
 <h3 id="Identity-and-access-management"><a href="#Identity-and-access-management" class="headerlink" title="Identity and access management"></a>Identity and access management</h3><p>When you create a key vault in an Azure subscription, it’s automatically associated with the Azure AD tenant of the subscription. Anyone trying to manage or retrieve content from a vault must be authenticated by Azure AD.</p>
 <ul>
 <li>Authentication establishes the identity of the caller.</li>
-<li>Authorization determines which operations the caller can perform. Authorization in Key Vault uses a combination of <a href="https://docs.microsoft.com/en-us/azure/role-based-access-control/overview" rel="external nofollow noopener noreferrer" target="_blank">Role based access control</a> (RBAC) and Azure Key Vault access policies.</li>
+<li>Authorization determines which operations the caller can perform. Authorization in Key Vault uses a combination of <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/role-based-access-control/overview">Role based access control</a> (RBAC) and Azure Key Vault access policies.</li>
 </ul>
 <h4 id="Access-model-overview"><a href="#Access-model-overview" class="headerlink" title="Access model overview"></a>Access model overview</h4><p>Access to vaults takes place through two interfaces or planes. These planes are the management plane and the data plane.</p>
 <ul>
@@ -315,7 +331,7 @@
 <li><strong>User plus application access</strong>: The application accesses Key Vault on behalf of a signed-in user. Examples of this type of access include Azure PowerShell and the Azure portal. User access is granted in two ways. Users can access Key Vault from any application, or they must use a specific application (referred to as <em>compound identity</em>).</li>
 <li><strong>Application-only access</strong>: The application runs as a daemon service or background job. The application identity is granted access to the key vault.</li>
 </ul>
-<p>For both types of access, the application authenticates with Azure AD. The application uses any <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/authentication-scenarios" rel="external nofollow noopener noreferrer" target="_blank">supported authentication method</a> based on the application type. The application acquires a token for a resource in the plane to grant access. The resource is an endpoint in the management or data plane, based on the Azure environment. The application uses the token and sends a REST API request to Key Vault. To learn more, review the <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow" rel="external nofollow noopener noreferrer" target="_blank">whole authentication flow</a>.</p>
+<p>For both types of access, the application authenticates with Azure AD. The application uses any <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/active-directory/develop/authentication-scenarios">supported authentication method</a> based on the application type. The application acquires a token for a resource in the plane to grant access. The resource is an endpoint in the management or data plane, based on the Azure environment. The application uses the token and sends a REST API request to Key Vault. To learn more, review the <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow">whole authentication flow</a>.</p>
 <p>The model of a single mechanism for authentication to both planes has several benefits:</p>
 <ul>
 <li>Organizations can control access centrally to all key vaults in their organization.</li>
@@ -355,10 +371,10 @@
 </ul>
 <p>本文章只是对于Azure Key Vault的基本概念的及其之间关系的简介，对于更加详细的信息，比如Key Vault具体是如何监控，节流，身份验证，请求参数之类的详细信息可以去查看文末的官方文档。</p>
 <p>参考文章：</p>
-<p> <a href="https://docs.microsoft.com/en-us/azure/key-vault/" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/key-vault/</a> </p>
-<p> <a href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis</a> </p>
-<p> <a href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-subscriptions-associated-directory" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-subscriptions-associated-directory</a> </p>
-<p> <a href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-manage-groups" rel="external nofollow noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-manage-groups</a> </p>
+<p> <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/key-vault/">https://docs.microsoft.com/en-us/azure/key-vault/</a> </p>
+<p> <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis</a> </p>
+<p> <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-subscriptions-associated-directory">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-subscriptions-associated-directory</a> </p>
+<p> <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-manage-groups">https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-manage-groups</a> </p>
 
     </div>
 
@@ -565,9 +581,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -601,7 +625,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

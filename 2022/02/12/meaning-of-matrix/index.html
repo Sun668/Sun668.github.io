@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,18 +20,25 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。">
-<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="矩阵运算的代数和几何意义">
 <meta property="og:url" content="https://sunra.top/2022/02/12/meaning-of-matrix/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-26T22:57:24.224Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-02-12T10:48:11.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.935Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="矩阵运算的代数和几何意义">
-<meta name="twitter:description" content="这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。">
 
 <link rel="canonical" href="https://sunra.top/2022/02/12/meaning-of-matrix/">
 
@@ -48,6 +55,15 @@
 
   <title>矩阵运算的代数和几何意义 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -223,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -247,7 +263,7 @@
 
       
         <p>这周完成了把线性代数的知识点粗略地过一遍，有的知识点记住了，有的没记住，有的即使记住了，感觉也是死记硬背，没有融入到自己的知识体系中，思索再三，我认为根本原因是，我不知道这些公式有什么用，他们有什么具体的，或者形象化的意义，所以就打算整体上再梳理一遍这些概念或者公式的实际意义，很多基础的名词和定义就不在这里总结了。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>总的来说，矩阵和向量，在代数意义上讲，表现的是方程组解的问题，而从几何意义上讲，是坐标变换的问题。</p>
 <p>但是其实，我们从一个n维坐标空间到另一个n维坐标空间进行的运算，还是方程组。所以说，矩阵，方程组和坐标变换具有很强的共性。</p>
 <h2 id="代数意义"><a href="#代数意义" class="headerlink" title="代数意义"></a>代数意义</h2><p>我们慢慢梳理行列式，向量，矩阵，方程组以及坐标空间的关系：</p>
@@ -264,7 +280,7 @@
 <h2 id="几何意义"><a href="#几何意义" class="headerlink" title="几何意义"></a>几何意义</h2><p>上面说的方程组，其实说起来就是一个空间坐标转化的过程（也就是向量x投影到A矩阵对应的坐标空间的过程），也就是方程组等式坐边的系数矩阵按列分块得到的n个n维向量线性表出方程组右边值组成的n维向量的过程，系数矩阵的n个列向量就相当于n个坐标轴，如果秩等于n，那就说明，这n个坐标轴线性无关，方程组就只有一个解，也就是只有一种表出方法。</p>
 <p>一个向量左乘一个矩阵，可以有两种几何意义，一种是将向量投影到一个新的坐标系(这个投影矩阵其实也是新坐标系的坐标轴在原坐标系下的表示)中，也就是不改变向量，而是用另一个坐标系来表示该向量，一种是表示缩放旋转、</p>
 <p>前者左乘的矩阵必须是一个可逆矩阵，因为你能从A坐标系变换到B坐标系，就需要变回来，这个变回来的过程就是左乘逆矩阵，这也是为什么可逆矩阵的行列式值不能为0的一个原因，如果为零，说明丢了一个维度，那么就回不来了。</p>
-<h2 id="特征值和特征向量"><a href="#特征值和特征向量" class="headerlink" title="特征值和特征向量"></a>特征值和特征向量</h2><p>这一段可以直接看<a href="http://haoeric.github.io/matrix-eigenvectors/" rel="external nofollow noopener noreferrer" target="_blank">http://haoeric.github.io/matrix-eigenvectors/</a></p>
+<h2 id="特征值和特征向量"><a href="#特征值和特征向量" class="headerlink" title="特征值和特征向量"></a>特征值和特征向量</h2><p>这一段可以直接看<a target="_blank" rel="external nofollow noopener noreferrer" href="http://haoeric.github.io/matrix-eigenvectors/">http://haoeric.github.io/matrix-eigenvectors/</a></p>
 <p>这篇博客详细的介绍了什么叫特征值和特征向量。</p>
 <p>我这里就只摘抄对我最有用的一段：</p>
 <p>如果一个n×n方阵A与一个非零向量x点乘满足如下条件：</p>
@@ -290,7 +306,7 @@ P^{-1}AP = B</script><p>则称B是A的相似矩阵<br>若A与对角阵相似，�
 <p>这里有个猜想，是不是说A对应的坐标空间的特征空间就是B对应的坐标空间？</p>
 <p>在理解特征值的时候，左乘矩阵的几何意义是投影变换，将向量投影到矩阵表示的向量空间中，而在理解相似的过程中，左乘P矩阵的几何意义是投影变换，左乘A矩阵的几何意义是进行旋转缩放。</p>
 </blockquote>
-<h2 id="矩阵的合同"><a href="#矩阵的合同" class="headerlink" title="矩阵的合同"></a>矩阵的合同</h2><p>这个也可以参考这篇博客：<a href="https://www.cnblogs.com/yanghh/p/13492614.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.cnblogs.com/yanghh/p/13492614.html</a></p>
+<h2 id="矩阵的合同"><a href="#矩阵的合同" class="headerlink" title="矩阵的合同"></a>矩阵的合同</h2><p>这个也可以参考这篇博客：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.cnblogs.com/yanghh/p/13492614.html">https://www.cnblogs.com/yanghh/p/13492614.html</a></p>
 <p>我也只摘抄对我最有用的一段：</p>
 <p>在不同的参考系下得到的多项式或二次型矩阵不同，但我们得知道它们是不是同一个图形，于是有合同的概念。</p>
 <p>两个合同的矩阵是：同一个图形在不同基下的表示。</p>
@@ -322,7 +338,7 @@ f = 2y_1^2 + y_2^2 - y_3^2</script><p>过度矩阵就是</p>
 1 & -1 & -1 \\
 0 & 1 & 2 \\
 0 & 0 & 1
-\end{bmatrix}</script><p>参考链接：<br><a href="http://haoeric.github.io/matrix-eigenvectors/" rel="external nofollow noopener noreferrer" target="_blank">http://haoeric.github.io/matrix-eigenvectors/</a><br><a href="https://www.cnblogs.com/yanghh/p/13492614.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.cnblogs.com/yanghh/p/13492614.html</a></p>
+\end{bmatrix}</script><p>参考链接：<br><a target="_blank" rel="external nofollow noopener noreferrer" href="http://haoeric.github.io/matrix-eigenvectors/">http://haoeric.github.io/matrix-eigenvectors/</a><br><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.cnblogs.com/yanghh/p/13492614.html">https://www.cnblogs.com/yanghh/p/13492614.html</a></p>
 
     </div>
 
@@ -439,7 +455,7 @@ f = 2y_1^2 + y_2^2 - y_3^2</script><p>过度矩阵就是</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#代数意义"><span class="nav-number">1.</span> <span class="nav-text">代数意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几何意义"><span class="nav-number">2.</span> <span class="nav-text">几何意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征值和特征向量"><span class="nav-number">3.</span> <span class="nav-text">特征值和特征向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩阵的相似"><span class="nav-number">4.</span> <span class="nav-text">矩阵的相似</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩阵的合同"><span class="nav-number">5.</span> <span class="nav-text">矩阵的合同</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E6%95%B0%E6%84%8F%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">代数意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%A0%E4%BD%95%E6%84%8F%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">几何意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%80%BC%E5%92%8C%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F"><span class="nav-number">3.</span> <span class="nav-text">特征值和特征向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E7%9A%84%E7%9B%B8%E4%BC%BC"><span class="nav-number">4.</span> <span class="nav-text">矩阵的相似</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E7%9A%84%E5%90%88%E5%90%8C"><span class="nav-number">5.</span> <span class="nav-text">矩阵的合同</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -529,9 +545,17 @@ f = 2y_1^2 + y_2^2 - y_3^2</script><p>过度矩阵就是</p>
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -565,7 +589,9 @@ f = 2y_1^2 + y_2^2 - y_3^2</script><p>过度矩阵就是</p>
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,18 +20,25 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="就在大家 happy 的这几天期间，Google 公开了两个文档，我感觉作为程序员和工程师非常有必要了解一下。作者在阅读之后截取部分原文并精简了其他一些部分总结下来。">
-<meta name="keywords" content="Codereview">
 <meta property="og:type" content="article">
 <meta property="og:title" content="codereview">
 <meta property="og:url" content="https://sunra.top/2019/10/05/codereview/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="就在大家 happy 的这几天期间，Google 公开了两个文档，我感觉作为程序员和工程师非常有必要了解一下。作者在阅读之后截取部分原文并精简了其他一些部分总结下来。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-26T22:57:23.953Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-10-05T03:46:37.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.923Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="codereview">
-<meta name="twitter:description" content="就在大家 happy 的这几天期间，Google 公开了两个文档，我感觉作为程序员和工程师非常有必要了解一下。作者在阅读之后截取部分原文并精简了其他一些部分总结下来。">
 
 <link rel="canonical" href="https://sunra.top/2019/10/05/codereview/">
 
@@ -48,6 +55,15 @@
 
   <title>codereview | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -223,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:23" itemprop="dateModified" datetime="2023-05-27T06:57:23+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -246,10 +262,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>就在大家 happy 的这几天期间，Google 公开了两个文档，我感觉作为程序员和工程师非常有必要了解一下。作者在阅读之后截取部分原文并精简了其他一些部分总结下来。<br><a id="more"></a></p>
+        <p>就在大家 happy 的这几天期间，Google 公开了两个文档，我感觉作为程序员和工程师非常有必要了解一下。作者在阅读之后截取部分原文并精简了其他一些部分总结下来。<br><span id="more"></span></p>
 <h2 id="The-CL-author’s-guide-to-getting-through-code-review"><a href="#The-CL-author’s-guide-to-getting-through-code-review" class="headerlink" title="The CL author’s guide to getting through code review"></a>The CL author’s guide to getting through code review</h2><p>简单来讲就是 CL 作者指南去指导通过代码审查。那么 CL 是什么意思呢？就是 change list ，变更记录和日志的意思。</p>
 <p>这个指南可帮助您更快地完成代码审核并获得更高质量的结果。适用于每个 Google 开发人员，阅读这份指南非常有帮助。</p>
-<p><a href="https://google.github.io/eng-practices/review/developer/" rel="external nofollow noopener noreferrer" target="_blank">https://google.github.io/eng-practices/review/developer/</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://google.github.io/eng-practices/review/developer/">https://google.github.io/eng-practices/review/developer/</a></p>
 <h3 id="Writing-good-CL-descriptions"><a href="#Writing-good-CL-descriptions" class="headerlink" title="Writing good CL descriptions"></a>Writing good CL descriptions</h3><h4 id="First-Line"><a href="#First-Line" class="headerlink" title="First Line"></a>First Line</h4><ul>
 <li>Short summary of what is being done.</li>
 <li>Complete sentence, written as though it was an order.</li>
@@ -314,9 +330,9 @@
 <h4 id="Fix-the-code"><a href="#Fix-the-code" class="headerlink" title="Fix the code"></a>Fix the code</h4><p>如果审阅者说不明白你的代码，那你应该想办法解释清楚你的代码在做什么。因为你的审阅者看不懂，将来其他的同事也可能看不懂。</p>
 <h4 id="Think-for-yourself"><a href="#Think-for-yourself" class="headerlink" title="Think for yourself"></a>Think for yourself</h4><p>因为我们每次提交可能是花费了大量的时间，所以当我们看到审阅者给我们提出意见的时候，我们的第一反应是拒绝。</p>
 <p>但是我们最好先考虑一下，审阅者的意见是否是正确的，如果我们没办法回答这个问题，我们就可能需要去找到审阅者让他说清楚自己的观点，然后再去判断。</p>
-<h4 id="Resolving-conflicts"><a href="#Resolving-conflicts" class="headerlink" title="Resolving conflicts"></a>Resolving conflicts</h4><p>Your first step in resolving conflicts should always be to try to come to consensus with your reviewer. If you can’t achieve consensus, see <a href="https://google.github.io/eng-practices/review/reviewer/standard.html" rel="external nofollow noopener noreferrer" target="_blank">The Standard of Code Review</a>, which gives principles to follow in such a situation.</p>
+<h4 id="Resolving-conflicts"><a href="#Resolving-conflicts" class="headerlink" title="Resolving conflicts"></a>Resolving conflicts</h4><p>Your first step in resolving conflicts should always be to try to come to consensus with your reviewer. If you can’t achieve consensus, see <a target="_blank" rel="external nofollow noopener noreferrer" href="https://google.github.io/eng-practices/review/reviewer/standard.html">The Standard of Code Review</a>, which gives principles to follow in such a situation.</p>
 <h2 id="How-to-do-a-code-review"><a href="#How-to-do-a-code-review" class="headerlink" title="How to do a code review"></a>How to do a code review</h2><p>这份文档中包含有关进行代码审查的最佳方式的建议。是一个非常完整的文档，分为许多单独的部分。阅读这个文档，对于大家来看，肯定会非常有帮助，绝对让大家受益匪浅的一件事。</p>
-<p><a href="https://google.github.io/eng-practices/review/reviewer/" rel="external nofollow noopener noreferrer" target="_blank">https://google.github.io/eng-practices/review/reviewer/</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://google.github.io/eng-practices/review/reviewer/">https://google.github.io/eng-practices/review/reviewer/</a></p>
 <h3 id="The-standard-of-code-review"><a href="#The-standard-of-code-review" class="headerlink" title="The standard of code review"></a>The standard of code review</h3><p>代码审查的主要目的是确保Google代码库的整体代码运行状况随着时间的推移而不断改善。</p>
 <p>首先，开发人员必须能够在其任务上取得进展。如果您从未向代码库提交过改进，那么代码库将永远不会得到改进。另外，如果审阅者很难进行任何更改，那么开发人员就没有动力在将来进行改进。</p>
 <p>另一方面，审阅者有责任确保每个CL的质量都使得其代码库的整体代码运行状况不会随着时间的流逝而减少。</p>
@@ -326,7 +342,7 @@
 <h4 id="Mentoring"><a href="#Mentoring" class="headerlink" title="Mentoring"></a>Mentoring</h4><p>代码审查具有重要的功能，可以教给开发人员有关语言，框架或通用软件设计原理的新知识。留下有助于开发人员学习新知识的评论总是很好的。共享知识是随着时间的推移改善系统代码运行状况的一部分。</p>
 <h4 id="Principles"><a href="#Principles" class="headerlink" title="Principles"></a>Principles</h4><ul>
 <li>Technical facts and data overrule opinions and personal preferences.</li>
-<li>On matters of style, the <a href="http://google.github.io/styleguide/" rel="external nofollow noopener noreferrer" target="_blank">style guide</a> is the absolute authority. Any purely style point (whitespace, etc.) that is not in the style guide is a matter of personal preference. The style should be consistent with what is there. If there is no previous style, accept the author’s.</li>
+<li>On matters of style, the <a target="_blank" rel="external nofollow noopener noreferrer" href="http://google.github.io/styleguide/">style guide</a> is the absolute authority. Any purely style point (whitespace, etc.) that is not in the style guide is a matter of personal preference. The style should be consistent with what is there. If there is no previous style, accept the author’s.</li>
 <li><strong>Aspects of software design are almost never a pure style issue or just a personal preference.</strong> They are based on underlying principles and should be weighed on those principles, not simply by personal opinion. Sometimes there are a few valid options. If the author can demonstrate (either through data or based on solid engineering principles) that several approaches are equally valid, then the reviewer should accept the preference of the author. Otherwise the choice is dictated by standard principles of software design.</li>
 <li>If no other rule applies, then the reviewer may ask the author to be consistent with what is in the current codebase, as long as that doesn’t worsen the overall code health of the system.</li>
 </ul>
@@ -362,9 +378,9 @@
 <li>Code is appropriately documented (generally in g3doc).</li>
 <li>The code conforms to our style guides.</li>
 </ul>
-<h3 id="Navigating-a-CL-in-review"><a href="#Navigating-a-CL-in-review" class="headerlink" title="Navigating a CL in review"></a>Navigating a CL in review</h3><p>Now that you know <a href="https://google.github.io/eng-practices/review/reviewer/looking-for.html" rel="external nofollow noopener noreferrer" target="_blank">what to look for</a>, what’s the most efficient way to manage a review that’s spread across multiple files?</p>
+<h3 id="Navigating-a-CL-in-review"><a href="#Navigating-a-CL-in-review" class="headerlink" title="Navigating a CL in review"></a>Navigating a CL in review</h3><p>Now that you know <a target="_blank" rel="external nofollow noopener noreferrer" href="https://google.github.io/eng-practices/review/reviewer/looking-for.html">what to look for</a>, what’s the most efficient way to manage a review that’s spread across multiple files?</p>
 <ol>
-<li>Does the change make sense? Does it have a good <a href="https://google.github.io/eng-practices/review/developer/cl-descriptions.html" rel="external nofollow noopener noreferrer" target="_blank">description</a>?</li>
+<li>Does the change make sense? Does it have a good <a target="_blank" rel="external nofollow noopener noreferrer" href="https://google.github.io/eng-practices/review/developer/cl-descriptions.html">description</a>?</li>
 <li>Look at the most important part of the change first. Is it well-designed overall?</li>
 <li>Look at the rest of the CL in an appropriate sequence.</li>
 </ol>
@@ -497,7 +513,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-CL-author’s-guide-to-getting-through-code-review"><span class="nav-number">1.</span> <span class="nav-text">The CL author’s guide to getting through code review</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Writing-good-CL-descriptions"><span class="nav-number">1.1.</span> <span class="nav-text">Writing good CL descriptions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#First-Line"><span class="nav-number">1.1.1.</span> <span class="nav-text">First Line</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Body-is-informative"><span class="nav-number">1.1.2.</span> <span class="nav-text">Body is informative</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bad-CL-Description"><span class="nav-number">1.1.3.</span> <span class="nav-text">Bad CL Description</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Good-CL-Descriptions"><span class="nav-number">1.1.4.</span> <span class="nav-text">Good CL Descriptions</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Functionality-change"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">Functionality change</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Small-CLs"><span class="nav-number">1.2.</span> <span class="nav-text">Small CLs</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Why-write-small-CLs"><span class="nav-number">1.2.1.</span> <span class="nav-text">Why write small CLs?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#What-is-small"><span class="nav-number">1.2.2.</span> <span class="nav-text">What is small?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#When-are-large-CLs-okay"><span class="nav-number">1.2.3.</span> <span class="nav-text">When are large CLs okay?</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Splitting-by-Files"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">Splitting by Files</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Separate-Out-Refactoring"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">Separate Out Refactoring</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Keep-related-test-code-in-the-same-CL"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">Keep related test code in the same CL</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Don’t-break-the-build"><span class="nav-number">1.2.3.4.</span> <span class="nav-text">Don’t break the build</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Can’t-Make-it-small-enough"><span class="nav-number">1.2.3.5.</span> <span class="nav-text">Can’t Make it small enough</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-handle-reviewer-comments"><span class="nav-number">1.3.</span> <span class="nav-text">How to handle reviewer comments</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Don’t-take-it-personally"><span class="nav-number">1.3.1.</span> <span class="nav-text">Don’t take it personally</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fix-the-code"><span class="nav-number">1.3.2.</span> <span class="nav-text">Fix the code</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Think-for-yourself"><span class="nav-number">1.3.3.</span> <span class="nav-text">Think for yourself</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Resolving-conflicts"><span class="nav-number">1.3.4.</span> <span class="nav-text">Resolving conflicts</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-to-do-a-code-review"><span class="nav-number">2.</span> <span class="nav-text">How to do a code review</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-standard-of-code-review"><span class="nav-number">2.1.</span> <span class="nav-text">The standard of code review</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Mentoring"><span class="nav-number">2.1.1.</span> <span class="nav-text">Mentoring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Principles"><span class="nav-number">2.1.2.</span> <span class="nav-text">Principles</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-to-look-for-in-a-code-review"><span class="nav-number">2.2.</span> <span class="nav-text">What to look for in a code review</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Design"><span class="nav-number">2.2.1.</span> <span class="nav-text">Design</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Functionality"><span class="nav-number">2.2.2.</span> <span class="nav-text">Functionality</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Complex"><span class="nav-number">2.2.3.</span> <span class="nav-text">Complex</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Tests"><span class="nav-number">2.2.4.</span> <span class="nav-text">Tests</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Naming"><span class="nav-number">2.2.5.</span> <span class="nav-text">Naming</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Comments"><span class="nav-number">2.2.6.</span> <span class="nav-text">Comments</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Style"><span class="nav-number">2.2.7.</span> <span class="nav-text">Style</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Documentation"><span class="nav-number">2.2.8.</span> <span class="nav-text">Documentation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Every-Line"><span class="nav-number">2.2.9.</span> <span class="nav-text">Every Line</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Context"><span class="nav-number">2.2.10.</span> <span class="nav-text">Context</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Good-Things"><span class="nav-number">2.2.11.</span> <span class="nav-text">Good Things</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Summary"><span class="nav-number">2.2.12.</span> <span class="nav-text">Summary</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Navigating-a-CL-in-review"><span class="nav-number">2.3.</span> <span class="nav-text">Navigating a CL in review</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Speed-of-Code-Reviews"><span class="nav-number">2.4.</span> <span class="nav-text">Speed of Code Reviews</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Why-should-code-reviews-be-fase"><span class="nav-number">2.4.1.</span> <span class="nav-text">Why should code reviews be fase?</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-write-code-revieww-comment"><span class="nav-number">2.5.</span> <span class="nav-text">How to write code revieww comment</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-CL-author%E2%80%99s-guide-to-getting-through-code-review"><span class="nav-number">1.</span> <span class="nav-text">The CL author’s guide to getting through code review</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Writing-good-CL-descriptions"><span class="nav-number">1.1.</span> <span class="nav-text">Writing good CL descriptions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#First-Line"><span class="nav-number">1.1.1.</span> <span class="nav-text">First Line</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Body-is-informative"><span class="nav-number">1.1.2.</span> <span class="nav-text">Body is informative</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bad-CL-Description"><span class="nav-number">1.1.3.</span> <span class="nav-text">Bad CL Description</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Good-CL-Descriptions"><span class="nav-number">1.1.4.</span> <span class="nav-text">Good CL Descriptions</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Functionality-change"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">Functionality change</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Small-CLs"><span class="nav-number">1.2.</span> <span class="nav-text">Small CLs</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Why-write-small-CLs"><span class="nav-number">1.2.1.</span> <span class="nav-text">Why write small CLs?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#What-is-small"><span class="nav-number">1.2.2.</span> <span class="nav-text">What is small?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#When-are-large-CLs-okay"><span class="nav-number">1.2.3.</span> <span class="nav-text">When are large CLs okay?</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Splitting-by-Files"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">Splitting by Files</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Separate-Out-Refactoring"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">Separate Out Refactoring</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Keep-related-test-code-in-the-same-CL"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">Keep related test code in the same CL</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Don%E2%80%99t-break-the-build"><span class="nav-number">1.2.3.4.</span> <span class="nav-text">Don’t break the build</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Can%E2%80%99t-Make-it-small-enough"><span class="nav-number">1.2.3.5.</span> <span class="nav-text">Can’t Make it small enough</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-handle-reviewer-comments"><span class="nav-number">1.3.</span> <span class="nav-text">How to handle reviewer comments</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Don%E2%80%99t-take-it-personally"><span class="nav-number">1.3.1.</span> <span class="nav-text">Don’t take it personally</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fix-the-code"><span class="nav-number">1.3.2.</span> <span class="nav-text">Fix the code</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Think-for-yourself"><span class="nav-number">1.3.3.</span> <span class="nav-text">Think for yourself</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Resolving-conflicts"><span class="nav-number">1.3.4.</span> <span class="nav-text">Resolving conflicts</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-to-do-a-code-review"><span class="nav-number">2.</span> <span class="nav-text">How to do a code review</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-standard-of-code-review"><span class="nav-number">2.1.</span> <span class="nav-text">The standard of code review</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Mentoring"><span class="nav-number">2.1.1.</span> <span class="nav-text">Mentoring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Principles"><span class="nav-number">2.1.2.</span> <span class="nav-text">Principles</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-to-look-for-in-a-code-review"><span class="nav-number">2.2.</span> <span class="nav-text">What to look for in a code review</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Design"><span class="nav-number">2.2.1.</span> <span class="nav-text">Design</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Functionality"><span class="nav-number">2.2.2.</span> <span class="nav-text">Functionality</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Complex"><span class="nav-number">2.2.3.</span> <span class="nav-text">Complex</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Tests"><span class="nav-number">2.2.4.</span> <span class="nav-text">Tests</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Naming"><span class="nav-number">2.2.5.</span> <span class="nav-text">Naming</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Comments"><span class="nav-number">2.2.6.</span> <span class="nav-text">Comments</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Style"><span class="nav-number">2.2.7.</span> <span class="nav-text">Style</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Documentation"><span class="nav-number">2.2.8.</span> <span class="nav-text">Documentation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Every-Line"><span class="nav-number">2.2.9.</span> <span class="nav-text">Every Line</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Context"><span class="nav-number">2.2.10.</span> <span class="nav-text">Context</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Good-Things"><span class="nav-number">2.2.11.</span> <span class="nav-text">Good Things</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Summary"><span class="nav-number">2.2.12.</span> <span class="nav-text">Summary</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Navigating-a-CL-in-review"><span class="nav-number">2.3.</span> <span class="nav-text">Navigating a CL in review</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Speed-of-Code-Reviews"><span class="nav-number">2.4.</span> <span class="nav-text">Speed of Code Reviews</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Why-should-code-reviews-be-fase"><span class="nav-number">2.4.1.</span> <span class="nav-text">Why should code reviews be fase?</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-write-code-revieww-comment"><span class="nav-number">2.5.</span> <span class="nav-text">How to write code revieww comment</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -587,9 +603,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -623,7 +647,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

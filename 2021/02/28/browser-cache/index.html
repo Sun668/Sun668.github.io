@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,18 +20,25 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="前段时间遇到了关于浏览器缓存的问题，当时没有什么想法，后来回来查了一下发现很多东西都接触过，只是没有系统地整理起来，借着这篇博客整理一下。 主要内容是浏览器的强缓存，协商缓存的机制以及对应的HTTP头。 另外以后可能会整理下浏览器的Cache API相关的内容。">
-<meta name="keywords" content="浏览器 缓存">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浏览器缓存">
 <meta property="og:url" content="https://sunra.top/2021/02/28/browser-cache/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="前段时间遇到了关于浏览器缓存的问题，当时没有什么想法，后来回来查了一下发现很多东西都接触过，只是没有系统地整理起来，借着这篇博客整理一下。 主要内容是浏览器的强缓存，协商缓存的机制以及对应的HTTP头。 另外以后可能会整理下浏览器的Cache API相关的内容。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-26T22:57:23.944Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-02-28T02:12:57.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.923Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="浏览器缓存">
-<meta name="twitter:description" content="前段时间遇到了关于浏览器缓存的问题，当时没有什么想法，后来回来查了一下发现很多东西都接触过，只是没有系统地整理起来，借着这篇博客整理一下。 主要内容是浏览器的强缓存，协商缓存的机制以及对应的HTTP头。 另外以后可能会整理下浏览器的Cache API相关的内容。">
 
 <link rel="canonical" href="https://sunra.top/2021/02/28/browser-cache/">
 
@@ -48,6 +55,15 @@
 
   <title>浏览器缓存 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -223,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:23" itemprop="dateModified" datetime="2023-05-27T06:57:23+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -249,7 +265,7 @@
         <p>前段时间遇到了关于浏览器缓存的问题，当时没有什么想法，后来回来查了一下发现很多东西都接触过，只是没有系统地整理起来，借着这篇博客整理一下。</p>
 <p>主要内容是浏览器的强缓存，协商缓存的机制以及对应的HTTP头。</p>
 <p>另外以后可能会整理下浏览器的Cache API相关的内容。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="强缓存和协商缓存"><a href="#强缓存和协商缓存" class="headerlink" title="强缓存和协商缓存"></a>强缓存和协商缓存</h2><p>浏览器缓存分为强缓存和协商缓存，两者有两个比较明显的区别：</p>
 <ol>
 <li>如果浏览器命中强缓存，则不需要给服务器发请求；而协商缓存最终由服务器来决定是否使用缓存，即客户端与服务器之间存在一次通信。</li>
@@ -297,7 +313,7 @@
 </ul>
 <h3 id="Cache-control"><a href="#Cache-control" class="headerlink" title="Cache-control"></a>Cache-control</h3><h4 id="可缓存性"><a href="#可缓存性" class="headerlink" title="可缓存性"></a>可缓存性</h4><ul>
 <li><p><code>public</code></p>
-<p>表明响应可以被任何对象（包括：发送请求的客户端，代理服务器，等等）缓存，即使是通常不可缓存的内容。（例如：1.该响应没有<code>max-age</code>指令或<code>Expires</code>消息头；2. 该响应对应的请求方法是 <a href="https://wiki.developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST" rel="external nofollow noopener noreferrer" target="_blank">POST</a> 。）</p>
+<p>表明响应可以被任何对象（包括：发送请求的客户端，代理服务器，等等）缓存，即使是通常不可缓存的内容。（例如：1.该响应没有<code>max-age</code>指令或<code>Expires</code>消息头；2. 该响应对应的请求方法是 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://wiki.developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST">POST</a> 。）</p>
 </li>
 <li><p><code>private</code></p>
 <p>表明响应只能被单个用户缓存，不能作为共享缓存（即代理服务器不能缓存它）。私有缓存可以缓存响应内容，比如：对应用户的本地浏览器。</p>
@@ -337,18 +353,18 @@
 <p>与must-revalidate作用相同，但它仅适用于共享缓存（例如代理），并被私有缓存忽略。</p>
 </li>
 <li><p><code>immutable</code> </p>
-<p>表示响应正文不会随时间而改变。资源（如果未过期）在服务器上不发生改变，因此客户端不应发送重新验证请求头（例如<code>If-None-Match</code>或I<code>f-Modified-Since</code>）来检查更新，即使用户显式地刷新页面。在Firefox中，immutable只能被用在 <code>https://</code> transactions. 有关更多信息，请参阅<a href="http://bitsup.blogspot.de/2016/05/cache-control-immutable.html" rel="external nofollow noopener noreferrer" target="_blank">这里</a>。</p>
+<p>表示响应正文不会随时间而改变。资源（如果未过期）在服务器上不发生改变，因此客户端不应发送重新验证请求头（例如<code>If-None-Match</code>或I<code>f-Modified-Since</code>）来检查更新，即使用户显式地刷新页面。在Firefox中，immutable只能被用在 <code>https://</code> transactions. 有关更多信息，请参阅<a target="_blank" rel="external nofollow noopener noreferrer" href="http://bitsup.blogspot.de/2016/05/cache-control-immutable.html">这里</a>。</p>
 </li>
 </ul>
 <h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
 <li><p><code>no-transform</code></p>
-<p>不得对资源进行转换或转变。<code>Content-Encoding</code>、<code>Content-Range</code>、<code>Content-Type</code>等HTTP头不能由代理修改。例如，非透明代理或者如<a href="https://support.google.com/webmasters/answer/6211428?hl=en" rel="external nofollow noopener noreferrer" target="_blank">Google’s Light Mode</a>可能对图像格式进行转换，以便节省缓存空间或者减少缓慢链路上的流量。<code>no-transform</code>指令不允许这样做。</p>
+<p>不得对资源进行转换或转变。<code>Content-Encoding</code>、<code>Content-Range</code>、<code>Content-Type</code>等HTTP头不能由代理修改。例如，非透明代理或者如<a target="_blank" rel="external nofollow noopener noreferrer" href="https://support.google.com/webmasters/answer/6211428?hl=en">Google’s Light Mode</a>可能对图像格式进行转换，以便节省缓存空间或者减少缓慢链路上的流量。<code>no-transform</code>指令不允许这样做。</p>
 </li>
 <li><p><code>only-if-cached</code></p>
 <p>表明客户端只接受已缓存的响应，并且不要向原始服务器检查是否有更新的拷贝。</p>
 </li>
 </ul>
-<h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control &gt; expires &gt; Etag &gt; Last-Modified</span><br></pre></td></tr></table></figure>
+<h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control &gt; expires &gt; Etag &gt; Last-Modified</span><br></pre></td></tr></table></figure>
 <h3 id="三级缓存原理"><a href="#三级缓存原理" class="headerlink" title="三级缓存原理"></a>三级缓存原理</h3><p>最后总结一下浏览器的三级缓存原理：</p>
 <ol>
 <li>先去内存看，如果有，直接加载</li>
@@ -356,7 +372,7 @@
 <li>如果硬盘也没有，那么就进行网络请求</li>
 <li>加载到的资源缓存到硬盘和内存</li>
 </ol>
-<p>参考文章：<a href="https://segmentfault.com/a/1190000021661656" rel="external nofollow noopener noreferrer" target="_blank">https://segmentfault.com/a/1190000021661656</a></p>
+<p>参考文章：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://segmentfault.com/a/1190000021661656">https://segmentfault.com/a/1190000021661656</a></p>
 
     </div>
 
@@ -473,7 +489,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#强缓存和协商缓存"><span class="nav-number">1.</span> <span class="nav-text">强缓存和协商缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存机制"><span class="nav-number">2.</span> <span class="nav-text">缓存机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请求流程"><span class="nav-number">3.</span> <span class="nav-text">请求流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#强缓存"><span class="nav-number">3.1.</span> <span class="nav-text">强缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#协商缓存"><span class="nav-number">3.2.</span> <span class="nav-text">协商缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要有-Etag"><span class="nav-number">3.3.</span> <span class="nav-text">为什么要有 Etag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cache-control"><span class="nav-number">3.4.</span> <span class="nav-text">Cache-control</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#可缓存性"><span class="nav-number">3.4.1.</span> <span class="nav-text">可缓存性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#到期"><span class="nav-number">3.4.2.</span> <span class="nav-text">到期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重新验证和重新加载"><span class="nav-number">3.4.3.</span> <span class="nav-text">重新验证和重新加载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他"><span class="nav-number">3.4.4.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优先级"><span class="nav-number">3.5.</span> <span class="nav-text">优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三级缓存原理"><span class="nav-number">3.6.</span> <span class="nav-text">三级缓存原理</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%BA%E7%BC%93%E5%AD%98%E5%92%8C%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">强缓存和协商缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6"><span class="nav-number">2.</span> <span class="nav-text">缓存机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">请求流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E7%BC%93%E5%AD%98"><span class="nav-number">3.1.</span> <span class="nav-text">强缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98"><span class="nav-number">3.2.</span> <span class="nav-text">协商缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89-Etag"><span class="nav-number">3.3.</span> <span class="nav-text">为什么要有 Etag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cache-control"><span class="nav-number">3.4.</span> <span class="nav-text">Cache-control</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E7%BC%93%E5%AD%98%E6%80%A7"><span class="nav-number">3.4.1.</span> <span class="nav-text">可缓存性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%B0%E6%9C%9F"><span class="nav-number">3.4.2.</span> <span class="nav-text">到期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E9%AA%8C%E8%AF%81%E5%92%8C%E9%87%8D%E6%96%B0%E5%8A%A0%E8%BD%BD"><span class="nav-number">3.4.3.</span> <span class="nav-text">重新验证和重新加载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">3.4.4.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">3.5.</span> <span class="nav-text">优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%BA%A7%E7%BC%93%E5%AD%98%E5%8E%9F%E7%90%86"><span class="nav-number">3.6.</span> <span class="nav-text">三级缓存原理</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -563,9 +579,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -599,7 +623,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

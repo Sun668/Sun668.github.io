@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,23 +28,23 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="缘起：启用HTTPS也不够安全有不少网站只通过HTTPS对外提供服务，但用户在访问某个网站的时候，在浏览器里却往往直接输入网站域名（例如Example Domain），而不是完整的URL（例如Example Domain），不过浏览器依然能正确的使用HTTPS发起请求。这背后多亏了服务器和浏览器的协作，如下图所示。  图1：服务器和浏览器在背后帮用户做了很多工作 简单来讲就是，浏览器向网站发起一次">
-<meta name="keywords" content="HSTS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HSTS">
 <meta property="og:url" content="https://sunra.top/posts/3daba739/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="缘起：启用HTTPS也不够安全有不少网站只通过HTTPS对外提供服务，但用户在访问某个网站的时候，在浏览器里却往往直接输入网站域名（例如Example Domain），而不是完整的URL（例如Example Domain），不过浏览器依然能正确的使用HTTPS发起请求。这背后多亏了服务器和浏览器的协作，如下图所示。  图1：服务器和浏览器在背后帮用户做了很多工作 简单来讲就是，浏览器向网站发起一次">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/微信截图_20201215200744_st7ygu.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034304/origin-of-ray/微信截图_20201215201136_l7n9kr.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034428/origin-of-ray/微信截图_20201215201341_n2jssi.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034571/origin-of-ray/微信截图_20201215201603_mijchx.png">
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-b69590c9522f75bbd8ef0c73382e0a57_720w.jpg">
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-b9df0eb3dcc8da972eec57f0051c2f3b_720w.jpg">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.318Z">
+<meta property="article:published_time" content="2020-06-17T22:38:51.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.923Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HSTS">
-<meta name="twitter:description" content="缘起：启用HTTPS也不够安全有不少网站只通过HTTPS对外提供服务，但用户在访问某个网站的时候，在浏览器里却往往直接输入网站域名（例如Example Domain），而不是完整的URL（例如Example Domain），不过浏览器依然能正确的使用HTTPS发起请求。这背后多亏了服务器和浏览器的协作，如下图所示。  图1：服务器和浏览器在背后帮用户做了很多工作 简单来讲就是，浏览器向网站发起一次">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/微信截图_20201215200744_st7ygu.png">
 
 <link rel="canonical" href="https://sunra.top/posts/3daba739/">
@@ -246,7 +246,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -274,7 +274,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>图1：服务器和浏览器在背后帮用户做了很多工作</p>
 <p>简单来讲就是，浏览器向网站发起一次HTTP请求，在得到一个重定向响应后，发起一次HTTPS请求并得到最终的响应内容。所有的这一切对用户而言是完全透明的，所以在用户看来，在浏览器里直接输入域名却依然可以用HTTPS协议和网站进行安全的通信，是个不错的用户体验。</p>
 <p>一切看上去都是那么的完美，但其实不然，由于在建立起HTTPS连接之前存在一次明文的HTTP请求和重定向（上图中的第1、2步），使得攻击者可以以中间人的方式劫持这次请求，从而进行后续的攻击，例如窃听数据、篡改请求和响应、跳转到钓鱼网站等。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>以劫持请求并跳转到钓鱼网站为例，其大致做法如下图所示：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034304/origin-of-ray/微信截图_20201215201136_l7n9kr.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034304/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201136_l7n9kr.png"></p>
 <p>图2：劫持HTTP请求，阻止HTTPS连接，并进行钓鱼攻击</p>
@@ -298,7 +298,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>HSTS最早于2015年被纳入到ThoughtWorks技术雷达，并且在2016年的最新一期技术雷达里，它直接从“评估（Trial）”阶段进入到了“采用（Adopt）“阶段，这意味着ThoughtWorks强烈主张业界积极采用这项安全防御措施，并且ThoughtWorks已经将其应用于自己的项目。</p>
 <p>HSTS最为核心的是一个HTTP响应头（HTTP Response Header）。正是它可以让浏览器得知，在接下来的一段时间内，当前域名只能通过HTTPS进行访问，并且在浏览器发现当前连接不安全的情况下，强制拒绝用户的后续访问要求。</p>
 <p>HSTS Header的语法如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Strict-Transport-Security: &lt;max-age=&gt;[; includeSubDomains][; preload]</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Strict-Transport-Security: &lt;max-age=&gt;[; includeSubDomains][; preload]</span><br></pre></td></tr></table></figure>
 <p>其中：</p>
 <ul>
 <li>max-age是必选参数，是一个以秒为单位的数值，它代表着HSTS Header的过期时间，通常设置为1年，即31536000秒。</li>
@@ -306,7 +306,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <li>preload是可选参数，只有当你申请将自己的域名加入到浏览器内置列表的时候才需要使用到它。关于浏览器内置列表，下文有详细介绍。</li>
 </ul>
 <h4 id="让浏览器直接发起HTTPS请求"><a href="#让浏览器直接发起HTTPS请求" class="headerlink" title="让浏览器直接发起HTTPS请求"></a>让浏览器直接发起HTTPS请求</h4><p>只要在服务器返回给浏览器的响应头中，增加Strict-Transport-Security这个HTTP Header（下文简称HSTS Header），例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Strict-Transport-Security: max-age=31536000; includeSubDomains</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Strict-Transport-Security: max-age=31536000; includeSubDomains</span><br></pre></td></tr></table></figure>
 <p>就可以告诉浏览器，在接下来的31536000秒（1年）内，对于当前域名及其子域名的后续通信应该强制性的只使用HTTPS，直到超过有效期为止。</p>
 <p>完整的流程如下图所示：</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034571/origin-of-ray/微信截图_20201215201603_mijchx.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034571/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201603_mijchx.png"></p>
@@ -323,7 +323,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <h4 id="Preload-List：让防御更加彻底"><a href="#Preload-List：让防御更加彻底" class="headerlink" title="Preload List：让防御更加彻底"></a>Preload List：让防御更加彻底</h4><p>针对上面的攻击，HSTS也有应对办法，那就是在浏览器里内置一个列表，只要是在这个列表里的域名，无论何时、何种情况，浏览器都只使用HTTPS发起连接。这个列表由Google Chromium维护，FireFox、Safari、IE等主流浏览器均在使用。</p>
 <h3 id="一些Tips"><a href="#一些Tips" class="headerlink" title="一些Tips"></a>一些Tips</h3><p><strong>Tip 1：如何配置HSTS</strong></p>
 <p>很多地方都可以进行HSTS的配置，例如反向代理服务器、应用服务器、应用程序框架，以及应用程序中自定义Header。你可以根据实际情况进行选择。<br>常见的是在代理服务器中进行配置，以Nginx为例，只需在配置文件中加上下面这条指令即可：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_header Strict-Transport-Security &quot;max-age=31536000; includeSubDomains&quot; always;</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_header Strict-Transport-Security &quot;max-age=31536000; includeSubDomains&quot; always;</span><br></pre></td></tr></table></figure>
 <p>不过需要特别注意的是，在生产环境下使用HSTS应当特别谨慎，因为一旦浏览器接收到HSTS Header（假如有效期是1年），但是网站的证书又恰好出了问题，那么用户将在接下来的1年时间内都无法访问到你的网站，直到证书错误被修复，或者用户主动清除浏览器缓存。</p>
 <p>因此，建议在生产环境开启HSTS的时候，先将max-age的值设置小一些，例如5分钟，然后检查HSTS是否能正常工作，网站能否正常访问，之后再逐步将时间延长，例如1周、1个月，并在这个时间范围内继续检查HSTS是否正常工作，最后才改到1年。</p>
 <p><strong>Tip 2：如何加入到HSTS Preload List</strong></p>
@@ -350,8 +350,8 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 </ul>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>随着越来越多的网站开始使用HTTPS，甚至是开启全站HTTPS，数据在传输过程中的安全性能够得到极大的保障。与此同时，通过HSTS的帮助，避免遭受到SSL Stripping或者中间人的攻击，能够使得数据通信变得更加安全。本篇文章希望通过对HSTS的解析，使得更多的开发团队将HSTS运用到自己的项目中。</p>
 <p>转载文章出处：</p>
-<p><a href="https://zhuanlan.zhihu.com/p/63674248" rel="external nofollow noopener noreferrer" target="_blank">https://zhuanlan.zhihu.com/p/63674248</a></p>
-<p><a href="https://www.barretlee.com/blog/2015/10/22/hsts-intro/" rel="external nofollow noopener noreferrer" target="_blank">https://www.barretlee.com/blog/2015/10/22/hsts-intro/</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://zhuanlan.zhihu.com/p/63674248">https://zhuanlan.zhihu.com/p/63674248</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.barretlee.com/blog/2015/10/22/hsts-intro/">https://www.barretlee.com/blog/2015/10/22/hsts-intro/</a></p>
 
     </div>
 
@@ -468,7 +468,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#缘起：启用HTTPS也不够安全"><span class="nav-number">1.</span> <span class="nav-text">缘起：启用HTTPS也不够安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决之道：使用HSTS"><span class="nav-number">2.</span> <span class="nav-text">解决之道：使用HSTS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HSTS"><span class="nav-number">2.1.</span> <span class="nav-text">HSTS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#让浏览器直接发起HTTPS请求"><span class="nav-number">2.2.</span> <span class="nav-text">让浏览器直接发起HTTPS请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#强制拒绝不安全的链接，不给用户选择的机会"><span class="nav-number">2.3.</span> <span class="nav-text">强制拒绝不安全的链接，不给用户选择的机会</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#道高一尺魔高一丈：攻击者依然有可乘之机"><span class="nav-number">3.</span> <span class="nav-text">道高一尺魔高一丈：攻击者依然有可乘之机</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Preload-List：让防御更加彻底"><span class="nav-number">3.1.</span> <span class="nav-text">Preload List：让防御更加彻底</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一些Tips"><span class="nav-number">4.</span> <span class="nav-text">一些Tips</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HSTS-存在的坑"><span class="nav-number">5.</span> <span class="nav-text">HSTS 存在的坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%98%E8%B5%B7%EF%BC%9A%E5%90%AF%E7%94%A8HTTPS%E4%B9%9F%E4%B8%8D%E5%A4%9F%E5%AE%89%E5%85%A8"><span class="nav-number">1.</span> <span class="nav-text">缘起：启用HTTPS也不够安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E4%B9%8B%E9%81%93%EF%BC%9A%E4%BD%BF%E7%94%A8HSTS"><span class="nav-number">2.</span> <span class="nav-text">解决之道：使用HSTS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HSTS"><span class="nav-number">2.1.</span> <span class="nav-text">HSTS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A9%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B4%E6%8E%A5%E5%8F%91%E8%B5%B7HTTPS%E8%AF%B7%E6%B1%82"><span class="nav-number">2.2.</span> <span class="nav-text">让浏览器直接发起HTTPS请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%BA%E5%88%B6%E6%8B%92%E7%BB%9D%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E9%93%BE%E6%8E%A5%EF%BC%8C%E4%B8%8D%E7%BB%99%E7%94%A8%E6%88%B7%E9%80%89%E6%8B%A9%E7%9A%84%E6%9C%BA%E4%BC%9A"><span class="nav-number">2.3.</span> <span class="nav-text">强制拒绝不安全的链接，不给用户选择的机会</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%93%E9%AB%98%E4%B8%80%E5%B0%BA%E9%AD%94%E9%AB%98%E4%B8%80%E4%B8%88%EF%BC%9A%E6%94%BB%E5%87%BB%E8%80%85%E4%BE%9D%E7%84%B6%E6%9C%89%E5%8F%AF%E4%B9%98%E4%B9%8B%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">道高一尺魔高一丈：攻击者依然有可乘之机</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Preload-List%EF%BC%9A%E8%AE%A9%E9%98%B2%E5%BE%A1%E6%9B%B4%E5%8A%A0%E5%BD%BB%E5%BA%95"><span class="nav-number">3.1.</span> <span class="nav-text">Preload List：让防御更加彻底</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9BTips"><span class="nav-number">4.</span> <span class="nav-text">一些Tips</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HSTS-%E5%AD%98%E5%9C%A8%E7%9A%84%E5%9D%91"><span class="nav-number">5.</span> <span class="nav-text">HSTS 存在的坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -558,9 +558,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -594,7 +602,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

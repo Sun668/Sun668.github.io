@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,14 +20,20 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="总述本文大概总结下一些三维空间的坐标数据是如何通过渲染流水线变为屏幕上不同颜色的像素的，阅读之时，需要注意，图元，片元，和像素三者的区别。 下图是一个总体的流程图，具体细节可以看后面的解释。">
-<meta name="keywords" content="Unity 流水线 矩阵 MVP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity 渲染原理 (一) 渲染流水线：从模型上的点到屏幕上的点">
 <meta property="og:url" content="https://sunra.top/2021/12/16/unity-render-pipeline-1/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="总述本文大概总结下一些三维空间的坐标数据是如何通过渲染流水线变为屏幕上不同颜色的像素的，阅读之时，需要注意，图元，片元，和像素三者的区别。 下图是一个总体的流程图，具体细节可以看后面的解释。">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646000/origin-of-ray/render_pipeline_gnuamz.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646124/origin-of-ray/asynccode_q28ocq.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646148/origin-of-ray/asynccode_ginlkt.png">
@@ -39,10 +45,11 @@
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646357/origin-of-ray/asynccode_viggia.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646391/origin-of-ray/asynccode_wyxw6o.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646424/origin-of-ray/asynccode_dk5lwg.png">
-<meta property="og:updated_time" content="2023-05-26T22:57:24.552Z">
+<meta property="article:published_time" content="2021-12-16T09:21:28.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.947Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Unity 渲染原理 (一) 渲染流水线：从模型上的点到屏幕上的点">
-<meta name="twitter:description" content="总述本文大概总结下一些三维空间的坐标数据是如何通过渲染流水线变为屏幕上不同颜色的像素的，阅读之时，需要注意，图元，片元，和像素三者的区别。 下图是一个总体的流程图，具体细节可以看后面的解释。">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646000/origin-of-ray/render_pipeline_gnuamz.png">
 
 <link rel="canonical" href="https://sunra.top/2021/12/16/unity-render-pipeline-1/">
@@ -60,6 +67,15 @@
 
   <title>Unity 渲染原理 (一) 渲染流水线：从模型上的点到屏幕上的点 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -235,7 +251,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -260,7 +276,7 @@
       
         <h1 id="总述"><a href="#总述" class="headerlink" title="总述"></a>总述</h1><p>本文大概总结下一些三维空间的坐标数据是如何通过渲染流水线变为屏幕上不同颜色的像素的，阅读之时，需要注意，图元，片元，和像素三者的区别。</p>
 <p>下图是一个总体的流程图，具体细节可以看后面的解释。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646000/origin-of-ray/render_pipeline_gnuamz.png" alt></p>
 <h1 id="什么是渲染流水线"><a href="#什么是渲染流水线" class="headerlink" title="什么是渲染流水线"></a>什么是渲染流水线</h1><h2 id="渲染流水线的任务"><a href="#渲染流水线的任务" class="headerlink" title="渲染流水线的任务"></a>渲染流水线的任务</h2><p>渲染流水线的工作就是，从一个三维场景出发，渲染出一张二维图像。</p>
 <p>也就是说，需要从一系列三维空间信息，如顶点数据，纹理等信息出发，把这些信息最终转化为一张人眼可以看到的二维图像。</p>
@@ -333,7 +349,7 @@
 <p>顶点着色器的主要功能有：坐标变化与逐顶点光照。</p>
 <p>当然，除了这两个主要任务，顶点着色器还可以输出后续阶段所需的数据</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1639646237/origin-of-ray/asynccode_kgktgg.png" alt="img"></p>
-<p>坐标转化。顾名思义，就是对顶点的坐标进行某种变换。顶点着色器可以在这一步中改变顶点的位置，这在顶点动画中非常有用。例如，我们可以通过改变顶点位置来模拟水面，布料等。但是需要注意的是，无论我们在顶点着色器中怎样改变顶点，一个顶点着色器必须完成的一个工作是：将顶点坐标从模型空间转换到<a href="https://gameinstitute.qq.com/community/detail/117556" rel="external nofollow noopener noreferrer" target="_blank">齐次裁剪空间</a></p>
+<p>坐标转化。顾名思义，就是对顶点的坐标进行某种变换。顶点着色器可以在这一步中改变顶点的位置，这在顶点动画中非常有用。例如，我们可以通过改变顶点位置来模拟水面，布料等。但是需要注意的是，无论我们在顶点着色器中怎样改变顶点，一个顶点着色器必须完成的一个工作是：将顶点坐标从模型空间转换到<a target="_blank" rel="external nofollow noopener noreferrer" href="https://gameinstitute.qq.com/community/detail/117556">齐次裁剪空间</a></p>
 <p>我们经常可以在顶点着色器中看到如下代码：</p>
 <p>o.pos = mul(UNITY_MVP, v.position);</p>
 <p>这段代码的作用就是把顶点坐标转换到齐次裁剪坐标系下，接着通常再由硬件做透视除法后，最终得到归一化的设备坐标（Normalized Device Coordinate, NDC）</p>
@@ -505,7 +521,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#总述"><span class="nav-number">1.</span> <span class="nav-text">总述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是渲染流水线"><span class="nav-number">2.</span> <span class="nav-text">什么是渲染流水线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染流水线的任务"><span class="nav-number">2.1.</span> <span class="nav-text">渲染流水线的任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染流水线的三个概念阶段"><span class="nav-number">2.2.</span> <span class="nav-text">渲染流水线的三个概念阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#应用阶段"><span class="nav-number">2.2.1.</span> <span class="nav-text">应用阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#几何阶段"><span class="nav-number">2.2.2.</span> <span class="nav-text">几何阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#光栅化阶段"><span class="nav-number">2.2.3.</span> <span class="nav-text">光栅化阶段</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU和GPU之间的通信"><span class="nav-number">3.</span> <span class="nav-text">CPU和GPU之间的通信</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#把数据加载到显存中"><span class="nav-number">3.1.</span> <span class="nav-text">把数据加载到显存中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置渲染状态"><span class="nav-number">3.2.</span> <span class="nav-text">设置渲染状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用Draw-call"><span class="nav-number">3.3.</span> <span class="nav-text">调用Draw call</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPU流水线"><span class="nav-number">4.</span> <span class="nav-text">GPU流水线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#顶点着色器"><span class="nav-number">4.1.</span> <span class="nav-text">顶点着色器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#裁剪"><span class="nav-number">4.2.</span> <span class="nav-text">裁剪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#屏幕映射"><span class="nav-number">4.3.</span> <span class="nav-text">屏幕映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三角形设置"><span class="nav-number">4.4.</span> <span class="nav-text">三角形设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三角形遍历"><span class="nav-number">4.5.</span> <span class="nav-text">三角形遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#片元着色器"><span class="nav-number">4.6.</span> <span class="nav-text">片元着色器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逐片元操作"><span class="nav-number">4.7.</span> <span class="nav-text">逐片元操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模版测试"><span class="nav-number">4.7.1.</span> <span class="nav-text">模版测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深度测试"><span class="nav-number">4.7.2.</span> <span class="nav-text">深度测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并"><span class="nav-number">4.7.3.</span> <span class="nav-text">合并</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">总述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%B8%B2%E6%9F%93%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">2.</span> <span class="nav-text">什么是渲染流水线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%9A%84%E4%BB%BB%E5%8A%A1"><span class="nav-number">2.1.</span> <span class="nav-text">渲染流水线的任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%9A%84%E4%B8%89%E4%B8%AA%E6%A6%82%E5%BF%B5%E9%98%B6%E6%AE%B5"><span class="nav-number">2.2.</span> <span class="nav-text">渲染流水线的三个概念阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E9%98%B6%E6%AE%B5"><span class="nav-number">2.2.1.</span> <span class="nav-text">应用阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E4%BD%95%E9%98%B6%E6%AE%B5"><span class="nav-number">2.2.2.</span> <span class="nav-text">几何阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%89%E6%A0%85%E5%8C%96%E9%98%B6%E6%AE%B5"><span class="nav-number">2.2.3.</span> <span class="nav-text">光栅化阶段</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU%E5%92%8CGPU%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1"><span class="nav-number">3.</span> <span class="nav-text">CPU和GPU之间的通信</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%8A%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%88%B0%E6%98%BE%E5%AD%98%E4%B8%AD"><span class="nav-number">3.1.</span> <span class="nav-text">把数据加载到显存中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E6%B8%B2%E6%9F%93%E7%8A%B6%E6%80%81"><span class="nav-number">3.2.</span> <span class="nav-text">设置渲染状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E7%94%A8Draw-call"><span class="nav-number">3.3.</span> <span class="nav-text">调用Draw call</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPU%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">4.</span> <span class="nav-text">GPU流水线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B6%E7%82%B9%E7%9D%80%E8%89%B2%E5%99%A8"><span class="nav-number">4.1.</span> <span class="nav-text">顶点着色器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%81%E5%89%AA"><span class="nav-number">4.2.</span> <span class="nav-text">裁剪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%8F%E5%B9%95%E6%98%A0%E5%B0%84"><span class="nav-number">4.3.</span> <span class="nav-text">屏幕映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E8%A7%92%E5%BD%A2%E8%AE%BE%E7%BD%AE"><span class="nav-number">4.4.</span> <span class="nav-text">三角形设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E8%A7%92%E5%BD%A2%E9%81%8D%E5%8E%86"><span class="nav-number">4.5.</span> <span class="nav-text">三角形遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%87%E5%85%83%E7%9D%80%E8%89%B2%E5%99%A8"><span class="nav-number">4.6.</span> <span class="nav-text">片元着色器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%90%E7%89%87%E5%85%83%E6%93%8D%E4%BD%9C"><span class="nav-number">4.7.</span> <span class="nav-text">逐片元操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E7%89%88%E6%B5%8B%E8%AF%95"><span class="nav-number">4.7.1.</span> <span class="nav-text">模版测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95"><span class="nav-number">4.7.2.</span> <span class="nav-text">深度测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E5%B9%B6"><span class="nav-number">4.7.3.</span> <span class="nav-text">合并</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -595,9 +611,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -631,7 +655,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

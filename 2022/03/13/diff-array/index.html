@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,18 +20,25 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="这周的每日一题有一道困难级别的题目，使用了一种叫做差分数组的技巧，这个技巧其实也不复杂，就是前缀和的反向操作，简单记录一下。 这是题目的链接：https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/">
-<meta name="keywords" content="差分数组">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
+  <meta name="description" content="这周的每日一题有一道困难级别的题目，使用了一种叫做差分数组的技巧，这个技巧其实也不复杂，就是前缀和的反向操作，简单记录一下。 这是题目的链接：https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;smallest-rotation-with-highest-score&#x2F;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="差分数组">
 <meta property="og:url" content="https://sunra.top/2022/03/13/diff-array/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="这周的每日一题有一道困难级别的题目，使用了一种叫做差分数组的技巧，这个技巧其实也不复杂，就是前缀和的反向操作，简单记录一下。 这是题目的链接：https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-26T22:57:24.043Z">
+<meta property="og:description" content="这周的每日一题有一道困难级别的题目，使用了一种叫做差分数组的技巧，这个技巧其实也不复杂，就是前缀和的反向操作，简单记录一下。 这是题目的链接：https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;smallest-rotation-with-highest-score&#x2F;">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-03-13T07:04:39.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.927Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="差分数组">
-<meta name="twitter:description" content="这周的每日一题有一道困难级别的题目，使用了一种叫做差分数组的技巧，这个技巧其实也不复杂，就是前缀和的反向操作，简单记录一下。 这是题目的链接：https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/">
 
 <link rel="canonical" href="https://sunra.top/2022/03/13/diff-array/">
 
@@ -48,6 +55,15 @@
 
   <title>差分数组 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -223,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -247,8 +263,8 @@
 
       
         <p>这周的每日一题有一道困难级别的题目，使用了一种叫做差分数组的技巧，这个技巧其实也不复杂，就是前缀和的反向操作，简单记录一下。</p>
-<p>这是题目的链接：<a href="https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/" rel="external nofollow noopener noreferrer" target="_blank">https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/</a></p>
-<a id="more"></a>
+<p>这是题目的链接：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/">https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/</a></p>
+<span id="more"></span>
 <p>这个题目最简单的做法就是遍历每个可能的k，然后计算当前数组的得分，最后比较那个情况下得分是最大的，如果有多个最大的，那么取k值小的。</p>
 <p>但是这样一来，算法的复杂度就是n的平方级别的。</p>
 <p>所以我们需要找出其中的规律，然后对这个规律加以简化。</p>
@@ -263,7 +279,7 @@
 <p>假设元素 x 的初始下标为 i。当 i &lt; x 时应将 points 的下标范围 [i + 1, i - x + n] 内的所有元素加 1，当 i≥x 时应将 points 的下标范围 [0, i - x] 和 [i + 1, n - 1] 内的所有元素加 1。由于是将一段或两段连续下标范围内的元素加 1，因此可以使用差分数组实现。定义长度为 n 的差分数组 diffs，其中 diffs[k]=points[k]−points[k−1]（特别地，points[−1]=0），具体做法是：令low=(i+1) mod n，high=(i−x+n+1) mod n，将 diffs[low] 的值加 1，将 diffs[high] 的值减 1，如果low≥high 则将 diffs[0] 的值加 1。</p>
 <p>遍历数组 nums 的所有元素并更新差分数组之后，遍历数组 diffs 并计算前缀和，则每个下标处的前缀和表示当前轮调下标处的得分。在遍历过程中维护最大得分和最大得分的最小轮调下标，遍历结束之后即可得到结果。</p>
 <p>下面是C语言版本的代码：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bestRotation</span><span class="params">(<span class="keyword">int</span>* nums, <span class="keyword">int</span> numsSize)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span>* diffs = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>) * numsSize);</span><br><span class="line">    <span class="built_in">memset</span>(diffs, <span class="number">0</span>, <span class="keyword">sizeof</span>(<span class="keyword">int</span>) * numsSize);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numsSize; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> low = (i + <span class="number">1</span>) % numsSize;</span><br><span class="line">        <span class="keyword">int</span> high = (i - nums[i] + numsSize + <span class="number">1</span>) % numsSize;</span><br><span class="line">        diffs[low]++;</span><br><span class="line">        diffs[high]--;</span><br><span class="line">        <span class="keyword">if</span> (low &gt;= high) &#123;</span><br><span class="line">            diffs[<span class="number">0</span>]++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> bestIndex = <span class="number">0</span>, maxScore = <span class="number">0</span>, score = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numsSize; i++) &#123;</span><br><span class="line">        score += diffs[i];</span><br><span class="line">        <span class="keyword">if</span> (maxScore &lt; score) &#123;</span><br><span class="line">            bestIndex = i;</span><br><span class="line">            maxScore = score;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">free</span>(diffs);</span><br><span class="line">    <span class="keyword">return</span> bestIndex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">bestRotation</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> numsSize)</span>&#123;</span><br><span class="line">    <span class="type">int</span>* diffs = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>) * numsSize);</span><br><span class="line">    <span class="built_in">memset</span>(diffs, <span class="number">0</span>, <span class="keyword">sizeof</span>(<span class="type">int</span>) * numsSize);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; numsSize; i++) &#123;</span><br><span class="line">        <span class="type">int</span> low = (i + <span class="number">1</span>) % numsSize;</span><br><span class="line">        <span class="type">int</span> high = (i - nums[i] + numsSize + <span class="number">1</span>) % numsSize;</span><br><span class="line">        diffs[low]++;</span><br><span class="line">        diffs[high]--;</span><br><span class="line">        <span class="keyword">if</span> (low &gt;= high) &#123;</span><br><span class="line">            diffs[<span class="number">0</span>]++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> bestIndex = <span class="number">0</span>, maxScore = <span class="number">0</span>, score = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; numsSize; i++) &#123;</span><br><span class="line">        score += diffs[i];</span><br><span class="line">        <span class="keyword">if</span> (maxScore &lt; score) &#123;</span><br><span class="line">            bestIndex = i;</span><br><span class="line">            maxScore = score;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">free</span>(diffs);</span><br><span class="line">    <span class="keyword">return</span> bestIndex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -468,9 +484,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -504,7 +528,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

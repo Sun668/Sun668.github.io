@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,17 +28,17 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="这个周刚接触了一点关于Solace的知识，对其中几个基础的概念查阅了一下官方文档，在这里总结一下，主要就是Endpoints，Queue，Topic，Subscription之间的关系。">
-<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Solace Endpoints">
 <meta property="og:url" content="https://sunra.top/posts/e726988d/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这个周刚接触了一点关于Solace的知识，对其中几个基础的概念查阅了一下官方文档，在这里总结一下，主要就是Endpoints，Queue，Topic，Subscription之间的关系。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.338Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-02-15T03:08:49.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.943Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Solace Endpoints">
-<meta name="twitter:description" content="这个周刚接触了一点关于Solace的知识，对其中几个基础的概念查阅了一下官方文档，在这里总结一下，主要就是Endpoints，Queue，Topic，Subscription之间的关系。">
 
 <link rel="canonical" href="https://sunra.top/posts/e726988d/">
 
@@ -239,7 +239,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,7 +263,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       
         <p>这个周刚接触了一点关于Solace的知识，对其中几个基础的概念查阅了一下官方文档，在这里总结一下，主要就是Endpoints，Queue，Topic，Subscription之间的关系。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>首先总结一下，Endpoint是Solace中用于发送和接收消息的端，它分为两种类型，一种是Queue Endpoint，另一种是Topic Endpoint，这两种Endpoint都可以有自己的Subscription，也可以称为Topic Subscription，每个Queue Endpoint可以有多个Topic Subscription，而每个Topic Endpoint只能有自身的一个Topic Subscription，我们可以把消息推送到Topic中，也可以推送到Queue中，但是推送到Topic中的消息不仅会被发送到Topic Endpoint中，还会发送到订阅它的Queue Endpoint中。（目前作者不成熟的理解是每个Topic Endpoint都一定有一个和它Match的Topic Subscription，所以给某个Topic推送，最少会有一个Topic Endpoint收到，同时订阅这个Topic的Queue也会收到，但是如果直接向Queue推送，就只有该Queue会受到消息）</p>
 <p>接下来详细解释一下具体的概念，这部分内容来自于Solace的官方解释。</p>
 <h2 id="Endpoints"><a href="#Endpoints" class="headerlink" title="Endpoints"></a>Endpoints</h2><p>Solace PubSub+事件代理支持两种类型的端点，用于接收、存储和交付保证消息。</p>
@@ -281,8 +281,8 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 </ul>
 <p>可以更改持久队列的访问类型，但仅在禁用了对队列的客户端访问之后。</p>
 <p>此外，队列的访问类型不会影响客户机使用队列浏览器在队列上浏览消息的能力。</p>
-<h3 id="Adding-Topic-Subscriptions-to-Queues"><a href="#Adding-Topic-Subscriptions-to-Queues" class="headerlink" title="Adding Topic Subscriptions to Queues"></a>Adding Topic Subscriptions to Queues</h3><p>这一段建议直接看<a href="https://docs.solace.com/PubSub-Basics/Endpoints.htm#add-topics-to-queues" rel="external nofollow noopener noreferrer" target="_blank">Adding Topic Subscriptions to Queues</a></p>
-<p>同时还有<a href="https://docs.solace.com/PubSub-Basics/Topic-Matching-and-Delivery-Modes.htm" rel="external nofollow noopener noreferrer" target="_blank">Delivery Modes</a></p>
+<h3 id="Adding-Topic-Subscriptions-to-Queues"><a href="#Adding-Topic-Subscriptions-to-Queues" class="headerlink" title="Adding Topic Subscriptions to Queues"></a>Adding Topic Subscriptions to Queues</h3><p>这一段建议直接看<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.solace.com/PubSub-Basics/Endpoints.htm#add-topics-to-queues">Adding Topic Subscriptions to Queues</a></p>
+<p>同时还有<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.solace.com/PubSub-Basics/Topic-Matching-and-Delivery-Modes.htm">Delivery Modes</a></p>
 <h2 id="Topic-Endpoint"><a href="#Topic-Endpoint" class="headerlink" title="Topic Endpoint"></a>Topic Endpoint</h2><p>主题端点吸引发布到主题的消息，主题端点对该主题具有匹配的主题订阅。主题端点的主题订阅在客户端请求中指定，以便将流绑定到该主题端点。</p>
 <p>主题端点可以在发布/订阅模型中使用。它们相当于Java消息服务(JMS)中的持久主题订阅。</p>
 
@@ -491,9 +491,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -527,7 +535,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

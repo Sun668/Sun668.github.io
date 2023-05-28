@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,17 +28,17 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="我们继续看一下Unity光照的最后一部分，衰减">
-<meta name="keywords" content="Unity 光照 光照衰减 不透明物体 阴影">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity 渲染原理（十五）Unity的光照衰减与不透明物体阴影">
 <meta property="og:url" content="https://sunra.top/posts/53817/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="我们继续看一下Unity光照的最后一部分，衰减">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.342Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-08-25T09:15:51.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.947Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Unity 渲染原理（十五）Unity的光照衰减与不透明物体阴影">
-<meta name="twitter:description" content="我们继续看一下Unity光照的最后一部分，衰减">
 
 <link rel="canonical" href="https://sunra.top/posts/53817/">
 
@@ -239,7 +239,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,7 +263,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       
         <p>我们继续看一下Unity光照的最后一部分，衰减</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="光照衰减"><a href="#光照衰减" class="headerlink" title="光照衰减"></a>光照衰减</h2><p>之前的博客我们提到，Unity使用一张纹理作为查找表来在片元着色器中计算逐像素的光照衰减。这样的好处在于，计算衰减可以不依赖于数学公式的复杂性，我们只要使用一个参数值去纹理中采样即可。但使用纹理查找来计算衰减也有一些弊端：</p>
 <ul>
 <li>需要预处理来得到采样纹理，而且纹理的大小也会影响衰减的精度</li>
@@ -272,12 +272,12 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>但是由于这种方法可以在一定程度上提高性能，而且得到的效果在大部分情况下都是良好的，因此Unity默认使用这种纹理查找的方式来计算逐像素的点光源和聚光灯的衰减。</p>
 <h3 id="用于光照衰减的纹理"><a href="#用于光照衰减的纹理" class="headerlink" title="用于光照衰减的纹理"></a>用于光照衰减的纹理</h3><p>Unity在内部使用一张名为_LightTexture0的纹理来计算光源衰减。需要注意的是，如果我们对该光源使用了cookie，那么衰减查找纹理是_LigthTextureB0,但这里不讨论这种情况。我们通常只关心_LightTexture0对角线上的纹理颜色值，这些值表明了在光源空间中不同位置的点的衰减值，如(0,0)点表明了与光源位置重合的点的衰减值，而(1,1)点则表明了在光源空间中所关心的距离最远的点的衰减。</p>
 <p>为了对_LightTexture0纹理采样得到给定点到光源的衰减值，我们首先需要得到该点在光源空间中的位置，这是通过_LightMatrix0变换矩阵得到的，我们只需要把_LightMatrix0和世界空间中的顶点坐标相乘即可得到光源空间中的相应位置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flaot3 lightCoord = mul(_LightMatrix0, float4(i.worldPostion, 1)).xyz</span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flaot3 lightCoord = mul(_LightMatrix0, float4(i.worldPostion, <span class="number">1</span>)).xyz</span><br></pre></td></tr></table></figure>
 <p>然后我们可以使用这个坐标的模的平方对衰减纹理进行采样，得到衰减值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fixed atten = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).UNITY_ATTEN_CHANNEL</span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fixed</span> atten = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).UNITY_ATTEN_CHANNEL</span><br></pre></td></tr></table></figure>
 <p>上面代码中，我们使用了光源空间中顶点距离的平方来对纹理进行采样，之所以没有使用距离值是因为这种方法可以避免开方操作，然后我们使用宏UNITY_ATTEN_CHANNEL来得到衰减纹理中衰减值所在的分量，得到最终的衰减值。</p>
 <h3 id="使用数学公式计算衰减"><a href="#使用数学公式计算衰减" class="headerlink" title="使用数学公式计算衰减"></a>使用数学公式计算衰减</h3><p>尽管纹理采样的方法可以减少计算衰减的复杂度，但有时候我们希望可以在代码中利用公式来计算光源的衰减，例如，我们我们可以利用代码计算光源的线性衰减</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">float distance = length(_WorldSpaceLightPos0.xyz - i.worldPosition.xyz);</span><br><span class="line">atten = 1.0 / distance;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">float</span> distance = length(_WorldSpaceLightPos0.xyz - i.worldPosition.xyz);</span><br><span class="line">atten = <span class="number">1.0</span> / distance;</span><br></pre></td></tr></table></figure>
 <p>但是，Unity没有给出内置衰减计算的相关说明。尽管我们仍然可以再片元着色器中利用一些数学公式来计算衰减，但是由于我们无法在Shader中通过内置变量得到光源的范围，聚光灯的朝向，张开角度等信息，因此得到的效果往往有些不尽如人意，尤其是在物体离开光源的照明范围会发生突变（因为物体不在光源范围，Unity就不会为物体执行一个Additional Pass）。当然，我们可以利用脚本讲光源的相关信息传递给Shader，但是灵活度比较低。</p>
 <h2 id="Unity-的阴影"><a href="#Unity-的阴影" class="headerlink" title="Unity 的阴影"></a>Unity 的阴影</h2><p>为了使场景看起来更贱真实，具有深度信息，我们通常希望光源可以把一些物体的阴影投射到其他物体上。</p>
 <p>我们一起来看一下如何让一个物体向其他物体投射阴影，以及如何让一个物体接收来自其他物体的阴影。</p>
@@ -299,7 +299,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <h4 id="让物体投射阴影"><a href="#让物体投射阴影" class="headerlink" title="让物体投射阴影"></a>让物体投射阴影</h4><p>在Unity中，我们可以选择是否让一个物体投射或接受阴影。这是通过设置Mesh Render组件中的Cast Shadows和Receive Shadows属性来实现的。</p>
 <p>Cast Shadows可以被设置为开启或者关闭。如果开启了Cast Shadows属性，那么Unity就会把该物体加入到光源的阴影映射纹理的计算中，从而让其他物体在对阴影映射纹理采样时可以得到该物体的相关信息。正如之前所说，这个过程是通过为该物体执行LightMode为ShadowCaster的Pass来实现的。Receive Shadows则可以选择是否让物体接受来自其他物体的阴影。如果没有开启Receive Shadows，那么当我们调用Unity得内置宏和变量计算阴影时，这些宏通过判断该物体没有开启接受阴影的功能，就不会在内部为我们计算阴影。</p>
 <p>当我们在正方体上开启Cast Shadows，在两个平面上开启Receive Shadows时，可以发现正方体在平面上产生了阴影。这是因为虽然我们的ForwardRendering没有LightMode为ShaderCaster的Pass，但是它的Fallback为Specular，而Specular的Fallback为VertexLit，在VertexLit中包含LightMode为ShaderCaster的Pass。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Pass &#123;</span><br><span class="line">    Name &quot;ShadowCaster&quot;</span><br><span class="line">    Tags &#123; &quot;LightMode&quot; = &quot;ShadowCaster&quot; &#125;</span><br><span class="line"></span><br><span class="line">    CFPROGRAM</span><br><span class="line">    #pragma vertex vert</span><br><span class="line">    #pragma fragment frag</span><br><span class="line">    #pragma multi_compile_shadowcaster</span><br><span class="line">    #include &quot;UnityCG.cginc&quot;</span><br><span class="line"></span><br><span class="line">    struct v2f &#123;</span><br><span class="line">        V2F_SHADOW_CASTER;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    v2f vert(appdata_base v) &#123;</span><br><span class="line">        v2f o;</span><br><span class="line">        TRANSFER_SHADOW_CASTER_NORMALOFFSET(o);</span><br><span class="line">        return o;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    float4 frag(v2f i): SV_Target &#123;</span><br><span class="line">        SHADOW_CASTER_FRAGMENT(i);</span><br><span class="line">    &#125;</span><br><span class="line">    ENDCG</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Pass &#123;</span><br><span class="line">    Name <span class="string">&quot;ShadowCaster&quot;</span></span><br><span class="line">    Tags &#123; <span class="string">&quot;LightMode&quot;</span> = <span class="string">&quot;ShadowCaster&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line">    CFPROGRAM</span><br><span class="line">    <span class="meta">#<span class="keyword">pragma</span> vertex vert</span></span><br><span class="line">    <span class="meta">#<span class="keyword">pragma</span> fragment frag</span></span><br><span class="line">    <span class="meta">#<span class="keyword">pragma</span> multi_compile_shadowcaster</span></span><br><span class="line">    <span class="meta">#include &quot;UnityCG.cginc&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">struct</span> v2f &#123;</span><br><span class="line">        V2F_SHADOW_CASTER;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">v2f <span class="title">vert</span>(<span class="params">appdata_base v</span>)</span> &#123;</span><br><span class="line">        v2f o;</span><br><span class="line">        TRANSFER_SHADOW_CASTER_NORMALOFFSET(o);</span><br><span class="line">        <span class="keyword">return</span> o;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">float4 <span class="title">frag</span>(<span class="params">v2f i</span>): SV_Target</span> &#123;</span><br><span class="line">        SHADOW_CASTER_FRAGMENT(i);</span><br><span class="line">    &#125;</span><br><span class="line">    ENDCG</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这段代码中有很多的宏定义，但是实际用处就是把深度信息写入渲染目标中。</p>
 <blockquote>
 <p>这里还有一点需要注意，默认情况下，我们在计算光源的阴影映射纹理时会剔除掉物体的背面。但对于内置的平面来说，它只有一个面，如果在计算阴影映射纹理时，物体在光源空间中没有任何正面（frontface），就不会添加到阴影映射纹理。我们可以设置Cast Shadows为Two Sided来允许对物体的所有面都计算阴影信息。</p>
@@ -307,16 +307,16 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <h4 id="让物体接收阴影"><a href="#让物体接收阴影" class="headerlink" title="让物体接收阴影"></a>让物体接收阴影</h4><p>我们的平面之所以能够产生阴影是因为使用了内置的Standard Shader，二者内置的Shader进行了接收阴影的相关操作。</p>
 <p>而为了让正方体可以接受阴影，我们需要改造我们的Shader代码，我们创建一个新的Shader，命名为Shadow，然后将ForwardRendering代码复制给它再改造</p>
 <p>首先需要在Base Pass中包含一个新的内置文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;AutoLight.cgnic&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include &quot;AutoLight.cgnic&quot;</span></span><br></pre></td></tr></table></figure>
 <p>这是因为我们计算阴影时所用到的宏定义都在这个文件中</p>
 <p>然后我们需要在我们的输出结构体系v2f中添加一个内置的宏<code>SHADOW_COORDS</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct v2f &#123;</span><br><span class="line">    float4 pos:SV_POSITION;</span><br><span class="line">    float3 worldNormal: TEXCOORD0;</span><br><span class="line">    float3 worldPos: TEXCOORD1;</span><br><span class="line">    SHADOW_COORDS(2)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> v2f &#123;</span><br><span class="line">    float4 pos:SV_POSITION;</span><br><span class="line">    float3 worldNormal: TEXCOORD0;</span><br><span class="line">    float3 worldPos: TEXCOORD1;</span><br><span class="line">    SHADOW_COORDS(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这个宏的作用很简单，就声明命一个用于对阴影纹理采样的坐标。需要注意的是，这个宏的参数需要是下一个可用的插值寄存器的索引值。</p>
 <p>然后我们在顶点着色器返回之前添加一个内置宏<code>TRANSFER_SHADOW</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">v2f vert(a2v v) &#123;</span><br><span class="line">    v2f o;</span><br><span class="line">    ...</span><br><span class="line">    TRANSFER_SHADOW_CASTER_NORMALOFFSET(o);</span><br><span class="line">    ...</span><br><span class="line">    return o;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">v2f <span class="title">vert</span>(<span class="params">a2v v</span>)</span> &#123;</span><br><span class="line">    v2f o;</span><br><span class="line">    ...</span><br><span class="line">    TRANSFER_SHADOW_CASTER_NORMALOFFSET(o);</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> o;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这个宏用于在顶点着色器中计算上一步中声明的阴影纹理坐标</p>
 <p>接着，我们在片元着色器中计算阴影值，同样适用一个宏定义<code>SHADOW_ATTENUATION</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fixed shadow = SHADOW_ATTENUATION(i);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fixed</span> shadow = SHADOW_ATTENUATION(i);</span><br></pre></td></tr></table></figure>
 <p>SHADOW_COORDS, TRANSFER_SHADOW和SHADOW_ATTENUATION是计算阴影时的三剑客，这些内置宏帮助我们在必要时计算光源的阴影，我们可以在AutoLight.cgnic中找到它们的声明</p>
 <p>SHADOW_COORDS实际上就是声明了一个名为_ShadowCoord的阴影纹理坐标变量。而TRANSFER_SHADOW的实现会根据平台不同二有所差异。如果当前平台可以使用屏幕空间的阴影映射技术（通过判断是否定义了UNITY_NO_SCREENSPACE_SHADOWS），TRANSFER_SHADOW会调用内置的 ComputeScreenPos 函数来计算_ShadowCoord。如果该平台不支持屏幕空间的阴影映射技术，就会使用传统的阴影映射技术。TRANSFER_SHADOW会把顶点坐标从模型空间变换到光源空间后存储到_ShadowCoord中。然后，SHADOW_ATTENUATION负责使用_ShadowCoord对相关纹理进行采样，得到阴影信息。</p>
 <p>需要注意的是，这些宏会使用上下文变量来进行相关的计算，例如TRANSFER_SHADOW会使用v.vertex和a.pos等来计算坐标，因此为了能让这些宏正确工作，我们需要保证我们自定义的变量名和这些宏使用的变量名相匹配</p>
@@ -325,13 +325,13 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>我们再讲上一步的Shadow Shader复制并重命名为AttenuationAndShadowUseBuildInFunctions</p>
 <p>尽管Shdow Shader中的代码可以让我们得到正确的阴影，但在实践中我们通常会使用Unity得内置宏和函数来计算衰减和阴影，从而隐藏一些细节。</p>
 <p>（1）首先需要包含进需要的头文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;Lighting.cgnic&quot;</span><br><span class="line">#include &quot;AutoLight.cgnic&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include &quot;Lighting.cgnic&quot;</span></span><br><span class="line"><span class="meta">#include &quot;AutoLight.cgnic&quot;</span></span><br></pre></td></tr></table></figure>
 <p>（2）在v2f结构体中使用宏定义SHADOW_COORD声明阴影坐标</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct v2f &#123;</span><br><span class="line">    float4 pos : SV_Target;</span><br><span class="line">    float3 worldNormal : TEXCOORD0;</span><br><span class="line">    float3 worldPos : TEXCOORD1;</span><br><span class="line">    SHADOW_COORDS(2)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> v2f &#123;</span><br><span class="line">    float4 pos : SV_Target;</span><br><span class="line">    float3 worldNormal : TEXCOORD0;</span><br><span class="line">    float3 worldPos : TEXCOORD1;</span><br><span class="line">    SHADOW_COORDS(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>（3）在顶点着色器中使用内置宏TRANSFER_SHADOW计算并向片元着色器传递阴影坐标</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">v2f vert(a2v v) &#123;</span><br><span class="line">    v2f o;</span><br><span class="line">    ...</span><br><span class="line">    TRANSDER_SHADOW(o);</span><br><span class="line">    return o;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">v2f <span class="title">vert</span>(<span class="params">a2v v</span>)</span> &#123;</span><br><span class="line">    v2f o;</span><br><span class="line">    ...</span><br><span class="line">    TRANSDER_SHADOW(o);</span><br><span class="line">    <span class="keyword">return</span> o;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>（4）片元着色器中我们使用内置宏 UNITY_LIGHT_ATTENUATION 来计算光照衰减和阴影</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fixed4 frag(v2f i) : SV_Target &#123;</span><br><span class="line">    ...</span><br><span class="line">    UNITY_LIGHT_ATTENUATION(attne, i, i.worldPos);</span><br><span class="line">    return fixed4(ambient + (diffuse + specular) * atten, 1.0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">fixed4 <span class="title">frag</span>(<span class="params">v2f i</span>) : SV_Target</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">    UNITY_LIGHT_ATTENUATION(attne, i, i.worldPos);</span><br><span class="line">    <span class="keyword">return</span> fixed4(ambient + (diffuse + specular) * atten, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>UNITY_LIGHT_ATTENUATION 是内置的用于计算光照衰减和阴影的宏，我们可以在内置的AutoLight.cgnic里找到他的声明，它接受三个参数，它会将光照衰减和阴影值相乘后的结果存储到第一个参数中。注意到，我们并没有声明第一个参数atten，因为 UNITY_LIGHT_ATTENUATION 会帮我声明这个变量。第二个参数是结构体 v2f，这个参数会传递给 SHADOW_ATTENUATION 用来计算阴影值。而第三个参数是世界空间的坐标，这个参数会用于计算光源空间下的坐标，再对光照衰减纹理采样得到光照衰减。</p>
 <p>由于使用了 UNITY_LIGHT_ATTENUATION，我们Base Pass和Additional Pass的代码得以统一，我们不需要在Base Pass里单独处理阴影，也不需要在Additional Pass中判断光源类型来处理光照衰减。如果我们希望在Additional Pass中添加阴影效果，就需要使用 <code>#pragma multi_compile_fwdadd_fullshadows</code>编译指令来代替Additional Pass中的<code>#pragma multi_compile_fwadd</code></p>
 
@@ -450,7 +450,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#光照衰减"><span class="nav-number">1.</span> <span class="nav-text">光照衰减</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用于光照衰减的纹理"><span class="nav-number">1.1.</span> <span class="nav-text">用于光照衰减的纹理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用数学公式计算衰减"><span class="nav-number">1.2.</span> <span class="nav-text">使用数学公式计算衰减</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unity-的阴影"><span class="nav-number">2.</span> <span class="nav-text">Unity 的阴影</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#阴影是如何实现的"><span class="nav-number">2.1.</span> <span class="nav-text">阴影是如何实现的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不透明物体的阴影"><span class="nav-number">2.2.</span> <span class="nav-text">不透明物体的阴影</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#让物体投射阴影"><span class="nav-number">2.2.1.</span> <span class="nav-text">让物体投射阴影</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#让物体接收阴影"><span class="nav-number">2.2.2.</span> <span class="nav-text">让物体接收阴影</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#统一管理关照衰减和阴影"><span class="nav-number">2.3.</span> <span class="nav-text">统一管理关照衰减和阴影</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%89%E7%85%A7%E8%A1%B0%E5%87%8F"><span class="nav-number">1.</span> <span class="nav-text">光照衰减</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E4%BA%8E%E5%85%89%E7%85%A7%E8%A1%B0%E5%87%8F%E7%9A%84%E7%BA%B9%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">用于光照衰减的纹理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AE%A1%E7%AE%97%E8%A1%B0%E5%87%8F"><span class="nav-number">1.2.</span> <span class="nav-text">使用数学公式计算衰减</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unity-%E7%9A%84%E9%98%B4%E5%BD%B1"><span class="nav-number">2.</span> <span class="nav-text">Unity 的阴影</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B4%E5%BD%B1%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="nav-number">2.1.</span> <span class="nav-text">阴影是如何实现的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E9%80%8F%E6%98%8E%E7%89%A9%E4%BD%93%E7%9A%84%E9%98%B4%E5%BD%B1"><span class="nav-number">2.2.</span> <span class="nav-text">不透明物体的阴影</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A9%E7%89%A9%E4%BD%93%E6%8A%95%E5%B0%84%E9%98%B4%E5%BD%B1"><span class="nav-number">2.2.1.</span> <span class="nav-text">让物体投射阴影</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A9%E7%89%A9%E4%BD%93%E6%8E%A5%E6%94%B6%E9%98%B4%E5%BD%B1"><span class="nav-number">2.2.2.</span> <span class="nav-text">让物体接收阴影</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E7%AE%A1%E7%90%86%E5%85%B3%E7%85%A7%E8%A1%B0%E5%87%8F%E5%92%8C%E9%98%B4%E5%BD%B1"><span class="nav-number">2.3.</span> <span class="nav-text">统一管理关照衰减和阴影</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -540,9 +540,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -576,7 +584,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

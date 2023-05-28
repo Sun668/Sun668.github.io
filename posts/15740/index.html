@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,21 +28,21 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="这几个周算是把慕课上400大洋买的关于React最佳工程实践的课程听的七七八八了，剩下的主要就是两部分，一部分是一些交互的优化，还有一点点关于性能的优化，这两部分我感觉不是很急，可以在我的工作中去慢慢体会。 我目前在react方面的当务之急是，我只学了实践，但是很多东西我都不知道为什么要这样写，比如为什么要setState才能更新，hook是如何生效的，react fiber是什么等等，不了解这些">
-<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="react-fiber">
 <meta property="og:url" content="https://sunra.top/posts/15740/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这几个周算是把慕课上400大洋买的关于React最佳工程实践的课程听的七七八八了，剩下的主要就是两部分，一部分是一些交互的优化，还有一点点关于性能的优化，这两部分我感觉不是很急，可以在我的工作中去慢慢体会。 我目前在react方面的当务之急是，我只学了实践，但是很多东西我都不知道为什么要这样写，比如为什么要setState才能更新，hook是如何生效的，react fiber是什么等等，不了解这些">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1622505912/origin-of-ray/bVboIrF_jbskrs.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1622505935/origin-of-ray/bVboJj4_drxyog.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1622505970/origin-of-ray/bVboJHa_lnhgaq.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1622505995/origin-of-ray/bVboJNB_sax2xo.png">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.334Z">
+<meta property="article:published_time" content="2021-06-01T00:02:45.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.939Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="react-fiber">
-<meta name="twitter:description" content="这几个周算是把慕课上400大洋买的关于React最佳工程实践的课程听的七七八八了，剩下的主要就是两部分，一部分是一些交互的优化，还有一点点关于性能的优化，这两部分我感觉不是很急，可以在我的工作中去慢慢体会。 我目前在react方面的当务之急是，我只学了实践，但是很多东西我都不知道为什么要这样写，比如为什么要setState才能更新，hook是如何生效的，react fiber是什么等等，不了解这些">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1622505912/origin-of-ray/bVboIrF_jbskrs.png">
 
 <link rel="canonical" href="https://sunra.top/posts/15740/">
@@ -244,7 +244,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -270,7 +270,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
         <p>这几个周算是把慕课上400大洋买的关于React最佳工程实践的课程听的七七八八了，剩下的主要就是两部分，一部分是一些交互的优化，还有一点点关于性能的优化，这两部分我感觉不是很急，可以在我的工作中去慢慢体会。</p>
 <p>我目前在react方面的当务之急是，我只学了实践，但是很多东西我都不知道为什么要这样写，比如为什么要setState才能更新，hook是如何生效的，react fiber是什么等等，不了解这些，我感觉自己的react还浮在半空中，没有比较好的落地，所以下一步的计划就是去了解一下原理，至于是否要去阅读源码，下一步再说。</p>
 <p>这篇博客的主要内容是读了一下几位国内外大佬的博客，先对react的fiber有个大概的了解</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="React-Fiber的诞生背景"><a href="#React-Fiber的诞生背景" class="headerlink" title="React Fiber的诞生背景"></a>React Fiber的诞生背景</h2><p>在页面元素很多，且需要频繁刷新的场景下，React 15 会出现掉帧的现象。</p>
 <p>其根本原因，是大量的同步计算任务阻塞了浏览器的 UI 渲染。默认情况下，JS 运算、页面布局和页面绘制都是运行在浏览器的主线程当中（关于这一段，可以去看我关于浏览器架构的博客：<a href="https://sunra.top/posts/bbe10e1c/），他们之间是互斥的关系。如果">https://sunra.top/posts/bbe10e1c/），他们之间是互斥的关系。如果</a> JS 运算持续占用主线程，页面就没法得到及时的更新。当我们调用<code>setState</code>更新页面的时候，React 会遍历应用的所有节点，计算出差异，然后再更新 UI。整个过程是一气呵成，不能被打断的。如果页面元素很多，整个过程占用的时机就可能超过 16 毫秒，就容易出现掉帧的现象。</p>
 <p>解决主线程长时间被 JS 运算占用这一问题的基本思路，是将运算切割为多个步骤，分批完成。也就是说在完成一部分任务之后，将控制权交回给浏览器，让浏览器有时间进行页面的渲染。等浏览器忙完之后，再继续之前未完成的任务。</p>
@@ -314,8 +314,8 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>如果过程中有优先级更高的任务需要进行，则 Fiber Reconciler 会丢弃正在生成的树，在空闲的时候再重新执行一遍。</p>
 <p>在构造 Fiber 树的过程中，Fiber Reconciler 会将需要更新的节点信息保存在<code>Effect List</code>当中，在阶段二执行的时候，会批量更新相应的节点。</p>
 <h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
-<li><a href="https://segmentfault.com/a/1190000018250127" rel="external nofollow noopener noreferrer" target="_blank">https://segmentfault.com/a/1190000018250127</a></li>
-<li><a href="https://medium.com/react-in-depth/inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react-e1c04700ef6e" rel="external nofollow noopener noreferrer" target="_blank">https://medium.com/react-in-depth/inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react-e1c04700ef6e</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://segmentfault.com/a/1190000018250127">https://segmentfault.com/a/1190000018250127</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://medium.com/react-in-depth/inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react-e1c04700ef6e">https://medium.com/react-in-depth/inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react-e1c04700ef6e</a></li>
 </ul>
 
     </div>
@@ -433,7 +433,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Fiber的诞生背景"><span class="nav-number">1.</span> <span class="nav-text">React Fiber的诞生背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Fiber简介"><span class="nav-number">2.</span> <span class="nav-text">React Fiber简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">3.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Fiber%E7%9A%84%E8%AF%9E%E7%94%9F%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">React Fiber的诞生背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Fiber%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">React Fiber简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">3.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -523,9 +523,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -559,7 +567,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,23 +28,23 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="阅读前的思考 在目录中找到某个文件可以使用什么方法？ 文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构之间是否存在某些制约关系？  上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。">
-<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="操作系统学习笔记（六）文件管理系统实现">
 <meta property="og:url" content="https://sunra.top/posts/65518/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="阅读前的思考 在目录中找到某个文件可以使用什么方法？ 文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构之间是否存在某些制约关系？  上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=MjNkMTljMmYzNTA4MDg5YWI5MzY1ODdkYzg4ZGJmMDhfa1poRVoyZTVQSmV0MmFnNW1CTnFIOXZ6UFRxTUpuejhfVG9rZW46Ym94Y25KUkg1M1E0NXNwbFB6TUJsQXZVbFliXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
 <meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDZkOTY5ZDYzZjllMWMzY2RkOWVjMjg0NjI3MDllNmNfUU94d3duenUzajVzcHlGSmJ2b25MeUNtbUdkRWNDazFfVG9rZW46Ym94Y25BZ21tcmJaWnExWTU1WGlHWVhSNHRiXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
 <meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmY1MmJlNzc2ODMyZGEzNzYzNzhiZThlZmRjNThhZDdfQXM3NHpTdDdmZWhDaVoyMkRFbXJQNjhNRGw5MmV2aHpfVG9rZW46Ym94Y25SV214OTNOakZrNXdXeFZNNmxMT0lkXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
 <meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmUyYjE0MjVkOWFhZTg1MzNkNjc4NDgzYmRlMmY0ODNfamdHOXpzaklPUzFCR3VNZ2J2ZWdJOUo5SzE4WG8zdUhfVG9rZW46Ym94Y25xT1NQYUVwZ2NBNlJ3UDZtQks3cXpjXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
 <meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWJhN2NkZGQ4NWYzYThjNjVhYzlhODNlNDkyMzIwZGZfWU5WQWo4eVk0T2hYVW9NemZiR1pUczRTaXNzTjVCWHdfVG9rZW46Ym94Y241THZNYmE1SkZqZVdCcWJTVm9xblBiXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
 <meta property="og:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=MmI3YTEzMzY2OWM4NGE5ODc1Yjk4OGFhOTA3OTNlMDBfMWFwaUM4dU1UUDlBYXJYbE1YQmJUSUp4ZTRBdVlra1FfVG9rZW46Ym94Y25OSmRlTTRUNms1cUhTTnUySk9PMjBkXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.334Z">
+<meta property="article:published_time" content="2022-01-01T23:56:20.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.935Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="操作系统学习笔记（六）文件管理系统实现">
-<meta name="twitter:description" content="阅读前的思考 在目录中找到某个文件可以使用什么方法？ 文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构之间是否存在某些制约关系？  上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。">
 <meta name="twitter:image" content="https://x8pzubgmif.feishu.cn/space/api/box/stream/download/asynccode/?code=MjNkMTljMmYzNTA4MDg5YWI5MzY1ODdkYzg4ZGJmMDhfa1poRVoyZTVQSmV0MmFnNW1CTnFIOXZ6UFRxTUpuejhfVG9rZW46Ym94Y25KUkg1M1E0NXNwbFB6TUJsQXZVbFliXzE2NDExNjc3OTQ6MTY0MTE3MTM5NF9WNA">
 
 <link rel="canonical" href="https://sunra.top/posts/65518/">
@@ -246,7 +246,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -274,7 +274,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <li>文件的逻辑结构和物理结构有什么区别？单个文件的逻辑结构和物理结构之间是否存在某些制约关系？</li>
 </ul>
 <p>上面的文件系统基础介绍了目录和文件的逻辑结构，现在我们介绍一下它们的物理结构。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="文件系统的层次结构"><a href="#文件系统的层次结构" class="headerlink" title="文件系统的层次结构"></a>文件系统的层次结构</h2><p>现代操作系统有多种文件系统类型，如FAT32，NTFS，ext2，ext3，ext4等，因此文件系统的层次结构也不尽相同。下面这种是一种比较通用的层次结构。</p>
 <p>不支持在 Docs 外粘贴 block</p>
 <ol>
@@ -555,7 +555,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#阅读前的思考"><span class="nav-number">1.</span> <span class="nav-text">阅读前的思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统的层次结构"><span class="nav-number">2.</span> <span class="nav-text">文件系统的层次结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目录的实现"><span class="nav-number">3.</span> <span class="nav-text">目录的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件的实现"><span class="nav-number">4.</span> <span class="nav-text">文件的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件的分配方式"><span class="nav-number">4.1.</span> <span class="nav-text">文件的分配方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#连续分配"><span class="nav-number">4.1.1.</span> <span class="nav-text">连续分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#链接分配"><span class="nav-number">4.1.2.</span> <span class="nav-text">链接分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引分配"><span class="nav-number">4.1.3.</span> <span class="nav-text">索引分配</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件存储空间管理"><span class="nav-number">4.2.</span> <span class="nav-text">文件存储空间管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件存储器空间的划分与初始化"><span class="nav-number">4.2.1.</span> <span class="nav-text">文件存储器空间的划分与初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件存储器空间管理"><span class="nav-number">4.2.2.</span> <span class="nav-text">文件存储器空间管理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#空闲表法"><span class="nav-number">4.2.2.1.</span> <span class="nav-text">空闲表法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#空闲链表法"><span class="nav-number">4.2.2.2.</span> <span class="nav-text">空闲链表法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#位示图法"><span class="nav-number">4.2.2.3.</span> <span class="nav-text">位示图法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#成组链表法"><span class="nav-number">4.2.2.4.</span> <span class="nav-text">成组链表法</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回答开始问题"><span class="nav-number">5.</span> <span class="nav-text">回答开始问题</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%85%E8%AF%BB%E5%89%8D%E7%9A%84%E6%80%9D%E8%80%83"><span class="nav-number">1.</span> <span class="nav-text">阅读前的思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">文件系统的层次结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">目录的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">文件的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E9%85%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">4.1.</span> <span class="nav-text">文件的分配方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9E%E7%BB%AD%E5%88%86%E9%85%8D"><span class="nav-number">4.1.1.</span> <span class="nav-text">连续分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5%E5%88%86%E9%85%8D"><span class="nav-number">4.1.2.</span> <span class="nav-text">链接分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%88%86%E9%85%8D"><span class="nav-number">4.1.3.</span> <span class="nav-text">索引分配</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86"><span class="nav-number">4.2.</span> <span class="nav-text">文件存储空间管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E5%99%A8%E7%A9%BA%E9%97%B4%E7%9A%84%E5%88%92%E5%88%86%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">4.2.1.</span> <span class="nav-text">文件存储器空间的划分与初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E5%99%A8%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86"><span class="nav-number">4.2.2.</span> <span class="nav-text">文件存储器空间管理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%A9%BA%E9%97%B2%E8%A1%A8%E6%B3%95"><span class="nav-number">4.2.2.1.</span> <span class="nav-text">空闲表法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%A9%BA%E9%97%B2%E9%93%BE%E8%A1%A8%E6%B3%95"><span class="nav-number">4.2.2.2.</span> <span class="nav-text">空闲链表法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%8D%E7%A4%BA%E5%9B%BE%E6%B3%95"><span class="nav-number">4.2.2.3.</span> <span class="nav-text">位示图法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%88%90%E7%BB%84%E9%93%BE%E8%A1%A8%E6%B3%95"><span class="nav-number">4.2.2.4.</span> <span class="nav-text">成组链表法</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E7%AD%94%E5%BC%80%E5%A7%8B%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">回答开始问题</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -645,9 +645,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -681,7 +689,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

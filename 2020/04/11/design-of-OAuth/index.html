@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,24 +20,31 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="OAuth的中文名称是开放式授权协议，这个名字大家仔细品，它是一个授权协议，任何实现这个协议的网站都可以在用户同意的条件下给某些在自己这里注册的应用授予对应用户在本网站某些资源的权限，而这个权限一般用token来表示。">
-<meta name="keywords" content="OAuth 比较 分析">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OAuth的发展与设计">
 <meta property="og:url" content="https://sunra.top/2020/04/11/design-of-OAuth/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="OAuth的中文名称是开放式授权协议，这个名字大家仔细品，它是一个授权协议，任何实现这个协议的网站都可以在用户同意的条件下给某些在自己这里注册的应用授予对应用户在本网站某些资源的权限，而这个权限一般用token来表示。">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1586583310/Cloud/微信截图_20200411133437_kt05s5.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1586584078/Cloud/微信截图_20200411134737_w5ftzj.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1586587044/Cloud/微信截图_20200411143642_a7kkr8.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608117974/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201216192144_wzrlgz.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608118806/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201216193951_hiq7je.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608119884/origin-of-ray/微信截图_20201216195014_gz6sjt.png">
-<meta property="og:updated_time" content="2023-05-26T22:57:24.035Z">
+<meta property="article:published_time" content="2020-04-11T05:26:14.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.927Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OAuth的发展与设计">
-<meta name="twitter:description" content="OAuth的中文名称是开放式授权协议，这个名字大家仔细品，它是一个授权协议，任何实现这个协议的网站都可以在用户同意的条件下给某些在自己这里注册的应用授予对应用户在本网站某些资源的权限，而这个权限一般用token来表示。">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1586583310/Cloud/微信截图_20200411133437_kt05s5.png">
 
 <link rel="canonical" href="https://sunra.top/2020/04/11/design-of-OAuth/">
@@ -55,6 +62,15 @@
 
   <title>OAuth的发展与设计 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -230,7 +246,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -254,7 +270,7 @@
 
       
         <p>OAuth的中文名称是开放式授权协议，这个名字大家仔细品，它是一个授权协议，<strong>任何实现这个协议的网站都可以在用户同意的条件下给某些在自己这里注册的应用授予对应用户在本网站某些资源的权限</strong>，而这个权限一般用token来表示。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="实际应用的举例"><a href="#实际应用的举例" class="headerlink" title="实际应用的举例"></a>实际应用的举例</h2><p>大家去leetcode登陆的时候，会弹出如下页面</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1586583310/Cloud/微信截图_20200411133437_kt05s5.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1586583310/Cloud/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20200411133437_kt05s5.png"></p>
 <p>在这里我们有两个选项，一个是直接注册一个账号，另一个就是选择第三方登陆，比如QQ登陆，这个第三方登陆中就使用了OAuth。</p>
@@ -347,13 +363,13 @@
 <p><a href="https://sunra.top/posts/46cef286/">https://sunra.top/2019/11/16/OAuth%20and%20OIDC/</a> ：OAuth，OIDC简介</p>
 <p><a href="https://sunra.top/posts/74ee5df7/">https://sunra.top/posts/74ee5df7/</a>  ：路由协议</p>
 <p><a href="https://sunra.top/posts/dfdf7442/">https://sunra.top/posts/dfdf7442/</a> ：ARP原理与防御</p>
-<p><a href="https://www.jianshu.com/p/0db71eb445c8" rel="external nofollow noopener noreferrer" target="_blank">https://www.jianshu.com/p/0db71eb445c8</a> ：OAuth认证流程举例</p>
-<p><a href="https://www.chrisyue.com/security-issue-about-oauth-2-0-you-should-know.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.chrisyue.com/security-issue-about-oauth-2-0-you-should-know.html</a> ：OAuth2.0中的安全考虑</p>
-<p><a href="https://www.cnblogs.com/linianhui/p/openid-connect-core.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.cnblogs.com/linianhui/p/openid-connect-core.html</a> ：OIDC文档</p>
-<p><a href="https://www.zhihu.com/question/19851243" rel="external nofollow noopener noreferrer" target="_blank">https://www.zhihu.com/question/19851243</a> ：OAuth1.0与2.0区别</p>
-<p><a href="https://docs.azure.cn/zh-cn/active-directory/azuread-dev/v1-protocols-openid-connect-code" rel="external nofollow noopener noreferrer" target="_blank">https://docs.azure.cn/zh-cn/active-directory/azuread-dev/v1-protocols-openid-connect-code</a> ：OIDC + AAD</p>
-<p><a href="https://www.sciencedirect.com/science/article/pii/S2215098617316750" rel="external nofollow noopener noreferrer" target="_blank">https://www.sciencedirect.com/science/article/pii/S2215098617316750</a> ：云服务中面临的安全问题</p>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy" rel="external nofollow noopener noreferrer" target="_blank">https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy</a> ：同源策略</p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.jianshu.com/p/0db71eb445c8">https://www.jianshu.com/p/0db71eb445c8</a> ：OAuth认证流程举例</p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.chrisyue.com/security-issue-about-oauth-2-0-you-should-know.html">https://www.chrisyue.com/security-issue-about-oauth-2-0-you-should-know.html</a> ：OAuth2.0中的安全考虑</p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.cnblogs.com/linianhui/p/openid-connect-core.html">https://www.cnblogs.com/linianhui/p/openid-connect-core.html</a> ：OIDC文档</p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.zhihu.com/question/19851243">https://www.zhihu.com/question/19851243</a> ：OAuth1.0与2.0区别</p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.azure.cn/zh-cn/active-directory/azuread-dev/v1-protocols-openid-connect-code">https://docs.azure.cn/zh-cn/active-directory/azuread-dev/v1-protocols-openid-connect-code</a> ：OIDC + AAD</p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.sciencedirect.com/science/article/pii/S2215098617316750">https://www.sciencedirect.com/science/article/pii/S2215098617316750</a> ：云服务中面临的安全问题</p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy">https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy</a> ：同源策略</p>
 
     </div>
 
@@ -470,7 +486,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#实际应用的举例"><span class="nav-number">1.</span> <span class="nav-text">实际应用的举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#登陆方式的发展过程"><span class="nav-number">2.</span> <span class="nav-text">登陆方式的发展过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用户名密码"><span class="nav-number">2.1.</span> <span class="nav-text">用户名密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session和Cookie"><span class="nav-number">2.2.</span> <span class="nav-text">Session和Cookie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Token"><span class="nav-number">2.3.</span> <span class="nav-text">Token</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSO-和-OAuth"><span class="nav-number">2.4.</span> <span class="nav-text">SSO 和 OAuth</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际看一下SSO过程中关于OAuth的请求"><span class="nav-number">3.</span> <span class="nav-text">实际看一下SSO过程中关于OAuth的请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#以授权码模式说明一下OAuth2-0设计中的一些细节"><span class="nav-number">4.</span> <span class="nav-text">以授权码模式说明一下OAuth2.0设计中的一些细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#这些参数都表示什么："><span class="nav-number">4.1.</span> <span class="nav-text">这些参数都表示什么：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么一开始就要发送个redirect-uri给IDP？"><span class="nav-number">4.2.</span> <span class="nav-text">为什么一开始就要发送个redirect_uri给IDP？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要绕这么一大圈，为什么要多一步code换access-token？"><span class="nav-number">4.3.</span> <span class="nav-text">为什么要绕这么一大圈，为什么要多一步code换access_token？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Secret有什么用？"><span class="nav-number">4.4.</span> <span class="nav-text">Secret有什么用？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#State又有什么用呢？"><span class="nav-number">4.5.</span> <span class="nav-text">State又有什么用呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么最后会返回两个token？"><span class="nav-number">4.6.</span> <span class="nav-text">为什么最后会返回两个token？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OAuth2-0中的其他模式"><span class="nav-number">5.</span> <span class="nav-text">OAuth2.0中的其他模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简化模式"><span class="nav-number">5.1.</span> <span class="nav-text">简化模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#密码模式"><span class="nav-number">5.2.</span> <span class="nav-text">密码模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端模式"><span class="nav-number">5.3.</span> <span class="nav-text">客户端模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OAuth1-0"><span class="nav-number">6.</span> <span class="nav-text">OAuth1.0</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-0a"><span class="nav-number">6.1.</span> <span class="nav-text">1.0a</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E7%9A%84%E4%B8%BE%E4%BE%8B"><span class="nav-number">1.</span> <span class="nav-text">实际应用的举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BB%E9%99%86%E6%96%B9%E5%BC%8F%E7%9A%84%E5%8F%91%E5%B1%95%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">登陆方式的发展过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E5%90%8D%E5%AF%86%E7%A0%81"><span class="nav-number">2.1.</span> <span class="nav-text">用户名密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session%E5%92%8CCookie"><span class="nav-number">2.2.</span> <span class="nav-text">Session和Cookie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Token"><span class="nav-number">2.3.</span> <span class="nav-text">Token</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSO-%E5%92%8C-OAuth"><span class="nav-number">2.4.</span> <span class="nav-text">SSO 和 OAuth</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E7%9C%8B%E4%B8%80%E4%B8%8BSSO%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%85%B3%E4%BA%8EOAuth%E7%9A%84%E8%AF%B7%E6%B1%82"><span class="nav-number">3.</span> <span class="nav-text">实际看一下SSO过程中关于OAuth的请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E6%8E%88%E6%9D%83%E7%A0%81%E6%A8%A1%E5%BC%8F%E8%AF%B4%E6%98%8E%E4%B8%80%E4%B8%8BOAuth2-0%E8%AE%BE%E8%AE%A1%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E7%BB%86%E8%8A%82"><span class="nav-number">4.</span> <span class="nav-text">以授权码模式说明一下OAuth2.0设计中的一些细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E4%BA%9B%E5%8F%82%E6%95%B0%E9%83%BD%E8%A1%A8%E7%A4%BA%E4%BB%80%E4%B9%88%EF%BC%9A"><span class="nav-number">4.1.</span> <span class="nav-text">这些参数都表示什么：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%80%E5%BC%80%E5%A7%8B%E5%B0%B1%E8%A6%81%E5%8F%91%E9%80%81%E4%B8%AAredirect-uri%E7%BB%99IDP%EF%BC%9F"><span class="nav-number">4.2.</span> <span class="nav-text">为什么一开始就要发送个redirect_uri给IDP？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%BB%95%E8%BF%99%E4%B9%88%E4%B8%80%E5%A4%A7%E5%9C%88%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%A4%9A%E4%B8%80%E6%AD%A5code%E6%8D%A2access-token%EF%BC%9F"><span class="nav-number">4.3.</span> <span class="nav-text">为什么要绕这么一大圈，为什么要多一步code换access_token？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Secret%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9F"><span class="nav-number">4.4.</span> <span class="nav-text">Secret有什么用？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#State%E5%8F%88%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%E5%91%A2%EF%BC%9F"><span class="nav-number">4.5.</span> <span class="nav-text">State又有什么用呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%80%E5%90%8E%E4%BC%9A%E8%BF%94%E5%9B%9E%E4%B8%A4%E4%B8%AAtoken%EF%BC%9F"><span class="nav-number">4.6.</span> <span class="nav-text">为什么最后会返回两个token？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OAuth2-0%E4%B8%AD%E7%9A%84%E5%85%B6%E4%BB%96%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">OAuth2.0中的其他模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8C%96%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.1.</span> <span class="nav-text">简化模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%86%E7%A0%81%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.2.</span> <span class="nav-text">密码模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.3.</span> <span class="nav-text">客户端模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OAuth1-0"><span class="nav-number">6.</span> <span class="nav-text">OAuth1.0</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-0a"><span class="nav-number">6.1.</span> <span class="nav-text">1.0a</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -560,9 +576,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -596,7 +620,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

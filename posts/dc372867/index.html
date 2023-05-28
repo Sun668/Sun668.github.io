@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,17 +28,17 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="Vue是我们经常使用的前端框架，虽然它使用起来很简单，官方文档也比较清晰，但是还是有不全面的地方导致我们可能会踩坑。">
-<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Vue使用注意事项总结（持续更新）">
 <meta property="og:url" content="https://sunra.top/posts/dc372867/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="Vue是我们经常使用的前端框架，虽然它使用起来很简单，官方文档也比较清晰，但是还是有不全面的地方导致我们可能会踩坑。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.346Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-08-28T14:03:51.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.951Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Vue使用注意事项总结（持续更新）">
-<meta name="twitter:description" content="Vue是我们经常使用的前端框架，虽然它使用起来很简单，官方文档也比较清晰，但是还是有不全面的地方导致我们可能会踩坑。">
 
 <link rel="canonical" href="https://sunra.top/posts/dc372867/">
 
@@ -239,7 +239,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,9 +263,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       
         <p>Vue是我们经常使用的前端框架，虽然它使用起来很简单，官方文档也比较清晰，但是还是有不全面的地方导致我们可能会踩坑。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h3 id="表单校验"><a href="#表单校验" class="headerlink" title="表单校验"></a>表单校验</h3><p>我们在使用Vue + ElementUI时经常会用到表单，也会用带表单的验证功能，但是在使用的时候需要注意官方文档上没有提到的一点，就是如果el-form-item的prop属性值与el-form-item中包裹的表单项v-model绑定的值完全相同，否则通过el-form的rules属性绑定进来的校验规则中的校验器会无法获取表单项的数据，就会导致校验总是无法通过</p>
-<h3 id="子组件上使用v-model来进行父子组件通信"><a href="#子组件上使用v-model来进行父子组件通信" class="headerlink" title="子组件上使用v-model来进行父子组件通信"></a>子组件上使用v-model来进行父子组件通信</h3><p><a href="https://cn.vuejs.org/v2/guide/components-custom-events.html#自定义组件的-v-model" rel="external nofollow noopener noreferrer" target="_blank">vue文档关于如何在自定义组件上使用v-model</a></p>
+<h3 id="子组件上使用v-model来进行父子组件通信"><a href="#子组件上使用v-model来进行父子组件通信" class="headerlink" title="子组件上使用v-model来进行父子组件通信"></a>子组件上使用v-model来进行父子组件通信</h3><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://cn.vuejs.org/v2/guide/components-custom-events.html#自定义组件的-v-model">vue文档关于如何在自定义组件上使用v-model</a></p>
 <p>简单来说在自定义组件上使用v-model绑定的值会传到子组件中的props：value中，而且会自动监听该自定义组件的input事件，通过input事件返回的值会自动赋值给父组件中绑定到自定义组件的值</p>
 
     </div>
@@ -383,7 +383,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#表单校验"><span class="nav-number">1.</span> <span class="nav-text">表单校验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子组件上使用v-model来进行父子组件通信"><span class="nav-number">2.</span> <span class="nav-text">子组件上使用v-model来进行父子组件通信</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E5%8D%95%E6%A0%A1%E9%AA%8C"><span class="nav-number">1.</span> <span class="nav-text">表单校验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%90%E7%BB%84%E4%BB%B6%E4%B8%8A%E4%BD%BF%E7%94%A8v-model%E6%9D%A5%E8%BF%9B%E8%A1%8C%E7%88%B6%E5%AD%90%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1"><span class="nav-number">2.</span> <span class="nav-text">子组件上使用v-model来进行父子组件通信</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -473,9 +473,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -509,7 +517,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

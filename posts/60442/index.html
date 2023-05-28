@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,17 +28,17 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="最近在看一些安全知识的时候，发现了一个新的漏洞，叫做SSRF，这个漏洞原理其实并不复杂，但是由于是第一次遇到，还是简单记录一下。">
-<meta name="keywords" content="SSRF 攻击原理 防御方式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SSRF漏洞的原理以及防御方案">
 <meta property="og:url" content="https://sunra.top/posts/60442/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近在看一些安全知识的时候，发现了一个新的漏洞，叫做SSRF，这个漏洞原理其实并不复杂，但是由于是第一次遇到，还是简单记录一下。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.338Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-05-06T13:48:51.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.943Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SSRF漏洞的原理以及防御方案">
-<meta name="twitter:description" content="最近在看一些安全知识的时候，发现了一个新的漏洞，叫做SSRF，这个漏洞原理其实并不复杂，但是由于是第一次遇到，还是简单记录一下。">
 
 <link rel="canonical" href="https://sunra.top/posts/60442/">
 
@@ -239,7 +239,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,7 +263,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       
         <p>最近在看一些安全知识的时候，发现了一个新的漏洞，叫做SSRF，这个漏洞原理其实并不复杂，但是由于是第一次遇到，还是简单记录一下。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="什么是SSRF"><a href="#什么是SSRF" class="headerlink" title="什么是SSRF"></a>什么是SSRF</h2><p>服务端请求伪造(Server-Side Request Forgery),指的是攻击者在未能取得服务器所有权限时，利用服务器漏洞以服务器的身份发送一条构造好的请求给服务器所在内网。SSRF攻击通常针对外部网络无法直接访问的内部系统。</p>
 <h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p><strong>SSRF漏洞形成的原因主要是服务器端所提供的接口中包含了所要请求的内容的URL参数，并且未对客户端所传输过来的URL参数进行过滤。</strong></p>
 <p>假设某公司的网站部署在A服务器上，为了让用户能够访问到，所以A服务器有自己的I公网P地址（或者经过NAT网关配置，有了自己的公网IP+PORT），同时公司还有一台B服务器，存放着一些重要的数据，这台B服务器部署在在内网，没有公网的IP，所以正常情况下，外网是无法访问的。</p>
@@ -274,7 +274,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <h2 id="SSRF危害"><a href="#SSRF危害" class="headerlink" title="SSRF危害"></a>SSRF危害</h2><h3 id="探测内部主机的任意端口"><a href="#探测内部主机的任意端口" class="headerlink" title="探测内部主机的任意端口"></a><strong>探测内部主机的任意端口</strong></h3><p>这种情况比较极端，基本不会出现，就是说A会通过请求参数中的ip和端口号去找B，也就是说，B的具体信息是A解析了请求中的IP和Port得出来的</p>
 <p>不过这种情况一旦出现，攻击者就可以伪造各种IP和PORT去访问，根据返回结果不同，得到内网中的网络结果和每个服务器的端口开发情况。</p>
 <h3 id="利用ssrf获取内网敏感文件信息"><a href="#利用ssrf获取内网敏感文件信息" class="headerlink" title="利用ssrf获取内网敏感文件信息"></a><strong>利用ssrf获取内网敏感文件信息</strong></h3><p>在服务器上有一个ssrf.php的页面，该页面的功能是获取URL参数，然后将URL的内容显示到网页页面上。</p>
-<p>我们访问该链接：<a href="http://127.0.0.1/ssrf.php?url=http://127.0.0.1/test.php" rel="external nofollow noopener noreferrer" target="_blank">http://127.0.0.1/ssrf.php?url=http://127.0.0.1/test.php</a> ，它会将test.php页面显示</p>
+<p>我们访问该链接：<a target="_blank" rel="external nofollow noopener noreferrer" href="http://127.0.0.1/ssrf.php?url=http://127.0.0.1/test.php">http://127.0.0.1/ssrf.php?url=http://127.0.0.1/test.php</a> ，它会将test.php页面显示</p>
 <p>我们可以将URL参数换成内网的地址，则会泄露服务器内网的信息。将URL换成file://的形式，就可以读取本地文件。</p>
 <h2 id="防御方式"><a href="#防御方式" class="headerlink" title="防御方式"></a>防御方式</h2><p>1、过滤返回的信息，如果web应用是去获取某一种类型的文件。那么在把返回结果展示给用户之前先验证返回的信息是否符合标准。</p>
 <p>2、统一错误信息，避免用户可以根据错误信息来判断远程服务器的端口状态。</p>
@@ -282,8 +282,8 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>4、禁止不常用的协议，仅仅允许http和https请求。可以防止类似于file:///,gopher://,ftp://等引起的问题。</p>
 <p>5、使用DNS缓存或者Host白名单的方式。</p>
 <p>参考链接：</p>
-<p><a href="https://zhuanlan.zhihu.com/p/91819069" rel="external nofollow noopener noreferrer" target="_blank">https://zhuanlan.zhihu.com/p/91819069</a></p>
-<p><a href="https://www.jianshu.com/p/612c010e588e" rel="external nofollow noopener noreferrer" target="_blank">https://www.jianshu.com/p/612c010e588e</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://zhuanlan.zhihu.com/p/91819069">https://zhuanlan.zhihu.com/p/91819069</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.jianshu.com/p/612c010e588e">https://www.jianshu.com/p/612c010e588e</a></p>
 
     </div>
 
@@ -400,7 +400,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是SSRF"><span class="nav-number">1.</span> <span class="nav-text">什么是SSRF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#举例"><span class="nav-number">1.2.</span> <span class="nav-text">举例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF危害"><span class="nav-number">2.</span> <span class="nav-text">SSRF危害</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#探测内部主机的任意端口"><span class="nav-number">2.1.</span> <span class="nav-text">探测内部主机的任意端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用ssrf获取内网敏感文件信息"><span class="nav-number">2.2.</span> <span class="nav-text">利用ssrf获取内网敏感文件信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防御方式"><span class="nav-number">3.</span> <span class="nav-text">防御方式</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFSSRF"><span class="nav-number">1.</span> <span class="nav-text">什么是SSRF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BE%E4%BE%8B"><span class="nav-number">1.2.</span> <span class="nav-text">举例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF%E5%8D%B1%E5%AE%B3"><span class="nav-number">2.</span> <span class="nav-text">SSRF危害</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A2%E6%B5%8B%E5%86%85%E9%83%A8%E4%B8%BB%E6%9C%BA%E7%9A%84%E4%BB%BB%E6%84%8F%E7%AB%AF%E5%8F%A3"><span class="nav-number">2.1.</span> <span class="nav-text">探测内部主机的任意端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8ssrf%E8%8E%B7%E5%8F%96%E5%86%85%E7%BD%91%E6%95%8F%E6%84%9F%E6%96%87%E4%BB%B6%E4%BF%A1%E6%81%AF"><span class="nav-number">2.2.</span> <span class="nav-text">利用ssrf获取内网敏感文件信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%B2%E5%BE%A1%E6%96%B9%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">防御方式</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -490,9 +490,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -526,7 +534,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

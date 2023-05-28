@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,13 +28,12 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="硬件中最重要的就是 CPU，它就是执行程序的核心部件。而我们常用的电脑就是 x86 平台，所以我们要对 x86 CPU 有一些基本的了解。按照 CPU 功能升级迭代的顺序，CPU 的工作模式有实模式、保护模式、长模式，这几种工作模式下 CPU 执行程序的方式截然不同，下面我们一起来探讨这几种工作模式。">
-<meta name="keywords" content="CPU 工作模式 原理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CPU工作的三种模式">
 <meta property="og:url" content="https://sunra.top/posts/43690/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="硬件中最重要的就是 CPU，它就是执行程序的核心部件。而我们常用的电脑就是 x86 平台，所以我们要对 x86 CPU 有一些基本的了解。按照 CPU 功能升级迭代的顺序，CPU 的工作模式有实模式、保护模式、长模式，这几种工作模式下 CPU 执行程序的方式截然不同，下面我们一起来探讨这几种工作模式。">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/14/13/14633ea933972e19f3439eb6aeab3d13.jpg?wh=2805*2805">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/14/13/14633ea933972e19f3439eb6aeab3d13.jpg?wh=2805*2805">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/e8/57/e8876e8561b949b8af5d5237e48f8757.jpg?wh=2783*1810">
@@ -46,10 +45,11 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/ff/5b/ff5c25c85a7fa28b17f386848f19fb5b.jpg?wh=2696*1780">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/97/c4/974b59084976ddb3df9bdc3bea9325c4.jpg?wh=4260*3060">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/28/c4/28f28817ca5a3e47f80ea798698dbdc4.jpg?wh=4155*2655">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.338Z">
+<meta property="article:published_time" content="2022-02-06T08:05:53.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.943Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CPU工作的三种模式">
-<meta name="twitter:description" content="硬件中最重要的就是 CPU，它就是执行程序的核心部件。而我们常用的电脑就是 x86 平台，所以我们要对 x86 CPU 有一些基本的了解。按照 CPU 功能升级迭代的顺序，CPU 的工作模式有实模式、保护模式、长模式，这几种工作模式下 CPU 执行程序的方式截然不同，下面我们一起来探讨这几种工作模式。">
 <meta name="twitter:image" content="https://static001.geekbang.org/resource/image/14/13/14633ea933972e19f3439eb6aeab3d13.jpg?wh=2805*2805">
 
 <link rel="canonical" href="https://sunra.top/posts/43690/">
@@ -251,7 +251,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -275,9 +275,8 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       
         <p>硬件中最重要的就是 CPU，它就是执行程序的核心部件。而我们常用的电脑就是 x86 平台，所以我们要对 x86 CPU 有一些基本的了解。按照 CPU 功能升级迭代的顺序，CPU 的工作模式有实模式、保护模式、长模式，这几种工作模式下 CPU 执行程序的方式截然不同，下面我们一起来探讨这几种工作模式。</p>
-<a id="more"></a>
-<p>请思考一下，如果下面这段应用程序代码能够成功运行，会有什么后果？<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span>* addr = (<span class="keyword">int</span>*)<span class="number">0</span>;</span><br><span class="line">    cli(); <span class="comment">//关中断</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        *addr = <span class="number">0</span>;</span><br><span class="line">        addr++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上述代码首先关掉了 CPU 中断，让 CPU 停止响应中断信号，然后进入死循环，最后从内存 0 地址开始写入 0。</p>
+<span id="more"></span>
+<p>请思考一下，如果下面这段应用程序代码能够成功运行，会有什么后果？<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span>* addr = (<span class="type">int</span>*)<span class="number">0</span>;</span><br><span class="line">    cli(); <span class="comment">//关中断</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        *addr = <span class="number">0</span>;</span><br><span class="line">        addr++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>上述代码首先关掉了 CPU 中断，让 CPU 停止响应中断信号，然后进入死循环，最后从内存 0 地址开始写入 0。</p>
 <p>你马上就会想到，这段代码只做了两件事：一是锁住了 CPU，二是清空了内存，你也许会觉得如果这样的代码能正常运行，那简直太可怕了。</p>
 <p>不过如果是在实模式下，这样的代码确实是能正常运行。因为在很久以前，计算机资源太少，内存太小，都是<strong>单道程序执行</strong>，程序大多是由专业人员编写调试好了，才能预约到一个时间去上机运行，没有现代操作系统的概念。</p>
 <p>后来有 DOS 操作系统，也是单道程序系统，不具备执行多道程序的能力，所以 CPU 这种模式也能很好地工作。</p>
@@ -291,7 +290,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>结合上图可以发现，所有的内存地址都是由段寄存器左移 4 位，再加上一个通用寄存器中的值或者常数形成地址，然后由这个地址去访问内存。</p>
 <p>这就是大名鼎鼎的<strong>分段内存管理模型</strong>(这种内存管理模型应该只有在实模式下还在使用，现代操作系统采用的是分页的方式或者段页式)。只不过这里要特别注意的是，<strong>代码段是由 CS 和 IP 确定的，而栈段是由 SS 和 SP 段确定的</strong>（CS，IP寄存器从概念上讲等同于我们常说的PC寄存器）。</p>
 <p>下面我们写一个 DOS 下的 Hello World 应用程序，这是一个工作在实模式下的汇编代码程序，一共 16 位，具体代码如下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">data SEGMENT ;定义一个数据段存放Hello World!</span><br><span class="line">    hello  DB 'Hello World!$' ;注意要以$结束</span><br><span class="line">data ENDS</span><br><span class="line">code SEGMENT ;定义一个代码段存放程序指令</span><br><span class="line">    ASSUME CS:CODE,DS:DATA ;告诉汇编程序，DS指向数据段，CS指向代码段</span><br><span class="line">start:</span><br><span class="line">    MOV AX,data  ;将data段首地址赋值给AX                </span><br><span class="line">    MOV DS,AX    ;将AX赋值给DS，使DS指向data段</span><br><span class="line">    LEA DX,hello ;使DX指向hello首地址</span><br><span class="line">    MOV AH,09h   ;给AH设置参数09H，AH是AX高8位，AL是AX低8位，其它类似</span><br><span class="line">    INT 21h      ;执行DOS中断输出DS指向的DX指向的字符串hello</span><br><span class="line">    MOV AX,4C00h ;给AX设置参数4C00h</span><br><span class="line">    INT 21h      ;调用4C00h号功能，结束程序</span><br><span class="line">code ENDS</span><br><span class="line">END start</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">data SEGMENT ;定义一个数据段存放Hello World!</span><br><span class="line">    hello  DB &#x27;Hello World!$&#x27; ;注意要以$结束</span><br><span class="line">data ENDS</span><br><span class="line">code SEGMENT ;定义一个代码段存放程序指令</span><br><span class="line">    ASSUME CS:CODE,DS:DATA ;告诉汇编程序，DS指向数据段，CS指向代码段</span><br><span class="line">start:</span><br><span class="line">    MOV AX,data  ;将data段首地址赋值给AX                </span><br><span class="line">    MOV DS,AX    ;将AX赋值给DS，使DS指向data段</span><br><span class="line">    LEA DX,hello ;使DX指向hello首地址</span><br><span class="line">    MOV AH,09h   ;给AH设置参数09H，AH是AX高8位，AL是AX低8位，其它类似</span><br><span class="line">    INT 21h      ;执行DOS中断输出DS指向的DX指向的字符串hello</span><br><span class="line">    MOV AX,4C00h ;给AX设置参数4C00h</span><br><span class="line">    INT 21h      ;调用4C00h号功能，结束程序</span><br><span class="line">code ENDS</span><br><span class="line">END start</span><br></pre></td></tr></table></figure>
 <p>上述代码中的结构模型，也是符合 CPU 实模式下分段内存管理模式的，它们被汇编器转换成二进制数据后，也是以段的形式存在的。代码中的注释已经很明确了，你应该很容易就能理解，大多数是操作寄存器，其中 LEA 是取地址指令，MOV 是数据传输指令，就是 INT 中断你可能还不太明白，下面我们就来研究它。</p>
 <h3 id="实模式中断"><a href="#实模式中断" class="headerlink" title="实模式中断"></a>实模式中断</h3><p>中断即中止执行当前程序，转而跳转到另一个特定的地址上，去运行特定的代码。在实模式下它的实现过程是先保存 CS 和 IP 寄存器，然后装载新的 CS 和 IP 寄存器，那么中断是如何产生的呢？</p>
 <p>第一种情况是，中断控制器给 CPU 发送了一个电子信号，CPU 会对这个信号作出应答。随后中断控制器会将中断号发送给 CPU，这是硬件中断。</p>
@@ -346,7 +345,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p>如果你还记得中断门描述符，就会发现其中的段内偏移只有 32 位，但是长模式支持 64 位内存寻址，所以要对中断门描述符进行修改和扩展，下面我们就来看看长模式下的中断门描述符的格式。</p>
 <p><img src="https://static001.geekbang.org/resource/image/28/c4/28f28817ca5a3e47f80ea798698dbdc4.jpg?wh=4155*2655" alt></p>
 <p>首先为了支持 64 位寻址中断门描述符在原有基础上增加 8 字节，用于存放目标段偏移的高 32 位值。其次，目标代码段选择子对应的代码段描述符必须是 64 位的代码段。最后其中的 IST 是 64 位 TSS 中的 IST 指针，因为我们不使用这个特性，所以不作详细介绍。长模式也同样在内存中有一个中断门描述符表，只不过表中的条目（如上图所示）是 16 字节大小，最多支持 256 个中断源，对中断的响应和相关权限的检查和保护模式一样</p>
-<p>参考链接：<a href="https://time.geekbang.org/column/article/375278" rel="external nofollow noopener noreferrer" target="_blank">https://time.geekbang.org/column/article/375278</a></p>
+<p>参考链接：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://time.geekbang.org/column/article/375278">https://time.geekbang.org/column/article/375278</a></p>
 
     </div>
 
@@ -463,7 +462,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#实模式"><span class="nav-number">1.</span> <span class="nav-text">实模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实模式寄存器"><span class="nav-number">1.1.</span> <span class="nav-text">实模式寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实模式下访问内存"><span class="nav-number">1.2.</span> <span class="nav-text">实模式下访问内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实模式中断"><span class="nav-number">1.3.</span> <span class="nav-text">实模式中断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保护模式"><span class="nav-number">2.</span> <span class="nav-text">保护模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#保护模式寄存器"><span class="nav-number">2.1.</span> <span class="nav-text">保护模式寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保护模式特权级"><span class="nav-number">2.2.</span> <span class="nav-text">保护模式特权级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保护模式段描述符"><span class="nav-number">2.3.</span> <span class="nav-text">保护模式段描述符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保护模式段选择子"><span class="nav-number">2.4.</span> <span class="nav-text">保护模式段选择子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保护模式平坦模型"><span class="nav-number">2.5.</span> <span class="nav-text">保护模式平坦模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保护模式中断"><span class="nav-number">2.6.</span> <span class="nav-text">保护模式中断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#长模式"><span class="nav-number">3.</span> <span class="nav-text">长模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#长模式段描述符"><span class="nav-number">3.1.</span> <span class="nav-text">长模式段描述符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#长模式中断"><span class="nav-number">3.2.</span> <span class="nav-text">长模式中断</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">实模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%A8%A1%E5%BC%8F%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">1.1.</span> <span class="nav-text">实模式寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%A8%A1%E5%BC%8F%E4%B8%8B%E8%AE%BF%E9%97%AE%E5%86%85%E5%AD%98"><span class="nav-number">1.2.</span> <span class="nav-text">实模式下访问内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%A8%A1%E5%BC%8F%E4%B8%AD%E6%96%AD"><span class="nav-number">1.3.</span> <span class="nav-text">实模式中断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">保护模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">2.1.</span> <span class="nav-text">保护模式寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E7%89%B9%E6%9D%83%E7%BA%A7"><span class="nav-number">2.2.</span> <span class="nav-text">保护模式特权级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E6%AE%B5%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="nav-number">2.3.</span> <span class="nav-text">保护模式段描述符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E6%AE%B5%E9%80%89%E6%8B%A9%E5%AD%90"><span class="nav-number">2.4.</span> <span class="nav-text">保护模式段选择子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E5%B9%B3%E5%9D%A6%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.5.</span> <span class="nav-text">保护模式平坦模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E4%B8%AD%E6%96%AD"><span class="nav-number">2.6.</span> <span class="nav-text">保护模式中断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%BF%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">长模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%BF%E6%A8%A1%E5%BC%8F%E6%AE%B5%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="nav-number">3.1.</span> <span class="nav-text">长模式段描述符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%BF%E6%A8%A1%E5%BC%8F%E4%B8%AD%E6%96%AD"><span class="nav-number">3.2.</span> <span class="nav-text">长模式中断</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -553,9 +552,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -589,7 +596,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

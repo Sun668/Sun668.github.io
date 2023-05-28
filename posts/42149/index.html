@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,19 +28,19 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="这周的工作中，有一个需求需要我去在前端生成一个决策树，于是去考察了很多开源的方案，下面这是我一开始调研的图表，大家可以看一下，根据自己的选择去挑自己合适的，最终我选的是G6。 其实G6的文档已经算是非常不错的了，那我写这篇博客的目的主要有两点：  根据自己的使用体验，重新组织成我习惯记忆的方式，方便以后自己查看。 总结一下使用过程中踩的几个小坑。   这里吐槽一句，G6对于TypeScript实在">
-<meta name="keywords" content="G6">
 <meta property="og:type" content="article">
 <meta property="og:title" content="G6 使用入门与总结">
 <meta property="og:url" content="https://sunra.top/posts/42149/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这周的工作中，有一个需求需要我去在前端生成一个决策树，于是去考察了很多开源的方案，下面这是我一开始调研的图表，大家可以看一下，根据自己的选择去挑自己合适的，最终我选的是G6。 其实G6的文档已经算是非常不错的了，那我写这篇博客的目的主要有两点：  根据自己的使用体验，重新组织成我习惯记忆的方式，方便以后自己查看。 总结一下使用过程中踩的几个小坑。   这里吐槽一句，G6对于TypeScript实在">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*I0RoTKgsvSEAAAAAAAAAAAAAARQnAQ">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1623800978/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210616074924_wrkvj4.png">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.326Z">
+<meta property="article:published_time" content="2021-06-09T13:14:55.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.927Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="G6 使用入门与总结">
-<meta name="twitter:description" content="这周的工作中，有一个需求需要我去在前端生成一个决策树，于是去考察了很多开源的方案，下面这是我一开始调研的图表，大家可以看一下，根据自己的选择去挑自己合适的，最终我选的是G6。 其实G6的文档已经算是非常不错的了，那我写这篇博客的目的主要有两点：  根据自己的使用体验，重新组织成我习惯记忆的方式，方便以后自己查看。 总结一下使用过程中踩的几个小坑。   这里吐槽一句，G6对于TypeScript实在">
 <meta name="twitter:image" content="https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*I0RoTKgsvSEAAAAAAAAAAAAAARQnAQ">
 
 <link rel="canonical" href="https://sunra.top/posts/42149/">
@@ -242,7 +242,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -266,7 +266,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       
         <p>这周的工作中，有一个需求需要我去在前端生成一个决策树，于是去考察了很多开源的方案，下面这是我一开始调研的图表，大家可以看一下，根据自己的选择去挑自己合适的，最终我选的是G6。</p>
-<p>其实<a href="https://g6.antv.vision/zh/docs/manual/introduction" rel="external nofollow noopener noreferrer" target="_blank">G6的文档</a>已经算是非常不错的了，那我写这篇博客的目的主要有两点：</p>
+<p>其实<a target="_blank" rel="external nofollow noopener noreferrer" href="https://g6.antv.vision/zh/docs/manual/introduction">G6的文档</a>已经算是非常不错的了，那我写这篇博客的目的主要有两点：</p>
 <ul>
 <li>根据自己的使用体验，重新组织成我习惯记忆的方式，方便以后自己查看。</li>
 <li>总结一下使用过程中踩的几个小坑。</li>
@@ -274,7 +274,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <blockquote>
 <p>这里吐槽一句，G6对于TypeScript实在是太不友好了，所有的属性都是可选的，有时候写下来一堆问号</p>
 </blockquote>
-<a id="more"></a>
+<span id="more"></span>
 <div class="table-container">
 <table>
 <thead>
@@ -289,28 +289,28 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <tbody>
 <tr>
 <td>G6</td>
-<td>文档较为详细：<a href="https://g6.antv.vision/zh/docs/manual/tutorial/preface" rel="external nofollow noopener noreferrer" target="_blank">前言</a></td>
+<td>文档较为详细：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://g6.antv.vision/zh/docs/manual/tutorial/preface">前言</a></td>
 <td>节点数少，但是单个节点比较复杂时候比较实用</td>
 <td>自由度较高，支持自定义节点</td>
 <td>主要是做图分析</td>
 </tr>
 <tr>
 <td>X6</td>
-<td>文档较为详细 <a href="https://x6.antv.vision/zh/docs/tutorial/getting-started" rel="external nofollow noopener noreferrer" target="_blank">快速上手</a></td>
+<td>文档较为详细 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://x6.antv.vision/zh/docs/tutorial/getting-started">快速上手</a></td>
 <td>节点多，但是单个简单，且更多的是拖拽等操作时比较实用</td>
 <td></td>
 <td>主要做的是图编辑</td>
 </tr>
 <tr>
 <td>ggEditor</td>
-<td>几乎没有文档，也不更新文档了 <a href="https://github.com/alibaba/GGEditor" rel="external nofollow noopener noreferrer" target="_blank">alibaba/GGEditor</a></td>
+<td>几乎没有文档，也不更新文档了 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/alibaba/GGEditor">alibaba/GGEditor</a></td>
 <td></td>
 <td></td>
 <td>蚂蚁金服团队基于G6+React封装的，与React兼容较好，但是早已不更新，使用的是3.5版本的G6</td>
 </tr>
 <tr>
 <td>Graphin</td>
-<td><a href="https://graphin.antv.vision/graphin/quick-start/overview/" rel="external nofollow noopener noreferrer" target="_blank">功能概览</a></td>
+<td><a target="_blank" rel="external nofollow noopener noreferrer" href="https://graphin.antv.vision/graphin/quick-start/overview/">功能概览</a></td>
 <td></td>
 <td>自由度较低，只支持圆形节点，无法定制且已有方案不符合要求 主要做图分析，而不是图编辑</td>
 <td>蚂蚁金服团队基于G6+React封装的，与React兼容较好</td>
@@ -346,7 +346,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 </tbody>
 </table>
 </div>
-<h2 id="如何在React中使用G6"><a href="#如何在React中使用G6" class="headerlink" title="如何在React中使用G6"></a>如何在React中使用G6</h2><p>一开始我还在GGEditor和G6之间徘徊，因为我的前端项目是基于React的，使用GGEditor可能会方便一点，但是我在G6的官网找到了官方推荐的React中的使用示例，这才决定使用G6，这是官方势力的链接：<a href="https://g6.antv.vision/zh/docs/manual/advanced/g6InReact" rel="external nofollow noopener noreferrer" target="_blank">https://g6.antv.vision/zh/docs/manual/advanced/g6InReact</a></p>
+<h2 id="如何在React中使用G6"><a href="#如何在React中使用G6" class="headerlink" title="如何在React中使用G6"></a>如何在React中使用G6</h2><p>一开始我还在GGEditor和G6之间徘徊，因为我的前端项目是基于React的，使用GGEditor可能会方便一点，但是我在G6的官网找到了官方推荐的React中的使用示例，这才决定使用G6，这是官方势力的链接：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://g6.antv.vision/zh/docs/manual/advanced/g6InReact">https://g6.antv.vision/zh/docs/manual/advanced/g6InReact</a></p>
 <h2 id="G6核心概念"><a href="#G6核心概念" class="headerlink" title="G6核心概念"></a>G6核心概念</h2><p>这里借用一下官方网站的图片</p>
 <p><img src="https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*I0RoTKgsvSEAAAAAAAAAAAAAARQnAQ" alt></p>
 <p>我来帮大家理一下，这几个核心概念之间的关系：</p>
@@ -371,13 +371,13 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 </ul>
 </li>
 </ul>
-<p>如果要了解 G6 支持的所有事件，请参考 <a href="https://g6.antv.vision/zh/docs/api/Event" rel="external nofollow noopener noreferrer" target="_blank">Event API</a>。</p>
+<p>如果要了解 G6 支持的所有事件，请参考 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://g6.antv.vision/zh/docs/api/Event">Event API</a>。</p>
 <p>在事件之上，G6定义了Behavior，其实就是事件及其处理函数的集合，我们从如何自定义一个事件就可以看出来：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">G6.registerBehavior(<span class="string">'activate-node'</span>, &#123;</span><br><span class="line">  getDefaultCfg() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      multiple: <span class="literal">true</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  getEvents() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="string">'node:click'</span>: <span class="string">'onNodeClick'</span>,</span><br><span class="line">      <span class="string">'canvas:click'</span>: <span class="string">'onCanvasClick'</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  onNodeClick(e) &#123;</span><br><span class="line">    <span class="keyword">const</span> graph = <span class="keyword">this</span>.graph;</span><br><span class="line">    <span class="keyword">const</span> item = e.item;</span><br><span class="line">    <span class="keyword">if</span> (item.hasState(<span class="string">'active'</span>)) &#123;</span><br><span class="line">      graph.setItemState(item, <span class="string">'active'</span>, <span class="literal">false</span>);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// this 上即可取到配置，如果不允许多个 'active'，先取消其他节点的 'active' 状态</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.multiple) &#123;</span><br><span class="line">      <span class="keyword">this</span>.removeNodesState();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 置点击的节点状态 'active' 为 true</span></span><br><span class="line">    graph.setItemState(item, <span class="string">'active'</span>, <span class="literal">true</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  onCanvasClick(e) &#123;</span><br><span class="line">    <span class="comment">// shouldUpdate 可以由用户复写，返回 true 时取消所有节点的 'active' 状态，即将 'active' 状态置为 false</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.shouldUpdate(e)) &#123;</span><br><span class="line">      removeNodesState();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  removeNodesState() &#123;</span><br><span class="line">    graph.findAllByState(<span class="string">'node'</span>, <span class="string">'active'</span>).forEach(<span class="function"><span class="params">node</span> =&gt;</span> &#123;</span><br><span class="line">        graph.setItemState(node, <span class="string">'active'</span>, <span class="literal">false</span>);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable constant_">G6</span>.<span class="title function_">registerBehavior</span>(<span class="string">&#x27;activate-node&#x27;</span>, &#123;</span><br><span class="line">  <span class="title function_">getDefaultCfg</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">multiple</span>: <span class="literal">true</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">getEvents</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="string">&#x27;node:click&#x27;</span>: <span class="string">&#x27;onNodeClick&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;canvas:click&#x27;</span>: <span class="string">&#x27;onCanvasClick&#x27;</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">onNodeClick</span>(<span class="params">e</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> graph = <span class="variable language_">this</span>.<span class="property">graph</span>;</span><br><span class="line">    <span class="keyword">const</span> item = e.<span class="property">item</span>;</span><br><span class="line">    <span class="keyword">if</span> (item.<span class="title function_">hasState</span>(<span class="string">&#x27;active&#x27;</span>)) &#123;</span><br><span class="line">      graph.<span class="title function_">setItemState</span>(item, <span class="string">&#x27;active&#x27;</span>, <span class="literal">false</span>);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// this 上即可取到配置，如果不允许多个 &#x27;active&#x27;，先取消其他节点的 &#x27;active&#x27; 状态</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">multiple</span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">removeNodesState</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 置点击的节点状态 &#x27;active&#x27; 为 true</span></span><br><span class="line">    graph.<span class="title function_">setItemState</span>(item, <span class="string">&#x27;active&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">onCanvasClick</span>(<span class="params">e</span>) &#123;</span><br><span class="line">    <span class="comment">// shouldUpdate 可以由用户复写，返回 true 时取消所有节点的 &#x27;active&#x27; 状态，即将 &#x27;active&#x27; 状态置为 false</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="title function_">shouldUpdate</span>(e)) &#123;</span><br><span class="line">      <span class="title function_">removeNodesState</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">removeNodesState</span>(<span class="params"></span>) &#123;</span><br><span class="line">    graph.<span class="title function_">findAllByState</span>(<span class="string">&#x27;node&#x27;</span>, <span class="string">&#x27;active&#x27;</span>).<span class="title function_">forEach</span>(<span class="function"><span class="params">node</span> =&gt;</span> &#123;</span><br><span class="line">        graph.<span class="title function_">setItemState</span>(node, <span class="string">&#x27;active&#x27;</span>, <span class="literal">false</span>);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>当然，G6也有很多内置的事件，比如拖拽节点，拖拽或者缩放画布。</p>
 <p>在事件之上，定义了交互模式Mode，每个交互模式就是几个Behavior的集合，如</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> graph = <span class="keyword">new</span> G6.Graph(&#123;</span><br><span class="line">  container: <span class="string">'mountNode'</span>,</span><br><span class="line">  width: <span class="number">500</span>,</span><br><span class="line">  height: <span class="number">500</span>,</span><br><span class="line">  modes: &#123;</span><br><span class="line">    <span class="comment">// 支持的 behavior</span></span><br><span class="line">    <span class="keyword">default</span>: [<span class="string">'drag-canvas'</span>, <span class="string">'zoom-canvas'</span>],</span><br><span class="line">    edit: [<span class="string">'click-select'</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>以上是模式定义的一个例子。在图上定义了两个模式，分别是 <code>default</code>，<code>edit</code>。其中 <code>default</code> 包含两个  <a href="https://g6.antv.vision/zh/docs/manual/middle/states/defaultBehavior" rel="external nofollow noopener noreferrer" target="_blank">Behavior</a>：<code>&#39;drag-canvas&#39;</code> 和 ‘<code>zoom-canvas&#39;</code>，都使用行为的默认参数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> graph = <span class="keyword">new</span> <span class="variable constant_">G6</span>.<span class="title class_">Graph</span>(&#123;</span><br><span class="line">  <span class="attr">container</span>: <span class="string">&#x27;mountNode&#x27;</span>,</span><br><span class="line">  <span class="attr">width</span>: <span class="number">500</span>,</span><br><span class="line">  <span class="attr">height</span>: <span class="number">500</span>,</span><br><span class="line">  <span class="attr">modes</span>: &#123;</span><br><span class="line">    <span class="comment">// 支持的 behavior</span></span><br><span class="line">    <span class="attr">default</span>: [<span class="string">&#x27;drag-canvas&#x27;</span>, <span class="string">&#x27;zoom-canvas&#x27;</span>],</span><br><span class="line">    <span class="attr">edit</span>: [<span class="string">&#x27;click-select&#x27;</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>以上是模式定义的一个例子。在图上定义了两个模式，分别是 <code>default</code>，<code>edit</code>。其中 <code>default</code> 包含两个  <a target="_blank" rel="external nofollow noopener noreferrer" href="https://g6.antv.vision/zh/docs/manual/middle/states/defaultBehavior">Behavior</a>：<code>&#39;drag-canvas&#39;</code> 和 ‘<code>zoom-canvas&#39;</code>，都使用行为的默认参数。</p>
 <h3 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h3><p>G6 中的 <strong>state</strong>，指的是节点或边的状态，包括<strong>交互状态</strong>和<strong>业务状态</strong>两种。</p>
 <p>在 G6 中，配置交互状态和业务状态的方式是相同的。对于部分只使用 G6 来完成某个需求的开发，而不想深入理解 G6 的用户，其实不用区分交互状态和业务状态的区别，使用相同的方式定义状态，完全没有理解成本。</p>
 <h4 id="交互状态"><a href="#交互状态" class="headerlink" title="交互状态"></a>交互状态</h4><p>交互状态是与具体的交互动作密切相关的，如用户使用鼠标选中某个节点则该节点被选中，hover 到某条边则该边被高亮等。</p>
@@ -386,8 +386,8 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <blockquote>
 <p>不论是节点还是边，它们的属性分为两种：</p>
 <ul>
-<li><strong>样式属性 <code>style</code></strong>：对应 Canvas 中的各种样式，在元素<a href="https://g6.antv.vision/zh/docs/manual/middle/states/state" rel="external nofollow noopener noreferrer" target="_blank">状态 State</a> 发生变化时，可以被改变；<a href="https://g6.antv.vision/zh/docs/manual/middle/states/state#%E9%85%8D%E7%BD%AE-state-%E6%A0%B7%E5%BC%8F" rel="external nofollow noopener noreferrer" target="_blank">配置state样式</a></li>
-<li><strong>其他属性</strong>：例如图形类型（ <code>type</code>）、id（<code>id</code> ）一类在元素<a href="https://g6.antv.vision/zh/docs/manual/middle/states/state" rel="external nofollow noopener noreferrer" target="_blank">状态 State</a> 发生变化时不能被改变的属性。</li>
+<li><strong>样式属性 <code>style</code></strong>：对应 Canvas 中的各种样式，在元素<a target="_blank" rel="external nofollow noopener noreferrer" href="https://g6.antv.vision/zh/docs/manual/middle/states/state">状态 State</a> 发生变化时，可以被改变；<a target="_blank" rel="external nofollow noopener noreferrer" href="https://g6.antv.vision/zh/docs/manual/middle/states/state#%E9%85%8D%E7%BD%AE-state-%E6%A0%B7%E5%BC%8F">配置state样式</a></li>
+<li><strong>其他属性</strong>：例如图形类型（ <code>type</code>）、id（<code>id</code> ）一类在元素<a target="_blank" rel="external nofollow noopener noreferrer" href="https://g6.antv.vision/zh/docs/manual/middle/states/state">状态 State</a> 发生变化时不能被改变的属性。</li>
 </ul>
 </blockquote>
 <h3 id="图元素"><a href="#图元素" class="headerlink" title="图元素"></a>图元素</h3><p>这次主要用到的就是自定义节点和边，主要就是踩坑，都在下面的总结里了</p>
@@ -513,7 +513,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何在React中使用G6"><span class="nav-number">1.</span> <span class="nav-text">如何在React中使用G6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#G6核心概念"><span class="nav-number">2.</span> <span class="nav-text">G6核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#图"><span class="nav-number">2.1.</span> <span class="nav-text">图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图形"><span class="nav-number">2.2.</span> <span class="nav-text">图形</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#布局"><span class="nav-number">2.3.</span> <span class="nav-text">布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交互与事件"><span class="nav-number">2.4.</span> <span class="nav-text">交互与事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态"><span class="nav-number">2.5.</span> <span class="nav-text">状态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#交互状态"><span class="nav-number">2.5.1.</span> <span class="nav-text">交互状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#业务状态"><span class="nav-number">2.5.2.</span> <span class="nav-text">业务状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图元素"><span class="nav-number">2.6.</span> <span class="nav-text">图元素</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8React%E4%B8%AD%E4%BD%BF%E7%94%A8G6"><span class="nav-number">1.</span> <span class="nav-text">如何在React中使用G6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#G6%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">G6核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE"><span class="nav-number">2.1.</span> <span class="nav-text">图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E5%BD%A2"><span class="nav-number">2.2.</span> <span class="nav-text">图形</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%83%E5%B1%80"><span class="nav-number">2.3.</span> <span class="nav-text">布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E4%BA%92%E4%B8%8E%E4%BA%8B%E4%BB%B6"><span class="nav-number">2.4.</span> <span class="nav-text">交互与事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81"><span class="nav-number">2.5.</span> <span class="nav-text">状态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%A4%E4%BA%92%E7%8A%B6%E6%80%81"><span class="nav-number">2.5.1.</span> <span class="nav-text">交互状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E7%8A%B6%E6%80%81"><span class="nav-number">2.5.2.</span> <span class="nav-text">业务状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E5%85%83%E7%B4%A0"><span class="nav-number">2.6.</span> <span class="nav-text">图元素</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -603,9 +603,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -639,7 +647,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

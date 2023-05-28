@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,18 +20,25 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="最近leetcode的每日一题开始了丑数的系列，做了几道，来总结一下。">
-<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Leetcode 丑数总结">
 <meta property="og:url" content="https://sunra.top/2021/04/11/ugly-number/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近leetcode的每日一题开始了丑数的系列，做了几道，来总结一下。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-26T22:57:24.511Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-04-11T01:45:14.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.943Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Leetcode 丑数总结">
-<meta name="twitter:description" content="最近leetcode的每日一题开始了丑数的系列，做了几道，来总结一下。">
 
 <link rel="canonical" href="https://sunra.top/2021/04/11/ugly-number/">
 
@@ -48,6 +55,15 @@
 
   <title>Leetcode 丑数总结 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -223,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -247,19 +263,19 @@
 
       
         <p>最近leetcode的每日一题开始了丑数的系列，做了几道，来总结一下。</p>
-<a id="more"></a>
-<h2 id="丑数I-Easy"><a href="#丑数I-Easy" class="headerlink" title="丑数I - Easy"></a>丑数I - Easy</h2><p>题目链接：<a href="https://leetcode-cn.com/problems/ugly-number/" rel="external nofollow noopener noreferrer" target="_blank">https://leetcode-cn.com/problems/ugly-number/</a></p>
+<span id="more"></span>
+<h2 id="丑数I-Easy"><a href="#丑数I-Easy" class="headerlink" title="丑数I - Easy"></a>丑数I - Easy</h2><p>题目链接：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://leetcode-cn.com/problems/ugly-number/">https://leetcode-cn.com/problems/ugly-number/</a></p>
 <p>这个题目没什么好说的，大家看下题目应该就知道怎么做了</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;number&#125;</span> <span class="variable">n</span></span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return <span class="type">&#123;boolean&#125;</span></span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> isUgly = <span class="function"><span class="keyword">function</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> factors = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> factor <span class="keyword">of</span> factors) &#123;</span><br><span class="line">        <span class="keyword">while</span> (n % factor === <span class="number">0</span>) &#123;</span><br><span class="line">            n /= factor;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> n == <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">number</span>&#125; <span class="variable">n</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="type">boolean</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> isUgly = <span class="keyword">function</span>(<span class="params">n</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> factors = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> factor <span class="keyword">of</span> factors) &#123;</span><br><span class="line">        <span class="keyword">while</span> (n % factor === <span class="number">0</span>) &#123;</span><br><span class="line">            n /= factor;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> n == <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <h2 id="丑数II-Medium"><a href="#丑数II-Medium" class="headerlink" title="丑数II - Medium"></a>丑数II - Medium</h2><p>题目链接</p>
-<p><a href="https://leetcode-cn.com/problems/ugly-number-ii/" rel="external nofollow noopener noreferrer" target="_blank">https://leetcode-cn.com/problems/ugly-number-ii/</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://leetcode-cn.com/problems/ugly-number-ii/">https://leetcode-cn.com/problems/ugly-number-ii/</a></p>
 <p>这个题目就有点意思了。</p>
 <h3 id="最小堆"><a href="#最小堆" class="headerlink" title="最小堆"></a>最小堆</h3><p>要得到从小到大的第 n 个丑数，可以使用最小堆实现。</p>
 <p>初始时堆为空。首先将最小的丑数 1 加入堆。</p>
 <p>每次取出堆顶元素 x，则 x 是堆中最小的丑数，由于 2x, 3x, 5x 也是丑数，因此将 2x, 3x, 5x 加入堆。</p>
 <p>上述做法会导致堆中出现重复元素的情况。为了避免重复元素，可以使用哈希集合去重，避免相同元素多次加入堆。</p>
 <p>在排除重复元素的情况下，第 n 次从最小堆中取出的元素即为第 n 个丑数。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> nthUglyNumber = <span class="function"><span class="keyword">function</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> factors = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>];</span><br><span class="line">    <span class="keyword">const</span> seen = <span class="keyword">new</span> <span class="built_in">Set</span>();</span><br><span class="line">    <span class="keyword">const</span> heap = <span class="keyword">new</span> MinHeap();</span><br><span class="line">    seen.add(<span class="number">1</span>);</span><br><span class="line">    heap.insert(<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">let</span> ugly = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        ugly = heap.pop();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> factor <span class="keyword">of</span> factors) &#123;</span><br><span class="line">            <span class="keyword">const</span> next = ugly * factor;</span><br><span class="line">            <span class="keyword">if</span> (!seen.has(next)) &#123;</span><br><span class="line">                seen.add(next);</span><br><span class="line">                heap.insert(next);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ugly;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> nthUglyNumber = <span class="keyword">function</span>(<span class="params">n</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> factors = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>];</span><br><span class="line">    <span class="keyword">const</span> seen = <span class="keyword">new</span> <span class="title class_">Set</span>();</span><br><span class="line">    <span class="keyword">const</span> heap = <span class="keyword">new</span> <span class="title class_">MinHeap</span>();</span><br><span class="line">    seen.<span class="title function_">add</span>(<span class="number">1</span>);</span><br><span class="line">    heap.<span class="title function_">insert</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">let</span> ugly = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        ugly = heap.<span class="title function_">pop</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> factor <span class="keyword">of</span> factors) &#123;</span><br><span class="line">            <span class="keyword">const</span> next = ugly * factor;</span><br><span class="line">            <span class="keyword">if</span> (!seen.<span class="title function_">has</span>(next)) &#123;</span><br><span class="line">                seen.<span class="title function_">add</span>(next);</span><br><span class="line">                heap.<span class="title function_">insert</span>(next);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ugly;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>最小堆的实现大家可以看我另一篇博客：<a href="https://sunra.top/posts/9df73d67/">https://sunra.top/posts/9df73d67/</a></p>
 <h3 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h3><p>方法一使用最小堆，会预先存储较多的丑数，导致空间复杂度较高，维护最小堆的过程也导致时间复杂度较高。可以使用动态规划的方法进行优化。</p>
 <p>定义数组dp，其中dp[i] 表示第 i 个丑数，第 n 个丑数即为dp[n]。</p>
@@ -278,9 +294,9 @@
 <p>为什么不去找dp[p2 + 1] <em> 2呢？因为我们要找最小值，这个值肯定大于dp[p2] </em> 2;</p>
 <p>为什么不去找dp[p3] <em> 2呢？因为p2和p3之间可能还有其他值乘以2的结果还没在dp中，也就是说可能存在一个p2 &lt; j &lt; p3，dp[j] </em> 2 还不在dp中，而且 dp[p2] <em> 2 &lt; dp[j] </em> 2 &lt; dp[p3] * 2。</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> nthUglyNumber = <span class="function"><span class="keyword">function</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> dp = <span class="keyword">new</span> <span class="built_in">Array</span>(n + <span class="number">1</span>).fill(<span class="number">0</span>);</span><br><span class="line">    dp[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">let</span> p2 = <span class="number">1</span>, p3 = <span class="number">1</span>, p5 = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">const</span> num2 = dp[p2] * <span class="number">2</span>, num3 = dp[p3] * <span class="number">3</span>, num5 = dp[p5] * <span class="number">5</span>;</span><br><span class="line">        dp[i] = <span class="built_in">Math</span>.min(<span class="built_in">Math</span>.min(num2, num3), num5);</span><br><span class="line">        <span class="keyword">if</span> (dp[i] === num2) &#123;</span><br><span class="line">            p2++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (dp[i] === num3) &#123;</span><br><span class="line">            p3++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (dp[i] === num5) &#123;</span><br><span class="line">            p5++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[n];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> nthUglyNumber = <span class="keyword">function</span>(<span class="params">n</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> dp = <span class="keyword">new</span> <span class="title class_">Array</span>(n + <span class="number">1</span>).<span class="title function_">fill</span>(<span class="number">0</span>);</span><br><span class="line">    dp[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">let</span> p2 = <span class="number">1</span>, p3 = <span class="number">1</span>, p5 = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">const</span> num2 = dp[p2] * <span class="number">2</span>, num3 = dp[p3] * <span class="number">3</span>, num5 = dp[p5] * <span class="number">5</span>;</span><br><span class="line">        dp[i] = <span class="title class_">Math</span>.<span class="title function_">min</span>(<span class="title class_">Math</span>.<span class="title function_">min</span>(num2, num3), num5);</span><br><span class="line">        <span class="keyword">if</span> (dp[i] === num2) &#123;</span><br><span class="line">            p2++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (dp[i] === num3) &#123;</span><br><span class="line">            p3++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (dp[i] === num5) &#123;</span><br><span class="line">            p5++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[n];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>参考链接：</p>
-<p><a href="https://leetcode-cn.com/problems/ugly-number-ii/solution/chou-shu-ii-by-leetcode-solution-uoqd/" rel="external nofollow noopener noreferrer" target="_blank">https://leetcode-cn.com/problems/ugly-number-ii/solution/chou-shu-ii-by-leetcode-solution-uoqd/</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://leetcode-cn.com/problems/ugly-number-ii/solution/chou-shu-ii-by-leetcode-solution-uoqd/">https://leetcode-cn.com/problems/ugly-number-ii/solution/chou-shu-ii-by-leetcode-solution-uoqd/</a></p>
 
     </div>
 
@@ -397,7 +413,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#丑数I-Easy"><span class="nav-number">1.</span> <span class="nav-text">丑数I - Easy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#丑数II-Medium"><span class="nav-number">2.</span> <span class="nav-text">丑数II - Medium</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最小堆"><span class="nav-number">2.1.</span> <span class="nav-text">最小堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态规划"><span class="nav-number">2.2.</span> <span class="nav-text">动态规划</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%91%E6%95%B0I-Easy"><span class="nav-number">1.</span> <span class="nav-text">丑数I - Easy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%91%E6%95%B0II-Medium"><span class="nav-number">2.</span> <span class="nav-text">丑数II - Medium</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E5%A0%86"><span class="nav-number">2.1.</span> <span class="nav-text">最小堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92"><span class="nav-number">2.2.</span> <span class="nav-text">动态规划</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -487,9 +503,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -523,7 +547,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

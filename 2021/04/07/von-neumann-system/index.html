@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,19 +20,26 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="越是我们习以为常的事情中，可能往往蕴藏着伟大的哲学，越是简单的事情当中，可能往往蕴藏着巨大的智慧。 今天我们就来讲一讲支撑起整个计算机虚拟世界，支撑起整个互联网，支撑起我们耳熟能详的腾讯，阿里，微软，谷歌这些互联网巨头的基础——冯诺依曼体系。 我们一起看看它有多简单，但同时又是多么的伟大，一起感受其中的哲学。">
-<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="虚拟世界的创世哲学——冯诺依曼体系">
 <meta property="og:url" content="https://sunra.top/2021/04/07/von-neumann-system/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="越是我们习以为常的事情中，可能往往蕴藏着伟大的哲学，越是简单的事情当中，可能往往蕴藏着巨大的智慧。 今天我们就来讲一讲支撑起整个计算机虚拟世界，支撑起整个互联网，支撑起我们耳熟能详的腾讯，阿里，微软，谷歌这些互联网巨头的基础——冯诺依曼体系。 我们一起看看它有多简单，但同时又是多么的伟大，一起感受其中的哲学。">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1617794617/origin-of-ray/cf77b8fbe8a559cecbb264c390bc7337_l2phvp.png">
-<meta property="og:updated_time" content="2023-05-26T22:57:24.728Z">
+<meta property="article:published_time" content="2021-04-07T10:29:18.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.947Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="虚拟世界的创世哲学——冯诺依曼体系">
-<meta name="twitter:description" content="越是我们习以为常的事情中，可能往往蕴藏着伟大的哲学，越是简单的事情当中，可能往往蕴藏着巨大的智慧。 今天我们就来讲一讲支撑起整个计算机虚拟世界，支撑起整个互联网，支撑起我们耳熟能详的腾讯，阿里，微软，谷歌这些互联网巨头的基础——冯诺依曼体系。 我们一起看看它有多简单，但同时又是多么的伟大，一起感受其中的哲学。">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1617794617/origin-of-ray/cf77b8fbe8a559cecbb264c390bc7337_l2phvp.png">
 
 <link rel="canonical" href="https://sunra.top/2021/04/07/von-neumann-system/">
@@ -50,6 +57,15 @@
 
   <title>虚拟世界的创世哲学——冯诺依曼体系 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -225,7 +241,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -251,7 +267,7 @@
         <p>越是我们习以为常的事情中，可能往往蕴藏着伟大的哲学，越是简单的事情当中，可能往往蕴藏着巨大的智慧。</p>
 <p>今天我们就来讲一讲支撑起整个计算机虚拟世界，支撑起整个互联网，支撑起我们耳熟能详的腾讯，阿里，微软，谷歌这些互联网巨头的基础——冯诺依曼体系。</p>
 <p>我们一起看看它有多简单，但同时又是多么的伟大，一起感受其中的哲学。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="冯诺依曼体系是什么"><a href="#冯诺依曼体系是什么" class="headerlink" title="冯诺依曼体系是什么"></a>冯诺依曼体系是什么</h2><p>我们现在常说，有两个世界，一个是现实世界，一个是虚拟世界，现实世界是大自然的产物，是造物主的杰作，它自带无穷无尽的规律，比如同性相斥，异性相吸，万有引力，光速不变等等。但是这些规律不是我们制造的，只是我们发现的。</p>
 <p>而虚拟世界不同，我们就是虚拟世界的造物主，虚拟世界的规则是我们制定的而不是发现的，而这个世界最基础的规则之一就是冯诺依曼体系。</p>
 <p>当我们去审视整个信息科技时，仅把它形容为一座大厦显得如此不贴切，甚至你也不能用“一个城市”去形容它，事实上，它更像是一个无中生有的全新世界：<strong>是冯诺依曼体系从虚无中造出了虚拟世界</strong>。</p>
@@ -432,7 +448,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#冯诺依曼体系是什么"><span class="nav-number">1.</span> <span class="nav-text">冯诺依曼体系是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为解决一切问题而生"><span class="nav-number">1.1.</span> <span class="nav-text">为解决一切问题而生</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#冯诺依曼体系的规格"><span class="nav-number">1.2.</span> <span class="nav-text">冯诺依曼体系的规格</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#冯诺依曼体系是如何解决一切问题的"><span class="nav-number">2.</span> <span class="nav-text">冯诺依曼体系是如何解决一切问题的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E4%BD%93%E7%B3%BB%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">冯诺依曼体系是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E8%A7%A3%E5%86%B3%E4%B8%80%E5%88%87%E9%97%AE%E9%A2%98%E8%80%8C%E7%94%9F"><span class="nav-number">1.1.</span> <span class="nav-text">为解决一切问题而生</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E4%BD%93%E7%B3%BB%E7%9A%84%E8%A7%84%E6%A0%BC"><span class="nav-number">1.2.</span> <span class="nav-text">冯诺依曼体系的规格</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E4%BD%93%E7%B3%BB%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E4%B8%80%E5%88%87%E9%97%AE%E9%A2%98%E7%9A%84"><span class="nav-number">2.</span> <span class="nav-text">冯诺依曼体系是如何解决一切问题的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -522,9 +538,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -558,7 +582,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

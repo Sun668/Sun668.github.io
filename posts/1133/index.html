@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,21 +28,21 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="最近看了一片介绍DHCP协议工作流程的文章，这里简单总结下。">
-<meta name="keywords" content="DHCP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DHCP 协议工作流程简介">
 <meta property="og:url" content="https://sunra.top/posts/1133/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近看了一片介绍DHCP协议工作流程的文章，这里简单总结下。">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637158337/origin-of-ray/QQ%E6%88%AA%E5%9B%BE20211117221021_vyrmgg.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637158337/origin-of-ray/QQ%E6%88%AA%E5%9B%BE20211117221106_ym8rio.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637158337/origin-of-ray/QQ%E6%88%AA%E5%9B%BE20211117221140_c1zfid.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637158337/origin-of-ray/QQ%E6%88%AA%E5%9B%BE20211117221146_vkuwkg.png">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.322Z">
+<meta property="article:published_time" content="2021-11-13T00:47:39.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.927Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DHCP 协议工作流程简介">
-<meta name="twitter:description" content="最近看了一片介绍DHCP协议工作流程的文章，这里简单总结下。">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637158337/origin-of-ray/QQ%E6%88%AA%E5%9B%BE20211117221021_vyrmgg.png">
 
 <link rel="canonical" href="https://sunra.top/posts/1133/">
@@ -244,7 +244,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -268,12 +268,12 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       
         <p>最近看了一片介绍DHCP协议工作流程的文章，这里简单总结下。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="如何给网卡配置一个IP地址"><a href="#如何给网卡配置一个IP地址" class="headerlink" title="如何给网卡配置一个IP地址"></a>如何给网卡配置一个IP地址</h2><p>你可以用命令行自己配置一个地址。可以使用 ifconfig，也可以使用 ip addr。设置好了以后，用这两个命令，将网卡 up 一下，就可以开始工作了。</p>
 <p>使用 net-tools：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo ifconfig eth1 10.0.0.1/24</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo ifconfig eth1 up</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo ifconfig eth1 10.0.0.1/24</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo ifconfig eth1 up</span></span><br></pre></td></tr></table></figure>
 <p>使用 iproute2：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo ip addr add 10.0.0.1/24 dev eth1</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo ip link <span class="built_in">set</span> up eth1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo ip addr add 10.0.0.1/24 dev eth1</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo ip <span class="built_in">link</span> <span class="built_in">set</span> up eth1</span></span><br></pre></td></tr></table></figure>
 <p>你可能会问了，自己配置这个自由度太大了吧，我是不是配置什么都可以？</p>
 <p>如果配置一个和谁都不搭边的地址呢？例如，旁边的机器都是 192.168.1.x，我非得配置一个 16.158.23.6，会出现什么现象呢？</p>
 <p>不会出现任何现象，就是包发不出去呗。</p>
@@ -423,7 +423,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何给网卡配置一个IP地址"><span class="nav-number">1.</span> <span class="nav-text">如何给网卡配置一个IP地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DHCP"><span class="nav-number">2.</span> <span class="nav-text">DHCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作流程"><span class="nav-number">2.2.</span> <span class="nav-text">工作流程</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%BB%99%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE%E4%B8%80%E4%B8%AAIP%E5%9C%B0%E5%9D%80"><span class="nav-number">1.</span> <span class="nav-text">如何给网卡配置一个IP地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DHCP"><span class="nav-number">2.</span> <span class="nav-text">DHCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">工作流程</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -513,9 +513,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -549,7 +557,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

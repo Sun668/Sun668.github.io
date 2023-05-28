@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,13 +28,12 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="最近发现需要看一些关于设计模式的内容了，于是在网上找到了《设计模式之禅》这本书，边看边总结吧 这次先总结下UML图的看法以及单一职责原则。">
-<meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《设计模式之禅》阅读笔记（一）">
 <meta property="og:url" content="https://sunra.top/posts/52680/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="最近发现需要看一些关于设计模式的内容了，于是在网上找到了《设计模式之禅》这本书，边看边总结吧 这次先总结下UML图的看法以及单一职责原则。">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970288/origin-of-ray/a1a8c7bd-101c-4dbf-823f-91625dcf7fab_ofx3xs.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/1280X1280_jmojyd.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/520b8b37-71f6-4df7-908b-147396219239_cuvcee.png">
@@ -44,10 +43,11 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/80ee630a-8238-4368-ab5f-20d9bcc482a5_qsm51m.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/58189a99-a292-4905-bd21-1f1a218d55eb_b7wbl4.png">
 <meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/0e76e37a-e56a-4cad-b86f-6a3aefd8ce30_qcib9j.png">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.322Z">
+<meta property="article:published_time" content="2021-11-26T23:32:35.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.927Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《设计模式之禅》阅读笔记（一）">
-<meta name="twitter:description" content="最近发现需要看一些关于设计模式的内容了，于是在网上找到了《设计模式之禅》这本书，边看边总结吧 这次先总结下UML图的看法以及单一职责原则。">
 <meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970288/origin-of-ray/a1a8c7bd-101c-4dbf-823f-91625dcf7fab_ofx3xs.png">
 
 <link rel="canonical" href="https://sunra.top/posts/52680/">
@@ -249,7 +249,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -274,11 +274,11 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
       
         <p>最近发现需要看一些关于设计模式的内容了，于是在网上找到了《设计模式之禅》这本书，边看边总结吧</p>
 <p>这次先总结下UML图的看法以及单一职责原则。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>设计模式更多的是一种哲学，偏向学术，总是会构造一些极端的情况去进行描述，就像物理学中的光滑平面一样，所以我们需要领会的更多的是其中的哲学，而不要试图在实际项目中能够完全复刻。</p>
 <h2 id="一图看懂UML标志"><a href="#一图看懂UML标志" class="headerlink" title="一图看懂UML标志"></a>一图看懂UML标志</h2><p>下面的内容会涉及很多UML图，如果大家不太熟悉，可以先简单看一下下面这张图。</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970288/origin-of-ray/a1a8c7bd-101c-4dbf-823f-91625dcf7fab_ofx3xs.png" alt></p>
-<h2 id="面向接口编程"><a href="#面向接口编程" class="headerlink" title="面向接口编程"></a>面向接口编程</h2><p><a href="https://segmentfault.com/a/1190000021928946" rel="external nofollow noopener noreferrer" target="_blank">为什么要面向接口编程</a></p>
+<h2 id="面向接口编程"><a href="#面向接口编程" class="headerlink" title="面向接口编程"></a>面向接口编程</h2><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://segmentfault.com/a/1190000021928946">为什么要面向接口编程</a></p>
 <h1 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a><strong>单一职责原则</strong></h1><h2 id="接口职责单一"><a href="#接口职责单一" class="headerlink" title="接口职责单一"></a>接口职责单一</h2><p>单一职责原则的英文名称是Single Responsibility Principle，简称是SRP。</p>
 <p>怎么划分类的职责。我们先举个例子来说明什么是单一职责原则。</p>
 <p>只要做过项目，肯定要接触到用户、机构、角色管理这些模块，基本上使用的都是RBAC模型（Role-Based Access Control，基于角色的访问控制，通过分配和取消角色来完成用户权限的授予和取消，使动作主体（用户）与资源的行为（权限）分离），确实是一个很好的解决办法。我们这里要讲的是用户管理、修改用户的信息、增加机构（一个人属于多个机构）、增加角色等，用户有这么多的信息和行为要维护，我们就把这些写到一个接口中，都是用户管理类嘛，我们先来看它的类图</p>
@@ -286,7 +286,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 <p><strong>这个接口设计得有问题，用户的属性和用户的行为没有分开，这是一个严重的错误</strong>！这个接口确实设计得一团糟，应该把用户的信息抽取成一个BO（Business Object，业务对象），把行为抽取成一个Biz（Business Logic，业务逻辑），按照这个思路对类图进行修正，如图1-2所示。</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970006/origin-of-ray/520b8b37-71f6-4df7-908b-147396219239_cuvcee.png" alt="img"></p>
 <p>重新拆封成两个接口，IUserBO负责用户的属性，简单地说，IUserBO的职责就是收集和反馈用户的属性信息；IUserBiz负责用户的行为，完成用户信息的维护和变更。各位可能要说了，这个与我实际工作中用到的User类还是有差别的呀！别着急，我们先来看一看分拆成两个接口怎么使用。OK，我们现在是面向接口编程，所以产生了这个UserInfo对象之后，当然可以把它当IUserBO接口使用。也可以当IUserBiz接口使用，这要看你在什么地方使用了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">IUserInfo userInfo = new UserInfo();</span><br><span class="line">//我要赋值了，我就认为它是一个纯粹的BO</span><br><span class="line">IUserBO userBO = (IUserBO)userInfo;</span><br><span class="line">userBO.setPassword(&quot;abc&quot;);</span><br><span class="line">//我要执行动作了，我就认为是一个业务逻辑类</span><br><span class="line">IUserBiz userBiz = (IUserBiz)userInfo;</span><br><span class="line">userBiz.deleteUser();</span><br></pre></td></tr></table></figure>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">IUserInfo userInfo = <span class="keyword">new</span> UserInfo();</span><br><span class="line"><span class="comment">//我要赋值了，我就认为它是一个纯粹的BO</span></span><br><span class="line">IUserBO userBO = (IUserBO)userInfo;</span><br><span class="line">userBO.setPassword(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line"><span class="comment">//我要执行动作了，我就认为是一个业务逻辑类</span></span><br><span class="line">IUserBiz userBiz = (IUserBiz)userInfo;</span><br><span class="line">userBiz.deleteUser();</span><br></pre></td></tr></table></figure>
 <p>确实可以如此，问题也解决了，但是我们来分析一下刚才的动作，为什么要把一个接口拆分成两个呢？其实，在实际的使用中，我们更倾向于使用两个不同的类或接口：一个是IUserBO，一个是IUserBiz，类图如图所示。</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1637970007/origin-of-ray/99211215-7ce6-41c2-b763-edddaa45f9ba_ygqbs4.png" alt="img"></p>
 <p>以上我们把一个接口拆分成两个接口的动作，就是依赖了单一职责原则，那什么是单一职责原则呢？</p>
@@ -425,7 +425,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一图看懂UML标志"><span class="nav-number">1.1.</span> <span class="nav-text">一图看懂UML标志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#面向接口编程"><span class="nav-number">1.2.</span> <span class="nav-text">面向接口编程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单一职责原则"><span class="nav-number">2.</span> <span class="nav-text">单一职责原则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#接口职责单一"><span class="nav-number">2.1.</span> <span class="nav-text">接口职责单一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类职责单一"><span class="nav-number">2.2.</span> <span class="nav-text">类职责单一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法职责单一"><span class="nav-number">2.3.</span> <span class="nav-text">方法职责单一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最佳实践"><span class="nav-number">2.4.</span> <span class="nav-text">最佳实践</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%9B%BE%E7%9C%8B%E6%87%82UML%E6%A0%87%E5%BF%97"><span class="nav-number">1.1.</span> <span class="nav-text">一图看懂UML标志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E6%8E%A5%E5%8F%A3%E7%BC%96%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">面向接口编程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99"><span class="nav-number">2.</span> <span class="nav-text">单一职责原则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E8%81%8C%E8%B4%A3%E5%8D%95%E4%B8%80"><span class="nav-number">2.1.</span> <span class="nav-text">接口职责单一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E8%81%8C%E8%B4%A3%E5%8D%95%E4%B8%80"><span class="nav-number">2.2.</span> <span class="nav-text">类职责单一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E8%81%8C%E8%B4%A3%E5%8D%95%E4%B8%80"><span class="nav-number">2.3.</span> <span class="nav-text">方法职责单一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">2.4.</span> <span class="nav-text">最佳实践</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -515,9 +515,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -551,7 +559,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

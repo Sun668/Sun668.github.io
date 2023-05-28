@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -27,18 +27,18 @@
 fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
-  <meta name="description" content="给定一个数组，包含从 1 到 N 所有的整数，但其中缺了两个数字。你能在 O(N) 时间内只用 O(1) 的空间找到它们吗？ 题目链接：https://leetcode.cn/problems/missing-two-lcci/ 这道题严格来说并不是一道算法题，我感觉它的解法中，一种像是计算机组成中二进制的知识，一种是数学知识">
-<meta name="keywords" content="技术分享 使用教程 原理 前端 计算机图形学">
+  <meta name="description" content="给定一个数组，包含从 1 到 N 所有的整数，但其中缺了两个数字。你能在 O(N) 时间内只用 O(1) 的空间找到它们吗？ 题目链接：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;missing-two-lcci&#x2F; 这道题严格来说并不是一道算法题，我感觉它的解法中，一种像是计算机组成中二进制的知识，一种是数学知识">
 <meta property="og:type" content="article">
 <meta property="og:title" content="消失的两个数字">
 <meta property="og:url" content="https://sunra.top/posts/38991/index.html">
 <meta property="og:site_name" content="Origin of Ray">
-<meta property="og:description" content="给定一个数组，包含从 1 到 N 所有的整数，但其中缺了两个数字。你能在 O(N) 时间内只用 O(1) 的空间找到它们吗？ 题目链接：https://leetcode.cn/problems/missing-two-lcci/ 这道题严格来说并不是一道算法题，我感觉它的解法中，一种像是计算机组成中二进制的知识，一种是数学知识">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.330Z">
+<meta property="og:description" content="给定一个数组，包含从 1 到 N 所有的整数，但其中缺了两个数字。你能在 O(N) 时间内只用 O(1) 的空间找到它们吗？ 题目链接：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;missing-two-lcci&#x2F; 这道题严格来说并不是一道算法题，我感觉它的解法中，一种像是计算机组成中二进制的知识，一种是数学知识">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-09-26T03:14:07.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.935Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="消失的两个数字">
-<meta name="twitter:description" content="给定一个数组，包含从 1 到 N 所有的整数，但其中缺了两个数字。你能在 O(N) 时间内只用 O(1) 的空间找到它们吗？ 题目链接：https://leetcode.cn/problems/missing-two-lcci/ 这道题严格来说并不是一道算法题，我感觉它的解法中，一种像是计算机组成中二进制的知识，一种是数学知识">
 
 <link rel="canonical" href="https://sunra.top/posts/38991/">
 
@@ -239,7 +239,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,16 +263,16 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
       
         <p>给定一个数组，包含从 1 到 N 所有的整数，但其中缺了两个数字。你能在 O(N) 时间内只用 O(1) 的空间找到它们吗？</p>
-<p>题目链接：<a href="https://leetcode.cn/problems/missing-two-lcci/" rel="external nofollow noopener noreferrer" target="_blank">https://leetcode.cn/problems/missing-two-lcci/</a></p>
+<p>题目链接：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://leetcode.cn/problems/missing-two-lcci/">https://leetcode.cn/problems/missing-two-lcci/</a></p>
 <p>这道题严格来说并不是一道算法题，我感觉它的解法中，一种像是计算机组成中二进制的知识，一种是数学知识</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="求和"><a href="#求和" class="headerlink" title="求和"></a>求和</h2><p>这种方法是纯数学方法，</p>
 <ul>
 <li>我们知道1～N的和是$\frac{N(N+1)}{2}$,然后我们可以通过遍历的方法求出提供的N-2个数字的和，通过相减，我们可以得到缺失的两个数字的和，假设为<code>sumTwo</code>，缺失的两个数分别为a和b</li>
 <li>缺失的两个数字是不相同的，所以一个大一个小，也就是说一个小于二者的平均值，一个大于二者的平均值，假设这个平均值为<code>limit</code>，则$limit = \frac{sumTwo}{2}$</li>
 <li>然后再根据是否小于<code>limit</code>将1～N分为两部分，则a在1～limit之间，我们只需要计算1～limit的和，即$\frac{limit(limit+1)}{2}$与提供的数组中1～limit的数字的和之间的差值，其实就是a。求b同理</li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> missingTwo = <span class="function"><span class="keyword">function</span>(<span class="params">nums</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> N = nums.length + <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">const</span> sumTwo = <span class="function">(<span class="params">N * (N + <span class="number">1</span></span>)) / 2 - <span class="params">nums</span>.<span class="params">reduce</span>(<span class="params">(pre, cur</span>) =&gt;</span> (pre + cur), <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">const</span> limit = <span class="built_in">Math</span>.floor(sumTwo / <span class="number">2</span>);</span><br><span class="line">    <span class="keyword">let</span> sumBefore = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">const</span> num <span class="keyword">of</span> nums) &#123;</span><br><span class="line">        <span class="keyword">if</span> (num &lt;= limit) &#123;</span><br><span class="line">            sumBefore += num;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> one = (limit * (limit + <span class="number">1</span>)) / <span class="number">2</span> - sumBefore;</span><br><span class="line">    <span class="keyword">return</span> [one, sumTwo - one];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> missingTwo = <span class="keyword">function</span>(<span class="params">nums</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> N = nums.<span class="property">length</span> + <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">const</span> sumTwo = (N * (N + <span class="number">1</span>)) / <span class="number">2</span> - nums.<span class="title function_">reduce</span>(<span class="function">(<span class="params">pre, cur</span>) =&gt;</span> (pre + cur), <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">const</span> limit = <span class="title class_">Math</span>.<span class="title function_">floor</span>(sumTwo / <span class="number">2</span>);</span><br><span class="line">    <span class="keyword">let</span> sumBefore = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">const</span> num <span class="keyword">of</span> nums) &#123;</span><br><span class="line">        <span class="keyword">if</span> (num &lt;= limit) &#123;</span><br><span class="line">            sumBefore += num;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> one = (limit * (limit + <span class="number">1</span>)) / <span class="number">2</span> - sumBefore;</span><br><span class="line">    <span class="keyword">return</span> [one, sumTwo - one];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <h2 id="利用位运算"><a href="#利用位运算" class="headerlink" title="利用位运算"></a>利用位运算</h2><p>这种思路和上面的求和思路有些类似，都是先求出缺失的两个数字的合并后的结果，然后根据合并的结果把提供的数字分成两部分，缺失的两个数字分别在两个部分中。</p>
 <p>由于从 1 到 n 的整数中有两个整数消失，其余每个整数都在数组中出现一次，因此数组的长度是 n - 2。在数组中的 n - 2 个数后面添加从 1 到 n 的每个整数各一次，则得到 2n−2 个数字，其中两个在数组中消失的数字各出现一次，其余每个数字各出现两次。</p>
 <p>假设数组 nums 中消失的两个数字分别是 $x_1$,$x_2$ 。如果把上述 2n−2 个数字全部异或起来，得到结果 x，那么一定有：</p>
@@ -283,7 +283,7 @@ x = x_1 \bigoplus x_2</script><p>其中 $\bigoplus$ 表示异或运算。这是�
 <p>对于任意一个在数组 nums 中出现一次的数字，这些数字在上述 2n−2 个数字中出现两次，两次出现会被包含在同一类中；</p>
 <p>对于任意一个在数组 nums 中消失的数字，即 $x_1$,$x_2$ ，这些数字在上述 2n - 2 个数字中出现一次，会被包含在不同类中。</p>
 <p>因此，如果我们将每一类的元素全部异或起来，那么其中一类会得到 $x_1$另一类会得到 $x_2$。这样我们就找出了这两个只出现一次的元素。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> missingTwo = <span class="function"><span class="keyword">function</span>(<span class="params">nums</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> xorsum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> n = nums.length + <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> num <span class="keyword">of</span> nums) &#123;</span><br><span class="line">        xorsum ^= num;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        xorsum ^= i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> type1 = <span class="number">0</span>, type2 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> lsb = xorsum &amp; (-xorsum);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> num <span class="keyword">of</span> nums) &#123;</span><br><span class="line">        <span class="keyword">if</span> (num &amp; lsb) &#123;</span><br><span class="line">            type1 ^= num;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            type2 ^= num;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &amp; lsb) &#123;</span><br><span class="line">            type1 ^= i;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            type2 ^= i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> [type1, type2];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> missingTwo = <span class="keyword">function</span>(<span class="params">nums</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> xorsum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> n = nums.<span class="property">length</span> + <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> num <span class="keyword">of</span> nums) &#123;</span><br><span class="line">        xorsum ^= num;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        xorsum ^= i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> type1 = <span class="number">0</span>, type2 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> lsb = xorsum &amp; (-xorsum);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> num <span class="keyword">of</span> nums) &#123;</span><br><span class="line">        <span class="keyword">if</span> (num &amp; lsb) &#123;</span><br><span class="line">            type1 ^= num;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            type2 ^= num;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &amp; lsb) &#123;</span><br><span class="line">            type1 ^= i;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            type2 ^= i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> [type1, type2];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -399,7 +399,7 @@ x = x_1 \bigoplus x_2</script><p>其中 $\bigoplus$ 表示异或运算。这是�
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#求和"><span class="nav-number">1.</span> <span class="nav-text">求和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用位运算"><span class="nav-number">2.</span> <span class="nav-text">利用位运算</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%82%E5%92%8C"><span class="nav-number">1.</span> <span class="nav-text">求和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E4%BD%8D%E8%BF%90%E7%AE%97"><span class="nav-number">2.</span> <span class="nav-text">利用位运算</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -489,9 +489,17 @@ x = x_1 \bigoplus x_2</script><p>其中 $\bigoplus$ 表示异或运算。这是�
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -525,7 +533,9 @@ x = x_1 \bigoplus x_2</script><p>其中 $\bigoplus$ 表示异或运算。这是�
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,18 +20,25 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="在IPv4地址不够用的时候，我们需要使用NAT技术来让我们减少对公网IP的消耗，这样在在互联网上一个个的局域网可以消耗一个公网IP，但是随之而来的就是局域网中的设备的IP地址是内网IP地址，对于公网而言是没有意义的。 那么我们如果在自己的机器上开发了一个应用希望其他人可以访问到我们需要怎么做呢？">
-<meta name="keywords" content="NAT DDNS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NAT与内网穿透">
 <meta property="og:url" content="https://sunra.top/2019/12/20/nat-and-ddns/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="在IPv4地址不够用的时候，我们需要使用NAT技术来让我们减少对公网IP的消耗，这样在在互联网上一个个的局域网可以消耗一个公网IP，但是随之而来的就是局域网中的设备的IP地址是内网IP地址，对于公网而言是没有意义的。 那么我们如果在自己的机器上开发了一个应用希望其他人可以访问到我们需要怎么做呢？">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-26T22:57:24.285Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-12-20T12:48:47.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.935Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="NAT与内网穿透">
-<meta name="twitter:description" content="在IPv4地址不够用的时候，我们需要使用NAT技术来让我们减少对公网IP的消耗，这样在在互联网上一个个的局域网可以消耗一个公网IP，但是随之而来的就是局域网中的设备的IP地址是内网IP地址，对于公网而言是没有意义的。 那么我们如果在自己的机器上开发了一个应用希望其他人可以访问到我们需要怎么做呢？">
 
 <link rel="canonical" href="https://sunra.top/2019/12/20/nat-and-ddns/">
 
@@ -48,6 +55,15 @@
 
   <title>NAT与内网穿透 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -223,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -248,7 +264,7 @@
       
         <p>在IPv4地址不够用的时候，我们需要使用NAT技术来让我们减少对公网IP的消耗，这样在在互联网上一个个的局域网可以消耗一个公网IP，但是随之而来的就是局域网中的设备的IP地址是内网IP地址，对于公网而言是没有意义的。</p>
 <p>那么我们如果在自己的机器上开发了一个应用希望其他人可以访问到我们需要怎么做呢？</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>如果我们有一个静态的公网IP，那很简单，只需要做一下端口映射就可以了，将公网的IP+端口映射到我们内网的IP+端口，不过这种一般需要我们的路由器可以设置端口映射并具有公网的IP。</p>
 <p>如果我们具有的是动态的公网IP，则我们需要在端口映射的基础上加上DDNS（动态域名解析），就是首先获取一个域名，并且内网的机器每隔一段时间对DDNS服务器发送请求，将自身内网IP与域名的映射关系不断刷新到DDNS服务器中。</p>
 <p>如果你的机器隐藏在多重路由器之下或者NAT类型为NAPT，那么就需要内网穿透技术了。</p>
@@ -281,11 +297,11 @@
 </li>
 </ul>
 <p>总的来说，内网穿透技术可以适用于所有能够连通公网的机器，提供了一个通用的打通内网的方式。</p>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p><a href="https://gist.github.com/WangYihang/e7d36b744557e4673d2157499f6c6b5e" rel="external nofollow noopener noreferrer" target="_blank">python端口转发</a></p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://gist.github.com/WangYihang/e7d36b744557e4673d2157499f6c6b5e">python端口转发</a></p>
 <p> 参考文章：</p>
-<p><a href="https://www.jianshu.com/p/62028875d53e" rel="external nofollow noopener noreferrer" target="_blank">https://www.jianshu.com/p/62028875d53e</a></p>
-<p><a href="http://www.52im.net/article-64-1.html" rel="external nofollow noopener noreferrer" target="_blank">http://www.52im.net/article-64-1.html</a></p>
-<p><a href="https://blog.csdn.net/deng_xj/article/details/88922690" rel="external nofollow noopener noreferrer" target="_blank">https://blog.csdn.net/deng_xj/article/details/88922690</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.jianshu.com/p/62028875d53e">https://www.jianshu.com/p/62028875d53e</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="http://www.52im.net/article-64-1.html">http://www.52im.net/article-64-1.html</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://blog.csdn.net/deng_xj/article/details/88922690">https://blog.csdn.net/deng_xj/article/details/88922690</a></p>
 
     </div>
 
@@ -402,7 +418,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NAT是什么"><span class="nav-number">1.</span> <span class="nav-text">NAT是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么需要NAT？"><span class="nav-number">1.1.</span> <span class="nav-text">为什么需要NAT？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">1.2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NAT原理"><span class="nav-number">1.3.</span> <span class="nav-text">NAT原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三种NAT技术"><span class="nav-number">1.4.</span> <span class="nav-text">三种NAT技术</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#静态NAT"><span class="nav-number">1.4.1.</span> <span class="nav-text">静态NAT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态NAT"><span class="nav-number">1.4.2.</span> <span class="nav-text">动态NAT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NPAT"><span class="nav-number">1.4.3.</span> <span class="nav-text">NPAT</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内网穿透技术"><span class="nav-number">2.</span> <span class="nav-text">内网穿透技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NAT的弊端"><span class="nav-number">2.1.</span> <span class="nav-text">NAT的弊端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NAT使IP会话的保持时效变短"><span class="nav-number">2.1.1.</span> <span class="nav-text">NAT使IP会话的保持时效变短</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#依赖IP进行主机跟踪的机制失效"><span class="nav-number">2.1.2.</span> <span class="nav-text">依赖IP进行主机跟踪的机制失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对IP端到端模型的破坏"><span class="nav-number">2.1.3.</span> <span class="nav-text">对IP端到端模型的破坏</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内网穿透的原理"><span class="nav-number">2.2.</span> <span class="nav-text">内网穿透的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例"><span class="nav-number">2.3.</span> <span class="nav-text">示例</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NAT%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">NAT是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81NAT%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">为什么需要NAT？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NAT%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.</span> <span class="nav-text">NAT原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%A7%8DNAT%E6%8A%80%E6%9C%AF"><span class="nav-number">1.4.</span> <span class="nav-text">三种NAT技术</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81NAT"><span class="nav-number">1.4.1.</span> <span class="nav-text">静态NAT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E6%80%81NAT"><span class="nav-number">1.4.2.</span> <span class="nav-text">动态NAT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NPAT"><span class="nav-number">1.4.3.</span> <span class="nav-text">NPAT</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E6%8A%80%E6%9C%AF"><span class="nav-number">2.</span> <span class="nav-text">内网穿透技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NAT%E7%9A%84%E5%BC%8A%E7%AB%AF"><span class="nav-number">2.1.</span> <span class="nav-text">NAT的弊端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NAT%E4%BD%BFIP%E4%BC%9A%E8%AF%9D%E7%9A%84%E4%BF%9D%E6%8C%81%E6%97%B6%E6%95%88%E5%8F%98%E7%9F%AD"><span class="nav-number">2.1.1.</span> <span class="nav-text">NAT使IP会话的保持时效变短</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96IP%E8%BF%9B%E8%A1%8C%E4%B8%BB%E6%9C%BA%E8%B7%9F%E8%B8%AA%E7%9A%84%E6%9C%BA%E5%88%B6%E5%A4%B1%E6%95%88"><span class="nav-number">2.1.2.</span> <span class="nav-text">依赖IP进行主机跟踪的机制失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9IP%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%A0%B4%E5%9D%8F"><span class="nav-number">2.1.3.</span> <span class="nav-text">对IP端到端模型的破坏</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">2.2.</span> <span class="nav-text">内网穿透的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.3.</span> <span class="nav-text">示例</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -492,9 +508,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -528,7 +552,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -28,17 +28,17 @@ fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
 webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
 <!-- end webpushr tracking code -->
   <meta name="description" content="这周在尝试对一个场景进行烘焙是，在引入了两个超大的地形之后，重新烘焙，遇到了两个问题，第一个问题，地形的某些地方出现了大量的黑斑，第二个问题，我的光照贴图数量飙升，从3个升到了16个。 询问了一下其他大佬的的意见，是因为地形过大的原因。">
-<meta name="keywords" content="Unity 烘焙 光照贴图 黑斑">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity 烘焙光照贴图出现黑斑解决方案">
 <meta property="og:url" content="https://sunra.top/posts/54639/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这周在尝试对一个场景进行烘焙是，在引入了两个超大的地形之后，重新烘焙，遇到了两个问题，第一个问题，地形的某些地方出现了大量的黑斑，第二个问题，我的光照贴图数量飙升，从3个升到了16个。 询问了一下其他大佬的的意见，是因为地形过大的原因。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-27T14:17:13.342Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-03-05T12:22:29.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.943Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Unity 烘焙光照贴图出现黑斑解决方案">
-<meta name="twitter:description" content="这周在尝试对一个场景进行烘焙是，在引入了两个超大的地形之后，重新烘焙，遇到了两个问题，第一个问题，地形的某些地方出现了大量的黑斑，第二个问题，我的光照贴图数量飙升，从3个升到了16个。 询问了一下其他大佬的的意见，是因为地形过大的原因。">
 
 <link rel="canonical" href="https://sunra.top/posts/54639/">
 
@@ -239,7 +239,7 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 22:17:13" itemprop="dateModified" datetime="2023-05-27T22:17:13+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -264,12 +264,12 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
       
         <p>这周在尝试对一个场景进行烘焙是，在引入了两个超大的地形之后，重新烘焙，遇到了两个问题，第一个问题，地形的某些地方出现了大量的黑斑，第二个问题，我的光照贴图数量飙升，从3个升到了16个。</p>
 <p>询问了一下其他大佬的的意见，是因为地形过大的原因。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>具体的解决方案，是修改地形的Mesh Renderer -&gt; LightMapping -&gt; Scale in lightmap参数，调低该参数。</p>
 <p>该参数的意思是设置对象的UV在光照贴图中的单位数量。</p>
 <p>一个物体最终生成的光照贴图的大小，由该参数，Windows-&gt;Lighting-&gt;Lightmap Resolution一起决定，可以理解为二者的乘积，然后由于Window-&gt;Lighting-&gt;Max Lightmap Size的限制，超过该大小，就会再拆出一个光照贴图。</p>
 <p>Scale in lightmap越大，该物体在光照贴图中的细节越多，而对于地形这种东西，其实没必要很多细节，而且由于太大了，如果细节很多，最终的贴图会很大，最后，会产生黑斑。</p>
-<p>当然，引起黑斑还有其他一些原因，但是我暂时没有遇到，简单记录下：<a href="https://blog.csdn.net/leeby100/article/details/89201605" rel="external nofollow noopener noreferrer" target="_blank">https://blog.csdn.net/leeby100/article/details/89201605</a></p>
+<p>当然，引起黑斑还有其他一些原因，但是我暂时没有遇到，简单记录下：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://blog.csdn.net/leeby100/article/details/89201605">https://blog.csdn.net/leeby100/article/details/89201605</a></p>
 
     </div>
 
@@ -475,9 +475,17 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -511,7 +519,9 @@ webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 

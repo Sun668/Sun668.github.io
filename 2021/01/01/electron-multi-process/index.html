@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 5.4.2">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,18 +20,25 @@
     var CONFIG = {"hostname":"sunra.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script>
+
+<!-- start webpushr tracking code --> 
+<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";
+fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));
+webpushr('setup',{'key':'BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4' });</script>
+<!-- end webpushr tracking code -->
   <meta name="description" content="这周大部分时间都是在开发一个基于Electron的客户端。 Electron内置一个chrome内核，所以可以让我们像开发一个网站一样开发客户端。 在开发过程中，遇到了一个问题，就是我们的项目需要从本地加载AI的模型并进行计算。 看过我介绍浏览器结构那篇文章的应该知道，在当前chrome结构下，网络进程与渲染进程是完全分开的，所以加载模型并不会pend住渲染进程，所以就没有在意。 但是事实证明我的">
-<meta name="keywords" content="Electron 多进程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Electron 多进程方案">
 <meta property="og:url" content="https://sunra.top/2021/01/01/electron-multi-process/index.html">
 <meta property="og:site_name" content="Origin of Ray">
 <meta property="og:description" content="这周大部分时间都是在开发一个基于Electron的客户端。 Electron内置一个chrome内核，所以可以让我们像开发一个网站一样开发客户端。 在开发过程中，遇到了一个问题，就是我们的项目需要从本地加载AI的模型并进行计算。 看过我介绍浏览器结构那篇文章的应该知道，在当前chrome结构下，网络进程与渲染进程是完全分开的，所以加载模型并不会pend住渲染进程，所以就没有在意。 但是事实证明我的">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2023-05-26T22:57:24.054Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-01-01T03:47:10.000Z">
+<meta property="article:modified_time" content="2023-05-28T00:25:39.927Z">
+<meta property="article:author" content="Ray Sun">
+<meta property="article:tag" content="技术分享 使用教程 原理 前端 计算机图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Electron 多进程方案">
-<meta name="twitter:description" content="这周大部分时间都是在开发一个基于Electron的客户端。 Electron内置一个chrome内核，所以可以让我们像开发一个网站一样开发客户端。 在开发过程中，遇到了一个问题，就是我们的项目需要从本地加载AI的模型并进行计算。 看过我介绍浏览器结构那篇文章的应该知道，在当前chrome结构下，网络进程与渲染进程是完全分开的，所以加载模型并不会pend住渲染进程，所以就没有在意。 但是事实证明我的">
 
 <link rel="canonical" href="https://sunra.top/2021/01/01/electron-multi-process/">
 
@@ -48,6 +55,15 @@
 
   <title>Electron 多进程方案 | Origin of Ray</title>
   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KEJ1L66CKC');
+      }
+    </script>
 
 
   <script>
@@ -223,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-27 06:57:24" itemprop="dateModified" datetime="2023-05-27T06:57:24+08:00">2023-05-27</time>
+                <time title="Modified: 2023-05-28 08:25:39" itemprop="dateModified" datetime="2023-05-28T08:25:39+08:00">2023-05-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -252,7 +268,7 @@
 <p>看过我介绍<a href="https://sunra.top/posts/bbe10e1c/">浏览器结构那篇文章</a>的应该知道，在当前chrome结构下，网络进程与渲染进程是完全分开的，所以加载模型并不会pend住渲染进程，所以就没有在意。</p>
 <p>但是事实证明我的页面还是会存在卡顿。</p>
 <p>于是我就用开发者工具的Performance面板录制了一下，结果发现是模型加载完后的识别函数，它是一个Promise，属于微任务，实际上是个协程，而且是个CPU密集型的协程。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>于是这里我就产生了第一个问题：</p>
 <h2 id="协程会pend住进程吗？"><a href="#协程会pend住进程吗？" class="headerlink" title="协程会pend住进程吗？"></a>协程会pend住进程吗？</h2><p>要解决这问题，首先得明白协程是什么。</p>
 <h3 id="进程是什么"><a href="#进程是什么" class="headerlink" title="进程是什么"></a>进程是什么</h3><p>进程是系统资源分配的最小单位, 系统由一个个进程(程序)组成 一般情况下，包括文本区域（text region）、数据区域（data region）和堆栈（stack region）。</p>
@@ -302,7 +318,7 @@
 <p>那我们的问题怎么解决呢？</p>
 <p>其实Electron自身就是个多进程的架构，<strong>就像Chrome会为每个不同站的网页单独一个渲染进程一样，Electron也能做到，我们只需要new 一个新的BrowserWindow就可以了，然后让我们的检测任务在单独的渲染进程中工作，将结果通过Electron提供的IPC通信接口发送给主渲染进程就好</strong>。</p>
 <p>参考链接：</p>
-<p><a href="https://juejin.cn/post/6844903607892967432" rel="external nofollow noopener noreferrer" target="_blank">https://juejin.cn/post/6844903607892967432</a></p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="https://juejin.cn/post/6844903607892967432">https://juejin.cn/post/6844903607892967432</a></p>
 
     </div>
 
@@ -419,7 +435,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#协程会pend住进程吗？"><span class="nav-number">1.</span> <span class="nav-text">协程会pend住进程吗？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程是什么"><span class="nav-number">1.1.</span> <span class="nav-text">进程是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程又是什么"><span class="nav-number">1.2.</span> <span class="nav-text">线程又是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是协程"><span class="nav-number">1.3.</span> <span class="nav-text">什么是协程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU的多核多线程指的是什么"><span class="nav-number">1.4.</span> <span class="nav-text">CPU的多核多线程指的是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结论"><span class="nav-number">1.5.</span> <span class="nav-text">结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何解决？"><span class="nav-number">2.</span> <span class="nav-text">如何解决？</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E7%A8%8B%E4%BC%9Apend%E4%BD%8F%E8%BF%9B%E7%A8%8B%E5%90%97%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">协程会pend住进程吗？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">进程是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%8F%88%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.2.</span> <span class="nav-text">线程又是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8D%8F%E7%A8%8B"><span class="nav-number">1.3.</span> <span class="nav-text">什么是协程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU%E7%9A%84%E5%A4%9A%E6%A0%B8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%8C%87%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.4.</span> <span class="nav-text">CPU的多核多线程指的是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">1.5.</span> <span class="nav-text">结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">如何解决？</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -509,9 +525,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
@@ -545,7 +569,9 @@
 
 
 
-  <script src="/js/local-search.js"></script>
+  
+<script src="/js/local-search.js"></script>
+
 
 
 
