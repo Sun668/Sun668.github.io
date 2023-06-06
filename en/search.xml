@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>JWT</title>
+    <url>/posts/1bb08f7a/</url>
+    <content><![CDATA[<p> JSON Web Token (abbreviated JWT) is the most popular cross-domain authentication solution available today</p>
+<span id="more"></span>
+<h2 id="JWT-Background"><a href="#JWT-Background" class="headerlink" title="JWT Background"></a>JWT Background</h2><p>Internet services are inseparable from user authentication. The general process is as follows.</p>
+<blockquote>
+<ol>
+<li><p>The user sends the username and password to the server.</p>
+</li>
+<li><p>After server authentication, relevant data is saved inside the current session, such as user role, login time, etc.</p>
+</li>
+<li><p>The server returns a session_id to the user, which is written to the user’s cookie.</p>
+</li>
+<li><p>Each subsequent request from the user will send the session_id back to the server via a cookie.</p>
+</li>
+<li><p>The server receives the session_id, finds the data saved in the previous session, and learns the identity of the user from it.</p>
+</li>
+</ol>
+</blockquote>
+<p>The problem with this model is that scaling is not good. If it is a server cluster, or a cross-domain service-oriented architecture, it requires session data sharing, and each server can read the session.</p>
+<p>For example, site A and site B are affiliated services of the same company. Now, it is required that once a user logs in at one of the sites, he/she will automatically log in when visiting the other site.</p>
+<p>One solution is session data persistence, written to a database or another persistence layer. When various services receive a request, they request data from the persistence layer. The advantage of this solution is that it has a clear architecture, but the disadvantage is that it is a large amount of work. In addition, if the persistence layer hangs, there will be a single point of failure.</p>
+<p>Another option is that the server simply does not store the session data, all data is stored on the client side and sent back to the server for each request. jwt is a representative of this option.</p>
+<h2 id="Structure-of-JWT"><a href="#Structure-of-JWT" class="headerlink" title="Structure of JWT"></a>Structure of JWT</h2><p>jwt is a very long string with three parts separated by a dot.</p>
+<p>The three parts of the JWT are as follows in order.</p>
+<blockquote>
+<ul>
+<li>Header</li>
+<li>Payload</li>
+<li>Signature</li>
+</ul>
+</blockquote>
+<p>Written in one line, it looks like the following.</p>
+<blockquote>
+<p>``javascript<br>Header.Payload.Signature<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">### Header</span><br><span class="line"></span><br><span class="line">The Header section is a JSON object that describes the metadata of the JWT and usually looks like the following.</span><br><span class="line"></span><br><span class="line">``javascript</span><br><span class="line">&#123;</span><br><span class="line">&quot;alg&quot;: &quot;HS256&quot;,</span><br><span class="line">&quot;typ&quot;: &quot;JWT&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>In the above code, the <code>alg</code> attribute indicates the algorithm of the signature (algorithm), the default is HMAC SHA256 (written as HS256); the <code>typ</code> attribute indicates the type of this token (token) (type), JWT tokens are uniformly written as <code>JWT</code>.</p>
+<p>Finally, the JSON object above is converted to a string using the Base64URL algorithm (see later for details).</p>
+<h3 id="Payload"><a href="#Payload" class="headerlink" title="Payload"></a>Payload</h3><p>The Payload section is also a JSON object that holds the actual data to be passed. jwt specifies 7 official fields to choose from.</p>
+<blockquote>
+<ul>
+<li>iss (issuer): issuer</li>
+<li>exp (expiration time): expiration time</li>
+<li>sub (subject): subject</li>
+<li>aud (audience)：受众</li>
+<li>nbf (Not Before): effective time</li>
+<li>iat (Issued At): Time of issuance</li>
+<li>jti (JWT ID): No.</li>
+</ul>
+</blockquote>
+<p>In addition to the official fields, you can also define private fields in this section, an example of which is shown below.</p>
+<blockquote>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">&quot;sub&quot;</span>: <span class="string">&quot;1234567890&quot;</span>,</span><br><span class="line"><span class="string">&quot;name&quot;</span>: <span class="string">&quot;John Doe&quot;</span>,</span><br><span class="line"><span class="string">&quot;admin&quot;</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>Note that the JWT is unencrypted by default and can be read by anyone, so don’t put secret information in this section.</p>
+<p>This JSON object is also converted to a string using the Base64URL algorithm.</p>
+<h3 id="Signature"><a href="#Signature" class="headerlink" title="Signature"></a>Signature</h3><p>The Signature section is a signature for the first two sections to prevent data tampering.</p>
+<p>First, a key (secret) needs to be specified. This key is known only to the server and cannot be disclosed to the user. Then, using the signature algorithm specified in the Header (the default is HMAC SHA256), the signature is generated according to the following formula.</p>
+<blockquote>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title class_">HMACSHA256</span>(</span><br><span class="line"><span class="title function_">base64UrlEncode</span>(header) + <span class="string">&quot;.&quot;</span> +</span><br><span class="line"><span class="title function_">base64UrlEncode</span>(payload),</span><br><span class="line">secret)</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>After the signature is calculated, the Header, Payload and Signature are put together into a string, and each part is separated by a <code>.</code>) between each part, and then it can be returned to the user.</p>
+<h2 id="Features-of-JWT"><a href="#Features-of-JWT" class="headerlink" title="Features of JWT"></a>Features of JWT</h2><h3 id="Advantages"><a href="#Advantages" class="headerlink" title="Advantages"></a>Advantages</h3><p><strong>1. The solution is more easily scalable horizontally</strong></p>
+<p>In the cookie-session scheme, the cookie contains only a session identifier, and information such as user information and authorization lists are stored in the session on the server side. If the authentication information in the session is stored in the JWT, there is no need for the session to exist on the server side. When the server side scales horizontally, there is no need to deal with session replication / session sticky session or to introduce external session storage.</p>
+<p><strong>2. The solution protects against CSRF attacks</strong></p>
+<h3 id="Disadvantages"><a href="#Disadvantages" class="headerlink" title="Disadvantages"></a>Disadvantages</h3><ol>
+<li><p><strong>More space occupation. </strong></p>
+<p>If the various types of information that originally existed in the server-side session are placed in the JWT and stored in the client, it may cause the JWT to occupy a larger space, requiring consideration of factors such as the space limitations of cookies, and if placed in Local Storage, it may be subject to XSS attacks.</p>
+</li>
+<li><p><strong>More insecure. </strong></p>
+<p>This refers specifically to the solution of saving JWT in Local Storage and then sending it to the server as HTTP header using Javascript. Storing sensitive information in Local Storage is not safe and vulnerable to cross-site scripting (xss for short), which is a kind of “HTML injection” and is called “cross-domain scripting” because the attacking scripts are mostly cross-domain. “These scripts can steal cookies or data from Local Storage. You can see the explanation of the principle of <a href="http://www.cnblogs.com/luminji/archive/2012/05/22/2507185.html">XSS attack</a> in this article.</p>
+</li>
+<li><p><strong>It is not possible to void a token that has been issued. </strong></p>
+<p>All authentication information is in the JWT, and since there is no state on the server side, even if you learn that a JWT has been stolen, there is nothing you can do to invalidate it. Until the JWT expires (and you should absolutely set an expiration time), there is nothing you can do about it.</p>
+</li>
+<li><p><strong>It is not easy to cope with data expiration. </strong></p>
+<p>Similar to the previous article, JWT is somewhat like a cache in that you can only live with “expired” data until it expires, since you can’t void the issued token.</p>
+</li>
+</ol>
+<p>Reference article:</p>
+<p> <a href="http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html">http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html</a></p>
+<p> <a href="https://juejin.im/entry/5993a030f265da24941202c2">https://juejin.im/entry/5993a030f265da24941202c2</a></p>
+]]></content>
+      <categories>
+        <category>Security</category>
+      </categories>
+  </entry>
+</search>
