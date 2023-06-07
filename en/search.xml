@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>ARP virus principle and defense</title>
-    <url>/en/posts/dfdf7442/</url>
+    <url>/posts/dfdf7442/</url>
     <content><![CDATA[<p>ARP virus principle and defense and how to quickly locate the source of ARP virus.</p>
 <span id="more"></span>
 <h2 id="ARP-protocol"><a href="#ARP-protocol" class="headerlink" title="ARP protocol"></a>ARP protocol</h2><p> ARP protocol (address resolution protocol)</p>
@@ -42,7 +42,7 @@
   </entry>
   <entry>
     <title>Exploring Asymmetric Encryption Principles</title>
-    <url>/en/posts/a515898/</url>
+    <url>/posts/a515898/</url>
     <content><![CDATA[<p>While reading about the principles of https today, I found that it uses the knowledge of asymmetric encryption, so I went to explore the basic principles of asymmetric encryption.<br><span id="more"></span></p>
 <h2 id="Asymmetric-encryption"><a href="#Asymmetric-encryption" class="headerlink" title="Asymmetric encryption"></a>Asymmetric encryption</h2><p>In asymmetric encryption algorithm, there are two kinds of keys, public and private, where the public key is public and does not need to be kept secret and the private key is held by individuals and must be kept secure and confidential. The use of two different keys for encryption and decryption is the reason for its name.</p>
 <p>Each public key corresponds to a private key.<br>In the key pair, the one that makes everyone know is the public key, and the one that is not told to everyone and only known to you is the private key.</p>
@@ -141,7 +141,7 @@
   </entry>
   <entry>
     <title>HSTS</title>
-    <url>/en/posts/3daba739/</url>
+    <url>/posts/3daba739/</url>
     <content><![CDATA[<h3 id="Origin-HTTPS-enabled-is-not-secure-enough-either"><a href="#Origin-HTTPS-enabled-is-not-secure-enough-either" class="headerlink" title="Origin: HTTPS enabled is not secure enough either"></a>Origin: HTTPS enabled is not secure enough either</h3><p>There are a number of websites that are only served externally via HTTPS, but when users visit a website, they often type the website domain name (e.g. <a href="https://link.zhihu.com/?target=http%3A//www.example.com">Example Domain</a>) directly into their browser instead of the The full URL (e.g., <a href="https://link.zhihu.com/?target=https%3A//www.example.com">Example Domain</a>), but the browser can still make the request correctly using HTTPS. This is possible thanks to the collaboration between the server and the browser, as shown in the figure below.</p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/微信截图_20201215200744_st7ygu.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215200744_st7ygu.png"></p>
 <p>Figure 1: The server and browser do a lot of work for the user behind the scenes</p>
@@ -232,7 +232,7 @@
   </entry>
   <entry>
     <title>InfineScroll 无限加载bug</title>
-    <url>/en/posts/fd076279/</url>
+    <url>/posts/fd076279/</url>
     <content><![CDATA[<p>I recently used the infinite loading component in the latest version of elementUI, and in some cases the loading function may be called infinitely during use, so I went to study the source code.</p>
 <span id="more"></span>
 <p>Before reading the source code, the first two functions to understand a little, respectively, MutationObserver and throttle function</p>
@@ -330,7 +330,7 @@
   </entry>
   <entry>
     <title>TamperMonkey</title>
-    <url>/en/posts/e438c689/</url>
+    <url>/posts/e438c689/</url>
     <content><![CDATA[<p>The Chrome extensions are an important reason why many people choose Chrome, and after years of development, Chrome has a wide variety of extensions.</p>
 <span id="more"></span>
 <p>“Grease Monkey also allows you to customize your website by installing various scripts. But it can customize more than just the style of the site, it can also implement more and more powerful features, such as</p>
@@ -403,7 +403,7 @@
   </entry>
   <entry>
     <title>Analysis Patterns - Reusable Object Model</title>
-    <url>/en/posts/29283/</url>
+    <url>/posts/29283/</url>
     <content><![CDATA[<p>Recently read the book “Analysis Patterns - Reusable Object Model”, this book is considered an enlightening book on DDD, read the completion or benefit a lot, on the one hand, many points and the usual work of mutual evidence, very inspired, on the other hand, learned some business modeling patterns, this article mainly summarizes the inspiration received This article mainly summarizes the inspiration received and modeling principles, specific modeling approach to give an example to experience it.</p>
 <p>Here are a few of my most rewarding points in brief:</p>
 <ul>
@@ -476,7 +476,7 @@
   </entry>
   <entry>
     <title>JavaScript Implementation of AVL Tree</title>
-    <url>/en/posts/5250/</url>
+    <url>/posts/5250/</url>
     <content><![CDATA[<p>Recently tried to implement the AVL tree, found that this thing to write up or a lot of details, messed up half a day, so here to record.</p>
 <p>An AVL tree is a balanced binary search tree. On the one hand, it is a BST, i.e., a binary search tree, and on the other hand, it is balanced, i.e., the difference between the height of the left and right subtrees of any subtree whose node is the root node is less than one.</p>
 <span id="more"></span>
@@ -508,7 +508,7 @@
   </entry>
   <entry>
     <title>Azure Basic Concepts Compendium</title>
-    <url>/en/posts/1bcc6f4f/</url>
+    <url>/posts/1bcc6f4f/</url>
     <content><![CDATA[<p>Recently, while reading the Azure documentation, I was very confused by many of the concepts in the documentation, so I went through some of the official documentation, which is a temporary understanding and summary.</p>
 <span id="more"></span>
 <p>First of all, I would like to start with the paragraph that I think best solves my doubts<a href="https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/considerations/fundamental-concepts">原文档</a>：</p>
@@ -590,7 +590,7 @@
   </entry>
   <entry>
     <title>In-depth Babel Principles Series (I) Introduction to Babel Workflow and Project Structure</title>
-    <url>/en/posts/17020/</url>
+    <url>/posts/17020/</url>
     <content><![CDATA[<p>I recently came across a bit of knowledge about Babel and got some interest in it, so I planned to take a look at the principle of Babel and then summarize it for learning, which is too complicated to write in multiple blogs.</p>
 <span id="more"></span>
 <h2 id="Workflow"><a href="#Workflow" class="headerlink" title="Workflow"></a>Workflow</h2><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1624407593/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210623081837_ikbdn8.png" alt=""></p>
@@ -636,7 +636,7 @@
   </entry>
   <entry>
     <title>In-depth Babel Principle Series (II) Parser Code Structure Introduction</title>
-    <url>/en/posts/5517/</url>
+    <url>/posts/5517/</url>
     <content><![CDATA[<p>In the previous article, when analyzing the Babel compilation process, we mentioned that Babel converts JS code into ASTs (Abstract Syntax Trees). This behavior is a generic one, no matter what programming language parses the source code into an AST, <strong>AST is not specific to Babel, let alone to JS</strong>.</p>
 <p>Why do we need to do this? The original JS file is incomprehensible to the computer, and it is difficult for the computer to modify the JS code directly, but by converting it to an AST, which is essentially a set of objects that represent the structure of the program, we can indirectly modify the code by modifying the objects. AST to generate bytecode.</p>
 <p>Parser’s process is divided into two steps, the first step, lexical analysis, which is the finite state machine in the compilation principle, to split a piece of code into individual Tokens, and the second step, syntax analysis, to convert the Token array, into an AST tree.</p>
@@ -694,7 +694,7 @@
   </entry>
   <entry>
     <title>Backtracking Algorithm</title>
-    <url>/en/posts/376d0826/</url>
+    <url>/posts/376d0826/</url>
     <content><![CDATA[<h2 id="Principle"><a href="#Principle" class="headerlink" title="Principle"></a>Principle</h2><p>Recently, I encountered several backtracking algorithms when I was doing problems, and each time I tried them out slowly, so I went to find out if there was any abstract ideas that I could refer to, so I looked for many articles, and here is an excerpt of the most basic but also the most clear article, the original link is <a href="https://leetcode-cn.com/problems/">this</a> permutations/solution/hui-su-suan-fa-xiang-jie-by-labuladong-2/).</p>
 <p>Solving a backtracking problem is actually a decision tree traversal process. You only need to think about 3 questions:</p>
 <ol>
@@ -743,7 +743,7 @@
   </entry>
   <entry>
     <title></title>
-    <url>/en/posts/39443/</url>
+    <url>/posts/39443/</url>
     <content><![CDATA[<p>I recently wanted to look at computer graphics, but I saw that the course requirements have linear algebra as a pre-requisite, so I re-read some of them, and so far I have looked at properties of determinants, matrices, vectors and systems of equations.<br>The main purpose of this blog is not to summarize the properties of matrices one by one, but to sort out a question I have been having during the review process, which is, why these things are spoken together, what is the relationship between them, and to slightly combine some ideas from the rendering principles, how matrices are applied to them.</p>
 <span id="more"></span>
 <h2 id="Some-understanding-of-the-relationship-between-series-matrices-vectors-and-systems-of-equations"><a href="#Some-understanding-of-the-relationship-between-series-matrices-vectors-and-systems-of-equations" class="headerlink" title="Some understanding of the relationship between series, matrices, vectors and systems of equations"></a>Some understanding of the relationship between series, matrices, vectors and systems of equations</h2><ul>
@@ -918,7 +918,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
   </entry>
   <entry>
     <title>Linear Table Basics Summary</title>
-    <url>/en/posts/16728/</url>
+    <url>/posts/16728/</url>
     <content><![CDATA[<p>These two weeks took out the university’s data structures and algorithms again to look at the second chapter of the linear table part, and some new gains, I think, to summarize.</p>
 <span id="more"></span>
 <h2 id="Basic-concepts-of-data-structures"><a href="#Basic-concepts-of-data-structures" class="headerlink" title="Basic concepts of data structures"></a>Basic concepts of data structures</h2><h3 id="Data"><a href="#Data" class="headerlink" title="Data"></a>Data</h3><p>Data is a carrier of information, a collection of numbers, characters and all symbols that can be entered into a computer and recognized and processed by a computer program to describe the properties of objective things. Data is the raw material for computer program processing.</p>
@@ -978,7 +978,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
   </entry>
   <entry>
     <title>JWT</title>
-    <url>/en/posts/1bb08f7a/</url>
+    <url>/posts/1bb08f7a/</url>
     <content><![CDATA[<p> JSON Web Token (abbreviated JWT) is the most popular cross-domain authentication solution available today</p>
 <span id="more"></span>
 <h2 id="JWT-Background"><a href="#JWT-Background" class="headerlink" title="JWT Background"></a>JWT Background</h2><p>Internet services are inseparable from user authentication. The general process is as follows.</p>
@@ -1066,7 +1066,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
   </entry>
   <entry>
     <title>Azure Key Vault</title>
-    <url>/en/posts/dfbc1109/</url>
+    <url>/posts/dfbc1109/</url>
     <content><![CDATA[<p>Azure Key Vault is a tool for securely storing and accessing secrets. A secret is anything that you want to tightly control access to, such as API keys, passwords, or certificates. A vault is logical group of secrets.</p>
 <span id="more"></span>
 <p>The above paragraph is the description of the official Azure documentation. After reading the Microsoft Azure documentation, the author extracted and summarized the basic concepts, and added some of his own understanding to the original text. After reading the Chinese version, you can have a general understanding of key vault. The original English version is a more professional description, which does not affect the understanding.</p>
@@ -1187,7 +1187,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
   </entry>
   <entry>
     <title>OAuth and OIDC</title>
-    <url>/en/posts/46cef286/</url>
+    <url>/posts/46cef286/</url>
     <content><![CDATA[<h2 id="OAuth-2-0"><a href="#OAuth-2-0" class="headerlink" title="OAuth 2.0"></a>OAuth 2.0</h2><p>OAuth is an open web standard for authorization that is widely used around the world and is currently available in version 2.0</p>
 <span id="more"></span>
 <h3 id="Explanation-of-terms"><a href="#Explanation-of-terms" class="headerlink" title="Explanation of terms"></a>Explanation of terms</h3><ul>
@@ -1369,7 +1369,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
   </entry>
   <entry>
     <title>higher mathematics knowledge point combing summary</title>
-    <url>/en/posts/29216/</url>
+    <url>/posts/29216/</url>
     <content><![CDATA[<p>Today, I finally got through the knowledge of higher mathematics, but because the whole process is long and there are many knowledge points, they are all fragmented and not systematic, so I thought I would take this opportunity to generally sort out all the knowledge points once.</p>
 <span id="more"></span>
 <h1 id="Brief-summary"><a href="#Brief-summary" class="headerlink" title="Brief summary"></a>Brief summary</h1><p>In general, the core knowledge of higher data revolves around limits and continuity, so it is important to be proficient in finding limits.</p>
@@ -2040,7 +2040,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
   </entry>
   <entry>
     <title>Devil&#39;s Dichotomy Lookup</title>
-    <url>/en/posts/e421a043/</url>
+    <url>/posts/e421a043/</url>
     <content><![CDATA[<h2 id="Principle"><a href="#Principle" class="headerlink" title="Principle"></a>Principle</h2><p>Knuth (who invented the KMP algorithm) said that dichotomous lookups are simple, but the details are the devil**. Many people like to talk about the integer overflow bug, but the real pitfall of dichotomous lookup is not that detail at all, but whether to add one or subtract one to <code>mid</code>, and whether to use <code>&lt;=</code> or <code>&lt;</code> in while.</p>
 <p>If you do not have a proper understanding of these details, writing dichotomous is certainly metaphysical programming, there is no bug can only rely on the blessing of God.</p>
 <span id="more"></span>
@@ -2154,7 +2154,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
   </entry>
   <entry>
     <title>Introduction to TCP Protocol</title>
-    <url>/en/posts/4f2bae2e/</url>
+    <url>/posts/4f2bae2e/</url>
     <content><![CDATA[<h2 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h2><ul>
 <li>TCP is a <strong>connection-oriented</strong> transport layer protocol. That is, a TCP connection must be established before an application can use it. After the data is transferred, the TCP connection must be released.</li>
 <li>Each TCP connection can only have two endpoints, and each TCP connection is <strong>point-to-point</strong>.</li>
@@ -2383,7 +2383,7 @@ U = \frac{T_D}{T_D + RTT + T_A}</script><p>To improve transmission efficiency, i
   </entry>
   <entry>
     <title>10 times programmer work method</title>
-    <url>/en/posts/37760/</url>
+    <url>/posts/37760/</url>
     <content><![CDATA[<p>The recent chatgpt fire has made many people think that many jobs, including programmers, will be replaced. Other positions I do not know much about, but for the programmer career, I think but in fact this shows that the perception of programmers in dealing with the problem is that programmers deal with a particular independent problem on, or a separate very specific problem on, of course, this and programmer interview questions, after all, programmer interview questions is actually this, interview questions, to say the least, is to do the paper, do the paper how you may have the back of the Internet robot than, and those badly measured seem to be empty words, in an interview, people really do not necessarily perform than the back is all the interview experience post robot superior.</p>
 <p>But in fact this is already forgetting what programmers exist for. The technology that programmers master is called information technology, and its purpose is to collect and process information quickly, so why is this technology important? Understanding this issue, in fact, can also understand what AI actually brings to us.</p>
 <span id="more"></span>
