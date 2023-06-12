@@ -2779,6 +2779,254 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
+    <title>Introduction and Summary of G6 Use</title>
+    <url>/en/posts/42149/</url>
+    <content><![CDATA[<p>In this week’s work, there is a requirement for me to generate a Decision Tree on the front end, so I went to investigate a lot of open source solutions. Here is the chart I investigated at the beginning. You can take a look and choose according to your own choice. Suitable, and finally I chose G6.</p>
+<p>Actually<a href="https://g6.antv.vision/zh/docs/manual/introduction">G6的文档</a>It’s already considered very good, so I have two main purposes for writing this blog:</p>
+<ul>
+<li>According to my own experience, re-organize it into the way I am used to remembering, so that I can view it myself in the future.</li>
+<li>Summarize a few small pits stepped on during use.</li>
+</ul>
+<blockquote>
+<p>Here to complain, G6 is too unfriendly for TypeScript, all properties are optional, and sometimes write down a bunch of question marks</p>
+</blockquote>
+<span id="more"></span>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Component Library</th>
+<th>Difficulty of Getting Started</th>
+<th>Performance</th>
+<th>Degree of Freedom/Mature Solutions</th>
+<th>Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G6</td>
+<td>doc is more detailed:<a href="https://g6.antv.vision/zh/docs/manual/tutorial/preface">前言</a></td>
+<td>The number of nodes is small, but it is more practical when a single node is more complex</td>
+<td>High degree of freedom, support custom nodes</td>
+<td>mainly for graph analysis</td>
+</tr>
+<tr>
+<td>X6</td>
+<td>doc is more detailed <a href="https://x6.antv.vision/zh/docs/tutorial/getting-started">快速上手</a></td>
+<td>There are many nodes, but a single one is simple, and it is more practical when dragging and dropping operations</td>
+<td></td>
+<td>mainly does graph editing</td>
+</tr>
+<tr>
+<td>ggEditor</td>
+<td>There is almost no doc, and doc is not updated <a href="https://github.com/alibaba/GGEditor">alibaba/GGEditor</a></td>
+<td></td>
+<td></td>
+<td>Ant Financial team is based on G6 + React encapsulation, compatible with React, but has not been updated, using version 3.5 of G6</td>
+</tr>
+<tr>
+<td>Graphin</td>
+<td><a href="https://graphin.antv.vision/graphin/quick-start/overview/">功能概览</a></td>
+<td></td>
+<td>Low degree of freedom, only supports circular nodes, cannot be customized and existing solutions do not meet the requirements, mainly for graph analysis, not graph editing</td>
+<td>Ant Financial team based on G6 + React encapsulation, compatible with React better</td>
+</tr>
+<tr>
+<td>JointJS</td>
+<td></td>
+<td></td>
+<td></td>
+<td>charge, and the license is MPL-2.0</td>
+</tr>
+<tr>
+<td>jsPlumb</td>
+<td></td>
+<td>Based on Jquery and canvas, mass operations may be problematic</td>
+<td></td>
+<td>Some mismatches with React in use</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>doc is relatively clear, but it is relatively low-level, so it is difficult to achieve the requirements</td>
+<td></td>
+<td>higher degree of freedom, but it feels more primitive, not as mature as X6</td>
+<td>If G6 and X6 are compared to arco, this is more like react</td>
+</tr>
+<tr>
+<td>spritejs</td>
+<td>doc is relatively clear, but it is relatively low-level, so it is difficult to achieve the requirements</td>
+<td></td>
+<td>Ditto</td>
+<td>Ditto</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="How-to-use-G6-in-React"><a href="#How-to-use-G6-in-React" class="headerlink" title="How to use G6 in React"></a>How to use G6 in React</h2><p>At first I was still hovering between GGEditor and G6, because my front-end project is based on React, it may be more convenient to use GGEditor, but I found the officially recommended use example in React on the official website of G6, and decided to use G6, this is the link to the official force: <a href="https://g6.antv.vision/zh/docs/manual/advanced/g6InReact">https://g6.antv.vision/zh/docs/manual/advanced/g6InReact</a></p>
+<h2 id="G6-Core-Concepts"><a href="#G6-Core-Concepts" class="headerlink" title="G6 Core Concepts"></a>G6 Core Concepts</h2><p>Here’s a picture from the official website</p>
+<p><img src="https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*I0RoTKgsvSEAAAAAAAAAAAAAARQnAQ" alt=""></p>
+<p>Let me help you sort out the relationship between these core concepts:</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1623800978/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210616074924_wrkvj4.png" alt=""></p>
+<h3 id="Figure"><a href="#Figure" class="headerlink" title="Figure"></a>Figure</h3><p>In G6, the composition of objects and relationships. It is not even limited to vision, the data of subjects and relationships can also be called graphs. In G6, the Graph object is the carrier of the graph, which contains all the elements on the graph (nodes, edges, etc.), and mounts the related operations of the graph (such as interactive listening, element manipulation, rendering, etc.). The life cycle of the Graph object is: Initialize - &gt; Load Data - &gt; Render - &gt; Update - &gt; Destroy.</p>
+<h3 id="Graphics"><a href="#Graphics" class="headerlink" title="Graphics"></a>Graphics</h3><p>Graphics: Also known as Shape, Shape refers to the graphics and shapes in G6, which can be circles, rectangles, paths, etc. It is generally related to nodes, edges, and Combo in G6. <strong> Each node/edge/Combo in G6 consists of one or more Shapes. The configuration of nodes, edges, Combo, and label text will be reflected on the corresponding graph. </strong></p>
+<p>Since each node can be composed of multiple graphs, all graphs in the same node can form a group, that is, the <strong> graph grouping </strong>, and each group has a <strong> key graph </strong> (keyShape), like the key graph of the built-in rect node is a rect graph.</p>
+<p>However, so far, the grouping concept I have been exposed to is generally only used when customizing nodes, which will be explained later when customizing nodes.</p>
+<p>Each graphic has its own properties, different graphics have common properties, but also have their own unique properties, common properties, such as the fill color of the graph, border color, border width, shadow color, shadow position and so on.</p>
+<p>Individual properties such as rectangles will have width and height, circles will have radius, and so on.</p>
+<p>A graphic grouping group similar to g in SVG is a container for combining graphic objects. Adding transformations (such as clipping, rotation, scaling, translation, etc.) to a group applies to all its child elements. Adding properties (such as color, position, etc.) to a group will be inherited by all its child elements. In addition, group can be nested in multiple layers, so it can be used to define complex objects.</p>
+<p><strong> Graphic transformation </strong> refers to rotation, scaling, etc</p>
+<h3 id="Layout"><a href="#Layout" class="headerlink" title="Layout"></a>Layout</h3><p>The layout is some of the layout methods that come with G6 to help you arrange the location of automatic nodes. Since I am going to generate a Decision Tree this time, the location of each node needs to be controlled by myself, so I didn’t look carefully. If you need it, you can Go to the official website to check</p>
+<h3 id="Interactions-and-events"><a href="#Interactions-and-events" class="headerlink" title="Interactions and events"></a>Interactions and events</h3><p>Events can be divided into the following four levels:</p>
+<ul>
+<li>canvas, graphic level events, ‘mousedown’, ‘mouseup’, ‘click’, ‘mouseenter’, ‘mouseleave’, etc.</li>
+<li>Node/edge events, ‘node: mousedown’, ‘edge: click’, etc., with’type: eventName ‘as the event name;</li>
+<li>Timing events:<ul>
+<li>Events when the node/edge is added or deleted, for example: ‘beforeadditem’, ‘afteradditem’, etc.;</li>
+<li>Events when node/edge state changes: ‘beforerefreshitem’ and’afterrefreshitem ‘;</li>
+<li>Layout timing: ‘beforelayout’ and’afterlayout ‘.</li>
+</ul>
+</li>
+</ul>
+<p>If you want to know all the events supported by G6, please refer to <a href="https://g6.antv.vision/zh/docs/api/Event">Event API</a>。</p>
+<p>On top of events, G6 defines Behavior, which is actually a collection of events and their handling functions. We can see it from how to customize an event:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="variable constant_">G6</span>.<span class="title function_">registerBehavior</span>(<span class="string">&#x27;activate-node&#x27;</span>, &#123;</span><br><span class="line">  <span class="title function_">getDefaultCfg</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">multiple</span>: <span class="literal">true</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">getEvents</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="string">&#x27;node:click&#x27;</span>: <span class="string">&#x27;onNodeClick&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;canvas:click&#x27;</span>: <span class="string">&#x27;onCanvasClick&#x27;</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">onNodeClick</span>(<span class="params">e</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> graph = <span class="variable language_">this</span>.<span class="property">graph</span>;</span><br><span class="line">    <span class="keyword">const</span> item = e.<span class="property">item</span>;</span><br><span class="line">    <span class="keyword">if</span> (item.<span class="title function_">hasState</span>(<span class="string">&#x27;active&#x27;</span>)) &#123;</span><br><span class="line">      graph.<span class="title function_">setItemState</span>(item, <span class="string">&#x27;active&#x27;</span>, <span class="literal">false</span>);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//The configuration can be obtained on this. If multiple&#x27;active &#x27;are not allowed, cancel the&#x27;active&#x27; status of other nodes first</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">multiple</span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">removeNodesState</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//set the clicked node status&#x27;active &#x27;to true</span></span><br><span class="line">    graph.<span class="title function_">setItemState</span>(item, <span class="string">&#x27;active&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">onCanvasClick</span>(<span class="params">e</span>) &#123;</span><br><span class="line">    <span class="comment">//shouldUpdate can be replicated by the user, cancel the&#x27;active &#x27;state of all nodes when returning true, i.e. set the&#x27;active&#x27; state to false</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="title function_">shouldUpdate</span>(e)) &#123;</span><br><span class="line">      <span class="title function_">removeNodesState</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">removeNodesState</span>(<span class="params"></span>) &#123;</span><br><span class="line">    graph.<span class="title function_">findAllByState</span>(<span class="string">&#x27;node&#x27;</span>, <span class="string">&#x27;active&#x27;</span>).<span class="title function_">forEach</span>(<span class="function"><span class="params">node</span> =&gt;</span> &#123;</span><br><span class="line">        graph.<span class="title function_">setItemState</span>(node, <span class="string">&#x27;active&#x27;</span>, <span class="literal">false</span>);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Of course, G6 also has many built-in events, such as dragging nodes, dragging or scaling canvases.</p>
+<p>On top of the event, the interaction mode is defined, and each interaction mode is a collection of several behaviors, such as</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> graph = <span class="keyword">new</span> <span class="variable constant_">G6</span>.<span class="title class_">Graph</span>(&#123;</span><br><span class="line">  <span class="attr">container</span>: <span class="string">&#x27;mountNode&#x27;</span>,</span><br><span class="line">  <span class="attr">width</span>: <span class="number">500</span>,</span><br><span class="line">  <span class="attr">height</span>: <span class="number">500</span>,</span><br><span class="line">  <span class="attr">modes</span>: &#123;</span><br><span class="line">    <span class="comment">//supported behavior</span></span><br><span class="line">    <span class="attr">default</span>: [<span class="string">&#x27;drag-canvas&#x27;</span>, <span class="string">&#x27;zoom-canvas&#x27;</span>],</span><br><span class="line">    <span class="attr">edit</span>: [<span class="string">&#x27;click-select&#x27;</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>The above is an example of a schema definition. Two schemas are defined on the diagram, namely’default ‘and’edit’. Where’default ‘contains two  <a href="https://g6.antv.vision/zh/docs/manual/middle/states/defaultBehavior">Behavior</a>: “drag-canvas” and “zoom-canvas”, both use the default parameters of the behavior.</p>
+<h3 id="Status"><a href="#Status" class="headerlink" title="Status"></a>Status</h3><p>The <strong> state </strong> in G6 refers to the state of a node or edge, including <strong> interaction state </strong> and <strong> business state </strong>.</p>
+<p>In G6, the way to configure interaction state and business state is the same. For some users who only use G6 to complete the development of a certain requirement, but do not want to deeply understand G6, in fact, there is no need to distinguish between interaction state and business state, and define state in the same way, without understanding the cost at all.</p>
+<h4 id="Interaction-state"><a href="#Interaction-state" class="headerlink" title="Interaction state"></a>Interaction state</h4><p>The interaction state is closely related to the specific interaction action. For example, if the user uses the mouse to select a certain node, the node is selected, and if the user hovers to a certain edge, the edge is highlighted.</p>
+<p>Interaction state is handled by default in G6.</p>
+<h4 id="Business-status"><a href="#Business-status" class="headerlink" title="Business status"></a>Business status</h4><p>Refers to the state customized according to user business needs. Business state is independent of interactions, strongly related to specific business logic, and can also be understood as strongly Data driven. For example, the execution status of a task, the approval status of an application, etc., different data values represent different business states. Business state is independent of user interactions, but the processing method in G6 is the same as interaction state.</p>
+<blockquote>
+<p>Whether it is a node or an edge, their properties are divided into two types:</p>
+<p>-<br>-</p>
+</blockquote>
+<h3 id="Graph-element"><a href="#Graph-element" class="headerlink" title="Graph element"></a>Graph element</h3><p>This time, the main use is to customize nodes and edges, mainly to step on pits, all in the following summary</p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><ul>
+<li>Graph properties are different from node properties, although there are many identical configurations</li>
+<li>Custom dom node, can only take effect when render is svg mode</li>
+<li>The time on the custom dom node will not be monitored by the graph, but intercepted by itself.</li>
+<li>When customizing the node, the first call to addShape on the graph grouping returns the key shape, and the further back the shape, the closer it is, that is, it will overlay the previous shape.</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Sundry</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Git command line scam notes</title>
+    <url>/en/posts/29980/</url>
+    <content><![CDATA[<p>Recently, when writing the packaging pipeline, I encountered several pits, so I will summarize it a little.</p>
+<span id="more"></span>
+<h2 id="Pull-the-remote-branch-if-it-exists-checkout-if-it-does-not-exist"><a href="#Pull-the-remote-branch-if-it-exists-checkout-if-it-does-not-exist" class="headerlink" title="Pull the remote branch if it exists, checkout if it does not exist"></a>Pull the remote branch if it exists, checkout if it does not exist</h2><h3 id="Full-pull"><a href="#Full-pull" class="headerlink" title="Full pull"></a>Full pull</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone -b master &quot;$&#123;git_url&#125;&quot; &quot;$&#123;products_dir&#125;&quot;</span><br><span class="line">cd &quot;$&#123;products_dir&#125;&quot;</span><br><span class="line">if [ &quot;git branch -r | grep $branch&quot; ]; then</span><br><span class="line">    echo &quot;remote $branch existed&quot;</span><br><span class="line">    git fetch --all</span><br><span class="line">    git switch -c &quot;$&#123;branch&#125;&quot; &quot;origin/$&#123;branch&#125;&quot;</span><br><span class="line">    git pull </span><br><span class="line">else</span><br><span class="line">    echo &quot;remote $branch not existed&quot;</span><br><span class="line">    git checkout -b &quot;$&#123;branch&#125;&quot;</span><br><span class="line">    git push -u origin &quot;$&#123;branch&#125;&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>There is a pit to pay attention to here, that is, you can’t use ‘—depth = 1’ when <strong> cloning, which will cause you to only pull the information of the branch in the future, and the other branches do not exist no matter how you check </strong></p>
+<p>But sometimes our repository is too big, we just want to pull the latest version of the branch how to do, can pull success pull success, pull success to create a branch.</p>
+<p>Sounds fine, but if you write directly, you will encounter problems, that is, the entire shell will exit if you fail to pull it, so is there a way to solve it?</p>
+<p>There are two ways, the first is to use subprocess.</p>
+<h3 id="Subprocess-tries-to-pull-the-latest-version"><a href="#Subprocess-tries-to-pull-the-latest-version" class="headerlink" title="Subprocess tries to pull the latest version"></a>Subprocess tries to pull the latest version</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git_clone=$(git clone--depth=1 -b &quot;$&#123;branch&#125;&quot; &quot;$&#123;git_url&#125;&quot; &quot;$&#123;products_dir&#125;&quot;)</span><br><span class="line">if [[ -z $&#123;git_clone&#125; ]]; then</span><br><span class="line">    echo &quot;remote $branch existed&quot;</span><br><span class="line">else</span><br><span class="line">    echo &quot;remote $branch not existed&quot;</span><br><span class="line">    git clone--depth=1 -b master &quot;$&#123;git_url&#125;&quot; &quot;$&#123;products_dir&#125;&quot;</span><br><span class="line">    git checkout -b &quot;$&#123;branch&#125;&quot;</span><br><span class="line">    git push -u origin &quot;$&#123;branch&#125;&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>The internal part of ‘$ () ‘ is subprocess, its failure will not cause the shell to exit directly</p>
+<h3 id="set"><a href="#set" class="headerlink" title="set"></a>set</h3><p><strong> Set set + e in the head of the shell to ensure that the failure does not exit, and then check whether the command is executed successfully </strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span> </span><br><span class="line">set +e</span><br><span class="line"></span><br><span class="line">git clone --depth=1 -b &quot;$branch&quot; &quot;$&#123;git_url&#125;&quot; &quot;$&#123;products_dir&#125;&quot;</span><br><span class="line">if [[ $? -ne 0 ]]; then</span><br><span class="line">    echo &quot;remote $branch not existed&quot;</span><br><span class="line">    git clone--depth=1 -b master &quot;$&#123;git_url&#125;&quot; &quot;$&#123;products_dir&#125;&quot;</span><br><span class="line">    git checkout -b &quot;$&#123;branch&#125;&quot;</span><br><span class="line">    git push -u origin &quot;$&#123;branch&#125;&quot;</span><br><span class="line">else</span><br><span class="line">    echo &quot;remote $branch existed&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>‘$?’ means to get the execution result of the previous instruction. If the result is 0, it means success.</p>
+<h2 id="If-the-repository-uses-lfs-it-is-best-to-use-git"><a href="#If-the-repository-uses-lfs-it-is-best-to-use-git" class="headerlink" title="If the repository uses lfs, it is best to use git"></a>If the repository uses lfs, it is best to use git</h2><p>That is to say, if your repository uses lfs, then try to use’git lfs clone ‘instead of’git clone’, the same is true for other commands</p>
+<h2 id="android-requestLegacyExternalStorage"><a href="#android-requestLegacyExternalStorage" class="headerlink" title="android:requestLegacyExternalStorage"></a>android:requestLegacyExternalStorage</h2><p>If you encounter such an error during the packaging of the APK: ‘AAPT: error: attribute android: requestLegacyExternalStorage not found.’</p>
+<p>This problem occurs when the project build.gradle - compileSdkVersion is configured with a version less than 29 and also configures the android: requestLegacyExternalStorage property in AndroidManifest.xml - application (whether it is configured by your own project or the third-party library).<br>This property is mainly used because of the storage permission adjustment of Android 10.0, a temporary solution launched by Google.</p>
+<p>This blog describes two solutions: <a href="https://juejin.cn/post/6850418117093523464">https://juejin.cn/post/6850418117093523464</a></p>
+<p>However, these two methods do not apply to our situation, because we are directly generated APK, there is no way to pause the operation of the middle of the Gradle product, of course, we can say that the first package Gradle project out, and then build APK</p>
+<p>However, Unity officially provides a method. We can define the’AndroidManifest.xml ‘of the intermediate Gradle product. There are two types here. One is to define the unityLibrary, the other is to define the launcher, and we take the second</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1661417543/origin-of-ray/WX20220825-165055_bxookt.png" alt=""></p>
+<p>Then change the generated’Assets/Plugins/Android/LauncherManifest.xml ‘to this:</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- GENERATED BY UNITY. REMOVE THIS COMMENT TO PREVENT OVERWRITING WHEN EXPORTING AGAIN--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">manifest</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:android</span>=<span class="string">&quot;http://schemas.android.com/apk/res/android&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">package</span>=<span class="string">&quot;com.unity3d.player&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:tools</span>=<span class="string">&quot;http://schemas.android.com/tools&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:installLocation</span>=<span class="string">&quot;preferExternal&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">supports-screens</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:smallScreens</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:normalScreens</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:largeScreens</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:xlargeScreens</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:anyDensity</span>=<span class="string">&quot;true&quot;</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">application</span> <span class="attr">android:extractNativeLibs</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">                 <span class="attr">android:label</span>=<span class="string">&quot;@string/app_name&quot;</span></span></span><br><span class="line"><span class="tag">                 <span class="attr">android:icon</span>=<span class="string">&quot;@mipmap/app_icon&quot;</span></span></span><br><span class="line"><span class="tag">                 <span class="attr">tools:remove</span>=<span class="string">&quot;android:requestLegacyExternalStorage&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Mainly add’tools: remove = “android: requestLegacyExternalStorage” ‘in the application tag</p>
+]]></content>
+      <categories>
+        <category>Sundry</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Greedy algorithm and simulated annealing algorithm</title>
+    <url>/en/posts/63479/</url>
+    <content><![CDATA[<p>Greedy algorithm is a relatively common algorithm. The essence of greed is to choose the local optimal of each stage to achieve the global optimal. Simulated annealing algorithms are more common in artificial intelligence.</p>
+<p>The reason why these two algorithms are considered together is that the simulated annealing algorithm is like an enhanced version of the greedy algorithm.</p>
+<p>If the local optimal solution of each step of a problem cannot obtain the global optimal solution, the algorithm thinking of our conventional front-end and back-end programmers is Dynamic Programming.</p>
+<p>But for AI development, the parameters may be hundreds of millions of levels, there is no way Dynamic Programming, this time you can try to use simulated annealing algorithm to jump out of this part with a certain probability, to find a better answer in the whole, but in fact This algorithm is not like a conventional algorithm, and will get an inevitable result.</p>
+<p>This article summarizes and compares the two algorithms together to see where they are applicable and how to use them.</p>
+<span id="more"></span>
+<h1 id="Greedy-algorithm"><a href="#Greedy-algorithm" class="headerlink" title="Greedy algorithm"></a>Greedy algorithm</h1><h2 id="What-is-a-greedy-algorithm"><a href="#What-is-a-greedy-algorithm" class="headerlink" title="What is a greedy algorithm"></a>What is a greedy algorithm</h2><p>The essence of greed is to choose the local optimum of each stage, so as to achieve the global optimum.</p>
+<p>This is a bit abstract, let’s take an example:</p>
+<p>For example, if you have a pile of banknotes, you can take ten of them. If you want to reach the maximum amount, how do you take them?</p>
+<p>Specify that you take the largest amount each time, and the end result is to take the largest amount of money.</p>
+<p>Each time you take the largest is the local optimal, and finally take the largest amount of money is to launch the global optimal.</p>
+<p>As another example, if there are a bunch of boxes, and you have a backpack with a volume of n, how to fill the backpack as much as possible, if you still choose the largest box every time, it will not work. At this time, Dynamic Programming is needed.</p>
+<h2 id="When-to-use-a-greedy-algorithm"><a href="#When-to-use-a-greedy-algorithm" class="headerlink" title="When to use a greedy algorithm"></a>When to use a greedy algorithm</h2><p>To be honest, there is no fixed routine for greedy algorithms.</p>
+<p>So the only difficulty is how to use the local optimum to derive the overall optimum.</p>
+<p>So how can we see if the local optimum can lead to the overall optimum? Are there any fixed strategies or routines?</p>
+<p>Sorry, no! Manually simulate by yourself. If the simulation is feasible, you can try the greedy strategy. If it is not feasible, Dynamic Programming may be required.</p>
+<p>A colleague asked how to verify whether a greedy algorithm can be used?</p>
+<p>The best strategy is to give counterexamples. If you can’t think of counterexamples, try greed.</p>
+<h2 id="Greedy-algorithm-general-steps"><a href="#Greedy-algorithm-general-steps" class="headerlink" title="Greedy algorithm general steps:"></a>Greedy algorithm general steps:</h2><ul>
+<li>Break down the problem into several sub-problems</li>
+<li>Find the right greedy strategy</li>
+<li>Solve the optimal solution for each sub-problem</li>
+<li>Stack locally optimal solutions into globally optimal solutions</li>
+</ul>
+<p>These four steps are actually too theoretical. We usually do greedy topics, and it is difficult to think according to these four steps. It is really a bit “chicken ribs”.</p>
+<p>When doing the question, as long as you think clearly, what is the local optimal, if you deduce the global optimal, it is actually enough.</p>
+<h1 id="Simulated-annealing-algorithm"><a href="#Simulated-annealing-algorithm" class="headerlink" title="Simulated annealing algorithm"></a>Simulated annealing algorithm</h1><h2 id="Metal-annealing-principle"><a href="#Metal-annealing-principle" class="headerlink" title="Metal annealing principle"></a>Metal annealing principle</h2><p>Metal annealing is a metal heat treatment process in which the metal is heated to a certain temperature, kept for a sufficient time, and then cooled at a suitable speed (usually slow cooling, sometimes controlled cooling). The simulated annealing algorithm is derived from the principle of solid annealing, which heats the solid to a sufficiently high temperature, and then allows it to cool slowly. When heated, the internal particles of the solid become disordered with the temperature rise, and the internal energy increases, while when slowly cooled, the particles gradually become Orderly, reaching an equilibrium state at each temperature, and finally reaching the ground state at room temperature, the internal energy is minimized.</p>
+<p>When in a low temperature state, the molecules in the solid have very low internal energy and vibrate in a small range in their original position. If the solid is heated to a certain temperature, the internal energy of the molecules will increase, the thermal movement will intensify, and the disorder of the molecular arrangement will increase. At this time, the temperature is slowly lowered, and at each temperature an equilibrium state (that is, a quasi-static process) is reached, the energy of the molecules gradually decreases, and eventually returns to the state of orderly arrangement, and the internal energy of the molecules also drops to a minimum.</p>
+<h2 id="Simulated-annealing-algorithm-1"><a href="#Simulated-annealing-algorithm-1" class="headerlink" title="Simulated annealing algorithm"></a>Simulated annealing algorithm</h2><p>The earliest idea of simulated annealing algorithm (Simulated Annealing, SA) was proposed by N. Metropolis et al in 1953. In 1983, S. Kirkpatrick et al successfully introduced the annealing idea into the field of combinatorial optimization. It is a stochastic optimization algorithm based on Monte-Carlo iterative solution strategy, and its starting point is based on the similarity between the annealing process of solid matter in physics and general combinatorial optimization problems.</p>
+<p>Before introducing simulated annealing, it is necessary to introduce the mountain climbing algorithm.</p>
+<h3 id="Hill-climbing-algorithm"><a href="#Hill-climbing-algorithm" class="headerlink" title="Hill climbing algorithm"></a>Hill climbing algorithm</h3><p>The hill climbing algorithm is a simple greedy search algorithm, which selects an optimal solution from the adjacent solution space of the current solution as the current solution every time until a local optimal solution is reached.</p>
+<p>The implementation of the hill-climbing algorithm is very simple, and its main disadvantage is that it will fall into the local optimal solution, and it may not be able to search for the global optimal solution. As shown in the figure above: Assuming that point C is the current solution, the hill-climbing algorithm will stop searching when it searches for the local optimal solution at point A, because no matter where point A moves in that direction, it cannot get a better solution.</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1679639508/origin-of-ray/2010122016525713_tp8p5t.png" alt=""></p>
+<h3 id="Core-idea-of-simulated-annealing"><a href="#Core-idea-of-simulated-annealing" class="headerlink" title="Core idea of simulated annealing"></a>Core idea of simulated annealing</h3><p>Simulated annealing is actually a greedy algorithm, but its search process introduces random factors. The simulated annealing algorithm accepts a solution that is worse than the current solution with a certain probability, so it is possible to jump out of this local optimal solution and achieve a global optimal solution.</p>
+<p>The simulated annealing algorithm starts from a higher initial temperature, with the continuous decline of temperature parameters, combined with certain probability sudden jump characteristics, randomly finds the global optimal solution of the target function in the solution space, that is, the local optimal solution can probabilistically jump out and eventually tend to the global optimal.</p>
+<p>The calculation of “certain probability” here refers to the annealing process of metal smelting, which is also the origin of the name of the simulated annealing algorithm. The temperature T is regarded as the control parameter, the target function value f is regarded as the internal energy E, and a state of a solid at a certain temperature T corresponds to a solution<br>Then the algorithm attempts to reduce the target function f (internal energy E) as the control parameter T decreases, until it tends to the global minimum (the lowest energy state at low temperature in annealing), just like the metal annealing process.</p>
+<h3 id="Mathematical-principles-of-simulated-annealing"><a href="#Mathematical-principles-of-simulated-annealing" class="headerlink" title="Mathematical principles of simulated annealing"></a>Mathematical principles of simulated annealing</h3><p>From the above, we know that the global optimal solution of the target function will be randomly found in the solution space in combination with the probability sudden jump characteristic. So what is the specific mechanism for updating the solution? If the new solution is better than the current solution, the new solution is accepted, otherwise it is judged whether to accept the new solution based on the Metropolis criterion. The acceptance probability is:</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+P = \begin{cases}
+    1 & E_{t + 1} < E_t;\\
+    e^{-\frac{E_{t + 1} - E_t}{kT}} & E_{t + 1} \geq E_t;
+\end{cases}
+\end{equation}</script><p>Assuming that the solution of the search at the current time is $x<em>t $, and the corresponding system energy (target function) is $E_t $, a random perturbation is applied to the search point to generate a new solution $x</em> {t + 1} $, and accordingly, the system energy is $E_ {t + 1} $, then the acceptance probability of the system from the search point to the transition is the above formula.</p>
+<p>That is, if the energy corresponding to the new solution is lower, then the probability of acceptance is 1, that is, it must be accepted. If the energy corresponding to the new solution is high, then accept the new solution with the probability of $e ^ {-\ frac {E_ {t + 1} - E_t} {kT}} $, that is, use this probability to jump out of this local optimal solution.</p>
+<p>This process is to randomly select x, and then find a corresponding E lowest x out, where E is lower corresponding to our specific algorithm is closer to the goal we need</p>
+<p>There is also a problem here, which is how to choose the size of each change in x when we randomly select x.</p>
+<p>This problem is actually the origin of the word’annealing ‘, that is, the temperature will gradually decrease, and the magnitude of x change will become smaller and smaller.</p>
+<h3 id="Simulated-annealing-process"><a href="#Simulated-annealing-process" class="headerlink" title="Simulated annealing process"></a>Simulated annealing process</h3><p>The essence of the algorithm is divided into two layers of cycles. At any temperature level, random disturbances generate a new solution, and calculate the change of the target function value to decide whether to accept it. Since the initial temperature of the algorithm is relatively high, the new solution that increases E may also be accepted initially, so it can jump out of the local minimum, and then by slowly reducing the temperature, the algorithm may eventually converge to the global optimal solution. The specific process is:</p>
+<ol>
+<li>Let $T = T_0 $, representing the initial temperature at which the annealing starts, randomly generate an initial solution $x_0 $, and calculate the corresponding target function value $E_0 $;</li>
+<li>Let $T = kT $, where k is between 0 and 1, which is the rate of temperature drop;</li>
+<li>Apply random perturbation to the current solution $x<em>t $, generate a new solution $x</em> {t + 1} $in its neighborhood, and calculate the corresponding target function value $E<em> {t + 1} $<br>$\Delta E =E</em>{t+1} - E_t$</li>
+<li>If $\ Delta E &lt; 0 $accepts the new solution as the current solution, otherwise it is judged whether to accept the new solution according to the probability $e ^ {-\ frac {\ Delta E} {kT}} $;</li>
+<li>Repeat the disturbance and acceptance process L times at temperature T, i.e. perform steps 3 and 4;</li>
+<li>Determine whether the temperature reaches the termination temperature level, if so, terminate the algorithm, otherwise return to step 2.</li>
+</ol>
+<p>There are a few points to note:</p>
+<ul>
+<li>The selection of the initial point has a certain impact on the results of the algorithm, it is best to run multiple times to make a comprehensive judgment on the results.</li>
+<li>In the early stage of algorithm operation, the temperature drops quickly to avoid accepting too many poor results. As the running time increases, the temperature drop slows down to stabilize the results faster.</li>
+<li>When the number of iterations increases to a certain number, the result may have reached stability, but there is still some time before the algorithm ends. Appropriate output conditions should be added when designing the program, and the program can be ended if the output conditions are met.</li>
+</ul>
+<h2 id="Application-of-simulated-annealing"><a href="#Application-of-simulated-annealing" class="headerlink" title="Application of simulated annealing"></a>Application of simulated annealing</h2><ul>
+<li><p>The application of simulated annealing algorithm in VLSI design, using simulated annealing algorithm to optimize the design of VLSI (Very Large Scale Integration, Very Large Scale Integrated Circuit), is one of the most successful application examples of simulated annealing algorithm at present. The simulated annealing algorithm can almost complete all optimized VLSI design work well. Such as global wiring, board layout, layout and logic minimization, etc.</p>
+</li>
+<li><p>Simulated annealing algorithm can be used for image restoration and other work, that is, to restore a contaminated image into a clear original image and filter out the distorted part. Therefore, its application prospect in image processing is broad.</p>
+</li>
+<li><p>Application of simulated annealing algorithm in neural network computer. The simulated annealing algorithm has the ability to jump out of the trap of local optima. In the Boltzmann machine, even if the system falls into the trap of local optima, after a period of time, it can jump out again, and the system will eventually converge in the direction of the global optimal value.</p>
+</li>
+<li><p>In the force-oriented layout algorithm, the idea of simulated annealing is actually implicit. At the beginning, all nodes are randomly arranged, and then the position of the node changes due to the action of the force between the nodes. The position change is equivalent to the x change, and the changed position, if the resultant force received by the node decreases, which is equivalent to a decrease in energy E, we accept the new solution, and then as the resultant force decreases, it is actually equivalent to a decrease in T, so the impact on the position will become smaller, the full resultant force decreases below a certain threshold, and the position change is not large, and we think the algorithm converges to the result.</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Algorithm</category>
+      </categories>
+  </entry>
+  <entry>
     <title>JWT</title>
     <url>/en/posts/1bb08f7a/</url>
     <content><![CDATA[<p> JSON Web Token (abbreviated JWT) is the most popular cross-domain authentication solution available today</p>
@@ -5519,6 +5767,598 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
 <p><a href="https://tech.meituan.com/2022/10/13/dive-into-functional-programming-01.html">https://tech.meituan.com/2022/10/13/dive-into-functional-programming-01.html</a></p>
 <p><a href="https://www.ruanyifeng.com/blog/2012/04/functional_programming.html">https://www.ruanyifeng.com/blog/2012/04/functional_programming.html</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>How to Develop a Relationship Graph with G6</title>
+    <url>/en/posts/8324/</url>
+    <content><![CDATA[<p>Recently, I was thinking about how to implement the relationship diagram of Feishu Docs, so I remembered the G6 I used before, so I simply implemented a version.</p>
+<h1 id="Final-effect"><a href="#Final-effect" class="headerlink" title="Final effect"></a>Final effect</h1><p>The main functions are as follows:</p>
+<ul>
+<li>The node is divided into two parts, the top half is the icon and the bottom half is the text<ul>
+<li>When the mouse is placed on the icon, it will produce a diffusion effect of water ripples, and a circle of borders will appear at the same time</li>
+<li>Text needs to be underlined and have a white background, and the water ripple effect cannot be blocked by the white background</li>
+<li>The underline of the text needs to be a square</li>
+</ul>
+</li>
+<li>The connection should have a gradual change of color, and the gradual change of color should be from the beginning of the arrow to the end of the arrow, and if the two-way relationship is supported, how to achieve two edges</li>
+<li>There should be a Label in the middle of the connection</li>
+<li>Nodes and connections should support translucency</li>
+<li>The overall layout should be a force-oriented layout, and node dragging is supported. When dragging, nodes cannot overlap, but other nodes cannot be dragged due to connection (this point is raised separately because G6’s built-in force-oriented layout nodes will be dragged).</li>
+</ul>
+<span id="more"></span>
+<h1 id="Concrete-realization"><a href="#Concrete-realization" class="headerlink" title="Concrete realization"></a>Concrete realization</h1><h2 id="Custom-node"><a href="#Custom-node" class="headerlink" title="Custom node"></a>Custom node</h2><p>The first difficulty of this Functional Button is:</p>
+<ul>
+<li>G6 Only keyShapre can respond to events, and the connection is connected to the keyShape injury, and the keyShape is the first shape of each group</li>
+<li>So if we want the mouse to Hover the image to produce water ripples, we should make the image node the keyShape</li>
+<li>But if we let image be keyShape, even if our picture is round, the box of keyShape is square, if the line is connected to the four corners of the image, there will be a little white space between the line and the picture, so we need to Let circle be keyShape, and then image is added later, but this will cause our keyShapre, that is, circle is covered by image, so that the hover event cannot be triggered</li>
+</ul>
+<p>There are two solutions, depending on whether the renderer you use is svg or canvas</p>
+<ul>
+<li><p>If it is canvas, let circle be keyShape, but add zIndex to both circle and image, and then call group.sort ()</p>
+</li>
+<li><p>If it is svg, group.sort is invalid, we need to change the hierarchy through the js method in the afterDraw method, and move the back circle to the front (the earlier you add it, the later it will be)</p>
+</li>
+</ul>
+<p>The second difficulty is how to add the water ripple effect and how to turn on the water ripple when the Hover circle</p>
+<p>The solution is divided into two steps:</p>
+<ul>
+<li>Use the water ripple code from the official example, but remember to set visible to false first, and pay attention to the hierarchy, so that the text is at the top</li>
+<li>Then listen to the’node: mousemove ‘event, if the Hover target is circle, call setItemState, then when registering the node, set the setState callback, and then set visible to true through the shape.attr method, then listen to’node: mouseleave’, set the state to another, and set visible to false in the setState callback</li>
+</ul>
+<blockquote>
+<p>The scheme of setting and listening to state changes can also be used to implement borders. Of course, this simple style can also be solved by stateStyle</p>
+</blockquote>
+<p>The third difficulty is how to add text underline and how to break lines if the text is too long, because the text in G6 does not support the underline I need</p>
+<p>The solution is:</p>
+<ul>
+<li>Calculate the length of the text by yourself, break if it exceeds a certain length, delete and add ellipsis after more than two lines</li>
+<li>Then add the path shape as an underscore below the text, and the length should be the text length.</li>
+</ul>
+<blockquote>
+<p>Note that custom nodes should remember to inherit a built-in node, at least inherit single-node, otherwise many features are not available</p>
+</blockquote>
+<p>Here only shows the canvas code:</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">enum</span> <span class="title class_">ItemStatus</span> &#123;</span><br><span class="line">  <span class="variable constant_">OPACITY</span> = <span class="string">&#x27;opacity&#x27;</span>,</span><br><span class="line">  <span class="variable constant_">NORMAL</span> = <span class="string">&#x27;normal&#x27;</span>,</span><br><span class="line">  <span class="variable constant_">ACTIVE</span> = <span class="string">&#x27;active&#x27;</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getLetterWidth</span>(<span class="params">letter: <span class="built_in">string</span>, fontSize: <span class="built_in">number</span></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> pattern = <span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="string">&#x27;[\u4E00-\u9FA5]+&#x27;</span>);</span><br><span class="line">  <span class="keyword">if</span> (pattern.<span class="title function_">test</span>(letter)) &#123;</span><br><span class="line">    <span class="comment">// Chinese charactors</span></span><br><span class="line">    <span class="keyword">return</span> fontSize;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// get the width of single letter according to the fontSize</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable constant_">G6</span>.<span class="property">Util</span>.<span class="title function_">getLetterWidth</span>(letter, fontSize);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getStringWidth</span>(<span class="params">str: <span class="built_in">string</span>, fontSize: <span class="built_in">number</span></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> currentWidth = <span class="number">0</span>;</span><br><span class="line">  str.<span class="title function_">split</span>(<span class="string">&#x27;&#x27;</span>).<span class="title function_">forEach</span>(<span class="function"><span class="params">letter</span> =&gt;</span> &#123;</span><br><span class="line">    currentWidth += <span class="title function_">getLetterWidth</span>(letter, fontSize);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> currentWidth;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">replaceTooLongStringWithEllipsis</span>(<span class="params"></span></span><br><span class="line"><span class="params">  strs: <span class="built_in">string</span>[],</span></span><br><span class="line"><span class="params">  maxWidth: <span class="built_in">number</span>,</span></span><br><span class="line"><span class="params">  fontSize: <span class="built_in">number</span>,</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> ellipsis = <span class="string">&#x27;...&#x27;</span>;</span><br><span class="line">  <span class="keyword">const</span> ellipsisLength = <span class="title function_">getStringWidth</span>(ellipsis, fontSize);</span><br><span class="line">  <span class="keyword">if</span> (strs.<span class="property">length</span> &gt; <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> secondLine = strs[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">let</span> currentWidth = ellipsisLength;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; secondLine.<span class="property">length</span>; i++) &#123;</span><br><span class="line">      currentWidth += <span class="title function_">getLetterWidth</span>(secondLine[i], fontSize);</span><br><span class="line">      <span class="keyword">if</span> (currentWidth &gt;= maxWidth) &#123;</span><br><span class="line">        strs[<span class="number">1</span>] = <span class="string">`<span class="subst">$&#123;secondLine.slice(<span class="number">0</span>, i)&#125;</span><span class="subst">$&#123;ellipsis&#125;</span>`</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> [strs[<span class="number">0</span>], strs[<span class="number">1</span>]];</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> strs;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">NODE_ICON_SIZE</span> = <span class="number">48</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">NODE_ICON_RADIUS</span> = <span class="variable constant_">NODE_ICON_SIZE</span> / <span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">NODE_NAME_FONT_SIZE</span> = <span class="number">14</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">NODE_NAME_HEIGHT</span> = <span class="number">18</span></span><br><span class="line"></span><br><span class="line"><span class="variable constant_">G6</span>.<span class="title function_">registerNode</span>(</span><br><span class="line">    <span class="string">&#x27;test-node&#x27;</span>,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="title function_">draw</span>(<span class="params">cfg, group</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> keyShape = group?.<span class="title function_">addShape</span>(<span class="string">&#x27;circle&#x27;</span>, &#123;</span><br><span class="line">          <span class="attr">attrs</span>: &#123;</span><br><span class="line">            <span class="attr">x</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">y</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">r</span>: <span class="variable constant_">NODE_ICON_RADIUS</span>,</span><br><span class="line">            <span class="attr">fill</span>: <span class="string">&#x27;rgba(255,255,255,0)&#x27;</span>,</span><br><span class="line">            <span class="attr">opacity</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">lineWidth</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">cursor</span>: <span class="string">&#x27;pointer&#x27;</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;test-node-dummy&#x27;</span>,</span><br><span class="line">          <span class="attr">draggle</span>: <span class="literal">true</span>,</span><br><span class="line">          <span class="attr">zIndex</span>: <span class="number">10</span>,</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        group?.<span class="title function_">addShape</span>(<span class="string">&#x27;image&#x27;</span>, &#123;</span><br><span class="line">          <span class="attr">attrs</span>: &#123;</span><br><span class="line">            <span class="attr">x</span>: -<span class="variable constant_">NODE_ICON_SIZE</span> / <span class="number">2</span>,</span><br><span class="line">            <span class="attr">y</span>: -<span class="variable constant_">NODE_ICON_SIZE</span> / <span class="number">2</span>,</span><br><span class="line">            <span class="attr">width</span>: <span class="variable constant_">NODE_ICON_SIZE</span>,</span><br><span class="line">            <span class="attr">height</span>: <span class="variable constant_">NODE_ICON_SIZE</span>,</span><br><span class="line">            <span class="attr">img</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">            <span class="attr">cursor</span>: <span class="string">&#x27;pointer&#x27;</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;test-node-icon&#x27;</span>,</span><br><span class="line">          <span class="attr">draggle</span>: <span class="literal">true</span>,</span><br><span class="line">          <span class="attr">zIndex</span>: <span class="number">9</span>,</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> lableSplit = <span class="title function_">fittingString</span>(</span><br><span class="line">          cfg?.<span class="property">supName</span> <span class="keyword">as</span> <span class="built_in">string</span>,</span><br><span class="line">          <span class="number">200</span>,</span><br><span class="line">          <span class="variable constant_">NODE_NAME_FONT_SIZE</span>,</span><br><span class="line">        );</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; lableSplit.<span class="property">length</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">const</span> label = lableSplit[i];</span><br><span class="line">            <span class="keyword">const</span> labelWidth = <span class="title function_">getStringWidth</span>(</span><br><span class="line">                label,</span><br><span class="line">                <span class="variable constant_">NODE_NAME_FONT_SIZE</span>,</span><br><span class="line">            );</span><br><span class="line">            group?.<span class="title function_">addShape</span>(<span class="string">&#x27;rect&#x27;</span>, &#123;</span><br><span class="line">                <span class="attr">attrs</span>: &#123;</span><br><span class="line">                <span class="attr">x</span>: -labelWidth / <span class="number">2</span>,</span><br><span class="line">                <span class="attr">y</span>:</span><br><span class="line">                    <span class="variable constant_">NODE_ICON_SIZE</span> -</span><br><span class="line">                    <span class="variable constant_">NODE_NAME_HEIGHT</span> +</span><br><span class="line">                    i * <span class="variable constant_">NODE_NAME_HEIGHT</span> +</span><br><span class="line">                    <span class="number">4</span>,</span><br><span class="line">                <span class="attr">width</span>: labelWidth,</span><br><span class="line">                <span class="attr">height</span>: <span class="variable constant_">NODE_NAME_HEIGHT</span>,</span><br><span class="line">                <span class="attr">fill</span>: <span class="string">&#x27;#FFFFFF&#x27;</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">name</span>: <span class="string">`test-node-name-background-<span class="subst">$&#123;i&#125;</span>`</span>,</span><br><span class="line">                <span class="attr">zIndex</span>: <span class="number">3</span>,</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            group?.<span class="title function_">addShape</span>(<span class="string">&#x27;text&#x27;</span>, &#123;</span><br><span class="line">                <span class="attr">attrs</span>: &#123;</span><br><span class="line">                <span class="attr">text</span>: label,</span><br><span class="line">                <span class="attr">fill</span>: <span class="string">&#x27;#646A73&#x27;</span>,</span><br><span class="line">                <span class="attr">fontSize</span>: <span class="number">14</span>,</span><br><span class="line">                <span class="attr">textAlign</span>: <span class="string">&#x27;center&#x27;</span>,</span><br><span class="line">                <span class="attr">x</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="attr">y</span>: <span class="variable constant_">NODE_ICON_SIZE</span> + i * <span class="variable constant_">NODE_NAME_HEIGHT</span>,</span><br><span class="line">                <span class="attr">width</span>: labelWidth,</span><br><span class="line">                <span class="attr">height</span>: <span class="variable constant_">NODE_NAME_HEIGHT</span>,</span><br><span class="line">                <span class="attr">cursor</span>: <span class="string">&#x27;pointer&#x27;</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">name</span>: <span class="string">`test-node-name-<span class="subst">$&#123;i&#125;</span>`</span>,</span><br><span class="line">                <span class="attr">zIndex</span>: <span class="number">3</span>,</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            group?.<span class="title function_">addShape</span>(<span class="string">&#x27;path&#x27;</span>, &#123;</span><br><span class="line">                <span class="attr">attrs</span>: &#123;</span><br><span class="line">                <span class="attr">path</span>: [</span><br><span class="line">                    [</span><br><span class="line">                    <span class="string">&#x27;M&#x27;</span>,</span><br><span class="line">                    -labelWidth / <span class="number">2</span>,</span><br><span class="line">                    <span class="variable constant_">NODE_ICON_SIZE</span> + i * <span class="variable constant_">NODE_NAME_HEIGHT</span> + <span class="number">2</span>,</span><br><span class="line">                    ],</span><br><span class="line">                    [</span><br><span class="line">                    <span class="string">&#x27;L&#x27;</span>,</span><br><span class="line">                    labelWidth / <span class="number">2</span>,</span><br><span class="line">                    <span class="variable constant_">NODE_ICON_SIZE</span> + i * <span class="variable constant_">NODE_NAME_HEIGHT</span> + <span class="number">2</span>,</span><br><span class="line">                    ],</span><br><span class="line">                ],</span><br><span class="line">                <span class="attr">stroke</span>: <span class="string">&#x27;#000000&#x27;</span>,</span><br><span class="line">                <span class="attr">lineWidth</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="attr">lineDash</span>: [<span class="number">2</span>, <span class="number">2</span>],</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">name</span>: <span class="string">`test-node-name-underline-<span class="subst">$&#123;i&#125;</span>`</span>,</span><br><span class="line">                <span class="attr">zIndex</span>: <span class="number">3</span>,</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> back1 = group?.<span class="title function_">addShape</span>(<span class="string">&#x27;circle&#x27;</span>, &#123;</span><br><span class="line">          <span class="attr">zIndex</span>: <span class="number">5</span>,</span><br><span class="line">          <span class="attr">attrs</span>: &#123;</span><br><span class="line">            <span class="attr">x</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">y</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">r</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">fill</span>: <span class="string">&#x27;rgba(255,255,255,0)&#x27;</span>,</span><br><span class="line">            <span class="attr">opacity</span>: <span class="number">0</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;test-node-wave1&#x27;</span>,</span><br><span class="line">          <span class="attr">draggle</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">const</span> back2 = group?.<span class="title function_">addShape</span>(<span class="string">&#x27;circle&#x27;</span>, &#123;</span><br><span class="line">          <span class="attr">zIndex</span>: <span class="number">6</span>,</span><br><span class="line">          <span class="attr">attrs</span>: &#123;</span><br><span class="line">            <span class="attr">x</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">y</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">r</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">fill</span>: <span class="string">&#x27;rgba(255,255,255,0)&#x27;</span>,</span><br><span class="line">            <span class="attr">opacity</span>: <span class="number">0</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;test-node-wave2&#x27;</span>,</span><br><span class="line">          <span class="attr">draggle</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">const</span> back3 = group?.<span class="title function_">addShape</span>(<span class="string">&#x27;circle&#x27;</span>, &#123;</span><br><span class="line">          <span class="attr">zIndex</span>: <span class="number">7</span>,</span><br><span class="line">          <span class="attr">attrs</span>: &#123;</span><br><span class="line">            <span class="attr">x</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">y</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">r</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">fill</span>: <span class="string">&#x27;rgba(255,255,255,0)&#x27;</span>,</span><br><span class="line">            <span class="attr">opacity</span>: <span class="number">0</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="attr">name</span>: <span class="string">&#x27;test-node-wave3&#x27;</span>,</span><br><span class="line">          <span class="attr">draggle</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        back1?.<span class="title function_">animate</span>(</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="comment">// Magnifying and disappearing</span></span><br><span class="line">            <span class="attr">r</span>: <span class="variable constant_">NODE_ICON_RADIUS</span> + <span class="number">16</span>,</span><br><span class="line">            <span class="attr">opacity</span>: <span class="number">0.1</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">duration</span>: <span class="number">3000</span>,</span><br><span class="line">            <span class="attr">easing</span>: <span class="string">&#x27;easeCubic&#x27;</span>,</span><br><span class="line">            <span class="attr">delay</span>: <span class="number">100</span>,</span><br><span class="line">            <span class="attr">repeat</span>: <span class="literal">true</span>, <span class="comment">// repeat</span></span><br><span class="line">          &#125;,</span><br><span class="line">        ); <span class="comment">// no delay</span></span><br><span class="line">        back2?.<span class="title function_">animate</span>(</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="comment">// Magnifying and disappearing</span></span><br><span class="line">            <span class="attr">r</span>: <span class="variable constant_">NODE_ICON_RADIUS</span> + <span class="number">16</span>,</span><br><span class="line">            <span class="attr">opacity</span>: <span class="number">0.1</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">duration</span>: <span class="number">3000</span>,</span><br><span class="line">            <span class="attr">easing</span>: <span class="string">&#x27;easeCubic&#x27;</span>,</span><br><span class="line">            <span class="attr">delay</span>: <span class="number">1000</span>,</span><br><span class="line">            <span class="attr">repeat</span>: <span class="literal">true</span>, <span class="comment">// repeat</span></span><br><span class="line">          &#125;,</span><br><span class="line">        ); <span class="comment">// 1s delay</span></span><br><span class="line">        back3?.<span class="title function_">animate</span>(</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="comment">// Magnifying and disappearing</span></span><br><span class="line">            <span class="attr">r</span>: <span class="variable constant_">NODE_ICON_RADIUS</span> + <span class="number">16</span>,</span><br><span class="line">            <span class="attr">opacity</span>: <span class="number">0.1</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">duration</span>: <span class="number">3000</span>,</span><br><span class="line">            <span class="attr">easing</span>: <span class="string">&#x27;easeCubic&#x27;</span>,</span><br><span class="line">            <span class="attr">delay</span>: <span class="number">2000</span>,</span><br><span class="line">            <span class="attr">repeat</span>: <span class="literal">true</span>, <span class="comment">// repeat</span></span><br><span class="line">          &#125;,</span><br><span class="line">        ); <span class="comment">// 3s delay</span></span><br><span class="line"></span><br><span class="line">        back1?.<span class="title function_">hide</span>();</span><br><span class="line">        back2?.<span class="title function_">hide</span>();</span><br><span class="line">        back3?.<span class="title function_">hide</span>();</span><br><span class="line"></span><br><span class="line">        group?.<span class="title function_">sort</span>();</span><br><span class="line">        <span class="keyword">return</span> keyShape <span class="keyword">as</span> <span class="title class_">IShape</span>;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="title function_">setState</span>(<span class="params">name, value, item</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (name = <span class="string">&#x27;status&#x27;</span>) &#123;</span><br><span class="line">          <span class="keyword">if</span> (value = <span class="title class_">ItemStatus</span>.<span class="property">ACTIVE</span>) &#123;</span><br><span class="line">            <span class="keyword">const</span> group = item?.<span class="title function_">getContainer</span>();</span><br><span class="line">            <span class="keyword">const</span> shapes = group?.<span class="title function_">getChildren</span>() ?? [];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">const</span> shape <span class="keyword">of</span> shapes) &#123;</span><br><span class="line">              <span class="keyword">if</span> (shape.<span class="property">cfg</span>.<span class="property">name</span>?.<span class="title function_">includes</span>(<span class="string">&#x27;test-node-wave&#x27;</span>)) &#123;</span><br><span class="line">                shape.<span class="title function_">attr</span>(<span class="string">&#x27;opacity&#x27;</span>, <span class="number">0.6</span>);</span><br><span class="line">                shape.<span class="title function_">attr</span>(<span class="string">&#x27;fill&#x27;</span>, <span class="string">&#x27;#4E83FD&#x27;</span>);</span><br><span class="line">                shape.<span class="title function_">show</span>();</span><br><span class="line">              &#125; <span class="keyword">else</span> <span class="keyword">if</span> (shape.<span class="property">cfg</span>.<span class="property">name</span>?.<span class="title function_">includes</span>(<span class="string">&#x27;test-node-dummy&#x27;</span>)) &#123;</span><br><span class="line">                shape.<span class="title function_">attr</span>(<span class="string">&#x27;opacity&#x27;</span>, <span class="number">1</span>);</span><br><span class="line">                shape.<span class="title function_">attr</span>(<span class="string">&#x27;stroke&#x27;</span>, <span class="string">&#x27;#4E83FD&#x27;</span>);</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                shape.<span class="title function_">attr</span>(<span class="string">&#x27;opacity&#x27;</span>, <span class="number">1</span>);</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> group = item?.<span class="title function_">getContainer</span>();</span><br><span class="line">            <span class="keyword">const</span> shapes = group?.<span class="title function_">getChildren</span>() ?? [];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">const</span> shape <span class="keyword">of</span> shapes) &#123;</span><br><span class="line">              <span class="keyword">if</span> (shape.<span class="property">cfg</span>.<span class="property">name</span>?.<span class="title function_">includes</span>(<span class="string">&#x27;test-node-wave&#x27;</span>)) &#123;</span><br><span class="line">                shape.<span class="title function_">attr</span>(<span class="string">&#x27;opacity&#x27;</span>, <span class="number">0</span>);</span><br><span class="line">                shape.<span class="title function_">attr</span>(<span class="string">&#x27;fill&#x27;</span>, <span class="string">&#x27;#FFFFFF&#x27;</span>);</span><br><span class="line">                shape.<span class="title function_">hide</span>();</span><br><span class="line">              &#125; <span class="keyword">else</span> <span class="keyword">if</span> (shape.<span class="property">cfg</span>.<span class="property">name</span>?.<span class="title function_">includes</span>(<span class="string">&#x27;test-node-dummy&#x27;</span>)) &#123;</span><br><span class="line">                shape.<span class="title function_">attr</span>(<span class="string">&#x27;opacity&#x27;</span>, <span class="number">0</span>);</span><br><span class="line">                shape.<span class="title function_">attr</span>(<span class="string">&#x27;stroke&#x27;</span>, <span class="string">&#x27;#FFFFFF&#x27;</span>);</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                shape.<span class="title function_">attr</span>(<span class="string">&#x27;opacity&#x27;</span>, value = <span class="title class_">ItemStatus</span>.<span class="property">OPACITY</span> ? <span class="number">0.2</span> : <span class="number">1</span>);</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&#x27;single-node&#x27;</span>,</span><br><span class="line">  );</span><br></pre></td></tr></table></figure>
+<h2 id="Connection"><a href="#Connection" class="headerlink" title="Connection"></a>Connection</h2><p>The first difficulty is that you can’t simply add a lable to draw or afterdraw. This only applies to the situation where the relative position of the text and the starting point of the line remains unchanged. When we need it, the node can be dragged and dropped, which means that the length of the line can be changed, and what we require is that the text is in the middle of the line.</p>
+<p>The solution is:</p>
+<ul>
+<li>Remove the previous added text shape and add new text shape every time in afterUpdate</li>
+<li>There is actually no group in afterUpdate. You can forcibly mount group to cfg after draw.</li>
+</ul>
+<p>The second difficulty is that how to keep the gradual change of color must be from the starting point to the end point of the connection, because G6 only supports the setting of a fixed angle, such as setting a gradual change of 0 degrees, it must be a gradual change from left to right, if A line is from right to left, then this gradual change of color is reversed</p>
+<p>The solution is:</p>
+<ul>
+<li>Or in afterUpdate, constantly calculate the position of the new startPoint and endPoint to calculate the angle</li>
+<li>Set the gradual change color attribute of stroke by calculating the angle and then using shape.attr</li>
+</ul>
+<p>The third difficulty is how to support bilinear curves, because the default is a straight line, and the two-way lines will overlap</p>
+<p>The solution lies in:</p>
+<ul>
+<li>Define another custom type, based on Bezier curve extension</li>
+</ul>
+<p>The specific code is as follows:</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="variable constant_">EDGE_LABEL_HEIGHT</span> = <span class="number">18</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">EDGE_LABEL_FONT_SIZE</span> = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">addLabelToEdge</span>(<span class="params">cfg: ModelConfig | <span class="literal">undefined</span></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> config = cfg <span class="keyword">as</span> <span class="title class_">ModelConfig</span>;</span><br><span class="line">  <span class="keyword">const</span> group = cfg?.<span class="property">group</span> <span class="keyword">as</span> <span class="title class_">IGroup</span>;</span><br><span class="line">  <span class="keyword">const</span> shape = group?.<span class="title function_">get</span>(<span class="string">&#x27;children&#x27;</span>)[<span class="number">0</span>];</span><br><span class="line">  <span class="comment">// get the coordinate of the mid point on the path</span></span><br><span class="line">  <span class="comment">//Get the coordinates of the midpoint of the path graph</span></span><br><span class="line">  <span class="keyword">const</span> midPoint = shape.<span class="title function_">getPoint</span>(<span class="number">0.5</span>);</span><br><span class="line">  <span class="keyword">const</span> startPoint = cfg?.<span class="property">startPoint</span>;</span><br><span class="line">  <span class="keyword">const</span> endPoint = cfg?.<span class="property">endPoint</span>;</span><br><span class="line">  <span class="keyword">if</span> (startPoint &amp;&amp; endPoint) &#123;</span><br><span class="line">    <span class="keyword">const</span> angle =</span><br><span class="line">      <span class="title class_">Math</span>.<span class="title function_">atan2</span>(endPoint.<span class="property">y</span> - startPoint.<span class="property">y</span>, endPoint.<span class="property">x</span> - startPoint.<span class="property">x</span>) * <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">if</span> (angle &gt; -<span class="title class_">Math</span>.<span class="property">PI</span> &amp;&amp; angle &lt; <span class="title class_">Math</span>.<span class="property">PI</span>) &#123;</span><br><span class="line">      shape.<span class="title function_">attr</span>(<span class="string">&#x27;stroke&#x27;</span>, <span class="string">`l(0) 0:#4E83FD 1:#B6CBFE`</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      shape.<span class="title function_">attr</span>(<span class="string">&#x27;stroke&#x27;</span>, <span class="string">`l(0) 0:#B6CBFE 1:#4E83FD`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (midPoint) &#123;</span><br><span class="line">    <span class="keyword">const</span> labelWidth = <span class="title function_">getStringWidth</span>(</span><br><span class="line">      config.<span class="property">text</span> <span class="keyword">as</span> <span class="built_in">string</span>,</span><br><span class="line">      <span class="variable constant_">EDGE_LABEL_FONT_SIZE</span>,</span><br><span class="line">    );</span><br><span class="line">    group?.<span class="title function_">removeChild</span>(config.<span class="property">preEdgeText</span> <span class="keyword">as</span> <span class="built_in">any</span>);</span><br><span class="line">    group?.<span class="title function_">removeChild</span>(config.<span class="property">preEdgeTextBackground</span> <span class="keyword">as</span> <span class="built_in">any</span>);</span><br><span class="line">    config.<span class="property">preEdgeTextBackground</span> = group.<span class="title function_">addShape</span>(<span class="string">&#x27;rect&#x27;</span>, &#123;</span><br><span class="line">      <span class="attr">attrs</span>: &#123;</span><br><span class="line">        <span class="attr">x</span>: midPoint.<span class="property">x</span> - (labelWidth + <span class="number">12</span>) / <span class="number">2</span>,</span><br><span class="line">        <span class="attr">y</span>: midPoint.<span class="property">y</span> - <span class="variable constant_">EDGE_LABEL_HEIGHT</span> + <span class="number">4</span>,</span><br><span class="line">        <span class="attr">width</span>: labelWidth + <span class="number">12</span>,</span><br><span class="line">        <span class="attr">height</span>: <span class="variable constant_">EDGE_LABEL_HEIGHT</span>,</span><br><span class="line">        <span class="attr">fill</span>: <span class="string">&#x27;#E1EAFF&#x27;</span>,</span><br><span class="line">        <span class="attr">radius</span>: <span class="variable constant_">EDGE_LABEL_HEIGHT</span> / <span class="number">2</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;test-edge-background&#x27;</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">    config.<span class="property">preEdgeText</span> = group.<span class="title function_">addShape</span>(<span class="string">&#x27;text&#x27;</span>, &#123;</span><br><span class="line">      <span class="attr">attrs</span>: &#123;</span><br><span class="line">        <span class="attr">text</span>: cfg?.<span class="property">text</span>,</span><br><span class="line">        <span class="attr">fill</span>: <span class="string">&#x27;#3370FF&#x27;</span>,</span><br><span class="line">        <span class="attr">fontWeight</span>: <span class="number">500</span>,</span><br><span class="line">        <span class="attr">fontSize</span>: <span class="number">10</span>,</span><br><span class="line">        <span class="attr">lineHeight</span>: <span class="number">16</span>,</span><br><span class="line">        <span class="attr">textAlign</span>: <span class="string">&#x27;center&#x27;</span>,</span><br><span class="line">        <span class="attr">x</span>: midPoint.<span class="property">x</span>,</span><br><span class="line">        <span class="attr">y</span>: midPoint.<span class="property">y</span>,</span><br><span class="line">        <span class="attr">width</span>: labelWidth + <span class="number">12</span>,</span><br><span class="line">        <span class="attr">height</span>: <span class="variable constant_">EDGE_LABEL_HEIGHT</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;test-edge-text&#x27;</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable constant_">G6</span>.<span class="title function_">registerEdge</span>(</span><br><span class="line"><span class="string">&#x27;test-edge-single&#x27;</span>,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="title function_">afterDraw</span>(<span class="params">cfg, group</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> config = cfg <span class="keyword">as</span> <span class="title class_">ModelConfig</span>;</span><br><span class="line">    config.<span class="property">group</span> = group;</span><br><span class="line">    <span class="title function_">addLabelToEdge</span>(cfg);</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">afterUpdate</span>(<span class="params">cfg</span>) &#123;</span><br><span class="line">    <span class="title function_">addLabelToEdge</span>(cfg);</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;,</span><br><span class="line"><span class="string">&#x27;line&#x27;</span>,</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="variable constant_">G6</span>.<span class="title function_">registerEdge</span>(</span><br><span class="line"><span class="string">&#x27;test-edge-double&#x27;</span>,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="title function_">afterDraw</span>(<span class="params">cfg, group</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> config = cfg <span class="keyword">as</span> <span class="title class_">ModelConfig</span>;</span><br><span class="line">    config.<span class="property">group</span> = group;</span><br><span class="line">    <span class="title function_">addLabelToEdge</span>(cfg);</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">afterUpdate</span>(<span class="params">cfg</span>) &#123;</span><br><span class="line">    <span class="title function_">addLabelToEdge</span>(cfg);</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;,</span><br><span class="line"><span class="string">&#x27;quadratic&#x27;</span>,</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="Event-monitoring-changes-node-and-connection-styles"><a href="#Event-monitoring-changes-node-and-connection-styles" class="headerlink" title="Event monitoring changes node and connection styles"></a>Event monitoring changes node and connection styles</h2><p>Code for event monitoring:</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">highlightLocalNodesAndEdges</span>(<span class="params">graphInstance: IGraph, e: IG6GraphEvent</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; localEdges, localNodesId, otherNodesId, otherEdges &#125; =</span><br><span class="line">    <span class="title function_">getAllLocalNodesAndEdges</span>(graphInstance, e.<span class="property">item</span>?.<span class="title function_">getModel</span>().<span class="property">id</span> <span class="keyword">as</span> <span class="built_in">string</span>);</span><br><span class="line"></span><br><span class="line">  localEdges.<span class="title function_">forEach</span>(<span class="function"><span class="params">edge</span> =&gt;</span> &#123;</span><br><span class="line">    graphInstance.<span class="title function_">setItemState</span>(</span><br><span class="line">      edge.<span class="title function_">getModel</span>().<span class="property">id</span> <span class="keyword">as</span> <span class="built_in">string</span>,</span><br><span class="line">      <span class="string">&#x27;status&#x27;</span>,</span><br><span class="line">      <span class="title class_">ItemStatus</span>.<span class="property">NORMAL</span>,</span><br><span class="line">    );</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  otherEdges.<span class="title function_">forEach</span>(<span class="function"><span class="params">edge</span> =&gt;</span> &#123;</span><br><span class="line">    graphInstance.<span class="title function_">setItemState</span>(</span><br><span class="line">      edge.<span class="title function_">getModel</span>().<span class="property">id</span> <span class="keyword">as</span> <span class="built_in">string</span>,</span><br><span class="line">      <span class="string">&#x27;status&#x27;</span>,</span><br><span class="line">      <span class="title class_">ItemStatus</span>.<span class="property">OPACITY</span>,</span><br><span class="line">    );</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  localNodesId.<span class="title function_">forEach</span>(<span class="function"><span class="params">nodeId</span> =&gt;</span> &#123;</span><br><span class="line">    graphInstance.<span class="title function_">setItemState</span>(nodeId <span class="keyword">as</span> <span class="built_in">string</span>, <span class="string">&#x27;status&#x27;</span>, <span class="title class_">ItemStatus</span>.<span class="property">NORMAL</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  otherNodesId.<span class="title function_">forEach</span>(<span class="function"><span class="params">nodeId</span> =&gt;</span> &#123;</span><br><span class="line">    graphInstance.<span class="title function_">setItemState</span>(nodeId <span class="keyword">as</span> <span class="built_in">string</span>, <span class="string">&#x27;status&#x27;</span>, <span class="title class_">ItemStatus</span>.<span class="property">OPACITY</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">highlightAllNodesAndGraph</span>(<span class="params">graphInstance: IGraph</span>) &#123;</span><br><span class="line">  graphInstance.<span class="title function_">findAll</span>(<span class="string">&#x27;edge&#x27;</span>, <span class="function"><span class="params">edge</span> =&gt;</span> &#123;</span><br><span class="line">    graphInstance.<span class="title function_">setItemState</span>(edge, <span class="string">&#x27;status&#x27;</span>, <span class="title class_">ItemStatus</span>.<span class="property">NORMAL</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  graphInstance.<span class="title function_">findAll</span>(<span class="string">&#x27;node&#x27;</span>, <span class="function"><span class="params">node</span> =&gt;</span> &#123;</span><br><span class="line">    graphInstance.<span class="title function_">setItemState</span>(node, <span class="string">&#x27;status&#x27;</span>, <span class="title class_">ItemStatus</span>.<span class="property">NORMAL</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useInternalEventListener</span>(<span class="params">graphInstance: IGraph | <span class="literal">null</span></span>) &#123;</span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">onMouseMoveOnNode</span>(<span class="params">e: IG6GraphEvent</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (</span><br><span class="line">        !e.<span class="property">target</span>.<span class="property">cfg</span>.<span class="property">name</span>?.<span class="title function_">includes</span>(<span class="string">&#x27;test-node--name-&#x27;</span>) &amp;&amp;</span><br><span class="line">        graphInstance</span><br><span class="line">      ) &#123;</span><br><span class="line">        <span class="title function_">highlightLocalNodesAndEdges</span>(graphInstance, e);</span><br><span class="line">        graphInstance.<span class="title function_">setItemState</span>(e.<span class="property">item</span> <span class="keyword">as</span> <span class="title class_">Item</span>, <span class="string">&#x27;status&#x27;</span>, <span class="title class_">ItemStatus</span>.<span class="property">ACTIVE</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">onMouseLeaveNode</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (graphInstance) &#123;</span><br><span class="line">        <span class="title function_">highlightAllNodesAndGraph</span>(graphInstance);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    graphInstance?.<span class="title function_">on</span>(<span class="string">&#x27;node:mousemove&#x27;</span>, onMouseMoveOnNode);</span><br><span class="line"></span><br><span class="line">    graphInstance?.<span class="title function_">on</span>(<span class="string">&#x27;node:mouseleave&#x27;</span>, onMouseLeaveNode);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      graphInstance?.<span class="title function_">off</span>(<span class="string">&#x27;node:mousemove&#x27;</span>, onMouseMoveOnNode);</span><br><span class="line"></span><br><span class="line">      graphInstance?.<span class="title function_">off</span>(<span class="string">&#x27;node:mouseleave&#x27;</span>, onMouseLeaveNode);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;, [graphInstance]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Layout-algorithms-and-drag-nodes"><a href="#Layout-algorithms-and-drag-nodes" class="headerlink" title="Layout algorithms and drag nodes"></a>Layout algorithms and drag nodes</h2><p>G6 actually comes with a force-oriented layout, but it’s weird, the effect is different from d3, and it doesn’t support only collision detection when dragging</p>
+<p>There are a few difficulties here:</p>
+<ul>
+<li>How to use force-oriented layout of d3, here mainly d3 will change the data structure of points, causing G6 to execute abnormally</li>
+<li>If you implement collision detection yourself</li>
+<li>How to smooth a bit when dragging nodes</li>
+</ul>
+<p>The solution is as follows:</p>
+<ul>
+<li>Use Promise to encapsulate the layout algorithm of d3, process the data into the format supported by G6 after monitoring the end event, otherwise let G6 render without waiting for all ticks to be completed. Halfway through, d3 changes the data format again, an error will be reported</li>
+<li>Self-implemented collision detection is actually a simple way to determine the distance between nodes. If it is less than a certain value, push other nodes away, then record the nodes that are pushed away, and calculate the distance between the nodes that are pushed away and all nodes., if there is still close, modify the position and continue the recursion of the nodes that modify the position in this round. In order to prevent stack overflow, you can set the maximum recursion layer of 30</li>
+<li>If the refreshPosition method is called after each node is calculated, it will actually cause line shaking. The solution is to enable force layout, so layout can be used to achieve smooth re-rendering, but the positions of all nodes are set with fx and fy to prevent force-oriented layout from modifying position</li>
+</ul>
+<p>The code is as follows:</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="variable constant_">REFRESH_NODE_POSITION_RECURSION_COUNT</span> = <span class="number">30</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">REFRESH_NODE_COLLIDE_RADIUS</span> = <span class="number">150</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">REFRESH_NODE_COLLIDE_RADIUS_SEQUARE</span> = <span class="title class_">Math</span>.<span class="title function_">pow</span>(</span><br><span class="line">  <span class="variable constant_">REFRESH_NODE_COLLIDE_RADIUS</span>,</span><br><span class="line">  <span class="number">2</span>,</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getTwoNodeDistance</span>(<span class="params">node1: NodeConfig, node2: NodeConfig</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> distance =</span><br><span class="line">    <span class="title class_">Math</span>.<span class="title function_">pow</span>((node1.<span class="property">x</span> <span class="keyword">as</span> <span class="built_in">number</span>) - (node2.<span class="property">x</span> <span class="keyword">as</span> <span class="built_in">number</span>), <span class="number">2</span>) +</span><br><span class="line">    <span class="title class_">Math</span>.<span class="title function_">pow</span>((node1.<span class="property">y</span> <span class="keyword">as</span> <span class="built_in">number</span>) - (node2.<span class="property">y</span> <span class="keyword">as</span> <span class="built_in">number</span>), <span class="number">2</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">sqrt</span>(distance);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">refreshNodesPositionHelper</span>(<span class="params"></span></span><br><span class="line"><span class="params">  dragedNode: NodeConfig,</span></span><br><span class="line"><span class="params">  positionChangedNodes: NodeConfig[],</span></span><br><span class="line"><span class="params">  allNodes: NodeConfig[],</span></span><br><span class="line"><span class="params">  deep = <span class="number">0</span>,</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (deep &gt; <span class="variable constant_">REFRESH_NODE_POSITION_RECURSION_COUNT</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> nextPositionChangedNodesSet = <span class="keyword">new</span> <span class="title class_">Set</span>&lt;<span class="title class_">NodeConfig</span>&gt;();</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> positionChangedNode <span class="keyword">of</span> positionChangedNodes) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> everyNode <span class="keyword">of</span> allNodes) &#123;</span><br><span class="line">      <span class="keyword">if</span> (positionChangedNode.<span class="property">id</span> = everyNode.<span class="property">id</span>) &#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">const</span> distance = <span class="title function_">getTwoNodeDistance</span>(positionChangedNode, everyNode);</span><br><span class="line">      <span class="keyword">if</span> (distance &lt; <span class="variable constant_">REFRESH_NODE_COLLIDE_RADIUS</span>) &#123;</span><br><span class="line">        nextPositionChangedNodesSet.<span class="title function_">add</span>(everyNode);</span><br><span class="line">        <span class="keyword">const</span> detaX = <span class="title class_">Math</span>.<span class="title function_">abs</span>(</span><br><span class="line">          (positionChangedNode.<span class="property">x</span> <span class="keyword">as</span> <span class="built_in">number</span>) - (everyNode.<span class="property">x</span> <span class="keyword">as</span> <span class="built_in">number</span>),</span><br><span class="line">        );</span><br><span class="line">        <span class="keyword">const</span> detaY = <span class="title class_">Math</span>.<span class="property">abs</span> (</span><br><span class="line">          (positionChangedNode.<span class="property">y</span> <span class="keyword">as</span> <span class="built_in">number</span>) - (everyNode.<span class="property">y</span> <span class="keyword">as</span> <span class="built_in">number</span>),</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Root formula for quadratic equation system of one yuan 2 * moveDistance ^ 2 + 2 (detaX + detaY) * moveDistance = REFRESH_NODE_COLLIDE_RADIUS_SEQUARE - (detaX ^ 2 + detaY ^ 2)</span></span><br><span class="line">        <span class="keyword">const</span> a = <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">const</span> b = <span class="number">2</span> * (detaX + detaY);</span><br><span class="line">        <span class="keyword">const</span> c =</span><br><span class="line">          detaX * detaX + detaY * detaY - <span class="variable constant_">REFRESH_NODE_COLLIDE_RADIUS_SEQUARE</span>;</span><br><span class="line">        <span class="keyword">const</span> moveDistance = (<span class="title class_">Math</span>.<span class="title function_">sqrt</span>(b * b - <span class="number">4</span> * a * c) - b) / (<span class="number">2</span> * a);</span><br><span class="line"></span><br><span class="line">        everyNode.<span class="property">x</span> =</span><br><span class="line">          (everyNode.<span class="property">x</span> <span class="keyword">as</span> <span class="built_in">number</span>) +</span><br><span class="line">          ((everyNode.<span class="property">x</span> <span class="keyword">as</span> <span class="built_in">number</span>) - (positionChangedNode.<span class="property">x</span> <span class="keyword">as</span> <span class="built_in">number</span>) &gt; <span class="number">0</span></span><br><span class="line">            ? <span class="number">1</span></span><br><span class="line">            : -<span class="number">1</span>) *</span><br><span class="line">            moveDistance;</span><br><span class="line"></span><br><span class="line">        everyNode.<span class="property">y</span> =</span><br><span class="line">          (everyNode.<span class="property">y</span> <span class="keyword">as</span> <span class="built_in">number</span>) +</span><br><span class="line">          ((everyNode.<span class="property">y</span> <span class="keyword">as</span> <span class="built_in">number</span>) - (positionChangedNode.<span class="property">y</span> <span class="keyword">as</span> <span class="built_in">number</span>) &gt; <span class="number">0</span></span><br><span class="line">            ? <span class="number">1</span></span><br><span class="line">            : -<span class="number">1</span>) *</span><br><span class="line">            moveDistance;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (nextPositionChangedNodesSet.<span class="property">size</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="attr">nextPositionChangedNodes</span>: <span class="title class_">NodeConfig</span>[] = [];</span><br><span class="line">    nextPositionChangedNodesSet.<span class="title function_">forEach</span>(<span class="function"><span class="params">value</span> =&gt;</span> &#123;</span><br><span class="line">      nextPositionChangedNodes.<span class="title function_">push</span>(value);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="title function_">refreshNodesPositionHelper</span>(</span><br><span class="line">      dragedNode,</span><br><span class="line">      nextPositionChangedNodes,</span><br><span class="line">      allNodes,</span><br><span class="line">      deep + <span class="number">1</span>,</span><br><span class="line">    );</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    allNodes.<span class="title function_">forEach</span>(<span class="function"><span class="params">node</span> =&gt;</span> &#123;</span><br><span class="line">      node.<span class="property">fx</span> = node.<span class="property">x</span>;</span><br><span class="line">      node.<span class="property">fy</span> = node.<span class="property">y</span>;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">onNodeDrag</span>(<span class="params">e: IG6GraphEvent</span>) &#123;</span><br><span class="line">    graphInstance?.<span class="title function_">layout</span>();</span><br><span class="line">    <span class="keyword">const</span> model = e.<span class="property">item</span>?.<span class="title function_">get</span>(<span class="string">&#x27;model&#x27;</span>);</span><br><span class="line">    model.<span class="property">x</span> = e.<span class="property">x</span>;</span><br><span class="line">    model.<span class="property">y</span> = e.<span class="property">y</span>;</span><br><span class="line">    model.<span class="property">fx</span> = e.<span class="property">x</span>;</span><br><span class="line">    model.<span class="property">fy</span> = e.<span class="property">y</span>;</span><br><span class="line">    <span class="keyword">const</span> allNodes = graphInstance</span><br><span class="line">    ?.<span class="title function_">findAll</span>(<span class="string">&#x27;node&#x27;</span>, <span class="function"><span class="params">node</span> =&gt;</span> node.<span class="title function_">getID</span>() ! e.<span class="property">item</span>?.<span class="title function_">getID</span>())</span><br><span class="line">    .<span class="title function_">map</span>(<span class="function"><span class="params">node</span> =&gt;</span> node.<span class="title function_">getModel</span>()) <span class="keyword">as</span> <span class="title class_">NodeConfig</span>[];</span><br><span class="line"></span><br><span class="line">    <span class="title function_">refreshNodesPositionHelper</span>(model, [model], allNodes);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">onMouseMoveOnNode</span>(<span class="params">e: IG6GraphEvent</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (</span><br><span class="line">    !e.<span class="property">target</span>.<span class="property">cfg</span>.<span class="property">name</span>?.<span class="title function_">includes</span>(<span class="string">&#x27;test-node--name-&#x27;</span>) &amp;&amp;</span><br><span class="line">    graphInstance</span><br><span class="line">    ) &#123;</span><br><span class="line">    <span class="title function_">highlightLocalNodesAndEdges</span>(graphInstance, e);</span><br><span class="line">    graphInstance.<span class="title function_">setItemState</span>(e.<span class="property">item</span> <span class="keyword">as</span> <span class="title class_">Item</span>, <span class="string">&#x27;status&#x27;</span>, <span class="title class_">ItemStatus</span>.<span class="property">ACTIVE</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">onMouseLeaveNode</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (graphInstance) &#123;</span><br><span class="line">    <span class="title function_">highlightAllNodesAndGraph</span>(graphInstance);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">graphInstance?.<span class="title function_">on</span>(<span class="string">&#x27;node:drag&#x27;</span>, onNodeDrag);</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Sundry</category>
+      </categories>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/en/posts/12801/</url>
+    <content><![CDATA[<p>Recently, I began to re-learn the knowledge of Computer Graphics, so I set my eyes on GAMES101. While watching, I did it and summarized it. This time I summarize the basic knowledge of linear algebra and how to do model transformation in the game. Finally, finish homework 1.</p>
+<span id="more"></span>
+<h1 id="Basic-knowledge-of-linear-algebra"><a href="#Basic-knowledge-of-linear-algebra" class="headerlink" title="Basic knowledge of linear algebra"></a>Basic knowledge of linear algebra</h1><h2 id="Vector"><a href="#Vector" class="headerlink" title="Vector"></a>Vector</h2><ol>
+<li>A vector is a line segment with a direction and a length, written in mathematical notation: $\ vec {a} $</li>
+<li>Or expressed as a line segment from the beginning to the end, for example, there are two points A, B, then the vector from A to B can be expressed as $\ vec {AB} = B - A $</li>
+<li>Vectors have no absolute starting point, that is, if a vector is moved in space, the vector itself remains unchanged</li>
+<li>The length of the vector is expressed as: $| |\ vec {a} | | $, and the vector divided by its own length is the unit vector of changing direction: $\ frac {\ vec {a}} {| |\ vec {a} | |} $</li>
+<li>The addition of vectors conforms to the parallelogram rule or the triangle rule</li>
+</ol>
+<h2 id="Coordinates-can-be-represented-by-vectors"><a href="#Coordinates-can-be-represented-by-vectors" class="headerlink" title="Coordinates can be represented by vectors"></a>Coordinates can be represented by vectors</h2><p>If there are two unit vectors perpendicular to each other, and we choose one of them to be $\ vec {X} $and the other to be $\ vec {Y} $, we can represent a vector $\ vec {A} =\ binom {x} {y} $, or $\ vec {A} ^ T = (x, y) $</p>
+<p>We assume that the starting point of this vector is the origin, then the end point is the (x, y) point we usually say in geometry</p>
+<h2 id="Multiplication-of-a-vector"><a href="#Multiplication-of-a-vector" class="headerlink" title="Multiplication of a vector"></a>Multiplication of a vector</h2><p>Vectors can be multiplied by dot. Suppose there are two vectors $\ vec {a},\ vec {b} $in different directions. Suppose their starting points are put together, and there will be an angle between them, assuming $\ theta $</p>
+<p>那么 $\vec{a} \cdot \vec{b} = ||\vec{a}||||\vec{b}||cos\theta$</p>
+<p>The point product of a vector has commutative and associative laws.</p>
+<script type="math/tex; mode=display">
+\vec{a} \cdot \vec{b} = \vec{b} \cdot \vec{a} \\
+\vec{a} \cdot (\vec{b} + \vec{c}) = \vec{a} \cdot \vec{b} + \vec{a} \cdot \vec{c} \\
+(k\vec{a}) \cdot \vec{b} = \vec{a} \cdot (k\vec{b}) = k(\vec{a} \cdot \vec{b})</script><p>The vector points are multiplied by coordinates:</p>
+<script type="math/tex; mode=display">
+\ vec {a}\ cdot\ vec {b} =\ binom {x _ a} {y _ a}\ cdot\ binom {x _ b} {y _ b} = x _ ax _ b + y _ ay _ b\\
+\vec{a} \cdot \vec{b} = \begin{bmatrix}
+    x_a \\ y_a \\ z_a
+\end{bmatrix} \cdot \begin{bmatrix}
+    x_b \\ y_b \\ z_b
+\end{bmatrix} = x_ay_a + x_by_b + z_az_b</script><p>Applications of vector dot multiplication are:</p>
+<ul>
+<li>We can use the result of the dot product between the two vectors and the 0 comparison to determine whether the angle between the two is acute or obtuse.</li>
+<li>Find the angle between two vectors</li>
+<li>Find the projection of one vector on another vector</li>
+</ul>
+<h2 id="Cross-product-of-vectors"><a href="#Cross-product-of-vectors" class="headerlink" title="Cross product of vectors"></a>Cross product of vectors</h2><p>Another multiplication of vectors is cross multiplication</p>
+<p>The direction of the cross product of the vector follows the right-hand rule. Assuming $\ vec {a}\ times\ vec {b} $, then the direction of the result is that the four fingers of the right hand turn from the direction of the vector a to the direction of b, clench tightly, and then give a thumbs up is, the direction of the thumb. That is, the result of the cross product is perpendicular to the plane where a and b are located</p>
+<p>Then the length of the cross product is actually $|\ vec {a}\ times\ vec {b }||=||\ vec {a} | | | |\ vec {b} | | sin\ theta $</p>
+<p>The cross product of vectors does not support associativity. To be precise, the result of the order of commutative cross products is reversed, that is, the direction is reversed: $\ vec {a}\ times\ vec {b} = -\ vec {b}\ times\ vec {a} $</p>
+<p>The cross product of the vector is represented by a matrix:</p>
+<script type="math/tex; mode=display">
+\vec{a} \times \vec{b} = \begin{bmatrix}
+    y_az_b - y_bz_a \\
+    x_az_b - x_bz_a \\
+    x_ay_b - x_by_a
+\end{bmatrix} \\
+\vec{a} \times \vec{b} = A * \vec{b} = \begin{bmatrix}
+    0 & -z_a & y_a \\
+    z_a & 0 & -x_a \\
+    -y_a & x_a & 0 \\
+\end{bmatrix} \begin{bmatrix}
+    x_b \\ y_b \\ z_b
+\end{bmatrix}</script><p>Cross product can determine whether a vector is on the left or right of another vector. This is easier to understand. When the right-hand rule rotates, it rotates clockwise or counterclockwise, and the result is the opposite.</p>
+<p>Another function is to determine whether a point is inside a triangle</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680175423/origin-of-ray/screenshot-20230330-192228_m9tuer.png" alt=""></p>
+<p>In the figure above, if the symbols of vector BC cross-multiplied by vector BP, vector CA cross-multiplied by vector CP, and vector AB cross-multiplied by vector AP are all the same, then it means that the P point is inside</p>
+<h2 id="Matrix"><a href="#Matrix" class="headerlink" title="Matrix"></a>Matrix</h2><p>A matrix is a two-dimensional array of m rows and n columns.</p>
+<p>The premise that two matrices can be multiplied is that the number of columns in the first matrix and the number of rows in the second matrix are the same.</p>
+<p>That is, a matrix with M rows and N columns can be multiplied by a matrix with N rows and P columns, resulting in a matrix with M rows and P columns.</p>
+<p>Suppose A and B are multiplied by two matrices to a matrix C, where each term of A is $a<em> {ij} $, each term of B is $B</em> {ij} $, and each term of C is $c<em> {ij} $, then $c</em> {ij} =\ sum<em> {k = 0} ^ {k = N} a</em> {ik} b_ {kj} $</p>
+<p>The important point here is how to write the equations of coordinate transformation in the form of matrices</p>
+<p>For example, how to say that points in a two-dimensional coordinate system are symmetrical according to the y-axis</p>
+<p>Just write it in a system of equations</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    x' = -x; \\
+    y' = y
+\end{cases}</script><p>Write it in matrix form</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+    -1 & 0 \\
+    0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+    x \\ y
+\end{bmatrix} = 
+\begin{bmatrix}
+    -x \\ y
+\end{bmatrix}</script><p>Each matrix has its own transpose matrix and inverse matrix.</p>
+<p>The transpose matrix of A is written as $A_T $, and $ (AB) ^ T = B ^ TA ^ T $</p>
+<p>The Inverse Matrix of A is written as $A ^ {-1} $, and $AA ^ {-1} = I $, where I is the identity matrix, and any matrix multiplied by the identity matrix equals nothing, that is, any matrix multiplied by A The change produced by the matrix can be restored by multiplying the Inverse Matrix of A</p>
+<h1 id="How-to-use-a-matrix-to-transform-Transform"><a href="#How-to-use-a-matrix-to-transform-Transform" class="headerlink" title="How to use a matrix to transform (Transform)"></a>How to use a matrix to transform (Transform)</h1><h2 id="2D-transformation"><a href="#2D-transformation" class="headerlink" title="2D transformation"></a>2D transformation</h2><ol>
+<li>Zoom out</li>
+</ol>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680229930/origin-of-ray/WX20230331-102939_2x_ch8yoi.png" alt=""></p>
+<p>When the image is scaled by s times, it is represented by the equation</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+x' = sx \\
+y' = sy \\
+\end{cases}</script><p>The corresponding scaling matrix is:</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+s & 0 \\
+0 & s
+\end{bmatrix}</script><ol>
+<li>Inversion</li>
+</ol>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680229931/origin-of-ray/WX20230331-103001_2x_npdyxc.png" alt=""></p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+-1 & 0 \\
+0 & 1 \\
+\end{bmatrix}</script><ol>
+<li>Shear</li>
+</ol>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680229930/origin-of-ray/WX20230331-103010_2x_h48ruq.png" alt=""></p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+1 & a \\
+0 & 1
+\end{bmatrix}</script><p>Step 4 Rotate</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680229931/origin-of-ray/WX20230331-103029_2x_khbazr.png" alt=""></p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+cos\theta & -sin\theta \\
+sin\theta & cos\theta
+\end{bmatrix}</script><p>So far, all our transformations can be expressed in matrix form, because our previous transformations can be expressed in the following equation:</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+x' = ax + by \\
+y '= cx + dy
+\end{cases}</script><p>Expressed as a matrix is</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+x' \\ y'
+\end{bmatrix}
+=
+\begin{bmatrix}
+a & b \\
+c & d \\
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y
+\end{bmatrix}</script><p>But the problem is that you can’t represent translation in this way, because translation can’t be written in this form</p>
+<ol>
+<li>Translation</li>
+</ol>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680229931/origin-of-ray/WX20230331-103041_2x_cdpzl7.png" alt=""></p>
+<p>The system of equations for translation is like this:</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+x' = x + t_x;\\
+y' = y + t_y;
+\end{cases}</script><p>If scaling, rotation, and translation are all represented by matrices, they should be as follows:</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+x' \\ y'
+\end{bmatrix}
+=
+\begin{bmatrix}
+a & b \\
+c & d 
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y
+\end{bmatrix}
++
+\begin{bmatrix}
+t_x \\ t_y
+\end{bmatrix}</script><p>So at this time we have to introduce homogeneous coordinates, that is, add w. At this time, the 2D point coordinates are represented by (x, y, 1), and the 2D vector is represented by (x, y, 0)</p>
+<p>When representing a point, w is 1, when representing a vector, w is 0, and there is a very magical place like this, that is, if two points are subtracted, w will become 0, which happens to be a vector, point and vector Adding, w is 1, which is also a point</p>
+<p>Using homogeneous coordinates, we can uniformly rotate, scale, and translate into a matrix</p>
+<p>The translation is expressed in homogeneous coordinates as:</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+x' \\ y' \\ z'
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 0 & t_x \\
+0 & 1 & t_y \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+x + t_x \\
+y + t_y \\
+1
+\end{bmatrix}</script><ol>
+<li>Mixing</li>
+</ol>
+<p>We can now use homogeneous coordinates to represent rotation, translation, and scaling respectively</p>
+<script type="math/tex; mode=display">
+S(s_x, s_y) = \begin{bmatrix}
+s_x & 0 & 0 \\
+0 & s_y & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+\\
+R(\theta) = \begin{matrix}
+cos\theta & -sin\theta & 0 \\
+sin\theta & cos\theta & 0 \\
+0 & 0 & 1
+\end{matrix}
+\\
+T(t_x, t_y) = \begin{bmatrix}
+1 & 0 & t_x \\
+0 & 1 & t_y \\
+0 & 0 & 1
+\end{bmatrix}</script><p>So how do we mix these operations?</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680229930/origin-of-ray/WX20230331-103100_2x_f3wqos.png" alt=""></p>
+<p>As you can see in the figure above, we now translate and then rotate. The result of translation is different from that of rotation first, because our rotation matrix is rotated around the origin</p>
+<p>Therefore, we generally specify the order to perform mixing operations. The first operation is multiplied left by the coordinates of the current point, and after obtaining the new point, it is multiplied left by the next operation matrix.</p>
+<p>Then, although our order cannot be changed because matrix multiplication has no commutativity, matrix multiplication has associativity, that is:</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680235553/origin-of-ray/WX20230331-120541_2x_tdldry.png" alt=""></p>
+<p>So we can achieve the result of multiplying the rotation, scaling, and translation matrices as the transformation matrix, and then multiplying it left with each point</p>
+<p>There is actually another problem here, which is, what if we just want a point to rotate around its lower left corner?</p>
+<p>It’s simple, translate the bottom left corner to the origin, then rotate, and finally translate the bottom left corner back:</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680235680/origin-of-ray/WX20230331-120741_2x_owrzbw.png" alt=""></p>
+<h2 id="3D-transformation"><a href="#3D-transformation" class="headerlink" title="3D transformation"></a>3D transformation</h2><p>The transformation of 3D is actually no different from 2D, except that homogeneous coordinates have four dimensions</p>
+<p>The transformation matrix is as follows:</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+x' \\ y' \\ z' \\ 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+a & b & c & t_x \\
+d & e & f & t_y \\
+g & h & o & t_z \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z \\ 1
+\end{bmatrix}</script><p>The scaling matrix can be written as;</p>
+<script type="math/tex; mode=display">
+S(s_x, s_y, s_z) = \begin{bmatrix}
+s_x & 0 & 0 & 0\\
+0 & x_y & 0 & 0\\
+0 & 0 & s_z & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><p>The translation matrix can be expressed as:</p>
+<script type="math/tex; mode=display">
+T(t_x, t_y, t_z) = \begin{bmatrix}
+1 & 0 & 0 & t_x \\
+0 & 1 & 0 & t_y \\
+0 & 0 & 1 & t_z \\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><p>Rotation is more complicated because it can be divided into rotation around different axes</p>
+<script type="math/tex; mode=display">
+R_x(\theta) = \begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & cos\theta & -sin\theta & 0 \\
+0 & sin\theta & cos\theta & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix} \\
+R_y(\theta) = \begin{bmatrix}
+cos\theta & 0 & sin\theta & 0 \\
+0 & 1 & 0 & 0 \\
+sin\theta & 0 & cos\theta & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix} \\
+R_z(\theta) = \begin{bmatrix}
+cos\theta & -sin\theta & 0 & 0 \\
+sin\theta & cos\theta & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><p>There is also a formula to multiply any rotation matrix Factorization by the rotation matrix in three axis directions. The following way represents the rotation angle of $\ theta $around the $\ vec {n} $axis.</p>
+<script type="math/tex; mode=display">
+R(\vec{n}, \alpha) = cos\alpha\vec{I} + (1 - cos\alpha)\vec{n}\vec{n}^T + sin\alpha\begin{bmatrix}
+0 & -n_z & n_y \\
+n_z & 0 & -n_x \\
+-n_y & n_x & 0 \\
+\end{bmatrix}</script><h1 id="Observation-Transformation-in-Graphics"><a href="#Observation-Transformation-in-Graphics" class="headerlink" title="Observation Transformation in Graphics"></a>Observation Transformation in Graphics</h1><p>When we are doing game development and writing Shader, we often use something called an MVP matrix to change the coordinates of points on the model to the coordinates on the screen.</p>
+<p>The MVP here refers to Model, View, and Projection, which means model transformation, view transformation, and projection transformation</p>
+<p>Model transformation is to change the coordinates from the coordinate system of the model itself to the coordinates of the game world coordinate system</p>
+<p>View transformation is to change the coordinates on the world coordinate system into the coordinates of the observation space</p>
+<p>The projection transformation is to change the coordinates of the observation space into the clipping space. In fact, this step does not do the operation of projecting to the two-dimensional plane. The specific projection operation is written in the GPU in the rendering pipeline, and is generally not processed in the Shader.</p>
+<p>The observation transformation we are talking about here is just a step in the rendering pipeline. At the beginning, it is operated vertex-by-vertex in the vertex shader. We get the coordinates of the point in the clipping space. In the next rendering pipeline, we have to go through grating., sampling, chip-by-chip shader output color, depth test, etc. will finally be projected onto a two-dimensional plane.</p>
+<p>Tired than the usual way we take pictures, the Model matrix is like we find a suitable camera position, the View matrix is to use the camera to find an angle</p>
+<p>We don’t talk about the Model matrix here, because it is the same as the View matrix, which changes from one coordinate system to another, and the Projection matrix is different in that the observation space is a box with a side length of 1 cube, we need to consider scaling</p>
+<h2 id="View-matrix"><a href="#View-matrix" class="headerlink" title="View matrix"></a>View matrix</h2><p>View matrix is the point from the world coordinates into the observation space, i.e., from the origin of the world coordinate system relative to the camera position becomes coordinates.</p>
+<p>After the Model transformation, we have the coordinates of the point in space, now we need to define the position and orientation of the camera in space:</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680243906/origin-of-ray/WX20230331-142433_2x_an1pc4.png" alt=""></p>
+<p>The coordinates and orientation of the camera here are relative to the world coordinate system. And our object coordinates are currently relative to the world coordinate system.</p>
+<p>Now all we have to do is change the object coordinates relative to the world coordinate system to relative to the camera coordinates.</p>
+<p>Here we introduce a common physical concept - relative motion, that is, if the same transformation operation is performed on the camera and the object, the relative position of the two remains unchanged.</p>
+<p>Then we can now try to move the camera to the origin. The observation direction of the camera is towards the negative direction of the z-axis of the world coordinate system, find the matrix of this transformation, and then apply this matrix to each point, which is equivalent to moving the object to the observation space. Although from the point of view of the object coordinates, a certain movement is made in the world coordinate system, this movement does not change the relative position of the object and the camera, and also successfully moves the camera to the origin of the world coordinates, so the result is equal to moving the object to the observation space.</p>
+<p>So how do you get this view matrix?</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680244406/origin-of-ray/WX20230331-143313_2x_om55nf.png" alt=""></p>
+<p>This method is more complicated</p>
+<p>We can use a better property here, that is, the rotation matrix is actually an orthogonal matrix, the Inverse Matrix and the transpose matrix of the orthogonal matrix are the same, that is, we can find the matrix of the world coordinate axis transformed into the camera coordinate axis, and then find his transpose matrix, that is, the Inverse Matrix, which is the matrix of the camera coordinate axis transformed into the world coordinate axis</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680244572/origin-of-ray/WX20230331-143602_2x_cpsn3o.png" alt=""></p>
+<h2 id="Projection-matrix"><a href="#Projection-matrix" class="headerlink" title="Projection matrix"></a>Projection matrix</h2><p>Just through the View matrix, the relative position of our camera and the object as a whole remains unchanged and moves to the position of the camera at the origin of the world coordinate system.</p>
+<p>What is the purpose of this? Of course, there is an advantage that it is easy to understand, but in fact, it does not make sense for a calculator, because it is all multiplied by a matrix, and the amount of calculation will not make a difference.</p>
+<p>Another advantage of this is to reduce the calculation of the projection matrix.</p>
+<p>Our projection matrix is divided into two types, one is parallel projection and the other is orthogonal projection:</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680244940/origin-of-ray/WX20230331-144201_2x_are3h7.png" alt=""></p>
+<h3 id="Parallel-projection"><a href="#Parallel-projection" class="headerlink" title="Parallel projection"></a>Parallel projection</h3><p>Let’s first look at the relatively simple parallel projection</p>
+<p>A relatively simple way to understand this projection is to just throw away the z-axis, which is the coordinate of the final point on the screen, and then both the x and y directions are translated and scaled between [-1, 1]. The reason why we can just throw away z here is that our camera is moved to the origin and in the negative direction of the z-axis.</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680245161/origin-of-ray/WX20230331-144545_2x_f4qhis.png" alt=""></p>
+<p>However, dropping the z-axis cannot be done yet. We still need the information of z to do in-depth tests later. What we need to do now is to normalize x, y, z to the cube of $[-1,1] ^ 3 $</p>
+<p>As shown in the figure below, in the parallel projection, we start with a cube in the observation space. We need to move the center of this cube to the origin and scale it to a cube with side length 1</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680245344/origin-of-ray/WX20230331-144846_2x_jxcjxv.png" alt=""></p>
+<h3 id="Orthogonal-projection"><a href="#Orthogonal-projection" class="headerlink" title="Orthogonal projection"></a>Orthogonal projection</h3><p>The difference between orthogonal projection and parallel projection is that there is a near-large and far-small effect, and its initial observation space is not a cube, but a ladder</p>
+<p>We are looking for this ladder normalization matrix to be divided into two steps:</p>
+<ol>
+<li>Scale the ladder to a cube, and the observation space at this time is equivalent to a parallel projection</li>
+<li>Reuse normalized matrices with parallel projections</li>
+</ol>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680245630/origin-of-ray/WX20230331-145336_2x_iwwpge.png" alt=""></p>
+<p>So we’re focusing on the first step right now</p>
+<p>And because our current camera is facing the negative direction of z, so the zoom bottom will not affect the z coordinate, we only need to focus on x and y, we take the y coordinate for example:</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1680245798/origin-of-ray/WX20230331-145627_2x_bdvmtg.png" alt=""></p>
+<p>Similarly, the left side of x becomes $x ‘=\ frac {n} {z} x $</p>
+<p>Then at this time, our transformation matrix can be written. First, the transformation of the orthogonal projection space into the parallel projection space</p>
+<script type="math/tex; mode=display">
+M_{presp-ortho}\begin{bmatrix}
+x \\ y \\ z \\ 1
+\end{bmatrix} = \begin{bmatrix}
+\ frac {n} {z} x\\ frac {n} {z} y\ z\\ 1
+\end{bmatrix} = \begin{bmatrix}
+nx \\ ny \\ z^2 \\ z
+\end{bmatrix}
+\\
+That is\\
+M_{presp-ortho} = \begin{bmatrix}
+n & 0 & 0 & 0 \\
+0 & n & 0 & 0 \\
+0 & 0 & z & 0 \\
+0 & 0 & 1 & 0 \\
+\end{bmatrix}</script><p>Then the formal orthogonal projection View matrix is $M_ {press-ortho} $multiplied by the parallel projection View matrix</p>
+<p>At this point, we have completed the transformation of a point from model space to normalized space in the world coordinate system</p>
+]]></content>
+      <categories>
+        <category>Unity</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Performance and Principle of Universal Lock</title>
+    <url>/en/posts/24195/</url>
+    <content><![CDATA[<p>This time, we must deal with what a universal lock is. This article will slowly unfold in the following order:</p>
+<ul>
+<li>Through a simple practical example to tell you, the performance of the universal lock in our lives</li>
+<li>What’s a universal lock?</li>
+<li>Talk about the principle of the existence of universal locks from the perspective of matrices and geometry respectively</li>
+<li>What’s wrong with the universal lock?</li>
+<li>Why quaternions can solve the gimbal lock problem</li>
+</ul>
+<span id="more"></span>
+<h2 id="A-small-experiment-with-a-universal-lock"><a href="#A-small-experiment-with-a-universal-lock" class="headerlink" title="A small experiment with a universal lock"></a>A small experiment with a universal lock</h2><p>You can take out the phone and put it on the desktop, the screen is facing up, the longest side of the phone is perpendicular to the edge of the table is set to the X axis, and the short side of the screen is parallel to the edge of the table is set to the Y axis, so the vector between the vertical and the screen is the Z axis.</p>
+<p>We first rotate 30 degrees clockwise around the X axis of the longest side of the mobile phone. At this time, the mobile phone leaves the desktop, leaving a long side in contact with the table; then rotate 90 degrees around the Y axis, that is, the short side of the mobile phone, so that the screen surface is connected with the table. Parallel to the edge;</p>
+<p>Rotate 10 degrees around the Z axis, that is, rotate 10 degrees around the axis perpendicular to the screen. At this time, you will find that when you rotate around the Z axis, the screen surface is still parallel to the edge of the table, and the angle of rotation around the Z axis at this time gives The effect of the phone’s posture is the same as the initial rotation of the X axis on the phone’s posture - both make the final posture of the phone (which has been rotated 90 degrees around the Y axis so that the phone screen is parallel to the edge of the table) rotate a certain angle around an axis perpendicular to the screen.</p>
+<p>In other words, you can not rotate around the Z axis, by adjusting the number of angles around the X axis, so that the final attitude of the phone and the rotation process to achieve the same attitude.</p>
+<p>In other words, once the Y axis is rotated 90 degrees, your phone plane must be in a plane perpendicular to the desktop, no matter how you start with the X axis and end with the Z axis</p>
+<h2 id="Universal-lock"><a href="#Universal-lock" class="headerlink" title="Universal lock"></a>Universal lock</h2><h3 id="What-is-Euler’s-Angle"><a href="#What-is-Euler’s-Angle" class="headerlink" title="What is Euler’s Angle?"></a>What is Euler’s Angle?</h3><p>Let’s briefly talk about Euler’s angle before explaining the universal lock.</p>
+<p>We have actually been exposed to this concept, but it may not be that deep, so let’s explain it here:</p>
+<p>Leonhard Euler used Euler angles to describe the orientation of a rigid body in three-dimensional Euclidean space. For any reference frame, the orientation of a rigid body is set by rotating three Euler angles from the reference frame in order. Therefore, the orientation of a rigid body can be determined by three basic rotation matrices. In other words, any rotation matrix about the rotation of a rigid body is composed of three basic rotation matrices.</p>
+<p>It is divided into static Euler angles and dynamic Euler angles</p>
+<p>Static: that is, the rotation around the three axes of the world coordinate system, because the coordinate axis remains static during the rotation of the object, it is called static.</p>
+<p>2, dynamic: that is, the rotation around the three axes of the object coordinate system, because the coordinate axis of the object rotates with the object to do the same rotation, so called dynamic.</p>
+<h4 id="Static-euler-angle"><a href="#Static-euler-angle" class="headerlink" title="Static euler angle"></a>Static euler angle</h4><p>For a reference system in three-dimensional space, the orientation of any coordinate system can be represented by three Euler angles. The reference system (fixed system), also known as the laboratory reference system, is stationary. The coordinate system (solid connection) is fixed to the rigid body and rotates as the rigid body rotates.</p>
+<p>See the figure on the right. Set the xyz-axis as the reference axis of the reference system. The intersection of the xy-plane and the XY-plane is called the intersection line, represented by the English letter (N). The Euler angle of zxz cis can be statically defined as follows:</p>
+<ul>
+<li>$\ alpha $ (precession angle) is the angle between the x-axis and the intersection line,</li>
+<li>$\ beta $ (nutation angle) is the angle between the z-axis and the Z-axis,</li>
+<li>$\ gamma $ (spin angle) is the angle between the intersection line and the X-axis.</li>
+</ul>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1662679829/origin-of-ray/400px-Eulerangles.svg_ylhxly.png" alt=""></p>
+<p>There is no convention for the order and marking of the included angles, the designation of the two axes of the included angles. Scientists have never reached a consensus on this. Whenever Euler angles are used, we must clearly indicate the order of the included angles and specify their reference axes.</p>
+<p>Range of angular values</p>
+<p>The $\ alpha $and $\ gamma $values range from 0 to 2 dollars\ pi $radians, respectively.<br>$\ Beta $values are radians from 0 to $\ pi $.<br>The set of Euler angles is unique for each orientation; with some exceptions:</p>
+<p>If the $\ alpha $of two Euler angles, one is 0 and the other is 2 dollars\ pi $, and $\ beta $and $\ gamma $are equal, then both Euler angles describe the same orientation.<br>If $\ gamma $of two Euler angles, one is 0 and the other is 2 dollars\ pi $, and $\ alpha $and $\ beta $are equal, then both Euler angles describe the same orientation.</p>
+<p>As mentioned earlier, the rotation matrix {\ displaystyle [\ mathbf {R}]} [\ mathbf {R}] with the rigid body orientation is composed of three basic rotation matrices:</p>
+<script type="math/tex; mode=display">
+[R] = \begin{bmatrix}
+cos\gamma & sin\gamma & 0 \\
+-sin\gamma & cos\gamma & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & cos\beta & sin\beta \\
+0 & -sin\beta & cos\beta
+\end{bmatrix}
+\begin{bmatrix}
+cos\alpha & sin\alpha & 0 \\
+-sin\alpha & cos\alpha & 0 \\
+0 & 0 & 1
+\end{bmatrix}</script><p>The result after the calculation is</p>
+<script type="math/tex; mode=display">
+[R] = \begin{bmatrix}
+cos\alpha cos\gamma - cos\beta sin\alpha sin\gamma & sin\alpha cos\gamma + cos\beta cos\alpha sin\gamma & sin\beta sin\gamma \\
+-cos\alpha sin\gamma - cos\beta sin\alpha cos\gamma & -sin\alpha sin\gamma + cos\beta cos\alpha cos\gamma & sin\beta cos\gamma \\
+sin\beta sin\alpha & -sin\beta cos\alpha & cos\beta
+\end{bmatrix}</script><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1662682019/origin-of-ray/200px-Euler2a_wnywfm.gif" alt=""></p>
+<p>In classical mechanics, the Euler angle is often set by the zxz conformism; according to the axis name of the second axis of rotation, it is abbreviated as the x-conformism. In addition, there are other types of Euler angle groups. In a legal Euler angle group, the only restriction is that any two consecutive rotations must rotate around different axes of rotation. Therefore, there are a total of 12 conformities. For example, y-conformism, where the second axis of rotation is the y-axis, is commonly used in quantum mechanics, nuclear physics, and particle physics. In addition, there is a compliance, xyz conformism, used in aerospace engineering; see Tate-Bryan angle</p>
+<h4 id="Dynamic-Euler-angle"><a href="#Dynamic-Euler-angle" class="headerlink" title="Dynamic Euler angle"></a>Dynamic Euler angle</h4><p>We can also give two different dynamic definitions of the Euler angle. One is a composite of three rotations around a coordinate axis fixed to a rigid body; the other is a composite of three rotations around a laboratory reference axis. With a dynamic definition, we can better understand the physical meaning and application of the Euler angle. Note in particular that, in the following description, the XYZ coordinate axis is the rotating rigid body coordinate axis; while the xyz coordinate axis is the stationary laboratory reference axis.</p>
+<ul>
+<li><p>Rotation around the XYZ axis: Initially, the axes of both coordinate systems xyz and XYZ overlap. Start by rotating $\ alpha $, the angular value, around the Z-axis. Then, rotate $\ beta $, the angular value, around the X-axis. Finally, rotate $\ gamma $, the angular value around the Z-axis.</p>
+</li>
+<li><p>Rotation around the xyz axis: Initially, the axes of both coordinate systems xyz and XYZ overlap. Start by rotating $\ gamma $, the angular value, around the z-axis. Then, rotate $\ beta $, the angular value, around the x-axis. Finally, rotate $\ alpha $, the angular value around the z-axis.</p>
+</li>
+</ul>
+<h3 id="What-is-a-universal-lock"><a href="#What-is-a-universal-lock" class="headerlink" title="What is a universal lock?"></a>What is a universal lock?</h3><p>We learned that Euler angles are divided into static Euler angles and dynamic Euler angles, and we continue to see what a universal lock is.</p>
+<p>First of all, let’s intuitively understand that the universal lock will only produce dynamic Euler angles, that is, we are rotating around the object’s own coordinate system, and the object’s own coordinate system will rotate with the object’s rotation</p>
+<p>Through the above small experiment, we can roughly understand that the reason why the universal lock is called a lock is because the rotation effect of two dimensions overlaps, that is, the effect of rotating the X axis and can be achieved by rotating the Z axis, that is, a dimension is lost.</p>
+<p>But from another point of view, this “lock” does not mean that there are any angles that cannot be expressed in the Euler angle, but that if your nutation angle is 90 degrees, your final result must be in a certain plane.</p>
+<h2 id="The-principle-of-universal-lock"><a href="#The-principle-of-universal-lock" class="headerlink" title="The principle of universal lock"></a>The principle of universal lock</h2><h3 id="Geometrically-speaking"><a href="#Geometrically-speaking" class="headerlink" title="Geometrically speaking"></a>Geometrically speaking</h3><p>Let’s first take a look at the following graph. The coordinate system of this graph is both the object’s own coordinate axis, which is exactly the same as the world coordinate axis</p>
+<p><img src="https://i.loli.net/2021/07/21/w1UdLtmlVe6Wrzb.png" alt=""></p>
+<p>Let’s first rotate an angle around the x-axis, no problem</p>
+<p>Then we rotate 90 degrees around the y-axis</p>
+<p><img src="https://i.loli.net/2021/07/21/s9PDTQXd25x3cpA.png" alt=""></p>
+<p>At this time, you can see that the z-axis has changed to the direction of the original x-axis. At this time, we rotate around the z-axis of the object itself. From the perspective of world coordinates, it is about the x-axis of the initial state, that is to say, from the perspective of the world coordinate system. From the point of view, it seems that the x-axis of the object itself at the beginning and the z-axis of the object itself at the end are the same, both of which revolve around the x-axis of the world coordinate system</p>
+<h3 id="From-a-matrix-perspective"><a href="#From-a-matrix-perspective" class="headerlink" title="From a matrix perspective"></a>From a matrix perspective</h3><p>The above process is written in the form of matrix multiplication</p>
+<script type="math/tex; mode=display">
+R_z(\beta)R_y(\pi / 2)R_x(\alpha) \\
+=\begin{bmatrix}
+cos\beta & -sin\beta & 0 \\
+sin\beta & cos\beta & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+-1 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & cos\alpha & -sin\alpha \\
+0 & sin\alpha & cos\alpha
+\end{bmatrix} \\
+= \begin{bmatrix}
+0 & sin(\alpha - \beta) & cos(\alpha - \beta) \\
+0 & con(\alpha - \beta) & -sin(\alpha - \beta) \\
+-1 & 0 & 0
+\end{bmatrix} \\
+= \begin{bmatrix}
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+-1 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & cos(\alpha - \beta) & -sin(\alpha - \beta) \\
+0 & sin(\alpha - \beta) & cos(\alpha - \beta)
+\end{bmatrix} \\
+= R_y(\pi /2)R_x(\alpha - \beta)</script><h2 id="What’s-wrong-with-the-universal-lock"><a href="#What’s-wrong-with-the-universal-lock" class="headerlink" title="What’s wrong with the universal lock?"></a>What’s wrong with the universal lock?</h2><p>So the universal lock is not unable to represent a certain angular displacement in space, but because of the universal lock, the interpolation between angular displacements becomes unsatisfactory, so how does the universal lock appear? When the second rotation angle is 90 degrees, use the first axis to coincide with the third axis. This is to understand this phenomenon from a perceptual point of view. If it is explained from a mathematical point of view, it is cos90 = 0</p>
+<p>In the game, when the animation of the character rotation is triggered, the character will make a series of continuous rotation transformations, each transformation must be represented by a set of Euler angles, but it is impossible to store the Euler angles of each orientation. So the animator defines a series of key frames, specifying the position of the character at the key frame (described by a set of Euler angles), and then the computer interpolates these sets of Euler angles according to time t to obtain a series of Euler angles.</p>
+<p>If the pitch is not ± 90 °, there will be no gimbal lock phenomenon, and a series of Euler angles after interpolation can completely characterize the desired character rotation path.</p>
+<p>If the pitch of a key frame, that is, the rotation around the second axis, is 90 °, you will encounter a universal lock. At this time, the phone can only rotate in a horizontal plane. If the animator specifies that the orientation of the next key frame phone is not standing up, there is no problem, but what happens if the orientation of the next key frame specified is standing up?</p>
+<h2 id="How-Quaternions-Solve-the-Gimbal-Lock-Problem"><a href="#How-Quaternions-Solve-the-Gimbal-Lock-Problem" class="headerlink" title="How Quaternions Solve the Gimbal Lock Problem"></a>How Quaternions Solve the Gimbal Lock Problem</h2><h3 id="Another-way-to-represent-rotation"><a href="#Another-way-to-represent-rotation" class="headerlink" title="Another way to represent rotation"></a>Another way to represent rotation</h3><p>To solve this problem, we must first ask about the preconditions for the existence of the universal lock problem</p>
+<p>As we know earlier, the universal lock only exists in the dynamic Euler angle, that is, the object rotates around its own coordinate system, and its own coordinate system rotates with its own rotation. If it rotates 90 degrees on the Y axis, the X axis and Z axis The rotation effect of the axis is the same.</p>
+<p>Think about it from another angle, in fact, under the Euler angle, the same effect has many different rotation methods, resulting in uncertain interpolation results.</p>
+<p>To solve this problem, in fact, the idea is relatively clear, that is, change the representation method, in this new representation method, the representation method of a rotation result is unique.</p>
+<p>We give another way to express the direction: Axis-Angle-Representation. Unlike Euler angles, this time we don’t take multiple rotations to find the target direction, but instead find an axis of rotation, and we can get the target direction by rotating around this axis only once. Will this not cause problems? Yes, the proof method is very simple. First, take the origin of the target matrix as one angle and the three axes as three sides to establish a cube. The diagonal line passing through the origin in this cube is the rotation axis we are looking for. Obviously, this rotation axis is unique, and We know that rotating around a rotation axis at different angles corresponds to different directions (angle range (−π,π]）， It can be seen that the axis angle representation of any position in space is unique.</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1662779292/origin-of-ray/v2-1b11f12de3b8309a49e7ea32a990d266_1440w_oublus.png" alt=""></p>
+<p>Generally speaking, when the axis angle represents the direction, there will be 4 parameters, 3 of which are used to represent the rotation axis and 1 is used to represent the rotation angle size. And if we specify the vector representing the rotation axis as the unit vector e, considering that $\ sqrt {x ^ 2 + y ^ 2 + z ^ 2} = 1 $, we can represent the rotation axis with two parameters, which only requires three parameters in total, as many as the Euler angle. The rotation vector can be represented by $\ bm {\ theta} =\ theta e $, where e is the unit vector. Incidentally, the rotation axis here is called the Euler axis, and the rotation vector here is called the Euler vector.</p>
+<p>It is also possible to consider the existence of this thing from the perspective of a matrix. There is a concept of a similar matrix and an eigenvector in the matrix. You can understand that this rotation axis is the eigenvector of the Euler angle rotation matrix, and the rotation angle of this rotation axis is the eigenvector. eigenvalue.</p>
+<h3 id="So-what-is-a-quaternion"><a href="#So-what-is-a-quaternion" class="headerlink" title="So what is a quaternion?"></a>So what is a quaternion?</h3><p>A quaternion is a complex number, and more specifically a quaternion is a complex number with three imaginary parts. q = w + ix + jy + kz, where i, j, k are imaginary units, such that i ^ 2 = j ^ 2 = k ^ 2 = -1, and i (j) j = k, j (i) i = k.</p>
+<script type="math/tex; mode=display">
+q_1 + q_2 = (w_1 + w_2) + i(x_1 + x_2) + j(y_1 + y_2) + k(z_1 +z_2) = [(w_1 + 2_2), (v_1 +v_2)] \\
+q_1 \cdot q_2 = (w_1w_2 -x_1x_2 - y_1y_2 - z_1z_2) + \\
+i(w_1x_2 + x_1w_2 + y_1z_2 - z1y_2) + \\
+j(w_1y_2 - x_1z_2 + y_1w_2 + z_1x_2) + \\
+k(w_1z_2 + x_1y_2 -y_zx_2 + z_1w_2)</script><p>When using quaternions to compute axis angle representations, we usually write them in vector representation, $q =\ begin {bmatrix}<br>W,\ vec v\ end {bmatrix} =\ begin {bmatrix} w,\ begin {pmatrix} x\ y\ z\ end {pmatrix}\ end {bmatrix} $, for clarity of expression and convenience of calculation, we position the value of w, x, y, z $w ^ 2 + x ^ 2 + y ^ 2 + z ^ 2 = 1 $, and call it the unit quaternion. In the direction calculation, the role of w, x, y, z in the unit quaternion is behind us Will explain. At this point, complex multiplication can be expressed in vector form</p>
+<script type="math/tex; mode=display">
+q_1 \cdot q_2 = [w_1, \vec v_1] \cdot [w_2, \vec v_2] = [w_1w_2 - v_1v_2, v1 \times v_2 + w_1 \cdot v_2 + w_2 \cdot v_1]</script><p>Or we can also write it in the form of a matrix</p>
+<script type="math/tex; mode=display">
+q_1q_2 = \begin{bmatrix}
+w_1 & -x_1 & -y_1 & -z_1 \\
+x_1 & w_1 & -z_1 & y_1 \\
+y_1 & z_1 & w_1 & -x_1 \\
+z_1 & -y_1 & x_1 & w_1
+\end{bmatrix}
+\begin{bmatrix}
+w_2 \\ x_2 \\ y_2 \\ z_2
+\end{bmatrix}</script><p>Observing this formula, we found that multiplying two quaternions requires storing 8 units of data, that is, each quaternion involved in the operation only needs to store 4 units of data. In addition, several special properties are required:</p>
+<ul>
+<li>Quaternion modulo $| | q | | =\ sqrt {w ^ 2 + x ^ 2 + y ^ 2 + z ^ 2} $</li>
+<li>Quaternion conjugate $q ^{<em>} = ( w + ix + jy + kz )^{</em>}= w -ix -jy - kz $</li>
+<li>共轭的向量形式 $q^{<em>} = (\begin{bmatrix} w &amp; \vec v \end{bmatrix})^{</em>} = \begin{bmatrix} w &amp; -\vec v \end{bmatrix}$</li>
+<li>The reciprocal of a quaternion: $q\ cdot q ^ {-1} = q ^ {-1}\ cdot q = 1 $</li>
+<li>Conjugate vs. reciprocal: $q ^ {-1} =\ frac {q ^ <em>} {w ^ 2 + x ^ 2 + y ^ 2 + z ^ 2} $, for the unit quaternion $q ^{</em>} = q {-1} $</li>
+<li>Quaternion operations satisfy both associative and distributive laws, but do not conform to commutative laws</li>
+</ul>
+<p>Knowing the above calculation rules, we can use quaternions to calculate the direction transformation process. Remember that we said before that when calculating quaternions, we use vector form to represent them and ensure that they are unit quaternions? In fact, the vector form of quaternions can be further rewritten as polar representation, $q =\ | q\ | [cos\ theta,\ vec {n}\ cdot sin\ theta] $</p>
+<p>Where q represents the modulus of the quaternion, the modulus of the quaternion is 1, and θ is the half-angle size of the rotation process represented by the quaternion, that is to say, (2θ) is the size of the rotation angle, and n is the rotation axis. The unit vector of direction. With this representation, the quaternion can represent the direction transformation expressed by any axis angle.</p>
+<p>First, the original vector coordinates are expressed as quaternions $p = [0,\ vec {v}] $, and the rotation angle and rotation axis are expressed as unit quaternions q. The rotated vector coordinates can be obtained by $r = q\ cdot p\ cdot q ^ * $or $r = q\ cdot p\ cdot q ^ {-1} $</p>
+<h3 id="Why-introduce-quaternions"><a href="#Why-introduce-quaternions" class="headerlink" title="Why introduce quaternions"></a>Why introduce quaternions</h3><p>In fact, the quaternion is to better represent the rotation axis and rotation angle. The rotation axis is a three-dimensional vector, and the rotation angle becomes four-dimensional. The quaternion was chosen to represent it because of some of its characteristics.</p>
+<p>Let’s start with the conclusion that quaternion references are used to reduce the amount of computation and storage space occupied during computation.</p>
+<p>However, if you are careful enough, you can definitely find that the process of multiplying two quaternions is actually a process of multiplying a 4 × 4 matrix with a 4 × 1 matrix, and the quaternion calculation requires two times this process, including 24 addition operations and 32 multiplication operations. In contrast, the matrix transformation of the Euler angle only needs to perform a multiplication operation of a 3 × 3 matrix and a 3 × 1 matrix, including 6 addition operations and 9 multiplication operations. The amount of operation is obviously Quaternion is larger. If you are more careful, you can find that although there is a 4 × 4 matrix involved in the operation of the quaternion operation, each item in the matrix is the unit data that has been stored, and the 3 × 3 matrix involved in the Euler angle operation It is obtained by 16 multiplication operations, 4 addition operations and 4 sign change operations performed on the stored unit data, but even with these operations, the matrix operation only needs 25 multiplication operations, 10 addition operations and 4 sign change operations. In terms of computational volume, the matrix operation of Euler angles still has an advantage over the quaternion operation. But in fact, the kinematics problems we generally encounter rarely have to do only one direction conversion. For complex systems and robots, we often face a large number of direction conversion processes. In this case, the advantages of quaternions are reflected. We consider quaternion operations for multiple transformations (using the polar coordinate form above):</p>
+<script type="math/tex; mode=display">
+R = R_1R_2...R_{n-1}R_n = (q_n(q_{n-1}...(q_2(q_1pq^*_1)q^*_2)...q^*_{n-1})q^*_n)</script><p>Use associative law:</p>
+<script type="math/tex; mode=display">
+R = R_1R_2...R_{n-1}R_n = (q_nq_{n-1}...q_2q_1)p(q^*_1q^*_2...q^*_{n-1}q^*_n）</script><p>Consider the conjugate $ (q_aq_b) ^ <em>= q ^ </em> _bq ^ * _a $</p>
+<script type="math/tex; mode=display">
+R = R_1R_2...R_{n-1}R_n = (q_nq_{n-1}...q_2q_1)p(q_nq_{n-1}...q_2q_1)^*</script><p>It can be found that the operation result in the parentheses on the left and right sides of the original vector ppp is a pair of conjugated quaternions, that is to say, the 3-th easy sign operation can be used instead of the n-th quaternion multiplication operation, which greatly reduces the amount of calculation.</p>
+<blockquote>
+<p>Finally, a little mention, a lot of people who come into contact with this problem are game developers, may have doubts, why there is no such problem in Unity’s Inspector, you can try this, Unity’s Inspector in the Y axis is not the object’s own coordinate axis rotation, so the universal lock is solved, the specific Unity internal rotation is how to see the next blog, here to dig a pit</p>
+</blockquote>
+<p>Reference article:</p>
+<p><a href="https://zh.m.wikipedia.org/zh/%E6%AC%A7%E6%8B%89%E8%A7%92">欧拉角 - 维基百科</a></p>
+<p><a href="https://www.zhihu.com/question/47736315/answer/236808639">如何通俗地解释欧拉角？之后为何要引入四元数？</a></p>
+]]></content>
+      <categories>
+        <category>Unity</category>
+      </categories>
   </entry>
   <entry>
     <title>Introduction to TCP Protocol</title>
