@@ -4611,7 +4611,7 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
-    <title>C</title>
+    <title>C#  Delegates and Events</title>
     <url>/en/posts/36409/</url>
     <content><![CDATA[<p>With the gradual increase in use, I can’t stand the use of these concepts in the vague situation, so I found some official doc to learn these concepts in C #, mainly to distinguish between delegates and events.</p>
 <p>In fact, I personally have been very vague about these concepts before reading the doc, and even once was confused by various blogs on the Internet, and even confused Action, Func and commission.</p>
