@@ -742,7 +742,7 @@
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Fundamentals of Linear Algebra (I)  Connections Between Determinants, Matrices, Vectors and Equations(above)</title>
     <url>/en/posts/39443/</url>
     <content><![CDATA[<p>I recently wanted to look at computer graphics, but I saw that the course requirements have linear algebra as a pre-requisite, so I re-read some of them, and so far I have looked at properties of determinants, matrices, vectors and systems of equations.<br>The main purpose of this blog is not to summarize the properties of matrices one by one, but to sort out a question I have been having during the review process, which is, why these things are spoken together, what is the relationship between them, and to slightly combine some ideas from the rendering principles, how matrices are applied to them.</p>
 <span id="more"></span>
@@ -977,7 +977,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Browser Architecture</title>
     <url>/en/posts/bbe10e1c/</url>
     <content><![CDATA[<p>Whether you want to design high-performance web applications or optimize existing web applications, you need to understand network processes in browsers, page rendering processes, JavaScript execution processes, and web security theory.</p>
 <p>This article briefly introduces the architectural evolution of browsers.<br><span id="more"></span></p>
@@ -1043,7 +1043,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Browser Cache</title>
     <url>/en/posts/be7c79f7/</url>
     <content><![CDATA[<p>Some time ago, I encountered a problem with browser caching. I didn’t have any ideas at the time. Later, I checked back and found that I had contacted many things, but I didn’t systematically sort them out. I used this blog to sort them out.</p>
 <p>The main content is the browser’s strong cache, the mechanism for negotiating the cache, and the corresponding HTTP headers.</p>
@@ -1162,7 +1162,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>How to Convert Canvas to SVG</title>
     <url>/en/posts/4708/</url>
     <content><![CDATA[<p>Before, I made a request for a relational graph. Because exporting png and other images will be distorted when enlarged, I hope to export them as vector graphs. However, the export graph function that comes with G6 cannot be exported as SVG in Canvas mode, and SVG mode has many features that are not supported, so I tried to find a way to export Canvas as SVG.</p>
 <span id="more"></span>
@@ -1176,7 +1176,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Front-end performance analysis tool</title>
     <url>/en/posts/a8b43915/</url>
     <content><![CDATA[<p>When we develop a Website, there may be many reasons for our page Caton, so we can use Google Devtools to quickly locate the main reasons for page Caton. This article summarizes the two main and most direct tools on the Chrome official doc.</p>
 <span id="more"></span>
@@ -1231,7 +1231,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Comparison of ESModule and CommonJS and Precautions</title>
     <url>/en/posts/16555/</url>
     <content><![CDATA[<p>In ES6, we know that import and export replace require and module.exports to import and export modules, but if you don’t understand the characteristics of ES6 modules, the code may run with some unimaginable results. I will use this article. Uncover the features of the ES6 module mechanism for you.</p>
 <p>I will not introduce the use of the two in detail. If you are interested, you can take a look at my previous blog:<a href="https://sunra.top/posts/d3bc7e1c/">JavaScript Module使用语法</a></p>
@@ -1365,7 +1365,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Comparison of Several Basic Data Structures</title>
     <url>/en/posts/803d8247/</url>
     <content><![CDATA[<p>** For a computer, it only knows how to use memory addresses to access variables in memory. We have artificially separated two storage forms, one is continuous storage (that is, arrays), and the other is chained storage (linked lists). As for other data structures, they are actually the use of these two storage forms. Any data structure can be implemented in two storage forms, only the question of whether it is suitable or not, and there is no question of whether it is possible or not, because in the end, the memory address is used to access the memory. Queue, stack we usually use arrays to achieve, but can also use linked lists, such as trees we use linked lists in most cases, but in fact, like a complete binary tree array to achieve no problem.</p>
 <p>This blog is mainly to analyze what features of data structures we need in these cases through some examples. In order to better meet these features, we need to use arrays or linked lists to implement. ** For all the content, I will not go into detail, let alone the specific implementation, because they are very basic, but if we really want to develop it, it will become a long talk. We mainly look at them from a higher level. some features.</p>
@@ -1452,7 +1452,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Cookies and the Same Site</title>
     <url>/en/posts/586529c7/</url>
     <content><![CDATA[<p>Recently, when reviewing the configuration of cookies, I found a new configuration called sameSite.</p>
 <p>The Chinese translation of this sameSite is same site.</p>
@@ -1592,7 +1592,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>BFC and Box Model for CSS</title>
     <url>/en/posts/41258/</url>
     <content><![CDATA[<p>CSS has been used for a long time, but some of the usage is always vague, and there is no systematic and logical understanding. This time, let’s first clarify the BFC and box model in CSS, as well as some related positioning and layout properties.</p>
 <span id="more"></span>
@@ -1679,7 +1679,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Summary and Comparison of CSS Mainstream Layouts (4) Holy Grail Layout</title>
     <url>/en/posts/64900/</url>
     <content><![CDATA[<p>The previous blog summarized the horizontal vertical centering and two column layout.</p>
 <p>This time we will continue to look at the Holy Grail layout, which is the three-row and three-column layout.</p>
@@ -1706,7 +1706,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Summary and Comparison of CSS Mainstream Layouts (3) Two-column Layout</title>
     <url>/en/posts/36778/</url>
     <content><![CDATA[<p>This time we continue to summarize the way and principle of the two-column layout in the mainstream layout of CSS.</p>
 <p>First, let’s talk about what a two-column layout is.</p>
@@ -1752,7 +1752,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Summary and Comparison of CSS Mainstream Layouts (2) Vertical Center Alignment</title>
     <url>/en/posts/15552/</url>
     <content><![CDATA[<p>Summarize the different implementations of vertical center alignment in several mainstream layouts and the comparisons between them.</p>
 <span id="more"></span>
@@ -1772,7 +1772,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Basic knowledge of DDOS</title>
     <url>/en/posts/7039/</url>
     <content><![CDATA[<p>This time, learn the basics of DOS (Distributed Denial-of-service) and DDOS (Distributed Denial-of-service).</p>
 <span id="more"></span>
@@ -1832,7 +1832,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Introduction to DHCP Protocol Workflow</title>
     <url>/en/posts/1133/</url>
     <content><![CDATA[<p>Recently read an article introducing the DHCP protocol workflow, here is a brief summary.</p>
 <span id="more"></span>
@@ -1880,7 +1880,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Difference Arrays</title>
     <url>/en/posts/54851/</url>
     <content><![CDATA[<p>This week’s question of the day has a difficult level question, using a technique called difference array. This technique is actually not complicated, that is, the reverse operation of prefix and, simply record it.</p>
 <p>Here is the link to the title: <a href="https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/">https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/</a></p>
@@ -1905,7 +1905,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>divide and conquer algorithm</title>
     <url>/en/posts/7474c898/</url>
     <content><![CDATA[<h2 id="Basic-concepts"><a href="#Basic-concepts" class="headerlink" title="Basic concepts"></a>Basic concepts</h2><p>  In computer science, divide and conquer is a very important algorithm. The literal interpretation is “divide and conquer”, which is to divide a complex problem into two or more identical or similar sub-problems, and then divide the sub-problems into smaller sub-problems… Until the final sub-problem can be simply solved directly, the solution of the original problem is the combination of the solutions of the sub-problems. This technique is the basis of many efficient algorithms, such as sorting algorithms (Quick Sort, Merge Sort), Fourier Transform (Fast Fourier Transform)…</p>
 <span id="more"></span>
@@ -1952,7 +1952,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Docker Introduction Notes</title>
     <url>/en/posts/6b3a9e14/</url>
     <content><![CDATA[<p>Recently, I want to use Docker, and I found a few entry-level blogs in the evening, summarizing and practicing.<br><span id="more"></span></p>
 <h2 id="Basic-concepts"><a href="#Basic-concepts" class="headerlink" title="Basic concepts"></a>Basic concepts</h2><h3 id="The-problem-of-environment-configuration"><a href="#The-problem-of-environment-configuration" class="headerlink" title="The problem of environment configuration"></a>The problem of environment configuration</h3><p>One of the biggest hassles in software development is environment configuration. The environments of users’ computers are different. How do you know which machines your software will run on?</p>
@@ -2070,7 +2070,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Double pointer algorithm</title>
     <url>/en/posts/9fba193f/</url>
     <content><![CDATA[<h2 id="Principle"><a href="#Principle" class="headerlink" title="Principle"></a>Principle</h2><h3 id="Fast-and-slow-pointer"><a href="#Fast-and-slow-pointer" class="headerlink" title="Fast and slow pointer"></a>Fast and slow pointer</h3><p>The two-pointer technique is further divided into two categories, one is “fast and slow pointers”, and the other is “left and right pointers”. The former mainly solves problems in linked lists, such as typically determining whether a linked list contains a ring; the latter mainly solves problems in arrays (or strings), such as binary search.</p>
 <span id="more"></span>
@@ -2124,7 +2124,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Electron Multi-Process Scheme</title>
     <url>/en/posts/954dea55/</url>
     <content><![CDATA[<p>Most of this week has been spent developing an Electron-based client.</p>
 <p>Electron has a built-in chrome kernel, so it allows us to develop clients like a website.</p>
@@ -2191,7 +2191,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Element UI Notes</title>
     <url>/en/posts/76e9bea4/</url>
     <content><![CDATA[<p>Take note of the pitfalls you encounter while using elementUI.</p>
 <p>Some event names in elementUI are confusing, such as handleSizeChange, handleCLose, etc.</p>
@@ -2209,7 +2209,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Element UI Table tree component lazy loading problem fix</title>
     <url>/en/posts/7a981791/</url>
     <content><![CDATA[<p>Last week, when using an elementUI table, I found that every time I click on the checkbox of the table, the page will be stuck for close to two seconds, so I used vue’s devtools to record where the operation time is consumed each time. It was found that the main reason is that although the elementUI table provides tree data and lazy loading functions, although the child nodes are not expanded, they have already been rendered.</p>
 <p>Therefore, the elementUI table provides the function of lazy loading, but this lazy loading function is problematic, because the lazy loading function will only be called once, and no matter how the data is changed in the future, the sub-node will not change.</p>
@@ -2225,7 +2225,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>ES6 Class Source Code Analysis</title>
     <url>/en/posts/30718/</url>
     <content><![CDATA[<p>The last blog about React left a pit about Es6 class, about the relationship between class and function, we will discuss this blog.</p>
 <p>We come to this blog with two questions:</p>
@@ -2445,7 +2445,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Chrome and the Node Event Loop</title>
     <url>/en/posts/ed430c49/</url>
     <content><![CDATA[<p>After using JavaScript for so long, I realized that I have always misunderstood the event loop mechanism of JavaScript.</p>
 <p>First, the event loop mechanism is not implemented in V8. The V8 engine is only responsible for compiling JavaScript code, memory allocation, etc.</p>
@@ -2545,7 +2545,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Extjs3 Ext.extend Using Pit Filling</title>
     <url>/en/posts/d558ce51/</url>
     <content><![CDATA[<h2 id="Ext-extend"><a href="#Ext-extend" class="headerlink" title="Ext.extend"></a>Ext.extend</h2><p>When using Extjs, we often use its custom component function to create the components we need, but there is a point to note when using Ext.extend, that is, if your custom component has some fixed items, then These items cannot be directly thrown into the configuration item, but need to be declared in the initComponent function.</p>
 <span id="more"></span>
@@ -2568,7 +2568,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>File Upload Vulnerability</title>
     <url>/en/posts/931c692/</url>
     <content><![CDATA[<h2 id="File-Upload-Vulnerabilities-and-Their-Harm"><a href="#File-Upload-Vulnerabilities-and-Their-Harm" class="headerlink" title="File Upload Vulnerabilities and Their Harm"></a>File Upload Vulnerabilities and Their Harm</h2><p>File upload vulnerability refers to a network attacker uploading an executable file to the server and executing it. The uploaded file here can be a Trojan horse, virus, malicious script or WebShell, etc.</p>
 <p>Due to insufficient programmer control over the user file upload portion or processing defects, resulting in the user can cross its own authority to upload executable dynamic script files to the server.</p>
@@ -2656,7 +2656,7 @@ i = 1, 2, 3, ..., n</script><p>where Ai is the determinant formed by replacing t
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Force-oriented algorithm</title>
     <url>/en/posts/62967/</url>
     <content><![CDATA[<p>Recently, I need to implement a relational graph in my work. The node layout in the graph needs to use force-oriented layout, so I was interested in the force-oriented algorithm involved, and I went to study it.</p>
 <p>Force-directed graph drawings can be used to describe the relationships between nodes of a graph, distributing nodes to reasonable positions on the canvas, such as describing relationships between enterprises, interpersonal relationships in social networks, etc.</p>
@@ -2687,7 +2687,7 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Four basic algorithm ideas</title>
     <url>/en/posts/f7e2a78f/</url>
     <content><![CDATA[<p>Data structures and algorithms are a very large range, and various problems require different algorithms, which are either complex or simple. This blog simply introduces four very basic and commonly used algorithm ideas through classic knapsack problems, namely greed, divide and conquer, backtracking, and motion rules.</p>
 <p>These four are algorithm ideas, not specific algorithms, mainly to understand their ideas, not specific implementations.</p>
@@ -3955,7 +3955,7 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Blob, Multipart Upload</title>
     <url>/en/posts/a3d8e8d3/</url>
     <content><![CDATA[<h2 id="What-is-Blob"><a href="#What-is-Blob" class="headerlink" title="What is Blob?"></a>What is Blob?</h2><p>A blob (Binary Large Object) represents a large object of binary type. In database management systems, binary data is stored as a collection of a single individual. A blob is usually a video, sound, or multimedia file. <strong> In JavaScript, an object of type Blob represents the original data source of an immutable file-like object. </strong></p>
 <p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1595596596/js/image-20200724202124460_csorcu.png" alt="image-20200724202124460"></p>
@@ -4046,7 +4046,7 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Introduction to blockchain</title>
     <url>/en/posts/7f31b34d/</url>
     <content><![CDATA[<p>Blockchain is a big hit right now, with a lot of news media coverage claiming that it will create the future.</p>
 <p>After reading some papers, blogs and official docs, the author integrated the content of these materials with his own understanding and reorganized them.</p>
@@ -4322,7 +4322,7 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>How codesandbox runs the npm module in the browser</title>
     <url>/en/posts/19234/</url>
     <content><![CDATA[<p>At present, there are more and more web IDE products running on the browser side. According to their functional characteristics, the current web IDE can be divided into two types. One is to migrate the functions of the local IDE basically intact. To the IDE on the web side, such as the most popular front-end IDE VS Code, with the help of cloud + containerization capabilities, VS Code has almost exactly the same functions as the local IDE on the browser side; there is also a web IDE that is more Focus on the presentation of’page development and real-time code parsing, compiling, and previewing ‘, and the implementation of code packaging and construction It is not limited to the implementation at the server level (such as based on Docker containers, etc.). Some products implement the functions of’compile, package, build, and run ‘based on browser-side code, and all of this is only based on our original development system.’ Local IDE + Node local build, local service + browser access preview ‘has the ability. Representatives of such products are CodeSandbox, codepen, StackBlitz, JSFiddle, etc.</p>
 <p>That is to say, the former just puts the code editing on the web segment. In fact, it uses the cloud to store the code, compile the project, package and run it, etc. In this way, what we finally get is no different from local development. The difference is that we don’t have to specially download an editor.</p>
@@ -4452,7 +4452,7 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Computer Composition (1) Computer Overview</title>
     <url>/en/posts/21925/</url>
     <content><![CDATA[<p>The performance of a computer system is largely characterized by the efficiency and role of software, and the performance of software cannot be achieved without the support of hardware. For a certain function, it can be implemented in software or hardware, which is called software and hardware is logically equivalent. When designing a computer system, the functions of software and hardware should be assigned. Generally speaking, if a function is frequently used and the cost of implementing it with hardware is ideal, hardware should be used to implement it, because the efficiency of hardware implementation is generally higher.</p>
 <span id="more"></span>
@@ -4611,7 +4611,7 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>C</title>
     <url>/en/posts/36409/</url>
     <content><![CDATA[<p>With the gradual increase in use, I can’t stand the use of these concepts in the vague situation, so I found some official doc to learn these concepts in C #, mainly to distinguish between delegates and events.</p>
 <p>In fact, I personally have been very vague about these concepts before reading the doc, and even once was confused by various blogs on the Internet, and even confused Action, Func and commission.</p>
@@ -4719,7 +4719,7 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Currying functions</title>
     <url>/en/posts/d56cb4fa/</url>
     <content><![CDATA[<p>Recently encountered a strange problem, achieve the following effect:</p>
 <p>sum(2, 3).result = 5;</p>
@@ -4841,7 +4841,7 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Development and Design of OAuth</title>
     <url>/en/posts/2b2971ba/</url>
     <content><![CDATA[<p>The Chinese name of OAuth is the Open Authorization Protocol. This name is carefully tested by everyone. It is an authorization protocol. <strong> Any website that implements this protocol can grant corresponding users to certain applications registered here under the conditions of user consent. Permission </strong> for certain resources on this website, and this permission is generally represented by token.</p>
 <span id="more"></span>
@@ -4950,7 +4950,7 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Dynamic Programming</title>
     <url>/en/posts/a80d0031/</url>
     <content><![CDATA[<p>Recently, I encountered recursion when I was doing the question. I vaguely felt that it was a bit similar to the motion gauge, but I couldn’t explain it clearly, so I found a lot of articles. Here is an excerpt of the most basic but also the most clear article. The original link is<a href="https://leetcode-cn.com/problems/coin-change/solution/dong-tai-gui-hua-tao-lu-xiang-jie-by-wei-lai-bu-ke/">这个</a>。</p>
 <h2 id="Principle"><a href="#Principle" class="headerlink" title="Principle"></a>Principle</h2><p>The general form of Dynamic Programming problem is to find the best value. Dynamic Programming is actually an optimization method of operations research, but it is more used in computer problems, such as asking you to find the longest increasing sequence, the minimum editing distance, and so on.</p>
@@ -5149,7 +5149,7 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>fetch-event-source source code parsing</title>
     <url>/en/posts/8b781825/</url>
     <content><![CDATA[<p>We all know that the interface of ChatGPT supports data return by streaming SSE, and the front-end browser provides EventSource by default to receive SSE, but the problem is that the default EventSource only supports Get requests, and does not support any custom headers. The interface of ChatGPT is a POST request, and it is necessary to carry a token in the header, so a Microsoft library is used. Let’s explain its usage, source code, and the basis for its source code to run from a protocol perspective, that is, why its source code can work</p>
 <span id="more"></span>
@@ -5183,7 +5183,7 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>Basic concepts of flex layout</title>
     <url>/en/posts/40806/</url>
     <content><![CDATA[<p>The traditional solution to layout, based on the box model, relies on the display property + position property + float property. It is very inconvenient for those special layouts, for example, vertical centering is not easy to implement. In 2009, the W3C proposed a new scheme, Flex Layout, which can implement various page layouts simply, completely, and responsively. Currently, it is supported by all browsers, which means that this feature can now be safely used.</p>
 <p>Of course, there is another layout solution is grid layout, but this article will sort out flex first.</p>
@@ -5342,7 +5342,7 @@ F_s = k_s(x - x_0)</script><p>The repulsive and attractive forces continue to ac
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>function components and function programming</title>
     <url>/en/posts/9244/</url>
     <content><![CDATA[<p>Function programming and function components are a trend in development now. They have been used in the past, but they have not been understood conceptually. This article summarizes the two together and makes a certain comparison.</p>
 <p>Function programming is a programming paradigm, and function components are a product of this paradigm.</p>
@@ -5750,7 +5750,7 @@ U = \frac{T_D}{T_D + RTT + T_A}</script><p>To improve transmission efficiency, i
       </categories>
   </entry>
   <entry>
-    <title></title>
+    <title>15 Essentials for Cloud Native Apps</title>
     <url>/en/posts/d20b574c/</url>
     <content><![CDATA[<p>Read the notes,<a href="https://learning.oreilly.com/library/view/beyond-the-twelve-factor/9781492042631/?download=true">原文链接</a></p>
 <span id="more"></span>
