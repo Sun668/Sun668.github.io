@@ -1,0 +1,307 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2"><link rel="apple-touch-icon" sizes="180x180" href="/en/images/apple-touch-icon-next.png"><link rel="icon" type="image/png" sizes="32x32" href="/en/images/favicon-32x32-next.png"><link rel="icon" type="image/png" sizes="16x16" href="/en/images/favicon-16x16-next.png"><link rel="mask-icon" href="/en/images/logo.svg" color="#222"><link rel="stylesheet" href="/en/css/main.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous"><script class="next-config" data-name="main" type="application/json">{"hostname":"sunra.top","root":"/en/","images":"/en/images","scheme":"Muse","darkmode":false,"version":"8.17.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/en/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/en/js/config.js"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8623125811074939" crossorigin="anonymous"></script><script>!function(e,p,s,r){if(void 0===e.webpushr){e.webpushr=e.webpushr||function(){(e.webpushr.q=e.webpushr.q||[]).push(arguments)};var d,t=p.getElementsByTagName(s)[0];(d=p.createElement(s)).id="webpushr-jssdk",d.async=1,d.src="https://cdn.webpushr.com/app.min.js",t.parentNode.appendChild(d)}}(window,document,"script"),webpushr("setup",{key:"BEQjc-0d1Q1CubrYZ2e2XXv5Is0ZCd3CtrNLet06owkUWK68qkxHpho2mKdnj2vpGdxddRDxRYthLuMwrTqfSB4"})</script><meta name="description" content="I have summarized the introduction of a version of the Unity rendering pipeline before. This time, it will be clearer to reorganize the process from the perspective of the spatial transformation of th"><meta property="og:type" content="article"><meta property="og:title" content="Unity Rendering Principle (3) Rendering Pipeline - From Point on Model to Point on Screen (Matrix Edition)"><meta property="og:url" content="https://sunra.top/en/2022/02/18/unity-render-pipeline-3/index.html"><meta property="og:site_name" content="Origin of Ray"><meta property="og:description" content="I have summarized the introduction of a version of the Unity rendering pipeline before. This time, it will be clearer to reorganize the process from the perspective of the spatial transformation of th"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262453/origin-of-ray/image-20220219131920494_trfzim.png"><meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262453/origin-of-ray/image-20220219154848985_jc5xfi.png"><meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262453/origin-of-ray/image-20220219155014022_m3jm22.png"><meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262453/origin-of-ray/image-20220219161801470_e7qfin.png"><meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262453/origin-of-ray/image-20220219163629618_bkbyon.png"><meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262452/origin-of-ray/image-20220219164211803_bqddc1.png"><meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262455/origin-of-ray/image-20220219165154409_tct88z.png"><meta property="og:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262454/origin-of-ray/image-20220219171351249_jjto0p.png"><meta property="article:published_time" content="2022-02-18T12:47:20.000Z"><meta property="article:modified_time" content="2023-06-13T10:45:21.618Z"><meta property="article:author" content="Ray Sun"><meta property="article:tag" content="Technology Sharing Using Tutorials Principles Front End Computer Graphics"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262453/origin-of-ray/image-20220219131920494_trfzim.png"><link rel="canonical" href="https://sunra.top/en/2022/02/18/unity-render-pipeline-3/"><script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://sunra.top/en/2022/02/18/unity-render-pipeline-3/","path":"2022/02/18/unity-render-pipeline-3/","title":"Unity Rendering Principle (3) Rendering Pipeline - From Point on Model to Point on Screen (Matrix Edition)"}</script><script class="next-config" data-name="calendar" type="application/json">""</script><title>Unity Rendering Principle (3) Rendering Pipeline - From Point on Model to Point on Screen (Matrix Edition) | Origin of Ray</title><script async src="https://www.googletagmanager.com/gtag/js?id=G-KEJ1L66CKC"></script><script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-KEJ1L66CKC","only_pageview":false}</script><script src="/en/js/third-party/analytics/google-analytics.js"></script><script src="/en/js/third-party/analytics/baidu-analytics.js"></script><script async src="https://hm.baidu.com/hm.js?cc2e15dfd66849cf1d7843d0d532438e"></script><link rel="dns-prefetch" href="https://blog-comments-3w44.vercel.app/"><noscript><link rel="stylesheet" href="/en/css/noscript.css"></noscript><link rel="alternate" href="/en/atom.xml" title="Origin of Ray" type="application/atom+xml"></head><body itemscope itemtype="http://schema.org/WebPage" class="use-motion"><div class="headband"></div><main class="main"><div class="column"><header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container"><div class="site-nav-toggle"><div class="toggle" aria-label="Toggle navigation bar" role="button"><span class="toggle-line"></span><span class="toggle-line"></span><span class="toggle-line"></span></div></div><div class="site-meta"><a href="/en/" class="brand" rel="start"><i class="logo-line"></i><p class="site-title">Origin of Ray</p><i class="logo-line"></i></a><p class="site-subtitle" itemprop="description">Lift the fog of the Internet together</p></div><div class="site-nav-right"><div class="toggle popup-trigger" aria-label="Search" role="button"><i class="fa fa-search fa-fw fa-lg"></i></div></div></div><nav class="site-nav"><ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/en/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/en/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/en/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-english"><a href="https://sunra.top/en" rel="section"><i class="fa fa-language fa-fw"></i>English</a></li><li class="menu-item menu-item-中文"><a href="https://sunra.top/" rel="section"><i class="fa fa-language fa-fw"></i>中文</a></li><li class="menu-item menu-item-search"><a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i> Search</a></li></ul></nav><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-icon"><i class="fa fa-search"></i></span><div class="search-input-container"> <input autocomplete="off" autocapitalize="off" maxlength="80" placeholder="Searching..." spellcheck="false" type="search" class="search-input"></div><span class="popup-btn-close" role="button"><i class="fa fa-times-circle"></i></span></div><div class="search-result-container no-result"><div class="search-result-icon"><i class="fa fa-spinner fa-pulse fa-5x"></i></div></div></div></div></header><aside class="sidebar"><div class="sidebar-inner sidebar-nav-active sidebar-toc-active"><ul class="sidebar-nav"><li class="sidebar-nav-toc"> Table of Contents</li><li class="sidebar-nav-overview"> Overview</li></ul><div class="sidebar-panel-container"><div class="post-toc-wrap sidebar-panel"><div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Geometric-Meaning-of-Matrix-Transformation"><span class="nav-number">1.</span> <span class="nav-text">The Geometric Meaning of Matrix: Transformation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#What-is-transformation"><span class="nav-number">1.1.</span> <span class="nav-text">What is transformation?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Homogeneous-coordinates"><span class="nav-number">1.2.</span> <span class="nav-text">Homogeneous coordinates</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Decomposition-base-transformation-matrix"><span class="nav-number">1.3.</span> <span class="nav-text">Decomposition base transformation matrix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Translation-matrix"><span class="nav-number">1.4.</span> <span class="nav-text">Translation matrix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scaling-matrix"><span class="nav-number">1.5.</span> <span class="nav-text">Scaling matrix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rotation-matrix"><span class="nav-number">1.6.</span> <span class="nav-text">Rotation matrix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Composite-transformation"><span class="nav-number">1.7.</span> <span class="nav-text">Composite transformation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Coordinate-space"><span class="nav-number">2.</span> <span class="nav-text">Coordinate space</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Transformation-matrix-of-coordinate-space"><span class="nav-number">2.1.</span> <span class="nav-text">Transformation matrix of coordinate space</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Model-space"><span class="nav-number">2.2.</span> <span class="nav-text">Model space</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#World-space"><span class="nav-number">2.3.</span> <span class="nav-text">World space</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Model-Transformation-From-Model-Space-to-World-Space"><span class="nav-number">2.3.1.</span> <span class="nav-text">Model Transformation: From Model Space to World Space</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Observation-space"><span class="nav-number">2.4.</span> <span class="nav-text">Observation space</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Observation-Transformation-From-World-Space-to-Observation-Space"><span class="nav-number">2.4.1.</span> <span class="nav-text">Observation Transformation: From World Space to Observation Space</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cutting-space"><span class="nav-number">2.5.</span> <span class="nav-text">Cutting space</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Perspective-projection"><span class="nav-number">2.5.1.</span> <span class="nav-text">Perspective projection</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Orthogonal-projection"><span class="nav-number">2.5.2.</span> <span class="nav-text">Orthogonal projection</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Screen-space"><span class="nav-number">2.6.</span> <span class="nav-text">Screen space</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary"><span class="nav-number">3.</span> <span class="nav-text">Summary</span></a></li></ol></div></div><div class="site-overview-wrap sidebar-panel"><div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" alt="Ray Sun" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg"><p class="site-author-name" itemprop="name">Ray Sun</p><div class="site-description" itemprop="description">Lift the fog of the Internet together</div></div><div class="site-state-wrap animated"><nav class="site-state"><div class="site-state-item site-state-posts"> <a href="/en/archives/"><span class="site-state-item-count">266</span> <span class="site-state-item-name">posts</span></a></div><div class="site-state-item site-state-categories"> <a href="/en/categories/"><span class="site-state-item-count">16</span> <span class="site-state-item-name">categories</span></a></div></nav></div><div class="links-of-author animated"><span class="links-of-author-item"><a href="https://github.com/Sun668" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Sun668" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i> GitHub</a></span><span class="links-of-author-item"><a href="mailto:947692259@qq.com" title="E-Mail → mailto:947692259@qq.com" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-envelope fa-fw"></i> E-Mail</a></span></div><div class="cc-license animated" itemprop="license"> <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="external nofollow noopener noreferrer" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a></div></div></div></div><div class="wechat_channel" style="width:50%;margin-left:25%"><br> <img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1685836114/origin-of-ray/wechat_channel_zmg0hw.jpg"></div></aside></div><div class="main-inner post posts-expand"><div class="post-block"><article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en"><link itemprop="mainEntityOfPage" href="https://sunra.top/en/2022/02/18/unity-render-pipeline-3/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1592617514/avatar_rpap6c.jpg"><meta itemprop="name" content="Ray Sun"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Origin of Ray"><meta itemprop="description" content="Lift the fog of the Internet together"></span><span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork"><meta itemprop="name" content="Unity Rendering Principle (3) Rendering Pipeline - From Point on Model to Point on Screen (Matrix Edition) | Origin of Ray"><meta itemprop="description" content></span><header class="post-header"><h1 class="post-title" itemprop="name headline"> Unity Rendering Principle (3) Rendering Pipeline - From Point on Model to Point on Screen (Matrix Edition)</h1><div class="post-meta-container"><div class="post-meta"><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar"></i></span> <span class="post-meta-item-text">Posted on</span> <time title="Created: 2022-02-18 20:47:20" itemprop="dateCreated datePublished" datetime="2022-02-18T20:47:20+08:00">2022-02-18</time></span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar-check"></i></span> <span class="post-meta-item-text">Edited on</span> <time title="Modified: 2023-06-13 18:45:21" itemprop="dateModified" datetime="2023-06-13T18:45:21+08:00">2023-06-13</time></span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-folder"></i></span> <span class="post-meta-item-text">In</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/en/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a></span></span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-comment"></i></span> <span class="post-meta-item-text">Waline:</span><a title="waline" href="/en/2022/02/18/unity-render-pipeline-3/#waline" itemprop="discussionUrl"><span class="post-comments-count waline-comment-count" data-path="/en/2022/02/18/unity-render-pipeline-3/" itemprop="commentCount"></span></a></span></div></div></header><div class="post-body" itemprop="articleBody"><p>I have summarized the introduction of a version of the Unity rendering pipeline before. This time, it will be clearer to reorganize the process from the perspective of the spatial transformation of the matrix. It is also a practice for me to review the content of linear algebra during this time.</p><span id="more"></span><h2 id="The-Geometric-Meaning-of-Matrix-Transformation"><a href="#The-Geometric-Meaning-of-Matrix-Transformation" class="headerlink" title="The Geometric Meaning of Matrix: Transformation"></a>The Geometric Meaning of Matrix: Transformation</h2><p>The geometric meaning of the matrix is not just transformation, but the matrix also has its algebraic meaning, but for the game, it is mainly transformation. If you are interested in other meanings, you can see my other blog:</p><h3 id="What-is-transformation"><a href="#What-is-transformation" class="headerlink" title="What is transformation?"></a>What is transformation?</h3><p>Transformation refers to the process of transforming some of our data, such as points, directional vectors, or even colors, in some way.</p><p>Let’s first look at a very common type of transformation - linear transformation. Linear transformations refer to transformations that preserve vector addition and scalar multiplication, expressed in mathematical formulas:</p><script type="math/tex;mode=display">
+f(x) + f(y) = f(x + y),\\
+kf(x) = f(kx)</script><p>Scaling is a linear transformation, such as f (x) = 2 <strong>x</strong> , which can represent a uniform scaling of size 2, that is, the modulus of the transformed vector <strong>x</strong> will be magnified twice.</p><p>It can be found that f ( <strong>x</strong> ) = 2 <strong>x</strong> satisfies the above two conditions.</p><p>Similarly, rotation is a linear transformation. For linear transformation, if we want to transform a three-dimensional vector, we need a third-order matrix to represent the transformation</p><blockquote><p>Because for a three-dimensional vector, scaling is three coordinates changing the same size at the same time, and rotation is a different transformation, so three equations are needed to become a matrix, which is a matrix of order n</p></blockquote><p>Linear transformation includes rotation and scaling, but also cross-cutting, mirroring, orthogonal projection, etc.</p><p>But there is a very basic transformation that is not linear, that is, translation. We consider a translation equation, f ( <strong>x</strong> ) = <strong>x</strong> + (1,2,3), this transformation is not a linear transformation, it does not satisfy vector addition. For example, we let <strong>x</strong> = (1,1,1).</p><script type="math/tex;mode=display">
+f(x) + f(x) = (4, 6, 8),\\
+f(x + x) = (3, 4, 5)</script><p>It can be seen that the results of the two operations are different, so we cannot use a third-order matrix to represent the translation of three-dimensional coordinates.</p><p>Therefore, we propose an affine transformation, which is a linear transformation plus a translational transformation. The method is to raise one dimension and use a fourth-order matrix to represent it</p><blockquote><p>There are two questions here: first, why pursue linear transformation, second, why raise a dimension, transform and then reduce the dimension, you can translate into linear transformation</p><p>First answer the first question, from a geometric point of view, linear transformation is to transform the image to another coordinate system, and the pattern will not change before and after the transformation</p><p>As for why raising a dimension can smooth out this effect, you can take a look: <a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.zhihu.com/question/20666664">https://www.zhihu.com/question/20666664</a></p></blockquote><h3 id="Homogeneous-coordinates"><a href="#Homogeneous-coordinates" class="headerlink" title="Homogeneous coordinates"></a>Homogeneous coordinates</h3><p>When we transform the three-dimensional transformation matrix into four dimensions, we also need to convert the original three-dimensional vector into a four-dimensional vector, which is what we call homogeneous coordinates.</p><p>So how do you turn a 3D vector into homogeneous coordinates? For a point, going from 3D coordinates to homogeneous coordinates is by setting its w component to 1, and for a directional vector, its w component needs to be set to 0.</p><p>In this way, when transforming a point with a fourth-order matrix, both translational rotation and scaling will be applied to the point. However, for a vector, the effect of translation will be ignored</p><h3 id="Decomposition-base-transformation-matrix"><a href="#Decomposition-base-transformation-matrix" class="headerlink" title="Decomposition base transformation matrix"></a>Decomposition base transformation matrix</h3><p>When we use affine transformation for coordinate transformation, we use a fourth-order matrix. We can disassemble this matrix and divide it into four parts</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+M_{3 * 3} & t_{3 * 1} \\
+0_{1 * 3} & 1
+\end{bmatrix}</script><p>The upper-left third-order matrix represents rotation and scaling, and the upper-right matrix represents translation.</p><p>Next, let’s see how to use this matrix for rotation, scaling, and translation.</p><h3 id="Translation-matrix"><a href="#Translation-matrix" class="headerlink" title="Translation matrix"></a>Translation matrix</h3><p>Let’s take a look. We perform a translation operation on a point</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+1 & 0 & 0 & t_x \\
+0 & 1 & 0 & t_y \\
+0 & 0 & 1 & t_z \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z \\ 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+x + t_x \\ y + t_y \\ z + t_z \\1
+\end{bmatrix}</script><p>As you can see, we succeeded in turning the point (x, y, z) into (x + tx, y + ty, z + tz).</p><p>Let’s take a look at transforming a vector.</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+1 & 0 & 0 & t_x \\
+0 & 1 & 0 & t_y \\
+0 & 0 & 1 & t_z \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z \\ 0
+\end{bmatrix}
+=
+\begin{bmatrix}
+x \\ y \\ z \\0
+\end{bmatrix}</script><p>Translation has no effect on the vector</p><p>The Inverse Matrix of the translation matrix is obtained by reverse translation, that is:</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+1 & 0 & 0 & -t_x \\
+0 & 1 & 0 & -t_y \\
+0 & 0 & 1 & -t_z \\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><p>It can be seen that the translation matrix is not an orthogonal matrix</p><h3 id="Scaling-matrix"><a href="#Scaling-matrix" class="headerlink" title="Scaling matrix"></a>Scaling matrix</h3><p>We can scale the coordinates of a point, represented by a matrix:</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+k_x & 0 & 0 & 0 \\
+0 & k_y & 0 & 0 \\
+0 & 0 & k_z & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z \\ 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+k_xx \\ k_yy \\ k_zz \\1
+\end{bmatrix}</script><p>Scaling a vector</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+k_x & 0 & 0 & 0 \\
+0 & k_y & 0 & 0 \\
+0 & 0 & k_z & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z \\ 0
+\end{bmatrix}
+=
+\begin{bmatrix}
+k_xx \\ k_yy \\ k_zz \\0
+\end{bmatrix}</script><p>The matrix above is only suitable for scaling along the coordinate axis. If we want to scale in any direction, we need to use a composite transformation. One of the main ideas is: first transform the scaling axis into a standard coordinate axis, then apply the standard scaling seen above, and then use your transformation to get the original scaling axis direction.</p><blockquote><p>This process actually implies the content of a similar matrix. The above composite transformation is of the form P ^ {-1} AP, if P ^ {-1} AP</p></blockquote><h3 id="Rotation-matrix"><a href="#Rotation-matrix" class="headerlink" title="Rotation matrix"></a>Rotation matrix</h3><p>Rotation is the most complex of the three matrices. We know that the rotation operation requires specifying an axis of rotation, which is not necessarily a coordinate axis, but we will talk about rotating along the coordinate axis for now.</p><p>The matrix rotated around the x-axis is:</p><script type="math/tex;mode=display">
+R_x(θ) = \begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & cosθ & -sinθ & 0 \\
+0 & sinθ & cosθ & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><p>Rotate around y-axis</p><script type="math/tex;mode=display">
+R_y(θ) = \begin{bmatrix}
+cosθ & 0 & sinθ & 0 \\
+0 & 1 & 0 & 0 \\
+-sinθ & 0 & cosθ & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><p>Rotate around the z-axis:</p><script type="math/tex;mode=display">
+R_z(θ) = \begin{bmatrix}
+cosθ & -sinθ & 0 & 0 \\
+sinθ & cosθ & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><h3 id="Composite-transformation"><a href="#Composite-transformation" class="headerlink" title="Composite transformation"></a>Composite transformation</h3><p>We can combine translation, rotation, and scaling to form a complex transformation.</p><p>We use a column matrix to represent a point, scaling, rotating, and translating in turn (this order cannot be changed), which is expressed as:</p><script type="math/tex;mode=display">
+p_{new} = M_{translation}M_{rotation}M_{scale}p_{old}</script><p>The reason why this order cannot be changed is because only in this order can we get the result we want. If we translate first and then scale, it may lead to deformation</p><h2 id="Coordinate-space"><a href="#Coordinate-space" class="headerlink" title="Coordinate space"></a>Coordinate space</h2><p>Our previous article said that the function of the vertex shader is to convert the vertex coordinates on the model to homogeneous coordinates. The process of game rendering is actually the process of converting points on the model into points on the screen through layers.</p><h3 id="Transformation-matrix-of-coordinate-space"><a href="#Transformation-matrix-of-coordinate-space" class="headerlink" title="Transformation matrix of coordinate space"></a>Transformation matrix of coordinate space</h3><p>To define a coordinate space, we must specify its origin and the positions of its three coordinate axes.</p><p>And these, in fact, are relative to another coordinate system, that is to say, all coordinate spaces are relative, and each coordinate space is a subspace of another coordinate space.</p><p>Assuming that we now have a parent coordinate space P and a child coordinate space C, we know that in the P coordinate space, the origin of C and the directions of the three coordinate axes, we generally have two requirements, one is to change the C coordinate space The point Ac becomes Ap in the P coordinate space, and the second is the other way around.</p><p>We can represent this process with two matrix transformations:</p><script type="math/tex;mode=display">
+A_p = M_{c->p}A_c\\
+A_c = M_{p->c}A_p</script><p>The above two matrices represent the transformation from C to P and the transformation from P to C, which are Inverse Matrices, so how should we solve for these two matrices?</p><p>We can understand from a geometric point of view that the coordinates of a point are (a, b, c), which means that the point has moved a, b, c three units along the x, y, and z axes from the origin.</p><p>In the same way, if Ac is (a, b, c), then from the origin Oc of C, three units a, b, c have been moved along the x, y, and z axes, respectively.</p><p>So if you look at it from the perspective of P, this point first moves from the origin Op of P to Oc, and then moves from Oc to Ac.</p><p>This process is expressed in a formula:</p><script type="math/tex;mode=display">
+\mathbf A_p = \mathbf O_c + a\mathbf x_c + b\mathbf y_c + c\mathbf z_c</script><p>And our transformation matrix is hidden in this equation, expressed as a matrix:</p><script type="math/tex;mode=display">
+\mathbf A_p = 
+\mathbf O_c
++
+\begin{bmatrix}
+\mathbf x_c & \mathbf y_c & \mathbf  z_c
+\end{bmatrix}
+\begin{bmatrix}
+a \\ b \\c
+\end{bmatrix} \\
+= 
+\begin{bmatrix}
+x_{oc} & y_{oc} & z_{oc}
+\end{bmatrix}
++
+\begin{bmatrix}
+x_{xc} & x_{yc} & x_{zc} \\
+y _ {xc} & y _ {yc} & y _ {zc}\
+z_ {xc} & z_ {yc} & z_ {zc}\\
+\end{bmatrix}
+\begin{bmatrix}
+a \\ b \\c
+\end{bmatrix}</script><p>Then we convert it into a homogeneous coordinate representation:</p><script type="math/tex;mode=display">
+\mathbf A_p 
+= 
+\begin{bmatrix}
+x_{oc} & y_{oc} & z_{oc} & 1
+\end{bmatrix}
++
+\begin{bmatrix}
+x_{xc} & x_{yc} & x_{zc} & 0 \\
+y _ {xc} & y _ {yc} & y _ {zc} & 0\
+z_ {xc} & z_ {yc} & z_ {zc} & 0\\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+a \\ b \\c \\ 1
+\end{bmatrix} \\
+=
+\begin{bmatrix}
+1 & 0 & 0 & x_{oc} \\
+0 & 1 & 0 & y_{oc} \\
+0 & 0 & 1 & z_{oc} \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+x_{xc} & x_{yc} & x_{zc} & 0 \\
+y _ {xc} & y _ {yc} & y _ {zc} & 0\
+z_ {xc} & z_ {yc} & z_ {zc} & 0\\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+a \\ b \\c \\ 1
+\end{bmatrix} \\
+=
+\begin{bmatrix}
+x_{xc} & x_{yc} & x_{zc} & x_{oc} \\
+y _ {xc} & y _ {yc} & y _ {zc} & y _ {oc}\
+z_ {xc} & z_ {yc} & z_ {zc} & z_ {oc}\\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+a \\ b \\c \\ 1
+\end{bmatrix} \\</script><p>Then our transformation matrix is</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+x_{xc} & x_{yc} & x_{zc} & x_{oc} \\
+y _ {xc} & y _ {yc} & y _ {zc} & y _ {oc}\
+z_ {xc} & z_ {yc} & z_ {zc} & z_ {oc}\\
+0 & 0 & 0 & 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+| & | & | & 0 \\
+\mathbf x_c & \mathbf y_c & \mathbf z_c & \mathbf O_c \\
+| & | & | & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><h3 id="Model-space"><a href="#Model-space" class="headerlink" title="Model space"></a>Model space</h3><p>Model space, also known as local space or object space, each model has an independent coordinate space. When the model rotates, the coordinate space also rotates together.</p><p>In model space, we often use the natural direction of up, down, left, right, front, back and forth.</p><p>Since Unity uses a left-handed coordinate system, in model space, the positive directions of the coordinate axes of x, y, and z are the right, up, and forward directions of the model, respectively.</p><p>The origin and axes of the model space are set by the artist in the modeling software. When imported into Unity, we can access the vertex information of the model in the vertex shader, which contains the coordinates of each vertex, which are relative to the coordinate space of the model space.</p><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262453/origin-of-ray/image-20220219131920494_trfzim.png" alt="image-20220219131920494"></p><h3 id="World-space"><a href="#World-space" class="headerlink" title="World space"></a>World space</h3><p>This space is the maximum space of the game, the so-called maximum is a macro concept, referring to the most peripheral space that the game can reach.</p><p>World space can be used to describe absolute position. Of course, position is relative, but here we define the position in the world space coordinate system as absolute position.</p><p>In Unity, the world space is also left-handed, but its coordinate axis is fixed.</p><p>In Unity, we can adjust the Transform property to change the position of the object relative to the parent object, or if there is no parent object, then relative to world space.</p><h4 id="Model-Transformation-From-Model-Space-to-World-Space"><a href="#Model-Transformation-From-Model-Space-to-World-Space" class="headerlink" title="Model Transformation: From Model Space to World Space"></a>Model Transformation: From Model Space to World Space</h4><p>Suppose there is a GameObject in our world space, and the three properties of its Transform component, Position, Rotation and Scale, are respectively, (5, 0, 25), (0, 150, 0) and (2, 2, 2), then according to the affine transformation matrix of the coordinate space we mentioned earlier is:</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+1 & 0 & 0 & t_x \\
+0 & 1 & 0 & t_y \\
+0 & 0 & 1 & t_z \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+cosθ & 0 & sinθ & 0 \\
+0 & 1 & 0 & 0 \\
+-sinθ & 0 & cosθ & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+k_x & 0 & 0 & 0 \\
+0 & k_y & 0 & 0 \\
+0 & 0 & k_z & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\\=
+\begin{bmatrix}
+1 & 0 & 0 & 5 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 25 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+-0.886 & 0 & 0.5 & 0 \\
+0 & 1 & 0 & 0 \\
+-0.5 & 0 & -0.886 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+2 & 0 & 0 & 0 \\
+0 & 2 & 0 & 0 \\
+0 & 0 & 2 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\\=
+\begin{bmatrix}
+-1.732 & 0 & 1 & 5 \\
+0 & 2 & 0 & 0\\
+-1 & 0 & -1.732 & 25 \\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><p>Next, we can make this affine transformation matrix for the coordinates of each point in the model to perform spatial transformation.</p><blockquote><p>There may be doubts here. The idea of solving this transformation matrix is different from the transformation matrix of coordinate space we just talked about. It is more like the basic transformation matrix we talked about at the beginning.</p><p>In fact, we think about it, the results of these two are the same. According to the idea of the coordinate space transformation matrix, we must first obtain the representation of the coordinate system of the model space in the world space according to the Transform attribute, and then obtain the transformation matrix. The results of the two are the same. The following is the way we solve the observation transformation matrix.</p></blockquote><h3 id="Observation-space"><a href="#Observation-space" class="headerlink" title="Observation space"></a>Observation space</h3><p>Observation space is also called camera space. Observation space can be considered a special case of model space. The camera is a very special model among all models. Its model space is worth discussing separately.</p><p>Camera space determines the perspective we use to render the game. In observation space, the camera is located at the origin, and its coordinate axis is arbitrary. In Untiy, the observation space x-axis points to the right, the y-axis points up, and the z-axis points to the rear of the camera, which is different from model space and world space., because the camera space takes a right-handed coordinate system, which is aligned with the OpenGL tradition.</p><h4 id="Observation-Transformation-From-World-Space-to-Observation-Space"><a href="#Observation-Transformation-From-World-Space-to-Observation-Space" class="headerlink" title="Observation Transformation: From World Space to Observation Space"></a>Observation Transformation: From World Space to Observation Space</h4><p>In the previous step, we obtained the coordinates of the points on the model in world space through the model transformation. Now we need to transform these coordinates into the observation space. In order to obtain the transformation matrix of our step, we can have two methods:</p><p>Construct the transformation matrix from observation space to world space, and then solve its Inverse Matrix, which is the transformation matrix from world space to observation space.</p><ul><li>Imagine translating the entire observation space, coinciding its origin with the origin of world space, and the coordinate axes also coincide separately.</li></ul><p>The first method is our previous method, let’s try the second method now</p><p>Assuming that the Transform property of the camera indicates that the camera rotates first by (30, 0, 0) in the world coordinate space, and then translates by (0, 10, -10), then in order to move the camera back to the initial state, what to do is to first translate back according to (0, -10, 10), and then rotate back (-30, 0, 0), expressed as a transformation matrix:</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & cosθ & -sinθ & 0 \\
+0 & sinθ & cosθ & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & 0 & 0 & t_x \\
+0 & 1 & 0 & t_y \\
+0 & 0 & 1 & t_z \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\\ =
+\begin{bmatrix}
+1 & 0 & 0 & 0\\
+0 & 0.886 & 0.5 & 0\\
+0 & -0.5 & 0.886 & 0\\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & -10\\
+0 & 0 & 0 & 10\\
+0 & 0 & 0 & 1
+\end{bmatrix}
+\\=
+\begin{bmatrix}
+1 & 0 & 0 & 0\\
+0 & 0.886 & 0.5 & -3.66\\
+0 & -0.5 & 0.886 & 13.66\\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><p>Then because our camera is right-handed, we invert all z components, so our final transformation matrix is:</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+1 & 0 & 0 & 0\\
+0 & 0.886 & 0.5 & -3.66\\
+0 & 0.5 & -0.886 & -13.66\\
+0 & 0 & 0 & 1
+\end{bmatrix}</script><h3 id="Cutting-space"><a href="#Cutting-space" class="headerlink" title="Cutting space"></a>Cutting space</h3><p>The clipping space, also called the homogeneous clipping space, and the matrix used for transformation is called the clipping matrix, also called the projection matrix.</p><p>The goal of clipping space is to make it easy to crop the render graph elements. The elements completely located in the space will be retained, the elements completely located outside the space will be eliminated, and the elements partially located in the space will be cropped. How is the scope defined? The answer is the visual cone.</p><p>An optic cone is an area of space that determines the amount of space the camera can see. The optic cone consists of six planes, also known as the crop plane.</p><p>There are two types of cones, one is orthogonal projection and the other is perspective projection.</p><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262453/origin-of-ray/image-20220219154848985_jc5xfi.png" alt="image-20220219154848985"></p><p>Two of the six crop planes are special, called the near crop plane and the far crop plane, which determine the depth of space that the camera can see</p><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262453/origin-of-ray/image-20220219155014022_m3jm22.png" alt="image-20220219155014022"></p><p>It can be seen that the visual cone of perspective projection is a pyramid shape, and the four cutting planes on the side intersect at the position of the camera. The orthogonal projection of the visual cone is a rectangular parallelepiped, and we hope to crop according to the scope of the visual cone, but if the space defined by the visual cone is directly used for cutting, then different visual cones will require different processing procedures, and for the visual cone of perspective projection, it is troublesome to judge whether a vertex is inside a pyramid. So we wanted to do the cropping in a more general, convenient, and neat way, by using a projection to transform the vertices into a cropping space.</p><p>The projection matrix has two purposes:</p><ul><li>Prepare for projection. This is a confusing point. Although it is called a projection matrix, it does not perform real projection work. It is preparing for projection. The real projection is the homogeneous division behind it. After the projection transformation, the w component has a special meaning.</li><li>Scaling x, y, z, we said above that it is more troublesome to directly use the six clipping planes of the visual cone for clipping, but after the projection matrix, we can directly judge whether the x, y, z components are in the w component.</li></ul><h4 id="Perspective-projection"><a href="#Perspective-projection" class="headerlink" title="Perspective projection"></a>Perspective projection</h4><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262453/origin-of-ray/image-20220219161801470_e7qfin.png" alt="image-20220219161801470"></p><p>We can change the opening angle of the viewing cone through FOV (Field of View), and the Near and Far properties in Clipping Planes control the distance between the main and far clipping planes of the near clipping bottle, which can calculate the height of the near clipping plane and the far clipping plane:</p><script type="math/tex;mode=display">
+nearClipPlaneHeight = 2 * Near * tan \frac {FOV}2\\
+farClipPlaneHeight = 2 * Far * tan \frac {FOV}2\\</script><p>Now we still lack the horizontal information, this can be obtained by the aspect ratio of the camera, in Unity, the aspect ratio of a camera is determined by the W and H in the View Port, assuming that our current aspect ratio is Aspect, then:</p><script type="math/tex;mode=display">
+nearClipWidth = nearClipHeight * Aspect\\
+farClipWidth = farClipHeight * Aspect\\</script><p>Then we can get the perspective projection matrix:</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+\frac {cot\frac{FOV}2}{Aspect} & 0 & 0 & 0\\
+0 & cot\frac{FOV}2 & 0 & 0\\
+0 & 0 & -\frac{Far + Near}{Far -Near} & -\frac{2*Far*Near}{Far -Near}\\
+0 & 0 & -1 & 0
+\end{bmatrix}</script><p>After we use this matrix to transform the point in space:</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+\frac {cot\frac{FOV}2}{Aspect} & 0 & 0 & 0\\
+0 & cot\frac{FOV}2 & 0 & 0\\
+0 & 0 & -\frac{Far + Near}{Far -Near} & -\frac{2*Far*Near}{Far -Near}\\
+0 & 0 & -1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z \\ 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+x\frac {cot\frac{FOV}2}{Aspect}\\
+ycot\frac{FOV}2\\
+-z\frac{Far + Near}{Far -Near}-\frac{2*Far*Near}{Far -Near}\\
+-z
+\end{bmatrix}</script><p>This matrix is built on the basis that Unity’s observation space is right-handed. Using this matrix to right-multiply the column matrix, the transformed z component will be between [-w, w].</p><p>As can be seen from the results, the matrix is scaled for the x and y components, and scaled and translated for the z component.</p><p>At this point, how do we determine whether a point is in the cone?</p><script type="math/tex;mode=display">
+-w\ le x\ le w\\
+-w\ le y\ le w\\
+-w\ le z\ le w\\</script><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262453/origin-of-ray/image-20220219163629618_bkbyon.png" alt="image-20220219163629618"></p><p>It should also be noted that after cutting the matrix, the space will change from right-handed to left-handed.</p><h4 id="Orthogonal-projection"><a href="#Orthogonal-projection" class="headerlink" title="Orthogonal projection"></a>Orthogonal projection</h4><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262452/origin-of-ray/image-20220219164211803_bqddc1.png" alt="image-20220219164211803"></p><p>Orthogonal video cone is a rectangular parallelepiped, we can change the Size property to change half of the vertical height of the viewing cone, and the Near and Far properties of Cliping Plane control the distance between the near and far cutting planes, that is</p><script type="math/tex;mode=display">
+farClipPlaneHeight = nearClipPlaneHeight = 2 * Size</script><p>The width of the apparent cone can be obtained by the aspect ratio</p><script type="math/tex;mode=display">
+nearClipPlaneWidth = Aspect * nearClipPlaneHeight</script><p>Then the orthogonal projection matrix (clipping matrix) is:</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+\frac {1}{Aspect * Size} & 0 & 0 & 0 \\
+0 & \frac{1}{Size} & 0 & 0\\
+0&0&-\frac{2}{Far-Near}&-\frac{Far+Near}{Far-Near}\\
+0&0&0&1
+\end{bmatrix}</script><p>Spatial transformation of points using this matrix:</p><script type="math/tex;mode=display">
+\begin{bmatrix}
+\frac {1}{Aspect * Size} & 0 & 0 & 0 \\
+0 & \frac{1}{Size} & 0 & 0\\
+0&0&-\frac{2}{Far-Near}&-\frac{Far+Near}{Far-Near}\\
+0&0&0&1
+\end{bmatrix}
+\begin{bmatrix}
+x\\y\\z\\1
+\end{bmatrix}
+=
+\begin{bmatrix}
+\frac {x}{Aspect * Size} \\ \frac{y}{Size} \\-\frac{2z}{Far-Near}-\frac{Far+Near}{Far-Near}\\1
+\end{bmatrix}</script><p>Note that in the perspective matrix of orthogonal projection, the w component is still 1.</p><p>The way to determine whether a point is in an orthogonal projection is the same as a perspective projection, and this is why we need to deal with this projection transformation</p><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262455/origin-of-ray/image-20220219165154409_tct88z.png" alt="image-20220219165154409"></p><h3 id="Screen-space"><a href="#Screen-space" class="headerlink" title="Screen space"></a>Screen space</h3><p>After the projection matrix transformation, we can crop, after the cutting work is completed, we can start the real projection, that is, the point in the cone is projected onto the screen, after this step, we will get the real pixel position.</p><p>The screen has a two-dimensional space, so we must project the vertices from the clipping space into the screen space to generate the corresponding 2D coordinates.</p><p>First, we need to perform the standard homogeneous division, that is, <strong>perspective division</strong> , that is, divide x, y, z by the w component, respectively. In OpenGL, we call the coordinates obtained in this step Normalized Device Coordinate (NDC).</p><p>After this step, the clipping space of the perspective projection will become a cube. According to the OpenGL tradition, the x, y, and z components of this cube are all in the range [-1, 1], and DirectX is [0, 1], while the clipping space of the orthogonal projection itself is a cube, and its w component is 1, which will not have any effect on x, y, z.</p><p>Now all we have to do is to project the coordinates in this NDC to the screen. In Unity, the pixel coordinates in the lower left corner of the screen are (0,0), and the coordinates in the upper right corner are (pixelWidth, pixelHeight). Since the range of the current coordinates is [-1,1], so we need to scale.</p><p>The formulas for homogeneous division and scaling together are:</p><script type="math/tex;mode=display">
+screen_x = \frac{clip_x * pixelWidth}{2 * clip_w}+\frac{pixelWidth}{2}\\
+screen_y = \frac{clip_y * pixelWidth}{2 * clip_w}+\frac{pixelHeight}{2}\\</script><p>Only the x and y components were mentioned above, because the screen is a two-dimensional space, so what about the z component? Usually, the z component is used for depth buffers</p><h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1645262454/origin-of-ray/image-20220219171351249_jjto0p.png" alt="image-20220219171351249"></p></div><footer class="post-footer"><div class="post-copyright"><ul><li class="post-copyright-author"> <strong>Post author:</strong> Ray Sun</li><li class="post-copyright-link"> <strong>Post link:</strong> <a href="https://sunra.top/en/2022/02/18/unity-render-pipeline-3/" title="Unity Rendering Principle (3) Rendering Pipeline - From Point on Model to Point on Screen (Matrix Edition)">https://sunra.top/en/2022/02/18/unity-render-pipeline-3/</a></li><li class="post-copyright-license"> <strong>Copyright Notice:</strong> All articles in this blog are licensed under<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noopener noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i> BY-NC-SA</a> unless stating additionally.</li></ul></div><div class="followme"> <span>Welcome to my other publishing channels</span><div class="social-list"><div class="social-item"><span class="social-link"><span class="icon"><i class="fab fa-weixin"></i></span> <span class="label">WeChat</span></span> <img class="social-item-img" src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1685836114/origin-of-ray/wechat_channel_zmg0hw.jpg"></div><div class="social-item"><a target="_blank" class="social-link" href="/en/atom.xml"><span class="icon"><i class="fa fa-rss"></i></span> <span class="label">RSS</span></a></div></div></div><div class="post-nav"><div class="post-nav-item"><a href="/en/2022/02/12/meaning-of-matrix/" rel="prev" title="Algebraic and Geometric Significance of Matrix Operations"><i class="fa fa-chevron-left"></i> Algebraic and Geometric Significance of Matrix Operations</a></div><div class="post-nav-item"> <a href="/en/2022/02/26/computer-construction-1-introduction/" rel="next" title="Computer Composition (1) Computer Overview">Computer Composition (1) Computer Overview<i class="fa fa-chevron-right"></i></a></div></div></footer></article></div><div class="comments" id="waline"></div></div></main><footer class="footer"><div class="footer-inner"><div class="copyright"> &copy; <span itemprop="copyrightYear">2023</span><span class="with-love"><i class="fa fa-heart"></i></span> <span class="author" itemprop="copyrightHolder">Ray Sun</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" rel="external nofollow noopener noreferrer" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="external nofollow noopener noreferrer" target="_blank">NexT.Muse</a></div></div></footer><div class="toggle sidebar-toggle" role="button"><span class="toggle-line"></span><span class="toggle-line"></span><span class="toggle-line"></span></div><div class="sidebar-dimmer"></div><div class="back-to-top" role="button" aria-label="Back to top"><i class="fa fa-arrow-up fa-lg"></i> <span>0%</span></div><noscript><div class="noscript-warning">Theme NexT works best with JavaScript enabled</div></noscript><script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script><script src="/en/js/comments.js"></script><script src="/en/js/utils.js"></script><script src="/en/js/motion.js"></script><script src="/en/js/schemes/muse.js"></script><script src="/en/js/next-boot.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script><script src="/en/js/third-party/search/local-search.js"></script><script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script><script src="/en/js/third-party/math/mathjax.js"></script><script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://blog-comments-3w44.vercel.app/","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"欢迎大家交流学习","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/en/2022/02/18/unity-render-pipeline-3/"}</script><link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css"><script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script></body></html>
