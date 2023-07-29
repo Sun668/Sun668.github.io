@@ -1630,10 +1630,6 @@ pre code {
   border-bottom: 0;
   color: var(--link-color);
 }
-.posts-collapse .post-content .post-title .fa {
-  font-size: 0.875em;
-  margin-left: 5px;
-}
 .posts-collapse .post-content::before {
   background: #f5f5f5;
   content: ' ';
@@ -1729,7 +1725,6 @@ pre code {
   font-size: 0.875em;
   margin-left: 4px;
 }
-.post-body .image-caption,
 .post-body img + figcaption,
 .post-body .fancybox + figcaption {
   color: #999;
@@ -2527,7 +2522,7 @@ header.header {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #11ffe0;
+  background: #ff867f;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
