@@ -1,57 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>ARP病毒原理及防御</title>
-    <url>/posts/dfdf7442/</url>
-    <content><![CDATA[<p>ARP病毒原理及防御以及如何快速定位ARP病毒源。</p>
-<span id="more"></span>
-<h2 id="arp协议"><a class="markdownIt-Anchor" href="#arp协议"></a> ARP协议</h2>
-<p>ARP协议（address resolution protocol）地址解析协议</p>
-<p>一台主机和另一台主机通信，要知道目标的IP地址，但是在局域网中传输数据的网卡却不能直接识别IP地址，所以用ARP解析协议将IP地址解</p>
-<p>析成MAC地址。ARP协议的基本功能就是通过目标设备的IP地址，来查询目标设备的mac地址。</p>
-<p>在局域网的任意一台主机中，都有一个ARP缓存表，里面保存本机已知的此局域网中各主机和路由器的IP地址和MAC地址的对照关系。ARP缓存</p>
-<p>表的生命周期是有时限的（一般不超过20分钟）。</p>
-<p>假设局域网中有A,B,C,D四台主机</p>
-<p>主机A想和主机B通信</p>
-<p>主机A会先查询自己的ARP缓存表里有没有B的联系方式，有的话，就将mac-b地址封装到数据包外面，发送出去。没有的话，A会向全网络发送一个</p>
-<p>ARP广播包，大声询问：我的IP地址是192.168.0.2，硬件地址是mac-a，我想知道IP地址是192.168.0.3的硬件地址是多少？   此时，局域网内所有</p>
-<p>主机都收到了，B收到后会单独私密回应：我是192.168.0.3，我的硬件地址是mac-b，其他主机不会理A的</p>
-<p>此时A知道了B的信息，同时也会动态的更新自身的缓存表</p>
-<h3 id="缺陷"><a class="markdownIt-Anchor" href="#缺陷"></a> 缺陷</h3>
-<p>ARP协议是建立在信任局域网内所有节点的基础上的，他的效率很高。但是不安全。它是无状态的协议。他不会检查自己是否发过请求包，</p>
-<p>也不知道自己是否发过请求包。他也不管是否合法的应答，只要收到目标mac地址是自己的ARP reply或者ARP广播包（包括ARP reply和ARP request），</p>
-<p>都会接受并缓存。</p>
-<h2 id="arp攻击原理"><a class="markdownIt-Anchor" href="#arp攻击原理"></a> ARP攻击原理</h2>
-<p>ARP欺骗攻击建立在局域网主机间相互信任的基础上的</p>
-<p>当A发广播询问：我想知道IP是192.168.0.3的硬件地址是多少？</p>
-<p>此时B当然会回话：我是IP192.168.0.3我的硬件地址是mac-b，</p>
-<p>可是此时IP地址是192.168.0.4的C也非法回了：我是IP192.168.0.3,我的硬件地址是mac-c。而且是大量的。</p>
-<p>所以A就会误信192.168.0.3的硬件地址是mac-c，而且动态更新缓存表</p>
-<p>这样主机C就劫持了主机A发送给主机B的数据，这就是ARP欺骗的过程。</p>
-<p>假如C直接冒充网关，此时主机C会不停的发送ARP欺骗广播，大声说：我的ＩＰ是１９２.１６８.０.１，我的硬件地址是ｍａｃ－ｃ，</p>
-<p>此时局域网内所有主机都被欺骗，更改自己的缓存表，此时Ｃ将会监听到整个局域网发送给互联网的数据报。</p>
-<h2 id="如何快速找到病毒源"><a class="markdownIt-Anchor" href="#如何快速找到病毒源"></a> 如何快速找到病毒源</h2>
-<h3 id="使用sniffer抓包"><a class="markdownIt-Anchor" href="#使用sniffer抓包"></a> 使用Sniffer抓包</h3>
-<p>在网络内任意一台主机上运行抓包软件，捕获所有到达本机的数据包。如果发现有某个IP不断发送请求包，那么这台电脑一般就是病毒源。原理：无论何种ARP病毒变种，行为方式有两种，一是欺骗网关，二是欺骗网内的所有主机。</p>
-<h3 id="使用arp-a命令"><a class="markdownIt-Anchor" href="#使用arp-a命令"></a> 使用arp -a命令</h3>
-<p>任意选两台不能上网的主机，在DOS命令窗口下运行arp -a命令。例如在结果中，两台电脑除了网关的IP，MAC地址对应项，都包含了192.168.0.186的这个IP，则可以断定192.168.0.186这台主机就是病毒源。原理：一般情况下，网内的主机只和网关通信。</p>
-<h3 id="使用tracert命令"><a class="markdownIt-Anchor" href="#使用tracert命令"></a> 使用tracert命令</h3>
-<p>在任意一台受影响的主机上，在DOS命令窗口下运行如下命令：tracert 61.135.179.148。　假定设置的缺省网关为10.8.6.1，在跟踪一个外网地址时，第一跳却是10.8.6.186，那么，10.8.6.186就是病毒源。原理：中毒主机在受影响主机和网关之间，扮演了“中间人”的角色。所有本应该到达网关的数据包，由于错误的MAC地址，均被发到了中毒主机。此时，中毒主机越俎代庖，起了缺省网关的作用。</p>
-<h2 id="arp防御"><a class="markdownIt-Anchor" href="#arp防御"></a> ARP防御</h2>
-<h3 id="arp双向绑定"><a class="markdownIt-Anchor" href="#arp双向绑定"></a> ARP双向绑定</h3>
-<p>在pc端上 IP+mac 绑定</p>
-<p>在网络设备（交换路由）上 采用ip+mac+端口绑定</p>
-<p>网关也进行IP和mac的静态绑定</p>
-<h3 id="建立dhcp服务器"><a class="markdownIt-Anchor" href="#建立dhcp服务器"></a> 建立DHCP服务器</h3>
-<p>ARP攻击一般先攻击网关，将DHCP服务器建立在网关上</p>
-<h3 id="划分安全区域"><a class="markdownIt-Anchor" href="#划分安全区域"></a> 划分安全区域</h3>
-<p>ARP广播包是不能跨子网或网段传播的，网段可以隔离广播包。VLAN就是一个逻辑广播域，通过VLAN技术可以在局域网中创建多个子网，就在局域网中隔离了广播,缩小感染范围。</p>
-]]></content>
-      <categories>
-        <category>Network</category>
-      </categories>
-  </entry>
-  <entry>
     <title>非对称加密原理探索</title>
     <url>/posts/a515898/</url>
     <content><![CDATA[<p>今天阅读https原理的时候，发现它采用了非对称加密的知识，于是去探索了一下非对称加密的基本原理。</p>
@@ -167,6 +116,161 @@ B给A回信时，采用了数字签名的方式<br />
 ]]></content>
       <categories>
         <category>Sundry</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>ARP病毒原理及防御</title>
+    <url>/posts/dfdf7442/</url>
+    <content><![CDATA[<p>ARP病毒原理及防御以及如何快速定位ARP病毒源。</p>
+<span id="more"></span>
+<h2 id="arp协议"><a class="markdownIt-Anchor" href="#arp协议"></a> ARP协议</h2>
+<p>ARP协议（address resolution protocol）地址解析协议</p>
+<p>一台主机和另一台主机通信，要知道目标的IP地址，但是在局域网中传输数据的网卡却不能直接识别IP地址，所以用ARP解析协议将IP地址解</p>
+<p>析成MAC地址。ARP协议的基本功能就是通过目标设备的IP地址，来查询目标设备的mac地址。</p>
+<p>在局域网的任意一台主机中，都有一个ARP缓存表，里面保存本机已知的此局域网中各主机和路由器的IP地址和MAC地址的对照关系。ARP缓存</p>
+<p>表的生命周期是有时限的（一般不超过20分钟）。</p>
+<p>假设局域网中有A,B,C,D四台主机</p>
+<p>主机A想和主机B通信</p>
+<p>主机A会先查询自己的ARP缓存表里有没有B的联系方式，有的话，就将mac-b地址封装到数据包外面，发送出去。没有的话，A会向全网络发送一个</p>
+<p>ARP广播包，大声询问：我的IP地址是192.168.0.2，硬件地址是mac-a，我想知道IP地址是192.168.0.3的硬件地址是多少？   此时，局域网内所有</p>
+<p>主机都收到了，B收到后会单独私密回应：我是192.168.0.3，我的硬件地址是mac-b，其他主机不会理A的</p>
+<p>此时A知道了B的信息，同时也会动态的更新自身的缓存表</p>
+<h3 id="缺陷"><a class="markdownIt-Anchor" href="#缺陷"></a> 缺陷</h3>
+<p>ARP协议是建立在信任局域网内所有节点的基础上的，他的效率很高。但是不安全。它是无状态的协议。他不会检查自己是否发过请求包，</p>
+<p>也不知道自己是否发过请求包。他也不管是否合法的应答，只要收到目标mac地址是自己的ARP reply或者ARP广播包（包括ARP reply和ARP request），</p>
+<p>都会接受并缓存。</p>
+<h2 id="arp攻击原理"><a class="markdownIt-Anchor" href="#arp攻击原理"></a> ARP攻击原理</h2>
+<p>ARP欺骗攻击建立在局域网主机间相互信任的基础上的</p>
+<p>当A发广播询问：我想知道IP是192.168.0.3的硬件地址是多少？</p>
+<p>此时B当然会回话：我是IP192.168.0.3我的硬件地址是mac-b，</p>
+<p>可是此时IP地址是192.168.0.4的C也非法回了：我是IP192.168.0.3,我的硬件地址是mac-c。而且是大量的。</p>
+<p>所以A就会误信192.168.0.3的硬件地址是mac-c，而且动态更新缓存表</p>
+<p>这样主机C就劫持了主机A发送给主机B的数据，这就是ARP欺骗的过程。</p>
+<p>假如C直接冒充网关，此时主机C会不停的发送ARP欺骗广播，大声说：我的ＩＰ是１９２.１６８.０.１，我的硬件地址是ｍａｃ－ｃ，</p>
+<p>此时局域网内所有主机都被欺骗，更改自己的缓存表，此时Ｃ将会监听到整个局域网发送给互联网的数据报。</p>
+<h2 id="如何快速找到病毒源"><a class="markdownIt-Anchor" href="#如何快速找到病毒源"></a> 如何快速找到病毒源</h2>
+<h3 id="使用sniffer抓包"><a class="markdownIt-Anchor" href="#使用sniffer抓包"></a> 使用Sniffer抓包</h3>
+<p>在网络内任意一台主机上运行抓包软件，捕获所有到达本机的数据包。如果发现有某个IP不断发送请求包，那么这台电脑一般就是病毒源。原理：无论何种ARP病毒变种，行为方式有两种，一是欺骗网关，二是欺骗网内的所有主机。</p>
+<h3 id="使用arp-a命令"><a class="markdownIt-Anchor" href="#使用arp-a命令"></a> 使用arp -a命令</h3>
+<p>任意选两台不能上网的主机，在DOS命令窗口下运行arp -a命令。例如在结果中，两台电脑除了网关的IP，MAC地址对应项，都包含了192.168.0.186的这个IP，则可以断定192.168.0.186这台主机就是病毒源。原理：一般情况下，网内的主机只和网关通信。</p>
+<h3 id="使用tracert命令"><a class="markdownIt-Anchor" href="#使用tracert命令"></a> 使用tracert命令</h3>
+<p>在任意一台受影响的主机上，在DOS命令窗口下运行如下命令：tracert 61.135.179.148。　假定设置的缺省网关为10.8.6.1，在跟踪一个外网地址时，第一跳却是10.8.6.186，那么，10.8.6.186就是病毒源。原理：中毒主机在受影响主机和网关之间，扮演了“中间人”的角色。所有本应该到达网关的数据包，由于错误的MAC地址，均被发到了中毒主机。此时，中毒主机越俎代庖，起了缺省网关的作用。</p>
+<h2 id="arp防御"><a class="markdownIt-Anchor" href="#arp防御"></a> ARP防御</h2>
+<h3 id="arp双向绑定"><a class="markdownIt-Anchor" href="#arp双向绑定"></a> ARP双向绑定</h3>
+<p>在pc端上 IP+mac 绑定</p>
+<p>在网络设备（交换路由）上 采用ip+mac+端口绑定</p>
+<p>网关也进行IP和mac的静态绑定</p>
+<h3 id="建立dhcp服务器"><a class="markdownIt-Anchor" href="#建立dhcp服务器"></a> 建立DHCP服务器</h3>
+<p>ARP攻击一般先攻击网关，将DHCP服务器建立在网关上</p>
+<h3 id="划分安全区域"><a class="markdownIt-Anchor" href="#划分安全区域"></a> 划分安全区域</h3>
+<p>ARP广播包是不能跨子网或网段传播的，网段可以隔离广播包。VLAN就是一个逻辑广播域，通过VLAN技术可以在局域网中创建多个子网，就在局域网中隔离了广播,缩小感染范围。</p>
+]]></content>
+      <categories>
+        <category>Network</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>HSTS</title>
+    <url>/posts/3daba739/</url>
+    <content><![CDATA[<h3 id="缘起启用https也不够安全"><a class="markdownIt-Anchor" href="#缘起启用https也不够安全"></a> 缘起：启用HTTPS也不够安全</h3>
+<p>有不少网站只通过HTTPS对外提供服务，但用户在访问某个网站的时候，在浏览器里却往往直接输入网站域名（例如<a href="https://link.zhihu.com/?target=http%3A//www.example.com">Example Domain</a>），而不是完整的URL（例如<a href="https://link.zhihu.com/?target=https%3A//www.example.com">Example Domain</a>），不过浏览器依然能正确的使用HTTPS发起请求。这背后多亏了服务器和浏览器的协作，如下图所示。</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215200744_st7ygu.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/微信截图_20201215200744_st7ygu.png" /></p>
+<p>图1：服务器和浏览器在背后帮用户做了很多工作</p>
+<p>简单来讲就是，浏览器向网站发起一次HTTP请求，在得到一个重定向响应后，发起一次HTTPS请求并得到最终的响应内容。所有的这一切对用户而言是完全透明的，所以在用户看来，在浏览器里直接输入域名却依然可以用HTTPS协议和网站进行安全的通信，是个不错的用户体验。</p>
+<p>一切看上去都是那么的完美，但其实不然，由于在建立起HTTPS连接之前存在一次明文的HTTP请求和重定向（上图中的第1、2步），使得攻击者可以以中间人的方式劫持这次请求，从而进行后续的攻击，例如窃听数据、篡改请求和响应、跳转到钓鱼网站等。</p>
+<span id="more"></span>
+<p>以劫持请求并跳转到钓鱼网站为例，其大致做法如下图所示：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034304/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201136_l7n9kr.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034304/origin-of-ray/微信截图_20201215201136_l7n9kr.png" /></p>
+<p>图2：劫持HTTP请求，阻止HTTPS连接，并进行钓鱼攻击</p>
+<ul>
+<li>第1步：浏览器发起一次明文HTTP请求，但实际上会被攻击者拦截下来</li>
+<li>第2步：攻击者作为代理，把当前请求转发给钓鱼网站</li>
+<li>第3步：钓鱼网站返回假冒的网页内容</li>
+<li>第4步：攻击者把假冒的网页内容返回给浏览器</li>
+</ul>
+<p>这个攻击的精妙之处在于，攻击者直接劫持了HTTP请求，并返回了内容给浏览器，根本不给浏览器同真实网站建立HTTPS连接的机会，因此浏览器会误以为真实网站通过HTTP对外提供服务，自然也就不会向用户报告当前的连接不安全。于是乎攻击者几乎可以神不知鬼不觉的对请求和响应动手脚。</p>
+<h3 id="解决之道使用hsts"><a class="markdownIt-Anchor" href="#解决之道使用hsts"></a> 解决之道：使用HSTS</h3>
+<p>既然建立HTTPS连接之前的这一次HTTP明文请求和重定向有可能被攻击者劫持，那么解决这一问题的思路自然就变成了如何避免出现这样的HTTP请求。我们期望的浏览器行为是，当用户让浏览器发起HTTP请求的时候，浏览器将其转换为HTTPS请求，直接略过上述的HTTP请求和重定向，从而使得中间人攻击失效，以规避风险。其大致流程如下：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034428/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201341_n2jssi.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034428/origin-of-ray/微信截图_20201215201341_n2jssi.png" /></p>
+<p>图3：略过HTTP请求和重定向，直接发送HTTPS请求</p>
+<ul>
+<li>第1步：用户在浏览器地址栏里输入网站域名，浏览器得知该域名应该使用HTTPS进行通信</li>
+<li>第2步：浏览器直接向网站发起HTTPS请求</li>
+<li>第3步：网站返回相应的内容</li>
+</ul>
+<p>那么问题来了，浏览器是如何做到这一点的呢？它怎么知道哪个网站应该发HTTPS请求，哪个网站应该用HTTP请求呢？此时就该HSTS闪亮登场了。</p>
+<h4 id="hsts"><a class="markdownIt-Anchor" href="#hsts"></a> HSTS</h4>
+<p>HSTS的全称是HTTP Strict-Transport-Security，它是一个Web安全策略机制（web security policy mechanism）。</p>
+<p>HSTS最早于2015年被纳入到ThoughtWorks技术雷达，并且在2016年的最新一期技术雷达里，它直接从“评估（Trial）”阶段进入到了“采用（Adopt）“阶段，这意味着ThoughtWorks强烈主张业界积极采用这项安全防御措施，并且ThoughtWorks已经将其应用于自己的项目。</p>
+<p>HSTS最为核心的是一个HTTP响应头（HTTP Response Header）。正是它可以让浏览器得知，在接下来的一段时间内，当前域名只能通过HTTPS进行访问，并且在浏览器发现当前连接不安全的情况下，强制拒绝用户的后续访问要求。</p>
+<p>HSTS Header的语法如下：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Strict-Transport-Security: &lt;max-age=&gt;[; includeSubDomains][; preload]</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li>max-age是必选参数，是一个以秒为单位的数值，它代表着HSTS Header的过期时间，通常设置为1年，即31536000秒。</li>
+<li>includeSubDomains是可选参数，如果包含它，则意味着当前域名及其子域名均开启HSTS保护。</li>
+<li>preload是可选参数，只有当你申请将自己的域名加入到浏览器内置列表的时候才需要使用到它。关于浏览器内置列表，下文有详细介绍。</li>
+</ul>
+<h4 id="让浏览器直接发起https请求"><a class="markdownIt-Anchor" href="#让浏览器直接发起https请求"></a> 让浏览器直接发起HTTPS请求</h4>
+<p>只要在服务器返回给浏览器的响应头中，增加Strict-Transport-Security这个HTTP Header（下文简称HSTS Header），例如：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Strict-Transport-Security: max-age=31536000; includeSubDomains</span><br></pre></td></tr></table></figure>
+<p>就可以告诉浏览器，在接下来的31536000秒（1年）内，对于当前域名及其子域名的后续通信应该强制性的只使用HTTPS，直到超过有效期为止。</p>
+<p>完整的流程如下图所示：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034571/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201603_mijchx.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034571/origin-of-ray/微信截图_20201215201603_mijchx.png" /></p>
+<p>图4：完整的HSTS流程</p>
+<p>只要是在有效期内，浏览器都将直接强制性的发起HTTPS请求，但是问题又来了，有效期过了怎么办？其实不用为此过多担心，因为HSTS Header存在于每个响应中，随着用户和网站的交互，这个有效时间时刻都在刷新，再加上有效期通常都被设置成了1年，所以只要用户的前后两次请求之间的时间间隔没有超过1年，则基本上不会出现安全风险。更何况，就算超过了有效期，只要用户和网站再进行一次新的交互，用户的浏览器又将开启有效期为1年的HSTS保护。</p>
+<h4 id="强制拒绝不安全的链接不给用户选择的机会"><a class="markdownIt-Anchor" href="#强制拒绝不安全的链接不给用户选择的机会"></a> 强制拒绝不安全的链接，不给用户选择的机会</h4>
+<p>在没有HSTS保护的情况下，当浏览器发现当前网站的证书出现错误，或者浏览器和服务器之间的通信不安全，无法建立HTTPS连接的时候，浏览器通常会警告用户，但是却又允许用户继续不安全的访问。如下图所示，用户可以点击图中红色方框中的链接，继续在不安全的连接下进行访问。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-b69590c9522f75bbd8ef0c73382e0a57_720w.jpg" alt="img" /></p>
+<p>图5：浏览器依然允许用户进行不安全的访问</p>
+<p>理论上而言，用户看到这个警告之后就应该提高警惕，意识到自己和网站之间的通信不安全，可能被劫持也可能被窃听，如果访问的恰好是银行、金融类网站的话后果更是不堪设想，理应终止后续操作。然而现实很残酷，就我的实际观察来看，有不少用户在遇到这样的警告之后依然选择了继续访问。</p>
+<p>不过随着HSTS的出现，事情有了转机。对于启用了浏览器HSTS保护的网站，如果浏览器发现当前连接不安全，它将仅仅警告用户，而不再给用户提供是否继续访问的选择，从而避免后续安全问题的发生。例如，当访问Google搜索引擎的时候，如果当前通信连接存在安全问题，浏览器将会彻底阻止用户继续访问Google，如下图所示。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-b9df0eb3dcc8da972eec57f0051c2f3b_720w.jpg" alt="img" /></p>
+<p>图6：浏览器彻底阻止用户继续进行不安全的访问</p>
+<h3 id="道高一尺魔高一丈攻击者依然有可乘之机"><a class="markdownIt-Anchor" href="#道高一尺魔高一丈攻击者依然有可乘之机"></a> 道高一尺魔高一丈：攻击者依然有可乘之机</h3>
+<p>细心的你可能发现了，HSTS存在一个比较薄弱的环节，那就是浏览器没有当前网站的HSTS信息的时候，或者第一次访问网站的时候，依然需要一次明文的HTTP请求和重定向才能切换到HTTPS，以及刷新HSTS信息。而就是这么一瞬间却给攻击者留下了可乘之机，使得他们可以把这一次的HTTP请求劫持下来，继续中间人攻击。</p>
+<h4 id="preload-list让防御更加彻底"><a class="markdownIt-Anchor" href="#preload-list让防御更加彻底"></a> Preload List：让防御更加彻底</h4>
+<p>针对上面的攻击，HSTS也有应对办法，那就是在浏览器里内置一个列表，只要是在这个列表里的域名，无论何时、何种情况，浏览器都只使用HTTPS发起连接。这个列表由Google Chromium维护，FireFox、Safari、IE等主流浏览器均在使用。</p>
+<h3 id="一些tips"><a class="markdownIt-Anchor" href="#一些tips"></a> 一些Tips</h3>
+<p><strong>Tip 1：如何配置HSTS</strong></p>
+<p>很多地方都可以进行HSTS的配置，例如反向代理服务器、应用服务器、应用程序框架，以及应用程序中自定义Header。你可以根据实际情况进行选择。<br />
+常见的是在代理服务器中进行配置，以Nginx为例，只需在配置文件中加上下面这条指令即可：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">add_header Strict-Transport-Security &quot;max-age=31536000; includeSubDomains&quot; always;</span><br></pre></td></tr></table></figure>
+<p>不过需要特别注意的是，在生产环境下使用HSTS应当特别谨慎，因为一旦浏览器接收到HSTS Header（假如有效期是1年），但是网站的证书又恰好出了问题，那么用户将在接下来的1年时间内都无法访问到你的网站，直到证书错误被修复，或者用户主动清除浏览器缓存。</p>
+<p>因此，建议在生产环境开启HSTS的时候，先将max-age的值设置小一些，例如5分钟，然后检查HSTS是否能正常工作，网站能否正常访问，之后再逐步将时间延长，例如1周、1个月，并在这个时间范围内继续检查HSTS是否正常工作，最后才改到1年。</p>
+<p><strong>Tip 2：如何加入到HSTS Preload List</strong></p>
+<p>根据官方说明，你的网站在具备以下几个条件后，可以提出申请加入到这个列表里。</p>
+<ul>
+<li>具备一个有效的证书</li>
+<li>在同一台主机上提供重定向响应，以及接收重定向过来的HTTPS请求</li>
+<li>所有子域名均使用HTTPS</li>
+<li>在根域名的HTTP响应头中，加入HSTS Header，并满足下列条件：
+<ul>
+<li>过期时间最短不得少于18周（10886400秒）</li>
+<li>必须包含includeSubDomains参数</li>
+<li>必须包含preload参数<br />
+当你准好这些之后，可以在HSTS Preload List的官网上（<a href="https://link.zhihu.com/?target=https%3A//hstspreload.org">https://hstspreload.org</a>）提交申请，或者了解更多详细的内容。</li>
+</ul>
+</li>
+</ul>
+<p><strong>Tip 3：如何查询域名是否加入到了Preload List</strong></p>
+<p>从提交申请到完成审核，成功加入到内置列表，中间可能需要等待几天到几周不等的时间。可通过官网<a href="https://link.zhihu.com/?target=https%3A//hstspreload.org">https://hstspreload.org</a>或在Chrome地址栏里输入chrome://net-internals/#hsts查询状态。</p>
+<h3 id="hsts-存在的坑"><a class="markdownIt-Anchor" href="#hsts-存在的坑"></a> HSTS 存在的坑</h3>
+<ul>
+<li>纯 IP 的请求，HSTS 没法处理，比如 <code>http://2.2.2.2</code> ， 即便响应头中设置了 STS，浏览器也不会理会（未测试）</li>
+<li>HSTS 只能在 80 和 443 端口之间切换，如果服务是 8080 端口，即便设置了 STS，也无效（未测试）</li>
+<li>如果浏览器证书错误，一般情况会提醒存在安全风险，然是依然给一个链接进入目标页，而 HSTS 则没有目标页入口，所以一旦证书配置错误，就是很大的故障了</li>
+<li>如果服务器的 HTTPS 没有配置好就开启了 STS 的响应头，并且还设置了很长的过期时间，那么在你服务器 HTTPS 配置好之前，用户都是没办法连接到你的服务器的，除非 max-age 过期了。</li>
+<li>HSTS 能让你的网站在 ssllab 上到 A+（这不是坑）</li>
+</ul>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<p>随着越来越多的网站开始使用HTTPS，甚至是开启全站HTTPS，数据在传输过程中的安全性能够得到极大的保障。与此同时，通过HSTS的帮助，避免遭受到SSL Stripping或者中间人的攻击，能够使得数据通信变得更加安全。本篇文章希望通过对HSTS的解析，使得更多的开发团队将HSTS运用到自己的项目中。</p>
+<p>转载文章出处：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/63674248">https://zhuanlan.zhihu.com/p/63674248</a></p>
+<p><a href="https://www.barretlee.com/blog/2015/10/22/hsts-intro/">https://www.barretlee.com/blog/2015/10/22/hsts-intro/</a></p>
+]]></content>
+      <categories>
+        <category>Security</category>
       </categories>
   </entry>
   <entry>
@@ -1712,110 +1816,6 @@ a. Prompt 动态组装器：动态拼装模块化的系统规则（如读取 <a 
 ]]></content>
       <categories>
         <category>Agent</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>HSTS</title>
-    <url>/posts/3daba739/</url>
-    <content><![CDATA[<h3 id="缘起启用https也不够安全"><a class="markdownIt-Anchor" href="#缘起启用https也不够安全"></a> 缘起：启用HTTPS也不够安全</h3>
-<p>有不少网站只通过HTTPS对外提供服务，但用户在访问某个网站的时候，在浏览器里却往往直接输入网站域名（例如<a href="https://link.zhihu.com/?target=http%3A//www.example.com">Example Domain</a>），而不是完整的URL（例如<a href="https://link.zhihu.com/?target=https%3A//www.example.com">Example Domain</a>），不过浏览器依然能正确的使用HTTPS发起请求。这背后多亏了服务器和浏览器的协作，如下图所示。</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215200744_st7ygu.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034077/origin-of-ray/微信截图_20201215200744_st7ygu.png" /></p>
-<p>图1：服务器和浏览器在背后帮用户做了很多工作</p>
-<p>简单来讲就是，浏览器向网站发起一次HTTP请求，在得到一个重定向响应后，发起一次HTTPS请求并得到最终的响应内容。所有的这一切对用户而言是完全透明的，所以在用户看来，在浏览器里直接输入域名却依然可以用HTTPS协议和网站进行安全的通信，是个不错的用户体验。</p>
-<p>一切看上去都是那么的完美，但其实不然，由于在建立起HTTPS连接之前存在一次明文的HTTP请求和重定向（上图中的第1、2步），使得攻击者可以以中间人的方式劫持这次请求，从而进行后续的攻击，例如窃听数据、篡改请求和响应、跳转到钓鱼网站等。</p>
-<span id="more"></span>
-<p>以劫持请求并跳转到钓鱼网站为例，其大致做法如下图所示：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034304/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201136_l7n9kr.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034304/origin-of-ray/微信截图_20201215201136_l7n9kr.png" /></p>
-<p>图2：劫持HTTP请求，阻止HTTPS连接，并进行钓鱼攻击</p>
-<ul>
-<li>第1步：浏览器发起一次明文HTTP请求，但实际上会被攻击者拦截下来</li>
-<li>第2步：攻击者作为代理，把当前请求转发给钓鱼网站</li>
-<li>第3步：钓鱼网站返回假冒的网页内容</li>
-<li>第4步：攻击者把假冒的网页内容返回给浏览器</li>
-</ul>
-<p>这个攻击的精妙之处在于，攻击者直接劫持了HTTP请求，并返回了内容给浏览器，根本不给浏览器同真实网站建立HTTPS连接的机会，因此浏览器会误以为真实网站通过HTTP对外提供服务，自然也就不会向用户报告当前的连接不安全。于是乎攻击者几乎可以神不知鬼不觉的对请求和响应动手脚。</p>
-<h3 id="解决之道使用hsts"><a class="markdownIt-Anchor" href="#解决之道使用hsts"></a> 解决之道：使用HSTS</h3>
-<p>既然建立HTTPS连接之前的这一次HTTP明文请求和重定向有可能被攻击者劫持，那么解决这一问题的思路自然就变成了如何避免出现这样的HTTP请求。我们期望的浏览器行为是，当用户让浏览器发起HTTP请求的时候，浏览器将其转换为HTTPS请求，直接略过上述的HTTP请求和重定向，从而使得中间人攻击失效，以规避风险。其大致流程如下：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034428/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201341_n2jssi.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034428/origin-of-ray/微信截图_20201215201341_n2jssi.png" /></p>
-<p>图3：略过HTTP请求和重定向，直接发送HTTPS请求</p>
-<ul>
-<li>第1步：用户在浏览器地址栏里输入网站域名，浏览器得知该域名应该使用HTTPS进行通信</li>
-<li>第2步：浏览器直接向网站发起HTTPS请求</li>
-<li>第3步：网站返回相应的内容</li>
-</ul>
-<p>那么问题来了，浏览器是如何做到这一点的呢？它怎么知道哪个网站应该发HTTPS请求，哪个网站应该用HTTP请求呢？此时就该HSTS闪亮登场了。</p>
-<h4 id="hsts"><a class="markdownIt-Anchor" href="#hsts"></a> HSTS</h4>
-<p>HSTS的全称是HTTP Strict-Transport-Security，它是一个Web安全策略机制（web security policy mechanism）。</p>
-<p>HSTS最早于2015年被纳入到ThoughtWorks技术雷达，并且在2016年的最新一期技术雷达里，它直接从“评估（Trial）”阶段进入到了“采用（Adopt）“阶段，这意味着ThoughtWorks强烈主张业界积极采用这项安全防御措施，并且ThoughtWorks已经将其应用于自己的项目。</p>
-<p>HSTS最为核心的是一个HTTP响应头（HTTP Response Header）。正是它可以让浏览器得知，在接下来的一段时间内，当前域名只能通过HTTPS进行访问，并且在浏览器发现当前连接不安全的情况下，强制拒绝用户的后续访问要求。</p>
-<p>HSTS Header的语法如下：</p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Strict-Transport-Security: &lt;max-age=&gt;[; includeSubDomains][; preload]</span><br></pre></td></tr></table></figure>
-<p>其中：</p>
-<ul>
-<li>max-age是必选参数，是一个以秒为单位的数值，它代表着HSTS Header的过期时间，通常设置为1年，即31536000秒。</li>
-<li>includeSubDomains是可选参数，如果包含它，则意味着当前域名及其子域名均开启HSTS保护。</li>
-<li>preload是可选参数，只有当你申请将自己的域名加入到浏览器内置列表的时候才需要使用到它。关于浏览器内置列表，下文有详细介绍。</li>
-</ul>
-<h4 id="让浏览器直接发起https请求"><a class="markdownIt-Anchor" href="#让浏览器直接发起https请求"></a> 让浏览器直接发起HTTPS请求</h4>
-<p>只要在服务器返回给浏览器的响应头中，增加Strict-Transport-Security这个HTTP Header（下文简称HSTS Header），例如：</p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Strict-Transport-Security: max-age=31536000; includeSubDomains</span><br></pre></td></tr></table></figure>
-<p>就可以告诉浏览器，在接下来的31536000秒（1年）内，对于当前域名及其子域名的后续通信应该强制性的只使用HTTPS，直到超过有效期为止。</p>
-<p>完整的流程如下图所示：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034571/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215201603_mijchx.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608034571/origin-of-ray/微信截图_20201215201603_mijchx.png" /></p>
-<p>图4：完整的HSTS流程</p>
-<p>只要是在有效期内，浏览器都将直接强制性的发起HTTPS请求，但是问题又来了，有效期过了怎么办？其实不用为此过多担心，因为HSTS Header存在于每个响应中，随着用户和网站的交互，这个有效时间时刻都在刷新，再加上有效期通常都被设置成了1年，所以只要用户的前后两次请求之间的时间间隔没有超过1年，则基本上不会出现安全风险。更何况，就算超过了有效期，只要用户和网站再进行一次新的交互，用户的浏览器又将开启有效期为1年的HSTS保护。</p>
-<h4 id="强制拒绝不安全的链接不给用户选择的机会"><a class="markdownIt-Anchor" href="#强制拒绝不安全的链接不给用户选择的机会"></a> 强制拒绝不安全的链接，不给用户选择的机会</h4>
-<p>在没有HSTS保护的情况下，当浏览器发现当前网站的证书出现错误，或者浏览器和服务器之间的通信不安全，无法建立HTTPS连接的时候，浏览器通常会警告用户，但是却又允许用户继续不安全的访问。如下图所示，用户可以点击图中红色方框中的链接，继续在不安全的连接下进行访问。</p>
-<p><img src="https://pic4.zhimg.com/80/v2-b69590c9522f75bbd8ef0c73382e0a57_720w.jpg" alt="img" /></p>
-<p>图5：浏览器依然允许用户进行不安全的访问</p>
-<p>理论上而言，用户看到这个警告之后就应该提高警惕，意识到自己和网站之间的通信不安全，可能被劫持也可能被窃听，如果访问的恰好是银行、金融类网站的话后果更是不堪设想，理应终止后续操作。然而现实很残酷，就我的实际观察来看，有不少用户在遇到这样的警告之后依然选择了继续访问。</p>
-<p>不过随着HSTS的出现，事情有了转机。对于启用了浏览器HSTS保护的网站，如果浏览器发现当前连接不安全，它将仅仅警告用户，而不再给用户提供是否继续访问的选择，从而避免后续安全问题的发生。例如，当访问Google搜索引擎的时候，如果当前通信连接存在安全问题，浏览器将会彻底阻止用户继续访问Google，如下图所示。</p>
-<p><img src="https://pic4.zhimg.com/80/v2-b9df0eb3dcc8da972eec57f0051c2f3b_720w.jpg" alt="img" /></p>
-<p>图6：浏览器彻底阻止用户继续进行不安全的访问</p>
-<h3 id="道高一尺魔高一丈攻击者依然有可乘之机"><a class="markdownIt-Anchor" href="#道高一尺魔高一丈攻击者依然有可乘之机"></a> 道高一尺魔高一丈：攻击者依然有可乘之机</h3>
-<p>细心的你可能发现了，HSTS存在一个比较薄弱的环节，那就是浏览器没有当前网站的HSTS信息的时候，或者第一次访问网站的时候，依然需要一次明文的HTTP请求和重定向才能切换到HTTPS，以及刷新HSTS信息。而就是这么一瞬间却给攻击者留下了可乘之机，使得他们可以把这一次的HTTP请求劫持下来，继续中间人攻击。</p>
-<h4 id="preload-list让防御更加彻底"><a class="markdownIt-Anchor" href="#preload-list让防御更加彻底"></a> Preload List：让防御更加彻底</h4>
-<p>针对上面的攻击，HSTS也有应对办法，那就是在浏览器里内置一个列表，只要是在这个列表里的域名，无论何时、何种情况，浏览器都只使用HTTPS发起连接。这个列表由Google Chromium维护，FireFox、Safari、IE等主流浏览器均在使用。</p>
-<h3 id="一些tips"><a class="markdownIt-Anchor" href="#一些tips"></a> 一些Tips</h3>
-<p><strong>Tip 1：如何配置HSTS</strong></p>
-<p>很多地方都可以进行HSTS的配置，例如反向代理服务器、应用服务器、应用程序框架，以及应用程序中自定义Header。你可以根据实际情况进行选择。<br />
-常见的是在代理服务器中进行配置，以Nginx为例，只需在配置文件中加上下面这条指令即可：</p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">add_header Strict-Transport-Security &quot;max-age=31536000; includeSubDomains&quot; always;</span><br></pre></td></tr></table></figure>
-<p>不过需要特别注意的是，在生产环境下使用HSTS应当特别谨慎，因为一旦浏览器接收到HSTS Header（假如有效期是1年），但是网站的证书又恰好出了问题，那么用户将在接下来的1年时间内都无法访问到你的网站，直到证书错误被修复，或者用户主动清除浏览器缓存。</p>
-<p>因此，建议在生产环境开启HSTS的时候，先将max-age的值设置小一些，例如5分钟，然后检查HSTS是否能正常工作，网站能否正常访问，之后再逐步将时间延长，例如1周、1个月，并在这个时间范围内继续检查HSTS是否正常工作，最后才改到1年。</p>
-<p><strong>Tip 2：如何加入到HSTS Preload List</strong></p>
-<p>根据官方说明，你的网站在具备以下几个条件后，可以提出申请加入到这个列表里。</p>
-<ul>
-<li>具备一个有效的证书</li>
-<li>在同一台主机上提供重定向响应，以及接收重定向过来的HTTPS请求</li>
-<li>所有子域名均使用HTTPS</li>
-<li>在根域名的HTTP响应头中，加入HSTS Header，并满足下列条件：
-<ul>
-<li>过期时间最短不得少于18周（10886400秒）</li>
-<li>必须包含includeSubDomains参数</li>
-<li>必须包含preload参数<br />
-当你准好这些之后，可以在HSTS Preload List的官网上（<a href="https://link.zhihu.com/?target=https%3A//hstspreload.org">https://hstspreload.org</a>）提交申请，或者了解更多详细的内容。</li>
-</ul>
-</li>
-</ul>
-<p><strong>Tip 3：如何查询域名是否加入到了Preload List</strong></p>
-<p>从提交申请到完成审核，成功加入到内置列表，中间可能需要等待几天到几周不等的时间。可通过官网<a href="https://link.zhihu.com/?target=https%3A//hstspreload.org">https://hstspreload.org</a>或在Chrome地址栏里输入chrome://net-internals/#hsts查询状态。</p>
-<h3 id="hsts-存在的坑"><a class="markdownIt-Anchor" href="#hsts-存在的坑"></a> HSTS 存在的坑</h3>
-<ul>
-<li>纯 IP 的请求，HSTS 没法处理，比如 <code>http://2.2.2.2</code> ， 即便响应头中设置了 STS，浏览器也不会理会（未测试）</li>
-<li>HSTS 只能在 80 和 443 端口之间切换，如果服务是 8080 端口，即便设置了 STS，也无效（未测试）</li>
-<li>如果浏览器证书错误，一般情况会提醒存在安全风险，然是依然给一个链接进入目标页，而 HSTS 则没有目标页入口，所以一旦证书配置错误，就是很大的故障了</li>
-<li>如果服务器的 HTTPS 没有配置好就开启了 STS 的响应头，并且还设置了很长的过期时间，那么在你服务器 HTTPS 配置好之前，用户都是没办法连接到你的服务器的，除非 max-age 过期了。</li>
-<li>HSTS 能让你的网站在 ssllab 上到 A+（这不是坑）</li>
-</ul>
-<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
-<p>随着越来越多的网站开始使用HTTPS，甚至是开启全站HTTPS，数据在传输过程中的安全性能够得到极大的保障。与此同时，通过HSTS的帮助，避免遭受到SSL Stripping或者中间人的攻击，能够使得数据通信变得更加安全。本篇文章希望通过对HSTS的解析，使得更多的开发团队将HSTS运用到自己的项目中。</p>
-<p>转载文章出处：</p>
-<p><a href="https://zhuanlan.zhihu.com/p/63674248">https://zhuanlan.zhihu.com/p/63674248</a></p>
-<p><a href="https://www.barretlee.com/blog/2015/10/22/hsts-intro/">https://www.barretlee.com/blog/2015/10/22/hsts-intro/</a></p>
-]]></content>
-      <categories>
-        <category>Security</category>
       </categories>
   </entry>
   <entry>
@@ -3737,53 +3737,6 @@ a_{n1} &amp; a_{n2} &amp; \ldots &amp; a_{nn} \\
       </categories>
   </entry>
   <entry>
-    <title>JavaScript实现AVL树</title>
-    <url>/posts/5250/</url>
-    <content><![CDATA[<p>最近尝试实现了下AVL树，发现这玩意写起来还是很多细节的，搞了半天，所以就在这里记录下。</p>
-<p>AVL树就是平衡二叉检索树，一方面它是BST，即二叉检索树，一方面它是平衡的，也就是任何一个节点为根结点的子树的左子树和右子树的高度差不到1。</p>
-<span id="more"></span>
-<h1 id="基本原理"><a class="markdownIt-Anchor" href="#基本原理"></a> 基本原理</h1>
-<p>关于BST就不多说了，比较简单，就是每个节点的左孩子都小于根节点，右孩子都大于根节点，插入的时候注意就好。</p>
-<p>但是BST有个问题，比如依次插入1，2，3，4，5，6，那么最终会得到一个只有右孩子的树，其实这个BST已经退化成了普通链表，所以我们需要一定的方式保持这个树的平衡，而保持平衡的方式如下：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1675307019/origin-of-ray/912c7f2fdaf3490689db1a7144775b11_tplv-k3u1fbpfcp-zoom-in-crop-mark_4536_0_0_0_qzoplx.webp" alt="" /></p>
-<h1 id="具体实现"><a class="markdownIt-Anchor" href="#具体实现"></a> 具体实现</h1>
-<h2 id="四种不平衡的情况"><a class="markdownIt-Anchor" href="#四种不平衡的情况"></a> 四种不平衡的情况</h2>
-<h3 id="左左情况"><a class="markdownIt-Anchor" href="#左左情况"></a> 左左情况</h3>
-<p>这个情况下要右旋，然后返回旋转后新的根节点，代码如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_rotateRight</span>(<span class="params">node</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> avlNode = node.<span class="property">left</span>;</span><br><span class="line">    node.<span class="property">left</span> = avlNode.<span class="property">right</span>;</span><br><span class="line">    avlNode.<span class="property">right</span> = node;</span><br><span class="line">    <span class="keyword">return</span> avlNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="右右情况"><a class="markdownIt-Anchor" href="#右右情况"></a> 右右情况</h3>
-<p>这个情况下要左旋，然后返回旋转后新的根节点，代码如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_rotateLeft</span>(<span class="params">node</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> avlNode = node.<span class="property">right</span>;</span><br><span class="line">    node.<span class="property">right</span> = avlNode.<span class="property">left</span>;</span><br><span class="line">    avlNode.<span class="property">left</span> = node;</span><br><span class="line">    <span class="keyword">return</span> avlNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="左右情况"><a class="markdownIt-Anchor" href="#左右情况"></a> 左右情况</h3>
-<p>这个情况下先要对根节点的左子节点做左旋，变为左左情况，然后再对根节点做右旋，然后返回旋转后新的根节点，代码如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_rotateLeftRight</span>(<span class="params">node</span>) &#123;</span><br><span class="line">    node.<span class="property">left</span> = <span class="variable language_">this</span>.#<span class="title function_">_rotateLeft</span>(node.<span class="property">left</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_rotateRight</span>(node)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="右左情况"><a class="markdownIt-Anchor" href="#右左情况"></a> 右左情况</h3>
-<p>这个情况下先要对根节点的右子节点做右旋，变为右右情况，然后再对根节点做左旋，然后返回旋转后新的根节点，代码如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_rotateRightLeft</span>(<span class="params">node</span>) &#123;</span><br><span class="line">    node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_rotateRight</span>(node.<span class="property">right</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_rotateLeft</span>(node);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="修复不平衡的情况"><a class="markdownIt-Anchor" href="#修复不平衡的情况"></a> 修复不平衡的情况</h2>
-<h3 id="获取节点的高度"><a class="markdownIt-Anchor" href="#获取节点的高度"></a> 获取节点的高度</h3>
-<p>我们在做平衡的时候需要判断是否需要平衡以及是哪种不平衡的情况好选择不同的旋转方式</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_getAvlTreeHeight</span>(<span class="params">node</span>) &#123;</span><br><span class="line">    <span class="comment">// 空节点的高度为0</span></span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里使用后序遍历，因为每次递归的结果需要子节点递归的结果</span></span><br><span class="line">    <span class="keyword">const</span> leftHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>);</span><br><span class="line">    <span class="keyword">const</span> rightHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 节点高度为左右子树高度中的较大值加上1</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">max</span>(leftHeight, rightHeight) + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="平衡"><a class="markdownIt-Anchor" href="#平衡"></a> 平衡</h3>
-<p>平衡以node为根节点的子树，并返回新的根节点。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_balance</span>(<span class="params">node</span>) &#123;</span><br><span class="line">    <span class="comment">// 空节点不需要平衡，直接返回空节点</span></span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取左右子树的高度</span></span><br><span class="line">    <span class="keyword">const</span> leftSubTreeHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>);</span><br><span class="line">    <span class="keyword">const</span> rightSubTreeHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果左子树高度大于右子树高度，且大不止1，说明不平衡，且这里隐含一个逻辑，就是左子树的左子树一定不为空</span></span><br><span class="line">    <span class="keyword">if</span> (leftSubTreeHeight - rightSubTreeHeight &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// 左左情况，直接右旋</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>.<span class="property">left</span>) &gt;= <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>.<span class="property">right</span>)) &#123;</span><br><span class="line">            node = <span class="variable language_">this</span>.#<span class="title function_">_rotateRight</span>(node)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 左右情况，先左旋后右旋</span></span><br><span class="line">            node = <span class="variable language_">this</span>.#<span class="title function_">_rotateLeftRight</span>(node);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (rightSubTreeHeight - leftSubTreeHeight &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// 右右情况，直接左旋</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>.<span class="property">right</span>) &gt;= <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>.<span class="property">left</span>)) &#123;</span><br><span class="line">            node = <span class="variable language_">this</span>.#<span class="title function_">_rotateLeft</span>(node)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 右左情况，先右旋，后左旋</span></span><br><span class="line">            node = <span class="variable language_">this</span>.#<span class="title function_">_rotateRightLeft</span>(node)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回平衡后的子树的新的根节点</span></span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="基本操作"><a class="markdownIt-Anchor" href="#基本操作"></a> 基本操作</h2>
-<h3 id="插入"><a class="markdownIt-Anchor" href="#插入"></a> 插入</h3>
-<p>插入新的节点，并返回新的根节点</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这段代码最需要理解的地方是，这个递归函数每次返回的是在以node节点为根节点的树上插入newNode并平衡后的新子树的根节点。</span></span><br><span class="line">#<span class="title function_">_insertHelper</span>(<span class="params">node, newNode</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果是根节点为空，则直接把newNode当作根节点返回</span></span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> newNode;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果新节点的值比当前节点小</span></span><br><span class="line">    <span class="keyword">if</span> (newNode.<span class="property">val</span> &lt; node.<span class="property">val</span>) &#123;</span><br><span class="line">        <span class="comment">// 左节点为空，那么直接就把新节点当作左子节点</span></span><br><span class="line">        <span class="keyword">if</span> (node.<span class="property">left</span> === <span class="literal">null</span>) &#123;</span><br><span class="line">            node.<span class="property">left</span> = newNode;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 如果左子节点不为空，那么在左子树中插入新节点，并把插入后返回的新子树的根节点作为左子树</span></span><br><span class="line">            node.<span class="property">left</span> = <span class="variable language_">this</span>.#<span class="title function_">_insertHelper</span>(node.<span class="property">left</span>, newNode);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 右节点为空，那么直接就把新节点当作右子节点</span></span><br><span class="line">        <span class="keyword">if</span> (node.<span class="property">right</span> === <span class="literal">null</span>) &#123;</span><br><span class="line">            node.<span class="property">right</span> = newNode;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 如果右子节点不为空，那么在右子树中插入新节点，并把插入后返回的新子树的根节点作为右子树</span></span><br><span class="line">            node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_insertHelper</span>(node.<span class="property">right</span>, newNode);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 插入后进行平衡，并返回平衡后的新子树的根节点</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_balance</span>(node)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">insert</span>(<span class="params">newNode</span>) &#123;</span><br><span class="line">    <span class="comment">// 从根节点开始插入newNode，并且重新赋值根节点，保证下次调用的正确</span></span><br><span class="line">    <span class="variable language_">this</span>.#_root = <span class="variable language_">this</span>.#<span class="title function_">_insertHelper</span>(<span class="variable language_">this</span>.#_root, newNode);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="查找"><a class="markdownIt-Anchor" href="#查找"></a> 查找</h3>
-<p>这个比较简单，和BST没什么区别</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"> #<span class="title function_">_searchHelper</span>(<span class="params">node, val</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (node.<span class="property">val</span> === val) &#123;</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; node.<span class="property">val</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_searchHelper</span>(node.<span class="property">left</span>, val)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_searchHelper</span>(node.<span class="property">right</span>, val);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">search</span>(<span class="params">val</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_searchHelper</span>(<span class="variable language_">this</span>.#_root, val);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="删除"><a class="markdownIt-Anchor" href="#删除"></a> 删除</h3>
-<p>在以node为根节点的子树上删除值为val的节点，并返回平衡后新的树的根节点</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_removeHelper</span>(<span class="params">node, val</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果node为空，说明树为空，不需要删除，新树的根节点也是null</span></span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">// 如果找到了要删除的节点</span></span><br><span class="line">    <span class="keyword">if</span> (val === node.<span class="property">val</span>) &#123;</span><br><span class="line">        <span class="comment">// 要删除的节点左右子树都有</span></span><br><span class="line">        <span class="keyword">if</span> (node.<span class="property">left</span> &amp;&amp; node.<span class="property">right</span>) &#123;</span><br><span class="line">            <span class="comment">// 那就找到该节点右子树</span></span><br><span class="line">            <span class="keyword">let</span> p = node.<span class="property">right</span>;</span><br><span class="line">            <span class="comment">// 然后在右子树中一直找左子树</span></span><br><span class="line">            <span class="keyword">while</span>(p.<span class="property">left</span>) &#123;</span><br><span class="line">                p = p.<span class="property">left</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 然后把结果替换到当前节点中，因为右子树中最左的子节点一定小于右子树中其他的节点，同时大雨左子树中所有节点</span></span><br><span class="line">            node.<span class="property">val</span> = p.<span class="property">val</span>;</span><br><span class="line">            <span class="comment">// 上一步只是把节点值替换，但是节点还在，我们需要右子树中删除该节点，然后返回平衡后新的右子树作为node的右子树。</span></span><br><span class="line">            <span class="comment">// 而记住，此时我们要删除的是p.val了，而不是val，因为我们已经把p.val放到了node.val，且这个p有个性质就是它最起码没有左子节点了，座椅下一次会进入紧接着的else逻辑</span></span><br><span class="line">            node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(node.<span class="property">right</span>, p.<span class="property">val</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 如果不是左右子树都有，直接就替换上来，然后删除原本的就好</span></span><br><span class="line">            <span class="keyword">let</span> p = node.<span class="property">left</span> !== <span class="literal">null</span> ? node.<span class="property">left</span> : node.<span class="property">right</span>;</span><br><span class="line">            node = <span class="literal">null</span>;</span><br><span class="line">            <span class="keyword">return</span> p;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; node.<span class="property">val</span>) &#123;</span><br><span class="line">        <span class="comment">// 如果要删除的值比当前小，就去左子树删除</span></span><br><span class="line">        node.<span class="property">left</span> = <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(node.<span class="property">left</span>, val)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 如果要删除的值比当前大，就去右子树删除</span></span><br><span class="line">        node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(node.<span class="property">right</span>, val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回平衡后新的子树根节点</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_balance</span>(node);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">remove</span>(<span class="params">val</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(<span class="variable language_">this</span>.#_root, val);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="完整代码和测试"><a class="markdownIt-Anchor" href="#完整代码和测试"></a> 完整代码和测试</h1>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AvlTree</span>&#123;</span><br><span class="line">    #<span class="title function_">_rotateLeft</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> avlNode = node.<span class="property">right</span>;</span><br><span class="line">        node.<span class="property">right</span> = avlNode.<span class="property">left</span>;</span><br><span class="line">        avlNode.<span class="property">left</span> = node;</span><br><span class="line">        <span class="keyword">return</span> avlNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_rotateRight</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> avlNode = node.<span class="property">left</span>;</span><br><span class="line">        node.<span class="property">left</span> = avlNode.<span class="property">right</span>;</span><br><span class="line">        avlNode.<span class="property">right</span> = node;</span><br><span class="line">        <span class="keyword">return</span> avlNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_rotateLeftRight</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        node.<span class="property">left</span> = <span class="variable language_">this</span>.#<span class="title function_">_rotateLeft</span>(node.<span class="property">left</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_rotateRight</span>(node)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_rotateRightLeft</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_rotateRight</span>(node.<span class="property">right</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_rotateLeft</span>(node);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_getAvlTreeHeight</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> leftHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>);</span><br><span class="line">        <span class="keyword">const</span> rightHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">max</span>(leftHeight, rightHeight) + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_balance</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> leftSubTreeHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>);</span><br><span class="line">        <span class="keyword">const</span> rightSubTreeHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (leftSubTreeHeight - rightSubTreeHeight &gt; <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>.<span class="property">left</span>) &gt;= <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>.<span class="property">right</span>)) &#123;</span><br><span class="line">                node = <span class="variable language_">this</span>.#<span class="title function_">_rotateRight</span>(node)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                node = <span class="variable language_">this</span>.#<span class="title function_">_rotateLeftRight</span>(node);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (rightSubTreeHeight - leftSubTreeHeight &gt; <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>.<span class="property">right</span>) &gt;= <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>.<span class="property">left</span>)) &#123;</span><br><span class="line">                node = <span class="variable language_">this</span>.#<span class="title function_">_rotateLeft</span>(node)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                node = <span class="variable language_">this</span>.#<span class="title function_">_rotateRightLeft</span>(node)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_insertHelper</span>(<span class="params">node, newNode</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> newNode;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (newNode.<span class="property">val</span> &lt; node.<span class="property">val</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (node.<span class="property">left</span> === <span class="literal">null</span>) &#123;</span><br><span class="line">                node.<span class="property">left</span> = newNode;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                node.<span class="property">left</span> = <span class="variable language_">this</span>.#<span class="title function_">_insertHelper</span>(node.<span class="property">left</span>, newNode);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (node.<span class="property">right</span> === <span class="literal">null</span>) &#123;</span><br><span class="line">                node.<span class="property">right</span> = newNode;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_insertHelper</span>(node.<span class="property">right</span>, newNode);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_balance</span>(node)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">insert</span>(<span class="params">newNode</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.#_root = <span class="variable language_">this</span>.#<span class="title function_">_insertHelper</span>(<span class="variable language_">this</span>.#_root, newNode);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_inOrder</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> stack = [node];</span><br><span class="line">        <span class="keyword">const</span> result = [];</span><br><span class="line">        <span class="keyword">while</span>(stack.<span class="property">length</span>) &#123;</span><br><span class="line">            <span class="keyword">let</span> current = stack.<span class="title function_">pop</span>();</span><br><span class="line">            <span class="keyword">if</span> (current !== <span class="literal">null</span>) &#123;</span><br><span class="line">                current.<span class="property">right</span> &amp;&amp; stack.<span class="title function_">push</span>(current.<span class="property">right</span>);</span><br><span class="line"></span><br><span class="line">                stack.<span class="title function_">push</span>(current, <span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">                current.<span class="property">left</span> &amp;&amp; stack.<span class="title function_">push</span>(current.<span class="property">left</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                current = stack.<span class="title function_">pop</span>();</span><br><span class="line">                result.<span class="title function_">push</span>(current.<span class="property">val</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    <span class="title function_">print</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.#_root === <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="variable language_">this</span>.#<span class="title function_">_inOrder</span>(<span class="variable language_">this</span>.#_root);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(<span class="variable language_">this</span>.#_root.<span class="property">left</span>))</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(<span class="variable language_">this</span>.#_root.<span class="property">right</span>))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_searchHelper</span>(<span class="params">node, val</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (node.<span class="property">val</span> === val) &#123;</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; node.<span class="property">val</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_searchHelper</span>(node.<span class="property">left</span>, val)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_searchHelper</span>(node.<span class="property">right</span>, val);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">search</span>(<span class="params">val</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_searchHelper</span>(<span class="variable language_">this</span>.#_root, val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_removeHelper</span>(<span class="params">node, val</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (val === node.<span class="property">val</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (node.<span class="property">left</span> &amp;&amp; node.<span class="property">right</span>) &#123;</span><br><span class="line">                <span class="keyword">let</span> p = node.<span class="property">right</span>;</span><br><span class="line">                <span class="keyword">while</span>(p.<span class="property">left</span>) &#123;</span><br><span class="line">                    p = p.<span class="property">left</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                node.<span class="property">val</span> = p.<span class="property">val</span>;</span><br><span class="line">                node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(node.<span class="property">right</span>, p.<span class="property">val</span>)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">let</span> p = node.<span class="property">left</span> !== <span class="literal">null</span> ? node.<span class="property">left</span> : node.<span class="property">right</span>;</span><br><span class="line">                node = <span class="literal">null</span>;</span><br><span class="line">                <span class="keyword">return</span> p;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; node.<span class="property">val</span>) &#123;</span><br><span class="line">            node.<span class="property">left</span> = <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(node.<span class="property">left</span>, val)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(node.<span class="property">right</span>, val);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_balance</span>(node);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">remove</span>(<span class="params">val</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(<span class="variable language_">this</span>.#_root, val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #_root = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> avlTree = <span class="keyword">new</span> <span class="title class_">AvlTree</span>();</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">0</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">2</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">3</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">4</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">6</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">8</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">9</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">14</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">15</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">16</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">17</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">18</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">19</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">20</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">21</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">11</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">31</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">61</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">111</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">221</span>));</span><br><span class="line"></span><br><span class="line">avlTree.<span class="title function_">remove</span>(<span class="number">20</span>);</span><br><span class="line">avlTree.<span class="title function_">print</span>()</span><br><span class="line"></span><br><span class="line">avlTree.<span class="title function_">remove</span>(<span class="number">1</span>);</span><br><span class="line">avlTree.<span class="title function_">print</span>()</span><br><span class="line"></span><br><span class="line">avlTree.<span class="title function_">remove</span>(<span class="number">11</span>);</span><br><span class="line">avlTree.<span class="title function_">print</span>()</span><br><span class="line"></span><br><span class="line">avlTree.<span class="title function_">remove</span>(<span class="number">221</span>);</span><br><span class="line">avlTree.<span class="title function_">print</span>()</span><br><span class="line"></span><br><span class="line">avlTree.<span class="title function_">remove</span>(<span class="number">8</span>);</span><br><span class="line">avlTree.<span class="title function_">print</span>()</span><br><span class="line"></span><br><span class="line">avlTree.<span class="title function_">remove</span>(<span class="number">4</span>);</span><br><span class="line">avlTree.<span class="title function_">print</span>()</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Algorithm</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Azure 基本概念梳理</title>
     <url>/posts/1bcc6f4f/</url>
     <content><![CDATA[<p>最近在看Azure文档的时候，被文档中的许多概念搞得非常困惑，就去查看了一些官方文档，算是一个临时的理解和总结。</p>
@@ -3867,6 +3820,53 @@ a_{n1} &amp; a_{n2} &amp; \ldots &amp; a_{nn} \\
 ]]></content>
       <categories>
         <category>Cloud</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>JavaScript实现AVL树</title>
+    <url>/posts/5250/</url>
+    <content><![CDATA[<p>最近尝试实现了下AVL树，发现这玩意写起来还是很多细节的，搞了半天，所以就在这里记录下。</p>
+<p>AVL树就是平衡二叉检索树，一方面它是BST，即二叉检索树，一方面它是平衡的，也就是任何一个节点为根结点的子树的左子树和右子树的高度差不到1。</p>
+<span id="more"></span>
+<h1 id="基本原理"><a class="markdownIt-Anchor" href="#基本原理"></a> 基本原理</h1>
+<p>关于BST就不多说了，比较简单，就是每个节点的左孩子都小于根节点，右孩子都大于根节点，插入的时候注意就好。</p>
+<p>但是BST有个问题，比如依次插入1，2，3，4，5，6，那么最终会得到一个只有右孩子的树，其实这个BST已经退化成了普通链表，所以我们需要一定的方式保持这个树的平衡，而保持平衡的方式如下：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1675307019/origin-of-ray/912c7f2fdaf3490689db1a7144775b11_tplv-k3u1fbpfcp-zoom-in-crop-mark_4536_0_0_0_qzoplx.webp" alt="" /></p>
+<h1 id="具体实现"><a class="markdownIt-Anchor" href="#具体实现"></a> 具体实现</h1>
+<h2 id="四种不平衡的情况"><a class="markdownIt-Anchor" href="#四种不平衡的情况"></a> 四种不平衡的情况</h2>
+<h3 id="左左情况"><a class="markdownIt-Anchor" href="#左左情况"></a> 左左情况</h3>
+<p>这个情况下要右旋，然后返回旋转后新的根节点，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_rotateRight</span>(<span class="params">node</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> avlNode = node.<span class="property">left</span>;</span><br><span class="line">    node.<span class="property">left</span> = avlNode.<span class="property">right</span>;</span><br><span class="line">    avlNode.<span class="property">right</span> = node;</span><br><span class="line">    <span class="keyword">return</span> avlNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="右右情况"><a class="markdownIt-Anchor" href="#右右情况"></a> 右右情况</h3>
+<p>这个情况下要左旋，然后返回旋转后新的根节点，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_rotateLeft</span>(<span class="params">node</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> avlNode = node.<span class="property">right</span>;</span><br><span class="line">    node.<span class="property">right</span> = avlNode.<span class="property">left</span>;</span><br><span class="line">    avlNode.<span class="property">left</span> = node;</span><br><span class="line">    <span class="keyword">return</span> avlNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="左右情况"><a class="markdownIt-Anchor" href="#左右情况"></a> 左右情况</h3>
+<p>这个情况下先要对根节点的左子节点做左旋，变为左左情况，然后再对根节点做右旋，然后返回旋转后新的根节点，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_rotateLeftRight</span>(<span class="params">node</span>) &#123;</span><br><span class="line">    node.<span class="property">left</span> = <span class="variable language_">this</span>.#<span class="title function_">_rotateLeft</span>(node.<span class="property">left</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_rotateRight</span>(node)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="右左情况"><a class="markdownIt-Anchor" href="#右左情况"></a> 右左情况</h3>
+<p>这个情况下先要对根节点的右子节点做右旋，变为右右情况，然后再对根节点做左旋，然后返回旋转后新的根节点，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_rotateRightLeft</span>(<span class="params">node</span>) &#123;</span><br><span class="line">    node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_rotateRight</span>(node.<span class="property">right</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_rotateLeft</span>(node);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="修复不平衡的情况"><a class="markdownIt-Anchor" href="#修复不平衡的情况"></a> 修复不平衡的情况</h2>
+<h3 id="获取节点的高度"><a class="markdownIt-Anchor" href="#获取节点的高度"></a> 获取节点的高度</h3>
+<p>我们在做平衡的时候需要判断是否需要平衡以及是哪种不平衡的情况好选择不同的旋转方式</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_getAvlTreeHeight</span>(<span class="params">node</span>) &#123;</span><br><span class="line">    <span class="comment">// 空节点的高度为0</span></span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里使用后序遍历，因为每次递归的结果需要子节点递归的结果</span></span><br><span class="line">    <span class="keyword">const</span> leftHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>);</span><br><span class="line">    <span class="keyword">const</span> rightHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 节点高度为左右子树高度中的较大值加上1</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">max</span>(leftHeight, rightHeight) + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="平衡"><a class="markdownIt-Anchor" href="#平衡"></a> 平衡</h3>
+<p>平衡以node为根节点的子树，并返回新的根节点。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_balance</span>(<span class="params">node</span>) &#123;</span><br><span class="line">    <span class="comment">// 空节点不需要平衡，直接返回空节点</span></span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取左右子树的高度</span></span><br><span class="line">    <span class="keyword">const</span> leftSubTreeHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>);</span><br><span class="line">    <span class="keyword">const</span> rightSubTreeHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果左子树高度大于右子树高度，且大不止1，说明不平衡，且这里隐含一个逻辑，就是左子树的左子树一定不为空</span></span><br><span class="line">    <span class="keyword">if</span> (leftSubTreeHeight - rightSubTreeHeight &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// 左左情况，直接右旋</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>.<span class="property">left</span>) &gt;= <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>.<span class="property">right</span>)) &#123;</span><br><span class="line">            node = <span class="variable language_">this</span>.#<span class="title function_">_rotateRight</span>(node)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 左右情况，先左旋后右旋</span></span><br><span class="line">            node = <span class="variable language_">this</span>.#<span class="title function_">_rotateLeftRight</span>(node);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (rightSubTreeHeight - leftSubTreeHeight &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// 右右情况，直接左旋</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>.<span class="property">right</span>) &gt;= <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>.<span class="property">left</span>)) &#123;</span><br><span class="line">            node = <span class="variable language_">this</span>.#<span class="title function_">_rotateLeft</span>(node)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 右左情况，先右旋，后左旋</span></span><br><span class="line">            node = <span class="variable language_">this</span>.#<span class="title function_">_rotateRightLeft</span>(node)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回平衡后的子树的新的根节点</span></span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="基本操作"><a class="markdownIt-Anchor" href="#基本操作"></a> 基本操作</h2>
+<h3 id="插入"><a class="markdownIt-Anchor" href="#插入"></a> 插入</h3>
+<p>插入新的节点，并返回新的根节点</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 这段代码最需要理解的地方是，这个递归函数每次返回的是在以node节点为根节点的树上插入newNode并平衡后的新子树的根节点。</span></span><br><span class="line">#<span class="title function_">_insertHelper</span>(<span class="params">node, newNode</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果是根节点为空，则直接把newNode当作根节点返回</span></span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> newNode;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果新节点的值比当前节点小</span></span><br><span class="line">    <span class="keyword">if</span> (newNode.<span class="property">val</span> &lt; node.<span class="property">val</span>) &#123;</span><br><span class="line">        <span class="comment">// 左节点为空，那么直接就把新节点当作左子节点</span></span><br><span class="line">        <span class="keyword">if</span> (node.<span class="property">left</span> === <span class="literal">null</span>) &#123;</span><br><span class="line">            node.<span class="property">left</span> = newNode;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 如果左子节点不为空，那么在左子树中插入新节点，并把插入后返回的新子树的根节点作为左子树</span></span><br><span class="line">            node.<span class="property">left</span> = <span class="variable language_">this</span>.#<span class="title function_">_insertHelper</span>(node.<span class="property">left</span>, newNode);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 右节点为空，那么直接就把新节点当作右子节点</span></span><br><span class="line">        <span class="keyword">if</span> (node.<span class="property">right</span> === <span class="literal">null</span>) &#123;</span><br><span class="line">            node.<span class="property">right</span> = newNode;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 如果右子节点不为空，那么在右子树中插入新节点，并把插入后返回的新子树的根节点作为右子树</span></span><br><span class="line">            node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_insertHelper</span>(node.<span class="property">right</span>, newNode);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 插入后进行平衡，并返回平衡后的新子树的根节点</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_balance</span>(node)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">insert</span>(<span class="params">newNode</span>) &#123;</span><br><span class="line">    <span class="comment">// 从根节点开始插入newNode，并且重新赋值根节点，保证下次调用的正确</span></span><br><span class="line">    <span class="variable language_">this</span>.#_root = <span class="variable language_">this</span>.#<span class="title function_">_insertHelper</span>(<span class="variable language_">this</span>.#_root, newNode);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="查找"><a class="markdownIt-Anchor" href="#查找"></a> 查找</h3>
+<p>这个比较简单，和BST没什么区别</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"> #<span class="title function_">_searchHelper</span>(<span class="params">node, val</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (node.<span class="property">val</span> === val) &#123;</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; node.<span class="property">val</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_searchHelper</span>(node.<span class="property">left</span>, val)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_searchHelper</span>(node.<span class="property">right</span>, val);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">search</span>(<span class="params">val</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_searchHelper</span>(<span class="variable language_">this</span>.#_root, val);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="删除"><a class="markdownIt-Anchor" href="#删除"></a> 删除</h3>
+<p>在以node为根节点的子树上删除值为val的节点，并返回平衡后新的树的根节点</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">#<span class="title function_">_removeHelper</span>(<span class="params">node, val</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果node为空，说明树为空，不需要删除，新树的根节点也是null</span></span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">// 如果找到了要删除的节点</span></span><br><span class="line">    <span class="keyword">if</span> (val === node.<span class="property">val</span>) &#123;</span><br><span class="line">        <span class="comment">// 要删除的节点左右子树都有</span></span><br><span class="line">        <span class="keyword">if</span> (node.<span class="property">left</span> &amp;&amp; node.<span class="property">right</span>) &#123;</span><br><span class="line">            <span class="comment">// 那就找到该节点右子树</span></span><br><span class="line">            <span class="keyword">let</span> p = node.<span class="property">right</span>;</span><br><span class="line">            <span class="comment">// 然后在右子树中一直找左子树</span></span><br><span class="line">            <span class="keyword">while</span>(p.<span class="property">left</span>) &#123;</span><br><span class="line">                p = p.<span class="property">left</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 然后把结果替换到当前节点中，因为右子树中最左的子节点一定小于右子树中其他的节点，同时大雨左子树中所有节点</span></span><br><span class="line">            node.<span class="property">val</span> = p.<span class="property">val</span>;</span><br><span class="line">            <span class="comment">// 上一步只是把节点值替换，但是节点还在，我们需要右子树中删除该节点，然后返回平衡后新的右子树作为node的右子树。</span></span><br><span class="line">            <span class="comment">// 而记住，此时我们要删除的是p.val了，而不是val，因为我们已经把p.val放到了node.val，且这个p有个性质就是它最起码没有左子节点了，座椅下一次会进入紧接着的else逻辑</span></span><br><span class="line">            node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(node.<span class="property">right</span>, p.<span class="property">val</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 如果不是左右子树都有，直接就替换上来，然后删除原本的就好</span></span><br><span class="line">            <span class="keyword">let</span> p = node.<span class="property">left</span> !== <span class="literal">null</span> ? node.<span class="property">left</span> : node.<span class="property">right</span>;</span><br><span class="line">            node = <span class="literal">null</span>;</span><br><span class="line">            <span class="keyword">return</span> p;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; node.<span class="property">val</span>) &#123;</span><br><span class="line">        <span class="comment">// 如果要删除的值比当前小，就去左子树删除</span></span><br><span class="line">        node.<span class="property">left</span> = <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(node.<span class="property">left</span>, val)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 如果要删除的值比当前大，就去右子树删除</span></span><br><span class="line">        node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(node.<span class="property">right</span>, val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回平衡后新的子树根节点</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_balance</span>(node);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">remove</span>(<span class="params">val</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(<span class="variable language_">this</span>.#_root, val);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="完整代码和测试"><a class="markdownIt-Anchor" href="#完整代码和测试"></a> 完整代码和测试</h1>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AvlTree</span>&#123;</span><br><span class="line">    #<span class="title function_">_rotateLeft</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> avlNode = node.<span class="property">right</span>;</span><br><span class="line">        node.<span class="property">right</span> = avlNode.<span class="property">left</span>;</span><br><span class="line">        avlNode.<span class="property">left</span> = node;</span><br><span class="line">        <span class="keyword">return</span> avlNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_rotateRight</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> avlNode = node.<span class="property">left</span>;</span><br><span class="line">        node.<span class="property">left</span> = avlNode.<span class="property">right</span>;</span><br><span class="line">        avlNode.<span class="property">right</span> = node;</span><br><span class="line">        <span class="keyword">return</span> avlNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_rotateLeftRight</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        node.<span class="property">left</span> = <span class="variable language_">this</span>.#<span class="title function_">_rotateLeft</span>(node.<span class="property">left</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_rotateRight</span>(node)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_rotateRightLeft</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_rotateRight</span>(node.<span class="property">right</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_rotateLeft</span>(node);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_getAvlTreeHeight</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> leftHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>);</span><br><span class="line">        <span class="keyword">const</span> rightHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">max</span>(leftHeight, rightHeight) + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_balance</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> leftSubTreeHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>);</span><br><span class="line">        <span class="keyword">const</span> rightSubTreeHeight = <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (leftSubTreeHeight - rightSubTreeHeight &gt; <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>.<span class="property">left</span>) &gt;= <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">left</span>.<span class="property">right</span>)) &#123;</span><br><span class="line">                node = <span class="variable language_">this</span>.#<span class="title function_">_rotateRight</span>(node)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                node = <span class="variable language_">this</span>.#<span class="title function_">_rotateLeftRight</span>(node);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (rightSubTreeHeight - leftSubTreeHeight &gt; <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>.<span class="property">right</span>) &gt;= <span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(node.<span class="property">right</span>.<span class="property">left</span>)) &#123;</span><br><span class="line">                node = <span class="variable language_">this</span>.#<span class="title function_">_rotateLeft</span>(node)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                node = <span class="variable language_">this</span>.#<span class="title function_">_rotateRightLeft</span>(node)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_insertHelper</span>(<span class="params">node, newNode</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> newNode;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (newNode.<span class="property">val</span> &lt; node.<span class="property">val</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (node.<span class="property">left</span> === <span class="literal">null</span>) &#123;</span><br><span class="line">                node.<span class="property">left</span> = newNode;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                node.<span class="property">left</span> = <span class="variable language_">this</span>.#<span class="title function_">_insertHelper</span>(node.<span class="property">left</span>, newNode);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (node.<span class="property">right</span> === <span class="literal">null</span>) &#123;</span><br><span class="line">                node.<span class="property">right</span> = newNode;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_insertHelper</span>(node.<span class="property">right</span>, newNode);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_balance</span>(node)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">insert</span>(<span class="params">newNode</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.#_root = <span class="variable language_">this</span>.#<span class="title function_">_insertHelper</span>(<span class="variable language_">this</span>.#_root, newNode);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_inOrder</span>(<span class="params">node</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> stack = [node];</span><br><span class="line">        <span class="keyword">const</span> result = [];</span><br><span class="line">        <span class="keyword">while</span>(stack.<span class="property">length</span>) &#123;</span><br><span class="line">            <span class="keyword">let</span> current = stack.<span class="title function_">pop</span>();</span><br><span class="line">            <span class="keyword">if</span> (current !== <span class="literal">null</span>) &#123;</span><br><span class="line">                current.<span class="property">right</span> &amp;&amp; stack.<span class="title function_">push</span>(current.<span class="property">right</span>);</span><br><span class="line"></span><br><span class="line">                stack.<span class="title function_">push</span>(current, <span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">                current.<span class="property">left</span> &amp;&amp; stack.<span class="title function_">push</span>(current.<span class="property">left</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                current = stack.<span class="title function_">pop</span>();</span><br><span class="line">                result.<span class="title function_">push</span>(current.<span class="property">val</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    <span class="title function_">print</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.#_root === <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="variable language_">this</span>.#<span class="title function_">_inOrder</span>(<span class="variable language_">this</span>.#_root);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(<span class="variable language_">this</span>.#_root.<span class="property">left</span>))</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.#<span class="title function_">_getAvlTreeHeight</span>(<span class="variable language_">this</span>.#_root.<span class="property">right</span>))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_searchHelper</span>(<span class="params">node, val</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (node.<span class="property">val</span> === val) &#123;</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; node.<span class="property">val</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_searchHelper</span>(node.<span class="property">left</span>, val)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_searchHelper</span>(node.<span class="property">right</span>, val);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">search</span>(<span class="params">val</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_searchHelper</span>(<span class="variable language_">this</span>.#_root, val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #<span class="title function_">_removeHelper</span>(<span class="params">node, val</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (val === node.<span class="property">val</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (node.<span class="property">left</span> &amp;&amp; node.<span class="property">right</span>) &#123;</span><br><span class="line">                <span class="keyword">let</span> p = node.<span class="property">right</span>;</span><br><span class="line">                <span class="keyword">while</span>(p.<span class="property">left</span>) &#123;</span><br><span class="line">                    p = p.<span class="property">left</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                node.<span class="property">val</span> = p.<span class="property">val</span>;</span><br><span class="line">                node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(node.<span class="property">right</span>, p.<span class="property">val</span>)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">let</span> p = node.<span class="property">left</span> !== <span class="literal">null</span> ? node.<span class="property">left</span> : node.<span class="property">right</span>;</span><br><span class="line">                node = <span class="literal">null</span>;</span><br><span class="line">                <span class="keyword">return</span> p;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (val &lt; node.<span class="property">val</span>) &#123;</span><br><span class="line">            node.<span class="property">left</span> = <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(node.<span class="property">left</span>, val)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            node.<span class="property">right</span> = <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(node.<span class="property">right</span>, val);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_balance</span>(node);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">remove</span>(<span class="params">val</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.#<span class="title function_">_removeHelper</span>(<span class="variable language_">this</span>.#_root, val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #_root = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> avlTree = <span class="keyword">new</span> <span class="title class_">AvlTree</span>();</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">0</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">2</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">3</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">4</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">6</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">8</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">9</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">14</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">15</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">16</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">17</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">18</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">19</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">20</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">21</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">11</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">31</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">61</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">111</span>));</span><br><span class="line">avlTree.<span class="title function_">insert</span>(<span class="keyword">new</span> <span class="title class_">TreeNode</span>(<span class="number">221</span>));</span><br><span class="line"></span><br><span class="line">avlTree.<span class="title function_">remove</span>(<span class="number">20</span>);</span><br><span class="line">avlTree.<span class="title function_">print</span>()</span><br><span class="line"></span><br><span class="line">avlTree.<span class="title function_">remove</span>(<span class="number">1</span>);</span><br><span class="line">avlTree.<span class="title function_">print</span>()</span><br><span class="line"></span><br><span class="line">avlTree.<span class="title function_">remove</span>(<span class="number">11</span>);</span><br><span class="line">avlTree.<span class="title function_">print</span>()</span><br><span class="line"></span><br><span class="line">avlTree.<span class="title function_">remove</span>(<span class="number">221</span>);</span><br><span class="line">avlTree.<span class="title function_">print</span>()</span><br><span class="line"></span><br><span class="line">avlTree.<span class="title function_">remove</span>(<span class="number">8</span>);</span><br><span class="line">avlTree.<span class="title function_">print</span>()</span><br><span class="line"></span><br><span class="line">avlTree.<span class="title function_">remove</span>(<span class="number">4</span>);</span><br><span class="line">avlTree.<span class="title function_">print</span>()</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Algorithm</category>
       </categories>
   </entry>
   <entry>
@@ -4059,55 +4059,6 @@ a_{n1} &amp; a_{n2} &amp; \ldots &amp; a_{nn} \\
 ]]></content>
       <categories>
         <category>Babel</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>回溯算法</title>
-    <url>/posts/376d0826/</url>
-    <content><![CDATA[<h2 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h2>
-<p>最近在做题的时候遇到了好几次回溯算法，每次都是慢慢试出来的，所以就去找一下有没有什么抽象出来的思路可以参考，于是找了很多文章，这里摘录一片最基础但也是最清楚的文章，原文链接是<a href="https://leetcode-cn.com/problems/permutations/solution/hui-su-suan-fa-xiang-jie-by-labuladong-2/">这个</a>。</p>
-<p>解决一个回溯问题，实际上就是一个决策树的遍历过程。你只需要思考 3 个问题：</p>
-<p>1、路径：也就是已经做出的选择。</p>
-<p>2、选择列表：也就是你当前可以做的选择。</p>
-<p>3、结束条件：也就是到达决策树底层，无法再做选择的条件。</p>
-<span id="more"></span>
-<p>如果你不理解这三个词语的解释，没关系，我们后面会用「全排列」和「N 皇后问题」这两个经典的回溯算法问题来帮你理解这些词语是什么意思，现在你先留着印象。</p>
-<p>代码方面，回溯算法的框架：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result = []</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">backtrack</span>(<span class="params">路径, 选择列表</span>):</span><br><span class="line">    <span class="keyword">if</span> 满足结束条件:</span><br><span class="line">        result.add(路径)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">for</span> 选择 <span class="keyword">in</span> 选择列表:</span><br><span class="line">        做选择</span><br><span class="line">        backtrack(路径, 选择列表)</span><br><span class="line">        撤销选择</span><br></pre></td></tr></table></figure>
-<p>其核心就是 for 循环里面的递归，在递归调用之前「做选择」，在递归调用之后「撤销选择」，特别简单。</p>
-<p>什么叫做选择和撤销选择呢，这个框架的底层原理是什么呢？下面我们就通过「全排列」这个问题来解开之前的疑惑，详细探究一下其中的奥妙！</p>
-<h2 id="举例"><a class="markdownIt-Anchor" href="#举例"></a> 举例</h2>
-<h3 id="全排列问题"><a class="markdownIt-Anchor" href="#全排列问题"></a> 全排列问题</h3>
-<p>我们在高中的时候就做过排列组合的数学题，我们也知道 n 个不重复的数，全排列共有 n! 个。</p>
-<p>PS：为了简单清晰起见，我们这次讨论的全排列问题不包含重复的数字。</p>
-<p>那么我们当时是怎么穷举全排列的呢？比方说给三个数 [1,2,3]，你肯定不会无规律地乱穷举，一般是这样：</p>
-<p>先固定第一位为 1，然后第二位可以是 2，那么第三位只能是 3；然后可以把第二位变成 3，第三位就只能是 2 了；然后就只能变化第一位，变成 2，然后再穷举后两位……</p>
-<p>其实这就是回溯算法，我们高中无师自通就会用，或者有的同学直接画出如下这棵回溯树：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032281/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215193732_x2lnqw.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032281/origin-of-ray/微信截图_20201215193732_x2lnqw.png" /></p>
-<p>只要从根遍历这棵树，记录路径上的数字，其实就是所有的全排列。我们不妨把这棵树称为回溯算法的「决策树」。</p>
-<p>为啥说这是决策树呢，因为你在每个节点上其实都在做决策。比如说你站在下图的红色节点上：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032359/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215193902_cao7zo.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032359/origin-of-ray/微信截图_20201215193902_cao7zo.png" /></p>
-<p>你现在就在做决策，可以选择 1 那条树枝，也可以选择 3 那条树枝。为啥只能在 1 和 3 之中选择呢？因为 2 这个树枝在你身后，这个选择你之前做过了，而全排列是不允许重复使用数字的。</p>
-<p>现在可以解答开头的几个名词：[2] 就是「路径」，记录你已经做过的选择；[1,3] 就是「选择列表」，表示你当前可以做出的选择；「结束条件」就是遍历到树的底层，在这里就是选择列表为空的时候。</p>
-<p>如果明白了这几个名词，可以把「路径」和「选择」列表作为决策树上每个节点的属性，比如下图列出了几个节点的属性：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032609/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215194319_ri7upg.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032609/origin-of-ray/微信截图_20201215194319_ri7upg.png" /></p>
-<p>我们定义的 backtrack 函数其实就像一个指针，在这棵树上游走，同时要正确维护每个节点的属性，每当走到树的底层，其「路径」就是一个全排列。</p>
-<p>再进一步，如何遍历一棵树？这个应该不难吧。回忆一下之前「学习数据结构的框架思维」写过，各种搜索问题其实都是树的遍历问题，而多叉树的遍历框架就是这样：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">traverse</span><span class="params">(TreeNode root)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (TreeNode child : root.childern)</span><br><span class="line">        <span class="comment">// 前序遍历需要的操作</span></span><br><span class="line">        traverse(child);</span><br><span class="line">        <span class="comment">// 后序遍历需要的操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>而所谓的前序遍历和后序遍历，他们只是两个很有用的时间点</p>
-<p>前序遍历的代码在进入某一个节点之前的那个时间点执行，后序遍历代码在离开某个节点之后的那个时间点执行。</p>
-<p>回想我们刚才说的，「路径」和「选择」是每个节点的属性，函数在树上游走要正确维护节点的属性，那么就要在这两个特殊时间点搞点动作：</p>
-<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032818/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215194648_rfi3ci.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032818/origin-of-ray/微信截图_20201215194648_rfi3ci.png" /></p>
-<p>现在，你是否理解了回溯算法的这段核心框架？</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for 选择 in 选择列表:</span><br><span class="line">    # 做选择</span><br><span class="line">    将该选择从选择列表移除</span><br><span class="line">    路径.add(选择)</span><br><span class="line">    backtrack(路径, 选择列表)</span><br><span class="line">    # 撤销选择</span><br><span class="line">    路径.remove(选择)</span><br><span class="line">    将该选择再加入选择列表</span><br></pre></td></tr></table></figure>
-<p>我们只要在递归之前做出选择，在递归之后撤销刚才的选择，就能正确得到每个节点的选择列表和路径。</p>
-<p>自己实现的JavaScript代码：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">number[]</span>&#125; <span class="variable">nums</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="type">number[][]</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">swap</span> = (<span class="params">nums, i, j</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> temp = nums[i];</span><br><span class="line">    nums[i] = nums[j];</span><br><span class="line">    nums[j] = temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">generate</span> = (<span class="params">nums, output, n, first</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (first === n) &#123;</span><br><span class="line">        output.<span class="title function_">push</span>([...nums]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = first; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="title function_">swap</span>(nums, i, first);</span><br><span class="line">        <span class="title function_">generate</span>(nums, output, n, first + <span class="number">1</span>);</span><br><span class="line">        <span class="title function_">swap</span>(nums, i, first);        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> permute = <span class="keyword">function</span>(<span class="params">nums</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> output = [];</span><br><span class="line">    <span class="title function_">generate</span>(nums, output, nums.<span class="property">length</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> output;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>注：</p>
-<p>本文图片均来自于labuladong公众号</p>
-]]></content>
-      <categories>
-        <category>Algorithm</category>
       </categories>
   </entry>
   <entry>
@@ -4546,6 +4497,55 @@ i = 1, 2, 3, ..., n
       </categories>
   </entry>
   <entry>
+    <title>回溯算法</title>
+    <url>/posts/376d0826/</url>
+    <content><![CDATA[<h2 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h2>
+<p>最近在做题的时候遇到了好几次回溯算法，每次都是慢慢试出来的，所以就去找一下有没有什么抽象出来的思路可以参考，于是找了很多文章，这里摘录一片最基础但也是最清楚的文章，原文链接是<a href="https://leetcode-cn.com/problems/permutations/solution/hui-su-suan-fa-xiang-jie-by-labuladong-2/">这个</a>。</p>
+<p>解决一个回溯问题，实际上就是一个决策树的遍历过程。你只需要思考 3 个问题：</p>
+<p>1、路径：也就是已经做出的选择。</p>
+<p>2、选择列表：也就是你当前可以做的选择。</p>
+<p>3、结束条件：也就是到达决策树底层，无法再做选择的条件。</p>
+<span id="more"></span>
+<p>如果你不理解这三个词语的解释，没关系，我们后面会用「全排列」和「N 皇后问题」这两个经典的回溯算法问题来帮你理解这些词语是什么意思，现在你先留着印象。</p>
+<p>代码方面，回溯算法的框架：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result = []</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">backtrack</span>(<span class="params">路径, 选择列表</span>):</span><br><span class="line">    <span class="keyword">if</span> 满足结束条件:</span><br><span class="line">        result.add(路径)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">for</span> 选择 <span class="keyword">in</span> 选择列表:</span><br><span class="line">        做选择</span><br><span class="line">        backtrack(路径, 选择列表)</span><br><span class="line">        撤销选择</span><br></pre></td></tr></table></figure>
+<p>其核心就是 for 循环里面的递归，在递归调用之前「做选择」，在递归调用之后「撤销选择」，特别简单。</p>
+<p>什么叫做选择和撤销选择呢，这个框架的底层原理是什么呢？下面我们就通过「全排列」这个问题来解开之前的疑惑，详细探究一下其中的奥妙！</p>
+<h2 id="举例"><a class="markdownIt-Anchor" href="#举例"></a> 举例</h2>
+<h3 id="全排列问题"><a class="markdownIt-Anchor" href="#全排列问题"></a> 全排列问题</h3>
+<p>我们在高中的时候就做过排列组合的数学题，我们也知道 n 个不重复的数，全排列共有 n! 个。</p>
+<p>PS：为了简单清晰起见，我们这次讨论的全排列问题不包含重复的数字。</p>
+<p>那么我们当时是怎么穷举全排列的呢？比方说给三个数 [1,2,3]，你肯定不会无规律地乱穷举，一般是这样：</p>
+<p>先固定第一位为 1，然后第二位可以是 2，那么第三位只能是 3；然后可以把第二位变成 3，第三位就只能是 2 了；然后就只能变化第一位，变成 2，然后再穷举后两位……</p>
+<p>其实这就是回溯算法，我们高中无师自通就会用，或者有的同学直接画出如下这棵回溯树：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032281/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215193732_x2lnqw.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032281/origin-of-ray/微信截图_20201215193732_x2lnqw.png" /></p>
+<p>只要从根遍历这棵树，记录路径上的数字，其实就是所有的全排列。我们不妨把这棵树称为回溯算法的「决策树」。</p>
+<p>为啥说这是决策树呢，因为你在每个节点上其实都在做决策。比如说你站在下图的红色节点上：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032359/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215193902_cao7zo.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032359/origin-of-ray/微信截图_20201215193902_cao7zo.png" /></p>
+<p>你现在就在做决策，可以选择 1 那条树枝，也可以选择 3 那条树枝。为啥只能在 1 和 3 之中选择呢？因为 2 这个树枝在你身后，这个选择你之前做过了，而全排列是不允许重复使用数字的。</p>
+<p>现在可以解答开头的几个名词：[2] 就是「路径」，记录你已经做过的选择；[1,3] 就是「选择列表」，表示你当前可以做出的选择；「结束条件」就是遍历到树的底层，在这里就是选择列表为空的时候。</p>
+<p>如果明白了这几个名词，可以把「路径」和「选择」列表作为决策树上每个节点的属性，比如下图列出了几个节点的属性：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032609/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215194319_ri7upg.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032609/origin-of-ray/微信截图_20201215194319_ri7upg.png" /></p>
+<p>我们定义的 backtrack 函数其实就像一个指针，在这棵树上游走，同时要正确维护每个节点的属性，每当走到树的底层，其「路径」就是一个全排列。</p>
+<p>再进一步，如何遍历一棵树？这个应该不难吧。回忆一下之前「学习数据结构的框架思维」写过，各种搜索问题其实都是树的遍历问题，而多叉树的遍历框架就是这样：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">traverse</span><span class="params">(TreeNode root)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (TreeNode child : root.childern)</span><br><span class="line">        <span class="comment">// 前序遍历需要的操作</span></span><br><span class="line">        traverse(child);</span><br><span class="line">        <span class="comment">// 后序遍历需要的操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而所谓的前序遍历和后序遍历，他们只是两个很有用的时间点</p>
+<p>前序遍历的代码在进入某一个节点之前的那个时间点执行，后序遍历代码在离开某个节点之后的那个时间点执行。</p>
+<p>回想我们刚才说的，「路径」和「选择」是每个节点的属性，函数在树上游走要正确维护节点的属性，那么就要在这两个特殊时间点搞点动作：</p>
+<p><img src="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032818/origin-of-ray/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20201215194648_rfi3ci.png" alt="https://res.cloudinary.com/dvtfhjxi4/image/upload/v1608032818/origin-of-ray/微信截图_20201215194648_rfi3ci.png" /></p>
+<p>现在，你是否理解了回溯算法的这段核心框架？</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for 选择 in 选择列表:</span><br><span class="line">    # 做选择</span><br><span class="line">    将该选择从选择列表移除</span><br><span class="line">    路径.add(选择)</span><br><span class="line">    backtrack(路径, 选择列表)</span><br><span class="line">    # 撤销选择</span><br><span class="line">    路径.remove(选择)</span><br><span class="line">    将该选择再加入选择列表</span><br></pre></td></tr></table></figure>
+<p>我们只要在递归之前做出选择，在递归之后撤销刚才的选择，就能正确得到每个节点的选择列表和路径。</p>
+<p>自己实现的JavaScript代码：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">number[]</span>&#125; <span class="variable">nums</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="type">number[][]</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">swap</span> = (<span class="params">nums, i, j</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> temp = nums[i];</span><br><span class="line">    nums[i] = nums[j];</span><br><span class="line">    nums[j] = temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">generate</span> = (<span class="params">nums, output, n, first</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (first === n) &#123;</span><br><span class="line">        output.<span class="title function_">push</span>([...nums]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = first; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="title function_">swap</span>(nums, i, first);</span><br><span class="line">        <span class="title function_">generate</span>(nums, output, n, first + <span class="number">1</span>);</span><br><span class="line">        <span class="title function_">swap</span>(nums, i, first);        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> permute = <span class="keyword">function</span>(<span class="params">nums</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> output = [];</span><br><span class="line">    <span class="title function_">generate</span>(nums, output, nums.<span class="property">length</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> output;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>注：</p>
+<p>本文图片均来自于labuladong公众号</p>
+]]></content>
+      <categories>
+        <category>Algorithm</category>
+      </categories>
+  </entry>
+  <entry>
     <title>魔鬼的二分查找</title>
     <url>/posts/e421a043/</url>
     <content><![CDATA[<h2 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h2>
@@ -4669,162 +4669,6 @@ i = 1, 2, 3, ..., n
 ]]></content>
       <categories>
         <category>Algorithm</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>区块链入门</title>
-    <url>/posts/7f31b34d/</url>
-    <content><![CDATA[<p>区块链（blockchain）是眼下的大热门，新闻媒体大量报道，宣称它将创造未来。</p>
-<p>作者在阅读了部分论文，博客以及官方文档之后结合自己的理解整合了这些资料的内容，并对这些内容进行了重新组织。</p>
-<span id="more"></span>
-<h2 id="区块链的本质"><a class="markdownIt-Anchor" href="#区块链的本质"></a> 区块链的本质</h2>
-<p>从本质上讲，区块链是一种特殊的分布式数据库。首先他可以存储信息，任何需要保存的信息都可以在区块链中进行读写。</p>
-<p>但是与普通的数据库不同，任何人都可以假设服务器加入区块链的网络，成为一个节点，每个节点都是平等的，也不存在类似于数据库管理员一样的角色。如果有人想对区块链添加审核，也实现不了，因为它的设计目标就是防止出现居于中心地位的管理当局。</p>
-<p>正是因为无法管理，区块链才能做到无法被控制。否则一旦大公司大集团控制了管理权，他们就会控制整个平台，其他使用者就都必须听命于他们了。</p>
-<p>向任意一个节点进行读写数据，所有的节点都会同步，保证区块链的一致性，这也是区块链去中心化之后能够保证其数据可靠性的原因。</p>
-<h2 id="区块链中的一些概念"><a class="markdownIt-Anchor" href="#区块链中的一些概念"></a> 区块链中的一些概念</h2>
-<p>区块链的基本原理理解起来并不复杂。首先来看三个基本概念：</p>
-<ul>
-<li>交易（Transaction）：一次对账本的操作，导致账本状态的一次改变，如添加一条转账记录；</li>
-<li>区块（Block）：记录一段时间内发生的所有交易和状态结果等，是对当前账本状态的一次共识；</li>
-<li>链（Chain）：由区块按照发生顺序串联而成，是整个账本状态变化的日志记录。</li>
-</ul>
-<h3 id="区块"><a class="markdownIt-Anchor" href="#区块"></a> 区块</h3>
-<p>区块链由一个个的区块（block）组成。可以把这些区块类比成数据库的记录，每一次对数据的修改，都会创建一个新的区块，因为区块链的设计是增量式的，所以无论是对现有区块中的数据做任何CRUD操作，都是在现有链的基础上增加新的区块。</p>
-<p>每个区块分为两个部分：</p>
-<ul>
-<li>区块头：记录当前区块的特征值</li>
-<li>区块体：记录当前区块的实际数据</li>
-</ul>
-<p>区块头又包含了当前区块的多项特征值：</p>
-<ul>
-<li>当前区块的生成时间</li>
-<li>区块体的哈希</li>
-<li>上一个区块的哈希</li>
-<li>…</li>
-</ul>
-<p>哈希其实就是计算机可以对任意内容计算出一个长度相同的特征值，区块链的哈希长度是256位，也就是说，不管什么内容最终计算出来的特征值都是256位，而且可以保证只要原始内容不同，计算出来的哈希值一定不同。</p>
-<p>这样就可以保证：</p>
-<ul>
-<li>每个区块的哈希值一定是不同的，可以通过哈希标识区块</li>
-<li>如果区块的内容改变了，他的哈希值一定会改变</li>
-</ul>
-<p>区块的哈希值都是根据区块头进行计算的，也就是说是把区块头的所有值拼接成一个字符串后对该字符串进行哈希的结果。</p>
-<p>结合前面所说，区块头包含了很多内容，其中就有当前区块体的内容以及上个区块的哈希，也就是当前区块体的内容改变了或者上一个区块的内容改变了，就一定会引起当前区块哈希的改变。</p>
-<p>这一点对区块链有重大意义。如果有人修改了一个区块，该区块的哈希就变了。为了让后面的区块还能连到它（因为下一个区块包含上一个区块的哈希），该人必须依次修改后面所有的区块，否则被改掉的区块就脱离区块链了。由于后面要提到的原因，哈希的计算很耗时，短时间内修改多个区块几乎不可能发生，除非有人掌握了全网51%以上的计算能力。</p>
-<h3 id="节点"><a class="markdownIt-Anchor" href="#节点"></a> 节点</h3>
-<p>节点指的是区块链网络中的计算机，包含手机，矿机和服务器等等。操作一个节点的可以是普通的钱包用户，矿工和多个人协作。例如比特币是属于公有链，当我们用自己已连接到互联网的电脑运行程序时，该电脑就是比特币网络中的一个节点。对于像比特币这样的公有链，理论上来讲，你下载完整的区块链，参与交易和挖矿，才算是节点。</p>
-<p>节点，保存着自己的一份或者部分账本，通过算力或者份额投票的方式来解决拜占庭将军问题，通过无信任的方式确保全体节点遵循的账本和自己的账本是一致的。</p>
-<h3 id="采矿"><a class="markdownIt-Anchor" href="#采矿"></a> 采矿</h3>
-<p>由于必须保证节点之间的同步，所以新区块的添加速度不能太快。试想一下，你刚刚同步了一个区块，准备基于它生成下一个区块，但这时别的节点又有新区块生成，你不得不放弃做了一半的计算，再次去同步。因为每个区块的后面，只能跟着一个区块，你永远只能在最新区块的后面，生成下一个区块。所以，你别无选择，一听到信号，就必须立刻同步。</p>
-<p>所以，区块链的发明者中本聪故意让添加新区块，变得很困难。他的设计是，平均每10分钟，全网才能生成一个新区块，一小时也就六个。</p>
-<p>这种产出速度不是通过命令达成的，而是故意设置了海量的计算。也就是说，只有通过极其大量的计算，才能得到当前区块的有效哈希，从而把新区块添加到区块链。由于计算量太大，所以快不起来。</p>
-<h2 id="区块链的原理"><a class="markdownIt-Anchor" href="#区块链的原理"></a> 区块链的原理</h2>
-<p>如果把区块链系统作为一个状态机，则每次交易意味着一次状态改变；生成的区块，就是参与者对其中交易导致状态改变结果的共识。</p>
-<p>区块链的目标是实现一个分布的数据记录账本，这个账本只允许添加、不允许删除。账本底层的基本结构是一个线性的链表。链表由一个个“区块”串联组成（如下图所示），后继区块中记录前导区块的哈希（Hash）值。某个区块（以及块里的交易）是否合法，可通过计算哈希值的方式进行快速检验。网络中节点可以提议添加一个新的区块，但必须经过共识机制来对区块达成确认。</p>
-<h3 id="通过比特币来了解区块链的工作过程"><a class="markdownIt-Anchor" href="#通过比特币来了解区块链的工作过程"></a> 通过比特币来了解区块链的工作过程</h3>
-<p>具体以比特币网络为例，来看其中如何使用了区块链技术。</p>
-<p>首先，用户通过比特币客户端发起一项交易，消息广播到比特币网络中等待确认。网络中的节点会将收到的等待确认的交易请求打包在一起，添加上前一个区块头部的哈希值等信息，组成一个区块结构。然后，试图找到一个 nonce 串（随机串）放到区块里，使得区块结构的哈希结果满足一定条件（比如小于某个值）。这个计算 nonce 串的过程，即俗称的“挖矿”。nonce 串的查找需要花费一定的计算力。</p>
-<p>一旦节点找到了满足条件的 nonce 串，这个区块在格式上就“合法”了，成为候选区块。节点将其在网络中广播出去。其它节点收到候选区块后进行验证，发现确实合法，就承认这个区块是一个新的合法区块，并添加到自己维护的本地区块链结构上。当大部分节点都接受了该区块后，意味着区块被网络接受，区块中所包括的交易也就得到确认。</p>
-<p>这里比较关键的步骤有两个，一个是完成对一批交易的共识（创建合法区块结构）；一个是新的区块添加到链结构上，被网络认可，确保未来无法被篡改。当然，在实现上还会有很多额外的细节。</p>
-<p>比特币的这种基于算力（寻找 nonce 串）的共识机制被称为工作量证明（Proof of Work，PoW）。这是因为要让哈希结果满足一定条件，并无已知的快速启发式算法，只能对 nonce 值进行逐个尝试的蛮力计算。尝试的次数越多（工作量越大），算出来的概率越大。</p>
-<p>通过调节对哈希结果的限制条件，比特币网络控制平均约 10 分钟产生一个合法区块。算出区块的节点将得到区块中所有交易的管理费和协议固定发放的奖励费（目前是 12.5 比特币，每四年减半）。</p>
-<h4 id="理解"><a class="markdownIt-Anchor" href="#理解"></a> 理解</h4>
-<p>根据作者现在的理解，所谓的挖矿并不是去抢夺比特币，而是去抢夺比特币这个账本的记账权，如果把比特币整个网络比作一个账本，区块链上的每个区块都是账本中的一页，但是并不是所有的账页都会被这个账本所接受，只有符合其规则的账页才能正确插入到账本中，所谓矿机就是寻找这种符合规则的账页。</p>
-<p>只不过目前比特币的激励机制就是每当你成功创建一个新的账页，你可以直接在其中写入向自己的账户转入一定数额的比特币，并结合你目前记录的所有未被记入区块链并且被承认有效的交易记录一起记入到这个区块体中，只要这个账页被成功插入并被大多数节点所接受并作为主分支，那么这些交易记录就是有效的。</p>
-<p>但是比特币数量又是有限的，当某一天比特币发完之后，矿机的收入来源就是那些记录在自己这一页上的交易记录的抽成。</p>
-<h2 id="区块链的三种场景"><a class="markdownIt-Anchor" href="#区块链的三种场景"></a> 区块链的三种场景</h2>
-<p>引入智能合约后的区块链，已经超越了单纯的数据记录功能，实际上带有点“智能计算”的意味了；更进一步地，还可以为区块链加入权限管理、高级编程语言支持等，实现更强大的、支持更多商用场景的分布式账本系统。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">场景</th>
-<th style="text-align:left">功能</th>
-<th style="text-align:left">智能合约</th>
-<th style="text-align:left">一致性</th>
-<th style="text-align:left">权限</th>
-<th style="text-align:left">类型</th>
-<th style="text-align:left">性能</th>
-<th style="text-align:left">编程语言</th>
-<th style="text-align:left">代表</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">数字货币</td>
-<td style="text-align:left">记账功能</td>
-<td style="text-align:left">不带有或较弱</td>
-<td style="text-align:left">PoW</td>
-<td style="text-align:left">无</td>
-<td style="text-align:left">公有链</td>
-<td style="text-align:left">较低</td>
-<td style="text-align:left">简单脚本</td>
-<td style="text-align:left">比特币网络</td>
-</tr>
-<tr>
-<td style="text-align:left">分布式应用引擎</td>
-<td style="text-align:left">智能合约</td>
-<td style="text-align:left">图灵完备</td>
-<td style="text-align:left">PoW、PoS</td>
-<td style="text-align:left">无</td>
-<td style="text-align:left">公有链</td>
-<td style="text-align:left">受限</td>
-<td style="text-align:left">特定语言</td>
-<td style="text-align:left">以太坊网络</td>
-</tr>
-<tr>
-<td style="text-align:left">带权限的分布式账本</td>
-<td style="text-align:left">商业处理</td>
-<td style="text-align:left">多种语言，图灵完备</td>
-<td style="text-align:left">包括 CFT、BFT 在内的多种机制，可插拔</td>
-<td style="text-align:left">支持</td>
-<td style="text-align:left">联盟链</td>
-<td style="text-align:left">可扩展</td>
-<td style="text-align:left">高级编程语言</td>
-<td style="text-align:left">超级账本</td>
-</tr>
-</tbody>
-</table>
-<p>根据参与者的不同，可以分为公有（Public 或 Permissionless）链、联盟（Consortium 或 Permissioned）链和私有（Private）链。</p>
-<p>公有链，顾名思义，任何人都可以参与使用和维护，参与者多为匿名。典型的如比特币和以太坊区块链，信息是完全公开的。</p>
-<p>如果进一步引入许可机制，可以实现私有链和联盟链两种类型。</p>
-<p>私有链，由集中管理者进行管理限制，只有内部少数人可以使用，信息不公开。一般认为跟传统中心化记账系统的差异不明显。</p>
-<p>联盟链则介于两者之间，由若干组织一起合作（如供应链机构或银行联盟等）维护一条区块链，该区块链的使用必须是带有权限的限制访问，相关信息会得到保护，典型如超级账本项目。在架构上，现有大部分区块链在实现都至少包括了网络层、共识层、智能合约和应用层等分层结构，联盟链实现往还会引入额外的权限管理机制。</p>
-<h2 id="hyperledger-fabric"><a class="markdownIt-Anchor" href="#hyperledger-fabric"></a> Hyperledger Fabric</h2>
-<p>Hyperledger Fabric 是由 IBM 公司主导开发的一个面向企业级客户的开源项目。与比特币和以太坊这类公有链不同，Hyperledger Fabric 网络中的节点必须经过授权认证后才能加入，从而避免了 POW 资源开销，大幅提高了交易处理效率，满足企业级应用对处理性能的诉求。同时，为了满足灵活多变的应用场景，Hyperledger Fabric 采用了高度模块化的系统设计理念，将权限认证模块（MSP）、共识服务模块（Ordering Service）、背书模块（Endorsing peers）、区块提交模块（committing peers）等进行分离部署，使开发者可以根据具体的业务场景替换模块，实现了模块的插件式管理（plug-in/plug-out）。所以，Hyperledger Fabric 是一个私有链／联盟链的开发框架，而且系统的运行不需要 token 支持。</p>
-<h3 id="基础概念"><a class="markdownIt-Anchor" href="#基础概念"></a> 基础概念</h3>
-<h4 id="channel"><a class="markdownIt-Anchor" href="#channel"></a> Channel：</h4>
-<p>是一种数据隔离机制，保证交易信息只有交易参与方可见，每个 channel 是一个独立的区块链，这使得多个用户可以共用同一个区块链系统而不用担心信息泄露问题。Channels 能够让上层不同的用户业务共享同一个区块链系统资源，主要包括网络、计算、存储资源。从本质上来说，channels 是通过不同的区块链账本来为上层业务服务，而且，这些区块链统一部署在 peers 节点上，统一通过 ordering service 进行交易排序和打包区块。Channels 之间通过权限隔离控制，不同 channel 内的成员，无法访问对方的交易信息，只能访问所属 channel 的交易信息。</p>
-<h4 id="chaincode"><a class="markdownIt-Anchor" href="#chaincode"></a> Chaincode：</h4>
-<p>也叫智能合约，将资产定义和资产处理逻辑封装成接口，当其被用户调用的时候，改变账本的状态。</p>
-<h4 id="ledger"><a class="markdownIt-Anchor" href="#ledger"></a> Ledger：</h4>
-<p>区块链账本，保存交易信息和智能合约代码。</p>
-<h4 id="network"><a class="markdownIt-Anchor" href="#network"></a> Network：</h4>
-<p>交易处理节点之间的 P2P 网络，用于维持区块链账本的一致性。</p>
-<h4 id="ordering-service"><a class="markdownIt-Anchor" href="#ordering-service"></a> Ordering service：</h4>
-<p>利用 kafka、SBTF 等共识算法对所有交易信息进行排序并打包成区块，发给 committing peers 节点，写入区块链中。</p>
-<h4 id="world-state"><a class="markdownIt-Anchor" href="#world-state"></a> World state：</h4>
-<p>显示当前资产数据的状态，底层通过 LevelDB 和 CouchDB 数据库将区块链中的资产信息组织起来，提供高效的数据访问接口。</p>
-<h4 id="membership-service-provider-msp"><a class="markdownIt-Anchor" href="#membership-service-provider-msp"></a> Membership service provider （MSP）：</h4>
-<p>管理认证信息，为 client 和 peers 提供授权服务。</p>
-<h3 id="角色"><a class="markdownIt-Anchor" href="#角色"></a> 角色</h3>
-<p>在 Hyperledger 中，由三种类型的角色：</p>
-<h4 id="client"><a class="markdownIt-Anchor" href="#client"></a> Client：</h4>
-<p>应用客户端，用于将终端用户的交易请求发送到区块链网络；</p>
-<h4 id="peers"><a class="markdownIt-Anchor" href="#peers"></a> Peers：</h4>
-<p>负责维护区块链账本，分为 endoring peers 和 committing peers，其中，endorser 为交易做背书（验证交易并对交易签名），committer 接收打包好的区块，然后写入区块链中。Peers 节点是一个逻辑的概念，endorser 和 committer 可以同时部署在一台物理机上。</p>
-<h4 id="ordering-service-2"><a class="markdownIt-Anchor" href="#ordering-service-2"></a> Ordering Service：</h4>
-<p>接收交易信息，并将其排序后打包成区块，放入区块链，最后将结果返回给 committer peers。</p>
-<h3 id="交易流程"><a class="markdownIt-Anchor" href="#交易流程"></a> 交易流程</h3>
-<p>区块链的账本由 peer 节点维护，并不是由 ordering service 集群维护，所以，只有 peer 节点上可以找到完整的区块链信息，而 order service 集群只负责对交易进行排序，只保留处理过程中的一部分区块链信息。Hyperledger Fabric 系统中的节点是一个逻辑的概念，并不一定是一个台物理设备，但是对于生产环境的设计者来说，peer 节点不能和 order 节点部署在一台机器上，而 enduring peers 和 committing peers 可以部署在同一台机器上，这种设计主要是为了系统架构的解耦，提高扩展性，以及通过主机隔离提高安全性。 Endorsing peer 校验客户端的签名，然后执行智能合约代码模拟交易。交易处理完成后，对交易信息签名，返回给客户端。客户端收到签名后的交易信息后，发给 order 节点排序。Order 节点将交易信息排序打包成区块后，广播发给 committing peers，写入区块链中。（具体交易流程可以参考：<a href="https://www.chainnews.com/articles/074736012702.htm%EF%BC%89">https://www.chainnews.com/articles/074736012702.htm）</a></p>
-<p>参考文章：</p>
-<p><a href="https://mp.weixin.qq.com/s/8W_oegxPCMr9zTtpN1h6dA">https://mp.weixin.qq.com/s/8W_oegxPCMr9zTtpN1h6dA</a></p>
-<p><a href="http://www.ruanyifeng.com/blog/2017/12/blockchain-tutorial.html">http://www.ruanyifeng.com/blog/2017/12/blockchain-tutorial.html</a></p>
-<p><a href="https://yeasy.gitbooks.io/blockchain_guide/content/02_overview/definition.html">https://yeasy.gitbooks.io/blockchain_guide/content/02_overview/definition.html</a></p>
-<p><a href="https://www.chainnews.com/articles/074736012702.htm">https://www.chainnews.com/articles/074736012702.htm</a></p>
-]]></content>
-      <categories>
-        <category>Blockchain</category>
       </categories>
   </entry>
   <entry>
@@ -5075,6 +4919,162 @@ i = 1, 2, 3, ..., n
 <figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">CanvasToSVG</span> <span class="keyword">from</span> <span class="string">&#x27;canvas-to-svg&#x27;</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">addTextWaterMaskToCanvas</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="attr">context</span>: <span class="title class_">CanvasRenderingContext2D</span>,</span></span><br><span class="line"><span class="params">  <span class="attr">textWaterMask</span>: <span class="built_in">string</span>,</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  context.<span class="property">font</span> = <span class="string">&#x27;16px Microsoft YaHei&#x27;</span>;</span><br><span class="line">  context.<span class="property">fillStyle</span> = <span class="string">&#x27;#F2F3F5&#x27;</span>;</span><br><span class="line">  <span class="keyword">const</span> &#123; width, height &#125; = context.<span class="property">canvas</span>;</span><br><span class="line">  <span class="keyword">const</span> textMaskCountHorizontal = <span class="title class_">Math</span>.<span class="title function_">max</span>(<span class="number">1</span>, width / <span class="number">150</span>);</span><br><span class="line">  <span class="keyword">const</span> textMaskCountVertical = <span class="title class_">Math</span>.<span class="title function_">max</span>(<span class="number">1</span>, height / <span class="number">150</span>);</span><br><span class="line">  <span class="keyword">const</span> fwidth = width / textMaskCountHorizontal;</span><br><span class="line">  <span class="keyword">const</span> fheight = height / textMaskCountVertical;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> hh = <span class="number">0</span>; hh &lt; height; hh += fheight) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> ww = <span class="number">0</span>; ww &lt; width; ww += fwidth) &#123;</span><br><span class="line">      context.<span class="title function_">translate</span>(ww, hh);</span><br><span class="line">      context.<span class="title function_">rotate</span>(-<span class="title class_">Math</span>.<span class="title function_">atan</span>(height / width));</span><br><span class="line">      context.<span class="title function_">fillText</span>(textWaterMask, -fwidth / <span class="number">2</span>, fheight / <span class="number">2</span>);</span><br><span class="line">      context.<span class="title function_">rotate</span>(<span class="title class_">Math</span>.<span class="title function_">atan</span>(height / width));</span><br><span class="line">      context.<span class="title function_">translate</span>(-ww, -hh);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">downloadFullImageWithWaterMaskCreator</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="attr">graphInstance</span>: <span class="title class_">IGraph</span> | <span class="literal">null</span>,</span></span><br><span class="line"><span class="params">  <span class="attr">textWaterMask</span>: <span class="built_in">string</span>,</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span></span><br><span class="line"><span class="params">    <span class="attr">name</span>?: <span class="built_in">string</span>,</span></span><br><span class="line"><span class="params">    <span class="attr">type</span>?: <span class="title class_">DataUrlType</span>,</span></span><br><span class="line"><span class="params">    <span class="attr">imageConfig</span>?: &#123;</span></span><br><span class="line"><span class="params">      backgroundColor?: <span class="built_in">string</span>;</span></span><br><span class="line"><span class="params">      padding?: <span class="built_in">number</span> | <span class="built_in">number</span>[];</span></span><br><span class="line"><span class="params">    &#125;,</span></span><br><span class="line"><span class="params">    <span class="attr">callback</span>?: (success: <span class="built_in">boolean</span>) =&gt; <span class="built_in">void</span>,</span></span><br><span class="line"><span class="params">  </span>) &#123;</span><br><span class="line">    graphInstance?.<span class="title function_">toFullDataURL</span>(</span><br><span class="line">      <span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> image = <span class="keyword">new</span> <span class="title class_">Image</span>();</span><br><span class="line">        image.<span class="property">src</span> = res;</span><br><span class="line">        image.<span class="property">onload</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// const canvas = document.createElement(&#x27;canvas&#x27;);</span></span><br><span class="line">            <span class="comment">// canvas.width = image.width;</span></span><br><span class="line">            <span class="comment">// canvas.height = image.height;</span></span><br><span class="line">            <span class="comment">// const context = canvas.getContext(&#x27;2d&#x27;);</span></span><br><span class="line">            <span class="keyword">const</span> context = <span class="keyword">new</span> <span class="title class_">CanvasToSVG</span>(image.<span class="property">width</span>, image.<span class="property">height</span>);</span><br><span class="line">            <span class="keyword">if</span> (context &amp;&amp; name) &#123;</span><br><span class="line">              context.<span class="title function_">rect</span>(<span class="number">0</span>, <span class="number">0</span>, image.<span class="property">width</span>, image.<span class="property">height</span>);</span><br><span class="line">              context.<span class="title function_">drawImage</span>(image, <span class="number">0</span>, <span class="number">0</span>, image.<span class="property">width</span>, image.<span class="property">height</span>);</span><br><span class="line"></span><br><span class="line">              <span class="title function_">addTextWaterMaskToCanvas</span>(context, textWaterMask);</span><br><span class="line"></span><br><span class="line">              <span class="comment">// downloadCanvasImage(canvas, name, type);</span></span><br><span class="line"></span><br><span class="line">              <span class="keyword">const</span> svg = context.<span class="title function_">getSerializedSvg</span>(<span class="literal">true</span>);</span><br><span class="line">              <span class="keyword">const</span> svgData = <span class="variable constant_">URL</span>.<span class="title function_">createObjectURL</span>(</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">Blob</span>([svg], &#123; <span class="attr">type</span>: <span class="string">&#x27;image/svg&#x27;</span> &#125;),</span><br><span class="line">              );</span><br><span class="line">              <span class="keyword">const</span> downloadLink = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line">              downloadLink.<span class="property">download</span> = <span class="string">`<span class="subst">$&#123;name&#125;</span>.svg`</span>;</span><br><span class="line">              downloadLink.<span class="property">href</span> = svgData;</span><br><span class="line">              downloadLink.<span class="title function_">click</span>();</span><br><span class="line"></span><br><span class="line">              callback?.(<span class="literal">true</span>);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">            callback?.(<span class="literal">false</span>);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        image.<span class="property">onerror</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">          callback?.(<span class="literal">false</span>);</span><br><span class="line">        &#125;;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">type</span>,</span><br><span class="line">      imageConfig,</span><br><span class="line">    );</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>Sundry</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>区块链入门</title>
+    <url>/posts/7f31b34d/</url>
+    <content><![CDATA[<p>区块链（blockchain）是眼下的大热门，新闻媒体大量报道，宣称它将创造未来。</p>
+<p>作者在阅读了部分论文，博客以及官方文档之后结合自己的理解整合了这些资料的内容，并对这些内容进行了重新组织。</p>
+<span id="more"></span>
+<h2 id="区块链的本质"><a class="markdownIt-Anchor" href="#区块链的本质"></a> 区块链的本质</h2>
+<p>从本质上讲，区块链是一种特殊的分布式数据库。首先他可以存储信息，任何需要保存的信息都可以在区块链中进行读写。</p>
+<p>但是与普通的数据库不同，任何人都可以假设服务器加入区块链的网络，成为一个节点，每个节点都是平等的，也不存在类似于数据库管理员一样的角色。如果有人想对区块链添加审核，也实现不了，因为它的设计目标就是防止出现居于中心地位的管理当局。</p>
+<p>正是因为无法管理，区块链才能做到无法被控制。否则一旦大公司大集团控制了管理权，他们就会控制整个平台，其他使用者就都必须听命于他们了。</p>
+<p>向任意一个节点进行读写数据，所有的节点都会同步，保证区块链的一致性，这也是区块链去中心化之后能够保证其数据可靠性的原因。</p>
+<h2 id="区块链中的一些概念"><a class="markdownIt-Anchor" href="#区块链中的一些概念"></a> 区块链中的一些概念</h2>
+<p>区块链的基本原理理解起来并不复杂。首先来看三个基本概念：</p>
+<ul>
+<li>交易（Transaction）：一次对账本的操作，导致账本状态的一次改变，如添加一条转账记录；</li>
+<li>区块（Block）：记录一段时间内发生的所有交易和状态结果等，是对当前账本状态的一次共识；</li>
+<li>链（Chain）：由区块按照发生顺序串联而成，是整个账本状态变化的日志记录。</li>
+</ul>
+<h3 id="区块"><a class="markdownIt-Anchor" href="#区块"></a> 区块</h3>
+<p>区块链由一个个的区块（block）组成。可以把这些区块类比成数据库的记录，每一次对数据的修改，都会创建一个新的区块，因为区块链的设计是增量式的，所以无论是对现有区块中的数据做任何CRUD操作，都是在现有链的基础上增加新的区块。</p>
+<p>每个区块分为两个部分：</p>
+<ul>
+<li>区块头：记录当前区块的特征值</li>
+<li>区块体：记录当前区块的实际数据</li>
+</ul>
+<p>区块头又包含了当前区块的多项特征值：</p>
+<ul>
+<li>当前区块的生成时间</li>
+<li>区块体的哈希</li>
+<li>上一个区块的哈希</li>
+<li>…</li>
+</ul>
+<p>哈希其实就是计算机可以对任意内容计算出一个长度相同的特征值，区块链的哈希长度是256位，也就是说，不管什么内容最终计算出来的特征值都是256位，而且可以保证只要原始内容不同，计算出来的哈希值一定不同。</p>
+<p>这样就可以保证：</p>
+<ul>
+<li>每个区块的哈希值一定是不同的，可以通过哈希标识区块</li>
+<li>如果区块的内容改变了，他的哈希值一定会改变</li>
+</ul>
+<p>区块的哈希值都是根据区块头进行计算的，也就是说是把区块头的所有值拼接成一个字符串后对该字符串进行哈希的结果。</p>
+<p>结合前面所说，区块头包含了很多内容，其中就有当前区块体的内容以及上个区块的哈希，也就是当前区块体的内容改变了或者上一个区块的内容改变了，就一定会引起当前区块哈希的改变。</p>
+<p>这一点对区块链有重大意义。如果有人修改了一个区块，该区块的哈希就变了。为了让后面的区块还能连到它（因为下一个区块包含上一个区块的哈希），该人必须依次修改后面所有的区块，否则被改掉的区块就脱离区块链了。由于后面要提到的原因，哈希的计算很耗时，短时间内修改多个区块几乎不可能发生，除非有人掌握了全网51%以上的计算能力。</p>
+<h3 id="节点"><a class="markdownIt-Anchor" href="#节点"></a> 节点</h3>
+<p>节点指的是区块链网络中的计算机，包含手机，矿机和服务器等等。操作一个节点的可以是普通的钱包用户，矿工和多个人协作。例如比特币是属于公有链，当我们用自己已连接到互联网的电脑运行程序时，该电脑就是比特币网络中的一个节点。对于像比特币这样的公有链，理论上来讲，你下载完整的区块链，参与交易和挖矿，才算是节点。</p>
+<p>节点，保存着自己的一份或者部分账本，通过算力或者份额投票的方式来解决拜占庭将军问题，通过无信任的方式确保全体节点遵循的账本和自己的账本是一致的。</p>
+<h3 id="采矿"><a class="markdownIt-Anchor" href="#采矿"></a> 采矿</h3>
+<p>由于必须保证节点之间的同步，所以新区块的添加速度不能太快。试想一下，你刚刚同步了一个区块，准备基于它生成下一个区块，但这时别的节点又有新区块生成，你不得不放弃做了一半的计算，再次去同步。因为每个区块的后面，只能跟着一个区块，你永远只能在最新区块的后面，生成下一个区块。所以，你别无选择，一听到信号，就必须立刻同步。</p>
+<p>所以，区块链的发明者中本聪故意让添加新区块，变得很困难。他的设计是，平均每10分钟，全网才能生成一个新区块，一小时也就六个。</p>
+<p>这种产出速度不是通过命令达成的，而是故意设置了海量的计算。也就是说，只有通过极其大量的计算，才能得到当前区块的有效哈希，从而把新区块添加到区块链。由于计算量太大，所以快不起来。</p>
+<h2 id="区块链的原理"><a class="markdownIt-Anchor" href="#区块链的原理"></a> 区块链的原理</h2>
+<p>如果把区块链系统作为一个状态机，则每次交易意味着一次状态改变；生成的区块，就是参与者对其中交易导致状态改变结果的共识。</p>
+<p>区块链的目标是实现一个分布的数据记录账本，这个账本只允许添加、不允许删除。账本底层的基本结构是一个线性的链表。链表由一个个“区块”串联组成（如下图所示），后继区块中记录前导区块的哈希（Hash）值。某个区块（以及块里的交易）是否合法，可通过计算哈希值的方式进行快速检验。网络中节点可以提议添加一个新的区块，但必须经过共识机制来对区块达成确认。</p>
+<h3 id="通过比特币来了解区块链的工作过程"><a class="markdownIt-Anchor" href="#通过比特币来了解区块链的工作过程"></a> 通过比特币来了解区块链的工作过程</h3>
+<p>具体以比特币网络为例，来看其中如何使用了区块链技术。</p>
+<p>首先，用户通过比特币客户端发起一项交易，消息广播到比特币网络中等待确认。网络中的节点会将收到的等待确认的交易请求打包在一起，添加上前一个区块头部的哈希值等信息，组成一个区块结构。然后，试图找到一个 nonce 串（随机串）放到区块里，使得区块结构的哈希结果满足一定条件（比如小于某个值）。这个计算 nonce 串的过程，即俗称的“挖矿”。nonce 串的查找需要花费一定的计算力。</p>
+<p>一旦节点找到了满足条件的 nonce 串，这个区块在格式上就“合法”了，成为候选区块。节点将其在网络中广播出去。其它节点收到候选区块后进行验证，发现确实合法，就承认这个区块是一个新的合法区块，并添加到自己维护的本地区块链结构上。当大部分节点都接受了该区块后，意味着区块被网络接受，区块中所包括的交易也就得到确认。</p>
+<p>这里比较关键的步骤有两个，一个是完成对一批交易的共识（创建合法区块结构）；一个是新的区块添加到链结构上，被网络认可，确保未来无法被篡改。当然，在实现上还会有很多额外的细节。</p>
+<p>比特币的这种基于算力（寻找 nonce 串）的共识机制被称为工作量证明（Proof of Work，PoW）。这是因为要让哈希结果满足一定条件，并无已知的快速启发式算法，只能对 nonce 值进行逐个尝试的蛮力计算。尝试的次数越多（工作量越大），算出来的概率越大。</p>
+<p>通过调节对哈希结果的限制条件，比特币网络控制平均约 10 分钟产生一个合法区块。算出区块的节点将得到区块中所有交易的管理费和协议固定发放的奖励费（目前是 12.5 比特币，每四年减半）。</p>
+<h4 id="理解"><a class="markdownIt-Anchor" href="#理解"></a> 理解</h4>
+<p>根据作者现在的理解，所谓的挖矿并不是去抢夺比特币，而是去抢夺比特币这个账本的记账权，如果把比特币整个网络比作一个账本，区块链上的每个区块都是账本中的一页，但是并不是所有的账页都会被这个账本所接受，只有符合其规则的账页才能正确插入到账本中，所谓矿机就是寻找这种符合规则的账页。</p>
+<p>只不过目前比特币的激励机制就是每当你成功创建一个新的账页，你可以直接在其中写入向自己的账户转入一定数额的比特币，并结合你目前记录的所有未被记入区块链并且被承认有效的交易记录一起记入到这个区块体中，只要这个账页被成功插入并被大多数节点所接受并作为主分支，那么这些交易记录就是有效的。</p>
+<p>但是比特币数量又是有限的，当某一天比特币发完之后，矿机的收入来源就是那些记录在自己这一页上的交易记录的抽成。</p>
+<h2 id="区块链的三种场景"><a class="markdownIt-Anchor" href="#区块链的三种场景"></a> 区块链的三种场景</h2>
+<p>引入智能合约后的区块链，已经超越了单纯的数据记录功能，实际上带有点“智能计算”的意味了；更进一步地，还可以为区块链加入权限管理、高级编程语言支持等，实现更强大的、支持更多商用场景的分布式账本系统。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">场景</th>
+<th style="text-align:left">功能</th>
+<th style="text-align:left">智能合约</th>
+<th style="text-align:left">一致性</th>
+<th style="text-align:left">权限</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">性能</th>
+<th style="text-align:left">编程语言</th>
+<th style="text-align:left">代表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">数字货币</td>
+<td style="text-align:left">记账功能</td>
+<td style="text-align:left">不带有或较弱</td>
+<td style="text-align:left">PoW</td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">公有链</td>
+<td style="text-align:left">较低</td>
+<td style="text-align:left">简单脚本</td>
+<td style="text-align:left">比特币网络</td>
+</tr>
+<tr>
+<td style="text-align:left">分布式应用引擎</td>
+<td style="text-align:left">智能合约</td>
+<td style="text-align:left">图灵完备</td>
+<td style="text-align:left">PoW、PoS</td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">公有链</td>
+<td style="text-align:left">受限</td>
+<td style="text-align:left">特定语言</td>
+<td style="text-align:left">以太坊网络</td>
+</tr>
+<tr>
+<td style="text-align:left">带权限的分布式账本</td>
+<td style="text-align:left">商业处理</td>
+<td style="text-align:left">多种语言，图灵完备</td>
+<td style="text-align:left">包括 CFT、BFT 在内的多种机制，可插拔</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">联盟链</td>
+<td style="text-align:left">可扩展</td>
+<td style="text-align:left">高级编程语言</td>
+<td style="text-align:left">超级账本</td>
+</tr>
+</tbody>
+</table>
+<p>根据参与者的不同，可以分为公有（Public 或 Permissionless）链、联盟（Consortium 或 Permissioned）链和私有（Private）链。</p>
+<p>公有链，顾名思义，任何人都可以参与使用和维护，参与者多为匿名。典型的如比特币和以太坊区块链，信息是完全公开的。</p>
+<p>如果进一步引入许可机制，可以实现私有链和联盟链两种类型。</p>
+<p>私有链，由集中管理者进行管理限制，只有内部少数人可以使用，信息不公开。一般认为跟传统中心化记账系统的差异不明显。</p>
+<p>联盟链则介于两者之间，由若干组织一起合作（如供应链机构或银行联盟等）维护一条区块链，该区块链的使用必须是带有权限的限制访问，相关信息会得到保护，典型如超级账本项目。在架构上，现有大部分区块链在实现都至少包括了网络层、共识层、智能合约和应用层等分层结构，联盟链实现往还会引入额外的权限管理机制。</p>
+<h2 id="hyperledger-fabric"><a class="markdownIt-Anchor" href="#hyperledger-fabric"></a> Hyperledger Fabric</h2>
+<p>Hyperledger Fabric 是由 IBM 公司主导开发的一个面向企业级客户的开源项目。与比特币和以太坊这类公有链不同，Hyperledger Fabric 网络中的节点必须经过授权认证后才能加入，从而避免了 POW 资源开销，大幅提高了交易处理效率，满足企业级应用对处理性能的诉求。同时，为了满足灵活多变的应用场景，Hyperledger Fabric 采用了高度模块化的系统设计理念，将权限认证模块（MSP）、共识服务模块（Ordering Service）、背书模块（Endorsing peers）、区块提交模块（committing peers）等进行分离部署，使开发者可以根据具体的业务场景替换模块，实现了模块的插件式管理（plug-in/plug-out）。所以，Hyperledger Fabric 是一个私有链／联盟链的开发框架，而且系统的运行不需要 token 支持。</p>
+<h3 id="基础概念"><a class="markdownIt-Anchor" href="#基础概念"></a> 基础概念</h3>
+<h4 id="channel"><a class="markdownIt-Anchor" href="#channel"></a> Channel：</h4>
+<p>是一种数据隔离机制，保证交易信息只有交易参与方可见，每个 channel 是一个独立的区块链，这使得多个用户可以共用同一个区块链系统而不用担心信息泄露问题。Channels 能够让上层不同的用户业务共享同一个区块链系统资源，主要包括网络、计算、存储资源。从本质上来说，channels 是通过不同的区块链账本来为上层业务服务，而且，这些区块链统一部署在 peers 节点上，统一通过 ordering service 进行交易排序和打包区块。Channels 之间通过权限隔离控制，不同 channel 内的成员，无法访问对方的交易信息，只能访问所属 channel 的交易信息。</p>
+<h4 id="chaincode"><a class="markdownIt-Anchor" href="#chaincode"></a> Chaincode：</h4>
+<p>也叫智能合约，将资产定义和资产处理逻辑封装成接口，当其被用户调用的时候，改变账本的状态。</p>
+<h4 id="ledger"><a class="markdownIt-Anchor" href="#ledger"></a> Ledger：</h4>
+<p>区块链账本，保存交易信息和智能合约代码。</p>
+<h4 id="network"><a class="markdownIt-Anchor" href="#network"></a> Network：</h4>
+<p>交易处理节点之间的 P2P 网络，用于维持区块链账本的一致性。</p>
+<h4 id="ordering-service"><a class="markdownIt-Anchor" href="#ordering-service"></a> Ordering service：</h4>
+<p>利用 kafka、SBTF 等共识算法对所有交易信息进行排序并打包成区块，发给 committing peers 节点，写入区块链中。</p>
+<h4 id="world-state"><a class="markdownIt-Anchor" href="#world-state"></a> World state：</h4>
+<p>显示当前资产数据的状态，底层通过 LevelDB 和 CouchDB 数据库将区块链中的资产信息组织起来，提供高效的数据访问接口。</p>
+<h4 id="membership-service-provider-msp"><a class="markdownIt-Anchor" href="#membership-service-provider-msp"></a> Membership service provider （MSP）：</h4>
+<p>管理认证信息，为 client 和 peers 提供授权服务。</p>
+<h3 id="角色"><a class="markdownIt-Anchor" href="#角色"></a> 角色</h3>
+<p>在 Hyperledger 中，由三种类型的角色：</p>
+<h4 id="client"><a class="markdownIt-Anchor" href="#client"></a> Client：</h4>
+<p>应用客户端，用于将终端用户的交易请求发送到区块链网络；</p>
+<h4 id="peers"><a class="markdownIt-Anchor" href="#peers"></a> Peers：</h4>
+<p>负责维护区块链账本，分为 endoring peers 和 committing peers，其中，endorser 为交易做背书（验证交易并对交易签名），committer 接收打包好的区块，然后写入区块链中。Peers 节点是一个逻辑的概念，endorser 和 committer 可以同时部署在一台物理机上。</p>
+<h4 id="ordering-service-2"><a class="markdownIt-Anchor" href="#ordering-service-2"></a> Ordering Service：</h4>
+<p>接收交易信息，并将其排序后打包成区块，放入区块链，最后将结果返回给 committer peers。</p>
+<h3 id="交易流程"><a class="markdownIt-Anchor" href="#交易流程"></a> 交易流程</h3>
+<p>区块链的账本由 peer 节点维护，并不是由 ordering service 集群维护，所以，只有 peer 节点上可以找到完整的区块链信息，而 order service 集群只负责对交易进行排序，只保留处理过程中的一部分区块链信息。Hyperledger Fabric 系统中的节点是一个逻辑的概念，并不一定是一个台物理设备，但是对于生产环境的设计者来说，peer 节点不能和 order 节点部署在一台机器上，而 enduring peers 和 committing peers 可以部署在同一台机器上，这种设计主要是为了系统架构的解耦，提高扩展性，以及通过主机隔离提高安全性。 Endorsing peer 校验客户端的签名，然后执行智能合约代码模拟交易。交易处理完成后，对交易信息签名，返回给客户端。客户端收到签名后的交易信息后，发给 order 节点排序。Order 节点将交易信息排序打包成区块后，广播发给 committing peers，写入区块链中。（具体交易流程可以参考：<a href="https://www.chainnews.com/articles/074736012702.htm%EF%BC%89">https://www.chainnews.com/articles/074736012702.htm）</a></p>
+<p>参考文章：</p>
+<p><a href="https://mp.weixin.qq.com/s/8W_oegxPCMr9zTtpN1h6dA">https://mp.weixin.qq.com/s/8W_oegxPCMr9zTtpN1h6dA</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2017/12/blockchain-tutorial.html">http://www.ruanyifeng.com/blog/2017/12/blockchain-tutorial.html</a></p>
+<p><a href="https://yeasy.gitbooks.io/blockchain_guide/content/02_overview/definition.html">https://yeasy.gitbooks.io/blockchain_guide/content/02_overview/definition.html</a></p>
+<p><a href="https://www.chainnews.com/articles/074736012702.htm">https://www.chainnews.com/articles/074736012702.htm</a></p>
+]]></content>
+      <categories>
+        <category>Blockchain</category>
       </categories>
   </entry>
   <entry>
@@ -8910,6 +8910,40 @@ iSum 表示 [l,r] 的区间和<br />
       </categories>
   </entry>
   <entry>
+    <title>福特-富尔克森算法</title>
+    <url>/posts/148d778b/</url>
+    <content><![CDATA[<p>这个算法是图论中比较经典的最大流问题的算法，使用场景有很多，比如在互联网中已知中间链路每一段的最大流量，如何最快速地把数据从一个节点传递到另一个节点。</p>
+<span id="more"></span>
+<h1 id="算法核心思路"><a class="markdownIt-Anchor" href="#算法核心思路"></a> 算法核心思路</h1>
+<p><img src="https://kingworker.cn/resources/blog/ford-fulkerson-algorithm/1.png" alt="" /></p>
+<p>假设上图为一个网络拓扑图，连接节点之间的边表示各种通道，上面的数字代表通道流量的上限，即通道的容量。每一条边的实际流量不可以超过通道的容量。</p>
+<p>假定我们现在要从数据中心S，最快速地将数据传递到T，需要制定一个方案，使得从S到T的流量可以达到最大。</p>
+<p>从图中可以看出，一些边由于自身容量很小，可能会成为瓶颈，而要想实现网络流量最大化，就要在一些节点进行分流，比如从A到D的边流量最大是8，显然消化不了从S到A的20，因此需要从A到B分流。</p>
+<p>要解决这个问题，我们需要这样思考。<strong>将一个连通图从中间一刀劈开，分为G1和G2两部分，起始节点和目标节点分别在G1和G2，那么显然整个网络能够传输的最大流量不会超过<u>连接G1和G2这两部分所有边</u>的容量之和</strong>。</p>
+<p>比如，我们把起始节点S放在G1，其他部分放在G2，如图中左边弧形切割线所示。从S出发的最大流显然无法超过被切割的三条边，也就是SA，SB，SC的总和。类似的，我们也可以把目标节点放在G2，其他放在G1，就是图中右边弧线的切割方式，网络中能够传输到T的总流量一定也不会超过DT，ET，FT三条边容量的总和。</p>
+<p>我们可以任意划分节点，只要S和T在图的两部分就可以，计算出每一种划分方式连接G1和G2所有边的总和，然后其中最小的值就是整个图的容量瓶颈。</p>
+<p>接下来的问题是，是否有一种设定各条边上流量的方式，让从S到T的流量能够等于最小切割流量。答案是肯定的。我们观察上图，L2对应的切割就是整个图的瓶颈，要想整个图的流量达到最大，瓶颈处的流量就必须饱和。如果被L2切割的边中有一条边的流量没有达到容量，那么说明整个网络还有进一步增加的可能性，我们就需要想办法调整每一条边的流量，让L2的各条边流量都达到饱和。</p>
+<p><strong>调整流量的本质就是找到一条从S到T流量尚未饱和的路径，然后增加这条路径上的每一条边的流量（当然减少某条边上的反向流量也等同于增加这条边的流量）。这条流量可以增加的路径，被称为增广路径。可以证明，只要从S到T的流量还没有达到最小切割流量，就可以不断找到增广路径，直到流量达到这个值为止</strong>。</p>
+<h1 id="算法伪代码"><a class="markdownIt-Anchor" href="#算法伪代码"></a> 算法伪代码</h1>
+<p>对于一个有权重的图G（V，E），如果（u,v）属于E，那么它的权重为capacity(u,v)，表示这条边的容量。我们用另一个数组flow(u,v),表示每条边已经分配的流量。此外我们使用一个临时数组remaining(u,v)表示每条边还剩余的可分配的流量。</p>
+<p>由remaining这个数组和节点的集合构成一个剩余流量图G_r，如果u，v之间没有剩余流量了，那么(u,v)这条边就不存在于剩余流量图G_r中</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Ford-Fulkerson(G, start, end) &#123;</span><br><span class="line">    while(G_r中存在从start到end的一条路径path) &#123;</span><br><span class="line">        remaining(path) = min&#123;remaining(u,v), (u,v)在路径path上&#125;;</span><br><span class="line">        for each (u, v) in path &#123;</span><br><span class="line">            // 如果这条边已经被分配了流量，增加其流量，否则减少其反方向流量</span><br><span class="line">            if (flow(u,v) &gt; 0) &#123;</span><br><span class="line">                flow(u,v) += remaining(path)</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                flow(v,u) -= remaining(path)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述伪代码中有一点在于如何从<strong>剩余流量图G_r中</strong>找到从start到end的一条路径path，答案是BFS。</p>
+<p>所以如果假设最大容量是F，那么这个算法的时间复杂度是O(|E|*F)，即最差的情况是每次找到增广路径，都只让流量增加1，每次找增广路径都要遍历所有的边</p>
+<h1 id="算法具体实现"><a class="markdownIt-Anchor" href="#算法具体实现"></a> 算法具体实现</h1>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">/ Ford - Fulkerson algorith in C</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> A 0</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> B 1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> C 2</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX_NODES 1000</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> O 1000000000</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> e;</span><br><span class="line"><span class="type">int</span> capacity[MAX_NODES][MAX_NODES];</span><br><span class="line"><span class="type">int</span> flow[MAX_NODES][MAX_NODES];</span><br><span class="line"><span class="type">int</span> color[MAX_NODES];</span><br><span class="line"><span class="type">int</span> pred[MAX_NODES];</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> x &lt; y ? x : y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> head, tail;</span><br><span class="line"><span class="type">int</span> q[MAX_NODES + <span class="number">2</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">enqueue</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">  q[tail] = x;</span><br><span class="line">  tail++;</span><br><span class="line">  color[x] = B;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">dequeue</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="type">int</span> x = q[head];</span><br><span class="line">  head++;</span><br><span class="line">  color[x] = C;</span><br><span class="line">  <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Using BFS as a searching algorithm</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">bfs</span><span class="params">(<span class="type">int</span> start, <span class="type">int</span> target)</span> &#123;</span><br><span class="line">  <span class="type">int</span> u, v;</span><br><span class="line">  <span class="keyword">for</span> (u = <span class="number">0</span>; u &lt; n; u++) &#123;</span><br><span class="line">    color[u] = A;</span><br><span class="line">  &#125;</span><br><span class="line">  head = tail = <span class="number">0</span>;</span><br><span class="line">  enqueue(start);</span><br><span class="line">  pred[start] = <span class="number">-1</span>;</span><br><span class="line">  <span class="keyword">while</span> (head != tail) &#123;</span><br><span class="line">    u = dequeue();</span><br><span class="line">    <span class="keyword">for</span> (v = <span class="number">0</span>; v &lt; n; v++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (color[v] == A &amp;&amp; capacity[u][v] - flow[u][v] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        enqueue(v);</span><br><span class="line">        pred[v] = u;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> color[target] == C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Applying fordfulkerson algorithm</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fordFulkerson</span><span class="params">(<span class="type">int</span> source, <span class="type">int</span> sink)</span> &#123;</span><br><span class="line">  <span class="type">int</span> i, j, u;</span><br><span class="line">  <span class="type">int</span> max_flow = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">      flow[i][j] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Updating the residual values of edges</span></span><br><span class="line">  <span class="keyword">while</span> (bfs(source, sink)) &#123;</span><br><span class="line">    <span class="type">int</span> increment = O;</span><br><span class="line">    <span class="keyword">for</span> (u = n - <span class="number">1</span>; pred[u] &gt;= <span class="number">0</span>; u = pred[u]) &#123;</span><br><span class="line">      increment = min(increment, capacity[pred[u]][u] - flow[pred[u]][u]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (u = n - <span class="number">1</span>; pred[u] &gt;= <span class="number">0</span>; u = pred[u]) &#123;</span><br><span class="line">      flow[pred[u]][u] += increment;</span><br><span class="line">      flow[u][pred[u]] -= increment;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Adding the path flows</span></span><br><span class="line">    max_flow += increment;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> max_flow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">      capacity[i][j] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  n = <span class="number">6</span>;</span><br><span class="line">  e = <span class="number">7</span>;</span><br><span class="line"></span><br><span class="line">  capacity[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">8</span>;</span><br><span class="line">  capacity[<span class="number">0</span>][<span class="number">4</span>] = <span class="number">3</span>;</span><br><span class="line">  capacity[<span class="number">1</span>][<span class="number">2</span>] = <span class="number">9</span>;</span><br><span class="line">  capacity[<span class="number">2</span>][<span class="number">4</span>] = <span class="number">7</span>;</span><br><span class="line">  capacity[<span class="number">2</span>][<span class="number">5</span>] = <span class="number">2</span>;</span><br><span class="line">  capacity[<span class="number">3</span>][<span class="number">5</span>] = <span class="number">5</span>;</span><br><span class="line">  capacity[<span class="number">4</span>][<span class="number">2</span>] = <span class="number">7</span>;</span><br><span class="line">  capacity[<span class="number">4</span>][<span class="number">3</span>] = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">  <span class="type">int</span> s = <span class="number">0</span>, t = <span class="number">5</span>;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Max Flow: %d\n&quot;</span>, fordFulkerson(s, t));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="扩展"><a class="markdownIt-Anchor" href="#扩展"></a> 扩展</h1>
+<h2 id="二分图配对问题"><a class="markdownIt-Anchor" href="#二分图配对问题"></a> 二分图配对问题</h2>
+<p>其实在讲第一部分的时候，不知道大家有没有想起这个二分图的配对问题，两个问题都涉及了寻找增广路径</p>
+<p><img src="https://kingworker.cn/resources/blog/ford-fulkerson-algorithm/3.png" alt="" /></p>
+<p>从上图可以看出，要实现L两边节点的最大配对，其实就等同于实现S到T的最大流，有两对节点能够配对，流量就是2，有三对能过够配对，流量就是3，所以这个问题可以用福特-富尔克森算法来解，这个算法对于边的最大容量和最小容量之比很大的图效率都不高，但是在二分图中，边的最大和最小容量都是1，所以这种算法的复杂度只有O(|E|)。</p>
+<p>当然，二分图有更简单的方法，因为它每一部分内部的点之间没有边，所以可以采用寻找交替路径的方法，也就是<a href="https://sunra.top/posts/5352/">匈牙利算法</a></p>
+]]></content>
+      <categories>
+        <category>Algorithm</category>
+      </categories>
+  </entry>
+  <entry>
     <title>四种基本算法思想</title>
     <url>/posts/f7e2a78f/</url>
     <content><![CDATA[<p>数据结构与算法是一个非常大的范围，各种不同的问题需要不同的算法，这些算法或复杂或简单。这篇博客简单通过经典的背包问题介绍四种非常基本且常用的算法思想，分别是贪心，分治，回溯，动规。</p>
@@ -9008,40 +9042,6 @@ iSum 表示 [l,r] 的区间和<br />
 </li>
 </ul>
 <p><a href="https://sunra.top/posts/90a4c0c1/">归并排序</a>就是一个非常典型的分治思想</p>
-]]></content>
-      <categories>
-        <category>Algorithm</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>福特-富尔克森算法</title>
-    <url>/posts/148d778b/</url>
-    <content><![CDATA[<p>这个算法是图论中比较经典的最大流问题的算法，使用场景有很多，比如在互联网中已知中间链路每一段的最大流量，如何最快速地把数据从一个节点传递到另一个节点。</p>
-<span id="more"></span>
-<h1 id="算法核心思路"><a class="markdownIt-Anchor" href="#算法核心思路"></a> 算法核心思路</h1>
-<p><img src="https://kingworker.cn/resources/blog/ford-fulkerson-algorithm/1.png" alt="" /></p>
-<p>假设上图为一个网络拓扑图，连接节点之间的边表示各种通道，上面的数字代表通道流量的上限，即通道的容量。每一条边的实际流量不可以超过通道的容量。</p>
-<p>假定我们现在要从数据中心S，最快速地将数据传递到T，需要制定一个方案，使得从S到T的流量可以达到最大。</p>
-<p>从图中可以看出，一些边由于自身容量很小，可能会成为瓶颈，而要想实现网络流量最大化，就要在一些节点进行分流，比如从A到D的边流量最大是8，显然消化不了从S到A的20，因此需要从A到B分流。</p>
-<p>要解决这个问题，我们需要这样思考。<strong>将一个连通图从中间一刀劈开，分为G1和G2两部分，起始节点和目标节点分别在G1和G2，那么显然整个网络能够传输的最大流量不会超过<u>连接G1和G2这两部分所有边</u>的容量之和</strong>。</p>
-<p>比如，我们把起始节点S放在G1，其他部分放在G2，如图中左边弧形切割线所示。从S出发的最大流显然无法超过被切割的三条边，也就是SA，SB，SC的总和。类似的，我们也可以把目标节点放在G2，其他放在G1，就是图中右边弧线的切割方式，网络中能够传输到T的总流量一定也不会超过DT，ET，FT三条边容量的总和。</p>
-<p>我们可以任意划分节点，只要S和T在图的两部分就可以，计算出每一种划分方式连接G1和G2所有边的总和，然后其中最小的值就是整个图的容量瓶颈。</p>
-<p>接下来的问题是，是否有一种设定各条边上流量的方式，让从S到T的流量能够等于最小切割流量。答案是肯定的。我们观察上图，L2对应的切割就是整个图的瓶颈，要想整个图的流量达到最大，瓶颈处的流量就必须饱和。如果被L2切割的边中有一条边的流量没有达到容量，那么说明整个网络还有进一步增加的可能性，我们就需要想办法调整每一条边的流量，让L2的各条边流量都达到饱和。</p>
-<p><strong>调整流量的本质就是找到一条从S到T流量尚未饱和的路径，然后增加这条路径上的每一条边的流量（当然减少某条边上的反向流量也等同于增加这条边的流量）。这条流量可以增加的路径，被称为增广路径。可以证明，只要从S到T的流量还没有达到最小切割流量，就可以不断找到增广路径，直到流量达到这个值为止</strong>。</p>
-<h1 id="算法伪代码"><a class="markdownIt-Anchor" href="#算法伪代码"></a> 算法伪代码</h1>
-<p>对于一个有权重的图G（V，E），如果（u,v）属于E，那么它的权重为capacity(u,v)，表示这条边的容量。我们用另一个数组flow(u,v),表示每条边已经分配的流量。此外我们使用一个临时数组remaining(u,v)表示每条边还剩余的可分配的流量。</p>
-<p>由remaining这个数组和节点的集合构成一个剩余流量图G_r，如果u，v之间没有剩余流量了，那么(u,v)这条边就不存在于剩余流量图G_r中</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Ford-Fulkerson(G, start, end) &#123;</span><br><span class="line">    while(G_r中存在从start到end的一条路径path) &#123;</span><br><span class="line">        remaining(path) = min&#123;remaining(u,v), (u,v)在路径path上&#125;;</span><br><span class="line">        for each (u, v) in path &#123;</span><br><span class="line">            // 如果这条边已经被分配了流量，增加其流量，否则减少其反方向流量</span><br><span class="line">            if (flow(u,v) &gt; 0) &#123;</span><br><span class="line">                flow(u,v) += remaining(path)</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                flow(v,u) -= remaining(path)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上述伪代码中有一点在于如何从<strong>剩余流量图G_r中</strong>找到从start到end的一条路径path，答案是BFS。</p>
-<p>所以如果假设最大容量是F，那么这个算法的时间复杂度是O(|E|*F)，即最差的情况是每次找到增广路径，都只让流量增加1，每次找增广路径都要遍历所有的边</p>
-<h1 id="算法具体实现"><a class="markdownIt-Anchor" href="#算法具体实现"></a> 算法具体实现</h1>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">/ Ford - Fulkerson algorith in C</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> A 0</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> B 1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> C 2</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX_NODES 1000</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> O 1000000000</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> e;</span><br><span class="line"><span class="type">int</span> capacity[MAX_NODES][MAX_NODES];</span><br><span class="line"><span class="type">int</span> flow[MAX_NODES][MAX_NODES];</span><br><span class="line"><span class="type">int</span> color[MAX_NODES];</span><br><span class="line"><span class="type">int</span> pred[MAX_NODES];</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> x &lt; y ? x : y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> head, tail;</span><br><span class="line"><span class="type">int</span> q[MAX_NODES + <span class="number">2</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">enqueue</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">  q[tail] = x;</span><br><span class="line">  tail++;</span><br><span class="line">  color[x] = B;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">dequeue</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="type">int</span> x = q[head];</span><br><span class="line">  head++;</span><br><span class="line">  color[x] = C;</span><br><span class="line">  <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Using BFS as a searching algorithm</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">bfs</span><span class="params">(<span class="type">int</span> start, <span class="type">int</span> target)</span> &#123;</span><br><span class="line">  <span class="type">int</span> u, v;</span><br><span class="line">  <span class="keyword">for</span> (u = <span class="number">0</span>; u &lt; n; u++) &#123;</span><br><span class="line">    color[u] = A;</span><br><span class="line">  &#125;</span><br><span class="line">  head = tail = <span class="number">0</span>;</span><br><span class="line">  enqueue(start);</span><br><span class="line">  pred[start] = <span class="number">-1</span>;</span><br><span class="line">  <span class="keyword">while</span> (head != tail) &#123;</span><br><span class="line">    u = dequeue();</span><br><span class="line">    <span class="keyword">for</span> (v = <span class="number">0</span>; v &lt; n; v++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (color[v] == A &amp;&amp; capacity[u][v] - flow[u][v] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        enqueue(v);</span><br><span class="line">        pred[v] = u;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> color[target] == C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Applying fordfulkerson algorithm</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fordFulkerson</span><span class="params">(<span class="type">int</span> source, <span class="type">int</span> sink)</span> &#123;</span><br><span class="line">  <span class="type">int</span> i, j, u;</span><br><span class="line">  <span class="type">int</span> max_flow = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">      flow[i][j] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Updating the residual values of edges</span></span><br><span class="line">  <span class="keyword">while</span> (bfs(source, sink)) &#123;</span><br><span class="line">    <span class="type">int</span> increment = O;</span><br><span class="line">    <span class="keyword">for</span> (u = n - <span class="number">1</span>; pred[u] &gt;= <span class="number">0</span>; u = pred[u]) &#123;</span><br><span class="line">      increment = min(increment, capacity[pred[u]][u] - flow[pred[u]][u]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (u = n - <span class="number">1</span>; pred[u] &gt;= <span class="number">0</span>; u = pred[u]) &#123;</span><br><span class="line">      flow[pred[u]][u] += increment;</span><br><span class="line">      flow[u][pred[u]] -= increment;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Adding the path flows</span></span><br><span class="line">    max_flow += increment;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> max_flow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">      capacity[i][j] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  n = <span class="number">6</span>;</span><br><span class="line">  e = <span class="number">7</span>;</span><br><span class="line"></span><br><span class="line">  capacity[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">8</span>;</span><br><span class="line">  capacity[<span class="number">0</span>][<span class="number">4</span>] = <span class="number">3</span>;</span><br><span class="line">  capacity[<span class="number">1</span>][<span class="number">2</span>] = <span class="number">9</span>;</span><br><span class="line">  capacity[<span class="number">2</span>][<span class="number">4</span>] = <span class="number">7</span>;</span><br><span class="line">  capacity[<span class="number">2</span>][<span class="number">5</span>] = <span class="number">2</span>;</span><br><span class="line">  capacity[<span class="number">3</span>][<span class="number">5</span>] = <span class="number">5</span>;</span><br><span class="line">  capacity[<span class="number">4</span>][<span class="number">2</span>] = <span class="number">7</span>;</span><br><span class="line">  capacity[<span class="number">4</span>][<span class="number">3</span>] = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">  <span class="type">int</span> s = <span class="number">0</span>, t = <span class="number">5</span>;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Max Flow: %d\n&quot;</span>, fordFulkerson(s, t));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h1 id="扩展"><a class="markdownIt-Anchor" href="#扩展"></a> 扩展</h1>
-<h2 id="二分图配对问题"><a class="markdownIt-Anchor" href="#二分图配对问题"></a> 二分图配对问题</h2>
-<p>其实在讲第一部分的时候，不知道大家有没有想起这个二分图的配对问题，两个问题都涉及了寻找增广路径</p>
-<p><img src="https://kingworker.cn/resources/blog/ford-fulkerson-algorithm/3.png" alt="" /></p>
-<p>从上图可以看出，要实现L两边节点的最大配对，其实就等同于实现S到T的最大流，有两对节点能够配对，流量就是2，有三对能过够配对，流量就是3，所以这个问题可以用福特-富尔克森算法来解，这个算法对于边的最大容量和最小容量之比很大的图效率都不高，但是在二分图中，边的最大和最小容量都是1，所以这种算法的复杂度只有O(|E|)。</p>
-<p>当然，二分图有更简单的方法，因为它每一部分内部的点之间没有边，所以可以采用寻找交替路径的方法，也就是<a href="https://sunra.top/posts/5352/">匈牙利算法</a></p>
 ]]></content>
       <categories>
         <category>Algorithm</category>
